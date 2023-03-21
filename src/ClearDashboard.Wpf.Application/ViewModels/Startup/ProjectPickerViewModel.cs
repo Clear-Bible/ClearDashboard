@@ -530,7 +530,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 importServerProjectViewModel.ProjectId = project.ProjectId;
                 importServerProjectViewModel.ProjectName = project.ProjectName;
-                importServerProjectViewModel.IsImportAction = true;
+                importServerProjectViewModel.CollaborationDialogAction = CollaborationDialogAction.Import;
                 var result = await _windowManager.ShowDialogAsync(importServerProjectViewModel, null, importServerProjectViewModel.DialogSettings());
 
                 await GetProjectsVersion().ConfigureAwait(false);

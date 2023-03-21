@@ -206,46 +206,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "CollaborationInitializeID")
                 {
-                    if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository())
-                    {
-                        _collaborationManager.InitializeRepository();
-                        _collaborationManager.FetchMergeRemote();
-                        _collaborationManager.StageProjectChangesAsync(CancellationToken.None).Wait();
-                        _collaborationManager.CommitChanges($"Initial commit");
-                        _collaborationManager.PushChangesToRemote();
-                    }
+                    ShowCollaborationInitialize();
                 }
                 else if (value == "CollaborationGetLatestID")
                 {
-                    if (_collaborationManager.IsRepositoryInitialized())
-                    {
-                        _collaborationManager.FetchMergeRemote();
-
-                        var projectProvider = LifetimeScope?.Resolve<IProjectProvider>();
-                        var importServerProjectViewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
-                        if (projectProvider is not null && importServerProjectViewModel is not null)
-                        {
-                            importServerProjectViewModel.ProjectId = projectProvider.CurrentProject.Id;
-                            importServerProjectViewModel.ProjectName = projectProvider.CurrentProject.ProjectName;
-                            importServerProjectViewModel.IsImportAction = false;
-                            this.WindowManager.ShowDialogAsync(importServerProjectViewModel, null, importServerProjectViewModel.DialogSettings());
-                        }
-                    }
+                    ShowCollaborationGetLatest();
                 }
                 else if (value == "CollaborationCommitID")
                 {
-                    if (_collaborationManager.IsCurrentProjectInRepository())
-                    {
-                        _collaborationManager.StageProjectChangesAsync(CancellationToken.None).Wait();
-                        _collaborationManager.CommitChanges($"Fake commit message {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss}");
-                        _collaborationManager.PushChangesToRemote();
-                    }
+                    ShowCollaborationCommit();
                 }
                 else if (value == "CollaborationHardResetID")
                 {
                     if (_collaborationManager.IsRepositoryInitialized())
                     {
                         _collaborationManager.HardResetChanges();
+                        RebuildMainMenu().Wait();
                     }
                 }
                 else
@@ -286,6 +262,88 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
 
                 NotifyOfPropertyChange(() => WindowIdToLoad);
+            }
+        }
+
+        private void ShowCollaborationInitialize()
+        {
+            if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository())
+            {
+                _collaborationManager.InitializeRepository();
+                _collaborationManager.FetchMergeRemote();
+
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    viewModel.CommitMessage = "Initial Commit";
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Commit;
+
+                    this.WindowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                    }
+
+                    // FIXME:  how?
+                    RebuildMainMenu().Wait();
+                }
+            }
+        }
+
+        private void ShowCollaborationGetLatest()
+        {
+            if (_collaborationManager.IsRepositoryInitialized())
+            {
+                _collaborationManager.FetchMergeRemote();
+
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Merge;
+
+                    this.WindowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                    }
+                }
+
+                RebuildMainMenu().Wait();
+            }
+        }
+
+        private void ShowCollaborationCommit()
+        {
+            if (_collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges())
+            {
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    // FIXME:  need to prompt user:
+                    viewModel.CommitMessage = $"Fake commit message {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss}";
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Commit;
+
+                    this.WindowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        ProjectManager.UpdateProject(ProjectManager.CurrentProject).Wait();
+                    }
+
+                    RebuildMainMenu().Wait();
+                }
             }
         }
 
@@ -1190,7 +1248,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Commit Changes to Server", Id = "CollaborationCommitID",
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository()
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges()
                 },
                 new MenuItemViewModel
                 {

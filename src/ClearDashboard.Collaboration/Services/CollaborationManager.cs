@@ -19,6 +19,7 @@ using ClearDashboard.Collaboration.Model;
 using System.Text.Json;
 using Paratext.PluginInterfaces;
 using SIL.Machine.Utils;
+using System;
 
 namespace ClearDashboard.Collaboration.Services;
 
@@ -70,7 +71,7 @@ public class CollaborationManager
         return _projectProvider.CurrentProject!;
     }
 
-    private void EnsureValidRepository(string path)
+    private static void EnsureValidRepository(string path)
     {
         if (!Repository.IsValid(path))
         {
@@ -122,7 +123,27 @@ public class CollaborationManager
         return false;
     }
 
-    private GeneralModel<Models.Project> LoadProjectModelSnapshot(string projectPropertiesFilePath)
+    public bool AreUnmergedChanges()
+    {
+        EnsureValidRepository(_repositoryPath);
+        var project = EnsureCurrentProject();
+
+        using (var repo = new Repository(_repositoryPath))
+        {
+            if (!repo.Commits.Any())
+            {
+                return false;
+            }
+
+            // From latest to earliest:
+            var commitShas = repo.Commits.Select(c => c.Sha).ToList();
+            var lastMergedCommitShaIndex = commitShas.FindIndex(c => c == project.LastMergedCommitSha);
+
+            return lastMergedCommitShaIndex != 0;
+        }
+    }
+
+    private static GeneralModel<Models.Project> LoadProjectModelSnapshot(string projectPropertiesFilePath)
     {
         var serializedProjectModelSnapshot = File.ReadAllText(projectPropertiesFilePath);
 
@@ -182,7 +203,7 @@ public class CollaborationManager
         return project.ProjectName ?? "Unnamed-Project";
     }
 
-    public async Task InitializeProjectDatabaseAsync(Guid projectId, bool includeMerge, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
+    public async Task<string> InitializeProjectDatabaseAsync(Guid projectId, bool includeMerge, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         using (var repo = new Repository(_repositoryPath))
         {
@@ -193,6 +214,8 @@ public class CollaborationManager
                 var command = new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId, includeMerge, progress);
                 var result = await _mediator.Send(command, cancellationToken);
                 result.ThrowIfCanceledOrFailed();
+
+                return headCommitSha;
             }
             else
             {
@@ -256,7 +279,7 @@ public class CollaborationManager
         }
     }
 
-    public async Task MergeProjectLatestChangesAsync(bool remoteOverridesLocal, bool createBackupSnapshot, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
+    public async Task<string?> MergeProjectLatestChangesAsync(bool remoteOverridesLocal, bool createBackupSnapshot, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         progress.Report(new ProgressStatus(0, "Finding latest commit"));
 
@@ -273,10 +296,9 @@ public class CollaborationManager
 
             if (!commitShas.Any())
             {
-                // We are already at the latest
                 progress.Report(new ProgressStatus(0, $"Repository has no commits yet"));
                 _logger.LogInformation($"MergeLastestChangesAsync called, but repository has no commits yet");
-                return;
+                return null;
             }
 
             headCommitSha = commitShas.First();
@@ -294,7 +316,7 @@ public class CollaborationManager
             // We are already at the latest
             progress.Report(new ProgressStatus(0, $"Already at latest commit '{project.LastMergedCommitSha}'"));
             _logger.LogInformation($"MergeLastestChangesAsync called, but already at latest commit '{project.LastMergedCommitSha}'");
-            return;
+            return null;
         }
 
         var factory = new ProjectSnapshotFromGitFactory(_repositoryPath, _logger);
@@ -321,6 +343,8 @@ public class CollaborationManager
         var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, remoteOverridesLocal, _logMergeOnly, progress);
         var result = await _mediator.Send(command, cancellationToken);
         result.ThrowIfCanceledOrFailed();
+
+        return headCommitSha;
     }
 
     public async Task CreateProjectBackupAsync(CancellationToken cancellationToken)
@@ -342,17 +366,21 @@ public class CollaborationManager
         factory.SaveSnapshot(result.Data!);
     }
 
-    public async Task StageProjectChangesAsync(CancellationToken cancellationToken)
+    public async Task StageProjectChangesAsync(CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 
         var projectFolderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id);
 
+        progress.Report(new ProgressStatus(0, "Extracting project snapshot from database for staging"));
+
         // Extract the latest from the project database:
         var command = new GetProjectSnapshotQuery();
         var result = await _mediator.Send(command, cancellationToken);
         result.ThrowIfCanceledOrFailed();
+
+        progress.Report(new ProgressStatus(0, "Saving project snapshot to source control directory"));
 
         // Save it to the local git directory:
         var factory = new ProjectSnapshotFilesFactory(Path.Combine(_repositoryPath, projectFolderName), _logger);
@@ -361,6 +389,7 @@ public class CollaborationManager
         // Stage the changes:  (or maybe have this as a separate step?)
         using (var repo = new Repository(_repositoryPath))
         {
+            progress.Report(new ProgressStatus(0, "Staging changes"));
             Commands.Stage(repo, projectFolderName);
         }
     }
@@ -417,7 +446,7 @@ public class CollaborationManager
         return statuses;
     }
 
-    public void CommitChanges(string commitMessage)
+    public string? CommitChanges(string commitMessage)
 	{
         EnsureValidRepository(_repositoryPath);
 
@@ -437,7 +466,10 @@ public class CollaborationManager
             if (status.IsDirty)
             {
                 var commit = repo.Commit(commitMessage, userSignature, userSignature);
+                return commit.Sha;
             }
+
+            return null;
         }
     }
 

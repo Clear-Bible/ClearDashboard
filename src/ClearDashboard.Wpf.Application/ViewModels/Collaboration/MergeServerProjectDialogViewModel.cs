@@ -33,11 +33,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         private CancellationTokenSource _cancellationTokenSource;
         private Task? _runningTask;
 
-        private bool _isImportAction = true;
-        public bool IsImportAction
+        private CollaborationDialogAction _dialogAction = CollaborationDialogAction.Import;
+        public CollaborationDialogAction CollaborationDialogAction
         {
-            get => _isImportAction;
-            set => _isImportAction = value;
+            get => _dialogAction;
+            set => _dialogAction = value;
         }
 
         private Guid _projectId = Guid.Empty;
@@ -59,6 +59,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 NotifyOfPropertyChange(nameof(Project));
             }
         }
+
+        public string CommitMessage { get; set; }
+        public string? CommitSha { get; private set; }
+
         private Visibility? _progressBarVisibility = Visibility.Hidden;
         public Visibility? ProgressBarVisibility
         {
@@ -77,34 +81,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             //return base.OnInitializeAsync(cancellationToken);
         }
 
-        public async Task Import()
+        private bool PreAction()
         {
             if (ProjectId == Guid.Empty)
             {
-                return;
+                return false;
             }
 
             if (CheckIfConnectedToParatext() == false)
             {
-                return;
+                return false;
             }
 
+            CanOkAction = false;
+            CancelAction = "Cancel";
+            ProgressBarVisibility = Visibility.Visible;
+
+            if (!_cancellationTokenSource.TryReset())
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+            }
+
+            return true;
+        }
+
+        private void PostAction()
+        {
+            _runningTask = null;
+
+            CancelAction = "Close";
+            ProgressBarVisibility = Visibility.Hidden;
+        }
+
+        private async Task Import()
+        {
             try
             {
-                CanOkAction = false;
-                CancelAction = "Cancel";
-                ProgressBarVisibility = Visibility.Visible;
-
-                MergeProgressUpdates.Clear();
-                if (!_cancellationTokenSource.TryReset())
+                if (!PreAction())
                 {
-                    _cancellationTokenSource = new CancellationTokenSource();
+                    return;
                 }
 
-                _runningTask = Task.Run(() => _collaborationManager.InitializeProjectDatabaseAsync(ProjectId, true, _cancellationTokenSource.Token, new Progress<ProgressStatus>(Report)));
+                _runningTask = Task.Run(async () => await _collaborationManager.InitializeProjectDatabaseAsync(
+                    ProjectId, 
+                    true, 
+                    _cancellationTokenSource.Token, 
+                    new Progress<ProgressStatus>(Report)));
                 await _runningTask;
-
-                // If Import succeeds, don't set CanAction back to true
             }
             catch (Exception)
             {
@@ -112,48 +135,61 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
             finally
             {
-                _runningTask = null;
-
-                CancelAction = "Close";
-                ProgressBarVisibility = Visibility.Hidden;
+                // If Import succeeds, don't set CanAction back to true
+                PostAction();
             }
         }
 
-        public async Task Merge()
+        private async Task Merge()
         {
-            if (ProjectId == Guid.Empty)
-            {
-                return;
-            }
-
-            if (CheckIfConnectedToParatext() == false)
-            {
-                return;
-            }
-
             try
             {
-                CanOkAction = false;
-                CancelAction = "Cancel";
-                ProgressBarVisibility = Visibility.Visible;
-
-                MergeProgressUpdates.Clear();
-                if (!_cancellationTokenSource.TryReset())
+                if (!PreAction())
                 {
-                    _cancellationTokenSource = new CancellationTokenSource();
+                    return;
                 }
 
-                _runningTask = Task.Run(() => _collaborationManager.MergeProjectLatestChangesAsync(true, false, _cancellationTokenSource.Token, new Progress<ProgressStatus>(Report)));
+                _runningTask = Task.Run(async () => CommitSha = await _collaborationManager.MergeProjectLatestChangesAsync(
+                    true, 
+                    false, 
+                    _cancellationTokenSource.Token, 
+                    new Progress<ProgressStatus>(Report)));
                 await _runningTask;
             }
             finally
             {
-
-                _runningTask = null;
-
                 CanOkAction = true;
-                CancelAction = "Close";
-                ProgressBarVisibility = Visibility.Hidden;
+                PostAction();
+            }
+        }
+
+        private async Task Commit()
+        {
+            try
+            {
+                if (!PreAction())
+                {
+                    return;
+                }
+
+                _runningTask = Task.Run(async () => {
+                    var progress = (IProgress<ProgressStatus>) new Progress<ProgressStatus>(Report);
+
+                    await _collaborationManager.StageProjectChangesAsync(_cancellationTokenSource.Token, progress);
+
+                    progress.Report(new ProgressStatus(0, "Committing changes"));
+                    CommitSha = _collaborationManager.CommitChanges(CommitMessage);
+
+                    progress.Report(new ProgressStatus(0, "Pushing changes to remote"));
+                    _collaborationManager.PushChangesToRemote();
+                });
+
+                await _runningTask;
+            }
+            finally
+            {
+                // If Commit succeeds, don't set CanAction back to true
+                PostAction();
             }
         }
 
@@ -206,18 +242,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         public async Task Ok()
         {
-            if (IsImportAction)
+            if (CollaborationDialogAction == CollaborationDialogAction.Import)
             {
                 await Import();
             } 
-            else 
+            else if (CollaborationDialogAction == CollaborationDialogAction.Merge)
             { 
                 await Merge(); 
             }
-         }
+            else if (CollaborationDialogAction == CollaborationDialogAction.Commit)
+            {
+                await Commit();
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(CollaborationDialogAction), $"Not expected value: {CollaborationDialogAction}");
+            }
+        }
 
         public string ProgressLabel => $"{OkAction} Progress";
-        public string OkAction => IsImportAction ? "Import" : "Merge";
+        public string OkAction => CollaborationDialogAction.ToString();
 
         private bool _canOkAction;
         public bool CanOkAction
@@ -260,5 +304,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 NotifyOfPropertyChange(() => MergeProgressUpdates);
             }
         }
+    }
+
+    public enum CollaborationDialogAction
+    {
+        Import,
+        Merge,
+        Commit
     }
 }
