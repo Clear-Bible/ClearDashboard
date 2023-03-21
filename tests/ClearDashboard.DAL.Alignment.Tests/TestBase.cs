@@ -24,6 +24,7 @@ using Caliburn.Micro;
 using Autofac.Configuration;
 using System.Configuration;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
