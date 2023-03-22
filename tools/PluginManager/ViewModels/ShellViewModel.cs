@@ -14,6 +14,14 @@ namespace PluginManager.ViewModels
     {
         #region Member Variables   
 
+        private enum ReturnType
+        {
+            True,
+            False,
+            Missing
+        }
+
+
         #endregion //Member Variables
 
 
@@ -66,14 +74,13 @@ namespace PluginManager.ViewModels
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Clear Dashboard Plugin Manager  -  Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
-
-
+            
             var isAquaEnabled = GetAquaRegistryKey();
-            if (isAquaEnabled)
+            if (isAquaEnabled == ReturnType.True)
             {
                 EnableAqua();
             }
-            else
+            else if (isAquaEnabled == ReturnType.False)
             {
                 DisableAqua();
             }
@@ -114,7 +121,7 @@ namespace PluginManager.ViewModels
             TryCloseAsync();
         }
 
-        private bool GetAquaRegistryKey()
+        private ReturnType GetAquaRegistryKey()
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\ClearDashboard\AQUA");
             //if it does exist, retrieve the stored values  
@@ -123,13 +130,18 @@ namespace PluginManager.ViewModels
                 if ((string)key.GetValue("IsEnabled") == "true")
                 {
                     key.Close();
-                    return true;
+                    return ReturnType.True;
+                }
+                else
+                {
+                    key.Close();
+                    return ReturnType.False;
                 }
 
             }
             key!.Close();
 
-            return false;
+            return ReturnType.Missing;
         }
 
         private void EnableAqua()
