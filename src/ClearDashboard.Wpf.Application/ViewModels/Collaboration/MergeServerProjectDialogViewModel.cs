@@ -177,7 +177,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                     await _collaborationManager.StageProjectChangesAsync(_cancellationTokenSource.Token, progress);
 
-                    progress.Report(new ProgressStatus(0, "Committing changes"));
                     CommitSha = _collaborationManager.CommitChanges(CommitMessage, progress);
 
                     if (CommitSha is not null)
@@ -253,7 +252,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             { 
                 await Merge(); 
             }
-            else if (CollaborationDialogAction == CollaborationDialogAction.Commit)
+            else if (CollaborationDialogAction == CollaborationDialogAction.Commit || CollaborationDialogAction == CollaborationDialogAction.Initialize)
             {
                 await Commit();
             }
@@ -313,6 +312,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
     {
         Import,
         Merge,
-        Commit
+        Commit,
+        Initialize
     }
 }

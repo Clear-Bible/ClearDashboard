@@ -279,7 +279,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     viewModel.ProjectId = ProjectManager.CurrentProject.Id;
                     viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
                     viewModel.CommitMessage = "Initial Commit";
-                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Commit;
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Initialize;
 
                     this.WindowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
 
