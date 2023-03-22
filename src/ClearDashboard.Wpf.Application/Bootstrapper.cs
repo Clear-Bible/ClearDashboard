@@ -375,7 +375,7 @@ namespace ClearDashboard.Wpf.Application
                     Logger.LogInformation($"The Full FilePath existed.");
                     var psi = new ProcessStartInfo();
                     psi.FileName = filename;
-                    psi.Verb = "runas"; //This is what actually runs the command as administrator
+                    //psi.Verb = "runas"; //This is what actually runs the command as administrator
                     psi.WorkingDirectory = startupPath;
                     try
                     {
