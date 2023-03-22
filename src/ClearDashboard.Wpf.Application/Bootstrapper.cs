@@ -359,8 +359,9 @@ namespace ClearDashboard.Wpf.Application
             Logger.LogInformation($"Settings.Default.RunAquaInstall is: " + Settings.Default.RunAquaInstall);
             if (Settings.Default.RunAquaInstall)
             {
+                Logger.LogInformation($"RunAquaInstall was true so continuing...");
                 Settings.Default.RunAquaInstall = false;
-
+                Logger.LogInformation($"Settings.Default.RunAquaInstall is: " + Settings.Default.RunAquaInstall);
 
                 var startupPath = Environment.CurrentDirectory;
                 Logger.LogInformation($"Dashboard Startup Path: {startupPath}");
