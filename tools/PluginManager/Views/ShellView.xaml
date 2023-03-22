@@ -3,11 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:PluginManager.ViewModels"
     Title="{Binding Version}"
-    Width="1100"
-    Height="830"
+    Width="800"
+    Height="800"
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -27,9 +28,7 @@
     <Grid ShowGridLines="False">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="275" />
-            <RowDefinition Height="250" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -39,6 +38,47 @@
         </Grid.ColumnDefinitions>
 
         <!--  ROW 0  -->
-        <TextBlock>TEST</TextBlock>
+        <GroupBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="8,4,8,0"
+            BorderThickness="1"
+            Header="Status"
+            Style="{DynamicResource MaterialDesignCardGroupBox}">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Width="32"
+                            Height="32"
+                            VerticalAlignment="Center"
+                            Kind="Console" />
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                            Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+
+            <TextBlock
+                Margin="2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                FontSize="12"
+                Foreground="{StaticResource SecondaryHueMidBrush}"
+                Text="{Binding ProgressText}" />
+        </GroupBox>
+
+        <Button
+            x:Name="Close"
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="10"
+            HorizontalAlignment="Right">
+            Close
+        </Button>
     </Grid>
 </Window>
