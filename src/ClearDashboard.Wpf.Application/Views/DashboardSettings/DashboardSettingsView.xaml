@@ -11,6 +11,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Title="{helpers:Localization Settings_Settings}"
     Width="800"
     Height="450"
@@ -26,6 +28,12 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
@@ -101,7 +109,12 @@
                             Foreground="{StaticResource OrangeDarkBrush}"
                             IsChecked="{Binding IsAquaEnabled}" />
                     </GroupBox>
-
+                    <TextBlock 
+                        Text="Please restart ClearDashboard for AQUA to be be enabled/disabled." 
+                        Margin="16" 
+                        Foreground="Red" 
+                        FontWeight="Medium"
+                        Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
             </TabItem>
             <!--<TabItem>

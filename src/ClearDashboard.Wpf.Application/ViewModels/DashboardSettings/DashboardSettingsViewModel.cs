@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -14,6 +16,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables   
 
         private readonly ILogger<DashboardSettingsViewModel> _logger;
+        private bool _isAquaEnabledOnStartup;
 
         #endregion //Member Variables
 
@@ -60,6 +63,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _runAquaInstall;
+        public bool RunAquaInstall
+        {
+            get => _runAquaInstall;
+            set
+            {
+                _runAquaInstall = value;
+                NotifyOfPropertyChange(() => RunAquaInstall);
+            }
+        }
+
 
 
 
@@ -88,7 +102,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             IsPowerModesEnabled = Settings.Default.EnablePowerModes;
-            IsAquaEnabled = Settings.Default.IsAquaEnabled;
+            _isAquaEnabledOnStartup = Settings.Default.IsAquaEnabled;
+            IsAquaEnabled = _isAquaEnabledOnStartup;
 
             base.OnViewReady(view);
         }
@@ -115,11 +130,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
 
             // copy files from install directory to the proper spots
-            if (IsAquaEnabled)
+            if (IsAquaEnabled && (IsAquaEnabled != _isAquaEnabledOnStartup))
             {
+                RunAquaInstall = true;
+                Settings.Default.RunAquaInstall = RunAquaInstall;
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
+                key.SetValue("IsEnabled", "true");
+
                 var appStartupPath = AppContext.BaseDirectory;
                 _logger.LogInformation($"Aqua Plugin File Copy from {appStartupPath}");
                 var fromPath = Path.Combine(appStartupPath, "Aqua");
+
                 if (Directory.Exists(fromPath))
                 {
                     // install folder
@@ -167,6 +188,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                     }
                 }
 
+            }
+            else if (!IsAquaEnabled && (IsAquaEnabled != _isAquaEnabledOnStartup))
+            {
+                RunAquaInstall = true;
+                Settings.Default.RunAquaInstall = RunAquaInstall;
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
+                key.SetValue("IsEnabled", "false");
+            }
+            else if (IsAquaEnabled == _isAquaEnabledOnStartup)
+            {
+                RunAquaInstall = false;
+                Settings.Default.RunAquaInstall = RunAquaInstall;
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
+                if (IsAquaEnabled)
+                {
+                    key.SetValue("IsEnabled", "true");
+                }
+                else
+                {
+                    key.SetValue("IsEnabled", "false");
+                }
             }
         }
 

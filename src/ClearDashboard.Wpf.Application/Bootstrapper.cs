@@ -30,6 +30,7 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using DashboardApplication = System.Windows.Application;
 using KeyTrigger = Microsoft.Xaml.Behaviors.Input.KeyTrigger;
+using System.Diagnostics;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -315,6 +316,8 @@ namespace ClearDashboard.Wpf.Application
 
             DisposeLifetimeScope();
 
+            CheckToInstallAqua();
+
             base.OnExit(sender, e);
         }
 
@@ -347,6 +350,33 @@ namespace ClearDashboard.Wpf.Application
             Logger?.LogInformation("Disposing ILifetimeScope");
             var lifetimeScope = Container!.Resolve<ILifetimeScope>();
             lifetimeScope.Dispose();
+        }
+
+        private void CheckToInstallAqua()
+        {
+            if (Settings.Default.RunAquaInstall)
+            {
+                Settings.Default.RunAquaInstall = false;
+               
+                string bat = @"C:\Users\rober\Documents\GitHub\ClearDashboard\installer\codesign_exe.bat";
+                var psi = new ProcessStartInfo();
+                //psi.CreateNoWindow = true; //This hides the dos-style black window that the command prompt usually shows
+                psi.FileName = @"cmd.exe";
+                psi.Verb = "runas"; //This is what actually runs the command as administrator
+                psi.Arguments = "/C " + bat;
+                try
+                {
+                    var process = new Process();
+                    process.StartInfo = psi;
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception)
+                {
+                    //If you are here the user clicked decline to grant admin privileges (or he's not administrator)
+
+                }
+            }
         }
 
         #endregion
