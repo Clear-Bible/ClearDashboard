@@ -101,7 +101,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
 
             var factory = Container!.Resolve<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
-            ProjectName = $"Project{random.Next(1, 1000)}";
+            ProjectName = $"Project{random.Next(1, 10000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {ProjectName}");

@@ -4,12 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     d:DesignHeight="55"
     d:DesignWidth="515"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="Transparent"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="13"
@@ -192,7 +195,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="SYNC" />
+            Text="{helpers:Localization Bcv_Sync}" />
         <TextBlock
             Grid.Row="0"
             Grid.Column="2"
@@ -200,7 +203,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="BOOK" />
+            Text="{helpers:Localization Bcv_Book}" />
         <TextBlock
             Grid.Row="0"
             Grid.Column="5"
@@ -208,7 +211,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="CHAPTER" />
+            Text="{helpers:Localization Bcv_Chapter}" />
         <TextBlock
             Grid.Row="0"
             Grid.Column="8"
@@ -216,7 +219,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="VERSE" />
+            Text="{helpers:Localization Bcv_Verse}" />
 
         <TextBlock
             Grid.Row="0"
@@ -225,7 +228,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="OFFSET" />
+            Text="{helpers:Localization Bcv_Offset}" />
 
         <ComboBox
             x:Name="CboBook"
@@ -281,7 +284,7 @@
             Click="BookUpArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
-            ToolTip="Previous Book">
+            ToolTip="{helpers:Localization Bcv_PreviousBook}">
             <TextBlock
                 Name="PreviousBookArrow"
                 FontWeight="ExtraBold"
@@ -304,7 +307,7 @@
             Click="BookDownArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
-            ToolTip="Next Book">
+            ToolTip="{helpers:Localization Bcv_NextBook}">
 
             <TextBlock
                 Name="NextBookArrow"
@@ -329,7 +332,7 @@
             Click="ChapterUpArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
-            ToolTip="Previous Chapter">
+            ToolTip="{helpers:Localization Bcv_PreviousChapter}">
             <TextBlock
                 Name="PreviousChapterArrow"
                 FontWeight="ExtraBold"
@@ -352,7 +355,7 @@
             Click="ChapterDownArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
-            ToolTip="Next Chapter">
+            ToolTip="{helpers:Localization Bcv_NextChapter}">
 
             <TextBlock
                 Name="NextChapterArrow"
@@ -378,7 +381,7 @@
             Click="VerseUpArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
-            ToolTip="Previous Verse">
+            ToolTip="{helpers:Localization Bcv_PreviousVerse}">
 
             <TextBlock
                 Name="PreviousVerseArrow"
@@ -402,7 +405,7 @@
             Click="VerseDownArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
-            ToolTip="Next Verse">
+            ToolTip="{helpers:Localization Bcv_NextVerse}">
 
             <TextBlock
                 Name="NextVerseArrow"

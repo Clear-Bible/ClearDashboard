@@ -3,9 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontSize="16"
@@ -17,7 +20,8 @@
         BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
         CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderCornerRadius}"
         MouseEnter="OnMouseEnter"
-        MouseLeave="OnMouseLeave">
+        MouseLeave="OnMouseLeave"
+        MouseLeftButtonUp="NoteDisplayBorder_OnMouseLeftButtonUp">
         <Border.Style>
             <Style TargetType="{x:Type Border}">
                 <Setter Property="Background" Value="Transparent" />
@@ -158,11 +162,10 @@
                     Height="40"
                     Margin="5"
                     Click="Cancel"
+                    Content="{helpers:Localization Cancel}"
                     FontSize="11"
                     Foreground="{DynamicResource MaterialDesignBody}"
-                    Style="{StaticResource TransparentStyle}">
-                    Cancel
-                </Button>
+                    Style="{StaticResource TransparentStyle}" />
             </StackPanel>
             <Grid Grid.Row="2" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
                 <Grid.RowDefinitions>
@@ -178,11 +181,10 @@
                 <Label
                     Grid.Row="0"
                     Grid.Column="0"
+                    Content="{helpers:Localization Notes_NoteLabels}"
                     FontSize="13"
                     FontWeight="SemiBold"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
-                    Labels
-                </Label>
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}" />
                 <StackPanel
                     Grid.Row="0"
                     Grid.Column="1"
@@ -223,7 +225,7 @@
                     FontSize="13"
                     FontWeight="SemiBold"
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
-                    <Label>Associations</Label>
+                    <Label Content="{helpers:Localization Notes_NoteAssociationDescriptions}" />
                 </Button>
                 <Button
                     Grid.Row="1"
@@ -281,7 +283,7 @@
                         Click="ConfirmParatextSend"
                         FontSize="12"
                         FontWeight="SemiBold"
-                        ToolTip="Send this note to Paratext">
+                        ToolTip="{helpers:Localization Notes_SendToParatext}">
                         <Image Height="18" Source="/Resources/Paratext_Send32.png" />
                     </Button>
                     <Popup
@@ -297,12 +299,11 @@
                                 <TextBlock
                                     Padding="10"
                                     HorizontalAlignment="Center"
-                                    FontWeight="Bold">
-                                    Send this note to Paratext?
+                                    FontWeight="Bold" Text="{helpers:Localization Marble_SendConfirmation}">
                                 </TextBlock>
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Button Margin="5" Click="ParatextSendConfirmed">Yes</Button>
-                                    <Button Margin="5" Click="ParatextSendCancelled">No</Button>
+                                    <Button Margin="5" Click="ParatextSendConfirmed" Content="{helpers:Localization Yes}"/>
+                                    <Button Margin="5" Click="ParatextSendCancelled" Content="{helpers:Localization No}"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>

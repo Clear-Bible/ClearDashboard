@@ -51,6 +51,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     "manuscript to zz_sur",
                     "fastalign",
                     false,
+                    false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus1.ParallelCorpusId,
                     Mediator!);
@@ -74,6 +75,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSet2 = await alignmentModel2.Create(
                     "manuscript to zz_sur",
                     "fastalign",
+                    false,
                     false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus2.ParallelCorpusId,
@@ -123,6 +125,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSet = await alignmentModel.Create(
                     "manuscript to zz_sur",
                     "fastalign",
+                    false,
                     false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,
@@ -177,6 +180,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSet = await alignmentModel.Create(
                     "manuscript to zz_sur",
                     "fastalign",
+                    false,
                     false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,
@@ -366,6 +370,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     "manuscript to zz_sur",
                     "fastalign",
                     false,
+                    false,
                     new Dictionary<string, object>(),
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
@@ -397,6 +402,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     "manuscript to zz_sur",
                     "fastalign",
                     false,
+                    false,
                     new Dictionary<string, object>(),
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
@@ -423,6 +429,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     "manuscript to zz_sur",
                     "fastalign",
                     false,
+                    true,
                     new Dictionary<string, object>(),
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
@@ -463,6 +470,14 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Assert.NotNull(alignmentDbAfter);
             Assert.NotNull(alignmentDbAfter.Deleted);
+
+            var alignmentSetCopy = await AlignmentSet.Get(alignmentSet.AlignmentSetId, Mediator!);
+            Assert.NotNull(alignmentSetCopy);
+            Assert.Equal(alignmentSet.AlignmentSetId.DisplayName, alignmentSetCopy.AlignmentSetId.DisplayName);
+            Assert.Equal(alignmentSet.AlignmentSetId.SmtModel, alignmentSetCopy.AlignmentSetId.SmtModel);
+            Assert.Equal(alignmentSet.AlignmentSetId.IsSyntaxTreeAlignerRefined, alignmentSetCopy.AlignmentSetId.IsSyntaxTreeAlignerRefined);
+            Assert.Equal(alignmentSet.AlignmentSetId.IsSymmetrized, alignmentSetCopy.AlignmentSetId.IsSymmetrized);
+            Assert.Equal(alignmentSet.AlignmentSetId.ParallelCorpusId, alignmentSetCopy.AlignmentSetId.ParallelCorpusId);
         }
         finally
         {
@@ -487,6 +502,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSet = await alignmentModel.Create(
                     "manuscript to zz_sur",
                     "fastalign",
+                    false,
                     false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,
@@ -585,6 +601,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     "manuscript to zz_sur",
                     "fastalign",
                     false,
+                    false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
@@ -651,6 +668,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSet = await alignmentModel.Create(
                     "manuscript to zz_sur",
                     "fastalign",
+                    false,
                     false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,
@@ -890,6 +908,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     "manuscript to zz_sur",
                     "fastalign",
                     false,
+                    false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
@@ -910,6 +929,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         var alignmentSet = await alignmentModel.Create(
                 "manuscript to zz_sur",
                 "fastalign",
+                false,
                 false,
                 new Dictionary<string, object>(), //metadata
                 parallelCorpus.ParallelCorpusId,

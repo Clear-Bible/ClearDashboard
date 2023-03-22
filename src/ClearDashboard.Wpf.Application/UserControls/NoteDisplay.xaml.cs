@@ -1129,5 +1129,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             Loaded += OnLoaded;
         }
 
+        private void NoteDisplayBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            NoteTextBox.Focus();
+        }
     }
 }
