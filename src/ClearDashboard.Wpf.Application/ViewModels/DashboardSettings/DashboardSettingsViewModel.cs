@@ -129,86 +129,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.IsAquaEnabled = IsAquaEnabled;
             Settings.Default.Save();
 
-            // copy files from install directory to the proper spots
-            if (IsAquaEnabled && (IsAquaEnabled != _isAquaEnabledOnStartup))
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
+
+            if (IsAquaEnabled)
             {
-                RunAquaInstall = true;
-                Settings.Default.RunAquaInstall = RunAquaInstall;
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
                 key.SetValue("IsEnabled", "true");
-
-                var appStartupPath = AppContext.BaseDirectory;
-                _logger.LogInformation($"Aqua Plugin File Copy from {appStartupPath}");
-                var fromPath = Path.Combine(appStartupPath, "Aqua");
-
-                if (Directory.Exists(fromPath))
-                {
-                    // install folder
-                    var files = Directory.EnumerateFiles(fromPath);
-                    foreach (var file in files)
-                    {
-                        try
-                        {
-                            File.Copy(file, appStartupPath, true);
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.LogError("Aqua Plugin File Copy", e);
-                        }
-                    }
-
-                    // en folder
-                    fromPath = Path.Combine(appStartupPath, "Aqua", "en");
-                    files = Directory.EnumerateFiles(fromPath);
-                    foreach (var file in files)
-                    {
-                        try
-                        {
-                            File.Copy(file, Path.Combine(appStartupPath, "en"), true);
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.LogError("Aqua Plugin File Copy", e);
-                        }
-                    }
-
-                    // Services folder
-                    fromPath = Path.Combine(appStartupPath, "Aqua", "Services");
-                    files = Directory.EnumerateFiles(fromPath);
-                    foreach (var file in files)
-                    {
-                        try
-                        {
-                            File.Copy(file, Path.Combine(appStartupPath, "Services"), true);
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.LogError("Aqua Plugin File Copy", e);
-                        }
-                    }
-                }
-
             }
-            else if (!IsAquaEnabled && (IsAquaEnabled != _isAquaEnabledOnStartup))
+            else
             {
-                RunAquaInstall = true;
-                Settings.Default.RunAquaInstall = RunAquaInstall;
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
+                
                 key.SetValue("IsEnabled", "false");
             }
-            else if (IsAquaEnabled == _isAquaEnabledOnStartup)
+
+            if (_isAquaEnabledOnStartup == IsAquaEnabled)
             {
                 RunAquaInstall = false;
                 Settings.Default.RunAquaInstall = RunAquaInstall;
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
-                if (IsAquaEnabled)
-                {
-                    key.SetValue("IsEnabled", "true");
-                }
-                else
-                {
-                    key.SetValue("IsEnabled", "false");
-                }
+            }
+            else
+            {
+                RunAquaInstall = true;
+                Settings.Default.RunAquaInstall = RunAquaInstall;
             }
         }
 
