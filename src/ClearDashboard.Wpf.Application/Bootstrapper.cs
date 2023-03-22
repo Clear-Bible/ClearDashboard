@@ -360,6 +360,7 @@ namespace ClearDashboard.Wpf.Application
 
 
                 var startupPath = Environment.CurrentDirectory;
+                Logger.LogInformation($"Dashboard Startup Path: {startupPath}");
                 var filename = Path.Combine(startupPath, "PluginManager.exe");
 
                 if (File.Exists(filename))
