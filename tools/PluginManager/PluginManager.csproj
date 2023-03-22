@@ -7,6 +7,10 @@
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>PluginManager.ico</ApplicationIcon>
+	<Copyright>Clear Bible, 2023</Copyright>
+	<AssemblyVersion>1.0.0.0</AssemblyVersion>
+	<FileVersion>1.0.0.0</FileVersion>
+	<Version>1.0.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
