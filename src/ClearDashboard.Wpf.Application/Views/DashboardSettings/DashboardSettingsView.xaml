@@ -89,12 +89,16 @@
                     </StackPanel>
                 </TabItem.Header>
                 <StackPanel Orientation="Vertical">
-                    <Image Source="pack://application:,,,/Resources/CautionTape.bmp" Height="15" Stretch="Fill" StretchDirection="UpOnly" />
+                    <Image
+                        Height="15"
+                        Source="pack://application:,,,/Resources/CautionTape.bmp"
+                        Stretch="Fill"
+                        StretchDirection="UpOnly" />
                     <GroupBox Margin="16" Header="{helpers:Localization Settings_Plugins}">
                         <CheckBox
-                            Foreground="{StaticResource OrangeDarkBrush}"
                             cm:Message.Attach="AquaEnabledCheckBox($datacontext)"
                             Content="{helpers:Localization Settings_AquaEnabled}"
+                            Foreground="{StaticResource OrangeDarkBrush}"
                             IsChecked="{Binding IsAquaEnabled}" />
                     </GroupBox>
 
