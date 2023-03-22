@@ -100,7 +100,7 @@
 
                 </StackPanel>
             </TabItem>
-            <TabItem>
+            <!--<TabItem>
                 <TabItem.Header>
                     <StackPanel Width="auto" Height="auto">
                         <iconPacks:PackIconUnicons
@@ -139,7 +139,7 @@
                     <LineBreak />
                     <LineBreak />
                 </TextBlock>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
 
         <!--<StackPanel Orientation="Vertical">
