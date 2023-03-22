@@ -56,7 +56,7 @@
 
 
         <TabControl Style="{StaticResource MahApps.Styles.TabControl.Animated}">
-            <TabItem Header="Known Issues">
+            <TabItem Header="{helpers:Localization ReleaseNotes_KnownIssues}">
                 <ListBox
                     x:Name="ListBoxKnownIssues"
                     Margin="10,0,10,0"
@@ -89,7 +89,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </TabItem>
-            <TabItem Header="Release Notes">
+            <TabItem Header="{helpers:Localization ShellView_ShowNotes}">
                 <ListView
                     x:Name="UpdateList"
                     Margin="18,0,5,5"
@@ -238,6 +238,6 @@
             Margin="10"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Content="Close" />
+            Content="{helpers:Localization Close}" />
     </Grid>
 </Window>
