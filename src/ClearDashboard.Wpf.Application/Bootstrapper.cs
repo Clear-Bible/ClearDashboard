@@ -316,6 +316,7 @@ namespace ClearDashboard.Wpf.Application
 
             DisposeLifetimeScope();
 
+            Logger.LogInformation($"Bootstrapper.OnExit hit.");
             CheckToInstallAqua();
 
             base.OnExit(sender, e);
@@ -354,6 +355,8 @@ namespace ClearDashboard.Wpf.Application
 
         private void CheckToInstallAqua()
         {
+            Logger.LogInformation($"Bootstrapper.CheckToInstallAqua hit.");
+            Logger.LogInformation($"Settings.Default.RunAquaInstall is: " + Settings.Default.RunAquaInstall);
             if (Settings.Default.RunAquaInstall)
             {
                 Settings.Default.RunAquaInstall = false;
@@ -361,24 +364,34 @@ namespace ClearDashboard.Wpf.Application
 
                 var startupPath = Environment.CurrentDirectory;
                 Logger.LogInformation($"Dashboard Startup Path: {startupPath}");
+
                 var filename = Path.Combine(startupPath, "PluginManager.exe");
+                Logger.LogInformation($"Full PluginManager FilePath: {filename}");
 
                 if (File.Exists(filename))
                 {
+                    Logger.LogInformation($"The Full FilePath existed.");
                     var psi = new ProcessStartInfo();
                     psi.FileName = filename;
                     psi.Verb = "runas"; //This is what actually runs the command as administrator
                     psi.WorkingDirectory = startupPath;
                     try
                     {
+                        Logger.LogInformation($"Entered Try block.");
                         var process = new Process();
                         process.StartInfo = psi;
                         process.Start();
+                        Logger.LogInformation($"Process Started.");
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        Logger.LogInformation($"In Catch, Process Failed or was denied admin privileges: " + ex);
                         //If you are here the user clicked decline to grant admin privileges (or he's not administrator)
                     }
+                }
+                else
+                {
+                    Logger.LogInformation($"The Full FilePath did not exist.");
                 }
 
             }
