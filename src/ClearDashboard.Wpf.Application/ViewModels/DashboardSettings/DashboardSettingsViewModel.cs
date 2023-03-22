@@ -127,7 +127,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         public void AquaEnabledCheckBox(bool value)
         {
             Settings.Default.IsAquaEnabled = IsAquaEnabled;
-            Settings.Default.Save();
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
 
@@ -151,6 +150,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                 RunAquaInstall = true;
                 Settings.Default.RunAquaInstall = RunAquaInstall;
             }
+
+            Settings.Default.Save();
         }
 
         #endregion // Methods
