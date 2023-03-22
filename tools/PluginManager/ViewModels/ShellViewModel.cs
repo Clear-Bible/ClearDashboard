@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Windows.Shapes;
+using Path = System.IO.Path;
 
 namespace PluginManager.ViewModels
 {
@@ -146,7 +148,10 @@ namespace PluginManager.ViewModels
                 {
                     try
                     {
-                        File.Copy(file, appStartupPath, true);
+                        ProgressText += $"\nFile: {file}";
+                        FileInfo fileInfo = new FileInfo(file);
+
+                        File.Copy(file, Path.Combine(appStartupPath, fileInfo.Name), true);
                     }
                     catch (Exception e)
                     {
@@ -154,6 +159,8 @@ namespace PluginManager.ViewModels
                         ProgressText += $"\n  {e.Message}";
                     }
                 }
+                ProgressText += $"\n";
+
 
                 // en folder
                 fromPath = Path.Combine(appStartupPath, "Aqua", "en");
@@ -162,7 +169,18 @@ namespace PluginManager.ViewModels
                 {
                     try
                     {
-                        File.Copy(file, Path.Combine(appStartupPath, "en"), true);
+                        ProgressText += $"\nFile: {file}";
+                        FileInfo fileInfo = new FileInfo(file);
+
+                        if (Directory.Exists(Path.Combine(appStartupPath, "en")) == false)
+                        {
+                            // create en directory
+                            ProgressText += $"\nCreate en Directory";
+                            Directory.CreateDirectory(Path.Combine(appStartupPath, "en"));
+                            ProgressText += $"\nCreate en Directory Complete";
+                        }
+
+                        File.Copy(file, Path.Combine(appStartupPath, "en", fileInfo.Name), true);
                     }
                     catch (Exception e)
                     {
@@ -170,6 +188,7 @@ namespace PluginManager.ViewModels
                         ProgressText += $"\n  {e.Message}";
                     }
                 }
+                ProgressText += $"\n";
 
                 // Services folder
                 fromPath = Path.Combine(appStartupPath, "Aqua", "Services");
@@ -178,7 +197,18 @@ namespace PluginManager.ViewModels
                 {
                     try
                     {
-                        File.Copy(file, Path.Combine(appStartupPath, "Services"), true);
+                        ProgressText += $"\nFile: {file}";
+                        FileInfo fileInfo = new FileInfo(file);
+
+                        if (Directory.Exists(Path.Combine(appStartupPath, "Services")) == false)
+                        {
+                            // create Services directory
+                            ProgressText += $"\nCreate Services Directory";
+                            Directory.CreateDirectory(Path.Combine(appStartupPath, "Services"));
+                            ProgressText += $"\nCreate Services Directory Complete";
+                        }
+
+                        File.Copy(file, Path.Combine(appStartupPath, "Services", fileInfo.Name), true);
                     }
                     catch (Exception e)
                     {
