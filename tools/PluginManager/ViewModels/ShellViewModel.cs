@@ -89,7 +89,7 @@ namespace PluginManager.ViewModels
 
         public void Close()
         {
-            var startupPath = AppContext.BaseDirectory;
+            var startupPath = Environment.CurrentDirectory;
             var filename = Path.Combine(startupPath, "ClearDashboard.Wpf.Application.exe");
 
             if (File.Exists(filename))
@@ -135,7 +135,7 @@ namespace PluginManager.ViewModels
             ProgressText = "Starting Migrating of AQUA Plugin";
 
             // copy files from install directory to the proper spots
-            var appStartupPath = AppContext.BaseDirectory;
+            var appStartupPath = Environment.CurrentDirectory;
             ProgressText += $"\nAqua Plugin File Copy from {appStartupPath}";
             var fromPath = Path.Combine(appStartupPath, "Aqua");
             if (Directory.Exists(fromPath))
@@ -196,7 +196,7 @@ namespace PluginManager.ViewModels
             ProgressText = "Starting Removal of AQUA Plugin";
 
             // copy files from install directory to the proper spots
-            var appStartupPath = AppContext.BaseDirectory;
+            var appStartupPath = Environment.CurrentDirectory;
             ProgressText += $"\nAqua Plugin File Copy from {appStartupPath}";
             var fromPath = Path.Combine(appStartupPath, "Aqua");
             if (Directory.Exists(fromPath))

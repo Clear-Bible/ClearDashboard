@@ -359,7 +359,7 @@ namespace ClearDashboard.Wpf.Application
                 Settings.Default.RunAquaInstall = false;
 
 
-                var startupPath = AppContext.BaseDirectory;
+                var startupPath = Environment.CurrentDirectory;
                 var filename = Path.Combine(startupPath, "PluginManager.exe");
 
                 if (File.Exists(filename))

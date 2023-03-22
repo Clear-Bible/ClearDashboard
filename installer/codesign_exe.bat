@@ -10,6 +10,21 @@ rem get the absolute path to the relative key file
 CALL :NORMALIZEPATH "..\code_signing_key\ClearBible.pfx"
 
 
+echo ========== PUBLISH 64-Bit Version of PluginManager ==============
+cd ..\tools\PluginManager
+dotnet clean --configuration Release
+dotnet publish -r win-x64 -c Release
+
+echo code sign the WPF exe	
+ ..\code_signing_key\signing_tool\signtool.exe ^
+ 	sign /v /f %RETVAL% ^
+ 	/p "%PASSWORD%" ^
+ 	/t http://timestamp.comodoca.com/authenticode ^
+"%CURRENTPATH%\..\tools\PluginManager\bin\Release\net7.0-windows\win-x64\publish\PluginManager.dll"
+
+
+
+
 echo ========== PUBLISH 64-Bit Version of Dashboard ==============
 cd ..\src\ClearDashboard.Wpf.Application
 dotnet clean --configuration Release
