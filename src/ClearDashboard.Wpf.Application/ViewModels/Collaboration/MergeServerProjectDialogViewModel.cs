@@ -122,7 +122,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     return;
                 }
 
-                _runningTask = Task.Run(async () => await _collaborationManager.InitializeProjectDatabaseAsync(
+                _runningTask = Task.Run(async () => CommitSha = await _collaborationManager.InitializeProjectDatabaseAsync(
                     ProjectId, 
                     true, 
                     _cancellationTokenSource.Token, 
@@ -178,10 +178,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     await _collaborationManager.StageProjectChangesAsync(_cancellationTokenSource.Token, progress);
 
                     progress.Report(new ProgressStatus(0, "Committing changes"));
-                    CommitSha = _collaborationManager.CommitChanges(CommitMessage);
+                    CommitSha = _collaborationManager.CommitChanges(CommitMessage, progress);
 
-                    progress.Report(new ProgressStatus(0, "Pushing changes to remote"));
-                    _collaborationManager.PushChangesToRemote();
+                    if (CommitSha is not null)
+                    {
+                        progress.Report(new ProgressStatus(0, "Pushing changes to remote"));
+                        _collaborationManager.PushChangesToRemote();
+                    }
                 });
 
                 await _runningTask;

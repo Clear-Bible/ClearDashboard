@@ -286,6 +286,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     if (viewModel.CommitSha is not null)
                     {
                         ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        // LastMergedCommitSha value should already be in database
                     }
 
                     // FIXME:  how?
@@ -296,7 +297,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void ShowCollaborationGetLatest()
         {
-            if (_collaborationManager.IsRepositoryInitialized())
+            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
             {
                 _collaborationManager.FetchMergeRemote();
 
@@ -313,6 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     if (viewModel.CommitSha is not null)
                     {
                         ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        // LastMergedCommitSha value should already be in database
                     }
                 }
 
@@ -1242,7 +1244,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Get Latest from Server", Id = "CollaborationGetLatestID",
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized()
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository()
                 },
                 new MenuItemViewModel
                 {

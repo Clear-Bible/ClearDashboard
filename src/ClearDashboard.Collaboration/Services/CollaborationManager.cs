@@ -389,7 +389,7 @@ public class CollaborationManager
         // Stage the changes:  (or maybe have this as a separate step?)
         using (var repo = new Repository(_repositoryPath))
         {
-            progress.Report(new ProgressStatus(0, "Staging changes"));
+            progress.Report(new ProgressStatus(0, "Staging changes in source control"));
             Commands.Stage(repo, projectFolderName);
         }
     }
@@ -446,7 +446,7 @@ public class CollaborationManager
         return statuses;
     }
 
-    public string? CommitChanges(string commitMessage)
+    public string? CommitChanges(string commitMessage, IProgress<ProgressStatus> progress)
 	{
         EnsureValidRepository(_repositoryPath);
 
@@ -465,10 +465,12 @@ public class CollaborationManager
             RepositoryStatus status = repo.RetrieveStatus();
             if (status.IsDirty)
             {
+                progress.Report(new ProgressStatus(0, "Committing to source control"));
                 var commit = repo.Commit(commitMessage, userSignature, userSignature);
                 return commit.Sha;
             }
 
+            progress.Report(new ProgressStatus(0, "Nothing to commit"));
             return null;
         }
     }
