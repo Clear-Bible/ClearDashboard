@@ -114,7 +114,7 @@ namespace PluginManager.ViewModels
 
         private bool GetAquaRegistryKey()
         {
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\ClearDashboard\AQUA");
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\ClearDashboard\AQUA");
             //if it does exist, retrieve the stored values  
             if (key != null)
             {

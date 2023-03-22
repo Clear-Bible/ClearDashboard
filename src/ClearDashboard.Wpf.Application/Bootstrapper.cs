@@ -357,25 +357,29 @@ namespace ClearDashboard.Wpf.Application
             if (Settings.Default.RunAquaInstall)
             {
                 Settings.Default.RunAquaInstall = false;
-               
-                string bat = @"C:\Users\rober\Documents\GitHub\ClearDashboard\installer\codesign_exe.bat";
-                var psi = new ProcessStartInfo();
-                //psi.CreateNoWindow = true; //This hides the dos-style black window that the command prompt usually shows
-                psi.FileName = @"cmd.exe";
-                psi.Verb = "runas"; //This is what actually runs the command as administrator
-                psi.Arguments = "/C " + bat;
-                try
-                {
-                    var process = new Process();
-                    process.StartInfo = psi;
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception)
-                {
-                    //If you are here the user clicked decline to grant admin privileges (or he's not administrator)
 
+
+                var startupPath = AppContext.BaseDirectory;
+                var filename = Path.Combine(startupPath, "PluginManager.exe");
+
+                if (File.Exists(filename))
+                {
+                    var psi = new ProcessStartInfo();
+                    psi.FileName = filename;
+                    psi.Verb = "runas"; //This is what actually runs the command as administrator
+                    psi.WorkingDirectory = startupPath;
+                    try
+                    {
+                        var process = new Process();
+                        process.StartInfo = psi;
+                        process.Start();
+                    }
+                    catch (Exception)
+                    {
+                        //If you are here the user clicked decline to grant admin privileges (or he's not administrator)
+                    }
                 }
+
             }
         }
 
