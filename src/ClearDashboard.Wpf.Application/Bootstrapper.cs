@@ -361,6 +361,7 @@ namespace ClearDashboard.Wpf.Application
             {
                 Logger.LogInformation($"RunAquaInstall was true so continuing...");
                 Settings.Default.RunAquaInstall = false;
+                Settings.Default.Save();
                 Logger.LogInformation($"Settings.Default.RunAquaInstall is: " + Settings.Default.RunAquaInstall);
 
                 var startupPath = Environment.CurrentDirectory;

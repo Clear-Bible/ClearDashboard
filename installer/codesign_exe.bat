@@ -15,6 +15,8 @@ cd ..\tools\PluginManager
 dotnet clean --configuration Release
 dotnet publish -r win-x64 -c Release
 
+cd ..\..\installer
+
 echo code sign the WPF exe	
  ..\code_signing_key\signing_tool\signtool.exe ^
  	sign /v /f %RETVAL% ^
@@ -26,7 +28,11 @@ echo code sign the WPF exe
 
 
 echo ========== PUBLISH 64-Bit Version of Dashboard ==============
+
 cd ..\src\ClearDashboard.Wpf.Application
+dir
+
+pause
 dotnet clean --configuration Release
 dotnet publish -r win-x64 -c Release
 
@@ -59,7 +65,7 @@ pause
 
 
 ::===================INNO Dashboard=====================
-eco run the Inno Setup Compliler on Dashboard
+echo run the Inno Setup Compliler on Dashboard
 "%driveInno%:\Program Files (x86)\Inno Setup 6\ISCC.exe" "%CURRENTPATH%\DashboardInstaller.iss"
 
 echo code sign the Dashboard installer
@@ -79,3 +85,8 @@ EXIT /B
   SET RETVAL=%~f1
   EXIT /B
 
+:GET_THIS_DIR
+pushd %~dp0
+set THIS_DIR=%CD%
+popd
+goto :EOF
