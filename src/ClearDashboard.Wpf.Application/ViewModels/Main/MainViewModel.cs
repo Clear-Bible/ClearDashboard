@@ -477,7 +477,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             EventAggregator?.Unsubscribe(this);
         }
 
-        private async Task SaveProjectData()
+        public async Task SaveProjectData()
         {
             try
             {
@@ -1063,7 +1063,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             AddNewEnhancedViewTab(windowDockable);
 
-            await SaveProjectEnhancedViewTabs();
+            await SaveProjectData();
         }
 
         private BindableCollection<LayoutFile> GetFileLayouts()
@@ -1330,6 +1330,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             FileLayouts.Remove(layoutFile);
             await RebuildMainMenu();
+            await SaveProjectData();
         }
 
         public void CancelSave()

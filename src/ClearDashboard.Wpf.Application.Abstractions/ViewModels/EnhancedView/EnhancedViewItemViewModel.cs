@@ -21,7 +21,7 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     private Brush _borderColor = Brushes.Blue;
 
-    
+    protected IEnhancedViewManager EnhancedViewManager { get; }
     public Brush BorderColor
     {
         get => _borderColor;
@@ -68,13 +68,14 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
         return Task.CompletedTask;
     }
 
-    protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager,
+    protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
         INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
         IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
         LocalizationService = localizationService;
-        // no-op
-    }
+        EnhancedViewManager = enhancedViewManager;
+
+    }       
 
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
     {

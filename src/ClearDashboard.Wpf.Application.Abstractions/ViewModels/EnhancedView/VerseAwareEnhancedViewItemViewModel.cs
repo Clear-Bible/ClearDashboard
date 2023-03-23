@@ -41,6 +41,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
         public IWindowManager WindowManager { get; }
 
+     
         public VerseAwareConductorOneActive ParentViewModel => (VerseAwareConductorOneActive)Parent;
 
         //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
@@ -152,9 +153,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _selectedVerseDisplayViewModel, value);
         }
 
-        public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager,
+        public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
             INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
-            IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+            IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             WindowManager = windowManager;
         }

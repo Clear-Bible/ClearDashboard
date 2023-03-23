@@ -26,6 +26,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -90,6 +91,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #region Member Variables
 
         public NoteManager NoteManager { get; }
+
+        protected IEnhancedViewManager EnhancedViewManager { get; }
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
 
@@ -328,7 +331,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
-        public EnhancedViewModel(INavigationService navigationService, 
+        public EnhancedViewModel(INavigationService navigationService,
+            IEnhancedViewManager enhancedViewManager,
             ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, 
             NoteManager noteManager, 
@@ -344,6 +348,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
+            EnhancedViewManager = enhancedViewManager;
             
             Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
 
@@ -402,6 +407,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
                 finally
                 {
+                    await EnhancedViewManager.SaveProjectData();
                     EnableBcvControl = true;
                 }
             }, cancellationToken);
@@ -549,7 +555,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        private void DeleteCorpusRow(object? obj)
+        private async void DeleteCorpusRow(object? obj)
         {
             var item = (EnhancedViewItemViewModel)obj!;
             
@@ -559,6 +565,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Items.RemoveAt(index);
             EnhancedViewLayout!.EnhancedViewItems.RemoveAt(index);
 
+            await EnhancedViewManager.SaveProjectData();
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)

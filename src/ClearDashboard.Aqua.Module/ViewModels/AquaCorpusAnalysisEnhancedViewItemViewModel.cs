@@ -7,6 +7,7 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
@@ -28,7 +29,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
-
 
 namespace ClearDashboard.Aqua.Module.ViewModels
 {
@@ -205,6 +205,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
 
         public AquaCorpusAnalysisEnhancedViewItemViewModel(
             DashboardProjectManager? projectManager,
+            IEnhancedViewManager enhancedViewManager,
             INavigationService? navigationService,
             ILogger<AquaCorpusAnalysisEnhancedViewItemViewModel>? logger,
             IEventAggregator? eventAggregator,
@@ -214,7 +215,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             ILocalizationService localizationService,
             IAquaManager aquaManager,
             LongRunningTaskManager longRunningTaskManager)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService)
+            : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService)
         {
             aquaManager_ = aquaManager;
             longRunningTaskManager_ = longRunningTaskManager;
