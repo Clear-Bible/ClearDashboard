@@ -840,6 +840,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...", 
                                 cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
+                            
+                            // CHRIS _ HERE IS WHAT YOU NEED
+                            Console.WriteLine(selectedProject.ScrVers);
+                            // ===============================
+
+
 #pragma warning disable CS8604
                             // ReSharper disable once UnusedVariable
                             var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
