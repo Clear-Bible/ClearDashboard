@@ -102,7 +102,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             IsPowerModesEnabled = Settings.Default.EnablePowerModes;
-            _isAquaEnabledOnStartup = Settings.Default.IsAquaEnabled;
+
+            var isEnabled = false;
+            try
+            {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\ClearDashboard\AQUA"))
+                {
+                    if (key != null)
+                    {
+                        Object o = key.GetValue("IsEnabled");
+                        if (o != null)
+                        {
+                            if (o as string == "true")
+                            {
+                                isEnabled = true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _isAquaEnabledOnStartup = Settings.Default.IsAquaEnabled;
+            }
+
+            _isAquaEnabledOnStartup = isEnabled;
             IsAquaEnabled = _isAquaEnabledOnStartup;
 
             base.OnViewReady(view);
