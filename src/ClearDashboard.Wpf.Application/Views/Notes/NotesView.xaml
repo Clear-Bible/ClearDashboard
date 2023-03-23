@@ -386,7 +386,7 @@
         </DataGrid>
 
         <ProgressBar
-            x:Name="ProgressBarVisibility"
+            x:Name="ProgressBar"
             Grid.Column="1"
             Width="100"
             Height="100"

@@ -31,6 +31,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         ToolViewModel, 
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
+        IHandle<NoteUpdatingMessage>,
         IHandle<NoteUpdatedMessage>,
         IHandle<NoteLabelAttachedMessage>,
         IHandle<NoteLabelDetachedMessage>
@@ -349,6 +350,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
             _ = (await noteManager.GetNoteIdsAsync(cancellationToken: cancellationToken))
                     .SelectMany(d => d.Value)
+                    //.Distinct(new IIdEqualityComparer()) //using hashset instead.
                     .Select(nid =>
                     {
                         noteIds.Add(nid);
@@ -359,7 +361,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Collecting note details for notes", null);
 
             return await noteIds
-                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid))
+                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false))
                 .WhenAll();
         }
         private void UpdateSelectedNote(NoteViewModel? selectedNoteViewModel)
@@ -614,11 +616,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await GetAllNotesAndSetNoteViewModelsAsync();
         }
 
-        public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
-        {
-            await GetAllNotesAndSetNoteViewModelsAsync();
-        }
-
         public async Task HandleAsync(NoteLabelAttachedMessage message, CancellationToken cancellationToken)
         {
             await GetAllNotesAndSetNoteViewModelsAsync();
@@ -627,6 +624,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         public async Task HandleAsync(NoteLabelDetachedMessage message, CancellationToken cancellationToken)
         {
             await GetAllNotesAndSetNoteViewModelsAsync();
+        }
+
+        public Task HandleAsync(NoteUpdatingMessage message, CancellationToken cancellationToken)
+        {
+            ProgressBarVisibility = Visibility.Visible;
+            return Task.CompletedTask;
+        }
+        public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.succeeded)
+                await GetAllNotesAndSetNoteViewModelsAsync();
+            else
+                ProgressBarVisibility = Visibility.Hidden;
         }
     }
 
