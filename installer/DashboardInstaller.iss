@@ -147,8 +147,8 @@ Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencrypti
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 ; Install Hebrew & Greek Fonts
-;Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_Hbrw.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Hebrew"
-;Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_grk.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Greek"
+Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_Hbrw.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Hebrew"
+Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_grk.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Greek"
 
 ; Install Paratext Plugin
 Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -162,6 +162,8 @@ Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: s
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".myp"; ValueData: ""
 
+Root: HKCU; Subkey: "Software\ClearDashboard\AQUA"; ValueName: "IsEnabled"; ValueType: none; Flags: deletevalue;
+
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
@@ -174,6 +176,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 
 [InstallDelete]
 Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
+Type: filesandordirs; Name: "{app}"
 
 [Code]
 //-------UninsIS-------//
