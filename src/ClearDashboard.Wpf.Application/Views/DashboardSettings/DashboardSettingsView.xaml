@@ -5,19 +5,18 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dashboardSettings="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.DashboardSettings"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.DashboardSettings"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    Title="{helpers1:Localization Settings_Settings}"
+    Title="{helpers:Localization Settings_Settings}"
     Width="800"
     Height="450"
     d:DataContext="{d:DesignInstance Type=dashboardSettings:DashboardSettingsViewModel,
                                      IsDesignTimeCreatable=True}"
-    helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -59,7 +58,7 @@
                             Kind="Gauge75" />
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="{helpers1:Localization Settings_PowerModes}"
+                            Text="{helpers:Localization Settings_PowerModes}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
@@ -70,7 +69,7 @@
                         IsEnabled="{Binding IsPowerModesBoxEnabled}">
                         <CheckBox
                             cm:Message.Attach="PowerModeCheckBox($datacontext)"
-                            Content="{helpers1:Localization Settings_PowerModesDescription}"
+                            Content="{helpers:Localization Settings_PowerModesDescription}"
                             IsChecked="{Binding IsPowerModesEnabled}" />
                     </GroupBox>
                 </StackPanel>
@@ -85,12 +84,12 @@
                             Kind="TrafficBarrier" />
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="{helpers1:Localization Settings_Reserved}"
+                            Text="{helpers:Localization Settings_Reserved}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
                 <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers1:Localization Settings_ReservedCaption}" />
+                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
                     <LineBreak />
                     <LineBreak />
                 </TextBlock>
@@ -105,12 +104,12 @@
                             Kind="TrafficBarrier" />
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="{helpers1:Localization Settings_Reserved}"
+                            Text="{helpers:Localization Settings_Reserved}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
                 <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers1:Localization Settings_ReservedCaption}" />
+                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
                     <LineBreak />
                     <LineBreak />
                 </TextBlock>
@@ -125,12 +124,12 @@
                             Kind="TrafficBarrier" />
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="{helpers1:Localization Settings_Reserved}"
+                            Text="{helpers:Localization Settings_Reserved}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
                 <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers1:Localization Settings_ReservedCaption}" />
+                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
                     <LineBreak />
                     <LineBreak />
                 </TextBlock>
@@ -151,7 +150,7 @@
             Grid.Row="1"
             Margin="10"
             HorizontalAlignment="Right"
-            Content="Close" />
+            Content="{helpers:Localization Close}" />
 
 
     </Grid>

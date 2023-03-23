@@ -20,6 +20,7 @@ public class AlignmentSet : SynchronizableTimestampedEntity
     public string? DisplayName { get; set; }
     public string? SmtModel { get; set; }
     public bool IsSyntaxTreeAlignerRefined { get; set; }
+    public bool IsSymmetrized { get; set; }
 
     public virtual ICollection<Alignment> Alignments { get; set; }
 

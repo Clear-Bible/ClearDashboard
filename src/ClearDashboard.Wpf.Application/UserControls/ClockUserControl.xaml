@@ -67,7 +67,7 @@
                                 Content="+"
                                 Style="{StaticResource SmallTransparentStyle}"
                                 Tag="{Binding MenuItems, Mode=TwoWay}"
-                                ToolTip="Add"
+                                ToolTip="{helpers:Localization ClockUserControl_Add}"
                                 Visibility="{Binding AddButtonVisibility}" />
                             <Button
                                 x:Name="DeleteButton"
@@ -79,7 +79,7 @@
                                 VerticalContentAlignment="Center"
                                 Click="DeleteButton_OnClick"
                                 Style="{StaticResource SmallTransparentStyle}"
-                                ToolTip="Delete"
+                                ToolTip="{helpers:Localization ClockUserControl_Delete}"
                                 Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}">
                                 <materialDesign:PackIcon Kind="TrashCanOutline" />
                             </Button>
@@ -88,7 +88,7 @@
                                 VerticalContentAlignment="Center"
                                 Checked="CheckBoxChanged"
                                 IsChecked="{Binding CheckBoxIsChecked, Mode=TwoWay}"
-                                ToolTip="Include in clock display rotation"
+                                ToolTip="{helpers:Localization ClockUserControl_Include}"
                                 Unchecked="CheckBoxChanged"
                                 Visibility="{Binding CheckBoxVisibility}">
                                 <CheckBox.Resources>
@@ -121,7 +121,7 @@
                                 MouseEnter="TextBox_OnMouseEnter"
                                 MouseLeave="TextBox_OnMouseLeave"
                                 Text="{Binding TextBoxText}"
-                                ToolTip="Name the item"
+                                ToolTip="{helpers:Localization ClockUserControl_Name}"
                                 Visibility="{Binding TextBoxVisibility}" />
 
                             <ComboBox
@@ -134,7 +134,7 @@
                                 SelectedItem="{Binding TextBlockText, Mode=TwoWay}"
                                 SelectionChanged="UtcComboSelected"
                                 Tag="{Binding TimeZoneInfo, Mode=TwoWay}"
-                                ToolTip="Select timezone"
+                                ToolTip="{helpers:Localization ClockUserControl_Select}"
                                 Visibility="{Binding UtcComboVisibility}" />
                             <TextBlock
                                 x:Name="ClockUserControl_nameTime"

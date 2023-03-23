@@ -314,7 +314,7 @@
                 Orientation="Horizontal">
                 <Button
                     x:Name="Ok"
-                    Content="Next"
+                    Content="{helpers:Localization Next}"
                     Style="{StaticResource TransparentStyle}" />
 
                 <!--<Button
