@@ -152,6 +152,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _selectedVerseDisplayViewModel, value);
         }
 
+      
         public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager,
             INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
         IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
@@ -189,18 +190,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _progressBarVisibility, value);
         }
 
-        //public override async Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
-        //{
-        //    EnhancedViewItemMetadatum = metadatum;
-        //    await GetData(ReloadType.Refresh, cancellationToken);
-        //}
-
+   
         public override async Task GetData(CancellationToken cancellationToken)
         {
             await GetData(ReloadType.Refresh, cancellationToken);
         }
 
-        public async virtual Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
+        public virtual async  Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
         {
             await GetData(reloadType, cancellationToken);
         }
@@ -213,6 +209,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     {
                         Verses.Clear();
 
+                        FetchingData = true;
                         ProgressBarVisibility = Visibility.Visible;
                         switch (EnhancedViewItemMetadatum)
                         {
@@ -268,7 +265,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             finally
             {
-                ProgressBarVisibility = Visibility.Collapsed;
+                FetchingData = false;
+               ProgressBarVisibility = Visibility.Collapsed;
             }
         }
 
@@ -413,6 +411,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             try
             {
+                if (ParentViewModel == null)
+                {
+                    return;
+                }
+
                 var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum);
 
                 if (rows == null || rows.Count == 0)

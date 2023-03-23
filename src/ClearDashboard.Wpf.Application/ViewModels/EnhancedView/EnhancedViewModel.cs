@@ -34,7 +34,6 @@ using Enumerable = System.Linq.Enumerable;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
@@ -425,10 +424,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 // Activate (and draw the items on the EnhancedView) in the order they have been defined.
                 foreach (var enhancedViewItemMetadatum in EnhancedViewLayout!.EnhancedViewItems)
                 {
-                    await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, CancellationToken.None);
+                    await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, token);
                 }
 
-                // Then get the data in a parallel fashion
+                // Then get the data in a parallel fashion.  Note the use of the Items collection, not the EnhancedViewItems
+                // from the EnhancedViewLayout.
                 await Parallel.ForEachAsync(Items, new ParallelOptions(), async (item, cancellationToken) =>
                 {
                     await item.GetData(cancellationToken);
@@ -443,12 +443,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken);
                 enhancedViewItemViewModel.EnhancedViewItemMetadatum = enhancedViewItemMetadatum;
-                //EnableBcvControl = false;
-                //await enhancedViewItemViewModel.GetData(enhancedViewItemMetadatum, cancellationToken);
             });
         }
-
-     
 
         /// <summary>
         /// Expects Metadatum to be in a 'Models.EnhancedView' namespace and looks for a ViewModel in a sibling 'ViewModels.EnhancedView' namespace by replacing
@@ -505,6 +501,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
     private ListView EnhancedViewListView { get; set; }
+
         #endregion //Constructor
 
         #region Methods

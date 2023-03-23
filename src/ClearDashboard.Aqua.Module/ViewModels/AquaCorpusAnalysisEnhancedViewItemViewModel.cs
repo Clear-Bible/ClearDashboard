@@ -227,7 +227,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         //    return Task.CompletedTask; //return base.GetData(metadatum, cancellationToken);
         //}
 
-        public override Task GetData(CancellationToken cancellationToken)
+        public override Task GetData(CancellationToken cancellationToken) 
         {
             assessmentId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)?.AssessmentId;
             versionId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)?.VersionId;

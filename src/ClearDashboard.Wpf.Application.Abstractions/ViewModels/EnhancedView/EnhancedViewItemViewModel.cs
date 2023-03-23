@@ -37,7 +37,21 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     // public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
 
+    public bool FetchingData
+    {
+        get => _fetchData;
+        set
+        {
+            Set(ref _fetchData, value);
+            NotifyOfPropertyChange(nameof(DisableDeleteButton));
+        }
+    }
+
+    public bool DisableDeleteButton => !FetchingData;
+
     private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
+    private bool _fetchData;
+
     public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
     {
         get => _enhancedViewItemMetadatum;
