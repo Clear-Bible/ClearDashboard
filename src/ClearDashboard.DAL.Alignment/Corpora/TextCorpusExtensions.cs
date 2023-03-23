@@ -28,7 +28,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException"></exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string displayName, string tokenizationFunction, CancellationToken token = default, bool useCache = false, ScrVers? versification = null)
+        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string displayName, string tokenizationFunction, ScrVers? versification = null, CancellationToken token = default, bool useCache = false)
         {
             try
             {
