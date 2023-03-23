@@ -54,6 +54,11 @@ public class VerseRowModelListJsonConverter : JsonConverter<GeneralListModel<Gen
             string[] verseRowDataParts = verseRowData.Split(" | ");
             if (verseRowDataParts.Length != 8) { throw new JsonException($"Expected verse row data string to contain 8 parts ({verseRowDataParts.Length} found instead)"); }
 
+            DateTimeOffset created = JsonSerializer.Deserialize<DateTimeOffset>(verseRowDataParts[5], options);
+            DateTimeOffset? modified = string.IsNullOrEmpty(verseRowDataParts[6]) 
+                ? null 
+                : JsonSerializer.Deserialize<DateTimeOffset>(verseRowDataParts[6], options);
+
             var properties = new Dictionary<string, object?>();
 
             properties.Add(nameof(Models.VerseRow.BookChapterVerse), bookChapterVerse);
@@ -62,8 +67,8 @@ public class VerseRowModelListJsonConverter : JsonConverter<GeneralListModel<Gen
             properties.Add(nameof(Models.VerseRow.IsInRange), bool.Parse(verseRowDataParts[2]));
             properties.Add(nameof(Models.VerseRow.IsRangeStart), bool.Parse(verseRowDataParts[3]));
             properties.Add(nameof(Models.VerseRow.IsEmpty), bool.Parse(verseRowDataParts[4]));
-            properties.Add(nameof(Models.VerseRow.Created), DateTimeOffset.Parse(verseRowDataParts[5]));
-            properties.Add(nameof(Models.VerseRow.Modified), string.IsNullOrEmpty(verseRowDataParts[6]) ? null : DateTimeOffset.Parse(verseRowDataParts[6]));
+            properties.Add(nameof(Models.VerseRow.Created), created);
+            properties.Add(nameof(Models.VerseRow.Modified), modified);
             properties.Add(nameof(Models.VerseRow.UserId), Guid.Parse(verseRowDataParts[7]));
 
             var verseRow = new GeneralModel<Models.VerseRow>(
@@ -105,7 +110,10 @@ public class VerseRowModelListJsonConverter : JsonConverter<GeneralListModel<Gen
                     var modified = (DateTimeOffset?)verseRow["Modified"]!;
                     var userId = (Guid)verseRow["UserId"]!;
 
-                    writer.WriteString(bcv, $"{originalText} | {isSentenceStart} | {isInRange} | {isRangeStart} | {isEmpty} | {created} | {modified} | {userId}");
+                    var createdSerialized = JsonSerializer.Serialize(created, options);
+                    var modifiedSerialized = (modified is not null) ? JsonSerializer.Serialize(modified, options) : null;
+
+                    writer.WriteString(bcv, $"{originalText} | {isSentenceStart} | {isInRange} | {isRangeStart} | {isEmpty} | {createdSerialized} | {modifiedSerialized} | {userId}");
                 }
                 writer.WriteEndObject();
             }

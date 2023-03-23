@@ -224,6 +224,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         RebuildMainMenu().Wait();
                     }
                 }
+                else if (value == "CollaborationFetchMergeID")
+                {
+                    if (_collaborationManager.IsRepositoryInitialized())
+                    {
+                        _collaborationManager.FetchMergeRemote();
+                        RebuildMainMenu().Wait();
+                    }
+                }
+                else if (value == "CollaborationCreateBackupID")
+                {
+                    if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                    {
+                        _collaborationManager.CreateProjectBackupAsync(CancellationToken.None).Wait();
+                        RebuildMainMenu().Wait();
+                    }
+                }
+                else if (value == "CollaborationDumpDifferencesLastMergedHeadID")
+                {
+                    if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                    {
+                        _collaborationManager.DumpDifferencesBetweenLastMergedCommitAndHead();
+                        RebuildMainMenu().Wait();
+                    }
+                }
+                else if (value == "CollaborationDumpDifferencesHeadCurrentDbID")
+                {
+                    if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                    {
+                        _collaborationManager.DumpDifferencesBetweenHeadAndCurrentDatabaseAsync().Wait();
+                        RebuildMainMenu().Wait();
+                    }
+                }
                 else
                 {
                     switch (value)
@@ -1252,11 +1284,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges()
                 },
+                // separator
+                new() { Header = "---------------------------------", Id = "SeparatorID", ViewModel = this, },
                 new MenuItemViewModel
                 {
                     Header = "Git Hard Reset", Id = "CollaborationHardResetID",
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsRepositoryInitialized()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Git Fetch + Merge", Id = "CollaborationFetchMergeID",
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Create Project Snapshot Backup", Id = "CollaborationCreateBackupID",
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Dump Differences between Last Merged and Head", Id = "CollaborationDumpDifferencesLastMergedHeadID",
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Dump Differences between Head and Current Database", Id = "CollaborationDumpDifferencesHeadCurrentDbID",
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
                 },
             };
             BindableCollection<MenuItemViewModel> layouts = new()

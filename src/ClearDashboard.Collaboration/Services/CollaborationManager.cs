@@ -20,6 +20,7 @@ using System.Text.Json;
 using Paratext.PluginInterfaces;
 using SIL.Machine.Utils;
 using System;
+using System.Threading;
 
 namespace ClearDashboard.Collaboration.Services;
 
@@ -31,6 +32,7 @@ public class CollaborationManager
     private readonly IProjectProvider _projectProvider;
     private readonly string _repositoryPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
     private readonly string _backupsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+    private readonly string _dumpsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Dumps";
 
     private readonly CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = false;
@@ -556,6 +558,77 @@ public class CollaborationManager
         }
 
         return projectIds;
+    }
+
+    public void DumpDifferencesBetweenLastMergedCommitAndHead()
+    {
+        EnsureValidRepository(_repositoryPath);
+        var project = EnsureCurrentProject();
+
+        using (var repo = new Repository(_repositoryPath))
+        {
+            var commitShas = repo.Commits.Select(c => c.Sha).ToList();
+
+            if (!commitShas.Any())
+            {
+                _logger.LogInformation($"No commits - unable to dump differences between last merged commit and head");
+                return;
+            }
+
+            if (project.LastMergedCommitSha is null)
+            {
+                _logger.LogInformation($"No last merged commit for project '{project.ProjectName}' - unable to dump differences between last merged commit and head");
+                return;
+            }
+
+            var lastMergedCommitShaIndex = commitShas.FindIndex(c => c == project.LastMergedCommitSha);
+            if (lastMergedCommitShaIndex == -1)
+            {
+                _logger.LogInformation($"Last merged commit for project '{project.ProjectName}' is not in git commit list - unable to dump differences between last merged commit and head");
+                return;
+            }
+
+            var factory = new ProjectSnapshotFromGitFactory(_repositoryPath, _logger);
+
+            var projectSnapshotHead = factory.LoadSnapshot(commitShas.First(), project.Id);
+            var projectSnapshotLastMerged = factory.LoadSnapshot(project.LastMergedCommitSha, project.Id);
+
+            var projectDifferences = new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotHead, CancellationToken.None);
+            projectDifferences.Serialize(_dumpsPath);
+        }
+    }
+
+    public async Task DumpDifferencesBetweenHeadAndCurrentDatabaseAsync()
+    {
+        EnsureValidRepository(_repositoryPath);
+        var project = EnsureCurrentProject();
+
+        using (var repo = new Repository(_repositoryPath))
+        {
+            var commitShas = repo.Commits.Select(c => c.Sha).ToList();
+
+            if (!commitShas.Any())
+            {
+                _logger.LogInformation($"No commits - unable to dump differences between head and current database");
+                return;
+            }
+
+            var factory = new ProjectSnapshotFromGitFactory(_repositoryPath, _logger);
+            var projectSnapshotHead = factory.LoadSnapshot(commitShas.First(), project.Id);
+
+            // Extract the latest from the project database:
+            var command = new GetProjectSnapshotQuery();
+            var result = await _mediator.Send(command, CancellationToken.None);
+
+            if (!result.Success)
+            {
+                _logger.LogInformation($"Unable to extract latest from project database: {result.Message}");
+                return;
+            }
+
+            var projectDifferences = new ProjectDifferences(projectSnapshotHead, result.Data!, CancellationToken.None);
+            projectDifferences.Serialize(_dumpsPath);
+        }
     }
 }
 
