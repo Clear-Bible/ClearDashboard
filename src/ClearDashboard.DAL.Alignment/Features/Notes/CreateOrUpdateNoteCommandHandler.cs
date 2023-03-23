@@ -18,13 +18,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         RequestResult<NoteId>, NoteId>
     {
         private readonly IMediator _mediator;
+        private readonly IUserProvider _userProvider;
 
         public CreateOrUpdateNoteCommandHandler(IMediator mediator,
-            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
+            ProjectDbContextFactory? projectNameDbContextFactory, 
+            IProjectProvider projectProvider,
+            IUserProvider userProvider,
             ILogger<CreateOrUpdateNoteCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
             logger)
         {
             _mediator = mediator;
+            _userProvider = userProvider;
         }
 
         protected override async Task<RequestResult<NoteId>> SaveDataAsync(CreateOrUpdateNoteCommand request,
@@ -102,7 +106,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
                 ProjectDbContext.Notes.Add(note);
 
-                foreach (var userId in request.SeenByUserIds)
+                if (_userProvider.CurrentUser is not null && !request.SeenByUserIds.Contains(_userProvider.CurrentUser.Id))
+                {
+                    request.SeenByUserIds.Add(_userProvider.CurrentUser.Id);
+                }
+
+                foreach (var userId in request.SeenByUserIds.Distinct())
                 {
                     ProjectDbContext.NoteUserSeenAssociations.Add(new Models.NoteUserSeenAssociation
                     {
