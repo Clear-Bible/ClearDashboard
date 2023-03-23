@@ -10,11 +10,12 @@
 #define MyAppAssocExt ".myp"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 #define MyAppHelpDocsName "Dashboard_Instructions.pdf"
+#define MyAppId "{{CD4BA885-D292-46D1-9EB8-1049865E327B}"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{CD4BA885-D292-46D1-9EB8-1049865E327B}
+AppId={#MyAppId}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -132,6 +133,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "windowsdesktop-runtime-7.0.4-win-x64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
+Source: "UninsIS.dll"; Flags: dontcopy
 
 ; Install PluginManager
 Source: "..\tools\PluginManager\bin\Release\net7.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -145,8 +147,8 @@ Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencrypti
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 ; Install Hebrew & Greek Fonts
-Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_Hbrw.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Hebrew"
-Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_grk.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Greek"
+;Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_Hbrw.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Hebrew"
+;Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_grk.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Greek"
 
 ; Install Paratext Plugin
 Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -174,6 +176,59 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
 
 [Code]
+//-------UninsIS-------//
+function DLLIsISPackageInstalled(AppId: string;
+  Is64BitInstallMode, IsAdminInstallMode: DWORD): DWORD;
+  external 'IsISPackageInstalled@files:UninsIS.dll stdcall setuponly';
+
+function DLLCompareISPackageVersion(AppId, InstallingVersion: string;
+  Is64BitInstallMode, IsAdminInstallMode: DWORD): longint;
+  external 'CompareISPackageVersion@files:UninsIS.dll stdcall setuponly';
+
+function DLLUninstallISPackage(AppId: string;
+  Is64BitInstallMode, IsAdminInstallMode: DWORD): DWORD;
+  external 'UninstallISPackage@files:UninsIS.dll stdcall setuponly';
+
+// Wrapper for UninsIS.dll IsISPackageInstalled() function
+// Returns true if package is detected as installed, or false otherwise
+function IsISPackageInstalled(): Boolean;
+begin
+  result := DLLIsISPackageInstalled('{#MyAppId}',  // AppId
+    DWORD(Is64BitInstallMode()),                        // Is64BitInstallMode
+    DWORD(IsAdminInstallMode())) = 1;                   // IsAdminInstallMode
+end;
+
+// Wrapper for UninsIS.dll CompareISPackageVersion() function
+// Returns:
+// < 0 if version we are installing is < installed version
+// 0   if version we are installing is = installed version
+// > 0 if version we are installing is > installed version
+function CompareISPackageVersion(): LongInt;
+begin
+  result := DLLCompareISPackageVersion('{#MyAppId}',  // AppId
+    '{#MyAppVersion}',                                // InstallingVersion
+    DWORD(Is64BitInstallMode()),                           // Is64BitInstallMode     
+    DWORD(IsAdminInstallMode()));                          // IsAdminInstallMode
+end;
+
+// Wrapper for UninsIS.dll UninstallISPackage() function
+// Returns 0 for success, non-zero for failure
+function UninstallISPackage(): DWORD;
+begin
+  result := DLLUninstallISPackage('{#MyAppId}',  // AppId
+    DWORD(Is64BitInstallMode()),                      // Is64BitInstallMode
+    DWORD(IsAdminInstallMode()));                     // IsAdminInstallMode
+end;
+
+function PrepareToInstall(var NeedsRestart: Boolean): string;
+begin
+  result := '';
+  if IsISPackageInstalled() and (CompareISPackageVersion() <> 0) then       //
+    UninstallISPackage();
+end;
+
+//-------Run Times-------//
+
 var
     ParatextInstallationPath: string;
 
