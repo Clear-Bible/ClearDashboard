@@ -1,8 +1,8 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.Framework.Input;
-using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
@@ -15,6 +15,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,12 +26,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Collections;
-using SIL.Linq;
 using Uri = System.Uri;
-using System.Collections.Concurrent;
-using Action = System.Action;
-using Enumerable = System.Linq.Enumerable;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -397,14 +393,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             EnableBcvControl = false;
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
-            try
+            await Task.Run(async () =>
             {
-                await ActivateNewVerseAwareViewItem(item, cancellationToken);
-            }
-            finally
-            {
-                EnableBcvControl = true;
-            }
+                try
+                {
+                    await ActivateNewVerseAwareViewItem(item, cancellationToken);
+                    await Items.Last().GetData(cancellationToken);
+                }
+                finally
+                {
+                    EnableBcvControl = true;
+                }
+            }, cancellationToken);
         }
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
@@ -443,6 +443,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken);
                 enhancedViewItemViewModel.EnhancedViewItemMetadatum = enhancedViewItemMetadatum;
+               
             });
         }
 

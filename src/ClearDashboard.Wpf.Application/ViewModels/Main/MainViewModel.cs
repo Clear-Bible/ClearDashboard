@@ -180,7 +180,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "NewEnhancedCorpusID")
                 {
-                    AddNewEnhancedView();
+                   AddNewEnhancedView().Wait();
                 }
                 else if (value == "ShowLogID")
                 {
@@ -1037,12 +1037,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             manager.ShowDialogAsync(viewModel, null, settings);
         }
 
-        private void AddNewEnhancedView()
+        private async Task AddNewEnhancedView()
         {
             var viewModel = IoC.Get<EnhancedViewModel>();
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
+            viewModel.EnhancedViewLayout = new EnhancedViewLayout();
+           
 
 
             // add vm to conductor
@@ -1060,6 +1062,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             };
 
             AddNewEnhancedViewTab(windowDockable);
+
+            await SaveProjectEnhancedViewTabs();
         }
 
         private BindableCollection<LayoutFile> GetFileLayouts()
