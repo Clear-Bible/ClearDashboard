@@ -251,14 +251,20 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 var lexSense = senses.Elements("LEXSense")
                     .FirstOrDefault(x => x.Attribute("LanguageCode").Value.Equals(_languageCode));
 
-                var definitionLong = lexSense.Element("DefinitionLong").Value;
-                var definitionShort = lexSense.Element("DefinitionShort").Value;
+                var definitionLong = "definition unavailable";
+                var definitionShort = "definition unavailable";
+                var glosses = new List<string>();
 
+                if (lexSense != null)
+                {
+                    definitionLong = lexSense.Element("DefinitionLong").Value;
+                    definitionShort = lexSense.Element("DefinitionShort").Value;
 
-                var glosses = lexSense.Elements("Glosses")
-                    .Elements("Gloss")
-                    .Select(x => x.Value)
-                    .ToList();
+                    glosses = lexSense.Elements("Glosses")
+                        .Elements("Gloss")
+                        .Select(x => x.Value)
+                        .ToList();
+                }
 
                 var domains = meaning.Element("LEXDomains")
                     .Elements("LEXDomain")

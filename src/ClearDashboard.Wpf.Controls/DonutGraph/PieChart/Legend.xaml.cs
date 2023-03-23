@@ -27,6 +27,15 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
         }
 
         /// <summary>
+        /// The property of the title
+        /// </summary>
+        public String TitleProperty
+        {
+            get { return PieChartLayout.GetTitleProperty(this); }
+            set { PieChartLayout.SetTitleProperty(this, value); }
+        }
+
+        /// <summary>
         /// A class which selects a color based on the item being rendered.
         /// </summary>
         public IColorSelector ColorSelector
@@ -42,6 +51,9 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
             // register any dependency property change handlers
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(PieChartLayout.PlottedPropertyProperty, typeof(PiePlotter));
             dpd.AddValueChanged(this, PlottedPropertyChanged);
+
+            DependencyPropertyDescriptor dpdt = DependencyPropertyDescriptor.FromProperty(PieChartLayout.TitlePropertyProperty, typeof(PiePlotter));
+            dpdt.AddValueChanged(this, TitlePropertyChanged);
 
             this.DataContextChanged += new DependencyPropertyChangedEventHandler(DataContextChangedHandler);
 
@@ -95,6 +107,16 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
         }
 
         /// <summary>
+        /// Handles changes to the TitleProperty property.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TitlePropertyChanged(object sender, EventArgs e)
+        {
+            RefreshView();
+        }
+
+        /// <summary>
         /// Iterates over the items in the bound collection, adding handlers for PropertyChanged events
         /// </summary>
         private void ObserveBoundCollectionChanges()
@@ -125,6 +147,11 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
         {
             // if the property which this pie chart represents has changed, re-construct the pie
             if (e.PropertyName.Equals(PlottedProperty))
+            {
+                RefreshView();
+            }
+            
+            if (e.PropertyName.Equals(TitleProperty))
             {
                 RefreshView();
             }

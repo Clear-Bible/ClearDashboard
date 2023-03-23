@@ -100,7 +100,7 @@
                         VerticalAlignment="Top"
                         Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
                         CommandParameter="{x:Static Dock.Top}"
-                        Content="CLOSE"
+                        Content="{helpers:Localization Close}"
                         FontSize="10"
                         Style="{StaticResource SmallTransparentStyle}" />
 
@@ -109,14 +109,14 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        FontWeight="Bold">
-                        Title:
+                        FontWeight="Bold"
+                        Content="{helpers:Localization FontSettings_Title}">
                     </Label>
                     <StackPanel
                         Grid.Row="0"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Title font size:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_TitleFontSize}"/>
                         <Slider
                             Name="TitleFontSizeSlider"
                             Width="100"
@@ -137,14 +137,12 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        FontWeight="Bold">
-                        Source Text:
-                    </Label>
+                        FontWeight="Bold" Content="{helpers:Localization FontSettings_Source}"/>
                     <StackPanel
                         Grid.Row="1"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Source font size:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_SourceFontSize}"/>
                         <Slider
                             Name="SourceTokenFontSizeSlider"
                             Width="100"
@@ -163,7 +161,7 @@
                         Grid.Row="1"
                         Grid.Column="2"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Vertical spacing:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Vertical}"/>
                         <Slider
                             Name="SourceTokenVerticalSpacingSlider"
                             Width="100"
@@ -182,7 +180,7 @@
                         Grid.Row="1"
                         Grid.Column="3"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Horizontal spacing:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Horizontal}"/>
                         <Slider
                             Name="SourceHorizontalSpacingSlider"
                             Width="100"
@@ -210,7 +208,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Target font size:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_TargetFontSize}"/>
                         <Slider
                             Name="TokenFontSizeSlider"
                             Width="100"
@@ -270,13 +268,13 @@
                         Grid.Row="3"
                         Grid.Column="0"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" FontWeight="Bold">Translations:</Label>
+                        <Label VerticalAlignment="Center" FontWeight="Bold" Content="{helpers:Localization FontSettings_Translations}"/>
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Font size:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_FontSize}"/>
                         <Slider
                             Name="TranslationFontSizeSlider"
                             Width="100"
@@ -296,7 +294,7 @@
                         Grid.Column="2"
                         Orientation="Horizontal"
                         Visibility="Collapsed">
-                        <Label VerticalAlignment="Center">Vertical spacing:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Vertical}"/>
                         <Slider
                             Name="TranslationVerticalSpacingSlider"
                             Width="100"
@@ -317,7 +315,7 @@
                         Grid.Row="4"
                         Grid.Column="0"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" FontWeight="Bold">Note Indicators:</Label>
+                        <Label VerticalAlignment="Center" FontWeight="Bold" Content="{helpers:Localization FontSettings_NoteIndicators}"/>
                         <CheckBox
                             Name="ShowNoteIndicatorsCheckbox"
                             Margin="5,0,0,0"
@@ -329,7 +327,7 @@
                         Grid.Row="4"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label Margin="0,0,14,0" VerticalAlignment="Center">Height:</Label>
+                        <Label Margin="0,0,14,0" VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Height}"/>
                         <Slider
                             Name="NoteIndicatorHeightSlider"
                             Width="100"
@@ -405,7 +403,7 @@
                     CommandParameter="{x:Static Dock.Top}"
                     Content="{materialDesign:PackIcon Kind=Tune}"
                     Style="{StaticResource SmallTransparentStyle}"
-                    ToolTip="Show the Enhanced View Controls" />
+                    ToolTip="{helpers:Localization EnhancedView_ShowControls}" />
 
                 <userControls:BcvUserControl
                     Grid.Row="0"
@@ -570,7 +568,7 @@
                                                 Height="20"
                                                 Foreground="{StaticResource RedVeryDarkBrush}"
                                                 Kind="Close"
-                                                ToolTip="Remove Corpus" />
+                                                ToolTip="{helpers:Localization EnhancedView_RemoveCorpus}" />
                                         </Button>
                                         <TextBlock
                                             Margin="8,0,5,0"

@@ -23,12 +23,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 string? displayName,
                 string smtModel,
                 bool isSyntaxTreeAlignerRefined,
+                bool isSymmetrized,
                 Dictionary<string, object> metadata,
                 ParallelCorpusId parallelCorpusId, 
                 IMediator mediator,
                 CancellationToken token = default)
         {
-            return await AlignmentSet.Create(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, metadata, parallelCorpusId, mediator, token);
+            return await AlignmentSet.Create(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, isSymmetrized, metadata, parallelCorpusId, mediator, token);
         }
     }
 }

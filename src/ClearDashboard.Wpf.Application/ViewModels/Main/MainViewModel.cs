@@ -1225,7 +1225,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         //new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
                         
                         // MARBLE
-                        new() { Header = "◕ MARBLE", Id = "MarbleID", ViewModel = this, },
+                        new() { Header = "◕ " +_localizationService!.Get("MainView_WindowsMarble"), Id = "MarbleID", ViewModel = this, },
 
                         // Notes
                         new() { Header = "⌺ " +_localizationService!.Get("MainView_WindowsNotes"), Id = "NotesId", ViewModel = this, },

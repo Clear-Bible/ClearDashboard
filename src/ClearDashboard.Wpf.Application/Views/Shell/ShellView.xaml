@@ -295,7 +295,7 @@
             Grid.Row="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Content="Loading..."
+            Content="{helpers:Localization ShellView_Loading}"
             FontSize="40"
             Visibility="{Binding LoadingApplication, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}" />
 

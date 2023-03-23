@@ -320,7 +320,7 @@
                                 Command="{Binding Path=DataContext.NotesCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                 CommandParameter="{Binding}"
                                 Style="{DynamicResource MaterialDesignIconButton}"
-                                ToolTip="Note">
+                                ToolTip="{helpers:Localization BiblicalTermsForm_Note}">
                                 <materialDesign:PackIcon
                                     Width="12"
                                     Height="12"
