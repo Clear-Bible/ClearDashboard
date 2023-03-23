@@ -28,7 +28,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException"></exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string displayName, string tokenizationFunction, CancellationToken token = default, bool useCache = false)
+        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string displayName, string tokenizationFunction, CancellationToken token = default, bool useCache = false, ScrVers? versification = null)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 throw new InvalidTypeEngineException(message: $"Corpus must be tokenized and transformed into TokensTextRows, e.g. corpus.Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             }
 
-            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, displayName, tokenizationFunction, ScrVers.Original);
+            var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, displayName, tokenizationFunction, versification ?? ScrVers.Original);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
