@@ -826,6 +826,35 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                 var metadata = projects.Select(project =>
                 {
+                    ScrVersType scrVersType = new ScrVersType();
+                    switch (project.Versification.Type)
+                    {
+                        case StandardScrVersType.Unknown:
+                            scrVersType = ScrVersType.Unknown; 
+                            break;
+                        case StandardScrVersType.Original:
+                            scrVersType = ScrVersType.Original;
+                            break;
+                        case StandardScrVersType.Septuagint:
+                            scrVersType = ScrVersType.Septuagint;
+                            break;
+                        case StandardScrVersType.Vulgate:
+                            scrVersType = ScrVersType.Vulgate;
+                            break;
+                        case StandardScrVersType.English:
+                            scrVersType = ScrVersType.English;
+                            break;
+                        case StandardScrVersType.RussianProtestant:
+                            scrVersType = ScrVersType.RussianProtestant;
+                            break;
+                        case StandardScrVersType.RussianOrthodox:
+                            scrVersType = ScrVersType.RussianOrthodox;
+                            break;
+                        default:
+                            scrVersType = ScrVersType.Unknown;
+                            break;
+                    }
+
                     var metaData = new ParatextProjectMetadata
                     {
                         Id = project.ID,
@@ -835,6 +864,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                         CorpusType = DetermineCorpusType(project.Type),
                         IsRtl = project.Language.IsRtoL,
                         AvailableBooks = project.GetAvailableBooks(),
+                        ScrVers = new ScrVers(scrVersType),
                     };
 
                     metaData.FontFamily = project.Language.Font.FontFamily;
