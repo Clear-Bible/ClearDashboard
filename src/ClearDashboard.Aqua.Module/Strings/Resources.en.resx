@@ -201,8 +201,17 @@
   <data name="Aqua_Version_CorpusInformation" xml:space="preserve">
     <value>Corpus Information</value>
   </data>
+  <data name="Aqua_Version_DeleteVersion" xml:space="preserve">
+    <value>Delete all corpus information from AQuA and reset</value>
+  </data>
+  <data name="Aqua_Version_DeleteVersionDescription" xml:space="preserve">
+    <value>Delete all corpus information from AQuA and reset</value>
+  </data>
   <data name="Aqua_Version_ForwardTranslationToVersionId" xml:space="preserve">
     <value>Version id of corpus this corpus is a forward translation to</value>
+  </data>
+  <data name="Aqua_Version_GetVersion" xml:space="preserve">
+    <value>Reload</value>
   </data>
   <data name="Aqua_Version_Language" xml:space="preserve">
     <value>Language</value>

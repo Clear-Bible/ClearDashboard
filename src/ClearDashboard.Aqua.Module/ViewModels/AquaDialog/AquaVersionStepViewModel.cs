@@ -30,7 +30,6 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     private readonly IEnhancedViewManager? _enhancedViewManager;
 
     private bool isValidValuesLoaded = false;
-    private int? dataLoadedForId_ = null;
 
     public BindableCollection<Language> IsoLanguages { get; set; } = new();
 
@@ -46,6 +45,21 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
             hasId_ = value;
             NotifyOfPropertyChange(() => HasId);
         }
+    }
+
+    private int? dataLoadedForId_ = null;
+    private int? DataLoadedForId
+    {
+        get => dataLoadedForId_;
+        set
+        {
+            dataLoadedForId_ = value;
+            NotifyOfPropertyChange(() => DataLoaded);
+        }
+    }
+    public bool DataLoaded
+    {
+        get => dataLoadedForId_ != null ? true : false;
     }
 
     private DialogMode _dialogMode;
@@ -171,7 +185,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
         isValidValuesLoaded = false;
-        dataLoadedForId_ = null;
+        DataLoadedForId = null;
         ParentViewModel!.StatusBarVisibility = Visibility.Visible;
         return base.OnInitializeAsync(cancellationToken);
     }
@@ -209,18 +223,20 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
 
             if (!HasId)
             {
-                dataLoadedForId_ = null;
+                DataLoadedForId = null;
                 ClearIdData();
             }
             else
             {
-                if (dataLoadedForId_ == null || dataLoadedForId_ != activeId)
+                if (DataLoadedForId == null || DataLoadedForId != activeId)
                 {
                     ClearIdData();
                     await GetVersion();
-                    dataLoadedForId_ = activeId;
                 }
-                await GetRevisions();
+                else
+                {
+                    await GetRevisions();
+                }
             }
         }
         catch (Exception ex)
@@ -292,6 +308,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
 
     public async Task GetVersion()
     {
+        DataLoadedForId = null;
+
         var processStatus = await ParentViewModel!.RunLongRunningTask(
             "AQuA-Get_Version",
             (cancellationToken) => aquaManager_!.GetVersion(
@@ -315,7 +333,9 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
 
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata!.abbreviation = Abbreviation;
                 await ParentViewModel!.AquaTokenizedTextCorpusMetadata!.Save(ParentViewModel!.TokenizedTextCorpusId!, Mediator!);
-            }); ;
+                DataLoadedForId = ParentViewModel!.AquaTokenizedTextCorpusMetadata!.id;
+                await GetRevisions();
+            });
 
         switch (processStatus)
         {
@@ -389,6 +409,49 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 //await MoveForwards();
                 break;
             case LongRunningTaskStatus.Failed:
+                break;
+            case LongRunningTaskStatus.Cancelled:
+                ParentViewModel!.Cancel();
+                break;
+            case LongRunningTaskStatus.NotStarted:
+                break;
+            case LongRunningTaskStatus.Running:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    public async Task DeleteVersion()
+    {
+        var processStatus = await ParentViewModel!.RunLongRunningTask(
+            "AQuA-Delete_Version",
+            (cancellationToken) => {
+                aquaManager_!.DeleteVersion(
+                    ParentViewModel!.AquaTokenizedTextCorpusMetadata!.id
+                        ?? throw new InvalidStateEngineException(name: "AquaTokenizedTextCorpusMetadata!.VersionId", value: "null"),
+                    cancellationToken);
+                return Task.FromResult(""); // so RunLongRunningTask can infer bogus type string
+            },
+            (_) => {});
+
+        switch (processStatus)
+        {
+            case LongRunningTaskStatus.Completed:
+            case LongRunningTaskStatus.Failed:
+                // want this to run even if delete on server failed because it's not on server so that the metadata is cleared.
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.id = null;
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.abbreviation = null;
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoLanguage = null;
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript = null;
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.forwardTranslationToVersionId = null;
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.backTranslationToVersionId = null;
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.machineTranslation = MachineTranslation;
+                await ParentViewModel!.AquaTokenizedTextCorpusMetadata!.Save(ParentViewModel!.TokenizedTextCorpusId!, Mediator!);
+
+                ClearIdData();
+
+                await Reload();
                 break;
             case LongRunningTaskStatus.Cancelled:
                 ParentViewModel!.Cancel();
