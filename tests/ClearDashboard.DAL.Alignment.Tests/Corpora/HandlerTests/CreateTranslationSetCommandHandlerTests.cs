@@ -439,11 +439,33 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             foreach (var e in parallelCorpus)
             {
                 someRows.Add((EngineParallelTextRow)e);
-                if (count++ > 5) break;
+                if (count++ > 10) break;
             }
 
-            var someAlignments = await alignmentSet.GetAlignments(someRows);
+            var someAlignments = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.All);
             Assert.True(someAlignments.Any());
+
+            var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
+            var atp2 = someAlignments.Skip(3).Take(1).Select(a => a.AlignedTokenPair).First();
+            var a3 = someAlignments.Skip(5).Take(1).First();
+            var a4 = someAlignments.Skip(7).Take(1).First();
+            var a5 = someAlignments.Skip(8).Take(1).First();
+
+            await alignmentSet.DeleteAlignment(a3.AlignmentId!);
+            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp1, "Verified"));
+            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Verified"));
+            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"));
+            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified"));
+
+            var manualOnly = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.ManualOnly);
+            Assert.Equal(4, manualOnly.Count());
+
+            // The PutAlignments above should effectively 'hide' five auto alignments (five
+            // because the last PutAlignment uses tokens from two different auto alignments)
+            // from the perspective of ManualOnlyNonManualAuto mode.
+            var manualOnlyNonManualAuto = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto);
+            Assert.Equal(someAlignments.Count() - 5, manualOnlyNonManualAuto.Where(a => a.OriginatedFrom == Models.AlignmentOriginatedFrom.FromAlignmentModel.ToString()).Count());
+            Assert.Equal(4, manualOnlyNonManualAuto.Where(a => a.OriginatedFrom == Models.AlignmentOriginatedFrom.Assigned.ToString()).Count());
 
             var alignment = someAlignments.First();
             Assert.NotNull(alignment);

@@ -65,15 +65,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         var bookAbbreviations = new List<string>();
         foreach (var bookNumber in bookNumbers)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>
-                (
-                    success: false,
-                    message: "Operation canceled",
-                    canceled: true
-                );
-            }
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (!bookNumbersToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
             {
@@ -90,7 +82,12 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         ScrVers versification = new ScrVers((ScrVersType)tokenizedCorpus.ScrVersType);
         if (!string.IsNullOrEmpty(tokenizedCorpus.CustomVersData))
         {
-            // FIXME - what do I do here to pull the CustomVersData into versification?
+            using (var reader = new StringReader(tokenizedCorpus.CustomVersData))
+            {
+                // FIXME:  Uncomment this once we know the correct way to reconstitute an
+                // ScrVers instance that should have both ScrVersType and CustomVersData
+//                versification = Versification.Table.Implementation.Load(reader, "not a file");
+            }
         }
 
         return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>
