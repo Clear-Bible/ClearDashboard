@@ -96,62 +96,58 @@ public class DefaultMergeHandler
     {
         var hasChange = false;
 
-        foreach (var pd in modelDifference.PropertyDifferences
-            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference))))
+        foreach (var (propertyName, propertyValueDifference) in modelDifference.PropertyValueDifferences)
         {
-            if (propertyValues.TryGetValue(pd.PropertyName, out var currentValue))
+            if (propertyValues.TryGetValue(propertyName, out var currentValue))
             {
-                var vd = (ValueDifference)pd.PropertyValueDifference;
-                if (vd.EqualsValue1(currentValue))
+                if (propertyValueDifference.EqualsValue1(currentValue))
                 {
-                    _mergeContext.Logger.LogInformation($"Updating property '{pd.PropertyName}' current value '{currentValue}' to new value '{vd.Value2AsObject}'");
+                    _mergeContext.Logger.LogInformation($"Updating property '{propertyName}' current value '{currentValue}' to new value '{propertyValueDifference.Value2AsObject}'");
                     hasChange = true;
                 }
-                else if (!vd.EqualsValue2(currentValue))
+                else if (!propertyValueDifference.EqualsValue2(currentValue))
                 {
-                    _mergeContext.Logger.LogInformation($"Conflict with property {pd.PropertyName} current value '{currentValue}' not matching last merge value '{vd.Value1AsObject}' or new value '{vd.Value2AsObject}'");
+                    _mergeContext.Logger.LogInformation($"Conflict with property {propertyName} current value '{currentValue}' not matching last merge value '{propertyValueDifference.Value1AsObject}' or new value '{propertyValueDifference.Value2AsObject}'");
                     hasChange = true;
-                    vd.ConflictValue = currentValue;
+                    propertyValueDifference.ConflictValue = currentValue;
                 }
             }
             else
             {
-                throw new InvalidDifferenceStateException($"Property name '{pd.PropertyName}' from PropertyDifferences does not exist in the current snapshot");
+                throw new InvalidDifferenceStateException($"Property name '{propertyName}' from PropertyDifferences does not exist in the current snapshot");
             }
         }
 
         return hasChange;
     }
 
-    protected bool CheckMergePropertyModelDifferences(IModelDifference modelDifference, IModelDistinguishable itemToModify)
+    protected bool CheckMergePropertyModelDifferences<T>(IModelDifference modelDifference, T itemToModify)
+        where T : IModelDistinguishable
     {
         var hasChange = false;
 
-        foreach (var pd in modelDifference.PropertyDifferences
-            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ModelDifference))))
+        foreach (var (propertyName, propertyModelDifference) in modelDifference.PropertyModelDifferences)
         {
-            if (itemToModify.PropertyValues.TryGetValue(pd.PropertyName, out var v))
+            if (itemToModify.PropertyValues.TryGetValue(propertyName, out var v))
             {
-                var md = (IModelDifference)pd.PropertyValueDifference;
-
                 if (v is IModelDistinguishable)
                 {
-                    hasChange = CheckMergePropertyModelDifferences(md, (IModelDistinguishable)v) || hasChange;
+                    hasChange = CheckMergePropertyModelDifferences(propertyModelDifference, (IModelDistinguishable)v) || hasChange;
                 }
                 else if (v is IDictionary<string, object>)
                 {
                     var propertyValues = ((IDictionary<string, object>)v)
                         .ToDictionary(e => e.Key, e => (object?)e.Value).AsReadOnly();
-                    hasChange = CheckMergePropertyValueDifferences(md, propertyValues) || hasChange;
+                    hasChange = CheckMergePropertyValueDifferences(propertyModelDifference, propertyValues) || hasChange;
                 }
                 else
                 {
-                    throw new InvalidDifferenceStateException($"Unable to CheckMerge for property '{pd.PropertyName}' having item type {v?.GetType()?.ShortDisplayName()}");
+                    throw new InvalidDifferenceStateException($"Unable to CheckMerge for property '{propertyName}' having item type {v?.GetType()?.ShortDisplayName()}");
                 }
             }
             else
             {
-                throw new InvalidDifferenceStateException($"Property name '{pd.PropertyName}' from ProjectDifferences snapshots does not exist in the current snapshot");
+                throw new InvalidDifferenceStateException($"Property name '{propertyName}' from ProjectDifferences snapshots does not exist in the current snapshot");
             }
         }
 

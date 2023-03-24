@@ -110,9 +110,10 @@ public class CollaborationTests : TestBase
         collaborationManager.InitializeRepository();
         collaborationManager.FetchMergeRemote();
 
-        await collaborationManager.StageProjectChangesAsync(default, new Progress<ProgressStatus>());
+        var progress = new Progress<ProgressStatus>();
+        await collaborationManager.StageProjectChangesAsync(default, progress);
 
-        collaborationManager.CommitChanges("[some commit message]");
+        collaborationManager.CommitChanges("[some commit message]", progress);
         collaborationManager.PushChangesToRemote();
     }
 
@@ -135,9 +136,10 @@ public class CollaborationTests : TestBase
     {
         var collaborationManager = Container!.Resolve<CollaborationManager>();
 
-        await collaborationManager.StageProjectChangesAsync(default,new Progress<ProgressStatus>());
+        var progress = new Progress<ProgressStatus>();
+        await collaborationManager.StageProjectChangesAsync(default, progress);
 
-        collaborationManager.CommitChanges("[some commit message]");
+        collaborationManager.CommitChanges("[some commit message]", progress);
         collaborationManager.PushChangesToRemote();
     }
 

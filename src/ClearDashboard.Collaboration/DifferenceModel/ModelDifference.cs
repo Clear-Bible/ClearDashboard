@@ -42,6 +42,17 @@ public abstract class ModelDifference : IModelDifference
     public object? Id { get; private set; }
 
     public IEnumerable<PropertyDifference> PropertyDifferences { get => _propertyDifferences; }
+
+    [JsonIgnore]
+    public IEnumerable<(string propertyName, IModelDifference propertyModelDifference)> PropertyModelDifferences => _propertyDifferences
+            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(IModelDifference)))
+            .Select(pd => (pd.PropertyName, (IModelDifference)pd.PropertyValueDifference));
+
+    [JsonIgnore]
+    public IEnumerable<(string propertyName, ValueDifference propertyValueDifference)> PropertyValueDifferences => _propertyDifferences
+            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference)))
+            .Select(pd => (pd.PropertyName, (ValueDifference)pd.PropertyValueDifference));
+
     public IReadOnlyDictionary<string, IListDifference> ChildListDifferences { get => _childListDifferences; }
     public void AddPropertyDifference(PropertyDifference propertyDifference) { _propertyDifferences.Add(propertyDifference); }
     public void AddPropertyDifferenceRange(IEnumerable<PropertyDifference> propertyDifferences) { _propertyDifferences.AddRange(propertyDifferences); }

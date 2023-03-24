@@ -594,7 +594,10 @@ public class CollaborationManager
             var projectSnapshotLastMerged = factory.LoadSnapshot(project.LastMergedCommitSha, project.Id);
 
             var projectDifferences = new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotHead, CancellationToken.None);
-            projectDifferences.Serialize(_dumpsPath);
+
+            var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id) + "_LastMergedToHead" + 
+                DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
+            projectDifferences.Serialize(Path.Combine(_dumpsPath, folderName));
         }
     }
 
@@ -627,7 +630,10 @@ public class CollaborationManager
             }
 
             var projectDifferences = new ProjectDifferences(projectSnapshotHead, result.Data!, CancellationToken.None);
-            projectDifferences.Serialize(_dumpsPath);
+
+            var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id) + "_HeadToDb" +
+                DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
+            projectDifferences.Serialize(Path.Combine(_dumpsPath, folderName));
         }
     }
 }

@@ -263,15 +263,12 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         var entityType = modelSnapshot.EntityType;
 
         // Each property difference here refers to a simple value difference.
-        foreach (var vd in modelDifference.PropertyDifferences
-            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference)))
-            .Select(pd => new { pn = pd.PropertyName, vd = ((ValueDifference)pd.PropertyValueDifference) }))
+        foreach (var (propertyName, propertyValueDifference) in modelDifference.PropertyValueDifferences)
         {
             // Grab the propertyName + 'value2' from the value difference
             // and run it through any (optional) converter(s), and assign
             // to DbCommand
-            var propertyName = vd.pn;
-            var propertyValue = vd.vd.Value2AsObject;
+            var propertyValue = propertyValueDifference.Value2AsObject;
 
             IEnumerable<string>? entityPropertyValues = null;
             if (!_propertyNameMap.TryGetValue((entityType, propertyName), out entityPropertyValues))
