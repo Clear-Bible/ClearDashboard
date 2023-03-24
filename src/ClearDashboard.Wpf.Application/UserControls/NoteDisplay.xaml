@@ -288,7 +288,6 @@
                     </Button>
                     <Popup
                         Name="ConfirmParatextSendPopup"
-                        Width="225"
                         HorizontalOffset="100"
                         Placement="Left"
                         PlacementTarget="{Binding ElementName=SendToParatextButton}"
@@ -299,7 +298,7 @@
                                 <TextBlock
                                     Padding="10"
                                     HorizontalAlignment="Center"
-                                    FontWeight="Bold" Text="{helpers:Localization Marble_SendConfirmation}">
+                                    FontWeight="Bold" Text="{helpers:Localization Notes_SendConfirmation}">
                                 </TextBlock>
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <Button Margin="5" Click="ParatextSendConfirmed" Content="{helpers:Localization Yes}"/>
