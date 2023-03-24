@@ -201,8 +201,8 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        FontWeight="Bold">
-                        Target Text:
+                        FontWeight="Bold"
+                        Content="{helpers:Localization FontSettings_Target}">
                     </Label>
                     <StackPanel
                         Grid.Row="2"
