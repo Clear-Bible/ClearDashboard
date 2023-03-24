@@ -895,11 +895,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task LabelAddedAsync(LabelEventArgs e)
         {
-            if (SelectedVerseDisplayViewModel is null)
-            {
-                return;
-            }
-
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
             {
