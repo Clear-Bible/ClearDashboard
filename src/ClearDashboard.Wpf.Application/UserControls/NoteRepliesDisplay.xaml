@@ -25,41 +25,50 @@
             >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="0,2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="3*" />
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="1*" />
-                            </Grid.ColumnDefinitions>
-                            <CheckBox
-                                Grid.Column="0"
-                                Margin="5,0,0,0"
-                                VerticalAlignment="Center"
-                                Content="{helpers:Localization Notes_NoteReplies_Read}"
-                                Checked="CheckBox_Checked" 
-                                Unchecked="CheckBox_UnChecked">
-                                <CheckBox.IsChecked>
-                                    <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay">
-                                        <Binding Path="SeenByUserIds"/>
-                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
-                                    </MultiBinding>
-                                </CheckBox.IsChecked>
-                            </CheckBox>                            
-                            <TextBlock
-                                Grid.Column="1"
-                                Text="{Binding Text}"
-                                TextWrapping="Wrap" />
-                            <TextBlock
-                                Grid.Column="2"
-                                Text="{Binding ModifiedBy}"
-                                TextWrapping="Wrap" />
-                            <TextBlock
-                                Grid.Column="3"
-                                Text="{Binding Created}"
-                                TextWrapping="Wrap" />
-
-                         </Grid>
+                            <StackPanel Orientation="Vertical">
+                                <Separator/>
+                                <TextBlock
+                                    FontSize="14"
+                                    Grid.Column="1"
+                                    Text="{Binding Text}"
+                                    TextWrapping="Wrap" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="4*" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                            <TextBlock
+                                                Text="{Binding ModifiedBy}"
+                                                FontSize="8"
+                                                Foreground="Gray"
+                                                TextWrapping="Wrap" />
+                                            <TextBlock
+                                                Text="{Binding Created}"
+                                                FontSize="8"
+                                                Foreground="Gray"
+                                                TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <CheckBox
+                                            Grid.Column="1"
+                                            Margin="5,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Content="{helpers:Localization Notes_NoteReplies_Read}"
+                                            FontSize="8"
+                                            Foreground="Gray"
+                                            Checked="CheckBox_Checked" 
+                                            Unchecked="CheckBox_UnChecked">
+                                            <CheckBox.IsChecked>
+                                                <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay">
+                                                    <Binding Path="SeenByUserIds"/>
+                                                    <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                                                </MultiBinding>
+                                            </CheckBox.IsChecked>
+                                        </CheckBox>
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>

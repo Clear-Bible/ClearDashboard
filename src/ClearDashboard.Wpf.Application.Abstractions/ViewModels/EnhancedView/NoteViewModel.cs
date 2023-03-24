@@ -66,33 +66,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _replies;
             set => Set(ref _replies, value);
         }
-
-        /// <summary>
-        /// if Replies is null or empty, returns SeenByUserIds for this entity,
-        /// else returns the collection of seenbyuserids that has seen every reply (Intersection)
-        /// </summary>
         public ICollection<Guid> SeenByUserIds
         {
+            get => Entity.SeenByUserIds;
+        }
+
+        /// <summary>
+        /// returns the collection of seenbyuserids that has seen every reply (Intersection)
+        /// or null if there are no replies
+        /// </summary>
+        public ICollection<Guid>? UserIdsSeenAllReplies
+        {
             get
-            { 
-                if (Replies == null || Replies.Count() == 0)
-                    return Entity.SeenByUserIds;
-                else
-                {
-                    return Replies
-                        .Select(rnvm => rnvm.SeenByUserIds)
-                        .Skip(1)
-                        .Aggregate(
-                            Replies.Count() > 0 ? 
-                                new HashSet<Guid>(Replies.First().SeenByUserIds) : 
-                                new HashSet<Guid>(), 
-                            (intersection, next) =>
-                            {
-                                intersection.IntersectWith(next);
-                                return intersection;
-                            }
-                        );
-                }
+            {
+                if (Replies == null || Replies.Count() == 0) 
+                    return null;
+
+                return Replies
+                    .Select(rnvm => rnvm.SeenByUserIds)
+                    .Skip(1)
+                    .Aggregate(
+                        Replies.Count() > 0 ?
+                            new HashSet<Guid>(Replies.First().SeenByUserIds) :
+                            new HashSet<Guid>(),
+                        (intersection, next) =>
+                        {
+                            intersection.IntersectWith(next);
+                            return intersection;
+                        }
+                    );
             }
         }
 

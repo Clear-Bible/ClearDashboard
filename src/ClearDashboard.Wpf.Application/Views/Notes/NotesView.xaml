@@ -29,6 +29,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:GuidInGuidsToBooleanConverter x:Key="GuidInGuidsToBooleanConverter" />
+            <converters:GuidInGuidsToVisibilityConverter x:Key="GuidInGuidsToVisibilityConverter" />
             <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
             <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
             <system:Boolean x:Key="True">True</system:Boolean>
@@ -290,19 +291,30 @@
             </DataGrid.ColumnHeaderStyle>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="1*" Header="{helpers:Localization Notes_HasUnread}">
+                <DataGridTemplateColumn Width="40">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox
+                            <TextBlock
+                                ToolTip="Unread replies"
+                                Text ="!"
+                                >
+                                <TextBlock.Visibility>
+                                    <MultiBinding Converter="{StaticResource GuidInGuidsToVisibilityConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
+                                        <Binding Path="UserIdsSeenAllReplies"/>
+                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                                    </MultiBinding>
+                                </TextBlock.Visibility>
+                            </TextBlock>
+                            <!--<CheckBox
                                 VerticalAlignment="Center"
                                 IsEnabled="False">
                                 <CheckBox.IsChecked>
                                     <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
-                                        <Binding Path="SeenByUserIds"/>
+                                        <Binding Path="UserIdsSeenAllReplies"/>
                                         <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
                                     </MultiBinding>                                
                                 </CheckBox.IsChecked>
-                            </CheckBox>
+                            </CheckBox>-->
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

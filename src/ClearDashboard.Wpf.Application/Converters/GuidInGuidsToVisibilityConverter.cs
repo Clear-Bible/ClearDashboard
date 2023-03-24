@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ClearDashboard.Wpf.Application.Converters
@@ -10,7 +11,7 @@ namespace ClearDashboard.Wpf.Application.Converters
     ///     If parameter is boolean true then returns true if list of guids doesn't contain guid.
     ///     If parameter is not included or false then returns true if list of guids contains guid.
     /// </summary>
-    public sealed class GuidInGuidsToBooleanConverter : IMultiValueConverter
+    public sealed class GuidInGuidsToVisibilityConverter : IMultiValueConverter
     {
         /// <summary>
         /// 
@@ -24,8 +25,8 @@ namespace ClearDashboard.Wpf.Application.Converters
         /// </param>
         /// <param name="culture"></param>
         /// <returns>
-        /// If parameter==true, returns true if ICollection<Guid>? is NOT null and does NOT contain guid. 
-        /// Else returns true if ICollection<Guid>? contains guid.</returns>
+        /// If parameter==true, returns visible if ICollection<Guid>? is NOT null and does NOT contain guid. 
+        /// Else returns visible if ICollection<Guid>? contains guid.</returns>
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (values.Length == 2 && values[0] is HashSet<Guid> && values[1] is Guid)
@@ -39,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.Converters
                 ) 
                 {
                     if (((HashSet<Guid>)values[0]).Contains((Guid)values[1]))
-                        return true;
+                        return Visibility.Visible;
                 }
                 else if (
                     parameter != null &&
@@ -48,10 +49,10 @@ namespace ClearDashboard.Wpf.Application.Converters
                 )
                 {
                     if (values[0] != null && !((HashSet<Guid>)values[0]).Contains((Guid)values[1]))
-                        return true;
+                        return Visibility.Visible;
                 }
             }
-            return false;
+            return Visibility.Hidden;
         }
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {

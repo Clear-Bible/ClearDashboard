@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
@@ -344,7 +345,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             string taskName, 
             Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus)
         {
-            HashSet<NoteId> noteIds = new HashSet<NoteId>();
+            HashSet<NoteId> noteIds = new HashSet<NoteId>(new IIdEqualityComparer());
 
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Getting all note ids", null);
 
