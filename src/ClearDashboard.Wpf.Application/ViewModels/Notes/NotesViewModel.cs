@@ -213,16 +213,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        //private BindableCollection<NoteViewModel> selectedNoteRepliesNoteViewModels_ = new();
-        //public BindableCollection<NoteViewModel> SelectedNoteRepliesNoteViewModels
-        //{
-        //    get => selectedNoteRepliesNoteViewModels_;
-        //    set
-        //    {
-        //        selectedNoteRepliesNoteViewModels_ = value;
-        //    }
-        //}
-
         private ICollectionView selectedNoteRepliesNoteCollectionView_;
         public ICollectionView SelectedNoteRepliesNoteCollectionView
         {
@@ -273,10 +263,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             NotesCollectionView.Filter = FilterNotesCollectionView;
             NotesCollectionView.SortDescriptions.Clear();
             NotesCollectionView.SortDescriptions.Add(new SortDescription("Created", ListSortDirection.Ascending));
-
-            //SelectedNoteRepliesNoteCollectionView = CollectionViewSource.GetDefaultView(selectedNoteRepliesNoteViewModels_);
-            //SelectedNoteRepliesNoteCollectionView.SortDescriptions.Clear();
-            //SelectedNoteRepliesNoteCollectionView.SortDescriptions.Add(new SortDescription("Created", ListSortDirection.Ascending));
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -374,19 +360,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                     return l;
                 })
                 .ToList();
-
-            //SelectedNoteRepliesNoteViewModels.Clear();
-            //if (selectedNoteViewModel != null)
-            //{
-            //    selectedNoteViewModel.Replies
-            //        .Select(r =>
-            //        {
-            //            SelectedNoteRepliesNoteViewModels.Add(r);
-            //            return r;
-            //        })
-            //        .ToList();
-            //    SelectedNoteRepliesNoteViewModels.NotifyOfPropertyChange(SelectedNoteRepliesNoteViewModels.GetType().Name);
-            //}
 
             SelectedNoteAssociationDescriptions.Clear();
             if (selectedNoteViewModel != null)
