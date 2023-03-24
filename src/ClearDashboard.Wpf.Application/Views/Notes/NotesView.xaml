@@ -295,7 +295,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                ToolTip="Unread replies"
+                                ToolTip="{helpers:Localization Notes_UnreadReplies}"
                                 Text ="!"
                                 >
                                 <TextBlock.Visibility>
