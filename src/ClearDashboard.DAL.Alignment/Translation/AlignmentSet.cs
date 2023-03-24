@@ -16,9 +16,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public AlignmentSetId AlignmentSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
 
-        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, CancellationToken token = default)
+        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, ManualAutoAlignmentMode mode = ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto, CancellationToken token = default)
         {
-            var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows), token);
+            var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows, mode), token);
             result.ThrowIfCanceledOrFailed(true);
             
             return result.Data!;

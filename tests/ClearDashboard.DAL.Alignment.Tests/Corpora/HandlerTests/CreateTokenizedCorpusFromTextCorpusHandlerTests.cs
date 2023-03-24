@@ -113,7 +113,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             // Create the TokenizedCorpus + Tokens in the database:
             var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
-            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction);
+            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction, ScrVers.RussianProtestant);
 
             Assert.NotNull(tokenizedTextCorpus);
             Assert.All(tokenizedTextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
@@ -130,6 +130,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             Assert.Equal(tokenizationFunction, corpusDB.TokenizedCorpora.First().TokenizationFunction);
 
             var tokenizedTextCorpusDB = await TokenizedTextCorpus.Get(Mediator!, new TokenizedTextCorpusId(corpusDB.TokenizedCorpora.First().Id));
+            Assert.Equal(ScrVers.RussianProtestant, tokenizedTextCorpusDB.Versification);
             var ct = 0;
 
             foreach (var tokensTextRow in tokenizedTextCorpusDB?.Cast<TokensTextRow>()!)
