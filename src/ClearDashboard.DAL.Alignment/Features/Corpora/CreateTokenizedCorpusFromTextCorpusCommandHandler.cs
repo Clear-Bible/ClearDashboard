@@ -78,10 +78,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             if (request.Versification.IsCustomized)
             {
-                var writer = new StringWriter();
-                request.Versification.Save(writer.ToString());
-
-                tokenizedCorpus.CustomVersData = writer.ToString();
+                using (var writer = new StringWriter())
+                {
+                    request.Versification.Save(writer);
+                    tokenizedCorpus.CustomVersData = writer.ToString();
+                }
             }
 
             var (tokenizedTextCorpus, tokenCount) = await CreateTokenizedTextCorpus(

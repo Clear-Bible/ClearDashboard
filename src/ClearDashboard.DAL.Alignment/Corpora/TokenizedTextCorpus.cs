@@ -134,11 +134,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public static async Task<TokenizedTextCorpus> Get(
             IMediator mediator,
             TokenizedTextCorpusId tokenizedTextCorpusId,
-            bool useCache = false)
+            bool useCache = false,
+            CancellationToken token = default)
         {
             var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpusId);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
 
             return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache, false);

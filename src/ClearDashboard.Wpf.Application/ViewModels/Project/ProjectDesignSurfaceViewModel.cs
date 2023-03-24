@@ -47,6 +47,7 @@ using ControlzEx.Standard;
 using System.Xml.Linq;
 using ClearDashboard.Wpf.Application.Properties;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
+using SIL.Scripture;
 
 
 // ReSharper disable once CheckNamespace
@@ -515,6 +516,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
                         MaculaCorporaNames.HebrewCorpusName,
                         Tokenizers.WhitespaceTokenizer.ToString(),
+                        ScrVers.Original,
                         cancellationToken,
                         true);
 
@@ -657,6 +659,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
                         MaculaCorporaNames.GreekCorpusName,
                         Tokenizers.WhitespaceTokenizer.ToString(),
+                        ScrVers.Original,
                         cancellationToken,
                         true);
 
@@ -843,7 +846,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8604
                             // ReSharper disable once UnusedVariable
                             var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                                selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
+                                selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), selectedProject.ScrVers, cancellationToken, false);
 #pragma warning restore CS8604
 
 

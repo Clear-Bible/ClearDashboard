@@ -92,34 +92,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
-            List<Models.Alignment> alignmentsToRemove = new();
-
-            if (request.Alignment.AlignmentId is not null)
-            {
-                var existingAlignment = ProjectDbContext!.Alignments
-                    .Where(e => e.Id == request.Alignment.AlignmentId.Id)
-                    .Where(e => e.Deleted == null)
-                    .SingleOrDefault();
-
-                if (existingAlignment is not null)
-                {
-                    existingAlignment.Deleted = currentDateTime;
-                    alignmentsToRemove.Add(existingAlignment);
-                }
-            }
-
-            ProjectDbContext!.Alignments
-                .Where(e => e.AlignmentSetId == alignmentSet.Id)
-                .Where(e => e.Deleted == null)
-                .Where(e => 
-                    e.SourceTokenComponent!.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id &&
-                    e.TargetTokenComponent!.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id)
-                .ToList()
-                .ForEach(e =>
-                {
-                    e.Deleted = currentDateTime;
-                    alignmentsToRemove.Add(e);
-                });
+            var alignmentsToRemove = Enumerable.Empty<Models.Alignment>();
 
             var alignment = new Models.Alignment
             {
