@@ -28,6 +28,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+    <StackPanel Orientation="Vertical">
     <Grid >
         <Grid.ColumnDefinitions >
             <ColumnDefinition Width="1*"/>
@@ -38,7 +39,7 @@
             <Grid Margin="0" Name="StepGrid" Width="Auto" Grid.Column="0">
             <Grid.IsEnabled>
                 <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                    <Binding Path="HasId"  Converter="{StaticResource BooleanInversionConverter}"/>
+                    <Binding Path="DataLoaded"  Converter="{StaticResource BooleanInversionConverter}"/>
                     <Binding Path="ParentViewModel.IsBusy" Converter="{StaticResource BooleanInversionConverter}"/>
                 </MultiBinding>
             </Grid.IsEnabled>
@@ -417,24 +418,33 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="2"
-                VerticalAlignment="Bottom"
-                Orientation="Vertical">
+                        VerticalAlignment="Bottom"
+                        Orientation="Vertical">
                         <Button
-                    x:Name="AddVersion"
-                    Content="{helpers:Localization Aqua_Version_AddVersion}"
-                    IsDefault="True"
-                    Style="{StaticResource TransparentStyle}">
+                            x:Name="AddVersion"
+                            Content="{helpers:Localization Aqua_Version_AddVersion}"
+                            IsDefault="True"
+                            Style="{StaticResource TransparentStyle}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                                    <Binding Path="HasId" Converter="{StaticResource BooleanInversionConverter}"/>
                                     <Binding Path="ParentViewModel.IsBusy" Converter="{StaticResource BooleanInversionConverter}"/>
                                     <Binding Path="ValidationResult.IsValid"/>
                                 </MultiBinding>
                             </Button.IsEnabled>
                         </Button>
+                        <Button
+                            x:Name="GetVersion"
+                            Content="{helpers:Localization Aqua_Version_GetVersion}"
+                            IsDefault="True"
+                            Style="{StaticResource TransparentStyle}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                                    <Binding Path="HasId"/>
+                                    <Binding Path="ParentViewModel.IsBusy" Converter="{StaticResource BooleanInversionConverter}"/>
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                        </Button>
                     </StackPanel>
-               
-            
         </Grid>
         </materialDesign:Card>
         <materialDesign:Card  Grid.Column="1"  Style="{StaticResource RightCardStyle}">
@@ -442,7 +452,7 @@
             <Grid  Margin="0" Width="Auto"  >
                 <Grid.IsEnabled>
                     <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                        <Binding Path="HasId"/>
+                        <Binding Path="DataLoaded"/>
                         <Binding Path="ParentViewModel.IsBusy" Converter="{StaticResource BooleanInversionConverter}"/>
                     </MultiBinding>
                 </Grid.IsEnabled>
@@ -562,4 +572,18 @@
        
         </materialDesign:Card>
     </Grid>
+    <Button
+        x:Name="DeleteVersion"
+        Content="{helpers:Localization Aqua_Version_DeleteVersion}"
+        IsDefault="False"
+        ToolTip="{helpers:Localization Aqua_Version_DeleteVersionDescription}"
+        Style="{StaticResource TransparentStyle}">
+        <Button.IsEnabled>
+            <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                <Binding Path="HasId"/>
+                <Binding Path="ParentViewModel.IsBusy" Converter="{StaticResource BooleanInversionConverter}"/>
+            </MultiBinding>
+        </Button.IsEnabled>
+    </Button>
+    </StackPanel>
 </UserControl>

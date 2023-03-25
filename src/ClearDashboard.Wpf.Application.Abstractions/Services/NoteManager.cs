@@ -129,7 +129,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <param name="noteId">A note ID for which to retrieve the note details.</param>
         /// <returns>A <see cref="NoteViewModel"/> containing the note details.</returns>
-        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId)
+        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true)
         {
             try
             {
@@ -156,7 +156,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
-                await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, UserProvider, Logger);
+                if (doGetParatextSendNoteInformation)
+                    await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, UserProvider, Logger);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
@@ -264,31 +265,39 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        /// <summary>
-        /// Updates a note.
-        /// </summary>
-        /// <param name="note">The <see cref="NoteViewModel"/> to update.</param>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task UpdateNoteAsync(NoteViewModel note)
+        public async Task UpdateNoteAsync(Note note)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                await note.Entity.CreateOrUpdate(Mediator);
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatingMessage(note.NoteId!));
+
+                await note.CreateOrUpdate(Mediator);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!));
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true));
 
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, false));
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Updates a note.
+        /// </summary>
+        /// <param name="noteViewModel">The <see cref="NoteViewModel"/> to update.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task UpdateNoteAsync(NoteViewModel noteViewModel)
+        {
+            await UpdateNoteAsync(noteViewModel.Entity);
         }
 
         /// <summary>
