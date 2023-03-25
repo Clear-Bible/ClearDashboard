@@ -1,9 +1,10 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Services;
@@ -31,6 +32,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         ToolViewModel, 
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
+        IHandle<NoteUpdatingMessage>,
         IHandle<NoteUpdatedMessage>,
         IHandle<NoteLabelAttachedMessage>,
         IHandle<NoteLabelDetachedMessage>
@@ -43,6 +45,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private readonly NoteManager? noteManager_;
         private NotesView view_;
         private LongRunningTask? currentLongRunningTask_;
+        private DataAccessLayer.Models.User? currentUser_;
 
         public enum FilterNoteStatusEnum
         {
@@ -61,6 +64,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                 NotifyOfPropertyChange(() => ProgressBarVisibility);
             }
         }
+
+        public Guid UserId => currentUser_?.Id 
+            ?? throw new InvalidStateEngineException(name: "currentUser_", value: "null");
 
         private FilterNoteStatusEnum filterStatus_;
         public FilterNoteStatusEnum FilterStatus
@@ -207,16 +213,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        private BindableCollection<NoteViewModel> selectedNoteRepliesNoteViewModels_ = new();
-        public BindableCollection<NoteViewModel> SelectedNoteRepliesNoteViewModels
+        private ICollectionView selectedNoteRepliesNoteCollectionView_;
+        public ICollectionView SelectedNoteRepliesNoteCollectionView
         {
-            get => selectedNoteRepliesNoteViewModels_;
+            get => selectedNoteRepliesNoteCollectionView_;
             set
             {
-                selectedNoteRepliesNoteViewModels_ = value;
+                selectedNoteRepliesNoteCollectionView_ = value;
             }
         }
-
         private BindableCollection<string> selectedNoteAssociationDescriptions_ = new();
         public BindableCollection<string> SelectedNoteAssociationDescriptions
         {
@@ -241,11 +246,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             ILifetimeScope lifetimeScope,
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
-            NoteManager noteManager)
+            NoteManager noteManager,
+            IUserProvider userProvider)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             longRunningTaskManager_ = longRunningTaskManager;
             noteManager_ = noteManager;
+            currentUser_ = userProvider.CurrentUser;
 
             //FIXME: why is this here and in MainViewModel line 1113??
             Title = "⌺ " + LocalizationService!.Get("MainView_WindowsNotes");
@@ -324,12 +331,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             string taskName, 
             Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus)
         {
-            HashSet<NoteId> noteIds = new HashSet<NoteId>();
+            HashSet<NoteId> noteIds = new HashSet<NoteId>(new IIdEqualityComparer());
 
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Getting all note ids", null);
 
             _ = (await noteManager.GetNoteIdsAsync(cancellationToken: cancellationToken))
                     .SelectMany(d => d.Value)
+                    //.Distinct(new IIdEqualityComparer()) //using hashset instead.
                     .Select(nid =>
                     {
                         noteIds.Add(nid);
@@ -340,7 +348,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Collecting note details for notes", null);
 
             return await noteIds
-                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid))
+                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false))
                 .WhenAll();
         }
         private void UpdateSelectedNote(NoteViewModel? selectedNoteViewModel)
@@ -352,12 +360,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                     return l;
                 })
                 .ToList();
-
-            SelectedNoteRepliesNoteViewModels.Clear();
-            if (selectedNoteViewModel != null)
-            {
-                SelectedNoteRepliesNoteViewModels = selectedNoteViewModel.Replies;
-            }
 
             SelectedNoteAssociationDescriptions.Clear();
             if (selectedNoteViewModel != null)
@@ -379,16 +381,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             try
             {
+
+                var selectedNoteId = SelectedNoteViewModel?.NoteId ?? null;
+
                 ProgressBarVisibility = Visibility.Visible;
 
-                var taskName = "Get notes";
+                var taskName = "Get_notes";
                 var processStatus = await RunLongRunningTask(
                     taskName,
                     (cancellationToken) => AssembleNotes(noteManager_!, cancellationToken, taskName, SendBackgroundStatus),
                     (noteVms) =>
                     {
-                        BindableCollection<NoteViewModel> noteViewModels = new();
-
                         NoteViewModels.Clear();
 
                         noteVms
@@ -399,6 +402,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                             })
                             .ToList();
                         NoteViewModels.NotifyOfPropertyChange(NoteViewModels.GetType().Name);
+
+                        if (selectedNoteId != null)
+                        {
+                            var selectedNote = NoteViewModels.Where(nvm => nvm.NoteId?.Id.Equals(selectedNoteId.Id) ?? false).FirstOrDefault();
+                            if (selectedNote != null)
+                                SelectedNoteViewModel = selectedNote;
+                        }
 
                         FilterUsersChoices.Clear();
                         noteVms
@@ -538,9 +548,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             return currentLongRunningTask_.Status;
         }
 
-        public async Task UpdateNote(NoteViewModel noteViewModel)
+        public async Task UpdateNoteSeen(NoteViewModel noteViewModel, bool seen)
         {
-            await noteManager_!.UpdateNoteAsync(noteViewModel);
+            bool seenByUserIdsChanged = false;
+            if (seen && !noteViewModel.SeenByUserIds.Contains(UserId))
+            {
+                noteViewModel.SeenByUserIds.Add(UserId);
+                seenByUserIdsChanged = true;
+            }
+            else if (!seen && noteViewModel.SeenByUserIds.Contains(UserId))
+            {
+                noteViewModel.SeenByUserIds.Remove(UserId);
+                seenByUserIdsChanged = true;
+            }
+
+            if (seenByUserIdsChanged)
+                await noteManager_!.UpdateNoteAsync(noteViewModel);
+        }
+
+        public async Task UpdateNoteStatus(NoteViewModel noteViewModel, DataAccessLayer.Models.NoteStatus noteStatus)
+        {
+            if (noteViewModel.NoteStatus != noteStatus.ToString())
+            {
+                noteViewModel.NoteStatus = noteStatus.ToString();
+                await noteManager_!.UpdateNoteAsync(noteViewModel);
+            }
+        }
+        public async Task AddReplyToNote(NoteViewModel noteViewModelWithReplies, string text)
+        {
+            var replyNote = new Note(noteViewModelWithReplies.Entity) { Text = text };
+            await noteManager_!.UpdateNoteAsync(replyNote);
         }
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
@@ -553,11 +590,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await GetAllNotesAndSetNoteViewModelsAsync();
         }
 
-        public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
-        {
-            await GetAllNotesAndSetNoteViewModelsAsync();
-        }
-
         public async Task HandleAsync(NoteLabelAttachedMessage message, CancellationToken cancellationToken)
         {
             await GetAllNotesAndSetNoteViewModelsAsync();
@@ -566,6 +598,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         public async Task HandleAsync(NoteLabelDetachedMessage message, CancellationToken cancellationToken)
         {
             await GetAllNotesAndSetNoteViewModelsAsync();
+        }
+
+        public Task HandleAsync(NoteUpdatingMessage message, CancellationToken cancellationToken)
+        {
+            ProgressBarVisibility = Visibility.Visible;
+            return Task.CompletedTask;
+        }
+        public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.succeeded)
+                await GetAllNotesAndSetNoteViewModelsAsync();
+            else
+                ProgressBarVisibility = Visibility.Hidden;
         }
     }
 
