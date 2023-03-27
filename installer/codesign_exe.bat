@@ -22,10 +22,16 @@ cd ..\ClearDashboard.WebApiParatextPlugin
 dotnet clean --configuration Release
 dotnet build  --configuration Release
 
+echo ========== Check if there is any aqua stuff in the right places %CURRENTPATH%==============
 pause
 
 cd ..\..\installer
 
+ robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish ClearDashboard.Aqua.Module.* /IS /IT ;
+
+ robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\en %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\en ClearDashboard.Aqua.Module.resources.dll /IS /IT ;
+
+ robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\Services %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\Services vref.txt /IS /IT ;
 
 echo code sign the WPF exe	
  ..\code_signing_key\signing_tool\signtool.exe ^

@@ -5,15 +5,9 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using System.Windows.Forms;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.LinkLabel;
-using ClearDashboard.WebApiParatextPlugin.Helpers;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {

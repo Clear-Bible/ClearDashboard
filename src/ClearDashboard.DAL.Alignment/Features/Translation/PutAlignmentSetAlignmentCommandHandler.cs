@@ -90,31 +90,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 );
             }
 
-            var alignmentsToRemove = ProjectDbContext!.Alignments
-                .Where(tr => tr.AlignmentSetId == alignmentSet.Id)
-                .Where(tr => tr.SourceTokenComponent!.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id ||
-                             tr.TargetTokenComponent!.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id);
-
             var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
-            foreach (var e in alignmentsToRemove)
-            {
-                e.Deleted = currentDateTime;
-            }
+            var alignmentsToRemove = Enumerable.Empty<Models.Alignment>();
 
             var alignment = new Models.Alignment
             {
+                Id = Guid.NewGuid(),
                 SourceTokenComponentId = request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id,
                 TargetTokenComponentId = request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id,
                 Score = request.Alignment.AlignedTokenPair.Score,
                 AlignmentVerification = verificationType,
-                AlignmentOriginatedFrom = originatedType
+                AlignmentOriginatedFrom = originatedType,
+                AlignmentSetId = alignmentSet.Id
             };
 
+            ProjectDbContext!.Alignments.Add(alignment);
 
-            alignmentSet.Alignments.Add(alignment);
-
-            using (var transaction =  ProjectDbContext.Database.BeginTransaction())
+            using (var transaction = ProjectDbContext.Database.BeginTransaction())
             {
                 alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignment, ProjectDbContext));
                 _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);

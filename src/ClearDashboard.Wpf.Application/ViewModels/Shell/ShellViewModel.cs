@@ -57,6 +57,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private UpdateFormat? _updateData;
 
+        private readonly ILocalizationService _localizationServices;
+
         private bool _verseChangeInProgress;
 
         private string? _paratextUserName;
@@ -273,12 +275,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             BackgroundTasksViewModel = backgroundTasksViewModel;
             _translationSource = translationSource;
+            _localizationServices = localizationService;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-            Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+            var versionText = _localizationServices.Get("ProjectPicker_Version");
+            Version = $"{versionText} {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
 
             LoadingApplication = true;
@@ -501,7 +505,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private async Task SendUiLanguageChangeMessage(string language)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
+            if (!SettingLanguage)
+            {
+                await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
+            }
         }
 
         public void CopyText(BackgroundTaskStatus status)

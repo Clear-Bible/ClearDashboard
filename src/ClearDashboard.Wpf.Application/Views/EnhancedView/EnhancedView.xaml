@@ -15,7 +15,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:foundation="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -38,18 +37,18 @@
             Key="N"
             Command="{Binding InsertNoteCommand}"
             Modifiers="Control+Shift" />
-      
+
     </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsFocused}" Value="True">
-                        <Setter Property="FocusManager.FocusedElement" 
-                                Value="{Binding RelativeSource={RelativeSource Self}}" />
+                        <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            <converters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
             <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <!--<converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />-->
@@ -101,7 +100,7 @@
                         VerticalAlignment="Top"
                         Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
                         CommandParameter="{x:Static Dock.Top}"
-                        Content="CLOSE"
+                        Content="{helpers:Localization Close}"
                         FontSize="10"
                         Style="{StaticResource SmallTransparentStyle}" />
 
@@ -110,14 +109,14 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        FontWeight="Bold">
-                        Title:
+                        FontWeight="Bold"
+                        Content="{helpers:Localization FontSettings_Title}">
                     </Label>
                     <StackPanel
                         Grid.Row="0"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Title font size:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_TitleFontSize}"/>
                         <Slider
                             Name="TitleFontSizeSlider"
                             Width="100"
@@ -138,14 +137,12 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        FontWeight="Bold">
-                        Source Text:
-                    </Label>
+                        FontWeight="Bold" Content="{helpers:Localization FontSettings_Source}"/>
                     <StackPanel
                         Grid.Row="1"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Source font size:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_SourceFontSize}"/>
                         <Slider
                             Name="SourceTokenFontSizeSlider"
                             Width="100"
@@ -164,7 +161,7 @@
                         Grid.Row="1"
                         Grid.Column="2"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Vertical spacing:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Vertical}"/>
                         <Slider
                             Name="SourceTokenVerticalSpacingSlider"
                             Width="100"
@@ -183,7 +180,7 @@
                         Grid.Row="1"
                         Grid.Column="3"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Horizontal spacing:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Horizontal}"/>
                         <Slider
                             Name="SourceHorizontalSpacingSlider"
                             Width="100"
@@ -211,7 +208,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Target font size:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_TargetFontSize}"/>
                         <Slider
                             Name="TokenFontSizeSlider"
                             Width="100"
@@ -271,13 +268,13 @@
                         Grid.Row="3"
                         Grid.Column="0"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" FontWeight="Bold">Translations:</Label>
+                        <Label VerticalAlignment="Center" FontWeight="Bold" Content="{helpers:Localization FontSettings_Translations}"/>
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Font size:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_FontSize}"/>
                         <Slider
                             Name="TranslationFontSizeSlider"
                             Width="100"
@@ -297,7 +294,7 @@
                         Grid.Column="2"
                         Orientation="Horizontal"
                         Visibility="Collapsed">
-                        <Label VerticalAlignment="Center">Vertical spacing:</Label>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Vertical}"/>
                         <Slider
                             Name="TranslationVerticalSpacingSlider"
                             Width="100"
@@ -318,7 +315,7 @@
                         Grid.Row="4"
                         Grid.Column="0"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" FontWeight="Bold">Note Indicators:</Label>
+                        <Label VerticalAlignment="Center" FontWeight="Bold" Content="{helpers:Localization FontSettings_NoteIndicators}"/>
                         <CheckBox
                             Name="ShowNoteIndicatorsCheckbox"
                             Margin="5,0,0,0"
@@ -330,7 +327,7 @@
                         Grid.Row="4"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label Margin="0,0,14,0" VerticalAlignment="Center">Height:</Label>
+                        <Label Margin="0,0,14,0" VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Height}"/>
                         <Slider
                             Name="NoteIndicatorHeightSlider"
                             Width="100"
@@ -406,7 +403,7 @@
                     CommandParameter="{x:Static Dock.Top}"
                     Content="{materialDesign:PackIcon Kind=Tune}"
                     Style="{StaticResource SmallTransparentStyle}"
-                    ToolTip="Show the Enhanced View Controls" />
+                    ToolTip="{helpers:Localization EnhancedView_ShowControls}" />
 
                 <userControls:BcvUserControl
                     Grid.Row="0"
@@ -447,13 +444,12 @@
         </materialDesign:DrawerHost>
 
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" ShowGridLines="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="19*" />
-                <ColumnDefinition Width="106*" />
+                <ColumnDefinition x:Name="FirstColumn" Width="*" />
                 <ColumnDefinition
                     x:Name="NotesColumn"
                     Width="Auto"
@@ -461,11 +457,8 @@
                     MaxWidth="300" />
             </Grid.ColumnDefinitions>
 
-            <!--  OUTER LISTVIEW  -->
             <ListView
-                x:Name="OuterListView"
-                Grid.ColumnSpan="2"
-                Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                x:Name="ItemsListView"
                 Margin="0,0,5,0"
                 ItemsSource="{Binding Items}"
                 ScrollViewer.CanContentScroll="False"
@@ -476,29 +469,43 @@
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
+                        <Style.Resources>
+                            <LinearGradientBrush x:Key="MouseOverBrush" StartPoint="0.5, 0" EndPoint="0.5, 1">
+                                <GradientStop Offset="0" Color="#22000000" />
+                                <GradientStop Offset="0.4" Color="#44000000" />
+                                <GradientStop Offset="0.6" Color="#55000000" />
+                                <GradientStop Offset="0.9" Color="#33000000" />
+                                <GradientStop Offset="1" Color="#22000000" />
+                            </LinearGradientBrush>
+                        </Style.Resources>
                         <Setter Property="Height" Value="Auto" />
-
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <!--<Setter Property="BorderBrush" Value="{Binding BorderColor}" />-->
+                        <Setter Property="BorderBrush" Value="{DynamicResource AttentionToActionBrush}" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="Margin" Value="5,5" />
                         <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" Value="LightGreen" />
-                                <Setter Property="IsSelected" Value="True" />
-                            </Trigger>
                             <Trigger Property="IsSelected" Value="true">
                                 <Setter Property="Background" Value="LightCoral" />
                             </Trigger>
+                            <Trigger Property="ListViewItem.IsMouseOver" Value="true">
+                                <Setter Property="Background" Value="{StaticResource MouseOverBrush}" />
+                                <Setter Property="IsSelected" Value="True" />
+                            </Trigger>
+
                             <DataTrigger Binding="{Binding HasFocus}" Value="True">
-                                <Setter Property="FocusManager.FocusedElement" 
-                                        Value="{Binding RelativeSource={RelativeSource Self}}" />
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition x:Name="DisplayColumn" Width="*" />
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition x:Name="DisplayColumn" Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='10'}" />
                             </Grid.ColumnDefinitions>
 
                             <StackPanel
@@ -506,53 +513,53 @@
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
 
-                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusUpRowCommand}" CommandParameter="{Binding}">
+                                <Button Command="{Binding ElementName=ItemsListView, Path=DataContext.MoveCorpusUpRowCommand}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="3" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderThickness" Value="0" />
                                         </Style>
                                     </Button.Style>
                                     <materialDesign:PackIcon
-                                        Width="20"
-                                        Height="20"
+                                        Width="24"
+                                        Height="24"
+                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
 
-                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusDownRowCommand}" CommandParameter="{Binding}">
+                                <Button Command="{Binding ElementName=ItemsListView, Path=DataContext.MoveCorpusDownRowCommand}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderThickness" Value="0" />
                                         </Style>
                                     </Button.Style>
                                     <materialDesign:PackIcon
-                                        Width="20"
-                                        Height="20"
+                                        Width="24"
+                                        Height="24"
+                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
                                         Kind="ArrowDownDropCircle" />
                                 </Button>
                             </StackPanel>
 
 
-                            <Border
-                                Grid.Column="1"
-                                Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='20'}"
-                                Padding="3,0,3,0"
-                                HorizontalAlignment="Stretch"
-                                BorderBrush="{Binding BorderColor}"
-                                BorderThickness="3"
-                                CornerRadius="4">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal">
+                            <Border Grid.Column="1" BorderThickness="0">
+                                <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
 
+                                    <StackPanel Orientation="Horizontal">
                                         <Button
                                             Width="20"
                                             Height="20"
                                             Margin="3,0,0,0"
                                             VerticalAlignment="Center"
-                                            Command="{Binding ElementName=OuterListView, Path=DataContext.DeleteCorpusRowCommand}"
+                                            Command="{Binding ElementName=ItemsListView, Path=DataContext.DeleteCorpusRowCommand}"
                                             CommandParameter="{Binding}">
                                             <Button.Style>
                                                 <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
                                                     <Setter Property="Padding" Value="0" />
+
                                                 </Style>
                                             </Button.Style>
                                             <materialDesign:PackIcon
@@ -560,7 +567,7 @@
                                                 Height="20"
                                                 Foreground="{StaticResource RedVeryDarkBrush}"
                                                 Kind="Close"
-                                                ToolTip="Remove Corpus" />
+                                                ToolTip="{helpers:Localization EnhancedView_RemoveCorpus}" />
                                         </Button>
                                         <TextBlock
                                             Margin="8,0,5,0"
@@ -572,7 +579,8 @@
                                     </StackPanel>
                                     <ContentControl
                                         Name="VerseContentControl"
-                                        HorizontalAlignment="Left"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch"
                                         cm:View.Model="{Binding .}"
                                         PreviewMouseWheel="VerseContentControl_OnPreviewMouseWheel" />
 
@@ -586,7 +594,7 @@
 
             <GridSplitter
                 x:Name="NotesSplitter"
-                Grid.Column="1"
+                Grid.Column="0"
                 Width="5"
                 DragDelta="ProjectDesignSurfaceSplitter_OnDragDelta" />
 

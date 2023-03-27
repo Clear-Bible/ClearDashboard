@@ -282,6 +282,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 alignmentSet.DisplayName,
                 alignmentSet.SmtModel,
                 alignmentSet.IsSyntaxTreeAlignerRefined,
+                alignmentSet.IsSymmetrized,
                 alignmentSet.Metadata,
                 alignmentSet.Created,
                 BuildUserId(user));
@@ -379,7 +380,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 translationSet.Id,
                 parallelCorpusId,
                 translationSet.DisplayName,
-                //translationSet.SmtModel,
+                translationSet.AlignmentSetId,
                 translationSet.Metadata,
                 translationSet.Created,
                 BuildUserId(user));
@@ -463,7 +464,9 @@ namespace ClearDashboard.DAL.Alignment.Features
                 note.LabelNoteAssociations
                     .Select(ln => new Label(new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty)).ToHashSet(),
                 note.NoteDomainEntityAssociations
-                    .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet()
+                    .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet(),
+                note.NoteUserSeenAssociations
+                    .Select(nu => nu.UserId).ToHashSet()
             );
         }
 

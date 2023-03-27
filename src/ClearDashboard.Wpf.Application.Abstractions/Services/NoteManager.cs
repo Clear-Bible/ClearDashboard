@@ -88,14 +88,14 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </remarks>
         /// <param name="entityIds">A collection of entity IDs for which to retrieve note IDs.</param>
         /// <returns>A <see cref="EntityNoteIdDictionary"/> containing the note IDs.</returns>
-        public async Task<EntityNoteIdDictionary> GetNoteIdsAsync(IEnumerable<IId> entityIds)
+        public async Task<EntityNoteIdDictionary> GetNoteIdsAsync(IEnumerable<IId>? entityIds = null, CancellationToken cancellationToken = default)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var notes = await Note.GetDomainEntityNoteIds(Mediator, entityIds);
+                var notes = await Note.GetDomainEntityNoteIds(Mediator, entityIds, cancellationToken);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved domain entity note IDs in {stopwatch.ElapsedMilliseconds}ms");
@@ -129,7 +129,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <param name="noteId">A note ID for which to retrieve the note details.</param>
         /// <returns>A <see cref="NoteViewModel"/> containing the note details.</returns>
-        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId)
+        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true)
         {
             try
             {
@@ -156,7 +156,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
-                await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, UserProvider, Logger);
+                if (doGetParatextSendNoteInformation)
+                    await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, UserProvider, Logger);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
@@ -264,28 +265,39 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        /// <summary>
-        /// Updates a note.
-        /// </summary>
-        /// <param name="note">The <see cref="NoteViewModel"/> to update.</param>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task UpdateNoteAsync(NoteViewModel note)
+        public async Task UpdateNoteAsync(Note note)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                await note.Entity.CreateOrUpdate(Mediator);
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatingMessage(note.NoteId!));
+
+                await note.CreateOrUpdate(Mediator);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true));
+
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, false));
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Updates a note.
+        /// </summary>
+        /// <param name="noteViewModel">The <see cref="NoteViewModel"/> to update.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task UpdateNoteAsync(NoteViewModel noteViewModel)
+        {
+            await UpdateNoteAsync(noteViewModel.Entity);
         }
 
         /// <summary>
@@ -367,12 +379,13 @@ namespace ClearDashboard.Wpf.Application.Services
                     var newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText);
                     LabelSuggestions.Add(newLabel);
                     LabelSuggestions = new LabelCollection(LabelSuggestions.OrderBy(l => l.Text));
-
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
                 }
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
 #endif
             }
             catch (Exception e)
@@ -405,6 +418,8 @@ namespace ClearDashboard.Wpf.Application.Services
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
+                await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
 #endif
             }
             catch (Exception e)
@@ -437,6 +452,8 @@ namespace ClearDashboard.Wpf.Application.Services
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
+                await EventAggregator.PublishOnUIThreadAsync(new NoteLabelDetachedMessage(note.NoteId!, label));
 #endif
             }
             catch (Exception e)

@@ -18,13 +18,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         RequestResult<NoteId>, NoteId>
     {
         private readonly IMediator _mediator;
+        private readonly IUserProvider _userProvider;
 
         public CreateOrUpdateNoteCommandHandler(IMediator mediator,
-            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
+            ProjectDbContextFactory? projectNameDbContextFactory, 
+            IProjectProvider projectProvider,
+            IUserProvider userProvider,
             ILogger<CreateOrUpdateNoteCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
             logger)
         {
             _mediator = mediator;
+            _userProvider = userProvider;
         }
 
         protected override async Task<RequestResult<NoteId>> SaveDataAsync(CreateOrUpdateNoteCommand request,
@@ -33,7 +37,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             Models.Note? note = null;
             if (request.NoteId != null)
             {
-                note = ProjectDbContext!.Notes.Include(n => n.User).FirstOrDefault(c => c.Id == request.NoteId.Id);
+                note = ProjectDbContext!.Notes
+                    .Include(n => n.User)
+                    .Include(n => n.NoteUserSeenAssociations)
+                    .FirstOrDefault(c => c.Id == request.NoteId.Id);
                 if (note == null)
                 {
                     return new RequestResult<NoteId>
@@ -47,6 +54,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 note.AbbreviatedText = request.AbbreviatedText;
                 note.Modified = DateTimeOffset.UtcNow;
                 note.NoteStatus = request.NoteStatus;
+
+                var seenByUserIdsToAdd = request.SeenByUserIds.Except(note.NoteUserSeenAssociations.Select(e => e.UserId)).Distinct();
+                foreach (var userId in seenByUserIdsToAdd)
+                {
+                    ProjectDbContext.NoteUserSeenAssociations.Add(new Models.NoteUserSeenAssociation
+                    {
+                        UserId = userId,
+                        NoteId = request.NoteId.Id
+                    });
+                }
+
+                var noteSeenUserAssociationsToRemove = note.NoteUserSeenAssociations.ExceptBy(request.SeenByUserIds, n => n.UserId);
+                ProjectDbContext.RemoveRange(noteSeenUserAssociationsToRemove);
 
                 // DO NOT MODIFY note.ThreadId once it is set during note creation
             }
@@ -85,6 +105,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 }
 
                 ProjectDbContext.Notes.Add(note);
+
+                if (_userProvider.CurrentUser is not null && !request.SeenByUserIds.Contains(_userProvider.CurrentUser.Id))
+                {
+                    request.SeenByUserIds.Add(_userProvider.CurrentUser.Id);
+                }
+
+                foreach (var userId in request.SeenByUserIds.Distinct())
+                {
+                    ProjectDbContext.NoteUserSeenAssociations.Add(new Models.NoteUserSeenAssociation
+                    {
+                        UserId = userId,
+                        NoteId = note.Id
+                    });
+                }
             }
 
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);

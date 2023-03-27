@@ -70,6 +70,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         private readonly DashboardProjectManager? _projectManager;
         private readonly IEventAggregator? _eventAggregator;
         private readonly TranslationSource _translationSource;
+        private readonly ILocalizationService _localizationService;
 
         private enum FiterReference
         {
@@ -202,6 +203,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             get => _searchEnglish;
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
+
                 _searchEnglish = value;
                 NotifyOfPropertyChange(() => SearchEnglish);
 
@@ -222,9 +228,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             get => _searchSource;
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
                 _searchSource = value;
                 NotifyOfPropertyChange(() => SearchSource);
 
+
+                
                 if (_searchSource.Length > 1)
                 {
                     _ = SearchSourceDatabase(_searchSource);
@@ -427,9 +439,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             _projectManager = projectManager;
             _eventAggregator = eventAggregator;
             _translationSource = translationSource;
+            _localizationService = localizationService;
 
 
-            Title = "◕ " + "MARBLE";
+            Title = "◕ " + _localizationService!.Get("MainView_WindowsMarble");
             ContentId = "MARBLE";
             DockSide = DockSide.Bottom;
 
@@ -826,11 +839,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                     languageCode = "fr";
                     break;
                 case "zh-CN":
-                    languageCode = "zhs";
+                    languageCode = "zhS";
                     break;
                 case "zh-TW":
-                    languageCode = "zht";
+                    languageCode = "zhT";
                     break;
+                case "pt":
+                    languageCode = "pt";
+                    break;
+                case "hi":
+                    languageCode = "hi";
+                    break;
+
                 default:
                     // default to English for everyone else
                     languageCode = "en";

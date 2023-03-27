@@ -114,6 +114,7 @@
                 Width="150"
                 Margin="0,1,0,1"
                 materialDesign:HintAssist.Hint="Search"
+                materialDesign:TextFieldAssist.HasClearButton="True"
                 TextChanged="SearchBox_OnTextChanged" />
             <Button
                 Width="30"

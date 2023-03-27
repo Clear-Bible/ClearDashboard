@@ -35,6 +35,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 .Include(n => n.NoteDomainEntityAssociations)
                 .Include(n => n.LabelNoteAssociations)
                     .ThenInclude(ln => ln.Label)
+                .Include(n => n.NoteUserSeenAssociations)
                 .Where(n => request.ThreadNoteId.Id == n.Id || request.ThreadNoteId.Id == n.ThreadId)
                 .Select(note => ModelHelper.BuildNote(note));
 

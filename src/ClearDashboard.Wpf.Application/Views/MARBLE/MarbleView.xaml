@@ -17,6 +17,8 @@
     xmlns:pieChart="clr-namespace:ClearDashboard.Wpf.Controls.DonutGraph.PieChart;assembly=ClearDashboard.Wpf.Controls"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:wpfKeyBoard="clr-namespace:wpfKeyBoard;assembly=wpfKeyBoard"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     x:Name="MarbleViewControl"
     d:DataContext="{d:DesignInstance Type=marble:MarbleViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -152,7 +154,7 @@
                         VerticalAlignment="Top"
                         Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
                         CommandParameter="{x:Static Dock.Top}"
-                        Content="CLOSE"
+                        Content="{helpers:Localization Close}"
                         Style="{StaticResource TransparentStyle}" />
 
                     <Border
@@ -164,13 +166,14 @@
                             <Label
                                 Margin="5,0,0,0"
                                 VerticalAlignment="Top"
-                                Content="Search by Hebrew/Greek"
+                                Content="{helpers:Localization Marble_SearchHebrew}"
                                 Foreground="{StaticResource PrimaryHueMidBrush}" />
 
                             <TextBox
                                 x:Name="SearchTextBox"
                                 Margin="5,0,5,0"
                                 VerticalAlignment="Center"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
                                 Style="{StaticResource MaterialDesignFilledTextBox}"
                                 Text="{Binding Path=SearchSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <Border
@@ -205,7 +208,7 @@
                         <StackPanel Orientation="Vertical">
                             <Label
                                 Margin="5,0,0,0"
-                                Content="Search by English Gloss"
+                                Content="{helpers:Localization Marble_SearchEnglish}"
                                 Foreground="{StaticResource PrimaryHueMidBrush}" />
                             <TextBox
                                 MinWidth="310"
@@ -213,6 +216,7 @@
                                 Margin="5,0,5,5"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
                                 AcceptsReturn="True"
                                 Style="{StaticResource MaterialDesignFilledTextBox}"
                                 Text="{Binding SearchEnglish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -380,7 +384,7 @@
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             Margin="10,10,23,10"
-                            Header="Frequency Graph"
+                            Header="{helpers:Localization Marble_FrequencyGraph}"
                             IsExpanded="False"
                             Style="{StaticResource ExpanderStyle}">
                             <pieChart:PieChartLayout
@@ -388,6 +392,7 @@
                                 HorizontalAlignment="Stretch"
                                 Background="White"
                                 ManuscriptTextProperty="ManuscriptWord"
+                                TitleProperty="{helpers:Localization Marble_VerseTotal}"
                                 PlottedProperty="VerseTotal">
                                 <pieChart:PieChartLayout.DataContext>
                                     <Binding Path="Senses" />
@@ -405,7 +410,7 @@
                             Grid.Column="0"
                             Width="Auto"
                             Margin="10,5,10,10"
-                            Header="General Information"
+                            Header="{helpers:Localization Marble_GeneralInformation}"
                             PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
                             <GroupBox.HeaderTemplate>
                                 <DataTemplate>
@@ -472,7 +477,10 @@
                                     </Grid.ColumnDefinitions>
 
 
-                                    <Expander Grid.Column="0" Header="Strong Codes   ">
+                                    <Expander
+                                        Grid.Column="0"
+                                        VerticalAlignment="Top"
+                                        Header="{helpers:Localization Marble_StrongCodes}">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
@@ -562,7 +570,10 @@
                                         </StackPanel>
                                     </Expander>
 
-                                    <Expander Grid.Column="1" Header="Parts of Speech   ">
+                                    <Expander
+                                        Grid.Column="1"
+                                        VerticalAlignment="Top"
+                                        Header="{helpers:Localization Marble_PartsOfSpeech}">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
@@ -639,7 +650,10 @@
                                         </StackPanel>
                                     </Expander>
 
-                                    <Expander Grid.Column="2" Header="Related Lemmas   ">
+                                    <Expander
+                                        Grid.Column="2"
+                                        VerticalAlignment="Top"
+                                        Header="{helpers:Localization Marble_RelatedLemmas}">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
@@ -763,7 +777,7 @@
                             Grid.Column="0"
                             Width="Auto"
                             Margin="5,5,10,10"
-                            Header="Senses"
+                            Header="{helpers:Localization Marble_Senses}"
                             PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
 
                             <ListView
@@ -800,7 +814,7 @@
 
                                         <GridViewColumn Width="100">
                                             <GridViewColumn.Header>
-                                                <TextBlock HorizontalAlignment="Left" Text="Verse Sense" />
+                                                <TextBlock HorizontalAlignment="Left" Text="{helpers:Localization Marble_VerseSense}" />
                                             </GridViewColumn.Header>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -825,7 +839,7 @@
 
                                         <GridViewColumn Width="300">
                                             <GridViewColumn.Header>
-                                                <TextBlock HorizontalAlignment="Left" Text="Sense" />
+                                                <TextBlock HorizontalAlignment="Left" Text="{helpers:Localization Marble_Sense}" />
                                             </GridViewColumn.Header>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -836,7 +850,7 @@
 
                                         <GridViewColumn Width="130">
                                             <GridViewColumn.Header>
-                                                <TextBlock HorizontalAlignment="Left" Text="Verse Total" />
+                                                <TextBlock HorizontalAlignment="Left" Text="{helpers:Localization Marble_VerseTotal}" />
                                             </GridViewColumn.Header>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -857,7 +871,7 @@
                             PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
                             <StackPanel Orientation="Vertical">
                                 <Expander
-                                    Header="Definition"
+                                    Header="{helpers:Localization Marble_Definition}"
                                     IsExpanded="True"
                                     Style="{StaticResource ExpanderStyle}">
                                     <StackPanel
@@ -869,7 +883,7 @@
                                         <TextBlock
                                             Padding="3"
                                             FontWeight="Bold"
-                                            Text="Definition Short:"
+                                            Text="{helpers:Localization Marble_DefinitionShort}"
                                             TextDecorations="Underline" />
                                         <!--<TextBox
                                             MinWidth="50"
@@ -891,7 +905,7 @@
                                             Margin="0,5,0,0"
                                             Padding="3"
                                             FontWeight="Bold"
-                                            Text="Definition Long:"
+                                            Text="{helpers:Localization Marble_DefinitionLong}"
                                             TextDecorations="Underline">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
@@ -927,7 +941,7 @@
                                             Margin="0,5,0,0"
                                             Padding="3"
                                             FontWeight="Bold"
-                                            Text="Glosses:"
+                                            Text="{helpers:Localization Marble_Glosses}"
                                             TextDecorations="Underline" />
                                         <ListBox ItemsSource="{Binding SelectedSense.Glosses}" />
                                     </StackPanel>
@@ -937,7 +951,7 @@
 
 
 
-                                <Expander Header="Verses" Style="{StaticResource ExpanderStyle}">
+                                <Expander Header="{helpers:Localization Marble_Verses}" Style="{StaticResource ExpanderStyle}">
                                     <StackPanel
                                         Margin="3"
                                         Background="{StaticResource MaterialDesignPaper}"
@@ -949,15 +963,14 @@
                                                 <TextBlock
                                                     Margin="10"
                                                     VerticalAlignment="Center"
-                                                    TextDecorations="Underline">
-                                                    Scope:
-                                                </TextBlock>
+                                                    TextDecorations="Underline"
+                                                    Text="{helpers:Localization Marble_Scope}"/>
                                                 <RadioButton
                                                     Name="rbAll"
                                                     Margin="10"
                                                     Command="{Binding Path=SetContextCommand}"
                                                     CommandParameter="{Binding ElementName=rbAll, Path=Tag}"
-                                                    Content="All"
+                                                    Content="{helpers:Localization Marble_All}"
                                                     GroupName="context"
                                                     IsChecked="True"
                                                     Tag="All" />
@@ -966,7 +979,7 @@
                                                     Margin="10"
                                                     Command="{Binding Path=SetContextCommand}"
                                                     CommandParameter="{Binding ElementName=RbBook, Path=Tag}"
-                                                    Content="Book"
+                                                    Content="{helpers:Localization Marble_Book}"
                                                     GroupName="context"
                                                     IsChecked="False"
                                                     Tag="Book" />
@@ -975,7 +988,7 @@
                                                     Margin="10"
                                                     Command="{Binding Path=SetContextCommand}"
                                                     CommandParameter="{Binding ElementName=rbChapter, Path=Tag}"
-                                                    Content="Chapter"
+                                                    Content="{helpers:Localization Marble_Chapter}"
                                                     GroupName="context"
                                                     IsChecked="False"
                                                     Tag="Chapter" />
@@ -1214,7 +1227,7 @@
                                     </StackPanel>
                                 </Expander>
 
-                                <Expander Header="Domains">
+                                <Expander Header="{helpers:Localization Marble_DomainsTitle}">
                                     <Expander.Style>
                                         <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
@@ -1233,7 +1246,7 @@
 
                                         <TextBlock
                                             FontWeight="Bold"
-                                            Text="Domains:"
+                                            Text="{helpers:Localization Marble_Domains}"
                                             TextDecorations="Underline" />
 
                                         <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.Domains}">
@@ -1273,7 +1286,7 @@
 
                                         <TextBlock
                                             FontWeight="Bold"
-                                            Text="Sub Domains:"
+                                            Text="{helpers:Localization Marble_SubDomains}"
                                             TextDecorations="Underline" />
                                         <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.SubDomains}">
                                             <ListBox.ItemContainerStyle>

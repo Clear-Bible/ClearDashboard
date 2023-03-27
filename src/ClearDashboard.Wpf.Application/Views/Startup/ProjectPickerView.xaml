@@ -152,18 +152,27 @@
             </Image>
             <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
                 <TextBlock
+                    x:Name="NotConnectedText"
+                    Margin="0,0,5,0"
+                    VerticalAlignment="Center"
+                    Text="{helpers:Localization ProjectPicker_ParatextOnNotConnected}"
+                    TextWrapping="Wrap"
+                    Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}" />
+                <TextBlock
                     Margin="5,0,5,0"
                     VerticalAlignment="Center"
-                    Foreground="{DynamicResource PrimaryHueMidBrush}">
+                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                    Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
                     <Run Text="{helpers:Localization ProjectPicker_Paratext}" />
                     <Run Text="{helpers:Localization ShellView_User}" />
                 </TextBlock>
                 <TextBlock
-                    TextWrapping="Wrap"
                     x:Name="ParatextUserName"
                     Margin="0,0,5,0"
                     VerticalAlignment="Center"
-                    d:Text="Joe Schmoe" />
+                    d:Text="Joe Schmoe"
+                    TextWrapping="Wrap"
+                    Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
                 <!--<TextBlock
@@ -254,6 +263,7 @@
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
                 materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_SearchRecent}"
+                materialDesign:TextFieldAssist.HasClearButton="True"
                 BorderBrush="DarkGray"
                 BorderThickness="1"
                 IsEnabled="{Binding Connected}">
@@ -296,7 +306,8 @@
                 Style="{StaticResource TransparentStyle}"
                 Visibility="{Binding SearchBlankVisibility}">
                 <TextBlock HorizontalAlignment="Left" TextAlignment="Left">
-                    <Run Text="Create Project: '" />
+                    <Run Text="{helpers:Localization ProjectPicker_CreateProject}" />
+                    <Run Text="'" />
                     <Run Text="{Binding SearchText}" />
                     <Run Text="'" />
                 </TextBlock>
@@ -387,7 +398,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
-                                        <Run FontSize="11" Text="Version: " />
+                                        <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Version}" />
                                         <Run FontSize="11" Text="{Binding Version}" />
                                     </TextBlock>
                                 </Grid>

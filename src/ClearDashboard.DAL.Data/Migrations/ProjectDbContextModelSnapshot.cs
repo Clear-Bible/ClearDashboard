@@ -15,7 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
@@ -111,6 +111,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSymmetrized")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsSyntaxTreeAlignerRefined")
                         .HasColumnType("INTEGER");
@@ -557,6 +560,27 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("NoteRecipient");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteUserSeenAssociation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("NoteId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NoteId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("NoteUserSeenAssociation");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>
@@ -1494,6 +1518,25 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteUserSeenAssociation", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Note", "Note")
+                        .WithMany("NoteUserSeenAssociations")
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Note");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", "SourceTokenizedCorpus")
@@ -1878,6 +1921,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("NoteDomainEntityAssociations");
 
                     b.Navigation("NoteRecipients");
+
+                    b.Navigation("NoteUserSeenAssociations");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>

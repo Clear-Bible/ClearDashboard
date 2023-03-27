@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public NoteIdCollection SelectedNoteIds => SelectedTokens.NoteIds;
         public bool AnySelectedNotes => SelectedTokens.Any(t => t.HasNote);
 
-        private void SelectionUpdated()
+        public void SelectionUpdated()
         {
             EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(SelectedTokens));
         }
@@ -68,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public void UpdateRightClickSelection(TokenDisplayViewModel token)
         {
-            if (!SelectedTokens.Contains(token) || token.CompositeToken !=null)
+            if (!SelectedTokens.Contains(token))
             {
                 SelectedTokens = new TokenDisplayViewModelCollection(token);
                 SelectionUpdated();

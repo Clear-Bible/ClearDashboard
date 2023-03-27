@@ -32,11 +32,5 @@ namespace ClearDashboard.Aqua.Module.Menu
 
             corpusNodeMenuItemViewModel.MenuItems.Add(menuItem);
         }
-
-        public override void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
-        {
-            //TODO:  Implement if required.
-            //throw new NotImplementedException();
-        }
     }
 }

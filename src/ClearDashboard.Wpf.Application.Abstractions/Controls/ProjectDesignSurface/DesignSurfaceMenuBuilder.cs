@@ -14,7 +14,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         ParallelCorpusConnectionMenuItemViewModel CreateParallelCorpusConnectionSeparatorMenuItem();
 
         void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds);
+        void CreateOnlyForNonResouceCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus);
         void CreateCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus);
+
     }
 
     public abstract class DesignSurfaceMenuBuilder : IDesignSurfaceMenuBuilder
@@ -52,7 +54,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             };
         }
 
-        public abstract void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds);
+        public virtual void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
+        {
+        }
+
+        public virtual void CreateOnlyForNonResouceCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus)
+        {
+        }
 
         public virtual void CreateCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus)
         {

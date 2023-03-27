@@ -14,14 +14,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<IParallelCorpusDialogViewModel>
 {
+    #region Member Variables   
+
+    #endregion //Member Variables
+
+
+    #region Public Properties
+
+    #endregion //Public Properties
+
+
+    #region Observable Properties
+
+
+    private DialogMode _dialogMode;
+    public DialogMode DialogMode
+    {
+        get => _dialogMode;
+        set => Set(ref _dialogMode, value);
+    }
+
+
     private bool _canTrain;
+    public bool CanTrain
+    {
+        get => _canTrain;
+        set => Set(ref _canTrain, value);
+    }
+
+    private bool? _isTrainedSymmetrizedModel = false;
+    public bool? IsTrainedSymmetrizedModel 
+    { 
+        get => _isTrainedSymmetrizedModel; 
+        set => Set(ref _isTrainedSymmetrizedModel, value);
+    }
+
+
+    #endregion //Observable Properties
+
+
+    #region Constructor
 
     public SmtModelStepViewModel()
     {
 
     }
 
-    public SmtModelStepViewModel( DialogMode dialogMode,  DashboardProjectManager projectManager,
+    public SmtModelStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
         IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
@@ -31,20 +70,6 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         CanMoveBackwards = true;
         EnableControls = true;
         CanTrain = true;
-    }
-
-    private DialogMode _dialogMode;
-    public DialogMode DialogMode
-    {
-        get => _dialogMode;
-        set => Set(ref _dialogMode, value);
-    }
-
-    public bool CanTrain
-
-    {
-        get => _canTrain;
-        set => Set(ref _canTrain, value);
     }
 
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -66,6 +91,11 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         base.OnActivateAsync(cancellationToken);
     }
 
+    #endregion //Constructor
+
+
+    #region Methods
+
     public async void Train()
     {
         await Train(true);
@@ -79,7 +109,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         {
             try
             {
-                var processStatus = await ParentViewModel!.TrainSmtModel();
+                var processStatus = await ParentViewModel!.TrainSmtModel(IsTrainedSymmetrizedModel);
 
                 switch (processStatus)
                 {
@@ -104,4 +134,6 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
             }
         }, CancellationToken.None);
     }
+
+    #endregion // Methods
 }

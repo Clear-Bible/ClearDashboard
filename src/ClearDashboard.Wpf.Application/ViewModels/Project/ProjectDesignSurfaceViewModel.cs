@@ -47,6 +47,7 @@ using ControlzEx.Standard;
 using System.Xml.Linq;
 using ClearDashboard.Wpf.Application.Properties;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
+using SIL.Scripture;
 
 
 // ReSharper disable once CheckNamespace
@@ -63,7 +64,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly IWindowManager? _windowManager;
-        private readonly BackgroundTasksViewModel _backgroundTasksViewModel;
+        public readonly BackgroundTasksViewModel BackgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly SystemPowerModes _systemPowerModes;
         #endregion //Member Variables
@@ -158,7 +159,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             EnhancedViewManager = enhancedViewManager;
             _systemPowerModes = systemPowerModes;
             _windowManager = windowManager;
-            _backgroundTasksViewModel = backgroundTasksViewModel;
+            BackgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
 
             EventAggregator.SubscribeOnUIThread(this);
@@ -448,7 +449,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             Logger!.LogInformation("AddManuscriptHebrewCorpus called.");
 
-            var taskName = "HebrewCorpus";
+            var taskName = MaculaCorporaNames.HebrewCorpusName;
 
             DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = false;
 
@@ -474,7 +475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 Id = ManuscriptIds.HebrewManuscriptId,
                 CorpusType = CorpusType.ManuscriptHebrew,
-                Name = "Macula Hebrew",
+                Name = MaculaCorporaNames.HebrewCorpusName,
                 AvailableBooks = books,
             };
 
@@ -496,7 +497,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
                         IsRtl: true,
-                        Name: "Macula Hebrew",
+                        Name: MaculaCorporaNames.HebrewCorpusName,
                         Language: "Hebrew",
                         CorpusType: CorpusType.ManuscriptHebrew.ToString(),
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
@@ -513,8 +514,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
-                        "Macula Hebrew",
+                        MaculaCorporaNames.HebrewCorpusName,
                         Tokenizers.WhitespaceTokenizer.ToString(),
+                        ScrVers.Original,
                         cancellationToken,
                         true);
 
@@ -560,7 +562,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode);
                         // What other work needs to be done?  how do we know which steps have been executed?
                         DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
                     }
@@ -570,7 +572,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
 
                     // check to see if there are still High Performance Tasks still out there
-                    var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                    var numTasks = BackgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
                     if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                     {
                         // shut down high performance mode
@@ -596,7 +598,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             DesignSurfaceViewModel!.AddManuscriptGreekEnabled = false;
 
-            var taskName = "GreekCorpus";
+            var taskName = MaculaCorporaNames.GreekCorpusName;
             var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = task.CancellationTokenSource!.Token;
 
@@ -621,7 +623,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 Id = ManuscriptIds.GreekManuscriptId,
                 CorpusType = CorpusType.ManuscriptGreek,
-                Name = "Macula Greek",
+                Name = MaculaCorporaNames.GreekCorpusName,
                 AvailableBooks = books,
             };
 
@@ -641,7 +643,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
                         IsRtl: false,
-                        Name: "Macula Greek",
+                        Name: MaculaCorporaNames.GreekCorpusName,
                         Language: "Greek",
                         CorpusType: CorpusType.ManuscriptGreek.ToString(),
                         ParatextId: ManuscriptIds.GreekManuscriptId,
@@ -655,8 +657,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
-                        "Macula Greek",
+                        MaculaCorporaNames.GreekCorpusName,
                         Tokenizers.WhitespaceTokenizer.ToString(),
+                        ScrVers.Original,
                         cancellationToken,
                         true);
 
@@ -698,7 +701,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode);
                         DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
                     }
                     else
@@ -707,7 +710,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
 
                     // check to see if there are still High Performance Tasks still out there
-                    var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                    var numTasks = BackgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
                     if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                     {
                         // shut down high performance mode
@@ -843,7 +846,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8604
                             // ReSharper disable once UnusedVariable
                             var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                                selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
+                                selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), selectedProject.ScrVers, cancellationToken, false);
 #pragma warning restore CS8604
 
 
@@ -896,7 +899,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             _busyState.Remove(taskName);
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                DesignSurfaceViewModel!.DeleteCorpusNode(node);
+                                DeleteCorpusNode(node);
                             }
                             else
                             {
@@ -906,7 +909,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
 
                             // check to see if there are still High Performance Tasks still out there
-                            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                            var numTasks = BackgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
                             if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                             {
                                 // shut down high performance mode
@@ -1407,16 +1410,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
             // check to see if is in the middle of working or not by tokenizing
-            var isCorpusProcessing = _backgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
+            var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)
             {
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = node.Name,
+                    Description = "Tokenization Cancelled",
+                    StartTime = DateTime.Now,
+                    TaskLongRunningProcessStatus = LongRunningTaskStatus.CancellationRequested
+                }));
                 return;
             }
 
 
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
-                Name = "Deleting Corpus Node",
+                Name = node.Name,
                 Description = "Deleting parallel corpus connections and the node itself...",
                 StartTime = DateTime.Now,
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
@@ -1450,11 +1460,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     await Corpus.Delete(Mediator!, corpusId);
                 }
+                else
+                {
+                    var id = new CorpusId(node.CorpusId);
+                    await Corpus.Delete(Mediator!, id);
+                }
             });
             
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
-                Name = "Deleting Corpus Node",
+                Name = node.Name,
                 Description = "Delete Complete",
                 StartTime = DateTime.Now,
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed

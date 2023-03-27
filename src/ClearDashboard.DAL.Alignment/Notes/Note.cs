@@ -74,6 +74,8 @@ namespace ClearDashboard.DAL.Alignment.Notes
         private readonly ICollection<IId> domainEntityIds_;
         public IEnumerable<IId> DomainEntityIds { get { return domainEntityIds_; } }
 
+        public ICollection<Guid> SeenByUserIds { get; private set; }
+
         public Note(Note? noteInThread = null)
         {
             if (noteInThread is not null)
@@ -96,8 +98,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             noteStatus_ = Models.NoteStatus.Open;
             labels_ = new ObservableCollection<Label>();
             domainEntityIds_ = new HashSet<IId>(new IIdEqualityComparer());
+            SeenByUserIds = new HashSet<Guid>();
         }
-        internal Note(NoteId noteId, string text, string? abbreviatedText, Models.NoteStatus noteStatus, EntityId<NoteId>? threadId, ICollection<Label> labels, ICollection<IId> domainEntityIds)
+        internal Note(NoteId noteId, string text, string? abbreviatedText, Models.NoteStatus noteStatus, EntityId<NoteId>? threadId, ICollection<Label> labels, ICollection<IId> domainEntityIds, ICollection<Guid> seenByUserIds)
         {
             NoteId = noteId;
             Text = text;
@@ -106,6 +109,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             noteStatus_ = noteStatus;
             labels_ = new ObservableCollection<Label>(labels.DistinctBy(l => l.LabelId)); ;
             domainEntityIds_ = new HashSet<IId>(domainEntityIds, new IIdEqualityComparer());
+            SeenByUserIds = new HashSet<Guid>(seenByUserIds);
         }
 
         /// <summary>
@@ -172,7 +176,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public async Task<Note> CreateOrUpdate(IMediator mediator, CancellationToken token = default)
         {
-            var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText, noteStatus_, ThreadId);
+            var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText, noteStatus_, ThreadId, SeenByUserIds);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);

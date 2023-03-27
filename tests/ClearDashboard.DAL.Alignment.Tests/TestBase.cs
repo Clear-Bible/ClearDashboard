@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
@@ -46,6 +47,16 @@ namespace ClearDashboard.DAL.Alignment.Tests
         protected virtual void SetupDependencyInjection()
         {
             var services = new ServiceCollection();
+            AddServices(services);
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            Container = builder.Build();
+        }
+
+        protected virtual void AddServices(ServiceCollection services)
+        {
             services.AddScoped<ProjectDbContext>();
             services.AddScoped<ProjectDbContextFactory>();
             services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
@@ -54,11 +65,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddSingleton<IProjectProvider, ProjectProvider>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
-
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-
-            Container = builder.Build();
+            services.AddSingleton<TranslationCommands>();
         }
 
         private async void SetupTests()
@@ -67,7 +74,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
 
             var factory = Container!.Resolve<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
-            ProjectName = $"Project{random.Next(1, 1000)}";
+            ProjectName = $"Project{random.Next(1, 10000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {ProjectName}");

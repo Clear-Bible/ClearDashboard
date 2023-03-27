@@ -11,14 +11,28 @@ using SIL.Machine.Translation;
 using SIL.Machine.Translation.Thot;
 using SIL.Machine.Utils;
 using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
-
+using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Caliburn.Micro;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
     public class TranslationCommands : ITranslationCommandable
     {
+        private readonly ILogger<TranslationCommands> _logger;
+
+        // FIXME:  remove this constructor
         public TranslationCommands()
         {
+            // FIXME:  use constructor injection (i.e. the other constructor)
+            // instead of relying on Caliburn Micro (the unit tests are not set
+            // up to use Caliburn Micro).  
+            _logger = IoC.Get<ILogger<TranslationCommands>>();
+        }
+
+        public TranslationCommands(ILogger<TranslationCommands> logger)
+        {
+            _logger = logger;
         }
 
         public IEnumerable<AlignedTokenPairs> PredictAllAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextCorpus parallelCorpus)
@@ -48,7 +62,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
             IProgress<ProgressStatus>? progress = null, 
             SymmetrizationHeuristic? symmetrizationHeuristic = null)
         {
-            if (symmetrizationHeuristic != null)
+            var sw = Stopwatch.StartNew();
+            sw.Start();
+
+            if (symmetrizationHeuristic != SymmetrizationHeuristic.None)
             {
                 if (smtModelType == SmtModelType.FastAlign)
                 {
@@ -64,18 +81,57 @@ namespace ClearDashboard.DAL.Alignment.Translation
                     trainer.Train(progress);
                     await trainer.SaveAsync();
 
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
+
                     return symmetrizedModel;
                 }
                 else if (smtModelType == SmtModelType.Hmm)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotHmmWordAlignmentModel();
+                    var trgSrcModel = new ThotHmmWordAlignmentModel();
+
+                    var symmetrizedModel = new SymmetrizedWordAlignmentModel(srcTrgModel, trgSrcModel)
+                    {
+                        Heuristic = symmetrizationHeuristic ?? SymmetrizationHeuristic.None // should never be null
+                    };
+
+                    using var trainer = symmetrizedModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
+                    return symmetrizedModel;
                 }
                 else if (smtModelType == SmtModelType.IBM4)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotIbm4WordAlignmentModel();
+                    var trgSrcModel = new ThotIbm4WordAlignmentModel();
+
+                    var symmetrizedModel = new SymmetrizedWordAlignmentModel(srcTrgModel, trgSrcModel)
+                    {
+                        Heuristic = symmetrizationHeuristic ?? SymmetrizationHeuristic.None // should never be null
+                    };
+
+                    using var trainer = symmetrizedModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
+
+                    return symmetrizedModel;
                 }
                 else
                 {
+                    sw.Stop();
                     throw new InvalidConfigurationEngineException(message: "Selected smt model type is not implemented.");
                 }
             }
@@ -83,21 +139,54 @@ namespace ClearDashboard.DAL.Alignment.Translation
             {
                 if (smtModelType == SmtModelType.FastAlign)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotFastAlignWordAlignmentModel();
+
+                    using var trainer = srcTrgModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
+                    return srcTrgModel;
                 }
                 else if (smtModelType == SmtModelType.Hmm)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotHmmWordAlignmentModel();
+
+                    using var trainer = srcTrgModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
+                    return srcTrgModel;
                 }
                 else if (smtModelType == SmtModelType.IBM4)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotIbm4WordAlignmentModel();
+
+                    using var trainer = srcTrgModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
+
+                    return srcTrgModel;
                 }
                 else
                 {
+                    sw.Stop();
                     throw new InvalidConfigurationEngineException(message: "Selected smt model type is not implemented.");
                 }
             }
+
         }
 
         /// <summary>

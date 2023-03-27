@@ -115,6 +115,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             get => _filterString;
             set
             {
+                value ??= string.Empty;
+
                 _filterString = value;
                 NotifyOfPropertyChange(() => FilterString);
 

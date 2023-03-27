@@ -21,8 +21,11 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Collections;
+using SIL.Linq;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -34,7 +37,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<ProjectChangedMessage>,
         IHandle<BCVLoadedMessage>,
         IHandle<ReloadDataMessage>,
-        IHandle<TokenizedCorpusUpdatedMessage>
+        IHandle<TokenizedCorpusUpdatedMessage>,
+        IHandle<HighlightTokensMessage>,
+        IHandle<UnhighlightTokensMessage>
     {
         #region Commands
 
@@ -42,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
         public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
-
+      
         private void IncreaseTextSize(object? commandParameter)
         {
             SourceFontSizeValue += 1;
@@ -89,7 +94,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
 
-        private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
+        private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>();
 
         private int _originalSourceFontSizeValue = 14;
         private int _originalTargetFontSizeValue = 14;
@@ -468,7 +473,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DisplayName = "Enhanced View";
             await base.OnInitializeAsync(cancellationToken);
         }
-        
+   
+
+
         protected override void OnViewAttached(object view, object context)
         {
             // grab the dictionary of all the verse lookups
@@ -493,10 +500,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             CurrentBcv.SetVerseFromId(ProjectManager!.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = ProjectManager.CurrentVerse;
-
+ 
             base.OnViewAttached(view, context);
         }
 
+    private ListView EnhancedViewListView { get; set; }
         #endregion //Constructor
 
         #region Methods
@@ -848,9 +856,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (e.Note.NoteId != null)
             {
+                EntityIdCollection associationIds= new();
+                e.Note.Associations.ForEach(a => associationIds.Add(a.AssociatedEntityId));
+
                 await Execute.OnUIThreadAsync(async () =>
                 {
-                    await NoteManager.DeleteNoteAsync(e.Note, e.EntityIds);
+                    await NoteManager.DeleteNoteAsync(e.Note, associationIds);
                     NotifyOfPropertyChange(() => Items);
                 });
             }
@@ -884,11 +895,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task LabelAddedAsync(LabelEventArgs e)
         {
-            if (SelectedVerseDisplayViewModel is null)
-            {
-                return;
-            }
-
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
             {
@@ -948,6 +954,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         #endregion
-        
+
+        public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item=> item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.HighlightTokensAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.UnhighlightTokensAsync(message, cancellationToken);
+            }
+        }
     }
 }
