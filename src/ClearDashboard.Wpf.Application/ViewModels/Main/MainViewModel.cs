@@ -1665,18 +1665,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #pragma warning restore CA1416 // Validate platform compatibility
         }
 
-        public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
-        {
-            OnUIThread(() => ShowProgressBar = message.Show);
-            await Task.CompletedTask;
-        }
-
-        public async Task HandleAsync(ProgressBarMessage message, CancellationToken cancellationToken)
-        {
-            OnUIThread(() => Message = message.Message);
-            await Task.CompletedTask;
-        }
-
         private async Task<bool> TryUpdateExistingEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
 
@@ -1734,10 +1722,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await Task.CompletedTask;
         }
 
-        public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        public async Task AddMetadatumEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken = default)
         {
-            // rebuild the menu system with the new language
-            await RebuildMainMenu();
+            if (!await TryUpdateExistingEnhancedView(metadatum, cancellationToken))
+            {
+                await DeactivateDockedWindows();
+                var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+                await viewModel.Initialize(new EnhancedViewLayout
+                {
+                    ParatextSync = false,
+                    Title = $"{metadatum.DisplayName}",
+                    VerseOffset = 0
+                }, metadatum, cancellationToken);
+
+                AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
+            }
+            await SaveAvalonDockLayout();
         }
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
@@ -1767,6 +1767,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #endregion // Methods
 
+        #region IHandel
+
+        public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => ShowProgressBar = message.Show);
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ProgressBarMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => Message = message.Message);
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            // rebuild the menu system with the new language
+            await RebuildMainMenu();
+        }
+
 
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {
@@ -1785,24 +1805,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             return Task.CompletedTask;
-        }
-
-        public async Task AddMetadatumEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken = default)
-        {
-            if (!await TryUpdateExistingEnhancedView(metadatum, cancellationToken))
-            {
-                await DeactivateDockedWindows();
-                var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-                await viewModel.Initialize(new EnhancedViewLayout
-                {
-                    ParatextSync = false,
-                    Title = $"{metadatum.DisplayName}",
-                    VerseOffset = 0
-                }, metadatum, cancellationToken);
-
-                AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
-            }
-            await SaveAvalonDockLayout();
         }
 
         /// <summary>
@@ -1876,5 +1878,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
+        #endregion
     }
 }

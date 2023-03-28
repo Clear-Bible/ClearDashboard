@@ -172,6 +172,12 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
                 ParentViewModel!.Cancel();
             }
         }, CancellationToken.None);
+
+        if (ParentViewModel.ProjectType == Enums.ParallelProjectType.AlignmentOnly)
+        {
+            // bail out
+            Console.WriteLine();
+        }
     }
 
     protected override ValidationResult? Validate()
