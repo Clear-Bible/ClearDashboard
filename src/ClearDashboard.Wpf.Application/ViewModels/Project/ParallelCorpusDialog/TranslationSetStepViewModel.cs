@@ -16,8 +16,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, TranslationSetStepViewModel>
 {
+    #region Member Variables   
+
+    #endregion //Member Variables
+
+
+    #region Public Properties
+
+    #endregion //Public Properties
+
+
+    #region Observable Properties
+
     private bool _canAdd;
+
+    public bool CanAdd
+    {
+        get => _canAdd;
+        set => Set(ref _canAdd, value);
+    }
+
+    private DialogMode _dialogMode;
+    public DialogMode DialogMode
+    {
+        get => _dialogMode;
+        set => Set(ref _dialogMode, value);
+    }
+
     private string _translationSetDisplayName;
+
+    public string TranslationSetDisplayName
+    {
+        get => _translationSetDisplayName;
+        set
+        {
+            Set(ref _translationSetDisplayName, value);
+            ValidationResult = Validator.Validate(this);
+            CanAdd = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+        }
+    }
+
+    #endregion //Observable Properties
+
+
+    #region Constructor
 
     public TranslationSetStepViewModel()
     {
@@ -37,28 +79,47 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
 
     }
 
-    private DialogMode _dialogMode;
-    public DialogMode DialogMode
+    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
-        get => _dialogMode;
-        set => Set(ref _dialogMode, value);
+
+        return base.OnInitializeAsync(cancellationToken);
     }
 
-    public bool CanAdd
+    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        get => _canAdd;
-        set => Set(ref _canAdd, value);
-    }
-
-    public string TranslationSetDisplayName
-    {
-        get => _translationSetDisplayName;
-        set
+        // skip this step if we are only adding an alignment
+        if (ParentViewModel.ProjectType == Enums.ParallelProjectType.AlignmentOnly)
         {
-            Set(ref _translationSetDisplayName, value);
-            ValidationResult = Validator.Validate(this);
-            CanAdd = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+            ParentViewModel.Ok();
+            return;
         }
+
+
+
+        ParentViewModel.CurrentStepTitle =
+            LocalizationService!.Get("ParallelCorpusDialog_AddTranslationSet");
+
+        var gloss = LocalizationService!.Get("AddParatextCorpusDialog_Interlinear");
+
+        TranslationSetDisplayName =
+            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name} {gloss}";
+
+        if (ParentViewModel.UseDefaults)
+        {
+            await Add(true);
+        }
+        
+        base.OnActivateAsync(cancellationToken);
+    }
+
+    #endregion //Constructor
+
+
+    #region Methods
+
+    protected override ValidationResult? Validate()
+    {
+        return (!string.IsNullOrEmpty(TranslationSetDisplayName)) ? Validator.Validate(this) : null;
     }
 
     public async void Add()
@@ -111,32 +172,5 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
 
     }
 
-    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-    {
-
-        return base.OnInitializeAsync(cancellationToken);
-    }
-
-    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-    {
-        ParentViewModel.CurrentStepTitle =
-            LocalizationService!.Get("ParallelCorpusDialog_AddTranslationSet");
-
-        var gloss = LocalizationService!.Get("AddParatextCorpusDialog_Interlinear");
-
-        TranslationSetDisplayName =
-            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name} {gloss}";
-
-        if (ParentViewModel.UseDefaults)
-        {
-            await Add(true);
-        }
-        
-        base.OnActivateAsync(cancellationToken);
-    }
-
-    protected override ValidationResult? Validate()
-    {
-        return (!string.IsNullOrEmpty(TranslationSetDisplayName)) ? Validator.Validate(this) : null;
-    }
+    #endregion // Methods
 }

@@ -26,6 +26,8 @@ public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<Paral
 
     private bool _isEnabled = true;
 
+    public string SmtModel { get; set; }
+
     public bool IsEnabled
     {
         get => _isEnabled;
