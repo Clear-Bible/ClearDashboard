@@ -21,7 +21,7 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     private Brush _borderColor = Brushes.Blue;
 
-
+    protected IEnhancedViewManager EnhancedViewManager { get; }
     public Brush BorderColor
     {
         get => _borderColor;
@@ -37,18 +37,45 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     // public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
 
-    public virtual Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+    public bool FetchingData
+    {
+        get => _fetchData;
+        set
+        {
+            Set(ref _fetchData, value);
+            NotifyOfPropertyChange(nameof(DisableDeleteButton));
+        }
+    }
+
+    public bool DisableDeleteButton => !FetchingData;
+
+    private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
+    private bool _fetchData;
+
+    public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
+    {
+        get => _enhancedViewItemMetadatum;
+        set => Set(ref _enhancedViewItemMetadatum, value);
+    }
+
+    //public virtual Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+    //{
+    //    return Task.CompletedTask;
+    //}
+
+    public virtual Task GetData(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
 
-    protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager,
+    protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
         INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
         IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
         LocalizationService = localizationService;
-        // no-op
-    }
+        EnhancedViewManager = enhancedViewManager;
+
+    }       
 
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
     {

@@ -554,6 +554,7 @@
                                             Height="20"
                                             Margin="3,0,0,0"
                                             VerticalAlignment="Center"
+                                            IsEnabled="{Binding DisableDeleteButton }"
                                             Command="{Binding ElementName=ItemsListView, Path=DataContext.DeleteCorpusRowCommand}"
                                             CommandParameter="{Binding}">
                                             <Button.Style>

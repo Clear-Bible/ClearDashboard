@@ -180,7 +180,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "NewEnhancedCorpusID")
                 {
-                    AddNewEnhancedView();
+                   AddNewEnhancedView().Wait();
                 }
                 else if (value == "ShowLogID")
                 {
@@ -477,7 +477,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             EventAggregator?.Unsubscribe(this);
         }
 
-        private async Task SaveProjectData()
+        public async Task SaveProjectData()
         {
             try
             {
@@ -655,8 +655,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadEnhancedViewData(List<EnhancedViewLayout> enhancedViews)
         {
-            await Parallel.ForEachAsync(enhancedViews, new ParallelOptions(), async (enhancedView, cancellationToken) =>
+            var orderedViews = enhancedViews.AsParallel().AsOrdered();
+            
+            await Parallel.ForEachAsync(orderedViews, new ParallelOptions(), async (enhancedView, cancellationToken) =>
+            //foreach (var enhancedView in enhancedViews)
             {
+
                 var enhancedViewModel = EnhancedViewModels.FirstOrDefault(item => item.Title == enhancedView.Title);
 
                 if (enhancedViewModel == null)
@@ -668,15 +672,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 enhancedViewModel.EnableBcvControl = false;
                 try
                 {
-                    await enhancedViewModel.LoadData(cancellationToken);
+                    //await enhancedViewModel.LoadData(cancellationToken);
+                    await enhancedViewModel.LoadData(CancellationToken.None);
                 }
                 finally
                 {
                     enhancedViewModel.EnableBcvControl = true;
                 }
-              
 
-            });
+            //} 
+        });
         }
 
 
@@ -1032,12 +1037,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             manager.ShowDialogAsync(viewModel, null, settings);
         }
 
-        private void AddNewEnhancedView()
+        private async Task AddNewEnhancedView()
         {
             var viewModel = IoC.Get<EnhancedViewModel>();
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
+            viewModel.EnhancedViewLayout = new EnhancedViewLayout();
+           
 
 
             // add vm to conductor
@@ -1055,6 +1062,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             };
 
             AddNewEnhancedViewTab(windowDockable);
+
+            await SaveProjectData();
         }
 
         private BindableCollection<LayoutFile> GetFileLayouts()
@@ -1321,6 +1330,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             FileLayouts.Remove(layoutFile);
             await RebuildMainMenu();
+            await SaveProjectData();
         }
 
         public void CancelSave()

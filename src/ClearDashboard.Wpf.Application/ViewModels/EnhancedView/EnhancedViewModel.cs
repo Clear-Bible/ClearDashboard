@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
@@ -14,6 +15,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +26,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Collections;
-using SIL.Linq;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
@@ -91,6 +91,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #region Member Variables
 
         public NoteManager NoteManager { get; }
+
+        protected IEnhancedViewManager EnhancedViewManager { get; }
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
 
@@ -329,7 +331,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
-        public EnhancedViewModel(INavigationService navigationService, 
+        public EnhancedViewModel(INavigationService navigationService,
+            IEnhancedViewManager enhancedViewManager,
             ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, 
             NoteManager noteManager, 
@@ -345,6 +348,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
+            EnhancedViewManager = enhancedViewManager;
             
             Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
 
@@ -394,16 +398,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             EnableBcvControl = false;
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
-            try
+            await Task.Run(async () =>
             {
-                await ActivateNewVerseAwareViewItem(item, cancellationToken);
-            }
-            finally
-            {
-                EnableBcvControl = true;
-            }
+                try
+                {
+                    await ActivateNewVerseAwareViewItem(item, cancellationToken);
+                    await Items.Last().GetData(cancellationToken);
+                }
+                finally
+                {
+                    await EnhancedViewManager.SaveProjectData();
+                    EnableBcvControl = true;
+                }
+            }, cancellationToken);
         }
-
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             Logger?.LogInformation($"{nameof(EnhancedViewModel)} OnActivateAsync called.");
@@ -413,42 +421,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 Items[0].HasFocus = true;
             }
-           
         }
 
         public override async Task LoadData(CancellationToken token)
         {
-            await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
+            await Task.Run(async () =>
             {
-                await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, cancellationToken);
+                // Activate (and draw the items on the EnhancedView) in the order they have been defined.
+                foreach (var enhancedViewItemMetadatum in EnhancedViewLayout!.EnhancedViewItems)
+                {
+                    await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, token);
+                }
 
-            });
+                // Then get the data in a parallel fashion.  Note the use of the Items collection, not the EnhancedViewItems
+                // from the EnhancedViewLayout.
+                await Parallel.ForEachAsync(Items, new ParallelOptions(), async (item, cancellationToken) =>
+                {
+                    await item.GetData(cancellationToken);
+                });
+
+            }, token);
         }
-
-        //private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
-        //{
-        //    await Execute.OnUIThreadAsync(async () =>
-        //    {
-        //        var verseAwareEnhancedViewItemViewModel =
-        //            await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>(cancellationToken);
-        //        await verseAwareEnhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
-        //    });
-        //}
 
         private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
         {
             await Execute.OnUIThreadAsync(async () =>
             {
-                var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken); 
-                //EnableBcvControl = false;
-                await enhancedViewItemViewModel.GetData(enhancedViewItemMetadatum, cancellationToken);
-
-                
+                var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken);
+                enhancedViewItemViewModel.EnhancedViewItemMetadatum = enhancedViewItemMetadatum;
                
             });
         }
-
-     
 
         /// <summary>
         /// Expects Metadatum to be in a 'Models.EnhancedView' namespace and looks for a ViewModel in a sibling 'ViewModels.EnhancedView' namespace by replacing
@@ -505,6 +508,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
     private ListView EnhancedViewListView { get; set; }
+
         #endregion //Constructor
 
         #region Methods
@@ -551,7 +555,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        private void DeleteCorpusRow(object? obj)
+        private async void DeleteCorpusRow(object? obj)
         {
             var item = (EnhancedViewItemViewModel)obj!;
             
@@ -561,6 +565,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Items.RemoveAt(index);
             EnhancedViewLayout!.EnhancedViewItems.RemoveAt(index);
 
+            await EnhancedViewManager.SaveProjectData();
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
