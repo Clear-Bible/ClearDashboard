@@ -67,7 +67,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private async void CheckForProgramUpdates()
         {
             bool isNewer = false;
-            bool acknowledgePrerelease =false;
+            bool seeRelease =false;
             var fullUpdateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();
             if (fullUpdateDataList != null)
             {
@@ -76,17 +76,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
                 UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
 
-                acknowledgePrerelease = false;
+                seeRelease = false;
                 if (fullUpdateDataList.FirstOrDefault().VersionType == VersionType.Prerelease)
                 {
                     if (PrereleaseToggle.IsChecked.Value)
                     {
-                        acknowledgePrerelease = true;
+                        seeRelease = true;
                     }
                     else
                     {
-                        acknowledgePrerelease = false;
+                        seeRelease = false;
                     }
+                }
+                else
+                {
+                    seeRelease = true;
                 }
             }
             else
@@ -94,7 +98,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ShowNotes.IsEnabled = false;
             }
 
-            if (isNewer && acknowledgePrerelease)
+            if (isNewer && seeRelease)
             {
                 UpdateLink.Visibility = Visibility.Visible;
 
