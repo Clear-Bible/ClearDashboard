@@ -462,15 +462,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             var alignmentSetCount = topLevelProjectIds.AlignmentSetIds.Count(alignmentSet =>
                 alignmentSet.ParallelCorpusId!.IdEquals(parallelCorpusConnection.ParallelCorpusId!));
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-            {
-                Header = LocalizationService.Get("Pds_CreateNewInterlinear"),
-                Id = DesignSurfaceMenuIds.CreateNewInterlinear,
-                IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
-                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                ConnectionId = parallelCorpusConnection.Id,
-                Enabled = (alignmentSetCount > 0)
-            });
+            //connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            //{
+            //    Header = LocalizationService.Get("Pds_CreateNewInterlinear"),
+            //    Id = DesignSurfaceMenuIds.CreateNewInterlinear,
+            //    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
+            //    ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+            //    ConnectionId = parallelCorpusConnection.Id,
+            //    Enabled = (alignmentSetCount > 0)
+            //});
 
 
             AddMenuSeparator(connectionMenuItems);
@@ -529,19 +529,19 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         {
 
             // Add new alignment set
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-            {
-                Header =LocalizationService.Get("Pds_CreateNewAlignmentSetMenu"),
-                Id = DesignSurfaceMenuIds.CreateNewAlignmentSet,
-                IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
-                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                ConnectionId = parallelCorpusConnection.Id,
-                ParallelCorpusId = parallelCorpusConnection.ParallelCorpusId?.Id.ToString(),
-                ParallelCorpusDisplayName = parallelCorpusConnection.ParallelCorpusDisplayName,
-                IsRtl = parallelCorpusConnection.IsRtl,
-                SourceParatextId = parallelCorpusConnection.SourceConnector?.ParatextId,
-                TargetParatextId = parallelCorpusConnection.DestinationConnector?.ParatextId,
-            });
+            //connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            //{
+            //    Header =LocalizationService.Get("Pds_CreateNewAlignmentSetMenu"),
+            //    Id = DesignSurfaceMenuIds.CreateNewAlignmentSet,
+            //    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
+            //    ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+            //    ConnectionId = parallelCorpusConnection.Id,
+            //    ParallelCorpusId = parallelCorpusConnection.ParallelCorpusId?.Id.ToString(),
+            //    ParallelCorpusDisplayName = parallelCorpusConnection.ParallelCorpusDisplayName,
+            //    IsRtl = parallelCorpusConnection.IsRtl,
+            //    SourceParatextId = parallelCorpusConnection.SourceConnector?.ParatextId,
+            //    TargetParatextId = parallelCorpusConnection.DestinationConnector?.ParatextId,
+            //});
 
             AddMenuSeparator(connectionMenuItems);
             var alignmentSets = topLevelProjectIds.AlignmentSetIds.Where(alignmentSet =>

@@ -10,8 +10,29 @@ rem get the absolute path to the relative key file
 CALL :NORMALIZEPATH "..\code_signing_key\ClearBible.pfx"
 
 
+echo ========== PUBLISH 64-Bit Version of PluginManager ==============
+cd ..\tools\PluginManager
+dotnet clean --configuration Release
+dotnet publish -r win-x64 -c Release
+
+cd ..\..\installer
+
+echo code sign the WPF exe	
+ ..\code_signing_key\signing_tool\signtool.exe ^
+ 	sign /v /f %RETVAL% ^
+ 	/p "%PASSWORD%" ^
+ 	/t http://timestamp.comodoca.com/authenticode ^
+"%CURRENTPATH%\..\tools\PluginManager\bin\Release\net7.0-windows\win-x64\publish\PluginManager.dll"
+
+
+
+
 echo ========== PUBLISH 64-Bit Version of Dashboard ==============
+
 cd ..\src\ClearDashboard.Wpf.Application
+dir
+
+pause
 dotnet clean --configuration Release
 dotnet publish -r win-x64 -c Release
 
@@ -27,11 +48,11 @@ pause
 
 cd ..\..\installer
 
- robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish ClearDashboard.Aqua.Module.* /IS /IT ;
+ robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\Aqua ClearDashboard.Aqua.Module.* /IS /IT ;
 
- robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\en %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\en ClearDashboard.Aqua.Module.resources.dll /IS /IT ;
+ robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\en %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\Aqua\en ClearDashboard.Aqua.Module.resources.dll /IS /IT ;
 
- robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\Services %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\Services vref.txt /IS /IT ;
+ robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\Services %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\Aqua\Services vref.txt /IS /IT ;
 
 echo code sign the WPF exe	
  ..\code_signing_key\signing_tool\signtool.exe ^
@@ -44,7 +65,7 @@ pause
 
 
 ::===================INNO Dashboard=====================
-eco run the Inno Setup Compliler on Dashboard
+echo run the Inno Setup Compliler on Dashboard
 "%driveInno%:\Program Files (x86)\Inno Setup 6\ISCC.exe" "%CURRENTPATH%\DashboardInstaller.iss"
 
 echo code sign the Dashboard installer
@@ -64,3 +85,8 @@ EXIT /B
   SET RETVAL=%~f1
   EXIT /B
 
+:GET_THIS_DIR
+pushd %~dp0
+set THIS_DIR=%CD%
+popd
+goto :EOF
