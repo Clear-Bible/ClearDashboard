@@ -292,21 +292,24 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Verse>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Verse>().HasIndex(e => e.VerseNumber);
 
-            modelBuilder.Entity<Alignment>().HasIndex(e => e.SourceTokenComponentId);
-            modelBuilder.Entity<Translation>().HasIndex(e => e.SourceTokenComponentId);
-            modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.AlignmentSetId);
-            modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.SourceTokenComponentId);
+            modelBuilder.Entity<Alignment>().HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
+            modelBuilder.Entity<Translation>().HasIndex(e => new { e.TranslationSetId, e.SourceTokenComponentId });
+            modelBuilder.Entity<AlignmentTopTargetTrainingText>()
+                .HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
 
             // =============
             // LEXICON:
             modelBuilder
                 .Entity<Lexicon_SemanticDomain>()
-                .HasMany(p => p.Meanings)
-                .WithMany(p => p.SemanticDomains)
+                .HasMany(e => e.Meanings)
+                .WithMany(e => e.SemanticDomains)
                 .UsingEntity<Lexicon_SemanticDomainMeaningAssociation>();
 
             modelBuilder.Entity<Lexicon_Lexeme>()
-                .HasIndex(p => new { p.Lemma, p.Language })
+                .HasIndex(e => new { e.Lemma, e.Language })
+                .IsUnique();
+            modelBuilder.Entity<Lexicon_Meaning>()
+                .HasIndex(e => new { e.Language })
                 .IsUnique();
             // =============
         }
