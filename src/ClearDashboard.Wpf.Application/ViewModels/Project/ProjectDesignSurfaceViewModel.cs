@@ -51,6 +51,8 @@ using ClearDashboard.Wpf.Application.Enums;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using System.Dynamic;
 using SIL.Scripture;
+using ClearDashboard.Wpf.Application.Models;
+using System.Collections.ObjectModel;
 
 
 // ReSharper disable once CheckNamespace
@@ -1407,6 +1409,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
         {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            var aligments =
+                topLevelProjectIds.AlignmentSetIds.Where(x => x.ParallelCorpusId == connection.ParallelCorpusId).ToList();
+
+            if (aligments.Count > 1)
+            {
+                // show the warning dialog if there are multiple alignment sets that are going to be deleted
+                var titleString = "Release Notes";
+
+                //dynamic settings = new ExpandoObject();
+                //settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                //settings.ResizeMode = ResizeMode.CanResize;
+                //settings.MinWidth = 800;
+                //settings.MinHeight = 600;
+                //settings.Title = $"{titleString} - {_updateData?.Version}";
+
+                //var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
+                //viewModel.Updates = new ObservableCollection<UpdateFormat>(Updates);
+
+                //IWindowManager manager = new WindowManager();
+                //var ret = manager.ShowWindowAsync(viewModel, null, settings);
+
+                //if (ret == false)
+                //{
+                //    // cancelled by user
+                //    return;
+                //}
+            }
+
+            
             // Removes the connector between corpus nodes:
             DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
 

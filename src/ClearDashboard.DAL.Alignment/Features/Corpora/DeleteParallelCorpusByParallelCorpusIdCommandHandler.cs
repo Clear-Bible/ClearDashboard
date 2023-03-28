@@ -11,6 +11,11 @@ using SIL.Extensions;
 using ModelCorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using ModelCorpus = ClearDashboard.DataAccessLayer.Models.Corpus;
 using System.Diagnostics;
+using System.Dynamic;
+using Caliburn.Micro;
+using Microsoft.VisualBasic;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -49,6 +54,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
+
+            
             ProjectDbContext.Remove(parallelCorpus);
             _ = await ProjectDbContext.SaveChangesAsync(cancellationToken);
 
