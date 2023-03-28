@@ -401,7 +401,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await RebuildMainMenu();
             await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
-            LoadEnhancedViewTabs(cancellationToken);
+            await LoadEnhancedViewTabs(cancellationToken);
             await base.OnInitializeAsync(cancellationToken);
         }
 
@@ -637,19 +637,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken)
         {
-            var sw = Stopwatch.StartNew();
-            var enhancedViews = LoadEnhancedViewTabLayout();
-
-            if (enhancedViews == null)
+            _=Task.Run(async () =>
             {
-                return;
-            }
+                var sw = Stopwatch.StartNew();
+                var enhancedViews = LoadEnhancedViewTabLayout();
 
-            await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
-            await LoadEnhancedViewData(enhancedViews);
+                if (enhancedViews == null)
+                {
+                    return;
+                }
 
-            sw.Stop();
-            Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+                await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
+                await LoadEnhancedViewData(enhancedViews);
+
+                sw.Stop();
+                Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+            }, cancellationToken);
         }
 
         private IEnumerable<EnhancedViewModel> EnhancedViewModels => Items.Where(item => item is EnhancedViewModel).Cast<EnhancedViewModel>();
