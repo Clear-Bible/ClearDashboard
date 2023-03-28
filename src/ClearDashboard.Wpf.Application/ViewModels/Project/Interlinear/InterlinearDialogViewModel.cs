@@ -29,7 +29,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
         #region Member Variables
 
         private TranslationSource? _translationSource;
-        private readonly IMediator _mediator;
         public ParallelCorpusId? ParallelCorpusId { get; set; }
 
         private readonly SystemPowerModes _systemPowerModes;
@@ -126,7 +125,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
         {
             _translationSource = translationSource;
-            _mediator = mediator;
             ParallelCorpusId = parallelCorpusId;
             Logger!.LogInformation("'InterlinearDialogViewModel' ctor called.");
         }
@@ -141,7 +139,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
                 .ToList();
 
             // get all the existing translation sets for this parallelcorpusid
-            var translationSets = (await TranslationSet.GetAllTranslationSetIds(_mediator, ParallelCorpusId)).ToList();
+            var translationSets = (await TranslationSet.GetAllTranslationSetIds(Mediator, ParallelCorpusId)).ToList();
 
             //_topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -216,7 +214,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var alignmentSet = AlignmentSet.Get(new AlignmentSetId(Guid.Parse("")), _mediator).Result;
+                var alignmentSet = AlignmentSet.Get(new AlignmentSetId(Guid.Parse("")), Mediator).Result;
 
                 // RUSSELL - code review
                 TranslationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId,

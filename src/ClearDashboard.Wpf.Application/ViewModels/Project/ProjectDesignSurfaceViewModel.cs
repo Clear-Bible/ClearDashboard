@@ -978,7 +978,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger!.LogError(e, $"An unexpected error occurred while adding the interlinear for {connectionMenuItem.ParallelCorpusId!}");
             }
         }
 

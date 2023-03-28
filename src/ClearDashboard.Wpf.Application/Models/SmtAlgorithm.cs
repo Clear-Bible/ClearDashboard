@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ClearDashboard.Wpf.Application.Models
 {
     // ReSharper disable once InconsistentNaming
-    public class SMTs
+    public class SmtAlgorithm
     {
         public string SmtName { get; set; } = "";
         public bool IsEnabled { get; set; } = true;
