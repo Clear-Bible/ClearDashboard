@@ -294,6 +294,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<Alignment>().HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
             modelBuilder.Entity<Translation>().HasIndex(e => new { e.TranslationSetId, e.SourceTokenComponentId });
+            modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.AlignmentSetId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>()
                 .HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
 
