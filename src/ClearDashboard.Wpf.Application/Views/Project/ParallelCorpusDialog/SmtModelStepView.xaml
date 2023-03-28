@@ -72,14 +72,11 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <!--
-                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-            -->
             <CheckBox
                 Margin="20,5,2,5"
                 Content="{helpers:Localization ParallelCorpusDialog_Symmetrize}"
                 IsChecked="{Binding IsTrainedSymmetrizedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                IsEnabled="False" />
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}" />
         </StackPanel>
 
         <StackPanel

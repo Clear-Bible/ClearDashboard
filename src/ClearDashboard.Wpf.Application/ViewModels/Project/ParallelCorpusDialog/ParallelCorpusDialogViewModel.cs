@@ -30,6 +30,7 @@ using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using ClearDashboard.Wpf.Application.Enums;
 using ClearDashboard.DAL.Alignment;
+using ClearDashboard.DataAccessLayer.Data.Migrations;
 using ClearDashboard.Wpf.Application.Models;
 using SIL.Machine.Corpora;
 
@@ -99,13 +100,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
         public AlignmentSet? AlignmentSet { get; set; }
 
+        public bool IsTrainedSymmetrizedModel { get; set; }
+
         #endregion //Public Properties
 
 
         #region Observable Properties
 
-        private SMTs _selectedSmtAlgorithm;
-        public SMTs SelectedSmtAlgorithm
+        private SmtAlgorithm _selectedSmtAlgorithm;
+        public SmtAlgorithm SelectedSmtAlgorithm
         {
             get => _selectedSmtAlgorithm;
             set => Set(ref _selectedSmtAlgorithm, value);
@@ -517,16 +520,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 if (ProjectType == ParallelProjectType.WholeProcess)
                 {
-                    AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.SmtName,
-                        false, new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator, cancellationToken);
+                    AlignmentSet = await AlignedTokenPairs.Create(displayName: alignmentSetDisplayName, 
+                        smtModel: SelectedSmtAlgorithm.SmtName,
+                        isSyntaxTreeAlignerRefined: false, 
+                        isSymmetrized: IsTrainedSymmetrizedModel, 
+                        metadata: new(), 
+                        parallelCorpusId:  ParallelTokenizedCorpus.ParallelCorpusId, 
+                        Mediator, 
+                        cancellationToken);
 
                 }
                 else
                 {
                     // alignment only
                     var parallelCorpus = ParallelTextCorpus as ParallelCorpus;
-                    AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.SmtName,
-                        false, new(), parallelCorpus!.ParallelCorpusId, Mediator, cancellationToken);
+                    AlignmentSet = await AlignedTokenPairs.Create(displayName: alignmentSetDisplayName,
+                        smtModel: SelectedSmtAlgorithm.SmtName,
+                        isSyntaxTreeAlignerRefined: false,
+                        isSymmetrized: IsTrainedSymmetrizedModel,
+                        metadata: new(),
+                        parallelCorpusId: parallelCorpus!.ParallelCorpusId, 
+                        Mediator, 
+                        cancellationToken);
                 }
 
                 await SendBackgroundStatus(taskName,
@@ -640,7 +655,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 if (SelectedSmtAlgorithm is null)
                 {
-                    SelectedSmtAlgorithm = new SMTs
+                    SelectedSmtAlgorithm = new SmtAlgorithm
                     {
                         SmtName = "FastAlign",
                         IsEnabled = true

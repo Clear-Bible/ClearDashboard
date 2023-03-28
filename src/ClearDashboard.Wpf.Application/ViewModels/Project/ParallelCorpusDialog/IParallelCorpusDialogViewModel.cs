@@ -14,6 +14,7 @@ using ClearDashboard.Wpf.Application.Enums;
 using ClearDashboard.Wpf.Application.Models;
 using SIL.Machine.Translation;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
+using SmtAlgorithm = ClearDashboard.Wpf.Application.Models.SmtAlgorithm;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
@@ -24,7 +25,7 @@ public interface IParallelCorpusDialogViewModel
     CorpusNodeViewModel SourceCorpusNodeViewModel { get; set; }
     CorpusNodeViewModel TargetCorpusNodeViewModel { get; set; }
     ParallelCorpusConnectionViewModel ParallelCorpusConnectionViewModel { get; set; }
-    SMTs SelectedSmtAlgorithm { get; set; }
+    SmtAlgorithm SelectedSmtAlgorithm { get; set; }
     IWordAlignmentModel WordAlignmentModel { get; set; }
     DAL.Alignment.Corpora.ParallelCorpus ParallelTokenizedCorpus { get; set; }
     EngineParallelTextCorpus ParallelTextCorpus { get; set; }
@@ -34,6 +35,8 @@ public interface IParallelCorpusDialogViewModel
     string? CurrentStepTitle { get; set; }
     string? CurrentProject { get; set; }
     bool UseDefaults { get; set; }
+
+    bool IsTrainedSymmetrizedModel { get; set; }
 
     ParallelProjectType ProjectType { get; set; }
     Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);

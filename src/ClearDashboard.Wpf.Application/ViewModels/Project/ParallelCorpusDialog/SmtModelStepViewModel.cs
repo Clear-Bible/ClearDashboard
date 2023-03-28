@@ -33,8 +33,8 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
     #region Observable Properties
 
     
-    private ObservableCollection<SMTs> _smtList = new();
-    public ObservableCollection<SMTs> SmtList
+    private ObservableCollection<SmtAlgorithm> _smtList = new();
+    public ObservableCollection<SmtAlgorithm> SmtList
     {
         get => _smtList;
         set
@@ -60,13 +60,16 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         set => Set(ref _canTrain, value);
     }
 
-    private bool? _isTrainedSymmetrizedModel = false;
-    public bool? IsTrainedSymmetrizedModel 
-    { 
-        get => _isTrainedSymmetrizedModel; 
-        set => Set(ref _isTrainedSymmetrizedModel, value);
+    private bool _isTrainedSymmetrizedModel = false;
+    public bool IsTrainedSymmetrizedModel
+    {
+        get => _isTrainedSymmetrizedModel;
+        set
+        {
+            Set(ref _isTrainedSymmetrizedModel, value);
+            ParentViewModel.IsTrainedSymmetrizedModel = value;
+        }
     }
-
 
     #endregion //Observable Properties
 
@@ -132,7 +135,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
                 {
                     OnUIThread(() =>
                     {
-                        SmtList.Add(new SMTs
+                        SmtList.Add(new SmtAlgorithm
                         {
                             SmtName = smt,
                             IsEnabled = false,
@@ -141,7 +144,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
                 }
                 else
                 {
-                    var newSMT = new SMTs
+                    var newSMT = new SmtAlgorithm
                     {
                         SmtName = smt,
                         IsEnabled = true,
@@ -187,6 +190,8 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
 
     public async Task Train(object nothing)
     {
+
+
         CanTrain = false;
         _ = await Task.Factory.StartNew(async () =>
         {
