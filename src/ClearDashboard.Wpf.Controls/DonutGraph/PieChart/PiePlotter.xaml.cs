@@ -30,6 +30,15 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
         }
 
         /// <summary>
+        /// The property of the title
+        /// </summary>
+        public String TitleProperty
+        {
+            get { return PieChartLayout.GetTitleProperty(this); }
+            set { PieChartLayout.SetTitleProperty(this, value); }
+        }
+
+        /// <summary>
         /// A class which selects a color based on the item being rendered.
         /// </summary>
         public IColorSelector ColorSelector
@@ -71,6 +80,9 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
             // register any dependency property change handlers
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(PieChartLayout.PlottedPropertyProperty, typeof(PiePlotter));
             dpd.AddValueChanged(this, PlottedPropertyChanged);
+
+            DependencyPropertyDescriptor dpdt = DependencyPropertyDescriptor.FromProperty(PieChartLayout.TitlePropertyProperty, typeof(PiePlotter));
+            dpdt.AddValueChanged(this, TitlePropertyChanged);
 
             InitializeComponent();
 
@@ -119,6 +131,16 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void PlottedPropertyChanged(object sender, EventArgs e)
+        {
+            ConstructPiePieces();
+        }
+
+        /// <summary>
+        /// Handles changes to the TitleProperty property.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TitlePropertyChanged(object sender, EventArgs e)
         {
             ConstructPiePieces();
         }

@@ -152,11 +152,11 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             Assert.Equal(2, note.Labels.Count());
             Assert.Equal(Models.NoteStatus.Resolved.ToString(), note.NoteStatus);
-            Assert.Equal(1, note.SeenByUserIds.Count);
+            Assert.Equal(2, note.SeenByUserIds.Count);  // User3.Id + IUserProvider.CurrentUser.Id
 
             note.SeenByUserIds.Add(user2.Id);
             await note.CreateOrUpdate(Mediator!);
-            Assert.Equal(2, note.SeenByUserIds.Count);
+            Assert.Equal(3, note.SeenByUserIds.Count);  // User2.Id + User3.Id + IUserProvider.CurrentUser.Id
 
             #region Stopwatch
             sw.Stop();
@@ -179,6 +179,7 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             var note2 = await new Note { Text = "a baa note", AbbreviatedText = "not sure" }.CreateOrUpdate(Mediator!);
             Assert.Equal(Models.NoteStatus.Open.ToString(), note2.NoteStatus);
+            Assert.Equal(1, note2.SeenByUserIds.Count);  // IUserProvider.CurrentUser.Id
             var openNoteId = note2.NoteId;
 
             var labels = await Label.Get(Mediator!, "boo lab");
@@ -569,6 +570,7 @@ public class CreateNotesCommandHandlerTests : TestBase
                     "manuscript to zz_sur",
                     "fastalign",
                     false,
+                    false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
@@ -647,6 +649,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             var alignmentSet = await alignmentModel.Create(
                     "manuscript to zz_sur",
                     "fastalign",
+                    false,
                     false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,

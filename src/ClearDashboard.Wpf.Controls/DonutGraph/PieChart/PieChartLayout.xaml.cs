@@ -66,6 +66,30 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
         }
 
         /// <summary>
+        /// The property of the bound object that will be plotted (CLR wrapper)
+        /// </summary>
+        public String TitleProperty
+        {
+            get { return GetTitleProperty(this); }
+            set { SetTitleProperty(this, value); }
+        }
+
+        // TitleProperty dependency property
+        public static readonly DependencyProperty TitlePropertyProperty =
+            DependencyProperty.RegisterAttached("TitleProperty", typeof(String), typeof(PieChartLayout),
+                new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.Inherits));
+
+        // TitleProperty attached property accessors
+        public static void SetTitleProperty(UIElement element, String value)
+        {
+            element.SetValue(TitlePropertyProperty, value);
+        }
+        public static String GetTitleProperty(UIElement element)
+        {
+            return (String)element.GetValue(TitlePropertyProperty);
+        }
+
+        /// <summary>
         /// A class which selects a color based on the item being rendered.
         /// </summary>
         public IColorSelector ColorSelector

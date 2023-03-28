@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Caliburn.Micro;
 using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.Services;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
@@ -67,6 +66,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _replies;
             set => Set(ref _replies, value);
         }
+        public ICollection<Guid> SeenByUserIds
+        {
+            get => Entity.SeenByUserIds;
+        }
+
+        /// <summary>
+        /// returns the collection of seenbyuserids that has seen every reply (Intersection)
+        /// or null if there are no replies
+        /// </summary>
+        public ICollection<Guid>? UserIdsSeenAllReplies
+        {
+            get
+            {
+                if (Replies == null || Replies.Count() == 0) 
+                    return null;
+
+                return Replies
+                    .Select(rnvm => rnvm.SeenByUserIds)
+                    .Skip(1)
+                    .Aggregate(
+                        Replies.Count() > 0 ?
+                            new HashSet<Guid>(Replies.First().SeenByUserIds) :
+                            new HashSet<Guid>(),
+                        (intersection, next) =>
+                        {
+                            intersection.IntersectWith(next);
+                            return intersection;
+                        }
+                    );
+            }
+        }
+
 
         /// <summary>
         /// Gets a formatted string corresponding to the date the note was created.

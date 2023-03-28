@@ -27,7 +27,8 @@ namespace ClearDashboard.Aqua.Module.Services
 {
     public class AquaManager : IAquaManager
     {
-        protected string BaseAddressString { get; set; } = "https://t3gnkxpu3d.us-east-1.awsapprunner.com/";
+        protected string BaseAddressString { get; set; } = "https://fxmhfbayk4.us-east-1.awsapprunner.com";
+        //protected string BaseAddressString { get; set; } = "https://t3gnkxpu3d.us-east-1.awsapprunner.com/";
 
         //prior endpoint
         //protected string BaseAddressString { get; set; } = "https://6pu6b82gdk.us-east-1.awsapprunner.com/";
@@ -82,11 +83,17 @@ namespace ClearDashboard.Aqua.Module.Services
             int id,
             CancellationToken cancellationToken = default)
         {
-            var versions = await ListVersions(cancellationToken);
-            return versions?
-                .Where(v => v.id == id)
-                .First()
-                ?? null;
+            try
+            {
+                var versions = await ListVersions(cancellationToken);
+                return versions?
+                    .Where(v => v.id == id)
+                    .First();
+            }
+            catch (InvalidOperationException)
+            {
+                throw new Exception($"Version id {id} doesn't exist on AQuA server");
+            }
         }
         public async Task<IAquaManager.Version?> AddVersion(
             IAquaManager.Version version,

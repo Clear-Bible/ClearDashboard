@@ -31,15 +31,17 @@
 
     <Grid>
         <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
             <Label Content="{Binding Verse}"/>
             <Label Content="{Binding Assessment.type}"/>
             <Label Content="{Binding Revision.name }"/>
             <Label Content="{Binding ReferenceRevision.name }"/>
+            </StackPanel>
             <!--<Label Content="{Binding BodyText}"/>-->
             <StackPanel
                 Margin="5,0,0,5"
                 VerticalAlignment="Center"
-                Orientation="Vertical">
+                Orientation="Horizontal">
                 <RadioButton
                     Content="{helpers:Localization Aqua_EnhancedView_VisualizationSelection_CartesianChart}"
                     Foreground="{DynamicResource PrimaryHueDarkBrush}"

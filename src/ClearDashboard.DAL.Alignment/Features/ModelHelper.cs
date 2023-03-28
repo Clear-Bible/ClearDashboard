@@ -282,6 +282,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 alignmentSet.DisplayName,
                 alignmentSet.SmtModel,
                 alignmentSet.IsSyntaxTreeAlignerRefined,
+                alignmentSet.IsSymmetrized,
                 alignmentSet.Metadata,
                 alignmentSet.Created,
                 BuildUserId(user));
@@ -379,7 +380,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 translationSet.Id,
                 parallelCorpusId,
                 translationSet.DisplayName,
-                //translationSet.SmtModel,
+                translationSet.AlignmentSetId,
                 translationSet.Metadata,
                 translationSet.Created,
                 BuildUserId(user));

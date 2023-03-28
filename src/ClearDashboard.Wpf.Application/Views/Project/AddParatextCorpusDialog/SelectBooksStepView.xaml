@@ -47,11 +47,11 @@
             <Label
                 Grid.Column="0"
                 Margin="15,0"
-                Content="Old Testament" />
+                Content="{helpers:Localization OldTestament}" />
             <Label
                 Grid.Column="1"
                 Margin="15,0"
-                Content="New Testament" />
+                Content="{helpers:Localization NewTestament}" />
         </Grid>
 
 
@@ -838,12 +838,12 @@
             <Button
                 Margin="10,0,0,15"
                 Command="{Binding OtCommand}"
-                Content="Old Testament"
+                Content="{helpers:Localization OldTestament}"
                 FontSize="12"
                 Style="{StaticResource TransparentStyle}" />
 
             <Button
-                Width="120"
+                MinWidth="120"
                 Margin="10,0,0,15"
                 Command="{Binding AllCommand}"
                 Content="{helpers:Localization AddParatextCorpusDialog_SelectAll}"
@@ -851,7 +851,7 @@
                 Style="{StaticResource TransparentStyle}" />
 
             <Button
-                Width="120"
+                MinWidth="120"
                 Margin="10,0,0,15"
                 Command="{Binding NoneCommand}"
                 Content="{helpers:Localization AddParatextCorpusDialog_UnSelectAll}"
@@ -861,7 +861,7 @@
             <Button
                 Margin="10,0,0,15"
                 Command="{Binding NtCommand}"
-                Content="New Testament"
+                Content="{helpers:Localization NewTestament}"
                 FontSize="12"
                 Style="{StaticResource TransparentStyle}" />
         </StackPanel>

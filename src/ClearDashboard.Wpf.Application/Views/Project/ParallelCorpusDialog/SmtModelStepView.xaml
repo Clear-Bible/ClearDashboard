@@ -75,7 +75,8 @@
 
             <CheckBox
                 Margin="20,5,2,5"
-                Content="Train Symmetrized Model?"
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                Content="{helpers:Localization ParallelCorpusDialog_Symmetrize}"
                 IsChecked="{Binding IsTrainedSymmetrizedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
