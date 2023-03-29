@@ -62,7 +62,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}">
+        <Menu
+            Grid.Row="0"
+            materialDesign:MenuAssist.TopLevelMenuItemHeight="25"
+            ItemsSource="{Binding MenuItems}">
             <Menu.ItemContainerStyle>
                 <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
                     <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
@@ -222,7 +225,7 @@
                         <panes:PanesStyleSelector.ToolStyle>
                             <Style TargetType="{x:Type LayoutAnchorableItem}">
                                 <Setter Property="Title" Value="{Binding Model.Title}" />
-                                <Setter Property="CanHide" Value="True"/>
+                                <Setter Property="CanHide" Value="True" />
                                 <Setter Property="CanClose" Value="False" />
                                 <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
                                 <Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}" />

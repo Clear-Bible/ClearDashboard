@@ -53,6 +53,7 @@ using System.Dynamic;
 using SIL.Scripture;
 using ClearDashboard.Wpf.Application.Models;
 using System.Collections.ObjectModel;
+using ClearDashboard.DAL.Alignment.Translation;
 
 
 // ReSharper disable once CheckNamespace
@@ -1411,32 +1412,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
-            var aligments =
-                topLevelProjectIds.AlignmentSetIds.Where(x => x.ParallelCorpusId == connection.ParallelCorpusId).ToList();
+            
+            var alignmentSetIds = topLevelProjectIds.AlignmentSetIds.Where(x => x.ParallelCorpusId == connection.ParallelCorpusId).ToList();
 
-            if (aligments.Count > 1)
+            var translationSetIds = topLevelProjectIds.TranslationSetIds.Where(x => x.ParallelCorpusId == connection.ParallelCorpusId).ToList();
+
+
+            if (alignmentSetIds.Count > 1 || translationSetIds.Count > 1)
             {
                 // show the warning dialog if there are multiple alignment sets that are going to be deleted
-                var titleString = "Release Notes";
+                dynamic settings = new ExpandoObject();
+                settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.CanResize;
+                settings.MinWidth = 800;
+                settings.MinHeight = 600;
+                settings.Title = "Delete Alignments/Interlinears";
 
-                //dynamic settings = new ExpandoObject();
-                //settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                //settings.ResizeMode = ResizeMode.CanResize;
-                //settings.MinWidth = 800;
-                //settings.MinHeight = 600;
-                //settings.Title = $"{titleString} - {_updateData?.Version}";
+                var viewModel = IoC.Get<DeleteParallelizationLineViewModel>();
+                viewModel.AlignmentSetIds = new ObservableCollection<AlignmentSetId>(alignmentSetIds);
+                viewModel.TranslationSetIds = new ObservableCollection<TranslationSetId>(translationSetIds);
 
-                //var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
-                //viewModel.Updates = new ObservableCollection<UpdateFormat>(Updates);
+                IWindowManager manager = new WindowManager();
+                var ret = manager.ShowDialogAsync(viewModel, null, settings);
 
-                //IWindowManager manager = new WindowManager();
-                //var ret = manager.ShowWindowAsync(viewModel, null, settings);
-
-                //if (ret == false)
-                //{
-                //    // cancelled by user
-                //    return;
-                //}
+                if (ret == false)
+                {
+                    // cancelled by user
+                    return;
+                }
             }
 
             
