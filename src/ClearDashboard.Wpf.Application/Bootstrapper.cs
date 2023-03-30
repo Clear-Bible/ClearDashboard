@@ -35,6 +35,7 @@ using Autofac.Configuration;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.Collaboration.Features;
+using System.Diagnostics;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -345,6 +346,9 @@ namespace ClearDashboard.Wpf.Application
 
             DisposeLifetimeScope();
 
+            Logger.LogInformation($"Bootstrapper.OnExit hit.");
+            CheckToInstallAqua();
+
             base.OnExit(sender, e);
         }
 
@@ -377,6 +381,53 @@ namespace ClearDashboard.Wpf.Application
             Logger?.LogInformation("Disposing ILifetimeScope");
             var lifetimeScope = Container!.Resolve<ILifetimeScope>();
             lifetimeScope.Dispose();
+        }
+
+        private void CheckToInstallAqua()
+        {
+            Logger.LogInformation($"Bootstrapper.CheckToInstallAqua hit.");
+            Logger.LogInformation($"Settings.Default.RunAquaInstall is: " + Settings.Default.RunAquaInstall);
+            if (Settings.Default.RunAquaInstall)
+            {
+                Logger.LogInformation($"RunAquaInstall was true so continuing...");
+                Settings.Default.RunAquaInstall = false;
+                Settings.Default.Save();
+                Logger.LogInformation($"Settings.Default.RunAquaInstall is: " + Settings.Default.RunAquaInstall);
+
+                var startupPath = Environment.CurrentDirectory;
+                Logger.LogInformation($"Dashboard Startup Path: {startupPath}");
+
+                var filename = Path.Combine(startupPath, "PluginManager.exe");
+                Logger.LogInformation($"Full PluginManager FilePath: {filename}");
+
+                if (File.Exists(filename))
+                {
+                    Logger.LogInformation($"The Full FilePath existed.");
+                    var psi = new ProcessStartInfo();
+                    psi.FileName = filename;
+                    psi.UseShellExecute = true;
+                    psi.Verb = "runas"; //This is what actually runs the command as administrator
+                    psi.WorkingDirectory = startupPath;
+                    try
+                    {
+                        Logger.LogInformation($"Entered Try block.");
+                        var process = new Process();
+                        process.StartInfo = psi;
+                        process.Start();
+                        Logger.LogInformation($"Process Started.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogInformation($"In Catch, Process Failed or was denied admin privileges: " + ex);
+                        //If you are here the user clicked decline to grant admin privileges (or he's not administrator)
+                    }
+                }
+                else
+                {
+                    Logger.LogInformation($"The Full FilePath did not exist.");
+                }
+
+            }
         }
 
         #endregion

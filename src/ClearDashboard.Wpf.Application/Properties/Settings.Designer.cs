@@ -297,5 +297,29 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["EnablePowerModes"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsAquaEnabled {
+            get {
+                return ((bool)(this["IsAquaEnabled"]));
+            }
+            set {
+                this["IsAquaEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RunAquaInstall {
+            get {
+                return ((bool)(this["RunAquaInstall"]));
+            }
+            set {
+                this["RunAquaInstall"] = value;
+            }
+        }
     }
 }

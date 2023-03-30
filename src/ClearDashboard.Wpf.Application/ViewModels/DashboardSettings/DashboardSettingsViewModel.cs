@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -9,6 +14,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
     {
 
         #region Member Variables   
+
+        private readonly ILogger<DashboardSettingsViewModel> _logger;
+        private bool _isAquaEnabledOnStartup;
 
         #endregion //Member Variables
 
@@ -44,6 +52,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _isAquaEnabled;
+        public bool IsAquaEnabled
+        {
+            get => _isAquaEnabled;
+            set
+            {
+                _isAquaEnabled = value;
+                NotifyOfPropertyChange(() => IsAquaEnabled);
+            }
+        }
+
+        private bool _runAquaInstall;
+        public bool RunAquaInstall
+        {
+            get => _runAquaInstall;
+            set
+            {
+                _runAquaInstall = value;
+                NotifyOfPropertyChange(() => RunAquaInstall);
+            }
+        }
+
+
 
 
         #endregion //Observable Properties
@@ -55,6 +86,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         public DashboardSettingsViewModel()
         {
             // for Caliburn Micro
+            _logger = IoC.Get<ILogger<DashboardSettingsViewModel>>();
         }
 
         protected override void OnViewReady(object view)
@@ -70,6 +102,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             IsPowerModesEnabled = Settings.Default.EnablePowerModes;
+
+            var isEnabled = false;
+            try
+            {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\ClearDashboard\AQUA"))
+                {
+                    if (key != null)
+                    {
+                        Object o = key.GetValue("IsEnabled");
+                        if (o != null)
+                        {
+                            if (o as string == "true")
+                            {
+                                isEnabled = true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _isAquaEnabledOnStartup = Settings.Default.IsAquaEnabled;
+            }
+
+            _isAquaEnabledOnStartup = isEnabled;
+            IsAquaEnabled = _isAquaEnabledOnStartup;
 
             base.OnViewReady(view);
         }
@@ -90,6 +148,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
         }
 
+        public void AquaEnabledCheckBox(bool value)
+        {
+            Settings.Default.IsAquaEnabled = IsAquaEnabled;
+
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
+
+            if (IsAquaEnabled)
+            {
+                key.SetValue("IsEnabled", "true");
+            }
+            else
+            {
+                
+                key.SetValue("IsEnabled", "false");
+            }
+
+            if (_isAquaEnabledOnStartup == IsAquaEnabled)
+            {
+                RunAquaInstall = false;
+                Settings.Default.RunAquaInstall = RunAquaInstall;
+            }
+            else
+            {
+                RunAquaInstall = true;
+                Settings.Default.RunAquaInstall = RunAquaInstall;
+            }
+
+            Settings.Default.Save();
+        }
 
         #endregion // Methods
 

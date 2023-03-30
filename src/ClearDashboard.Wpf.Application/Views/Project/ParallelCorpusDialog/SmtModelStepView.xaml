@@ -57,22 +57,26 @@
                 Margin="30,0,30,0"
                 VerticalAlignment="Top"
                 IsEnabled="{Binding CanTrain}"
-                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type translation:SmtModelType}}}"
+                ItemsSource="{Binding SmtList}"
                 SelectedItem="{Binding ParentViewModel.SelectedSmtAlgorithm}">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="18" Text="{Binding .}" />
+                            <TextBlock FontSize="18" Text="{Binding SmtName}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-
             <CheckBox
                 Margin="20,5,2,5"
-                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
                 Content="{helpers:Localization ParallelCorpusDialog_Symmetrize}"
-                IsChecked="{Binding IsTrainedSymmetrizedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                IsChecked="{Binding IsTrainedSymmetrizedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}" />
         </StackPanel>
 
         <StackPanel
