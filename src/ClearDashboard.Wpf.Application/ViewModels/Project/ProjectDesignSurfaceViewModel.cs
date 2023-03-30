@@ -1429,8 +1429,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 settings.Title = "Delete Alignments/Interlinears";
 
                 var viewModel = IoC.Get<DeleteParallelizationLineViewModel>();
-                viewModel.AlignmentSetIds = new ObservableCollection<AlignmentSetId>(alignmentSetIds);
-                viewModel.TranslationSetIds = new ObservableCollection<TranslationSetId>(translationSetIds);
+                viewModel.AlignmentSetIds = alignmentSetIds;
+                viewModel.TranslationSetIds = translationSetIds;
 
                 IWindowManager manager = new WindowManager();
                 var ret = manager.ShowDialogAsync(viewModel, null, settings);

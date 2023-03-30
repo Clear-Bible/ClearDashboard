@@ -11,12 +11,121 @@ using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using ControlzEx.Standard;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class DeleteParallelizationLineViewModel : DashboardApplicationScreen
     {
+        #region Member Variables   
+
         private readonly ILogger<SlackMessageViewModel> _logger;
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        private List<AlignmentSetId> _alignmentSetIds;
+        public List<AlignmentSetId> AlignmentSetIds
+        {
+            get => _alignmentSetIds;
+            set
+            {
+                _alignmentSetIds = value;
+
+                SelectableAlignmentSetIds.Clear();
+                foreach (var alignmentSetId in _alignmentSetIds)
+                {
+                    SelectableAlignmentSetIds.Add(new SelectableAlignmentSetId
+                    {
+                        IsChecked = false,
+                        AlignmentSetId = alignmentSetId,
+                    });
+                }
+            }
+        }
+
+
+        private List<TranslationSetId> _translationSetIds;
+        public List<TranslationSetId> TranslationSetIds
+        {
+            get => _translationSetIds;
+            set
+            {
+                _translationSetIds = value;
+
+                SelectableTranslationSetIds.Clear();
+                foreach (var translationSetId in _translationSetIds)
+                {
+                    SelectableTranslationSetIds.Add(new SelectableTranslationSetId
+                    {
+                        IsChecked = false,
+                        TranslationSetId = translationSetId,
+                    });
+                }
+            }
+        }
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
+        private Visibility _progressBarVisibility = Visibility.Collapsed;
+        public Visibility ProgressBarVisibility
+        {
+            get => _progressBarVisibility; 
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
+
+        private bool _isWindowEnabled = true;
+        public bool IsWindowEnabled
+        {
+            get => _isWindowEnabled;
+            set
+            {
+                _isWindowEnabled = value;
+                NotifyOfPropertyChange(() => IsWindowEnabled);
+            }
+        }
+
+
+
+
+        private ObservableCollection<SelectableAlignmentSetId> _selectableAlignmentSetIds = new();
+        public ObservableCollection<SelectableAlignmentSetId> SelectableAlignmentSetIds
+        {
+            get => _selectableAlignmentSetIds;
+            set
+            {
+                _selectableAlignmentSetIds = value;
+                NotifyOfPropertyChange(() => SelectableAlignmentSetIds);
+            }
+        }
+
+        private ObservableCollection<SelectableTranslationSetId> _selectableTranslationSetIds = new();
+        public ObservableCollection<SelectableTranslationSetId> SelectableTranslationSetIds
+        {
+            get => _selectableTranslationSetIds;
+            set
+            {
+                _selectableTranslationSetIds = value;
+                NotifyOfPropertyChange(() => SelectableTranslationSetIds);
+            }
+        }
+
+
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
 
         public DeleteParallelizationLineViewModel()
         {
@@ -31,28 +140,85 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _logger = logger;
         }
 
+        #endregion //Constructor
 
-        private ObservableCollection<AlignmentSetId> _alignmentSetIds;
-        public ObservableCollection<AlignmentSetId> AlignmentSetIds
+
+        #region Methods
+
+        public async void DeleteSelected()
         {
-            get => _alignmentSetIds;
-            set
+            IsWindowEnabled = false;
+            await Task.Factory.StartNew(async () =>
             {
-                _alignmentSetIds = value;
-                NotifyOfPropertyChange(() => AlignmentSetIds);
+                for (int i = SelectableAlignmentSetIds.Count - 1; i >= 0; i--)
+                {
+                    if (SelectableAlignmentSetIds[i].IsChecked)
+                    {
+                        //await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+
+                        SelectableAlignmentSetIds.RemoveAt(i);
+                    }
+                }
+            });
+
+            await Task.Factory.StartNew(async () =>
+            {
+                for (int i = SelectableTranslationSetIds.Count - 1; i >= 0; i--)
+                {
+                    if (SelectableTranslationSetIds[i].IsChecked)
+                    {
+                        //await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+
+                        SelectableTranslationSetIds.RemoveAt(i);
+                    }
+                }
+            });
+
+            IsWindowEnabled = true;
+        }
+
+        public void DeleteAll()
+        {
+            // let the PDS view model know to remove the line and all alignments/glosses
+            TryCloseAsync(true);
+        }
+
+        public void Close()
+        {
+            if (SelectableTranslationSetIds.Count == 0 && SelectableAlignmentSetIds.Count == 0)
+            {
+                // everything was deleted so we need to kill off the line from the PDS
+                TryCloseAsync(true);
             }
+            else
+            {
+                TryCloseAsync(false);
+            }
+            
         }
 
 
-        private ObservableCollection<TranslationSetId> _translationSetIds;
-        public ObservableCollection<TranslationSetId> TranslationSetIds
-        {
-            get => _translationSetIds;
-            set
-            {
-                _translationSetIds = value;
-                NotifyOfPropertyChange(() => TranslationSetIds);
-            }
-        }
+        #endregion // Methods
+
+
+
+
+
+
+
+
+    }
+
+
+    public class SelectableAlignmentSetId
+    {
+        public bool IsChecked { get; set; }
+        public AlignmentSetId AlignmentSetId { get; set; }
+    }
+
+    public class SelectableTranslationSetId
+    {
+        public bool IsChecked { get; set; }
+        public TranslationSetId TranslationSetId { get; set; }
     }
 }
