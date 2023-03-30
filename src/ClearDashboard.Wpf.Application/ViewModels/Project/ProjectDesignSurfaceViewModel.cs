@@ -1435,7 +1435,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 IWindowManager manager = new WindowManager();
                 var ret = manager.ShowDialogAsync(viewModel, null, settings);
 
-                if (ret == false)
+                if ((bool)ret.GetType().GetProperty("Result").GetValue(ret, null) == false)
                 {
                     // cancelled by user
                     return;
