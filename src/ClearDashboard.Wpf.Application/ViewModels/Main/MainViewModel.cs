@@ -216,19 +216,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     ShowCollaborationCommit();
                 }
-                else if (value == "CollaborationHardResetID")
-                {
-                    if (_collaborationManager.IsRepositoryInitialized())
-                    {
-                        _collaborationManager.HardResetChanges();
-                        RebuildMainMenu().Wait();
-                    }
-                }
                 else if (value == "CollaborationFetchMergeID")
                 {
                     if (_collaborationManager.IsRepositoryInitialized())
                     {
                         _collaborationManager.FetchMergeRemote();
+                        RebuildMainMenu().Wait();
+                    }
+                }
+                else if (value == "CollaborationHardResetID")
+                {
+                    if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                    {
+                        _collaborationManager.HardResetChanges();
                         RebuildMainMenu().Wait();
                     }
                 }
@@ -1288,15 +1288,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 new() { Header = "---------------------------------", Id = "SeparatorID", ViewModel = this, },
                 new MenuItemViewModel
                 {
-                    Header = "Git Hard Reset", Id = "CollaborationHardResetID",
+                    Header = "Git Fetch + Merge", Id = "CollaborationFetchMergeID",
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsRepositoryInitialized()
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Git Fetch + Merge", Id = "CollaborationFetchMergeID",
+                    Header = "Git Hard Reset", Id = "CollaborationHardResetID",
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized()
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
                 },
                 new MenuItemViewModel
                 {

@@ -37,6 +37,7 @@ public class CollaborationManager
     private readonly CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = false;
 
+    public const string BranchName = "master";
     public const string RemoteOrigin = "origin";
 
     public CollaborationManager(
@@ -406,7 +407,10 @@ public class CollaborationManager
         using (var repo = new Repository(_repositoryPath))
         {
             Branch originMaster = repo.Branches["origin/master"];
-            repo.Reset(ResetMode.Hard, originMaster.Tip);
+            if (originMaster is not null)
+            {
+                repo.Reset(ResetMode.Hard, originMaster.Tip);
+            }
         }
     }
 
