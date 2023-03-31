@@ -28,11 +28,15 @@ namespace ClearDashboard.Collaboration.Features;
 public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDatabaseCommand, RequestResult<Unit>>
 {
     private ProjectDbContextFactory _projectNameDbContextFactory { get; init; }
+    private IUserProvider _userProvider { get; init; }
     private ILogger _logger { get; init; }
-    public InitializeDatabaseCommandHandler(ProjectDbContextFactory projectNameDbContextFactory,
+    public InitializeDatabaseCommandHandler(
+        ProjectDbContextFactory projectNameDbContextFactory,
+        IUserProvider userProvider,
         ILogger<InitializeDatabaseCommandHandler> logger)
     {
         _projectNameDbContextFactory = projectNameDbContextFactory;
+        _userProvider = userProvider;
         _logger = logger;
     }
 
@@ -68,7 +72,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
                     return new RequestResult<Unit>(Unit.Value);
                 }
 
-                request.Progress.Report(new ProgressStatus(0, "Adding users and project to database"));
+                request.Progress.Report(new ProgressStatus(0, "Adding snapshot users and project to database"));
 
                 await using MergeBehaviorBase mergeBehavior = new MergeBehaviorApply(_logger, projectContext, new MergeCache(), request.Progress);
                 await mergeBehavior.MergeStartAsync(cancellationToken);
@@ -86,6 +90,14 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
                     mergeBehavior.StartInsertModelCommand(projectModelSnapshot);
                     await mergeBehavior.RunInsertModelCommand(projectModelSnapshot, cancellationToken);
                     mergeBehavior.CompleteInsertModelCommand(projectModelSnapshot.EntityType);
+
+                    if (_userProvider.CurrentUser is not null && !userModelSnapshots
+                        .Select(e => (Guid)e.GetId())
+                        .Contains(_userProvider.CurrentUser.Id))
+                    {
+                        request.Progress.Report(new ProgressStatus(0, "Adding current user to database"));
+                        projectContext.Users.Add(_userProvider.CurrentUser);
+                    }
 
                     cancellationToken.ThrowIfCancellationRequested();
 

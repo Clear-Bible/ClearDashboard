@@ -82,6 +82,29 @@ public class CollaborationManager
         }
     }
 
+    private void EnsureValidRemoteUrl()
+    {
+        if (HasRemoteConfigured())
+        {
+            using (var repo = new Repository(_repositoryPath))
+            {
+                var gitRemoteUrl = repo.Config.Where(e => e.Key == "remote.origin.url").FirstOrDefault();
+                if (gitRemoteUrl is not null)
+                {
+                    var gitRemoteUri = new Uri(gitRemoteUrl.Value);
+                    var configRemoteUri = new Uri(_configuration.RemoteUrl);
+
+                    if (gitRemoteUri.Host == configRemoteUri.Host ||
+                        gitRemoteUri.AbsolutePath != configRemoteUri.AbsolutePath)
+                    {
+                        _logger.LogError($"Current git repository remote.origin.url '{gitRemoteUri}' is different than what is configuration in secrets.json '{configRemoteUri}'.  Either delete the Collaboration folder and start over or change the secrets.json file to match.");
+                        throw new GitRepositoryNotFoundException($"Current git repository remote.origin.url '{gitRemoteUri}' is different than what is configuration in secrets.json '{configRemoteUri}'.  Either delete the Collaboration folder and start over or change the secrets.json file to match.");
+                    }
+                }
+            }
+        }
+    }
+
     public bool HasRemoteConfigured()
     {
         return 

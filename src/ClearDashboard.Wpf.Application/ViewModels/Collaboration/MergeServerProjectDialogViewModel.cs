@@ -184,6 +184,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                         progress.Report(new ProgressStatus(0, "Pushing changes to remote"));
                         _collaborationManager.PushChangesToRemote();
                     }
+
+                    progress.Report(new ProgressStatus(0, "Commit Complete!"));
                 });
 
                 await _runningTask;
