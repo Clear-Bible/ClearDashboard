@@ -150,26 +150,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             IsWindowEnabled = false;
             await Task.Factory.StartNew(async () =>
             {
-                for (int i = SelectableAlignmentSetIds.Count - 1; i >= 0; i--)
+                for (int i = _selectableAlignmentSetIds.Count - 1; i >= 0; i--)
                 {
-                    if (SelectableAlignmentSetIds[i].IsChecked)
+                    if (_selectableAlignmentSetIds[i].IsChecked)
                     {
+                        // TODO Waiting on Chris to give me this working function
                         //await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
 
-                        SelectableAlignmentSetIds.RemoveAt(i);
+                        OnUIThread(() =>
+                        {
+                            _selectableAlignmentSetIds.RemoveAt(i);
+                            NotifyOfPropertyChange(() => SelectableAlignmentSetIds);
+                        });
                     }
                 }
             });
 
             await Task.Factory.StartNew(async () =>
             {
-                for (int i = SelectableTranslationSetIds.Count - 1; i >= 0; i--)
+                for (int i = _selectableTranslationSetIds.Count - 1; i >= 0; i--)
                 {
-                    if (SelectableTranslationSetIds[i].IsChecked)
+                    if (_selectableTranslationSetIds[i].IsChecked)
                     {
+                        // TODO Waiting on Chris to give me this working function
                         //await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
 
-                        SelectableTranslationSetIds.RemoveAt(i);
+                        OnUIThread(() =>
+                        {
+                            _selectableTranslationSetIds.RemoveAt(i);
+                            NotifyOfPropertyChange(() => SelectableTranslationSetIds);
+                        });
                     }
                 }
             });
