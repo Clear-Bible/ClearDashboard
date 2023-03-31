@@ -15,15 +15,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;assembly=ClearDashboard.DAL.Models"
     xmlns:pieChart="clr-namespace:ClearDashboard.Wpf.Controls.DonutGraph.PieChart;assembly=ClearDashboard.Wpf.Controls"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:wpfKeyBoard="clr-namespace:wpfKeyBoard;assembly=wpfKeyBoard"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     x:Name="MarbleViewControl"
     d:DataContext="{d:DesignInstance Type=marble:MarbleViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="900"
     d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="13"
@@ -34,6 +34,7 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
         <x:ArrayExtension x:Key="brushes" Type="{x:Type Brush}">
             <SolidColorBrush Color="#9F15C3" />
             <SolidColorBrush Color="#FF8E01" />
@@ -392,8 +393,8 @@
                                 HorizontalAlignment="Stretch"
                                 Background="White"
                                 ManuscriptTextProperty="ManuscriptWord"
-                                TitleProperty="{helpers:Localization Marble_VerseTotal}"
-                                PlottedProperty="VerseTotal">
+                                PlottedProperty="VerseTotal"
+                                TitleProperty="{helpers:Localization Marble_VerseTotal}">
                                 <pieChart:PieChartLayout.DataContext>
                                     <Binding Path="Senses" />
                                 </pieChart:PieChartLayout.DataContext>
@@ -963,8 +964,8 @@
                                                 <TextBlock
                                                     Margin="10"
                                                     VerticalAlignment="Center"
-                                                    TextDecorations="Underline"
-                                                    Text="{helpers:Localization Marble_Scope}"/>
+                                                    Text="{helpers:Localization Marble_Scope}"
+                                                    TextDecorations="Underline" />
                                                 <RadioButton
                                                     Name="rbAll"
                                                     Margin="10"
@@ -1011,19 +1012,14 @@
                                                     Foreground="{StaticResource SecondaryHueDarkBrush}"
                                                     Text="{Binding VerseTextId}"
                                                     TextDecorations="Underline" />
-                                                <TextBlock Text="{Binding VerseText}" TextWrapping="Wrap">
+                                                <TextBlock
+                                                    FlowDirection="{Binding IsTargetRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
+                                                    FontFamily="{Binding VerseTextFontFamily}"
+                                                    Text="{Binding VerseText}"
+                                                    TextWrapping="Wrap">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
-                                                            <Setter Property="FlowDirection" Value="LeftToRight" />
-                                                            <Setter Property="FontSize" Value="16" />
-                                                            <Setter Property="FontFamily" Value="SBL Greek" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding DataContext.IsOt, ElementName=MainGrid}" Value="True">
-                                                                    <Setter Property="FlowDirection" Value="RightToLeft" />
-                                                                    <Setter Property="FontSize" Value="20" />
-                                                                    <Setter Property="FontFamily" Value="SBL Hebrew" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
+                                                            <Setter Property="FontSize" Value="20" />
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
