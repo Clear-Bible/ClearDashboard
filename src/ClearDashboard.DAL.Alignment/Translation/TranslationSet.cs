@@ -3,6 +3,7 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DAL.CQRS;
 using MediatR;
@@ -94,6 +95,16 @@ namespace ClearDashboard.DAL.Alignment.Translation
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId and also this.AlignmentSetId
         }
 
+        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        {
+            if (TranslationSetId == null)
+            {
+                return;
+            }
+
+            await Delete(mediator, TranslationSetId, token);
+        }
+
         public static async Task<IEnumerable<TranslationSetId>> 
             GetAllTranslationSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
         {
@@ -150,6 +161,17 @@ namespace ClearDashboard.DAL.Alignment.Translation
             createTranslationSetCommandResult.ThrowIfCanceledOrFailed(true);
 
             return createTranslationSetCommandResult.Data!;
+        }
+
+        public static async Task Delete(
+            IMediator mediator,
+            TranslationSetId translationSetId,
+            CancellationToken token = default)
+        {
+            var command = new DeleteTranslationSetByTranslationSetIdCommand(translationSetId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed(true);
         }
 
         internal TranslationSet(
