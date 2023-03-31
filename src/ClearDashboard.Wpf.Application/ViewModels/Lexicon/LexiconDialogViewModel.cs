@@ -314,9 +314,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             SourceFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.ParatextGuid);
             TargetFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.ParatextGuid);
 
-            SourceFontFamily = TokenDisplay.VerseDisplay.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.FontFamily;
-            TargetFontFamily = TokenDisplay.VerseDisplay.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.FontFamily;
-
             OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
         }
 
