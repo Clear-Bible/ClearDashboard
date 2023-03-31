@@ -1300,6 +1300,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }, CancellationToken.None);
                     }
                     break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteAlignmentSet:
+                    // TODO WAITING ON CHRIS FOR WORKING ALIGNMENT DELETE
+
+                    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteTranaslationSet:
+                    // TODO WAITING ON CHRIS FOR WORKING ALIGNMENT DELETE
+
+                    break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToCurrentEnhancedView:
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView:
                     if (connectionMenuItem.IsEnabled)
