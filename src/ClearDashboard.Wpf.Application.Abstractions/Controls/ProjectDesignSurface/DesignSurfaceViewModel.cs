@@ -634,8 +634,17 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems = new();
 
-            var isResource = await IsRelatedParatextProjectAParatextResource(corpusNodeViewModel);
-            
+            bool isResource;
+
+            try
+            {
+                isResource = await IsRelatedParatextProjectAParatextResource(corpusNodeViewModel);
+            }
+            catch (Exception e)
+            {
+                isResource = false;
+            }
+
             var addSeparator = false;
             // restrict the ability of Manuscript to add new tokenizers
             if (corpusNodeViewModel.CorpusType != CorpusType.ManuscriptHebrew && corpusNodeViewModel.CorpusType != CorpusType.ManuscriptGreek)
