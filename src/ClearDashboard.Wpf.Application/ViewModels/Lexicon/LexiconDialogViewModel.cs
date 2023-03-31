@@ -11,6 +11,8 @@ using System.Windows.Controls.Primitives;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -26,6 +28,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
     public class LexiconDialogViewModel : DashboardApplicationScreen
     {
+        private string _sourceFontFamily = FontNames.DefaultFontFamily;
+        public string SourceFontFamily
+        {
+            get => _sourceFontFamily;
+            set
+            {
+                _sourceFontFamily = value;
+                NotifyOfPropertyChange(() => SourceFontFamily);
+            }
+        }
+
+        private string _targetFontFamily = FontNames.DefaultFontFamily;
+        public string TargetFontFamily
+        {
+            get => _targetFontFamily;
+            set
+            {
+                _targetFontFamily = value;
+                NotifyOfPropertyChange(() => TargetFontFamily);
+            }
+        }
+
         private readonly LexiconManager? _lexiconManager;
         private LexiconManager LexiconManager
         {
@@ -261,6 +285,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             ApplyEnabled = SelectedTranslation != null;
         }
 
+        private async Task<string?> GetFontFamily(string paratextProjectId)
+        {
+            var result = await Mediator.Send(new GetProjectFontFamilyQuery(paratextProjectId));
+            if (result is { HasData: true })
+            {
+                return result.Data;
+            }
+
+            return FontNames.DefaultFontFamily;
+        }
+
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             await base.OnInitializeAsync(cancellationToken);
@@ -275,6 +310,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 SemanticDomainSuggestions = await LexiconManager.GetAllSemanticDomainsAsync();
             }
+
+            SourceFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.ParatextGuid);
+            TargetFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.ParatextGuid);
+
+            SourceFontFamily = TokenDisplay.VerseDisplay.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.FontFamily;
+            TargetFontFamily = TokenDisplay.VerseDisplay.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.FontFamily;
 
             OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
         }
