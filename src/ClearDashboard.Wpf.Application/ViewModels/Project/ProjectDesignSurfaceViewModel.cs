@@ -398,6 +398,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 //});
             }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message, e);
+            }
             finally
             {
                 LoadingDesignSurface = false;
