@@ -294,6 +294,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             b.Id == metadatum.ParatextProjectId!.Replace("-", ""));
                         if (metadata is null)
                         {
+                            Logger?.LogWarning("The Paratext project's metadata is null.");
                             metadata =  new ParatextProjectMetadata();
                             metadata.AvailableBooks = BookInfo.GenerateScriptureBookList();
                         }
