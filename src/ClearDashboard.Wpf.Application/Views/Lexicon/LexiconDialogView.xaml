@@ -25,6 +25,7 @@
                HorizontalContentAlignment="Center"
                Content="Set a translation for" />
         <Label Grid.Row="1"
+               FontFamily="{Binding SourceFontFamily}"
                HorizontalContentAlignment="Center"
                Content="{Binding TokenDisplay.TranslationSurfaceText}"
                FontSize="18"
@@ -33,6 +34,12 @@
                 Margin="20,0,20,20"
                 Lexeme="{Binding Lexeme}" 
                 TokenDisplay="{Binding TokenDisplay}" 
+                LemmaFontFamily="{Binding SourceFontFamily}"
+                LexemeFormFontFamily="{Binding SourceFontFamily}"
+                MeaningTextFontFamily="{Binding SourceFontFamily}"
+                SemanticDomainFontFamily="{Binding SourceFontFamily}"
+                TranslationFontFamily="{Binding SourceFontFamily}"
+                FontFamily="{Binding SourceFontFamily}"
                 LemmaFontSize="16"
                 LemmaFontWeight="Bold"
                 LexemeFormBackground="LightGray"
@@ -103,6 +110,8 @@
                 TranslationFontSize="12"
                 TranslationFontStyle="Normal"
                 Margin="40,0,0,0"
+                TranslationFontFamily="{Binding TargetFontFamily}"
+                FontFamily="{Binding TargetFontFamily}"
                 >
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="TranslationAdded">

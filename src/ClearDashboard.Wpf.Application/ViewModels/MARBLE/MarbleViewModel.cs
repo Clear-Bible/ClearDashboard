@@ -29,6 +29,7 @@ using System.Windows.Input;
 using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Wpf.Application.Services;
 using wpfKeyBoard;
+using CefSharp.DevTools.Page;
 
 
 #pragma warning disable CS8618
@@ -522,6 +523,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             //    await ObtainGlosses().ConfigureAwait(false);
             //});
 
+            //if (ProjectManager.CurrentParatextProject != null)
+            //{
+            //    var paratextProject = ProjectManager.CurrentParatextProject;
+            //    // pull out the project font family
+            //    _fontFamily = paratextProject.Language.FontFamily;
+            //    _fontSize = paratextProject.Language.Size;
+            //    IsRtl = paratextProject.Language.IsRtol;
+            //}
 
             base.OnViewReady(view);
         }
