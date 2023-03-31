@@ -291,8 +291,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     if (result.Success && result.HasData)
                     {
                         metadata = result.Data!.FirstOrDefault(b =>
-                                       b.Id == metadatum.ParatextProjectId!.Replace("-", "")) ??
-                                   throw new InvalidOperationException();
+                            b.Id == metadatum.ParatextProjectId!.Replace("-", ""));
+                        if (metadata is null)
+                        {
+                            metadata =  new ParatextProjectMetadata();
+                            metadata.AvailableBooks = BookInfo.GenerateScriptureBookList();
+                        }
                     }
                     else
                     {
