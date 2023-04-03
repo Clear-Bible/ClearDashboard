@@ -292,9 +292,6 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Verse>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Verse>().HasIndex(e => e.VerseNumber);
 
-            modelBuilder.Entity<Alignment>().HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
-            modelBuilder.Entity<Translation>().HasIndex(e => new { e.TranslationSetId, e.SourceTokenComponentId });
-            modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.AlignmentSetId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>()
                 .HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
 
@@ -308,9 +305,6 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<Lexicon_Lexeme>()
                 .HasIndex(e => new { e.Lemma, e.Language })
-                .IsUnique();
-            modelBuilder.Entity<Lexicon_Meaning>()
-                .HasIndex(e => new { e.Language })
                 .IsUnique();
             // =============
         }
