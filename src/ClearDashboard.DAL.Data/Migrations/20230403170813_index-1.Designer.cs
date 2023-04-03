@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20230328210058_indexes-2")]
-    partial class indexes2
+    [Migration("20230403170813_index-1")]
+    partial class index1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,13 +92,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AlignmentSetId");
+
                     b.HasIndex("SourceTokenComponentId");
 
                     b.HasIndex("TargetTokenComponentId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("AlignmentSetId", "SourceTokenComponentId");
 
                     b.ToTable("Alignment");
                 });
@@ -188,8 +188,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlignmentSetId");
 
                     b.HasIndex("SourceTokenComponentId");
 
@@ -387,9 +385,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Language")
-                        .IsUnique();
 
                     b.HasIndex("LexemeId");
 
@@ -905,9 +900,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("SourceTokenComponentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TranslationSetId");
 
-                    b.HasIndex("TranslationSetId", "SourceTokenComponentId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Translation");
                 });
