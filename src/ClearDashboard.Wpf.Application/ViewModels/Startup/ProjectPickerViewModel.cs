@@ -68,6 +68,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private string? _initializeCollaborationLabel;
+        public string? InitializeCollaborationLabel
+        {
+            get => _initializeCollaborationLabel;
+
+            set
+            {
+                _initializeCollaborationLabel = value;
+                NotifyOfPropertyChange(() => InitializeCollaborationLabel);
+            }
+        }
+
         private Visibility _collabProjectVisibility;
         public Visibility CollabProjectVisibility
         {
@@ -419,11 +431,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 {
                     CollabProjectVisibility = Visibility.Collapsed;
                     InitializeCollaborationVisibility = Visibility.Visible;
+                    InitializeCollaborationLabel = "Initialize Collaboration";
                 }
                 else
                 {
                     CollabProjectVisibility = Visibility.Visible;
-                    InitializeCollaborationVisibility = Visibility.Collapsed;
+                    InitializeCollaborationVisibility = Visibility.Visible;
+                    InitializeCollaborationLabel = "Refresh Server Data";
                 }
             }
 #else
@@ -498,7 +512,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            _collaborationManager.InitializeRepository();
+            if (!_collaborationManager.IsRepositoryInitialized())
+            {
+                _collaborationManager.InitializeRepository();
+            }
             _collaborationManager.FetchMergeRemote();
 
             await GetCollabProjects().ConfigureAwait(false);

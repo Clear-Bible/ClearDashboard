@@ -524,7 +524,7 @@
                             VerticalAlignment="Center"
                             FontSize="19"
                             FontWeight="Normal"
-                            Text="Initialize Collaboration" />
+                            Text="{Binding InitializeCollaborationLabel}" />
                     </StackPanel>
                 </StackPanel>
             </Button>
