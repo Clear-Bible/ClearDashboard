@@ -89,13 +89,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AlignmentSetId");
+
                     b.HasIndex("SourceTokenComponentId");
 
                     b.HasIndex("TargetTokenComponentId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("AlignmentSetId", "SourceTokenComponentId");
 
                     b.ToTable("Alignment");
                 });
@@ -189,8 +189,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("AlignmentSetId");
 
                     b.HasIndex("SourceTokenComponentId");
-
-                    b.HasIndex("AlignmentSetId", "SourceTokenComponentId");
 
                     b.ToTable("AlignmentTopTargetTrainingText");
                 });
@@ -384,9 +382,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Language")
-                        .IsUnique();
 
                     b.HasIndex("LexemeId");
 
@@ -902,9 +897,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("SourceTokenComponentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TranslationSetId");
 
-                    b.HasIndex("TranslationSetId", "SourceTokenComponentId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Translation");
                 });
