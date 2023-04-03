@@ -119,7 +119,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             using var writer = new StringWriter();
             versification.Save(writer);
 
-            //Assert.Equal(ScrVersType.RussianOrthodox, versification.Type);
+            Assert.Equal(ScrVersType.Unknown, versification.Type);
             Assert.Equal(ScrVers.RussianOrthodox, versification.BaseVersification);
             Assert.True(versification.IsCustomized);
 
@@ -139,7 +139,9 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             Assert.NotNull(tokenizedTextCorpus2);
 
             var versification2 = tokenizedTextCorpus2.Versification;
-            Assert.Equal(ScrVers.RussianOrthodox, versification2.BaseVersification);
+
+            Assert.Equal(versification.Type, versification2.Type);
+            Assert.Equal(versification.BaseVersification, versification2.BaseVersification);
             Assert.True(versification2.IsCustomized);
 
             using var writer2 = new StringWriter();
