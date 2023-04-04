@@ -241,6 +241,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             ApplyEnabled = !string.IsNullOrWhiteSpace(SelectedTranslation.Text);
         }
         
+        public async void OnMeaningTranslationAdded(object sender, LexiconTranslationEventArgs e)
+        {
+            await LexiconManager.AddTranslationAsync(e.Translation, e.Meaning);
+            SelectedTranslation = e.Translation;
+            ApplyEnabled = !string.IsNullOrWhiteSpace(SelectedTranslation.Text);
+        }        
+        
         public void OnTranslationAdded(object sender, LexiconTranslationEventArgs e)
         {
             SelectedTranslation = e.Translation;
