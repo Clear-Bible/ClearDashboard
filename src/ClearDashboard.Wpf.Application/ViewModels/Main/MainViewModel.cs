@@ -468,6 +468,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // Clear the items in the event the user is switching projects.
             Items.Clear();
+            
+            OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -637,19 +639,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken)
         {
-            var sw = Stopwatch.StartNew();
-            var enhancedViews = LoadEnhancedViewTabLayout();
-
-            if (enhancedViews == null)
+            _=Task.Run(async () =>
             {
-                return;
-            }
+                var sw = Stopwatch.StartNew();
+                var enhancedViews = LoadEnhancedViewTabLayout();
 
-            await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
-            await LoadEnhancedViewData(enhancedViews);
+                if (enhancedViews == null)
+                {
+                    return;
+                }
 
-            sw.Stop();
-            Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+                await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
+                await LoadEnhancedViewData(enhancedViews);
+
+                sw.Stop();
+                Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+            }, cancellationToken);
         }
 
         private IEnumerable<EnhancedViewModel> EnhancedViewModels => Items.Where(item => item is EnhancedViewModel).Cast<EnhancedViewModel>();

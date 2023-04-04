@@ -20,6 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             BaseTargetFullName = TargetProject?.LongName;
         }
 
+        public bool IsClosed { get; set; } = true;
         public bool IsNew { get; set; }
         public string? ProjectName { get; set; }
 
