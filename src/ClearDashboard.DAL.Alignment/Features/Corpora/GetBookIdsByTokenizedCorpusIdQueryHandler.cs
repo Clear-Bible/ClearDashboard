@@ -84,9 +84,8 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         {
             using (var reader = new StringReader(tokenizedCorpus.CustomVersData))
             {
-                // FIXME:  Uncomment this once we know the correct way to reconstitute an
-                // ScrVers instance that should have both ScrVersType and CustomVersData
-//                versification = Versification.Table.Implementation.Load(reader, "not a file");
+                Versification.Table.Implementation.RemoveAllUnknownVersifications();
+                versification = Versification.Table.Implementation.Load(reader, "not a file", versification, "custom");
             }
         }
 

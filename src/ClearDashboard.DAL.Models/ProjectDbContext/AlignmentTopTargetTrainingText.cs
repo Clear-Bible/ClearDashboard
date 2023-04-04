@@ -15,12 +15,12 @@ public class AlignmentTopTargetTrainingText
     public Guid Id { get; set; }
 
     [ForeignKey("AlignmentSetId")]
-    public virtual Guid AlignmentSetId { get; set; }
+    public Guid AlignmentSetId { get; set; }
     public virtual AlignmentSet? AlignmentSet { get; set; }
 
     [ForeignKey("SourceTokenComponentId")]
     public Guid SourceTokenComponentId { get; set; }
-    public TokenComponent? SourceTokenComponent { get; set; }
+    public virtual TokenComponent? SourceTokenComponent { get; set; }
 
     public string SourceTrainingText { get; set; }
     public string TopTargetTrainingText { get; set; }
