@@ -259,6 +259,7 @@
                                                 CommandParameter="{Binding ElementName=btn}"
                                                 Content="{Binding stringA}"
                                                 Cursor="Hand"
+                                                Style="{StaticResource TransparentStyle}"
                                                 Tag="{Binding stringB}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>

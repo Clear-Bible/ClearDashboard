@@ -222,7 +222,7 @@
                         <panes:PanesStyleSelector.ToolStyle>
                             <Style TargetType="{x:Type LayoutAnchorableItem}">
                                 <Setter Property="Title" Value="{Binding Model.Title}" />
-                                <Setter Property="CanHide" Value="True"/>
+                                <Setter Property="CanHide" Value="True" />
                                 <Setter Property="CanClose" Value="False" />
                                 <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
                                 <Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}" />

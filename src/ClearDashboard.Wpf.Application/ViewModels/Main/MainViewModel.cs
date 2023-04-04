@@ -180,6 +180,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                    AddNewEnhancedView().Wait();
                 }
+                else if (value == "GettingStartedGuideID")
+                {
+                    LaunchGettingStartedGuide();
+                }
                 else if (value == "ShowLogID")
                 {
                     ShowLogs();
@@ -875,6 +879,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
+        public void LaunchGettingStartedGuide()
+        {
+            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
+            if (File.Exists(path))
+            {
+                var p = new Process();
+                p.StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true
+                };
+                p.Start();
+            }
+            else
+            {
+                Logger?.LogInformation("Dashboard_Instructions.pdf missing.");
+            }
+        }
         private void ShowLogs()
         {
             var tailBlazerProxy = LifetimeScope.Resolve<TailBlazerProxy>();
@@ -1248,6 +1270,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = _localizationService!.Get("MainView_Help"), Id =  "HelpID", ViewModel = this,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
+                        // launch Getting Started Guide
+                        new() { Header = _localizationService!.Get("MainView_GettingStartedGuide"), Id = "GettingStartedGuideID", ViewModel = this, },
+
                         // Gather Logs
                         new() { Header = _localizationService!.Get("MainView_ShowLog"), Id = "ShowLogID", ViewModel = this, },
 
