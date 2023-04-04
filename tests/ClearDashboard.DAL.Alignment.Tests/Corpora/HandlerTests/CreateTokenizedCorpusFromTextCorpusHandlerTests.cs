@@ -20,6 +20,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using SIL.Extensions;
 using System.Text.Json;
 using System.IO;
+using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -115,6 +116,10 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                 Versification.Table.Implementation.RemoveAllUnknownVersifications();
                 versification = Versification.Table.Implementation.Load(reader, "not a file", versification, "custom");
             }
+
+            var v = versification;
+            var newVerse = v.ChangeVersification(040001002, ScrVers.Original);
+            Assert.Equal(40001003, newVerse);
 
             using var writer = new StringWriter();
             versification.Save(writer);
