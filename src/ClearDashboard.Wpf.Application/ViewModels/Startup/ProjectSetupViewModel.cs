@@ -105,11 +105,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             get => _projectName;
             set
             {
-                Set(ref _projectName, value);
-                ProjectManager!.CurrentDashboardProject.ProjectName = value;
-                Project.ProjectName = value;
+                Set(ref _projectName, value.Replace(' ','_'));
+                ProjectManager!.CurrentDashboardProject.ProjectName = _projectName;
+                Project.ProjectName = _projectName;
                 ValidationResult = Validator.Validate(Project);
-                CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+                CanCreate = !string.IsNullOrEmpty(_projectName) && ValidationResult.IsValid;
                 NotifyOfPropertyChange(nameof(Project));
             }
         }

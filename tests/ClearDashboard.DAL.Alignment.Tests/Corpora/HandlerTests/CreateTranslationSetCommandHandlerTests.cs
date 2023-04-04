@@ -331,6 +331,18 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 { "maa", 0.001 }
             });
             */
+
+            var translationSetGuid = translationSet.TranslationSetId.Id;
+            var alignmentSetGuid = alignmentSet.AlignmentSetId.Id;
+
+            Output.WriteLine($"Deleting TranslationSet: '{translationSetGuid}'");
+            await translationSet.Delete(Mediator!);
+            Assert.False(ProjectDbContext.TranslationSets.Where(e => e.Id == translationSetGuid).Any());
+            Assert.True(ProjectDbContext.AlignmentSets.Where(e => e.Id == alignmentSetGuid).Any());
+
+            Output.WriteLine($"Deleting AlignmentSet: '{alignmentSetGuid}'");
+            await alignmentSet.Delete(Mediator!);
+            Assert.False(ProjectDbContext.AlignmentSets.Where(e => e.Id == alignmentSetGuid).Any());
         }
         finally
         {

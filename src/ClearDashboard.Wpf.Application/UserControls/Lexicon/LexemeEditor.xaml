@@ -45,6 +45,7 @@
                 SemanticDomainSelected="OnSemanticDomainSelected"
                 MeaningUpdated="OnMeaningUpdated"
                 MeaningDeleted="OnMeaningDeleted"
+                TranslationAdded="OnTranslationAdded"
                 TranslationDeleted="OnTranslationDeleted"
                 TranslationDropped="OnTranslationDropped"
                 TranslationSelected="OnTranslationSelected"
