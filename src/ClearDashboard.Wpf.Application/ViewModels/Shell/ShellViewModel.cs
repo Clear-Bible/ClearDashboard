@@ -193,21 +193,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private void Help(object? commandParameter)
         {
-            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
-            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
-            if (File.Exists(path))
-            {
-                var p = new Process();
-                p.StartInfo = new ProcessStartInfo(path)
-                {
-                    UseShellExecute = true
-                };
-                p.Start();
-            }
-            else
-            {
-                Logger?.LogInformation("Dashboard_Instructions.pdf missing.");
-            }
+            var mainViewModel = LifetimeScope?.Resolve<MainViewModel>();
+            mainViewModel!.LaunchGettingStartedGuide();
         }
         
         public ICommand PreviousVerseCommand => new RelayCommand(PreviousVerse);
