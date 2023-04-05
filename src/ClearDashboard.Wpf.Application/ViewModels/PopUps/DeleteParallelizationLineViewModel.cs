@@ -13,6 +13,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using ControlzEx.Standard;
 using System.Windows;
+using ClearDashboard.DAL.Alignment;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -147,6 +148,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void DeleteSelected()
         {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
             IsWindowEnabled = false;
             await Task.Factory.StartNew(async () =>
             {
@@ -156,6 +159,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     {
                         // TODO Waiting on Chris to give me this working function
                         //await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+
+                        var alignmentSet = _selectableAlignmentSetIds[i];
+
+                        var alignmentSetId = alignmentSet.AlignmentSetId;
+
+                        //AlignmentSet alignment = null;
+                        //await alignment.DeleteAlignment(alignmentSetId.);
+
 
                         OnUIThread(() =>
                         {
