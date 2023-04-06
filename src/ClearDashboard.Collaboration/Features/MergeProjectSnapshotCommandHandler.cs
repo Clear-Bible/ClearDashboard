@@ -66,6 +66,13 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
                 if (!request.UseLogOnlyMergeBehavior)
                 {
                     projectInDatabase.LastMergedCommitSha = request.CommitShaToMerge;
+                    if (!projectDifferences.HasDifferences)
+                    {
+                        await ProjectDbContext.SaveChangesAsync(cancellationToken);
+                        request.Progress.Report(new ProgressStatus(0, "No differences found.  Merge complete!"));
+
+                        return new RequestResult<Unit>(Unit.Value);
+                    }
                 }
 
                 BuilderContext builderContext = new(ProjectDbContext);
@@ -101,6 +108,8 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
             }
             catch (Exception ex)
             {
+                Logger.LogError(ex, $"Exception thrown in handler '{GetType().Name}'");
+
                 await mergeBehavior.MergeErrorAsync(CancellationToken.None);
                 Logger.LogInformation($"Exception of type '{ex.GetType().ShortDisplayName()}': {ex.Message}");
 

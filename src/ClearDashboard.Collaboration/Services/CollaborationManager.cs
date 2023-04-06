@@ -370,7 +370,13 @@ public class CollaborationManager
         var result = await _mediator.Send(command, cancellationToken);
         result.ThrowIfCanceledOrFailed();
 
-        return headCommitSha;
+        if (!_logMergeOnly)
+        {
+            project.LastMergedCommitSha = headCommitSha;
+            return headCommitSha;
+        }
+
+        return project.LastMergedCommitSha;
     }
 
     public async Task CreateProjectBackupAsync(CancellationToken cancellationToken)

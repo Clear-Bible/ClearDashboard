@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
+    xmlns:applicationConverters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -26,6 +27,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <applicationConverters:BooleanAndConverter x:Key="BooleanAndConverter" />
             <system:Boolean x:Key="True">True</system:Boolean>
             <system:Boolean x:Key="False">False</system:Boolean>
             <Style
@@ -510,8 +512,13 @@
                 Background="DarkGray"
                 BorderThickness="0"
                 Visibility="{Binding InitializeCollaborationVisibility}"
-                IsEnabled="{Binding Connected}"
                 Style="{StaticResource TransparentStyle}">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                        <Binding Path="Connected"/>
+                        <Binding Path="CollabButtonsEnabled"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                     <Image
                         Height="30"
@@ -536,11 +543,16 @@
             <ListView 
                 x:Name="CollabProjectListView" 
                 Height="231" 
-                IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding DashboardCollabProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                 Visibility="{Binding CollabProjectVisibility}">
+                <ListView.IsEnabled>
+                    <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                        <Binding Path="Connected"/>
+                        <Binding Path="CollabButtonsEnabled"/>
+                    </MultiBinding>
+                </ListView.IsEnabled>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border

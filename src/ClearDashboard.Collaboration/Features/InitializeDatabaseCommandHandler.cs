@@ -147,6 +147,8 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, $"Exception thrown in handler '{GetType().Name}'");
+
             var innerExceptionMessage = (ex.InnerException is not null) ?
                 $" (inner exception message: {ex.InnerException.Message})" :
                 "";

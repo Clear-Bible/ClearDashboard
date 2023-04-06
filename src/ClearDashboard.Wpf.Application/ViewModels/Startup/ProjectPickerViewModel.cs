@@ -91,6 +91,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private bool _collabButtonsEnabled;
+        public bool CollabButtonsEnabled
+        {
+            get => _collabButtonsEnabled;
+            set
+            {
+                _collabButtonsEnabled = value;
+                NotifyOfPropertyChange(() => CollabButtonsEnabled);
+            }
+        }
+
         private Visibility _noProjectVisibility;
         public Visibility NoProjectVisibility
         {
@@ -430,14 +441,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 if (!_collaborationManager.IsRepositoryInitialized())
                 {
                     CollabProjectVisibility = Visibility.Collapsed;
+                    CollabButtonsEnabled = true;
                     InitializeCollaborationVisibility = Visibility.Visible;
                     InitializeCollaborationLabel = "Initialize Collaboration";
                 }
                 else
                 {
                     CollabProjectVisibility = Visibility.Visible;
+                    CollabButtonsEnabled = true;
                     InitializeCollaborationVisibility = Visibility.Visible;
-                    InitializeCollaborationLabel = "Refresh Server Data";
+                    InitializeCollaborationLabel = "Refresh Server Projects";
                 }
             }
 #else
@@ -511,6 +524,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
+
+            CollabButtonsEnabled = false;
+            await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);
 
             if (!_collaborationManager.IsRepositoryInitialized())
             {

@@ -30,6 +30,8 @@ public class ProjectDifferences
     public IListDifference<IModelSnapshot<Models.Note>> Notes { get; private set; }
     public IListDifference<IModelSnapshot<Models.Label>> Labels { get; private set; }
 
+    public bool HasDifferences { get; init; }
+
     public ProjectDifferences(ProjectSnapshot snapshot1, ProjectSnapshot snapshot2, CancellationToken cancellationToken = default) {
 
         Project = ((IModelDistinguishable<IModelSnapshot<Models.Project>>)snapshot1.Project).GetModelDifference(snapshot2.Project);
@@ -58,6 +60,17 @@ public class ProjectDifferences
 
         Labels = snapshot1.Labels.GetListDifference(snapshot2.Labels);
         cancellationToken.ThrowIfCancellationRequested();
+
+        HasDifferences =
+            Project.HasDifferences &&
+            Users.HasDifferences &&
+            Corpora.HasDifferences &&
+            TokenizedCorpora.HasDifferences &&
+            ParallelCorpora.HasDifferences &&
+            AlignmentSets.HasDifferences &&
+            TranslationSets.HasDifferences &&
+            Notes.HasDifferences &&
+            Labels.HasDifferences;
     }
 
     // For diagnostics:
