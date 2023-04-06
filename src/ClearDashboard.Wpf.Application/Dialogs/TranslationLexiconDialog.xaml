@@ -8,7 +8,7 @@
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     xmlns:dialogs="clr-namespace:ClearDashboard.Wpf.Application.Dialogs"
     xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.Views.Lexicon"
-    d:DataContext="{d:DesignInstance Type=lexicon:TranslationLexiconDialog}"
+    d:DataContext="{d:DesignInstance Type=dialogs:TranslationLexiconDialog}"
     Title="{Binding DialogTitle}"
 
     ResizeMode="NoResize"

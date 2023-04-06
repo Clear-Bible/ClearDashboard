@@ -46,6 +46,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.Helpers;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 using MahApps.Metro.Controls;
@@ -186,6 +187,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 else if (value == "NewEnhancedCorpusID")
                 {
                    AddNewEnhancedView().Wait();
+                }
+                else if (value == "GettingStartedGuideID")
+                {
+                    LaunchGettingStartedGuide();
                 }
                 else if (value == "ShowLogID")
                 {
@@ -610,6 +615,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // Clear the items in the event the user is switching projects.
             Items.Clear();
+            
+            OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -779,19 +786,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken)
         {
-            var sw = Stopwatch.StartNew();
-            var enhancedViews = LoadEnhancedViewTabLayout();
-
-            if (enhancedViews == null)
+            _=Task.Run(async () =>
             {
-                return;
-            }
+                var sw = Stopwatch.StartNew();
+                var enhancedViews = LoadEnhancedViewTabLayout();
 
-            await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
-            await LoadEnhancedViewData(enhancedViews);
+                if (enhancedViews == null)
+                {
+                    return;
+                }
 
-            sw.Stop();
-            Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+                await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
+                await LoadEnhancedViewData(enhancedViews);
+
+                sw.Stop();
+                Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+            }, cancellationToken);
         }
 
         private IEnumerable<EnhancedViewModel> EnhancedViewModels => Items.Where(item => item is EnhancedViewModel).Cast<EnhancedViewModel>();
@@ -1021,6 +1031,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
+        public void LaunchGettingStartedGuide()
+        {
+            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
+            if (File.Exists(path))
+            {
+                var p = new Process();
+                p.StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true
+                };
+                p.Start();
+            }
+            else
+            {
+                Logger?.LogInformation("Dashboard_Instructions.pdf missing.");
+            }
+        }
         private void ShowLogs()
         {
             var tailBlazerProxy = LifetimeScope.Resolve<TailBlazerProxy>();
@@ -1450,6 +1478,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = _localizationService!.Get("MainView_Help"), Id =  "HelpID", ViewModel = this,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
+                        // launch Getting Started Guide
+                        new() { Header = _localizationService!.Get("MainView_GettingStartedGuide"), Id = "GettingStartedGuideID", ViewModel = this, },
+
                         // Gather Logs
                         new() { Header = _localizationService!.Get("MainView_ShowLog"), Id = "ShowLogID", ViewModel = this, },
 

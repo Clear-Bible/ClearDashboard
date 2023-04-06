@@ -72,19 +72,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 Corpus = corpus,
                 DisplayName = request.DisplayName,
-                TokenizationFunction = request.TokenizationFunction,
-                ScrVersType = (int)request.Versification.Type
+                TokenizationFunction = request.TokenizationFunction
             };
 
             tokenizedCorpus.LastTokenized = tokenizedCorpus.Created;
 
             if (request.Versification.IsCustomized)
             {
+                tokenizedCorpus.ScrVersType = (int)request.Versification.BaseVersification.Type;
                 using (var writer = new StringWriter())
                 {
                     request.Versification.Save(writer);
                     tokenizedCorpus.CustomVersData = writer.ToString();
                 }
+            }
+            else
+            {
+                tokenizedCorpus.ScrVersType = (int)request.Versification.Type;
             }
 
             var (tokenizedTextCorpus, tokenCount) = await CreateTokenizedTextCorpus(

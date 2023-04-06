@@ -27,6 +27,7 @@ using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using System.Diagnostics;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -200,7 +201,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 else
                 {
                     _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
-                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower()));
+                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ','_')));
                 }
 
                 if (_dashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count>0)
@@ -338,15 +339,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             // check for Projects subfolder
             var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
 
+            if (!IsDashboardRunningAlready())
+            {
+                OpenProjectManager.ClearOpenProjectList();
+
+                OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
+            }
+
+            var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
+
             foreach (var directoryName in directories)
             {
+                var directoryInfo = new DirectoryInfo(directoryName);
+                
                 // find the Alignment JSONs
                 var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName),
                     "*.sqlite");
                 foreach (var file in files)
                 {
                     var fileInfo = new FileInfo(file);
-                    var directoryInfo = new DirectoryInfo(directoryName);
 
                     string version = "unavailable";
 
@@ -358,6 +369,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         version = results.Data;
                     }
 
+                    bool isClosed = true;
+                    if (currentlyOpenProjectsList.Contains(directoryInfo.Name))
+                    {
+                        isClosed = false;
+                    }
+
                     // add as ListItem
                     var dashboardProject = new DashboardProject
                     {
@@ -365,7 +382,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         ProjectName = directoryInfo.Name,
                         ShortFilePath = fileInfo.Name,
                         FullFilePath = fileInfo.FullName,
-                        Version = version
+                        Version = version,
+                        IsClosed = isClosed
                     };
 
                     DashboardProjects.Add(dashboardProject);
@@ -462,6 +480,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
+        private bool IsDashboardRunningAlready()
+        {
+            var process = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
+            return process.Length > 1;
+        }
 
         private async void ListenForParatextStart()
         {
@@ -511,7 +534,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             ProjectManager!.CurrentDashboardProject = project;
-           
+            
+            OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
+
             ParentViewModel!.ExtraData = project;
             ParentViewModel.Ok();
         }

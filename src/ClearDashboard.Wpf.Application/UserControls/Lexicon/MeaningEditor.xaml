@@ -38,6 +38,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -142,5 +143,48 @@
             ItemTemplate="{StaticResource TranslationDisplayTemplate}"
             ItemsPanel="{StaticResource TranslationPanelTemplate}"
             ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Meaning.Translations}" />
+        <Grid Grid.Row="2" Margin="26,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <RadioButton Grid.Column="0" VerticalAlignment="Center" Checked="OnNewTranslationChecked" Unchecked="OnNewTranslationUnchecked" GroupName="SelectedTransaction"/>
+            <TextBox x:Name="NewTranslationTextBox"
+                     Grid.Column="1"
+                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
+                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
+                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
+                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
+                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
+                     Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationPadding}"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Left"
+                     KeyUp="OnNewTranslationTextBoxKeyUp"
+                     TextChanged="OnNewTranslationChanged"
+                     Width="200"
+                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewTranslationTextBoxIsEnabled}"
+            />
+            <TextBlock
+                Grid.Column="1"
+                Margin="4,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Foreground="DarkGray"
+                FontSize="11"
+                FontStyle="Italic"
+                IsHitTestVisible="False"
+                Text="Enter a new translation for this meaning">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=NewTranslationTextBox}" Value="">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
     </Grid>
 </UserControl>
