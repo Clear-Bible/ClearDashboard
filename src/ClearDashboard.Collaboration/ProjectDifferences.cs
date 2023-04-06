@@ -62,14 +62,14 @@ public class ProjectDifferences
         cancellationToken.ThrowIfCancellationRequested();
 
         HasDifferences =
-            Project.HasDifferences &&
-            Users.HasDifferences &&
-            Corpora.HasDifferences &&
-            TokenizedCorpora.HasDifferences &&
-            ParallelCorpora.HasDifferences &&
-            AlignmentSets.HasDifferences &&
-            TranslationSets.HasDifferences &&
-            Notes.HasDifferences &&
+            Project.HasDifferences ||
+            Users.HasDifferences ||
+            Corpora.HasDifferences ||
+            TokenizedCorpora.HasDifferences ||
+            ParallelCorpora.HasDifferences ||
+            AlignmentSets.HasDifferences ||
+            TranslationSets.HasDifferences ||
+            Notes.HasDifferences ||
             Labels.HasDifferences;
     }
 
