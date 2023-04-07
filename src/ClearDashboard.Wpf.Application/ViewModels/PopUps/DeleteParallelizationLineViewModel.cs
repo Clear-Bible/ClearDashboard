@@ -234,11 +234,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public Task HandleAsync(SetIsCheckedAlignment message, CancellationToken cancellationToken)
         {
-            var parallelCorpusId = message.AlignmentSetId.ParallelCorpusId;
+            var alignmentSetGuid = message.AlignmentSetId.Id;
 
             foreach (var selectableTranslationSetId in SelectableTranslationSetIds)
             {
-                if (selectableTranslationSetId.TranslationSetId.ParallelCorpusId == parallelCorpusId)
+                if (selectableTranslationSetId.TranslationSetId.AlignmentSetGuid == alignmentSetGuid)
                 {
                     selectableTranslationSetId.IsChecked = message.IsChecked;
                     break;
