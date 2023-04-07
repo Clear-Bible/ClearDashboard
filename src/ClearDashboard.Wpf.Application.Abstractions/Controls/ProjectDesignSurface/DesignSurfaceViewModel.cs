@@ -25,8 +25,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.DAL.Alignment.Translation;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
@@ -642,7 +644,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             {
                                 // Add Verses to new enhanced view
                                 Header = LocalizationService.Get("Pds_DeleteAlignmentSet"),
-                                Id = DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
+                                Id = DesignSurfaceMenuIds.DeleteAlignmentSet,
                                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.Cancel.ToString(),
                                 AlignmentSetId = alignmentSetInfo.Id.ToString(),
@@ -1231,6 +1233,37 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
 
             return FontNames.DefaultFontFamily;
+        }
+
+        public void DeleteAlignmentFromMenus(AlignmentSetId alignmentSetId)
+        {
+            foreach (var connection in ParallelCorpusConnections)
+            {
+                foreach (var parallelCorpusConnectionMenuItemViewModel in connection.MenuItems)
+                {
+                    if (alignmentSetId.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.Id)
+                    {
+                        connection.MenuItems.Remove(parallelCorpusConnectionMenuItemViewModel);
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        public void DeleteTranslationFromMenus(TranslationSetId translationSetId)
+        {
+            foreach (var connection in ParallelCorpusConnections)
+            {
+                foreach (var parallelCorpusConnectionMenuItemViewModel in connection.MenuItems)
+                {
+                    if (translationSetId.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.Id)
+                    {
+                        connection.MenuItems.Remove(parallelCorpusConnectionMenuItemViewModel);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

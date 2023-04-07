@@ -54,6 +54,8 @@ using SIL.Scripture;
 using ClearDashboard.Wpf.Application.Models;
 using System.Collections.ObjectModel;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.Alignment.Features.Translation;
+using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 
 
 // ReSharper disable once CheckNamespace
@@ -1302,7 +1304,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteAlignmentSet:
                     // TODO WAITING ON CHRIS FOR WORKING ALIGNMENT DELETE
-
+                    DeleteAlignmentSet(connectionMenuItem);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteTranaslationSet:
                     // TODO WAITING ON CHRIS FOR WORKING ALIGNMENT DELETE
@@ -1338,6 +1340,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //no-op
                     break;
             }
+        }
+
+        private async Task DeleteAlignmentSet(
+            ParallelCorpusConnectionMenuItemViewModel parallelCorpusConnectionMenuItemViewModel)
+        {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            var alignmentSetId = topLevelProjectIds.AlignmentSetIds.FirstOrDefault(x =>
+
+                x.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.AlignmentSetId
+            );
+
+            DesignSurfaceViewModel.DeleteAlignmentFromMenus(alignmentSetId);
+
+
+            Task.Factory.StartNew(async () =>
+            {
+                await AlignmentSet.Delete(Mediator!, alignmentSetId);
+            });
+
+
+            
         }
 
 
@@ -1424,7 +1448,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
-            
+
             var alignmentSetIds = topLevelProjectIds.AlignmentSetIds.Where(x => x.ParallelCorpusId == connection.ParallelCorpusId).ToList();
 
             var translationSetIds = topLevelProjectIds.TranslationSetIds.Where(x => x.ParallelCorpusId == connection.ParallelCorpusId).ToList();
@@ -1443,6 +1467,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 var viewModel = IoC.Get<DeleteParallelizationLineViewModel>();
                 viewModel.AlignmentSetIds = alignmentSetIds;
                 viewModel.TranslationSetIds = translationSetIds;
+                viewModel.DesignSurfaceViewModel = DesignSurfaceViewModel;
 
                 IWindowManager manager = new WindowManager();
                 var ret = manager.ShowDialogAsync(viewModel, null, settings);
@@ -1454,7 +1479,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
             }
 
-            
+
             // Removes the connector between corpus nodes:
             DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
 

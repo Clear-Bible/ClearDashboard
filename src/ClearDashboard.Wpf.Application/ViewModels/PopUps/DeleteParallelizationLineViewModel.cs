@@ -1,23 +1,21 @@
-﻿using ClearDashboard.Wpf.Application.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.Alignment.Translation;
-using System.Collections.ObjectModel;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ControlzEx.Standard;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DAL.Alignment;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
-    public class DeleteParallelizationLineViewModel : DashboardApplicationScreen
+    public class DeleteParallelizationLineViewModel : DashboardApplicationScreen, IHandle<SetIsCheckedAlignment>
     {
         #region Member Variables   
 
@@ -39,7 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 SelectableAlignmentSetIds.Clear();
                 foreach (var alignmentSetId in _alignmentSetIds)
                 {
-                    SelectableAlignmentSetIds.Add(new SelectableAlignmentSetId
+                    SelectableAlignmentSetIds.Add(new SelectableAlignmentSetId(EventAggregator!)
                     {
                         IsChecked = false,
                         AlignmentSetId = alignmentSetId,
@@ -69,6 +67,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        public DesignSurfaceViewModel DesignSurfaceViewModel { get; set; }
+
         #endregion //Public Properties
 
 
@@ -77,7 +77,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private Visibility _progressBarVisibility = Visibility.Collapsed;
         public Visibility ProgressBarVisibility
         {
-            get => _progressBarVisibility; 
+            get => _progressBarVisibility;
             set
             {
                 _progressBarVisibility = value;
@@ -121,14 +121,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-
+        
 
         #endregion //Observable Properties
 
 
         #region Constructor
 
+#pragma warning disable CS8618
         public DeleteParallelizationLineViewModel()
+#pragma warning restore CS8618
         {
             // no-op
         }
@@ -141,60 +143,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _logger = logger;
         }
 
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
         #endregion //Constructor
 
 
         #region Methods
 
-        public async void DeleteSelected()
+        public void DeleteSelected()
         {
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-
             IsWindowEnabled = false;
-            await Task.Factory.StartNew(async () =>
+
+            // remove any translationSets first since they are dependent on an AlignmentSet
+            for (int i = _selectableTranslationSetIds.Count - 1; i >= 0; i--)
             {
-                for (int i = _selectableAlignmentSetIds.Count - 1; i >= 0; i--)
+                if (_selectableTranslationSetIds[i].IsChecked)
                 {
-                    if (_selectableAlignmentSetIds[i].IsChecked)
+                    var translationSetId = _selectableTranslationSetIds[i].TranslationSetId;
+
+                    OnUIThread(() =>
                     {
-                        // TODO Waiting on Chris to give me this working function
-                        //await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+                        DesignSurfaceViewModel.DeleteTranslationFromMenus(translationSetId);
 
-                        var alignmentSet = _selectableAlignmentSetIds[i];
+                        _selectableTranslationSetIds.RemoveAt(i);
+                        NotifyOfPropertyChange(() => SelectableAlignmentSetIds);
 
-                        var alignmentSetId = alignmentSet.AlignmentSetId;
+                    });
 
-                        //AlignmentSet alignment = null;
-                        //await alignment.DeleteAlignment(alignmentSetId.);
-
-
-                        OnUIThread(() =>
-                        {
-                            _selectableAlignmentSetIds.RemoveAt(i);
-                            NotifyOfPropertyChange(() => SelectableAlignmentSetIds);
-                        });
-                    }
+                    Task.Factory.StartNew(async () =>
+                    {
+                        await TranslationSet.Delete(Mediator!, translationSetId);
+                    });
                 }
-            });
+            }
 
-            await Task.Factory.StartNew(async () =>
+            // remove any AlignmentSets
+            for (int i = _selectableAlignmentSetIds.Count - 1; i >= 0; i--)
             {
-                for (int i = _selectableTranslationSetIds.Count - 1; i >= 0; i--)
+                if (_selectableAlignmentSetIds[i].IsChecked)
                 {
-                    if (_selectableTranslationSetIds[i].IsChecked)
+                    var alignmentSetId = _selectableAlignmentSetIds[i].AlignmentSetId;
+
+                    OnUIThread(() =>
                     {
-                        // TODO Waiting on Chris to give me this working function
-                        //await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+                        DesignSurfaceViewModel.DeleteAlignmentFromMenus(alignmentSetId);
+                        
+                        _selectableAlignmentSetIds.RemoveAt(i);
+                        NotifyOfPropertyChange(() => SelectableAlignmentSetIds);
 
-                        OnUIThread(() =>
-                        {
-                            _selectableTranslationSetIds.RemoveAt(i);
-                            NotifyOfPropertyChange(() => SelectableTranslationSetIds);
-                        });
-                    }
+                    });
+
+                    Task.Factory.StartNew(async () =>
+                    {
+                        await AlignmentSet.Delete(Mediator!, alignmentSetId);
+                    });
                 }
-            });
-
+            }
+            
             IsWindowEnabled = true;
         }
 
@@ -215,31 +223,72 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 TryCloseAsync(false);
             }
-            
+
         }
 
 
         #endregion // Methods
 
 
+        #region Event Aggragator Handlers
 
+        public Task HandleAsync(SetIsCheckedAlignment message, CancellationToken cancellationToken)
+        {
+            var parallelCorpusId = message.AlignmentSetId.ParallelCorpusId;
 
+            foreach (var selectableTranslationSetId in SelectableTranslationSetIds)
+            {
+                if (selectableTranslationSetId.TranslationSetId.ParallelCorpusId == parallelCorpusId)
+                {
+                    selectableTranslationSetId.IsChecked = message.IsChecked;
+                    break;
+                }
+            }
 
+            return Task.CompletedTask;
+        }
 
-
-
+        #endregion
     }
 
 
-    public class SelectableAlignmentSetId
+    public class SelectableAlignmentSetId : Screen
     {
-        public bool IsChecked { get; set; }
+        private IEventAggregator _eventAggrator;
+
+        private bool _isChecked;
+        public bool IsChecked
+        {
+            get => _isChecked;
+            set
+            {
+                _isChecked = value;
+                NotifyOfPropertyChange(() => IsChecked);
+
+                _eventAggrator.PublishOnUIThreadAsync(new SetIsCheckedAlignment(this.AlignmentSetId, value));
+            }
+        }
+
         public AlignmentSetId AlignmentSetId { get; set; }
+
+        public SelectableAlignmentSetId(IEventAggregator eventAggregator)
+        {
+            _eventAggrator = eventAggregator;
+        }
     }
 
-    public class SelectableTranslationSetId
+    public class SelectableTranslationSetId : Screen
     {
-        public bool IsChecked { get; set; }
+        private bool _isChecked;
+        public bool IsChecked
+        {
+            get => _isChecked;
+            set
+            {
+                _isChecked = value;
+                NotifyOfPropertyChange(() => IsChecked);
+            }
+        }
         public TranslationSetId TranslationSetId { get; set; }
     }
 }

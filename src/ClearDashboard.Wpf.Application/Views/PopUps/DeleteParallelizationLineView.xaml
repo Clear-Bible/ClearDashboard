@@ -157,7 +157,7 @@
                 Grid.Column="2"
                 Margin="5"
                 Content="Delete Selected"
-                IsEnabled="False"
+                IsEnabled="True"
                 Style="{StaticResource TransparentStyle}" />
 
 
