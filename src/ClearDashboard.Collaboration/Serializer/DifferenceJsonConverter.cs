@@ -58,17 +58,20 @@ public class DifferenceJsonConverter : JsonConverter<IDifference>
         else if (value.GetType().IsAssignableToGenericType(typeof(IModelDifference<>)))
         {
             writer.WriteStartObject();
-            writer.WriteString(nameof(ModelDifference.ModelType), ((ModelDifference)value).ModelType.ShortDisplayName());
-            writer.WriteString(nameof(ModelDifference.Id), ((ModelDifference)value).Id?.ToString());
-            if (((ModelDifference)value).PropertyDifferences.Any())
+            if (((ModelDifference)value).HasDifferences)
             {
-                writer.WritePropertyName(nameof(ModelDifference.PropertyDifferences));
-                JsonSerializer.Serialize(writer, ((ModelDifference)value).PropertyDifferences, ((ModelDifference)value).PropertyDifferences.GetType(), options);
-            }
-            if (((ModelDifference)value).ChildListDifferences.Any())
-            {
-                writer.WritePropertyName(nameof(ModelDifference.ChildListDifferences));
-                JsonSerializer.Serialize(writer, ((ModelDifference)value).ChildListDifferences, ((ModelDifference)value).ChildListDifferences.GetType(), options);
+                writer.WriteString(nameof(ModelDifference.ModelType), ((ModelDifference)value).ModelType.ShortDisplayName());
+                writer.WriteString(nameof(ModelDifference.Id), ((ModelDifference)value).Id?.ToString());
+                if (((ModelDifference)value).PropertyDifferences.Any())
+                {
+                    writer.WritePropertyName(nameof(ModelDifference.PropertyDifferences));
+                    JsonSerializer.Serialize(writer, ((ModelDifference)value).PropertyDifferences, ((ModelDifference)value).PropertyDifferences.GetType(), options);
+                }
+                if (((ModelDifference)value).ChildListDifferences.Any())
+                {
+                    writer.WritePropertyName(nameof(ModelDifference.ChildListDifferences));
+                    JsonSerializer.Serialize(writer, ((ModelDifference)value).ChildListDifferences, ((ModelDifference)value).ChildListDifferences.GetType(), options);
+                }
             }
             writer.WriteEndObject();
         }

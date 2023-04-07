@@ -108,6 +108,7 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
             .ToDictionary(g => g.Key, g => g
                 .Select(e => e)
                 .OrderBy(e => (string)e[AlignmentBuilder.SOURCE_TOKEN_LOCATION]!)
+                .ThenBy(e => (string)e[AlignmentBuilder.TARGET_TOKEN_LOCATION]!)
                 .ToGeneralListModel<GeneralModel<Models.Alignment>>())
             .OrderBy(kvp => kvp.Key);
 
