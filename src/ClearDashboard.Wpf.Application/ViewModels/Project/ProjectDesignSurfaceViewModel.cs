@@ -1306,7 +1306,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // TODO WAITING ON CHRIS FOR WORKING ALIGNMENT DELETE
                     DeleteAlignmentSet(connectionMenuItem);
                     break;
-                case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteTranaslationSet:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteTranslationSet:
                     // TODO WAITING ON CHRIS FOR WORKING ALIGNMENT DELETE
 
                     break;

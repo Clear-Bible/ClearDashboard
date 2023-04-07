@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects;
@@ -25,10 +26,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ClearDashboard.DAL.Alignment.Translation;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
@@ -541,7 +540,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             new()
                             {
                                 Header = LocalizationService.Get("Pds_DeleteTranaslationSet"),
-                                Id = DesignSurfaceMenuIds.DeleteTranaslationSet,
+                                Id = DesignSurfaceMenuIds.DeleteTranslationSet,
                                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.Cancel.ToString(),
                                 TranslationSetId = translationSet.Id.ToString(),
@@ -1235,6 +1234,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             return FontNames.DefaultFontFamily;
         }
 
+
+        /// <summary>
+        /// kills off the menu item for an alignment set
+        /// </summary>
+        /// <param name="alignmentSetId"></param>
         public void DeleteAlignmentFromMenus(AlignmentSetId alignmentSetId)
         {
             foreach (var connection in ParallelCorpusConnections)
@@ -1251,6 +1255,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         }
 
+        /// <summary>
+        /// kills off the menu item for a translation set
+        /// </summary>
+        /// <param name="translationSetId"></param>
         public void DeleteTranslationFromMenus(TranslationSetId translationSetId)
         {
             foreach (var connection in ParallelCorpusConnections)
