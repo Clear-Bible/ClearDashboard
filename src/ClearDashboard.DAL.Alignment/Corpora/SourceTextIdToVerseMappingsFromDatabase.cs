@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Features;
+using SIL.Machine.FiniteState;
 
 namespace ClearDashboard.DAL.Alignment.Corpora;
 
@@ -26,7 +27,9 @@ internal class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMapp
     {
         var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, null);
 
-        var result = _mediator.Send(command, CancellationToken.None).GetAwaiter().GetResult();
+        var task = Task.Run(async () => await _mediator.Send(command, CancellationToken.None));
+        var result = task.Result;
+
         result.ThrowIfCanceledOrFailed(true);
 
         return result.Data!;
@@ -38,7 +41,9 @@ internal class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMapp
         {
             var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, sourceTextId);
 
-            var result = _mediator.Send(command, CancellationToken.None).GetAwaiter().GetResult();
+            var task = Task.Run(async () => await _mediator.Send(command, CancellationToken.None));
+            var result = task.Result;
+
             result.ThrowIfCanceledOrFailed(true);
 
             return result.Data!;
