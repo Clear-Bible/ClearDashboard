@@ -67,7 +67,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public async Task Update(IMediator mediator, CancellationToken token = default)
         {
             var command = new UpdateParallelCorpusCommand(
-                VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
+                SourceTextIdToVerseMappings?.GetVerseMappings() ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
                 ParallelCorpusId);
 
             var result = await mediator.Send(command, token);
@@ -99,7 +99,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return new ParallelCorpus(
                 await TokenizedTextCorpus.Get(mediator, data.sourceTokenizedCorpusId, useCache), 
                 await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId, useCache), 
-                data.verseMappings, 
+                new SourceTextIdToVerseMappingsFromDatabase(mediator, data.parallelCorpusId), 
                 data.parallelCorpusId,
                 useCache);
         }
@@ -117,10 +117,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         internal ParallelCorpus(
             TokenizedTextCorpus sourceTokenizedTextCorpus,
             TokenizedTextCorpus targetTokenizedTextCorpus,
-            IEnumerable<VerseMapping> verseMappings,
+            SourceTextIdToVerseMappings sourceTextIdToVerseMappings,
             ParallelCorpusId parallelCorpusId,
             bool useCache )
-            : base(sourceTokenizedTextCorpus, targetTokenizedTextCorpus, verseMappings.ToList())
+            : base(sourceTokenizedTextCorpus, targetTokenizedTextCorpus, sourceTextIdToVerseMappings)
         {
             ParallelCorpusId = parallelCorpusId;
             useCache_ = useCache;

@@ -79,12 +79,16 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
 			var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator_, new TokenizedTextCorpusId(new Guid()));
 
-			var parallelTextCorpusWithTokenizedTextCorpuses = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+			var verseMappingList = TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
+					sourceTokenizedTextCorpus.Versification,
+					targetTokenizedTextCorpus.Versification);
+
+            var parallelTextCorpusWithTokenizedTextCorpuses = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, 
+				new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingList));
 
 			var parallelTokenizedCorpus = await parallelTextCorpusWithTokenizedTextCorpuses.Create("parallelTextCorpusWithTokenizedTextCorpuses", mediator_);
-			parallelTokenizedCorpus.VerseMappingList = parallelTextCorpusWithTokenizedTextCorpuses.VerseMappingList;
 
-            Assert.Equal(15, parallelTokenizedCorpus.VerseMappingList?.Count() ?? 0);
+            Assert.Equal(16, verseMappingList.Count());
 			Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 16);
 			Assert.True(parallelTokenizedCorpus.TargetCorpus.Count() == 16);
 		}
@@ -95,8 +99,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		public async void ParallelCorpus_Get()
 		{
 			var parallelCorpus = await ParallelCorpus.Get( mediator_, new ParallelCorpusId(new Guid()));
-			Assert.NotNull(parallelCorpus.VerseMappingList);
-			Assert.Equal(1, parallelCorpus.VerseMappingList?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
+			Assert.NotNull(parallelCorpus.SourceTextIdToVerseMappings);
+			Assert.Equal(1, parallelCorpus.SourceTextIdToVerseMappings?.GetVerseMappings()?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
 			Assert.True(parallelCorpus.SourceCorpus.Count() > 0);
 			Assert.True(parallelCorpus.TargetCorpus.Count() > 0);
 
@@ -128,18 +132,24 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		public async void ParallelCorpus_Get_ChangeVerseMappings_SaveNewParallelVersion()
 		{
 			var parallelCorpus = await ParallelCorpus.Get(mediator_, new ParallelCorpusId(new Guid()));
-			Assert.NotNull(parallelCorpus.VerseMappingList);
-			Assert.Equal(1, parallelCorpus.VerseMappingList?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
-			Assert.True(parallelCorpus.SourceCorpus.Count() > 0);
-			Assert.True(parallelCorpus.TargetCorpus.Count() > 0);
+            Assert.NotNull(parallelCorpus.SourceTextIdToVerseMappings);
 
-			parallelCorpus.VerseMappingList = parallelCorpus.VerseMappingList?.Append(
+			var verseMappingList = parallelCorpus.SourceTextIdToVerseMappings?.GetVerseMappings()?.ToList();
+
+			Assert.NotNull(verseMappingList);
+            Assert.Single(verseMappingList); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
+            Assert.True(parallelCorpus.SourceCorpus.Count() > 0);
+            Assert.True(parallelCorpus.TargetCorpus.Count() > 0);
+
+//			var sourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromVerseMappings();
+            verseMappingList.Add(
 				new VerseMapping(
 					new List<Verse>() { new Verse("MAT", 1, 2) },
-					new List<Verse>() { new Verse("MAT", 1, 2) })).ToList()
-					?? null; //already checked for null, this should never happen.
-			
-			Assert.Equal(2, parallelCorpus.VerseMappingList?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
+					new List<Verse>() { new Verse("MAT", 1, 2) })); //already checked for null, this should never happen.
+
+			parallelCorpus.SourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingList);
+
+            Assert.Equal(2, parallelCorpus.SourceTextIdToVerseMappings.GetVerseMappings().Count()); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
 
 			//since there is only one mapped verse, there should only be one that displays
 			foreach (var engineParallelTextRow in parallelCorpus.Cast<EngineParallelTextRow>())
@@ -168,14 +178,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus_Get_ChangeTokenizedCorpuses_SaveNewParallelTokenizedCorpus()
 		{
-			var paralleCorpus = await ParallelCorpus.Get(mediator_, new ParallelCorpusId(new Guid()));
-			Assert.NotNull(paralleCorpus.VerseMappingList);
-			Assert.Equal(1, paralleCorpus.VerseMappingList?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
-			Assert.True(paralleCorpus.SourceCorpus.Count() > 0);
-			Assert.True(paralleCorpus.TargetCorpus.Count() > 0);
+			var parallelCorpus = await ParallelCorpus.Get(mediator_, new ParallelCorpusId(new Guid()));
+            Assert.NotNull(parallelCorpus.SourceTextIdToVerseMappings);
+			Assert.Equal(1, parallelCorpus.SourceTextIdToVerseMappings?.GetVerseMappings()?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
+            Assert.True(parallelCorpus.SourceCorpus.Count() > 0);
+            Assert.True(parallelCorpus.TargetCorpus.Count() > 0);
 
-			//since there is only one mapped verse, there should only be one that displays
-			foreach (var engineParallelTextRow in paralleCorpus.Cast<EngineParallelTextRow>())
+            //since there is only one mapped verse, there should only be one that displays
+            foreach (var engineParallelTextRow in parallelCorpus.Cast<EngineParallelTextRow>())
 			{
 				//display verse info
 				var verseRefStr = engineParallelTextRow.Ref.ToString();
