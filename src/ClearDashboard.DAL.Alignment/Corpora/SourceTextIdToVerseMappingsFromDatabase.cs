@@ -25,10 +25,9 @@ internal class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMapp
 
     public override IEnumerable<VerseMapping> GetVerseMappings()
     {
-        var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, null);
+        GetVerseMappingsByParallelCorpusIdAndBookIdQuery? command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, null);
 
-        var task = Task.Run(async () => await _mediator.Send(command, CancellationToken.None));
-        var result = task.Result;
+        var result = _mediator.Send(command, CancellationToken.None).Result;
 
         result.ThrowIfCanceledOrFailed(true);
 
@@ -41,8 +40,7 @@ internal class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMapp
         {
             var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, sourceTextId);
 
-            var task = Task.Run(async () => await _mediator.Send(command, CancellationToken.None));
-            var result = task.Result;
+            var result = _mediator.Send(command, CancellationToken.None).Result;
 
             result.ThrowIfCanceledOrFailed(true);
 
