@@ -15,46 +15,46 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     {
         public ParallelCorpusId ParallelCorpusId { get; set; }
 
-        //FIXME: engineupdate
-        //public new SourceTextIdToVerseMappings? SourceTextIdToVerseMappings
-        //{
-        //    get => SourceTextIdToVerseMappings;
-        //    set
-        //    {
-        //        if (UseCache)
-        //            throw new EngineException("cannot set this property because UseCache is true");
-        //        else
-        //            base.SourceTextIdToVerseMappings = value;
-        //    }
-        //}
+        public new SourceTextIdToVerseMappings? SourceTextIdToVerseMappings
+        {
+            get => SourceTextIdToVerseMappings;
+            set
+            {
+                if (UseCache)
+                    throw new EngineException("cannot set this property because UseCache is true");
+                else
+                    base.SourceTextIdToVerseMappings = value;
+            }
+        }
 
-        //public new ScrVers? SourceCorpusVersification
-        //{
-        //    get => base.SourceCorpusVersification;
-        //    set
-        //    {
-        //        if (UseCache)
-        //            throw new EngineException("cannot set this property because UseCache is true");
-        //        else
-        //            base.SourceCorpusVersification = value;
-        //    }
-        //}
+        public new ScrVers? SourceCorpusVersification
+        {
+            get => base.SourceCorpusVersification;
+            set
+            {
+                if (UseCache)
+                    throw new EngineException("cannot set this property because UseCache is true");
+                else
+                    base.SourceCorpusVersification = value;
+            }
+        }
 
 
-        //public new IEnumerable<string>? LimitToSourceBooks
-        //{
-        //    get => base.LimitToSourceBooks;
-        //    set
-        //    {
-        //        var isChanged = (base.LimitToSourceBooks == null && value != null) ||
-        //            (base.LimitToSourceBooks != null && value == null) ||
-        //            ((base.LimitToSourceBooks.Intersect(value).Count() > 0);
-        //        if (UseCache && ParallelTextRowsCache != null && isChanged)
-        //            ParallelTextRowsCache = null;
-        //        else
-        //            base.LimitToSourceBooks = value;
-        //    }
-        //}
+        public override IEnumerable<string>? LimitToSourceBooks
+        {
+            get => base.LimitToSourceBooks;
+            set
+            {
+                var isChanged = 
+                    (base.LimitToSourceBooks == null && value != null) ||
+                    (base.LimitToSourceBooks != null && value == null) ||
+                    (base.LimitToSourceBooks != null && value != null && base.LimitToSourceBooks.Intersect(value).Count() > 0);
+                if (UseCache && ParallelTextRowsCache != null && isChanged)
+                    ParallelTextRowsCache = null;
+                else
+                    base.LimitToSourceBooks = value;
+            }
+        }
 
         public new bool AllSourceRows
         {
@@ -182,6 +182,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public async Task Update(IMediator mediator, CancellationToken token = default)
         {
             var command = new UpdateParallelCorpusCommand(
+                //FIXME:CHRIS - I think this will always get the verse mappings from the database and then save them back because Get() (below) 
+                //always sets the class to SourceTextIdToVerseMappingsFromDatabase.
                 SourceTextIdToVerseMappings?.GetVerseMappings() ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
                 ParallelCorpusId);
 

@@ -38,6 +38,7 @@ internal class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMapp
     {
         get
         {
+            //FIXME:CHRIS - I think the value for the book should be cached in a dict like SourceTextIdToVerseMappingsFromVerseMappings does.
             var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, sourceTextId);
 
             var result = _mediator.Send(command, CancellationToken.None).Result;
