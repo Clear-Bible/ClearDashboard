@@ -739,31 +739,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             foreach (var r in refs)
             {
                 var tmp = r.Trim();
-                var book = tmp.Substring(0, 3);
-                var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
-                if (bookNum.Length > 0)
+                if (tmp.Length >= 3)
                 {
-                    tmp = tmp.Substring(3).Trim();
-                    var parts = tmp.Split(':');
-                    if (parts.Length > 1)
+                    var book = tmp.Substring(0, 3);//the issue is we are assuming the string is a certian length etc.  do more checking
+                    var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
+                    if (bookNum.Length > 0)
                     {
-                        string chapter = parts[0].Trim();
-                        string verse = parts[1].Trim();
-                        if (verse.IndexOf("-") > 0)
+                        if(tmp.Length >= 4)
                         {
-                            verse = verse.Substring(0, verse.IndexOf("-"));
-                        }
+                            tmp = tmp.Substring(3).Trim();
+                            var parts = tmp.Split(':');
+                            if (parts.Length > 1)
+                            {
+                                string chapter = parts[0].Trim();
+                                string verse = parts[1].Trim();
+                                if (verse.IndexOf("-") > 0)
+                                {
+                                    verse = verse.Substring(0, verse.IndexOf("-"));
+                                }
 
-                        if (verse.IndexOf(".") > 0)
-                        {
-                            verse = verse.Substring(0, verse.IndexOf("."));
-                        }
+                                if (verse.IndexOf(".") > 0)
+                                {
+                                    verse = verse.Substring(0, verse.IndexOf("."));
+                                }
 
-                        references.Add(new CoupleOfStrings
-                        {
-                            stringA = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}",
-                            stringB = r
-                        });
+                                references.Add(new CoupleOfStrings
+                                {
+                                    stringA = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}",
+                                    stringB = r
+                                });
+                            }
+                        }
                     }
                 }
             }
