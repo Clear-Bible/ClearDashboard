@@ -1,26 +1,27 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Translation;
+using SIL.Machine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.Properties;
+using System.Windows;
 using ValidationResult = FluentValidation.Results.ValidationResult;
-using ClearDashboard.Wpf.Application.ViewModels.Shell;
-using SIL.Machine.Translation;
-using ClearDashboard.DAL.Alignment;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 {
@@ -28,18 +29,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
     {
         #region Member Variables
 
-        private TranslationSource? _translationSource;
         public ParallelCorpusId? ParallelCorpusId { get; set; }
-
         private readonly SystemPowerModes _systemPowerModes;
         private readonly LongRunningTaskManager _longRunningTaskManager;
-        public LongRunningTask? CurrentTask { get; set; }
+        private LongRunningTask? CurrentTask { get; set; }
         private readonly BackgroundTasksViewModel _backgroundTasksViewModel;
-
-        public IWordAlignmentModel WordAlignmentModel { get; set; }
         public ParallelCorpus ParallelTokenizedCorpus { get; set; }
-        public TranslationSet? TranslationSet { get; set; }
-        private TopLevelProjectIds _topLevelProjectIds;
 
         #endregion //Member Variables
 
@@ -96,35 +91,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
         }
 
 
-        private string? _translationSetDisplayName;
-        public string TranslationSetDisplayName
+        private string? _translationSetDisplayName = "";
+        public string? TranslationSetDisplayName
         {
             get => _translationSetDisplayName;
             set
             {
                 Set(ref _translationSetDisplayName, value);
-                ValidationResult = Validator.Validate(this);
-                CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+                ValidationResult = Validator?.Validate(this);
+                if (ValidationResult != null) 
+                    CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
             }
         }
+
+        private Visibility _spinnerVisibility = Visibility.Hidden;
+
+        public Visibility SpinnerVisibility
+        {
+            get => _spinnerVisibility;
+            set
+            {
+                _spinnerVisibility = value; 
+                NotifyOfPropertyChange(() => SpinnerVisibility);    
+            }
+        }
+
 
         #endregion //Observable Properties
 
 
         #region Constructor
 
+        // ReSharper disable once UnusedMember.Global
+#pragma warning disable CS8618
         public InterlinearDialogViewModel()
+
         {
             // no-op
         }
 
+        // ReSharper disable once UnusedMember.Global
         public InterlinearDialogViewModel(ParallelCorpusId parallelCorpusId,
-            TranslationSource? translationSource, INavigationService navigationService,
-            ILogger<InterlinearDialogViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
-            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, IValidator<InterlinearDialogViewModel> validator, ILocalizationService localizationService)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
+#pragma warning restore CS8618
+            //TranslationSource? translationSource,
+            INavigationService navigationService,
+            ILogger<InterlinearDialogViewModel> logger,
+            DashboardProjectManager? projectManager,
+            IEventAggregator eventAggregator,
+            IMediator mediator,
+            ILifetimeScope lifetimeScope,
+            LongRunningTaskManager longRunningTaskManager,
+            BackgroundTasksViewModel backgroundTasksViewModel,
+            SystemPowerModes systemPowerModes,
+            IValidator<InterlinearDialogViewModel> validator,
+            ILocalizationService localizationService)
+            : base(projectManager!, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
         {
-            _translationSource = translationSource;
+            _longRunningTaskManager = longRunningTaskManager;
+            _backgroundTasksViewModel = backgroundTasksViewModel;
+            _systemPowerModes = systemPowerModes;
+            //_translationSource = translationSource;
             ParallelCorpusId = parallelCorpusId;
             Logger!.LogInformation("'InterlinearDialogViewModel' ctor called.");
         }
@@ -133,26 +159,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
         {
             // get all the existing alignment sets for this parallelcorpusid
             AlignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
-                    Mediator!, 
+                    Mediator!,
                     ParallelCorpusId,
                     new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!)))
                 .ToList();
 
             // get all the existing translation sets for this parallelcorpusid
-            var translationSets = (await TranslationSet.GetAllTranslationSetIds(Mediator, ParallelCorpusId)).ToList();
+            var translationSets = (await TranslationSet.GetAllTranslationSetIds(Mediator!, ParallelCorpusId)).ToList();
 
             //_topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
             // parse down to only those which we do not have an existing translation set
-            //for (var index = AlignmentSets.Count - 1; index >= 0; index--)
-            //{
-            //    var alignmentSet = AlignmentSets[index];
-            //    var translationSet = translationSets.FirstOrDefault(x => x.AlignmentSetId == alignmentSet.Id);
-            //    if (translationSet != null)
-            //    {
-            //        AlignmentSets.RemoveAt(index);
-            //    }
-            //}
+            for (var index = AlignmentSets.Count - 1; index >= 0; index--)
+            {
+                var translationSet = translationSets.FirstOrDefault(x => x.AlignmentSetGuid == AlignmentSets[index].Id);
+                if (translationSet != null)
+                {
+                    AlignmentSets.RemoveAt(index);
+                }
+            }
 
             CanCreate = false;
             CanCancel = true;
@@ -166,6 +191,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             {
                 SelectedAlignmentSet = null;
             }
+
+            if (translationSets.Count > 0)
+            {
+                TranslationSetDisplayName = translationSets[0].DisplayName;
+            }
+
         }
 
         #endregion //Constructor
@@ -175,12 +206,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 
         protected override ValidationResult? Validate()
         {
-            return (!string.IsNullOrEmpty(TranslationSetDisplayName)) ? Validator.Validate(this) : null;
+            return (!string.IsNullOrEmpty(TranslationSetDisplayName)) ? Validator?.Validate(this) : null;
         }
 
         public async void Create()
         {
-            //await TryCloseAsync(false);
+            SpinnerVisibility = Visibility.Visible;
+            await Task.Delay(200);
+            await AddTranslationSet(TranslationSetDisplayName);
+            SpinnerVisibility = Visibility.Collapsed;
+
+            await TryCloseAsync(true);
         }
 
         public async void Close()
@@ -188,7 +224,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             await TryCloseAsync(false);
         }
 
-        public async Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName)
+        public async Task<LongRunningTaskStatus> AddTranslationSet(string? translationSetDisplayName)
         {
             IsBusy = true;
 
@@ -201,26 +237,73 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             var soundType = SoundType.Success;
             var taskName = ParallelCorpusDialogViewModel.TaskNames.TranslationSet;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
-            var cancellationToken = CurrentTask.CancellationTokenSource.Token;
+            var cancellationToken = CurrentTask.CancellationTokenSource!.Token;
             try
             {
+                SmtModelType modelType;
+                switch (SelectedAlignmentSet!.SmtModel)
+                {
+                    case "HMM":
+                        modelType = SmtModelType.Hmm;
+                        break;
+                    case "IBM4":
+                        modelType = SmtModelType.IBM4;
+                        break;
+                    default:
+                        modelType = SmtModelType.FastAlign;
+                        break;
+                }
+
+                // ReSharper disable once NotAccessedVariable
+                SymmetrizationHeuristic symmetrizationHeuristic = new();
+                if (SelectedAlignmentSet.IsSymmetrized)
+                {
+                    symmetrizationHeuristic = SymmetrizationHeuristic.GrowDiagFinalAnd;
+                }
+                else
+                {
+                    symmetrizationHeuristic = SymmetrizationHeuristic.None;
+                }
+
+
+                var parallelTextCorpus = await ParallelCorpus.Get(Mediator!, new ParallelCorpusId(SelectedAlignmentSet.ParallelCorpusId!.Id), useCache: true, token: cancellationToken);
+
+                TranslationCommands translationCommandable = new TranslationCommands();
+                // ReSharper disable once NotAccessedVariable
+                IWordAlignmentModel wordAlignmentModel;
+
+                await Task.Factory.StartNew(
+                    async () =>
+                    {
+                        wordAlignmentModel = await translationCommandable.TrainSmtModel(
+                            modelType,
+                            parallelTextCorpus,
+                            // ReSharper disable once AsyncVoidLambda
+                            new DelegateProgress(async status =>
+                                {
+                                    var message =
+                                        $"Training symmetrized {modelType} model: {status.PercentCompleted:P}";
+                                    await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
+                                        message);
+                                    Logger!.LogInformation(message);
+
+                                }
+                            ), symmetrizationHeuristic);
+                    }, cancellationToken);
+                
+                
                 CurrentTask.Status = LongRunningTaskStatus.Running;
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Creating the TranslationSet '{translationSetDisplayName}'...");
 
-                var translationModel = WordAlignmentModel.GetTranslationTable();
-
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var alignmentSet = AlignmentSet.Get(new AlignmentSetId(Guid.Parse("")), Mediator).Result;
-
                 // RUSSELL - code review
-                TranslationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId,
+                _ = await TranslationSet.Create(null, SelectedAlignmentSet,
                     translationSetDisplayName, new Dictionary<string, object>(),
-                    ParallelTokenizedCorpus.ParallelCorpusId, Mediator, cancellationToken);
-
+                    parallelTextCorpus.ParallelCorpusId, Mediator!, cancellationToken);
 
 
                 await SendBackgroundStatus(taskName,
@@ -231,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 
                 CurrentTask.Status = LongRunningTaskStatus.Completed;
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 Logger!.LogInformation($"AddTranslationSet - operation canceled.");
             }
@@ -304,11 +387,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
 
-        public void SelectItem(AlignmentSetId item)
-        {
-            SelectedAlignmentSet = item;
-            CanCreate = true;
-        }
+        //public void SelectItem(AlignmentSetId item)
+        //{
+        //    SelectedAlignmentSet = item;
+        //    CanCreate = true;
+        //}
 
         #endregion // Methods
     }

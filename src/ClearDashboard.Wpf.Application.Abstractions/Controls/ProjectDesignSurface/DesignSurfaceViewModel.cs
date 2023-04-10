@@ -428,7 +428,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
 
-
             try
             {
                 // PLUG-IN REVIEW
@@ -490,7 +489,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 {
 
                     var alignmentSet = topLevelProjectIds.AlignmentSetIds.FirstOrDefault(alignmentSet =>
-                        alignmentSet.ParallelCorpusId == translationSet.ParallelCorpusId);
+                        alignmentSet.Id == translationSet.AlignmentSetGuid);
 
                     var header = translationSet.DisplayName;
                     if (alignmentSet is not null)
