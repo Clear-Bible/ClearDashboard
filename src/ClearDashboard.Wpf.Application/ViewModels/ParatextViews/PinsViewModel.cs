@@ -770,7 +770,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 });
                             }
                         }
+                        else
+                        {
+                            Logger.LogWarning("The reference was less than 4 characters.  It was "+ tmp.Length);
+                        }
                     }
+                }
+                else
+                {
+                    Logger.LogWarning("The reference was less than 3 characters.  It was "+ tmp.Length);
                 }
             }
 
