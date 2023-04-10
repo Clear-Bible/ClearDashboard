@@ -5,13 +5,127 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
+using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class ParallelCorpus : EngineParallelTextCorpus, ICache
     {
         public ParallelCorpusId ParallelCorpusId { get; set; }
+
+        //FIXME: engineupdate
+        //public new SourceTextIdToVerseMappings? SourceTextIdToVerseMappings
+        //{
+        //    get => SourceTextIdToVerseMappings;
+        //    set
+        //    {
+        //        if (UseCache)
+        //            throw new EngineException("cannot set this property because UseCache is true");
+        //        else
+        //            base.SourceTextIdToVerseMappings = value;
+        //    }
+        //}
+
+        //public new ScrVers? SourceCorpusVersification
+        //{
+        //    get => base.SourceCorpusVersification;
+        //    set
+        //    {
+        //        if (UseCache)
+        //            throw new EngineException("cannot set this property because UseCache is true");
+        //        else
+        //            base.SourceCorpusVersification = value;
+        //    }
+        //}
+
+
+        //public new IEnumerable<string>? LimitToSourceBooks
+        //{
+        //    get => base.LimitToSourceBooks;
+        //    set
+        //    {
+        //        var isChanged = (base.LimitToSourceBooks == null && value != null) ||
+        //            (base.LimitToSourceBooks != null && value == null) ||
+        //            ((base.LimitToSourceBooks.Intersect(value).Count() > 0);
+        //        if (UseCache && ParallelTextRowsCache != null && isChanged)
+        //            ParallelTextRowsCache = null;
+        //        else
+        //            base.LimitToSourceBooks = value;
+        //    }
+        //}
+
+        public new bool AllSourceRows
+        {
+            get => base.AllSourceRows;
+            set
+            {
+                if (UseCache)
+                    throw new EngineException("cannot set this property because UseCache is true");
+                else
+                    base.AllSourceRows = value;
+            }
+        }
+        public new bool AllTargetRows
+        {
+            get => base.AllTargetRows;
+            set
+            {
+                if (UseCache)
+                    throw new EngineException("cannot set this property because UseCache is true");
+                else
+                    base.AllTargetRows = value;
+            }
+        }
+
+        public new ITextCorpus SourceCorpus
+        {
+            get => base.SourceCorpus;
+            set
+            {
+                if (UseCache)
+                    throw new EngineException("cannot set this property because UseCache is true");
+                else
+                    base.SourceCorpus = value;
+            }
+        }
+        public new ITextCorpus TargetCorpus
+        {
+            get => base.TargetCorpus;
+            set
+            {
+                if (UseCache)
+                    throw new EngineException("cannot set this property because UseCache is true");
+                else
+                    base.TargetCorpus = value;
+            }
+        }
+        public new IAlignmentCorpus AlignmentCorpus
+        {
+            get => base.AlignmentCorpus;
+            set
+            {
+                if (UseCache)
+                    throw new EngineException("cannot set this property because UseCache is true");
+                else
+                    base.AlignmentCorpus = value;
+            }
+        }
+        protected List<ParallelTextRow>? ParallelTextRowsCache { get; set; }
+        public override IEnumerator<ParallelTextRow> GetEnumerator()
+        {
+            if (UseCache)
+            {
+                if (ParallelTextRowsCache == null)
+                {
+                    ParallelTextRowsCache = this.ToList();
+                }
+                return ParallelTextRowsCache.GetEnumerator();
+            }
+            else
+                return base.GetEnumerator();
+        }
 
         public static async Task<IEnumerable<ParallelCorpusId>> 
             GetAllParallelCorpusIds( IMediator mediator)
@@ -41,6 +155,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         {
             ((TokenizedTextCorpus)SourceCorpus).InvalidateCache();
             ((TokenizedTextCorpus)TargetCorpus).InvalidateCache();
+            ParallelTextRowsCache = null;
         }
 
         private bool useCache_;
@@ -123,7 +238,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             : base(sourceTokenizedTextCorpus, targetTokenizedTextCorpus, verseMappings.ToList())
         {
             ParallelCorpusId = parallelCorpusId;
-            useCache_ = useCache;
+            UseCache = useCache;
+            ParallelTextRowsCache = null;
         }
     }
 }
