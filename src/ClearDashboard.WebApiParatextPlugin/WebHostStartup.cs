@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Controllers;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using ClearDashboard.WebApiParatextPlugin.Mvc;
 using Microsoft.AspNet.SignalR;
@@ -27,6 +28,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private static IPluginHost _pluginHost;
         private static IPluginChildWindow _parent;
         private static IPluginLogger _pluginLogger;
+        private static ConnectionChange _connectionChange;
 
         public static IServiceProvider ServiceProvider { get; private set; }
 
@@ -126,6 +128,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddSingleton<IPluginHost>(sp =>_pluginHost);
             services.AddSingleton<IPluginChildWindow>(sp => _parent);
             services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
+            services.AddSingleton<ConnectionChange>(sp => _connectionChange);
            
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
@@ -139,6 +142,11 @@ namespace ClearDashboard.WebApiParatextPlugin
         public void ChangeVerse(IVerseRef verse)
         {
             _verseRef = verse;
+        }
+
+        public void ChangeConnectionType(ConnectionChangeType connectionChangeType)
+        {
+            _connectionChange = new ConnectionChange { ConnectionChangeType = connectionChangeType };
         }
 
     }

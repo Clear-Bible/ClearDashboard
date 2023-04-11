@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {
@@ -39,6 +40,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
         public void SendVerse(string verse)
         {
             Clients.All.addMessage(verse);
+        }
+
+        public void SendConnectionChange(ConnectionChange connectionChange)
+        {
+            Clients.All.addMessage(connectionChange);
         }
 
         public void SendTextCollections(List<TextCollection> textCollections)

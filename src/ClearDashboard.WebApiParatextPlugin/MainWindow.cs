@@ -23,8 +23,10 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
@@ -301,6 +303,34 @@ namespace ClearDashboard.WebApiParatextPlugin
                 Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
             }
 
+        }
+
+
+        /// <summary>
+        /// Called when window is closed
+        /// </summary>
+        /// <param name="e"></param>
+        protected override async void OnLeave(EventArgs e)
+        {
+            // send message to Dashboard through plugin that we are closing
+            WebHostStartup.ChangeConnectionType(ConnectionChangeType.ParatextWindowClosing);
+
+            try
+            {
+                await HubContext.Clients.All.SendConnectionChange(new ConnectionChange
+                {
+                    ConnectionChangeType = ConnectionChangeType.ParatextWindowClosing,
+                });
+
+            }
+            catch (Exception ex)
+            {
+                AppendText(Color.Red,
+                    $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
+            }
+
+            await Task.Delay(1000);
+            base.OnLeave(e);
         }
 
         #endregion Paratext overrides - standard functions

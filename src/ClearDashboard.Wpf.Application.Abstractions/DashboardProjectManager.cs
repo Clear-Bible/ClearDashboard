@@ -18,6 +18,7 @@ using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.Application;
 
@@ -178,6 +179,12 @@ public class DashboardProjectManager : ProjectManager
         {
             await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollection));
         });
+
+        HubProxy.On<ConnectionChange>("connectionChange", async (connectionChange) =>
+        {
+            await Console.Out.WriteLineAsync();
+        });
+
 
         // ReSharper restore AsyncVoidLambda
 
