@@ -16,6 +16,8 @@ internal class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMapp
 {
     private readonly IMediator _mediator;
     private readonly ParallelCorpusId _parallelCorpusId;
+    private Dictionary<string, IEnumerable<VerseMapping>>? _textIdToVerseMappings = null;
+    private SourceTextIdToVerseMappingsFromVerseMappings? _sourceTextIdToVerseMappingsFromVerseMappings = null;
 
     public SourceTextIdToVerseMappingsFromDatabase(IMediator mediator, ParallelCorpusId parallelCorpusId)
     {
@@ -25,27 +27,47 @@ internal class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMapp
 
     public override IEnumerable<VerseMapping> GetVerseMappings()
     {
-        GetVerseMappingsByParallelCorpusIdAndBookIdQuery? command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, null);
+        // Use SourceTextIdToVerseMappingsFromVerseMappings implementation as cache:
+        if (_sourceTextIdToVerseMappingsFromVerseMappings is null)
+        {
+            var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, null);
 
-        var result = _mediator.Send(command, CancellationToken.None).Result;
+            var result = _mediator.Send(command, CancellationToken.None).Result;
+            result.ThrowIfCanceledOrFailed(true);
 
-        result.ThrowIfCanceledOrFailed(true);
+            _sourceTextIdToVerseMappingsFromVerseMappings = new(result.Data!);
+        }
 
-        return result.Data!;
+        return _sourceTextIdToVerseMappingsFromVerseMappings.GetVerseMappings();
     }
 
     public override IEnumerable<VerseMapping> this[string sourceTextId]
     {
         get
         {
-            //FIXME:CHRIS - I think the value for the book should be cached in a dict like SourceTextIdToVerseMappingsFromVerseMappings does.
-            var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, sourceTextId);
+            // First check if book-specific cache entry exists:
+            if (_textIdToVerseMappings is not null && _textIdToVerseMappings.TryGetValue(sourceTextId, out var value))
+            {
+                return value;
+            }
+            // Next check if GetVerseMappings (all mappings) cache exists:
+            else if (_sourceTextIdToVerseMappingsFromVerseMappings is not null)
+            {
+                return _sourceTextIdToVerseMappingsFromVerseMappings[sourceTextId];
+            }
+            else
+            {
+                _textIdToVerseMappings ??= new();
 
-            var result = _mediator.Send(command, CancellationToken.None).Result;
+                var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, sourceTextId);
 
-            result.ThrowIfCanceledOrFailed(true);
+                var result = _mediator.Send(command, CancellationToken.None).Result;
+                result.ThrowIfCanceledOrFailed(true);
 
-            return result.Data!;
+                _textIdToVerseMappings[sourceTextId] = result.Data!;
+
+                return result.Data!;
+            }
         }
     }
 }

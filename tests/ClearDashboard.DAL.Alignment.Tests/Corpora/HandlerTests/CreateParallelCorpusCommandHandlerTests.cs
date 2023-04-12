@@ -282,6 +282,24 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
                 .ToList();
 
             Assert.Equal(verseMappingsSourceMatCount, verseMappings.Count);
+            Assert.Equal("test pc", parallelTokenizedCorpus.ParallelCorpusId.DisplayName);
+
+            parallelTokenizedCorpus.ParallelCorpusId.DisplayName = "some other name!";
+
+            var newVerseMappings = new List<VerseMapping>()
+            {
+                new VerseMapping(
+                    new List<Verse>() { new Verse("JAS", 1, 1) },
+                    new List<Verse>() { new Verse("JAS", 1, 1) }
+                )
+            };
+
+            parallelTokenizedCorpus.SourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromVerseMappings(newVerseMappings);
+            await parallelTokenizedCorpus.Update(Mediator!);
+
+            var updatedParallelCorpus = await ParallelCorpus.Get(Mediator!, parallelTokenizedCorpus.ParallelCorpusId);
+            Assert.Equal("some other name!", updatedParallelCorpus.ParallelCorpusId.DisplayName);
+            Assert.Single(updatedParallelCorpus.SourceTextIdToVerseMappings!.GetVerseMappings());
         }
         finally
         {

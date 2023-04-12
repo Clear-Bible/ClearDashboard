@@ -8,6 +8,7 @@ using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
+using System.Collections;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -17,7 +18,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public new SourceTextIdToVerseMappings? SourceTextIdToVerseMappings
         {
-            get => SourceTextIdToVerseMappings;
+            get => base.SourceTextIdToVerseMappings;
             set
             {
                 if (UseCache)
@@ -112,19 +113,28 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                     base.AlignmentCorpus = value;
             }
         }
-        protected List<ParallelTextRow>? ParallelTextRowsCache { get; set; }
+        protected CachedEnumerable<ParallelTextRow>? ParallelTextRowsCache { get; set; }
         public override IEnumerator<ParallelTextRow> GetEnumerator()
         {
             if (UseCache)
             {
-                if (ParallelTextRowsCache == null)
-                {
-                    ParallelTextRowsCache = this.ToList();
-                }
+                ParallelTextRowsCache ??= new CachedEnumerable<ParallelTextRow>(base.GetEnumerator());
                 return ParallelTextRowsCache.GetEnumerator();
+                //if (ParallelTextRowsCache == null)
+                //{
+                //    ParallelTextRowsCache = new();
+                //    using IEnumerator<ParallelTextRow> en = base.GetEnumerator();
+                //    while (en.MoveNext())
+                //    {
+                //        ParallelTextRowsCache.Add(en.Current);
+                //    }
+                //}
+                //return ParallelTextRowsCache.GetEnumerator();
             }
             else
+            {
                 return base.GetEnumerator();
+            }
         }
 
         public static async Task<IEnumerable<ParallelCorpusId>> 
@@ -181,10 +191,17 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public async Task Update(IMediator mediator, CancellationToken token = default)
         {
+            // FIXME (verify):  not sure API-wise of how the user is supposed to make changes to verse
+            // mappings of a ParallelCorpus.  Since there aren't any verse mapping setters on the
+            // SourceTextIdToVerseMappings interface, this assumes that in order to alter them, the UI
+            // must create an instance of SourceTextIdToVerseMappingsFromVerseMappings that contains
+            // the altered verse mappings.  
+            var verseMappingsToUpdate = (SourceTextIdToVerseMappings is SourceTextIdToVerseMappingsFromVerseMappings)
+                ? SourceTextIdToVerseMappings.GetVerseMappings()
+                : Enumerable.Empty<VerseMapping>();
+
             var command = new UpdateParallelCorpusCommand(
-                //FIXME:CHRIS - I think this will always get the verse mappings from the database and then save them back because Get() (below) 
-                //always sets the class to SourceTextIdToVerseMappingsFromDatabase.
-                SourceTextIdToVerseMappings?.GetVerseMappings() ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
+                verseMappingsToUpdate,
                 ParallelCorpusId);
 
             var result = await mediator.Send(command, token);
@@ -242,6 +259,41 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             ParallelCorpusId = parallelCorpusId;
             UseCache = useCache;
             ParallelTextRowsCache = null;
+        }
+
+        protected class CachedEnumerable<T> : IEnumerable<T>
+        {
+            private readonly IEnumerator<T> _enumerator;
+            private readonly List<T> _cache = new();
+
+            public CachedEnumerable(IEnumerator<T> enumerator) => this._enumerator = enumerator;
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                int index = 0;
+
+                while (true)
+                {
+                    if (index < _cache.Count)
+                    {
+                        yield return _cache[index];
+                        index++;
+                    }
+                    else
+                    {
+                        if (_enumerator.MoveNext())
+                        {
+                            _cache.Add(_enumerator.Current);
+                        }
+                        else
+                        {
+                            yield break;
+                        }
+                    }
+                }
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
     }
 }
