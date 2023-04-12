@@ -602,22 +602,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     int lmrIndex = 0;
                     foreach (var LMR in LexMatRef)
                     {
-                        
                         try
                         {
-                            rs = LMR.Value.Split(',')
-                                .ToList(); // change dictionary values from comma delimited string to List for sorting
+                            rs = LMR.Value.Split(',').ToList(); // change dictionary values from comma delimited string to List for sorting
                             ky = LMR.Key;
                             SortRefs(ref rs); // sort the List  
                             vl = string.Join(", ", rs); // change List back to comma delimited string
 
                             if (!vl.Contains("missing"))
                             {
-                                var objectToFind = GridData.Where(s => s.Match == ky).FirstOrDefault();
-                                ndx2 = GridData.IndexOf(objectToFind); //.FindIndex(s => s.Match == ky);
-                                if (ndx2 >= 0)
-                                {
-                                    datrow = GridData[ndx2];
+                                datrow = (PinsDataTable)GridData.Where(s => s.Match == ky);//.FirstOrDefault();
+                                //ndx2 = GridData.IndexOf(objectToFind); //.FindIndex(s => s.Match == ky);
+                                //if (ndx2 >= 0)
+                                //{
+                                    //datrow = GridData[ndx2];
                                     datrow.Refs = vl;
 
                                     if (datrow.Refs != "")
@@ -646,9 +644,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     {
                                         datrow.SimpRefs = "0";
                                         datrow.VerseList = null;
-
                                     }
-                                }
+                                //}
                             }
                         }
                         catch (Exception ex)
