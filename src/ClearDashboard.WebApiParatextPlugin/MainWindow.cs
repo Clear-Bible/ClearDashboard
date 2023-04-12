@@ -10,6 +10,7 @@ using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using Serilog;
+using Serilog.Parsing;
 using SIL.Linq;
 using SIL.Scripture;
 using System;
@@ -1395,10 +1396,18 @@ namespace ClearDashboard.WebApiParatextPlugin
             var lastTokenChapter = false;
             var lastTokenText = false;
             var lastVerseZero = false;
+
+            var previousTokenWasCp = false;
             foreach (var token in tokens)
             {
-                if (token is IUSFMMarkerToken marker)
+                if (previousTokenWasCp)
                 {
+                    previousTokenWasCp= false;
+                    continue;
+                }
+
+                if (token is IUSFMMarkerToken marker)
+                {   
                     // a verse token
                     if (marker.Type == MarkerType.Verse)
                     {
@@ -1452,6 +1461,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                         verse = string.Empty;
 
                         lastTokenChapter = true;
+                    }
+
+                    if (marker.Marker == "cp")
+                    {
+                        previousTokenWasCp = true;
                     }
                 }
                 else if (token is IUSFMTextToken textToken)

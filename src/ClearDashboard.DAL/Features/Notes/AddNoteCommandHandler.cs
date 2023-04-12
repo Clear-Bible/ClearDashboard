@@ -7,7 +7,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
 
-namespace ClearDashboard.DataAccessLayer.Features.BiblicalTerms
+namespace ClearDashboard.DataAccessLayer.Features.Notes
 {
     public class AddNoteCommandHandler : ParatextRequestHandler<AddNoteCommand, RequestResult<IProjectNote>, IProjectNote>
     {

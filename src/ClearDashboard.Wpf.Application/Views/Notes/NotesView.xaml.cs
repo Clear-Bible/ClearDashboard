@@ -1,12 +1,9 @@
-﻿using System;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Notes;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using SIL.IO.FileLock;
-using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.Events;
 
 namespace ClearDashboard.Wpf.Application.Views.Notes
 {
@@ -89,26 +86,44 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
         {
             var radioButton = e.Source as RadioButton;
             var noteViewModel = radioButton?.DataContext as NoteViewModel;
-            if (noteViewModel != null)
+            if (_vm != null && noteViewModel != null)
             {
-                if (noteViewModel.NoteStatus != NoteStatus.Open.ToString())
-                {
-                    noteViewModel.NoteStatus = NoteStatus.Open.ToString();
-                    await _vm.UpdateNote(noteViewModel);
-                }
+                await _vm.UpdateNoteStatus(noteViewModel, NoteStatus.Open);
             }
         }
         private async void RadioButton_Resolved_Checked(object sender, RoutedEventArgs e)
         {
             var radioButton = e.Source as RadioButton;
             var noteViewModel = radioButton?.DataContext as NoteViewModel;
-            if (noteViewModel != null)
+            if (_vm != null && noteViewModel != null)
             {
-                if (noteViewModel.NoteStatus != NoteStatus.Resolved.ToString())
-                {
-                    noteViewModel.NoteStatus = NoteStatus.Resolved.ToString();
-                    await _vm.UpdateNote(noteViewModel);
-                }
+                await _vm.UpdateNoteStatus(noteViewModel, NoteStatus.Resolved);
+            }
+        }
+
+        private async void OnNoteSeen(object sender, RoutedEventArgs e)
+        {
+            var args = e as NoteSeenEventArgs;
+            if (_vm != null && 
+                args != null && 
+                args.NoteViewModel != null &&
+                args.Seen != null
+            )
+            {
+                await _vm.UpdateNoteSeen(args.NoteViewModel, (bool) args.Seen);
+            }
+        }   
+        private async void OnNoteReplyAdd(object sender, RoutedEventArgs e)
+        {
+            var args = e as NoteReplyAddEventArgs;
+            if ( _vm != null &&
+                args != null && 
+                args.Text != null && 
+                args.Text != string.Empty && 
+                args.NoteViewModelWithReplies != null
+            )
+            {
+                await _vm.AddReplyToNote(args.NoteViewModelWithReplies, args.Text);
             }
         }
     }

@@ -94,6 +94,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             (nameof(SemanticDomainSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
 
         /// <summary>
+        /// Identifies the TranslationAddedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationAddedEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
+        
+        /// <summary>
         /// Identifies the TranslationDeletedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationDeletedEvent = EventManager.RegisterRoutedEvent
@@ -601,6 +607,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             Loaded -= OnLoaded;
         }
 
+        private void OnTranslationAdded(object sender, RoutedEventArgs e)
+        {
+            if (e is LexiconTranslationEventArgs args)
+            {
+                RaiseTranslationEntryEvent(TranslationAddedEvent, args);
+            }
+        }
         private void OnTranslationDeleted(object sender, RoutedEventArgs e)
         {
             if (e is LexiconTranslationEventArgs args)
@@ -1067,6 +1080,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             add => AddHandler(SemanticDomainSelectedEvent, value);
             remove => RemoveHandler(SemanticDomainSelectedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a new translation is added.
+        /// </summary>
+        public event RoutedEventHandler TranslationAdded
+        {
+            add => AddHandler(TranslationAddedEvent, value);
+            remove => RemoveHandler(TranslationAddedEvent, value);
         }
 
         /// <summary>

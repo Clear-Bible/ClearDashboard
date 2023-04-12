@@ -218,14 +218,24 @@
                 x:Name="UseDefaults"
                 Content="{helpers:Localization UseDefaults}"
                 IsDefault="True"
-                IsEnabled="{Binding CanCreate}"
-                Style="{StaticResource TransparentStyle}" />
+                IsEnabled="{Binding CanCreate}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource TransparentStyle}" TargetType="Button">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ProjectType}" Value="AlignmentOnly">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
             <Button
                 x:Name="Create"
                 Margin="10,0,0,0"
                 Content="{helpers:Localization Create}"
-                IsDefault="True"
+                IsDefault="False"
                 IsEnabled="{Binding CanCreate}"
                 Style="{StaticResource TransparentStyle}" />
 

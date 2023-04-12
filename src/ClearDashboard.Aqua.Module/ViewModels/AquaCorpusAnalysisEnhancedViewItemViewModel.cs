@@ -32,10 +32,9 @@ using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 
 namespace ClearDashboard.Aqua.Module.ViewModels
 {
-    public class AquaCorpusAnalysisEnhancedViewItemViewModel : 
+    public class AquaCorpusAnalysisEnhancedViewItemViewModel :
         VerseAwareEnhancedViewItemViewModel
     {
-        public readonly string RandomString = Guid.NewGuid().ToString();
         public record TypeAnalysisConfiguration(
             string name,
             IEnumerable<VisualizationEnum> visualizations,
@@ -96,12 +95,14 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 0.0M,
                 0.9M) },
         };
-        
+
         private readonly IAquaManager aquaManager_;
         private readonly LongRunningTaskManager longRunningTaskManager_;
         private LongRunningTask? currentLongRunningTask_;
         private int? assessmentId_;
         private int? versionId_;
+
+        public string RandomString { get; } =  Guid.NewGuid().ToString();
 
         private Visibility? _progressBarVisibility = Visibility.Hidden;
         public Visibility? ProgressBarVisibility
