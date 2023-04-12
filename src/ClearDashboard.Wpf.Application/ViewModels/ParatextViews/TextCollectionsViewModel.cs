@@ -28,6 +28,7 @@ using System.Windows.Media;
 using AvalonDock.Properties;
 using ClearApplicationFoundation.Framework.Input;
 using HtmlAgilityPack;
+using Serilog;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -45,6 +46,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         #region Public Properties
 
+        public ILogger<TextCollectionsViewModel> Logger;
 
         #endregion //Public Properties
 
@@ -184,6 +186,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _projectManager = projectManager;
+            Logger = logger;
             Title = "🗐 " + LocalizationService!.Get("Windows_TextCollection");
             this.ContentId = "TEXTCOLLECTION";
 
@@ -369,8 +372,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private static void OnBodyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var chromiumWebBrowser = (ChromiumWebBrowser)d;
-            chromiumWebBrowser.LoadHtml((string)e.NewValue, "http://ClearDashboard.Wpf.Application.TextCollection/"); //.NavigateToString((string)e.NewValue);
+            try
+            {
+                var chromiumWebBrowser = (ChromiumWebBrowser)d;
+                chromiumWebBrowser.LoadHtml((string)e.NewValue, "http://ClearDashboard.Wpf.Application.TextCollection/"); //.NavigateToString((string)e.NewValue);
+            }
+            catch(Exception ex)
+            {
+                var textCollectionViewModel = IoC.Get<TextCollectionsViewModel>();
+                textCollectionViewModel.Logger.LogError("Body failed to set", ex);
+            }
         }
     }
 }
