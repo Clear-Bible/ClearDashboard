@@ -599,8 +599,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     var simrefs = "";
                     var results = new List<PinsDataTable>();
                     PinsDataTable datrow;
+                    int lmrIndex = 0;
                     foreach (var LMR in LexMatRef)
                     {
+                        
                         try
                         {
                             rs = LMR.Value.Split(',')
@@ -625,8 +627,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                         var simprefs = new List<string>();
                                         foreach (var longref in longrefs)
                                         {
+                                            lmrIndex++;
                                             var booksplit = longref.Trim().Split(' ').ToList();
-                                            var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
+                                            var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(booksplit[0]);
+                                                //BibleBookDict[booksplit[0]].PadLeft(3, '0');
                                             var chapterVerseSplit = booksplit[1].Split(':').ToList();
                                             var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
                                             var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
@@ -649,6 +653,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         }
                         catch (Exception ex)
                         {
+                            var theThingThatFailed = LMR;
                             _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                         }
                     }
@@ -770,16 +775,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 });
                             }
                         }
-                        else
-                        {
-                            Logger.LogWarning("The reference was less than 4 characters.  It was "+ tmp.Length);
-                        }
+                        //else
+                        //{
+                        //    Logger.LogWarning("The reference was less than 4 characters.  It was "+ tmp.Length);
+                        //}
                     }
                 }
-                else
-                {
-                    Logger.LogWarning("The reference was less than 3 characters.  It was "+ tmp.Length);
-                }
+                //else
+                //{
+                //    Logger.LogWarning("The reference was less than 3 characters.  It was "+ tmp.Length);
+                //}
             }
 
             var orderedList = references.OrderBy(x => x.stringA).ToList();
