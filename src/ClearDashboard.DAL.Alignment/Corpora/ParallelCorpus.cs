@@ -120,16 +120,6 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             {
                 ParallelTextRowsCache ??= new CachedEnumerable<ParallelTextRow>(base.GetEnumerator());
                 return ParallelTextRowsCache.GetEnumerator();
-                //if (ParallelTextRowsCache == null)
-                //{
-                //    ParallelTextRowsCache = new();
-                //    using IEnumerator<ParallelTextRow> en = base.GetEnumerator();
-                //    while (en.MoveNext())
-                //    {
-                //        ParallelTextRowsCache.Add(en.Current);
-                //    }
-                //}
-                //return ParallelTextRowsCache.GetEnumerator();
             }
             else
             {
