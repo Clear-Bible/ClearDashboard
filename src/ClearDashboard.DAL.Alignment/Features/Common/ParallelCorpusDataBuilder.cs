@@ -7,7 +7,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common;
 
-public static class ParallelCorpusDataUtil
+public static class ParallelCorpusDataBuilder
 {
     public static Models.ParallelCorpus BuildParallelCorpus(
         Guid parallelCorpusId,

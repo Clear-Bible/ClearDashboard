@@ -92,7 +92,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             // Create and Save the Parallel Corpus Model
             // + with Verse Mappings
-            var parallelCorpusModel = ParallelCorpusDataUtil.BuildParallelCorpus(
+            var parallelCorpusModel = ParallelCorpusDataBuilder.BuildParallelCorpus(
                 Guid.NewGuid(),
                 sourceTokenizedCorpus,
                 targetTokenizedCorpus,

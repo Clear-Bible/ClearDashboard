@@ -79,8 +79,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             ParallelCorpusId = parallelCorpusEntity.Id
                         };
 
-                        verseMapping.Verses.AddRange(ParallelCorpusDataUtil.BuildVerses(vm.SourceVerses, parallelCorpusEntity.Id, sourceCorpusId, cancellationToken));
-                        verseMapping.Verses.AddRange(ParallelCorpusDataUtil.BuildVerses(vm.TargetVerses, parallelCorpusEntity.Id, targetCorpusId, cancellationToken));
+                        verseMapping.Verses.AddRange(ParallelCorpusDataBuilder.BuildVerses(vm.SourceVerses, parallelCorpusEntity.Id, sourceCorpusId, cancellationToken));
+                        verseMapping.Verses.AddRange(ParallelCorpusDataBuilder.BuildVerses(vm.TargetVerses, parallelCorpusEntity.Id, targetCorpusId, cancellationToken));
 
                         return verseMapping;
                     });
