@@ -87,7 +87,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
                 try
                 {
-                    queryResult.Data = LoadCsvAndProcessData(null);
+                    queryResult.Data = LoadCsvAndProcessData(ResourceName);
                 }
                 catch (Exception ex)
                 {
@@ -112,7 +112,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
                 try
                 {
-                    queryResult.Data = LoadCsvAndProcessData(null);
+                    queryResult.Data = LoadCsvAndProcessData(ResourceName);
                 }
                 catch (Exception ex)
                 {
