@@ -34,7 +34,7 @@ public static class DialogSettings
     private static dynamic CreateAddNewInterlinearDialogSettings()
     {
         dynamic settings = new ExpandoObject();
-        settings.WindowStyle = WindowStyle.ToolWindow;
+        settings.WindowStyle = WindowStyle.None;
         settings.ShowInTaskbar = false;
         settings.WindowState = WindowState.Normal;
         settings.ResizeMode = ResizeMode.NoResize;

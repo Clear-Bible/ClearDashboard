@@ -1,10 +1,13 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.Messages
 {
+
+    public record SetIsCheckedAlignment(AlignmentSetId AlignmentSetId, bool IsChecked);
 
     public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
 
