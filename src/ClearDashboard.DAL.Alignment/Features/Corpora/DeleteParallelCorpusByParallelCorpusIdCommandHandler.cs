@@ -1,21 +1,10 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SIL.Extensions;
-
-using ModelCorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
-using ModelCorpus = ClearDashboard.DataAccessLayer.Models.Corpus;
 using System.Diagnostics;
-using System.Dynamic;
-using Caliburn.Micro;
-using Microsoft.VisualBasic;
-using System.Collections.ObjectModel;
-using System.Windows;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {

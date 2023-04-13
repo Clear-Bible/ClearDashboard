@@ -1286,7 +1286,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             IsRtl = connectionMenuItem.IsRtl,
                             //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            IsTargetRtl = connectionMenuItem.IsTargetRTL,
+                            IsTargetRtl = connectionMenuItem.IsTargetRtl,
                             IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds
                                 .AddAlignmentSetToNewEnhancedView,
                             SourceParatextId = connectionMenuItem.SourceParatextId,
@@ -1319,7 +1319,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //FIXME:surface serialization null,
                             IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds
                                     .AddInterlinearToNewEnhancedView,
-                            IsTargetRtl = connectionMenuItem.IsTargetRTL,
+                            IsTargetRtl = connectionMenuItem.IsTargetRtl,
                             SourceParatextId = connectionMenuItem.SourceParatextId,
                             TargetParatextId = connectionMenuItem.TargetParatextId
                         }, CancellationToken.None

@@ -387,12 +387,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
 
-        //public void SelectItem(AlignmentSetId item)
-        //{
-        //    SelectedAlignmentSet = item;
-        //    CanCreate = true;
-        //}
-
         #endregion // Methods
     }
 }
