@@ -269,7 +269,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     return false;
                 }
 
-
                 // fix the greek renderings which are inconsistent
                 for (var i = _termRenderingsList.TermRendering.Count - 1; i >= 0; i--)
                 {
@@ -514,7 +513,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
-
                 var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
                 ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
                 var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories)
@@ -561,12 +559,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     {
                         foreach (var senseEntry in entry.Entry.Sense)
                         {
-                            //List<string> rs;
                             string vl = string.Empty;
                             var pndx = 0;
                             var simrefs = "";
                             var simprefsString = "0";
                             List<string> verseList = new List<string>();
+
                             try
                             {
                                 if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
@@ -609,6 +607,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             {
                                 _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                             }
+
                             GridData.Add(new PinsDataTable
                             {
                                 Id = Guid.NewGuid(),
