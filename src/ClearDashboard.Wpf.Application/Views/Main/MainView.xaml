@@ -62,7 +62,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}">
+        <Menu
+            Grid.Row="0"
+            materialDesign:MenuAssist.TopLevelMenuItemHeight="25"
+            ItemsSource="{Binding MenuItems}">
             <Menu.ItemContainerStyle>
                 <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
                     <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />

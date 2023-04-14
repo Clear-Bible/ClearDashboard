@@ -46,11 +46,9 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                         queryResult.Data = ExecuteSqliteCommandAndProcessData(
                             $"SELECT AppVersion FROM PROJECT LIMIT 1");
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        LogAndSetUnsuccessfulResult(ref queryResult,
-                            $"An unexpected error occurred while querying the '{ResourceName}' database for the database version'",
-                            ex);
+                        queryResult.Success = false;
                     }
                 }
                 return Task.FromResult(queryResult);
