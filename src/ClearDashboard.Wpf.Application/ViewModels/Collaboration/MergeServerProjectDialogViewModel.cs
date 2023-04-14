@@ -115,6 +115,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private async Task Import()
         {
+            IProgress<ProgressStatus> progress = new Progress<ProgressStatus>(Report);
             try
             {
                 if (!PreAction())
@@ -126,11 +127,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     ProjectId, 
                     true, 
                     _cancellationTokenSource.Token, 
-                    new Progress<ProgressStatus>(Report)));
+                    progress));
                 await _runningTask;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                progress.Report(new ProgressStatus(0, $"Exception thrown attempting to initialize project database: {ex.Message}"));
                 CanOkAction = true;
             }
             finally
@@ -142,6 +144,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private async Task Merge()
         {
+            IProgress<ProgressStatus> progress = new Progress<ProgressStatus>(Report);
             try
             {
                 if (!PreAction())
@@ -149,12 +152,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     return;
                 }
 
+                progress.Report(new ProgressStatus(0, "Fetching latest changes from server"));
+                _collaborationManager.FetchMergeRemote();
+
                 _runningTask = Task.Run(async () => CommitSha = await _collaborationManager.MergeProjectLatestChangesAsync(
                     true, 
                     false, 
                     _cancellationTokenSource.Token, 
-                    new Progress<ProgressStatus>(Report)));
+                    progress));
                 await _runningTask;
+            }
+            catch (Exception ex)
+            {
+                progress.Report(new ProgressStatus(0, $"Exception thrown attempting to merge latest project changes: {ex.Message}"));
             }
             finally
             {
@@ -165,6 +175,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private async Task Commit()
         {
+            IProgress<ProgressStatus> progress = new Progress<ProgressStatus>(Report);
             try
             {
                 if (!PreAction())
@@ -172,8 +183,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     return;
                 }
 
+                if (CollaborationDialogAction == CollaborationDialogAction.Initialize)
+                {
+                    _collaborationManager.InitializeRepository();
+                    _collaborationManager.FetchMergeRemote();
+                }
+
                 _runningTask = Task.Run(async () => {
-                    var progress = (IProgress<ProgressStatus>) new Progress<ProgressStatus>(Report);
 
                     await _collaborationManager.StageProjectChangesAsync(_cancellationTokenSource.Token, progress);
 
@@ -189,6 +205,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 });
 
                 await _runningTask;
+            }
+            catch (Exception ex)
+            {
+                if (CollaborationDialogAction == CollaborationDialogAction.Initialize)
+                {
+                    progress.Report(new ProgressStatus(0, $"Exception thrown attempting to initialize, fetch, stage and commit project changes: {ex.Message}"));
+                }
+                else
+                {
+                    progress.Report(new ProgressStatus(0, $"Exception thrown attempting to stage and commit project changes: {ex.Message}"));
+                }
             }
             finally
             {

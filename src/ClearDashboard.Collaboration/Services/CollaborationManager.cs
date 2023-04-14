@@ -149,23 +149,49 @@ public class CollaborationManager
         return false;
     }
 
+    protected string? FindRemoteHeadCommitSha()
+    {
+        using (var repo = new Repository(_repositoryPath))
+        {
+            var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) =>
+                new UsernamePasswordCredentials()
+                {
+                    Username = _configuration.RemoteUserName,
+                    Password = _configuration.RemotePassword
+                });
+
+            foreach (Remote remote in repo.Network.Remotes)
+            {
+                if (remote.Name == RemoteOrigin)
+                {
+                    var references = repo.Network.ListReferences(remote, credentialsProvider);
+                    var headRef = references.Where(e => e.CanonicalName == "HEAD").FirstOrDefault();
+                    if (headRef is not null)
+                    {
+                        var headCommitSha = headRef.ResolveToDirectReference().TargetIdentifier;
+                        return headCommitSha;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public bool AreUnmergedChanges()
     {
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 
-        using (var repo = new Repository(_repositoryPath))
+        try
         {
-            if (!repo.Commits.Any())
-            {
-                return false;
-            }
-
-            // From latest to earliest:
-            var commitShas = repo.Commits.Select(c => c.Sha).ToList();
-            var lastMergedCommitShaIndex = commitShas.FindIndex(c => c == project.LastMergedCommitSha);
-
-            return lastMergedCommitShaIndex != 0;
+            var remoteHeadCommitSha = FindRemoteHeadCommitSha();
+            return project.LastMergedCommitSha != remoteHeadCommitSha;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation($"Unable to determine if there are any unmerged changes, so to be safe returning true.  Exception: {ex.Message}");
+            return true;
         }
     }
 
@@ -334,6 +360,8 @@ public class CollaborationManager
         if (lastMergedCommitShaIndex == -1 && project.LastMergedCommitSha is not null)
         {
             // FIXME:  not sure what to do here.  Wrong commit tree or something?
+            progress.Report(new ProgressStatus(0, $"Last merged commit sha '{project.LastMergedCommitSha}' is not in commit tree.  Unable to merge!"));
+            _logger.LogInformation($"Last merged commit sha '{project.LastMergedCommitSha}' is not in commit tree.  Unable to merge!");
             throw new CommitNotFoundException(project.LastMergedCommitSha);
         }
 
@@ -498,7 +526,7 @@ public class CollaborationManager
         using (var repo = new Repository(_repositoryPath))
         {
             RepositoryStatus status = repo.RetrieveStatus();
-            if (status.IsDirty)
+            if (status.IsDirty && status.Staged.Any())
             {
                 progress.Report(new ProgressStatus(0, "Committing changes to source control"));
                 var commit = repo.Commit(commitMessage, userSignature, userSignature);

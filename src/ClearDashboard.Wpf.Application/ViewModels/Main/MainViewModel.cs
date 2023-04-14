@@ -305,9 +305,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository())
             {
-                _collaborationManager.InitializeRepository();
-                _collaborationManager.FetchMergeRemote();
-
                 var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
 
                 if (viewModel is not null)
@@ -333,10 +330,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void ShowCollaborationGetLatest()
         {
-            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+            if (_collaborationManager.IsCurrentProjectInRepository())
             {
-                _collaborationManager.FetchMergeRemote();
-
                 var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
 
                 if (viewModel is not null)
@@ -369,7 +364,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     viewModel.ProjectId = ProjectManager.CurrentProject.Id;
                     viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
                     // FIXME:  need to prompt user:
-                    viewModel.CommitMessage = $"Fake commit message {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss}";
+                    viewModel.CommitMessage = $"Commit issued: {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss}";
                     viewModel.CollaborationDialogAction = CollaborationDialogAction.Commit;
 
                     this.WindowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());

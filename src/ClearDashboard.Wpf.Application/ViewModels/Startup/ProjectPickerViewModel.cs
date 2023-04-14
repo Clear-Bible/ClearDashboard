@@ -557,7 +557,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 _collaborationManager.InitializeRepository();
             }
-            _collaborationManager.FetchMergeRemote();
+
+            try
+            {
+                _collaborationManager.FetchMergeRemote();
+            }
+            catch (Exception ex)
+            {
+                Logger!.LogError(ex, "Unable to fetch from server");
+            }
 
             await GetCollabProjects().ConfigureAwait(false);
             SetCollabVisibility();
