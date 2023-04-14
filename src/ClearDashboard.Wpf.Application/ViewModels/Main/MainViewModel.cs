@@ -222,7 +222,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "CollaborationFetchMergeID")
                 {
-                    if (_collaborationManager.IsRepositoryInitialized())
+                    if (_collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable())
                     {
                         _collaborationManager.FetchMergeRemote();
                         RebuildMainMenu().Wait();
@@ -303,7 +303,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void ShowCollaborationInitialize()
         {
-            if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository())
+            if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
             {
                 var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
 
@@ -330,7 +330,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void ShowCollaborationGetLatest()
         {
-            if (_collaborationManager.IsCurrentProjectInRepository())
+            if (_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
             {
                 var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
 
@@ -355,7 +355,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void ShowCollaborationCommit()
         {
-            if (_collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges())
+            if (_collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable())
             {
                 var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
 
@@ -1301,19 +1301,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Initialize Server with Project", Id = "CollaborationInitializeID",
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository()
+                    IsEnabled = _collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 new MenuItemViewModel
                 {
                     Header = "Get Latest from Server", Id = "CollaborationGetLatestID",
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository()
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 new MenuItemViewModel
                 {
                     Header = "Commit Changes to Server", Id = "CollaborationCommitID",
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges()
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
                 },
                 // separator
                 new() { Header = "---------------------------------", Id = "SeparatorID", ViewModel = this, },
@@ -1321,7 +1321,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Git Fetch + Merge", Id = "CollaborationFetchMergeID",
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized()
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable()
                 },
                 new MenuItemViewModel
                 {

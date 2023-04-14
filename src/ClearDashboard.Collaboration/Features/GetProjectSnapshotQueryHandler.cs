@@ -70,7 +70,8 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
         {
             return new RequestResult<ProjectSnapshot>(
                 success: false,
-                message: ex.Message
+                message: ex.Message,
+                canceled: ex is OperationCanceledException
             );
         }
     }

@@ -130,6 +130,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     progress));
                 await _runningTask;
             }
+            catch (OperationCanceledException)
+            {
+                progress.Report(new ProgressStatus(0, "Operation Cancelled"));
+            }
             catch (Exception ex)
             {
                 progress.Report(new ProgressStatus(0, $"Exception thrown attempting to initialize project database: {ex.Message}"));
@@ -152,15 +156,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     return;
                 }
 
-                progress.Report(new ProgressStatus(0, "Fetching latest changes from server"));
-                _collaborationManager.FetchMergeRemote();
+                _runningTask = Task.Run(async () => {
 
-                _runningTask = Task.Run(async () => CommitSha = await _collaborationManager.MergeProjectLatestChangesAsync(
-                    true, 
-                    false, 
-                    _cancellationTokenSource.Token, 
-                    progress));
+                    progress.Report(new ProgressStatus(0, "Fetching latest changes from server"));
+                    _collaborationManager.FetchMergeRemote();
+
+                    CommitSha = await _collaborationManager.MergeProjectLatestChangesAsync(
+                        true,
+                        false,
+                        _cancellationTokenSource.Token,
+                        progress);
+
+                    });
                 await _runningTask;
+            }
+            catch (OperationCanceledException)
+            {
+                progress.Report(new ProgressStatus(0, "Operation Cancelled"));
             }
             catch (Exception ex)
             {
@@ -183,14 +195,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     return;
                 }
 
-                if (CollaborationDialogAction == CollaborationDialogAction.Initialize)
-                {
-                    _collaborationManager.InitializeRepository();
-                    _collaborationManager.FetchMergeRemote();
-                }
-
                 _runningTask = Task.Run(async () => {
 
+                    if (CollaborationDialogAction == CollaborationDialogAction.Initialize)
+                    {
+                        progress.Report(new ProgressStatus(0, "Initializing Collaboration Repository"));
+                        _collaborationManager.InitializeRepository();
+                    }
+
+                    _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                    progress.Report(new ProgressStatus(0, "Fetching Server Data"));
+                    _collaborationManager.FetchMergeRemote();
+
+                    _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                    await _collaborationManager.MergeProjectLatestChangesAsync(true, false, _cancellationTokenSource.Token, progress);
                     await _collaborationManager.StageProjectChangesAsync(_cancellationTokenSource.Token, progress);
 
                     CommitSha = _collaborationManager.CommitChanges(CommitMessage, progress);
@@ -205,6 +225,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 });
 
                 await _runningTask;
+            }
+            catch (OperationCanceledException)
+            {
+                progress.Report(new ProgressStatus(0, "Operation Cancelled"));
             }
             catch (Exception ex)
             {

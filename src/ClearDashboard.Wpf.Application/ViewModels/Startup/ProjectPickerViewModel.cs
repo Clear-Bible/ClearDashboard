@@ -459,14 +459,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 if (!_collaborationManager.IsRepositoryInitialized())
                 {
                     CollabProjectVisibility = Visibility.Collapsed;
-                    CollabButtonsEnabled = true;
+                    CollabButtonsEnabled = InternetAvailability.IsInternetAvailable();
                     InitializeCollaborationVisibility = Visibility.Visible;
                     InitializeCollaborationLabel = "Initialize Collaboration";
                 }
                 else
                 {
                     CollabProjectVisibility = Visibility.Visible;
-                    CollabButtonsEnabled = true;
+                    CollabButtonsEnabled = InternetAvailability.IsInternetAvailable();
                     InitializeCollaborationVisibility = Visibility.Visible;
                     InitializeCollaborationLabel = "Refresh Server Projects";
                 }

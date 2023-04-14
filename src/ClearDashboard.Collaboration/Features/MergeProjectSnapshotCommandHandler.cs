@@ -98,7 +98,6 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
             catch (OperationCanceledException)
             {
                 await mergeBehavior.MergeErrorAsync(CancellationToken.None);
-                request.Progress.Report(new SIL.Machine.Utils.ProgressStatus(0, "Operation Canceled"));
                 return new RequestResult<Unit>
                 {
                     Message = "Operation Canceled",
