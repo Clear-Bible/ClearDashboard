@@ -128,7 +128,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     {
                         var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
                         var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
-                        if (decryptedLicenseUser.Id != null)
+                        if (decryptedLicenseUser.Id != Guid.Empty)
                         {
                             ProjectManager.CurrentUser = new User
                             {
@@ -136,6 +136,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                                 LastName = decryptedLicenseUser.LastName,
                                 Id = decryptedLicenseUser.Id
                             };
+                        }
+                        else
+                        {
+                            _licenseCleared = false;
+                            return true;
                         }
 
                         _licenseCleared = true;
