@@ -49,9 +49,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var parallelCorpus =
                 ModelHelper.AddIdIncludesParallelCorpaQuery(ProjectDbContext)
-                    .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
-                        .ThenInclude(tc => tc.Tokens)
-                            .ThenInclude(t => t.VerseRow)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
 #if DEBUG

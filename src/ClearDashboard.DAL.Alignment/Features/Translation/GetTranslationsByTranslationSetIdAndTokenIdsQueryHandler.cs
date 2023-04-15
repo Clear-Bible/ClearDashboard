@@ -74,7 +74,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     ModelHelper.BuildTranslationId(t),
                     ModelHelper.BuildToken(t.SourceTokenComponent!),
                     t.TargetText ?? string.Empty,
-                    t.TranslationState.ToString()));
+                    t.TranslationState.ToString()))
+                .ToList();
 
             var tokenGuidsNotFound = tokenIdGuids.Except(translations.Select(t => t.SourceToken.TokenId.Id));
 
@@ -94,10 +95,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     request.TranslationSetId.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language,
                     cancellationToken);
 
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Combined Model Translations");
+                sw.Restart();
+#endif
+
                 var tokensIdsNotFound = request.TokenIds
                     .Where(tid => !combined.Select(t => t.SourceToken.TokenId.Id).Contains(tid.Id))
                     .Select(tid => tid.Id)
                     .ToList();
+
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Calculate TokenIdsNotFound");
+                sw.Restart();
+#endif
 
                 if (tokensIdsNotFound.Any())
                 {
@@ -108,7 +121,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                             ModelHelper.BuildToken(tc),
                             string.Empty,
                             "FromAlignmentModel")).ToList());
-//                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
+                    //                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
+
+#if DEBUG
+                    sw.Stop();
+                    Logger.LogInformation($"Elapsed={sw.Elapsed} - Added Translations for [{tokensIdsNotFound.Count}] token ids not found");
+                    sw.Restart();
+#endif
                 }
 #if DEBUG
                 sw.Stop();
@@ -223,7 +242,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             {
 #if DEBUG
                 Stopwatch sw = new Stopwatch();
-                sw.Start();
+                sw.Restart();
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Add alignment translations (start)");
 #endif
 
@@ -281,12 +300,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Select(a => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(a.SourceTokenComponent!),
                             a.TopTargetTrainingText,
-                            "FromAlignmentModel"));
+                            "FromAlignmentModel"))
+                        .ToList();
 
-                    combined.AddRange(translationsFromAlignmentModel.ToList());
+                    combined.AddRange(translationsFromAlignmentModel);
 #if DEBUG
                     sw.Stop();
-                    Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from denormalized Alignment model '{translationSet.DisplayName}' (end)");
+                    Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve [{translationsFromAlignmentModel.Count}] Translations from denormalized Alignment model '{translationSet.DisplayName}' (end)");
 #endif
                 }
             }
