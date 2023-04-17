@@ -2,6 +2,7 @@ using Autofac;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Exceptions;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Features.Projects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
@@ -124,6 +125,21 @@ namespace ClearDashboard.DataAccessLayer
                 Id = TemporaryUserGuid,
             };
 
+            if (CurrentProject != null && CurrentProject.ProjectName != null)
+            {
+                var requestResults = ExecuteRequest(new GetProjectUserSlice.GetProjectUserQuery(CurrentProject.ProjectName), CancellationToken.None);
+
+                if (requestResults.IsCompleted && requestResults.Result.Success && requestResults.Result.HasData && requestResults.Result.Data.Id != CurrentUser.Id)
+                {
+                    user = new User
+                    {
+                        FirstName = requestResults.Result.Data.FirstName,
+                        LastName = requestResults.Result.Data.LastName,
+                        Id = requestResults.Result.Data.Id
+                    };
+                }
+            }
+            
             return user;
         }
 

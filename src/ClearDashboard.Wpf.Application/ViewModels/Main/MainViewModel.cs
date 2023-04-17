@@ -400,6 +400,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
             await LoadParatextProjectMetadata(cancellationToken);
             await LoadProject();
+            ProjectManager.CurrentUser = ProjectManager.GetLicensedUser();
             await NoteManager!.InitializeAsync();
             await RebuildMainMenu();
             await ActivateDockedWindowViewModels(cancellationToken);
