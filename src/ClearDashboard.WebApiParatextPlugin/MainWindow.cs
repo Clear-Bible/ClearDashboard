@@ -312,9 +312,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="e"></param>
         protected override async void OnLeave(EventArgs e)
         {
-            // send message to Dashboard through plugin that we are closing
-            WebHostStartup.ChangeConnectionType(ConnectionChangeType.ParatextWindowClosing);
-
             try
             {
                 await HubContext.Clients.All.SendConnectionChange(new PluginClosing
@@ -785,8 +782,8 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             return;
 
-            var paratextExtractUSFM = new ParatextExtractUSFM();
-            paratextExtractUSFM.ExportUSFMScripture(_project, this);
+            //var paratextExtractUSFM = new ParatextExtractUSFM();
+            //paratextExtractUSFM.ExportUSFMScripture(_project, this);
         }
 
         public void SwitchVerseReference(int book, int chapter, int verse)
