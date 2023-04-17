@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using System.Runtime;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
@@ -31,7 +26,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
     public class InternetAvailability
     {
         [DllImport("wininet.dll")]
-        private extern static bool InternetGetConnectedState(out int description, int reservedValue);
+        private static extern bool InternetGetConnectedState(out int description, int reservedValue);
 
         public static bool IsInternetAvailable()
         {

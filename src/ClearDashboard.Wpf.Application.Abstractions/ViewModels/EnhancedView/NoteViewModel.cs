@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,6 +8,7 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
@@ -37,7 +39,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => Entity.NoteStatus;
             set
             {
-                if (Equals(value, Entity.NoteStatus)) 
+                if (Equals(value, Entity.NoteStatus))
                     return;
                 Entity.NoteStatus = value;
                 NotifyOfPropertyChange();
@@ -61,6 +63,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _associations, value);
         }
 
+
+        public string AssociationVerse
+        {
+            get
+            {
+                string verses = String.Empty;
+                foreach (var association in Associations)
+                {
+                    try
+                    {
+                        var verseId = association.AssociatedEntityId.ToString().Substring(0,9);
+                        if (verseId.Length > 0)
+                        {
+                            verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verseId) + ", ";
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    
+                }
+
+                if (verses.Length > 2)
+                {
+                    verses = verses.Substring(0, verses.Length - 2);
+                }
+
+                return verses;
+            }
+        }
+
+
+
         public NoteViewModelCollection Replies
         {
             get => _replies;
@@ -79,7 +114,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get
             {
-                if (Replies == null || Replies.Count() == 0) 
+                if (Replies == null || Replies.Count() == 0)
                     return null;
 
                 return Replies
