@@ -317,19 +317,20 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             try
             {
-                await HubContext.Clients.All.SendConnectionChange(new ConnectionChange
+                await HubContext.Clients.All.SendConnectionChange(new PluginClosing
                 {
                     ConnectionChangeType = ConnectionChangeType.ParatextWindowClosing,
                 });
 
+                await Task.Delay(1000);
             }
             catch (Exception ex)
             {
                 AppendText(Color.Red,
-                    $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
+                    $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
             }
 
-            await Task.Delay(1000);
+            //await Task.Delay(1000);
             base.OnLeave(e);
         }
 
@@ -762,8 +763,28 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnExportUSFM_Click(object sender, EventArgs e)
+        private async void btnExportUSFM_Click(object sender, EventArgs e)
         {
+            // send message to Dashboard through plugin that we are closing
+            WebHostStartup.ChangeConnectionType(ConnectionChangeType.ParatextWindowClosing);
+
+            try
+            {
+                await HubContext.Clients.All.SendPluginClosing(new PluginClosing
+                {
+                    ConnectionChangeType = ConnectionChangeType.ParatextWindowClosing,
+                });
+
+                await Task.Delay(1000);
+            }
+            catch (Exception ex)
+            {
+                AppendText(Color.Red,
+                    $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
+            }
+
+            return;
+
             var paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(_project, this);
         }

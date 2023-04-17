@@ -146,7 +146,6 @@ public class DashboardProjectManager : ProjectManager
         List<string> requestedVerses = new();
         // ReSharper disable AsyncVoidLambda
         HubProxy.On<string>("sendVerse", async (verse) =>
-
         {
             requestedVerses.Add(verse);
             if (!UpdatingCurrentVerse)
@@ -180,7 +179,7 @@ public class DashboardProjectManager : ProjectManager
             await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollection));
         });
 
-        HubProxy.On<ConnectionChange>("connectionChange", async (connectionChange) =>
+        HubProxy.On<PluginClosing>("pluginClosing", async (pluginClosing) =>
         {
             await Console.Out.WriteLineAsync();
         });

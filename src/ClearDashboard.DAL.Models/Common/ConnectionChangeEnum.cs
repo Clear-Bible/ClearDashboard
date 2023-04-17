@@ -11,7 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
         Restart = 2,
     }
 
-    public class ConnectionChange
+    public class PluginClosing
     {
         public ConnectionChangeType ConnectionChangeType { get; set; } = ConnectionChangeType.None;
     }

@@ -42,9 +42,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
             Clients.All.addMessage(verse);
         }
 
-        public void SendConnectionChange(ConnectionChange connectionChange)
+        public void SendPluginClosing(PluginClosing pluginClosing)
         {
-            Clients.All.addMessage(connectionChange);
+            Clients.All.addMessage(pluginClosing);
         }
 
         public void SendTextCollections(List<TextCollection> textCollections)

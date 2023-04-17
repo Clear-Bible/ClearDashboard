@@ -28,7 +28,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private static IPluginHost _pluginHost;
         private static IPluginChildWindow _parent;
         private static IPluginLogger _pluginLogger;
-        private static ConnectionChange _connectionChange;
+        private static PluginClosing _pluginClosing;
 
         public static IServiceProvider ServiceProvider { get; private set; }
 
@@ -128,7 +128,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddSingleton<IPluginHost>(sp =>_pluginHost);
             services.AddSingleton<IPluginChildWindow>(sp => _parent);
             services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
-            services.AddSingleton<ConnectionChange>(sp => _connectionChange);
+            services.AddSingleton<PluginClosing>(sp => _pluginClosing);
            
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
@@ -146,7 +146,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public void ChangeConnectionType(ConnectionChangeType connectionChangeType)
         {
-            _connectionChange = new ConnectionChange { ConnectionChangeType = connectionChangeType };
+            _pluginClosing = new PluginClosing { ConnectionChangeType = connectionChangeType };
         }
 
     }
