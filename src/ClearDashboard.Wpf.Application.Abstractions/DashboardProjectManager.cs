@@ -179,10 +179,10 @@ public class DashboardProjectManager : ProjectManager
             await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollection));
         });
 
-        HubProxy.On<PluginClosing>("pluginClosing", async (pluginClosing) =>
+        HubProxy.On<PluginClosing>("sendPluginClosing", async (pluginClosing) =>
         {
-            await Console.Out.WriteLineAsync();
-        });
+            Logger.LogInformation($"sendPluginClosing received: {pluginClosing.PluginConnectionChangeType}");
+          });
 
 
         // ReSharper restore AsyncVoidLambda

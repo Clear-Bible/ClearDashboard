@@ -1,21 +1,17 @@
-﻿using Owin;
-using System.Net.Http.Headers;
-using System.Web.Http;
+﻿using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using MediatR;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Owin.Cors;
+using Owin;
+using Paratext.PluginInterfaces;
 using Serilog;
 using System;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Web.Http;
 using System.Web.Http.Controllers;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.WebApiParatextPlugin.Features.Project;
-using ClearDashboard.WebApiParatextPlugin.Mvc;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Owin.Cors;
-using Newtonsoft.Json;
-using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -28,12 +24,10 @@ namespace ClearDashboard.WebApiParatextPlugin
         private static IPluginHost _pluginHost;
         private static IPluginChildWindow _parent;
         private static IPluginLogger _pluginLogger;
-        private static PluginClosing _pluginClosing;
 
         public static IServiceProvider ServiceProvider { get; private set; }
 
-        //public Microsoft.AspNet.SignalR.DefaultDependencyResolver SignalRServiceResolver { get; private set; }
-
+  
         public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IPluginHost pluginHost, IPluginChildWindow parent, IPluginLogger pluginLogger)
         {
             _project = project;
@@ -68,6 +62,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
 #if DEBUG
                     EnableDetailedErrors = true, 
+                    
                     //Resolver = signalRServiceResolver
 #endif
                 });
@@ -128,8 +123,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddSingleton<IPluginHost>(sp =>_pluginHost);
             services.AddSingleton<IPluginChildWindow>(sp => _parent);
             services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
-            services.AddSingleton<PluginClosing>(sp => _pluginClosing);
-           
+         
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
                 .Where(t => typeof(IHttpController).IsAssignableFrom(t)
@@ -142,11 +136,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         public void ChangeVerse(IVerseRef verse)
         {
             _verseRef = verse;
-        }
-
-        public void ChangeConnectionType(ConnectionChangeType connectionChangeType)
-        {
-            _pluginClosing = new PluginClosing { ConnectionChangeType = connectionChangeType };
         }
 
     }

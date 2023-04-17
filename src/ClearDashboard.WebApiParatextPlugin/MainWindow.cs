@@ -316,7 +316,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 await HubContext.Clients.All.SendConnectionChange(new PluginClosing
                 {
-                    ConnectionChangeType = ConnectionChangeType.ParatextWindowClosing,
+                    PluginConnectionChangeType = PluginConnectionChangeType.Closing,
                 });
 
                 await Task.Delay(1000);
@@ -762,17 +762,9 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="e"></param>
         private async void btnExportUSFM_Click(object sender, EventArgs e)
         {
-            // send message to Dashboard through plugin that we are closing
-            WebHostStartup.ChangeConnectionType(ConnectionChangeType.ParatextWindowClosing);
-
             try
             {
-                await HubContext.Clients.All.SendPluginClosing(new PluginClosing
-                {
-                    ConnectionChangeType = ConnectionChangeType.ParatextWindowClosing,
-                });
-
-                await Task.Delay(1000);
+                HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
             }
             catch (Exception ex)
             {
