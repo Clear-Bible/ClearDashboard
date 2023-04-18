@@ -1,14 +1,12 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
-using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
-using System.Collections;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -113,12 +111,22 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                     base.AlignmentCorpus = value;
             }
         }
-        protected CachedEnumerable<ParallelTextRow>? ParallelTextRowsCache { get; set; }
+        protected List<ParallelTextRow>? ParallelTextRowsCache { get; set; }
+
         public override IEnumerator<ParallelTextRow> GetEnumerator()
         {
             if (UseCache)
             {
-                ParallelTextRowsCache ??= new CachedEnumerable<ParallelTextRow>(base.GetEnumerator());
+                IEnumerable<T> BaseToEnumerable<T>(IEnumerator<T> enumerator)
+                {
+                    while (enumerator.MoveNext())
+                        yield return enumerator.Current;
+                }
+
+                if (ParallelTextRowsCache == null)
+                {
+                    ParallelTextRowsCache = BaseToEnumerable(base.GetEnumerator()).ToList();
+                }
                 return ParallelTextRowsCache.GetEnumerator();
             }
             else
@@ -249,41 +257,6 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             ParallelCorpusId = parallelCorpusId;
             UseCache = useCache;
             ParallelTextRowsCache = null;
-        }
-
-        protected class CachedEnumerable<T> : IEnumerable<T>
-        {
-            private readonly IEnumerator<T> _enumerator;
-            private readonly List<T> _cache = new();
-
-            public CachedEnumerable(IEnumerator<T> enumerator) => this._enumerator = enumerator;
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                int index = 0;
-
-                while (true)
-                {
-                    if (index < _cache.Count)
-                    {
-                        yield return _cache[index];
-                        index++;
-                    }
-                    else
-                    {
-                        if (_enumerator.MoveNext())
-                        {
-                            _cache.Add(_enumerator.Current);
-                        }
-                        else
-                        {
-                            yield break;
-                        }
-                    }
-                }
-            }
-
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
     }
 }
