@@ -480,6 +480,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             Connected = message.Connected;
             IsParatextRunning = true;
+
+            //if (message.Connected == false)
+            //{
+            //    PlaySound.PlaySoundFromResource(SoundType.Error);
+            //}
+
             await Task.CompletedTask;
         }
 

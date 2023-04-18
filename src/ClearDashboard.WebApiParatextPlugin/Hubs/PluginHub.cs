@@ -79,10 +79,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
                 }
             }
 
-            {
-                _logger.AppendText(Color.DarkOrange, $"Sending PluginStatus - {PluginConnectionChangeType.None}");
-                Clients.All.SendPluginClosing(new PluginClosing {PluginConnectionChangeType = PluginConnectionChangeType.None});
-            }
+            //{
+            //    _logger.AppendText(Color.DarkOrange, $"Sending PluginStatus - {PluginConnectionChangeType.None}");
+            //    Clients.All.SendPluginClosing(new PluginClosing {PluginConnectionChangeType = PluginConnectionChangeType.None});
+            //}
 
             //{
             //    var result = await _mediator.Send(new GetTextCollectionsQuery());

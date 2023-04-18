@@ -314,12 +314,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             try
             {
-                await HubContext.Clients.All.SendConnectionChange(new PluginClosing
-                {
-                    PluginConnectionChangeType = PluginConnectionChangeType.Closing,
-                });
-
-                await Task.Delay(1000);
+                HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
             }
             catch (Exception ex)
             {
@@ -327,7 +322,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
             }
 
-            //await Task.Delay(1000);
+            await Task.Delay(1000);
             base.OnLeave(e);
         }
 
@@ -760,22 +755,10 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void btnExportUSFM_Click(object sender, EventArgs e)
+        private  void btnExportUSFM_Click(object sender, EventArgs e)
         {
-            try
-            {
-                HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
-            }
-            catch (Exception ex)
-            {
-                AppendText(Color.Red,
-                    $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
-            }
-
-            return;
-
-            //var paratextExtractUSFM = new ParatextExtractUSFM();
-            //paratextExtractUSFM.ExportUSFMScripture(_project, this);
+            var paratextExtractUSFM = new ParatextExtractUSFM();
+            paratextExtractUSFM.ExportUSFMScripture(_project, this);
         }
 
         public void SwitchVerseReference(int book, int chapter, int verse)

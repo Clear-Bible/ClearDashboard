@@ -181,8 +181,13 @@ public class DashboardProjectManager : ProjectManager
 
         HubProxy.On<PluginClosing>("sendPluginClosing", async (pluginClosing) =>
         {
+            if (pluginClosing.PluginConnectionChangeType == PluginConnectionChangeType.Closing)
+            {
+                await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(false));
+            }
+            
             Logger.LogInformation($"sendPluginClosing received: {pluginClosing.PluginConnectionChangeType}");
-          });
+        });
 
 
         // ReSharper restore AsyncVoidLambda
