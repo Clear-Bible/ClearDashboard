@@ -44,6 +44,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(e => e.TokenComponents.Where(t => t.Deleted == null))
                 .Where(e => e.TokenizedCorpusId == request.TokenizedCorpusId.Id)
                 .Where(e => e.BookChapterVerse!.Substring(0, 3) == bookNumberAsPaddedString)
+                .OrderBy(e => e.BookChapterVerse)
                 .ToDictionary(e => e.Id, e => e);
 
 #if DEBUG

@@ -40,6 +40,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Events
                 alignments.Add(notification.AlignmentAdding);
             }
 
+            if (alignments.Any(a => a.SourceTokenComponent == null))
+            {
+                // In case the event thrower only provided SourceTokenComponentId for each alignment:
+                var sourceTokenComponents = notification.ProjectDbContext.TokenComponents
+                    .Where(e => alignments.Select(a => a.SourceTokenComponentId).Contains(e.Id))
+                    .ToList();
+
+                alignments.ForEach(a => a.SourceTokenComponent = sourceTokenComponents
+                    .Where(t => t.Id == a.SourceTokenComponentId).FirstOrDefault());
+            }
+
             var denormalizationTasks = alignments
                 .Where(a => a.AlignmentSetId != Guid.Empty)
                 .Where(a => a.SourceTokenComponent?.TrainingText != null)

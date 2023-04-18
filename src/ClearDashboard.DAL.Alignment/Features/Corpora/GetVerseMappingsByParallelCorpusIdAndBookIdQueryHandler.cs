@@ -51,7 +51,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
 
             var parallelCorpusEntity = parallelCorpusQueryable
-                    .FirstOrDefault(e => e.Id == request.ParallelCorpusId.Id);
+                .FirstOrDefault(e => e.Id == request.ParallelCorpusId.Id);
 
 #if DEBUG
             sw.Stop();
@@ -113,7 +113,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 .Select(tva => new { tva.TokenComponent!.TokenizedCorpusId, ((Models.Token)tva.TokenComponent!).BookNumber }))
                             .Any(tcb =>
                                 tcb.TokenizedCorpusId == sourceTokenizedCorpusGuid &&
-                                tcb.BookNumber.Equals(sourceBookNumber)));
+                                tcb.BookNumber.Equals(sourceBookNumber)))
+                    .ToList();
 
             }
 
