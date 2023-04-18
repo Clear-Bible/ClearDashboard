@@ -12,6 +12,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.Enums;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
@@ -30,6 +31,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 
         #region Observable Properties
+        public ParallelProjectType ProjectType { get; set; }
+
 
         private string _parallelCorpusDisplayName;
         public string ParallelCorpusDisplayName
@@ -101,7 +104,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             ParallelCorpusDisplayName =
                 $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name}";
+
+            ProjectType = ParentViewModel.ProjectType;
+
             return base.OnActivateAsync(cancellationToken);
+        }
+
+        protected override async void OnViewReady(object view)
+        {
+            // skip this step if we are doing only creating a new alignment
+            if (ParentViewModel.ProjectType == ParallelProjectType.AlignmentOnly)
+            {
+                await MoveForwards();
+            }
+
+            base.OnViewReady(view);
+
         }
 
         #endregion //Constructor

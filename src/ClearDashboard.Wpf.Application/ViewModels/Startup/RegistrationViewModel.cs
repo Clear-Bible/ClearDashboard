@@ -143,6 +143,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
                 var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
 
+                if (decryptedLicenseUser.Id == Guid.Empty)
+                {
+                    throw new Exception("License has empty guid.");
+                }
+
                 var givenLicenseUser = new LicenseUser
                 {
                     FirstName = FirstName, //_registrationViewModel.FirstName;

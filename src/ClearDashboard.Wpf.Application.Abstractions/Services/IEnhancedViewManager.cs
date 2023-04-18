@@ -7,5 +7,7 @@ namespace ClearDashboard.Wpf.Application.Services
     public interface IEnhancedViewManager
     {
         Task AddMetadatumEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken);
+
+        Task SaveProjectData();
     }
 }

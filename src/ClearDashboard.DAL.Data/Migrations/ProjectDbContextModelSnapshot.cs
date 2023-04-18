@@ -186,9 +186,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AlignmentSetId");
-
                     b.HasIndex("SourceTokenComponentId");
+
+                    b.HasIndex("AlignmentSetId", "SourceTokenComponentId");
 
                     b.ToTable("AlignmentTopTargetTrainingText");
                 });

@@ -7,6 +7,7 @@ public static class DialogSettings
 {
     public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
     public static dynamic AddParatextCorpusDialogSettings => CreateAddParatextCorpusDialogSettings();
+    public static dynamic AddNewInterlinearDialogSettings => CreateAddNewInterlinearDialogSettings();
 
     private static dynamic CreateNewProjectDialogSettings()
     {
@@ -29,4 +30,17 @@ public static class DialogSettings
         settings.Height = 600;
         return settings;
     }
+
+    private static dynamic CreateAddNewInterlinearDialogSettings()
+    {
+        dynamic settings = new ExpandoObject();
+        settings.WindowStyle = WindowStyle.None;
+        settings.ShowInTaskbar = false;
+        settings.WindowState = WindowState.Normal;
+        settings.ResizeMode = ResizeMode.NoResize;
+        settings.Width = 850;
+        settings.Height = 600;
+        return settings;
+    }
+
 }

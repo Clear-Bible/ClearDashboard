@@ -13,8 +13,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime" 
     x:Name="NotesViewWindow"
     d:DataContext="{d:DesignInstance Type=notes:NotesViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -88,7 +88,6 @@
                 x:Name="FiltersScrollViewer"
                 Grid.Column="0"
                 MaxWidth="176"
-                HorizontalAlignment="Left"
                 VerticalScrollBarVisibility="Auto">
                 <StackPanel Background="{DynamicResource MaterialDesignPaper}" Orientation="Vertical">
                     <Button
@@ -122,136 +121,160 @@
                     </Button>
 
                     <StackPanel
+                        Margin="0,0,5,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         Orientation="Vertical">
-                        <Border
+                        <GroupBox
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="1">
-                            <StackPanel
-                                Margin="5,0,0,5"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
+                            BorderThickness="1"
+                            Header="Filter by Status">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="25" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="-8,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="20"
+                                    Foreground="{StaticResource GreenDarkBrush}"
+                                    Text="*" />
                                 <RadioButton
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
                                     Content="{helpers:Localization Notes_FilterStatus_Any}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Any}"
                                     Style="{StaticResource MaterialDesignLightRadioButton}" />
+
+
+                                <materialDesign:PackIcon
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource GreenDarkBrush}"
+                                    Kind="EmailOpenOutline" />
                                 <RadioButton
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
                                     Content="{helpers:Localization Notes_FilterStatus_Open}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Open}"
                                     Style="{StaticResource MaterialDesignLightRadioButton}" />
+
+                                <materialDesign:PackIcon
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource BlueDarkBrush}"
+                                    Kind="EmailOutline" />
                                 <RadioButton
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
                                     Content="{helpers:Localization Notes_FilterStatus_Closed}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Resolved}"
                                     Style="{StaticResource MaterialDesignLightRadioButton}" />
-                            </StackPanel>
-                        </Border>
-                        <Border
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="1">
-                            <StackPanel Orientation="Vertical">
-                                <Label
-                                    Margin="10,5,5,5"
-                                    VerticalAlignment="Center"
-                                    Content="{helpers:Localization Notes_FilterLabels}" />
-                                <ListBox
-                                    x:Name="LabelsFilter"
-                                    MaxHeight="200"
-                                    Margin="10,0,0,10"
-                                    HorizontalAlignment="Left"
-                                    IsEnabled="True"
-                                    ItemsSource="{Binding FilterLabelsChoices}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    SelectionChanged="SelectionLabelsChanged"
-                                    SelectionMode="Multiple">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <ContentControl Content="{Binding Text}" />
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </StackPanel>
-                        </Border>
-                        <Border
+                            BorderThickness="1"
+                            Header="Filter by Label">
+                            <ListBox
+                                x:Name="LabelsFilter"
+                                MaxHeight="200"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="True"
+                                ItemsSource="{Binding FilterLabelsChoices}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                SelectionChanged="SelectionLabelsChanged"
+                                SelectionMode="Multiple"
+                                Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Content="{Binding Text}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
+
+                        <GroupBox
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="1">
-                            <StackPanel Orientation="Vertical">
-                                <Label
-                                    Margin="10,5,5,5"
-                                    VerticalAlignment="Center"
-                                    Content="{helpers:Localization Notes_FilterUsers}" />
-                                <ListBox
-                                    x:Name="UsersFilter"
-                                    MaxHeight="200"
-                                    Margin="10,0,0,10"
-                                    HorizontalAlignment="Left"
-                                    BorderBrush="{DynamicResource PurpleDarkBrush}"
-                                    IsEnabled="True"
-                                    ItemsSource="{Binding FilterUsersChoices}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    SelectionChanged="SelectionUsersChanged"
-                                    SelectionMode="Multiple">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <ContentControl Content="{Binding}" />
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </StackPanel>
-                        </Border>
-                        <Border
+                            BorderThickness="1"
+                            Header="{helpers:Localization Notes_FilterUsers}">
+
+                            <ListBox
+                                x:Name="UsersFilter"
+                                MaxHeight="200"
+                                Margin="10,0,0,10"
+                                HorizontalAlignment="Stretch"
+                                BorderBrush="{DynamicResource PurpleDarkBrush}"
+                                IsEnabled="True"
+                                ItemsSource="{Binding FilterUsersChoices}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                SelectionChanged="SelectionUsersChanged"
+                                SelectionMode="Multiple">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Content="{Binding}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
+
+                        <GroupBox
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="1">
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Vertical">
-                                    <Label
-                                        Margin="5,0,5,0"
-                                        VerticalAlignment="Center"
-                                        Content="{helpers:Localization Notes_FilterNoteText}" />
-                                    <TextBox
-                                        x:Name="FilterNotesText"
-                                        MinWidth="125"
-                                        Margin="5,0,5,5"
-                                        VerticalAlignment="Center"
-                                        materialDesign:TextFieldAssist.HasClearButton="True"
-                                        AcceptsReturn="False"
-                                        Text="{Binding FilterNoteText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                        <Border
+                            BorderThickness="1"
+                            Header="{helpers:Localization Notes_FilterNoteText}">
+                            <TextBox
+                                x:Name="FilterNotesText"
+                                MinWidth="125"
+                                Margin="5,0,5,5"
+                                VerticalAlignment="Center"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                AcceptsReturn="False"
+                                Text="{Binding FilterNoteText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        </GroupBox>
+
+                        <GroupBox
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="1">
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Vertical">
-                                    <Label
-                                        Margin="5,0,5,0"
-                                        VerticalAlignment="Center"
-                                        Content="{helpers:Localization Notes_FilterAssociationsDescriptionText}" />
-                                    <TextBox
-                                        x:Name="FilterAssociationsText"
-                                        MinWidth="125"
-                                        Margin="5,0,5,5"
-                                        VerticalAlignment="Center"
-                                        materialDesign:TextFieldAssist.HasClearButton="True"
-                                        AcceptsReturn="False"
-                                        Text="{Binding FilterAssociationsDescriptionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
+                            BorderThickness="1"
+                            Header="{helpers:Localization Notes_FilterAssociationsDescriptionText}">
+                            <TextBox
+                                x:Name="FilterAssociationsText"
+                                MinWidth="125"
+                                Margin="5,0,5,5"
+                                VerticalAlignment="Center"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                AcceptsReturn="False"
+                                Text="{Binding FilterAssociationsDescriptionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </GroupBox>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
@@ -291,7 +314,33 @@
             </DataGrid.ColumnHeaderStyle>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="60">
+
+
+                <DataGridTemplateColumn MinWidth="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <materialDesign:PackIcon
+                                Width="30"
+                                Height="30"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <materialDesign:PackIcon.Style>
+                                    <Style TargetType="materialDesign:PackIcon">
+                                        <Setter Property="Kind" Value="EmailOutline" />
+                                        <Setter Property="Foreground" Value="{StaticResource BlueDarkBrush}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
+                                                <Setter Property="Kind" Value="EmailOpenOutline" />
+                                                <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </materialDesign:PackIcon.Style>
+                            </materialDesign:PackIcon>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="40">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Height="24" 
@@ -308,7 +357,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Notes_NoteText}">
+                <DataGridTemplateColumn
+                    Width="*"
+                    MinWidth="250"
+                    Header="{helpers:Localization Notes_NoteText}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -322,7 +374,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="11*" Header="{helpers:Localization Notes_Note_NoteStatus}">
+                <!--<DataGridTemplateColumn Width="11*" Header="{helpers:Localization Notes_Note_NoteStatus}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel
@@ -346,8 +398,18 @@
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+
+
+                <DataGridTemplateColumn MinWidth="200" Header="Verse(s)">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding AssociationVerse}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="15*" Header="{helpers:Localization Notes_Note_Created}">
+
+                <DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Created}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -360,7 +422,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="4*" Header="{helpers:Localization Notes_Note_Modified}">
+                <DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Modified}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -372,7 +434,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="4*" Header="{helpers:Localization Notes_Note_ModifiedBy}">
+                <DataGridTemplateColumn MinWidth="150" Header="{helpers:Localization Notes_Note_ModifiedBy}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -411,88 +473,107 @@
                     Margin="5"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
-                    <StackPanel Orientation="Vertical">
-                        <Label
-                            Margin="10,5,5,5"
-                            VerticalAlignment="Center"
-                            Content="{helpers:Localization Notes_NoteText}" />
-                        <TextBlock
-                            Margin="10,0,5,5"
-                            Foreground="{StaticResource SecondaryHueMidBrush}"
-                            Text="{Binding SelectedNoteText}"
-                            TextWrapping="Wrap" />
+                    <StackPanel
+                        Margin="15,2,0,5"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <RadioButton
+                            Checked="RadioButton_Open_Checked"
+                            Content="{helpers:Localization Notes_Note_NoteStatus_Open}"
+                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                            GroupName="{Binding NoteId}"
+                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
+                            Style="{StaticResource MaterialDesignLightRadioButton}" />
+                        <RadioButton
+                            Margin="10,0,0,0"
+                            Checked="RadioButton_Resolved_Checked"
+                            Content="{helpers:Localization Notes_Note_NoteStatus_Resolved}"
+                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                            GroupName="{Binding NoteId}"
+                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
+                            Style="{StaticResource MaterialDesignLightRadioButton}" />
                     </StackPanel>
                 </Border>
-                <Border
-                    Margin="5"
+                <GroupBox
+                    Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                    BorderThickness="1">
-                    <StackPanel Orientation="Vertical">
-                        <Label
-                            Margin="10,5,5,5"
-                            VerticalAlignment="Center"
-                            Content="{helpers:Localization Notes_NoteLabels}" />
-                        <ListBox
-                            x:Name="SelectedLabels"
-                            Margin="5"
-                            VerticalAlignment="Top"
-                            materialDesign:ListBoxItemAssist.ShowSelection="False"
-                            ItemsSource="{Binding SelectedNoteLabels}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,2">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
-                                    <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
-                    </StackPanel>
-                </Border>
-                <Border
-                    Margin="5"
+                    BorderThickness="1"
+                    Header="{helpers:Localization Notes_NoteText}">
+
+                    <TextBlock
+                        Margin="10,0,5,5"
+                        Foreground="{StaticResource SecondaryHueMidBrush}"
+                        Text="{Binding SelectedNoteText}"
+                        TextWrapping="Wrap" />
+                </GroupBox>
+
+
+                <GroupBox
+                    Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                    BorderThickness="1">
-                    <StackPanel Orientation="Vertical">
-                        <Label
-                            Margin="10,5,5,5"
-                            VerticalAlignment="Center"
-                            Content="{helpers:Localization Notes_NoteAssociationDescriptions}" />
-                        <ListBox
-                            x:Name="SelectedNotesAssociationDescriptions"
-                            Margin="5"
-                            VerticalAlignment="Top"
-                            materialDesign:ListBoxItemAssist.ShowSelection="False"
-                            ItemsSource="{Binding SelectedNoteAssociationDescriptions}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,2">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding}" TextWrapping="Wrap" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
-                                    <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
-                    </StackPanel>
-                </Border>
-                <Border
-                    Margin="5"
+                    BorderThickness="1"
+                    Header="{helpers:Localization Notes_NoteLabels}">
+
+                    <ListBox
+                        x:Name="SelectedLabels"
+                        Margin="5"
+                        VerticalAlignment="Top"
+                        materialDesign:ListBoxItemAssist.ShowSelection="False"
+                        ItemsSource="{Binding SelectedNoteLabels}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
+                                <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </GroupBox>
+
+
+                <GroupBox
+                    Margin="5,5,0,2"
+                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                    BorderThickness="1"
+                    Header="{helpers:Localization Notes_NoteAssociationDescriptions}">
+
+                    <ListBox
+                        x:Name="SelectedNotesAssociationDescriptions"
+                        Margin="5"
+                        VerticalAlignment="Top"
+                        materialDesign:ListBoxItemAssist.ShowSelection="False"
+                        ItemsSource="{Binding SelectedNoteAssociationDescriptions}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
+                                <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </GroupBox>
+
+                <GroupBox
+                    Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
                     <StackPanel Orientation="Vertical">

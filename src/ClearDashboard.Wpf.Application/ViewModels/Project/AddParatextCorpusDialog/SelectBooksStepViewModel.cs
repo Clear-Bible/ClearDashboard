@@ -176,7 +176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                         if(found != null)
                         {
                             book.IsEnabled = true;
-                            book.IsSelected = true;
+                            book.IsSelected = false; // set to false so that the end user doesn't automatically just select every book to enter
                         }
                         else
                         {

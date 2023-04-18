@@ -1,6 +1,8 @@
-﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.NoteRepliesDisplay"
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.UserControls.NoteRepliesDisplay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -9,9 +11,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
-    mc:Ignorable="d"
-    d:DesignHeight="450" d:DesignWidth="800"
->
+    mc:Ignorable="d">
     <UserControl.Resources>
         <converters:GuidInGuidsToBooleanConverter x:Key="GuidInGuidsToBooleanConverter" />
 
@@ -51,7 +51,7 @@
         </ItemsPanelTemplate>
 
     </UserControl.Resources>
-    
+
     <Grid>
         <StackPanel Orientation="Vertical">
             <ItemsControl
@@ -121,19 +121,16 @@
             </ListBox>-->
             <TextBox 
                 Grid.Column="0"
-                x:Name="AddReplyText"
+                VerticalAlignment="Center"
                 materialDesign:HintAssist.FloatingScale="0.60"
                 materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                 materialDesign:HintAssist.Hint="Type reply, then press enter"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                VerticalAlignment="Center"
                 materialDesign:TextFieldAssist.HasClearButton="True"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 Foreground="{DynamicResource MaterialDesignBody}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TextWrapping="Wrap"
                 KeyDown="AddReplyText_KeyDown"
-                >
-            </TextBox>
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                TextWrapping="Wrap" />
         </StackPanel>
     </Grid>
 </UserControl>

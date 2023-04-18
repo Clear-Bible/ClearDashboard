@@ -522,6 +522,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             //    await ObtainGlosses().ConfigureAwait(false);
             //});
 
+            if (ProjectManager.CurrentParatextProject != null)
+            {
+                var paratextProject = ProjectManager.CurrentParatextProject;
+                // pull out the project font family
+                _verseTextFontFamily = paratextProject.Language.FontFamily;
+                IsTargetRtl = paratextProject.Language.IsRtol;
+            }
 
             base.OnViewReady(view);
         }

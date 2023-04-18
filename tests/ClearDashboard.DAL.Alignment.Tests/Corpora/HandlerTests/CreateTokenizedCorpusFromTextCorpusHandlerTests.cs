@@ -19,6 +19,8 @@ using ClearBible.Engine.Persistence;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using SIL.Extensions;
 using System.Text.Json;
+using System.IO;
+using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -93,6 +95,64 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                     detokenizer.Detokenize(tokensTextRow.Tokens.Select(t => t.SurfaceText).ToList());
                 Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
             }
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    public async void TokenizedCorpus__CreateWithVersification()
+    {
+        try
+        {
+            // Create a customized versification:
+            Versification.Table.Implementation.RemoveAllUnknownVersifications();
+            string customVersificationAddition = "&MAT 1:2 = MAT 1:1\nMAT 1:3 = MAT 1:2\nMAT 1:1 = MAT 1:3\n";
+            ScrVers versification = ScrVers.RussianOrthodox;
+            using (var reader = new StringReader(customVersificationAddition))
+            {
+                Versification.Table.Implementation.RemoveAllUnknownVersifications();
+                versification = Versification.Table.Implementation.Load(reader, "not a file", versification, "custom");
+            }
+
+            var v = versification;
+            var newVerse = v.ChangeVersification(040001002, ScrVers.Original);
+            Assert.Equal(40001003, newVerse);
+
+            using var writer = new StringWriter();
+            versification.Save(writer);
+
+            Assert.Equal(ScrVersType.Unknown, versification.Type);
+            Assert.Equal(ScrVers.RussianOrthodox, versification.BaseVersification);
+            Assert.True(versification.IsCustomized);
+
+            //Import
+            var textCorpus = TestDataHelpers.GetSampleTextCorpus();
+
+            // Create the corpus in the database:
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction, versification);
+
+            Assert.NotNull(tokenizedTextCorpus);
+
+            var tokenizedTextCorpus2 = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpus.TokenizedTextCorpusId, false);
+            Assert.NotNull(tokenizedTextCorpus2);
+
+            var versification2 = tokenizedTextCorpus2.Versification;
+
+            Assert.Equal(versification.Type, versification2.Type);
+            Assert.Equal(versification.BaseVersification, versification2.BaseVersification);
+            Assert.True(versification2.IsCustomized);
+
+            using var writer2 = new StringWriter();
+            versification2.Save(writer2);
+
+            Assert.Equal(writer.ToString(), writer2.ToString());
         }
         finally
         {

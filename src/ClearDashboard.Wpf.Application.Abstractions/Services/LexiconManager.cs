@@ -293,6 +293,34 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        public async Task AddTranslationAsync(LexiconTranslationViewModel translation, MeaningViewModel meaning)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+#if !DEMO
+                await meaning.Entity.PutTranslation(Mediator, translation.Entity);
+#endif
+                var newTranslation = new LexiconTranslationViewModel(translation.Entity) 
+                    { 
+                        Count = translation.Count,
+                        Meaning = meaning,
+                        IsSelected = translation.IsSelected
+                    };
+                await EventAggregator.PublishOnUIThreadAsync(new LexiconTranslationAddedMessage(newTranslation, meaning));
+
+                stopwatch.Stop();
+                Logger.LogInformation($"Added translation {translation.Text} to meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
+            }
+            catch (Exception e)
+            {
+                Logger.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
         public async Task MoveTranslationAsync(LexiconTranslationViewModel sourceTranslation, MeaningViewModel targetMeaning)
         {
             try

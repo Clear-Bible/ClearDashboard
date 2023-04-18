@@ -41,6 +41,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
         public IWindowManager WindowManager { get; }
 
+     
         public VerseAwareConductorOneActive ParentViewModel => (VerseAwareConductorOneActive)Parent;
 
         //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
@@ -88,12 +89,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
-        public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
-        {
-            get => _enhancedViewItemMetadatum;
-            set => Set(ref _enhancedViewItemMetadatum, value);
-        }
+        //private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
+        //public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
+        //{
+        //    get => _enhancedViewItemMetadatum;
+        //    set => Set(ref _enhancedViewItemMetadatum, value);
+        //}
 
         #region FontFamily
 
@@ -152,9 +153,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _selectedVerseDisplayViewModel, value);
         }
 
-        public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager,
+        public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
             INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
-        IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+            IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             WindowManager = windowManager;
         }
@@ -189,13 +190,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _progressBarVisibility, value);
         }
 
-        public override async Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+   
+        public override async Task GetData(CancellationToken cancellationToken)
         {
-            EnhancedViewItemMetadatum = metadatum;
             await GetData(ReloadType.Refresh, cancellationToken);
         }
 
-        public async virtual Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
+        public virtual async  Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
         {
             await GetData(reloadType, cancellationToken);
         }
@@ -208,6 +209,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     {
                         Verses.Clear();
 
+                        FetchingData = true;
                         ProgressBarVisibility = Visibility.Visible;
                         switch (EnhancedViewItemMetadatum)
                         {
@@ -263,7 +265,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             finally
             {
-                ProgressBarVisibility = Visibility.Collapsed;
+                FetchingData = false;
+               ProgressBarVisibility = Visibility.Collapsed;
             }
         }
 
@@ -288,8 +291,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     if (result.Success && result.HasData)
                     {
                         metadata = result.Data!.FirstOrDefault(b =>
-                                       b.Id == metadatum.ParatextProjectId!.Replace("-", "")) ??
-                                   throw new InvalidOperationException();
+                            b.Id == metadatum.ParatextProjectId!.Replace("-", ""));
+                        if (metadata is null)
+                        {
+                            Logger?.LogWarning("The Paratext project's metadata is null.");
+                            metadata =  new ParatextProjectMetadata();
+                            metadata.AvailableBooks = BookInfo.GenerateScriptureBookList();
+                        }
                     }
                     else
                     {
@@ -408,6 +416,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             try
             {
+                if (ParentViewModel == null)
+                {
+                    return;
+                }
+
                 var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum);
 
                 if (rows == null || rows.Count == 0)

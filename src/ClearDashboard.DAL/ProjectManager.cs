@@ -19,7 +19,7 @@ namespace ClearDashboard.DataAccessLayer
     {
 #nullable disable
         #region Properties
-       
+
         protected ILogger Logger { get; }
         protected ParatextProxy ParatextProxy { get; }
         protected ILifetimeScope LifetimeScope { get; }

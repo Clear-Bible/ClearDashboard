@@ -68,6 +68,16 @@ namespace ClearDashboard.DAL.Alignment.Translation
             throw new NotImplementedException();
         }
 
+        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        {
+            if (AlignmentSetId == null)
+            {
+                return;
+            }
+
+            await Delete(mediator, AlignmentSetId, token);
+        }
+
         public static async Task<IEnumerable<AlignmentSetId>> 
             GetAllAlignmentSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
         {
@@ -116,6 +126,17 @@ namespace ClearDashboard.DAL.Alignment.Translation
             createTranslationSetCommandResult.ThrowIfCanceledOrFailed(true);
 
             return createTranslationSetCommandResult.Data!;
+        }
+
+        public static async Task Delete(
+            IMediator mediator,
+            AlignmentSetId alignmentSetId,
+            CancellationToken token = default)
+        {
+            var command = new DeleteAlignmentSetByAlignmentSetIdCommand(alignmentSetId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed(true);
         }
 
         internal AlignmentSet(

@@ -4,6 +4,7 @@ using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Framework.Input;
 using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
@@ -11,12 +12,12 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Exceptions;
-using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Marble;
@@ -24,6 +25,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
@@ -43,13 +45,10 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using System.Windows.Input;
-using ClearApplicationFoundation.Framework.Input;
-using ClearDashboard.Wpf.Application.ViewModels.Popups;
+using ClearDashboard.Wpf.Application.Helpers;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
-using MahApps.Metro.Controls;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -180,7 +179,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "NewEnhancedCorpusID")
                 {
-                    AddNewEnhancedView();
+                   AddNewEnhancedView().Wait();
+                }
+                else if (value == "GettingStartedGuideID")
+                {
+                    LaunchGettingStartedGuide();
                 }
                 else if (value == "ShowLogID")
                 {
@@ -466,6 +469,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // Clear the items in the event the user is switching projects.
             Items.Clear();
+            
+            OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -477,7 +482,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             EventAggregator?.Unsubscribe(this);
         }
 
-        private async Task SaveProjectData()
+        public async Task SaveProjectData()
         {
             try
             {
@@ -635,19 +640,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken)
         {
-            var sw = Stopwatch.StartNew();
-            var enhancedViews = LoadEnhancedViewTabLayout();
-
-            if (enhancedViews == null)
+            _=Task.Run(async () =>
             {
-                return;
-            }
+                var sw = Stopwatch.StartNew();
+                var enhancedViews = LoadEnhancedViewTabLayout();
 
-            await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
-            await LoadEnhancedViewData(enhancedViews);
+                if (enhancedViews == null)
+                {
+                    return;
+                }
 
-            sw.Stop();
-            Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+                await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
+                await LoadEnhancedViewData(enhancedViews);
+
+                sw.Stop();
+                Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+            }, cancellationToken);
         }
 
         private IEnumerable<EnhancedViewModel> EnhancedViewModels => Items.Where(item => item is EnhancedViewModel).Cast<EnhancedViewModel>();
@@ -655,8 +663,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadEnhancedViewData(List<EnhancedViewLayout> enhancedViews)
         {
-            await Parallel.ForEachAsync(enhancedViews, new ParallelOptions(), async (enhancedView, cancellationToken) =>
+            var orderedViews = enhancedViews.AsParallel().AsOrdered();
+            
+            await Parallel.ForEachAsync(orderedViews, new ParallelOptions(), async (enhancedView, cancellationToken) =>
+            //foreach (var enhancedView in enhancedViews)
             {
+
                 var enhancedViewModel = EnhancedViewModels.FirstOrDefault(item => item.Title == enhancedView.Title);
 
                 if (enhancedViewModel == null)
@@ -668,15 +680,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 enhancedViewModel.EnableBcvControl = false;
                 try
                 {
-                    await enhancedViewModel.LoadData(cancellationToken);
+                    //await enhancedViewModel.LoadData(cancellationToken);
+                    await enhancedViewModel.LoadData(CancellationToken.None);
                 }
                 finally
                 {
                     enhancedViewModel.EnableBcvControl = true;
                 }
-              
 
-            });
+            //} 
+        });
         }
 
 
@@ -872,6 +885,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
+        public void LaunchGettingStartedGuide()
+        {
+            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
+            if (File.Exists(path))
+            {
+                var p = new Process();
+                p.StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true
+                };
+                p.Start();
+            }
+            else
+            {
+                Logger?.LogInformation("Dashboard_Instructions.pdf missing.");
+            }
+        }
         private void ShowLogs()
         {
             var tailBlazerProxy = LifetimeScope.Resolve<TailBlazerProxy>();
@@ -1032,12 +1063,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             manager.ShowDialogAsync(viewModel, null, settings);
         }
 
-        private void AddNewEnhancedView()
+        private async Task AddNewEnhancedView()
         {
             var viewModel = IoC.Get<EnhancedViewModel>();
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
+            viewModel.EnhancedViewLayout = new EnhancedViewLayout();
+           
 
 
             // add vm to conductor
@@ -1055,6 +1088,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             };
 
             AddNewEnhancedViewTab(windowDockable);
+
+            await SaveProjectData();
         }
 
         private BindableCollection<LayoutFile> GetFileLayouts()
@@ -1241,6 +1276,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = _localizationService!.Get("MainView_Help"), Id =  "HelpID", ViewModel = this,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
+                        // launch Getting Started Guide
+                        new() { Header = _localizationService!.Get("MainView_GettingStartedGuide"), Id = "GettingStartedGuideID", ViewModel = this, },
+
                         // Gather Logs
                         new() { Header = _localizationService!.Get("MainView_ShowLog"), Id = "ShowLogID", ViewModel = this, },
 
@@ -1321,6 +1359,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             FileLayouts.Remove(layoutFile);
             await RebuildMainMenu();
+            await SaveProjectData();
         }
 
         public void CancelSave()
@@ -1655,18 +1694,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #pragma warning restore CA1416 // Validate platform compatibility
         }
 
-        public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
-        {
-            OnUIThread(() => ShowProgressBar = message.Show);
-            await Task.CompletedTask;
-        }
-
-        public async Task HandleAsync(ProgressBarMessage message, CancellationToken cancellationToken)
-        {
-            OnUIThread(() => Message = message.Message);
-            await Task.CompletedTask;
-        }
-
         private async Task<bool> TryUpdateExistingEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
 
@@ -1724,10 +1751,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await Task.CompletedTask;
         }
 
-        public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        public async Task AddMetadatumEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken = default)
         {
-            // rebuild the menu system with the new language
-            await RebuildMainMenu();
+            if (!await TryUpdateExistingEnhancedView(metadatum, cancellationToken))
+            {
+                await DeactivateDockedWindows();
+                var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+                await viewModel.Initialize(new EnhancedViewLayout
+                {
+                    ParatextSync = false,
+                    Title = $"{metadatum.DisplayName}",
+                    VerseOffset = 0
+                }, metadatum, cancellationToken);
+
+                AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
+            }
+            await SaveAvalonDockLayout();
         }
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
@@ -1757,6 +1796,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #endregion // Methods
 
+        #region IHandel
+
+        public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => ShowProgressBar = message.Show);
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ProgressBarMessage message, CancellationToken cancellationToken)
+        {
+            OnUIThread(() => Message = message.Message);
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            // rebuild the menu system with the new language
+            await RebuildMainMenu();
+        }
+
 
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {
@@ -1775,24 +1834,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             return Task.CompletedTask;
-        }
-
-        public async Task AddMetadatumEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken = default)
-        {
-            if (!await TryUpdateExistingEnhancedView(metadatum, cancellationToken))
-            {
-                await DeactivateDockedWindows();
-                var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-                await viewModel.Initialize(new EnhancedViewLayout
-                {
-                    ParatextSync = false,
-                    Title = $"{metadatum.DisplayName}",
-                    VerseOffset = 0
-                }, metadatum, cancellationToken);
-
-                AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
-            }
-            await SaveAvalonDockLayout();
         }
 
         /// <summary>
@@ -1866,5 +1907,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
+        #endregion
     }
 }
