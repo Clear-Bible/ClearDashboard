@@ -617,7 +617,7 @@
                             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}"
                         />
                     </StackPanel>
-                </Border>
+                </GroupBox>
             </StackPanel>
         </ScrollViewer>
     </Grid>
