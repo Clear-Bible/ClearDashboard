@@ -153,7 +153,15 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
             {
-                AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                if (args.RequestingAssembly == null && args.Name.StartsWith("WeifenLuo") == false)
+                {
+                    AppendText(Color.Orange, $"Cannot load {args.Name} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                }
+                else
+                {
+                    AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                }
+                
                 return null;
             }
             // Load the most up to date version
