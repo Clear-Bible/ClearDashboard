@@ -39,9 +39,9 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                 var projectDbContextFactory = _lifetimeScope.Resolve<ProjectDbContextFactory>();
                 var projectDbContext = await projectDbContextFactory.GetDatabaseContext(request.projectName,true,requestScope);
 
-                var currentProject = projectDbContext.Users.First();
+                var projectUser = projectDbContext.Users.First();
 
-                return new RequestResult<Models.User>(currentProject);
+                return new RequestResult<Models.User>(projectUser);
             }
         }
     }
