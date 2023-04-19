@@ -1,15 +1,9 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SIL.Extensions;
-
-using ModelCorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
-using ModelCorpus = ClearDashboard.DataAccessLayer.Models.Corpus;
 using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -49,6 +43,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
+
+            
             ProjectDbContext.Remove(parallelCorpus);
             _ = await ProjectDbContext.SaveChangesAsync(cancellationToken);
 

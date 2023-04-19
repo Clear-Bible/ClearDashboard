@@ -149,9 +149,26 @@ namespace ClearDashboard.DataAccessLayer
             }
             catch (Exception)
             {
-                return new LicenseUser();
+                try
+                {
+                    var temporaryLicenseUser = JsonSerializer.Deserialize<TemporaryLicenseUser>(decryptedLicenseKey);
+                    var licenseUser = new LicenseUser
+                    {
+                        FirstName = temporaryLicenseUser.FirstName,
+                        LastName = temporaryLicenseUser.LastName,
+                        LicenseKey = temporaryLicenseUser.LicenseKey,
+                        ParatextUserName = temporaryLicenseUser.ParatextUserName,
+                        MatchType = temporaryLicenseUser.MatchType,
+                        Id = Guid.Parse(temporaryLicenseUser.Id)
+                    };
+                    return licenseUser;
+                }
+                catch
+                {
+                    return new LicenseUser();
+                }
+               
             }
-
         }
 
         public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)

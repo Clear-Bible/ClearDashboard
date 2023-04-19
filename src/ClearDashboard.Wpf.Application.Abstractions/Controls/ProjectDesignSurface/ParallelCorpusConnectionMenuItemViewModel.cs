@@ -16,7 +16,8 @@ public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<Paral
     public string? TargetParatextId { get; set; } = "";
 
     public bool IsRtl { get; set; }
-    public bool IsTargetRTL { get; set; }
+    // ReSharper disable once InconsistentNaming
+    public bool IsTargetRtl { get; set; }
     public string? AlignmentSetId { get; set; } = string.Empty;
     public string? TranslationSetId { get; set; } = string.Empty;
     public string? DisplayName { get; set; } = string.Empty;
