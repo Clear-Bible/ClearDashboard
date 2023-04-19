@@ -222,6 +222,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             try
             {
+                bool error = false;
                 var baseAddress = $"http://localhost:{PortNumber}/";
                 WebAppProxy?.Dispose();
 
@@ -241,8 +242,9 @@ namespace ClearDashboard.WebApiParatextPlugin
                             if (e.Message.StartsWith("Disconnect"))
                             {
                                 ServerInUseMethod();
-                                return;
                             }
+
+                            error = true;
                         }
                         finally
                         {
@@ -251,7 +253,10 @@ namespace ClearDashboard.WebApiParatextPlugin
                         }
                     });
 
-                AppendText(Color.Green, "Owin Web Api host started");
+                if (error == false)
+                {
+                    AppendText(Color.Green, "Owin Web Api host started");
+                }
             }
             catch (Exception e)
             {
