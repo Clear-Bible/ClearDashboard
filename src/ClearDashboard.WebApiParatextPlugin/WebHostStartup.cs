@@ -27,7 +27,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public static IServiceProvider ServiceProvider { get; private set; }
 
-  
+
         public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IPluginHost pluginHost, IPluginChildWindow parent, IPluginLogger pluginLogger)
         {
             _project = project;
@@ -51,7 +51,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     map.UseCors(CorsOptions.AllowAll);
                     map.MapSignalR(new HubConfiguration()
                     {
-#if DEBUG
+#if DEBUG              
                         EnableDetailedErrors = true,
 #endif
                     });
@@ -61,8 +61,8 @@ namespace ClearDashboard.WebApiParatextPlugin
                 appBuilder.MapSignalR(new HubConfiguration()
                 {
 #if DEBUG
-                    EnableDetailedErrors = true, 
-                    
+                    EnableDetailedErrors = true,
+
                     //Resolver = signalRServiceResolver
 #endif
                 });
@@ -73,21 +73,21 @@ namespace ClearDashboard.WebApiParatextPlugin
                 appBuilder.UseWebApi(config);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "An unexpected error occurred while configuring Web API.");
             }
-           
+
         }
 
         private HttpConfiguration InitializeHttpConfiguration()
         {
             var config = new HttpConfiguration();
             config.DependencyResolver = new DefaultDependencyResolver(ServiceProvider);
-           // config.MessageHandlers.Add(new MessageLoggingHandler(_mainWindow));
+            // config.MessageHandlers.Add(new MessageLoggingHandler(_mainWindow));
             config.Formatters.Remove(config.Formatters.XmlFormatter);
-          //config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings
-          //    { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            //config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings
+            //    { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
 
             config.Routes.MapHttpRoute(
@@ -96,11 +96,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                 defaults: new { }
             );
 
-         config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            config.Routes.MapHttpRoute(
+                   name: "DefaultApi",
+                   routeTemplate: "api/{controller}/{id}",
+                   defaults: new { id = RouteParameter.Optional }
+               );
 
             config.EnsureInitialized(); //Nice to check for issues before first request
 
@@ -116,14 +116,14 @@ namespace ClearDashboard.WebApiParatextPlugin
             //services.AddSerilog();
 
             services.AddMediatR(typeof(GetCurrentProjectQueryHandler));
-            
-            
+
+
             services.AddSingleton<IProject>(sp => _project);
             services.AddTransient<IVerseRef>(sp => _verseRef);
-            services.AddSingleton<IPluginHost>(sp =>_pluginHost);
+            services.AddSingleton<IPluginHost>(sp => _pluginHost);
             services.AddSingleton<IPluginChildWindow>(sp => _parent);
             services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
-         
+
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
                 .Where(t => typeof(IHttpController).IsAssignableFrom(t)
