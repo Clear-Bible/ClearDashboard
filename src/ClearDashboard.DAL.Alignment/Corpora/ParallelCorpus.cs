@@ -187,15 +187,17 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
+        /// <summary>
+        /// as a part of updating, deletes all verse mappings in the database and inserts all versemappings 
+        /// obtained from member property SourceTextIdToVerseMappings.GetVerseMappings().
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public async Task Update(IMediator mediator, CancellationToken token = default)
         {
-            // FIXME (verify):  not sure API-wise of how the user is supposed to make changes to verse
-            // mappings of a ParallelCorpus.  Since there aren't any verse mapping setters on the
-            // SourceTextIdToVerseMappings interface, this assumes that in order to alter them, the UI
-            // must create an instance of SourceTextIdToVerseMappingsFromVerseMappings that contains
-            // the altered verse mappings.  
-            var verseMappingsToUpdate = (SourceTextIdToVerseMappings is SourceTextIdToVerseMappingsFromVerseMappings)
-                ? SourceTextIdToVerseMappings.GetVerseMappings()
+            var verseMappingsToUpdate = (SourceTextIdToVerseMappings is not SourceTextIdToVerseMappingsFromDatabase)
+                ? SourceTextIdToVerseMappings?.GetVerseMappings() ?? Enumerable.Empty<VerseMapping>()
                 : Enumerable.Empty<VerseMapping>();
 
             var command = new UpdateParallelCorpusCommand(
