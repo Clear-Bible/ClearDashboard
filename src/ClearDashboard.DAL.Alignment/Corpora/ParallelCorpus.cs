@@ -117,7 +117,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         {
             if (UseCache)
             {
-                IEnumerable<T> BaseToEnumerable<T>(IEnumerator<T> enumerator)
+                IEnumerable<T> EnumeratorToEnumerable<T>(IEnumerator<T> enumerator)
                 {
                     while (enumerator.MoveNext())
                         yield return enumerator.Current;
@@ -125,7 +125,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
                 if (ParallelTextRowsCache == null)
                 {
-                    ParallelTextRowsCache = BaseToEnumerable(base.GetEnumerator()).ToList();
+                    ParallelTextRowsCache = EnumeratorToEnumerable(base.GetEnumerator()).ToList();
                 }
                 return ParallelTextRowsCache.GetEnumerator();
             }
