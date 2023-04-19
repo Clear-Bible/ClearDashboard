@@ -11,6 +11,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -128,18 +129,32 @@ namespace ClearDashboard.DataAccessLayer
             if (CurrentProject != null && CurrentProject.ProjectName != null)
             {
                 var requestResults = ExecuteRequest(new GetProjectUserSlice.GetProjectUserQuery(CurrentProject.ProjectName), CancellationToken.None);
-
-                if (requestResults.IsCompleted && requestResults.Result.Success && requestResults.Result.HasData && requestResults.Result.Data.Id != CurrentUser.Id)
+                
+                if (requestResults.IsCompleted && requestResults.Result.Success && requestResults.Result.HasData)
                 {
-                    user = new User
+                    var currentUserIsInDatabase = false;
+
+                    foreach (var item in requestResults.Result.Data)
                     {
-                        FirstName = requestResults.Result.Data.FirstName,
-                        LastName = requestResults.Result.Data.LastName,
-                        Id = requestResults.Result.Data.Id
-                    };
+                        if (item.Id == CurrentUser.Id)
+                        {
+                            currentUserIsInDatabase = true;
+                        }
+                    }
+
+                    if (!currentUserIsInDatabase)
+                    {
+                        var firstUser = requestResults.Result.Data.FirstOrDefault();
+
+                        user = new User
+                        {
+                            FirstName = firstUser.FirstName,
+                            LastName = firstUser.LastName,
+                            Id = firstUser.Id
+                        };
+                    }
                 }
             }
-            
             return user;
         }
 

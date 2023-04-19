@@ -19,9 +19,9 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
 {
     public class GetProjectUserSlice
     {
-        public record GetProjectUserQuery(string projectName) : IRequest<RequestResult<Models.User>>;
+        public record GetProjectUserQuery(string projectName) : IRequest<RequestResult<List<Models.User>>>;
 
-        public class GetProjectUserQueryHandler : IRequestHandler<GetProjectUserQuery, RequestResult<Models.User>>
+        public class GetProjectUserQueryHandler : IRequestHandler<GetProjectUserQuery, RequestResult<List<Models.User>>>
         {
             private readonly IMediator _mediator;
             private readonly ILifetimeScope _lifetimeScope;
@@ -32,16 +32,16 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                 _mediator = mediator;
             }
 
-            public async Task<RequestResult<Models.User>> Handle(GetProjectUserQuery request, CancellationToken cancellationToken)
+            public async Task<RequestResult<List<Models.User>>> Handle(GetProjectUserQuery request, CancellationToken cancellationToken)
             {
                 using var requestScope = _lifetimeScope.BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
 
                 var projectDbContextFactory = _lifetimeScope.Resolve<ProjectDbContextFactory>();
                 var projectDbContext = await projectDbContextFactory.GetDatabaseContext(request.projectName,true,requestScope);
 
-                var projectUser = projectDbContext.Users.First();
+                var projectUsers = projectDbContext.Users.ToList();
 
-                return new RequestResult<Models.User>(projectUser);
+                return new RequestResult<List<Models.User>>(projectUsers);
             }
         }
     }
