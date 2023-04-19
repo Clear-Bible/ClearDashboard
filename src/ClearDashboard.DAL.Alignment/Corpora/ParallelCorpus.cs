@@ -188,8 +188,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
 
         /// <summary>
-        /// as a part of updating, deletes all verse mappings in the database and inserts all versemappings 
-        /// obtained from member property SourceTextIdToVerseMappings.GetVerseMappings().
+        /// To update versemappings, property SourceTextIdToVerseMappings must be set to an 
+        /// instance that is not a SourceTextIdToVerseMappingsFromDatabase and implements SourceTextIdToVerseMappings.GetVerseMappings(). If this
+        /// property is set to such an instance, this method 
+        /// 1. deletes all versemappings for this ParallelCorpus in the database 
+        /// 2. inserts those returned by SourcetextIdToVerseMappings.GetVerseMappings(),
+        /// 3. sets property SourceTextIdToVerseMappings back to a SourceTextIdToVerseMappingsFromDatabase.
         /// </summary>
         /// <param name="mediator"></param>
         /// <param name="token"></param>
@@ -206,6 +210,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();
+            SourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromDatabase(mediator, ParallelCorpusId);
         }
 
         public async Task Delete(IMediator mediator, CancellationToken token = default)
