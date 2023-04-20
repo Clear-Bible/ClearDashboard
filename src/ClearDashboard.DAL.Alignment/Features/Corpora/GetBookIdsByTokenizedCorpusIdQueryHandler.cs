@@ -13,8 +13,6 @@ using Microsoft.Extensions.Logging;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using System.Linq;
 using SIL.Scripture;
-using System.Reflection.PortableExecutable;
-using SIL.Machine.FiniteState;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 

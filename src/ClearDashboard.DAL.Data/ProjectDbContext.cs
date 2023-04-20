@@ -262,14 +262,14 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .WithMany(p => p.TokenComposites)
                 .UsingEntity<TokenCompositeTokenAssociation>();
 
-            modelBuilder.Entity<VerseRow>().HasIndex(e => e.BookChapterVerse);
-            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
-
             modelBuilder.Entity<VerseRow>()
                 .HasMany(e => e.TokenComponents)
                 .WithOne(e => e.VerseRow)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<VerseRow>().HasIndex(e => e.BookChapterVerse);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 
             modelBuilder.Entity<Token>().HasIndex(e => e.TokenizedCorpusId);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
