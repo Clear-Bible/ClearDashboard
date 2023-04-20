@@ -10,6 +10,7 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 //using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -40,6 +41,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -318,7 +320,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task DrawDesignSurface()
         {
-
+            var resourceList = DesignSurfaceViewModel!.GetParatextResourceNames();
+            
             Logger!.LogInformation($"Drawing design surface for project '{ProjectName}'.");
             DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
             DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
@@ -354,6 +357,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var point = corpusNodeLocation != null
                             ? new Point(corpusNodeLocation.X, corpusNodeLocation.Y)
                             : new Point();
+
+                        // check to see if this is a resource and not a Standard
+                        if (corpus.CorpusId.CorpusType == CorpusType.Standard.ToString())
+                        {
+                            var resource = resourceList.FirstOrDefault(x => x == corpus.CorpusId.Name);
+                            if (resource != null)
+                            {
+                                corpus.CorpusId.CorpusType = CorpusType.Resource.ToString();
+                            }
+                        }
+                        
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
                         var tokenizedCorpora =
                             topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
@@ -410,6 +424,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
         }
+
 
         private ProjectDesignSurfaceSerializationModel? LoadDesignSurfaceData()
         {

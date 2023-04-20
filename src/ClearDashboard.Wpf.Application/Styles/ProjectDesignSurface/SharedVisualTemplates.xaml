@@ -31,7 +31,7 @@
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="NodeFillBrushReferenceResource" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
-        <GradientStop Offset="0.6" Color="DarkOliveGreen" />
+        <GradientStop Offset="0.6" Color="LightGreen" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="NodeFillBrushReferenceDaughter" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
