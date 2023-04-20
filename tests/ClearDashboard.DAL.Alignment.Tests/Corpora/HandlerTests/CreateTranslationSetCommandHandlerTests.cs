@@ -1014,7 +1014,10 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         var targetTokenizedTextCorpus = await TestDataHelpers.GetZZSurCorpus()
             .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-        var engineParallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+        var engineParallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
+                sourceTargetParallelVersesList: new SourceTextIdToVerseMappingsFromVerseMappings(EngineParallelTextCorpus.VerseMappingsForAllVerses(
+                    sourceTokenizedTextCorpus.Versification,
+                    targetTokenizedTextCorpus.Versification)));
 
         return engineParallelTextCorpus;
     }
@@ -1029,7 +1032,10 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-        var engineParallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+        var engineParallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
+                sourceTargetParallelVersesList: new SourceTextIdToVerseMappingsFromVerseMappings(EngineParallelTextCorpus.VerseMappingsForAllVerses(
+                    sourceTokenizedTextCorpus.Versification,
+                    targetTokenizedTextCorpus.Versification)));
 
         return engineParallelTextCorpus;
     }
@@ -1047,7 +1053,10 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-        var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+        var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
+                sourceTargetParallelVersesList: new SourceTextIdToVerseMappingsFromVerseMappings(EngineParallelTextCorpus.VerseMappingsForAllVerses(
+                    sourceTokenizedTextCorpus.Versification,
+                    targetTokenizedTextCorpus.Versification)));
 
         return parallelTextCorpus;
     }

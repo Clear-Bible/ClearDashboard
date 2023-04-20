@@ -290,7 +290,18 @@
                                         Height="15"
                                         Margin="5,5,0,0"
                                         VerticalAlignment="Center"
-                                        Kind="{Binding IconKind}" />
+                                        Kind="{Binding IconKind}">
+                                        <iconPacks:PackIconPicolIcons.Style>
+                                            <Style TargetType="iconPacks:PackIconPicolIcons" >
+                                                <Setter Property="Foreground" Value="Black" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IconKind}" Value="Cancel">
+                                                        <Setter Property="Foreground" Value="Red" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </iconPacks:PackIconPicolIcons.Style>
+                                    </iconPacks:PackIconPicolIcons>
                                     <TextBlock
                                         Margin="5,5,0,0"
                                         VerticalAlignment="Center"

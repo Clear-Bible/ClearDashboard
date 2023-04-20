@@ -113,7 +113,10 @@ public class CreateNotesCommandHandlerTests : TestBase
             sw.Restart();
             #endregion
 
-            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, 
+                new SourceTextIdToVerseMappingsFromVerseMappings(TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
+                    sourceTokenizedTextCorpus.Versification,
+                    targetTokenizedTextCorpus.Versification)));
 
             #region Stopwatch
             sw.Stop();
@@ -558,7 +561,10 @@ public class CreateNotesCommandHandlerTests : TestBase
                 "Resource", Guid.NewGuid().ToString());
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleGreekCorpus()
                 .Create(Mediator!, targetCorpus.CorpusId, "test", "tokenization");
-            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, 
+                new SourceTextIdToVerseMappingsFromVerseMappings(TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
+                    sourceTokenizedTextCorpus.Versification,
+                    targetTokenizedTextCorpus.Versification)));
             var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
@@ -638,7 +644,10 @@ public class CreateNotesCommandHandlerTests : TestBase
                 "Resource", Guid.NewGuid().ToString());
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleGreekCorpus()
                 .Create(Mediator!, targetCorpus.CorpusId, "test", "tokenization");
-            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, 
+                new SourceTextIdToVerseMappingsFromVerseMappings(TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
+                    sourceTokenizedTextCorpus.Versification,
+                    targetTokenizedTextCorpus.Versification)));
             var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,

@@ -39,8 +39,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         #region Member Variables
         public Dictionary<string, string> LexMatRef = new();
-        public string[] BibleBooks = { "01GEN", "02EXO", "03LEV", "04NUM", "05DEU", "06JOS", "07JDG", "08RUT", "091SA", "102SA", "111KI", "122KI", "131CH", "142CH", "15EZR", "16NEH", "17EST", "18JOB", "19PSA", "20PRO", "21ECC", "22SNG", "23ISA", "24JER", "25LAM", "26EZK", "27DAN", "28HOS", "29JOL", "30AMO", "31OBA", "32JON", "33MIC", "34NAM", "35HAB", "36ZEP", "37HAG", "38ZEC", "39MAL", "41MAT", "42MRK", "43LUK", "44JHN", "45ACT", "46ROM", "471CO", "482COR", "49GAL", "50EPH", "51PHP", "52COL", "531TH", "542TH", "551TI", "562TI", "57TIT", "58PHM", "59HEB", "60JAS", "611PE", "622PE", "631JN", "642JN", "653JN", "66JUD", "67REV", "70TOB", "71JDT", "72ESG", "73WIS", "74SIR", "75BAR", "76LJE", "77S3Y", "78SUS", "79BEL", "80MAN", "81PS2" };
-        public Dictionary<string, string> BibleBookDict;
         public string[] projectBookFileData;
         public string ProjectDir;
         private TermRenderingsList _termRenderingsList = new();
@@ -51,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private string _paratextInstallPath = "";
 
         private bool _generateDataRunning = false;
-      //  private CancellationTokenSource _cancellationTokenSource;
+        //  private CancellationTokenSource _cancellationTokenSource;
         private string _taskName = "PINS";
 
         private readonly ILogger<PinsViewModel> _logger;
@@ -151,7 +149,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         // ReSharper disable once UnusedMember.Global
         public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope,localizationService)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Title = "⍒ " + LocalizationService!.Get("Windows_PINS");
             this.ContentId = "PINS";
@@ -160,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _projectManager = projectManager;
             _mediator = mediator;
             _longRunningTaskManager = longRunningTaskManager;
-            
+
             // wire up the commands
             ClearFilterCommand = new RelayCommand(ClearFilter);
             VerseButtonCommand = new RelayCommand(VerseButtonClick);
@@ -202,15 +200,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _ = base.OnActivateAsync(cancellationToken);
         }
 
-        protected override async  Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-          
+
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
             if (_generateDataRunning)
             {
                 var cancelled = _longRunningTaskManager.CancelTask(_taskName);
-                
+
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                 {
                     Name = _taskName,
@@ -232,7 +230,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GenerateData()
         {
             _generateDataRunning = true;
-            
+
             var longRunningTask = _longRunningTaskManager.Create(_taskName, LongRunningTaskStatus.Running);
             var cancellationToken = longRunningTask.CancellationTokenSource.Token;
 
@@ -270,7 +268,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     ProgressBarVisibility = Visibility.Collapsed;
                     return false;
                 }
-
 
                 // fix the greek renderings which are inconsistent
                 for (var i = _termRenderingsList.TermRendering.Count - 1; i >= 0; i--)
@@ -352,13 +349,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     {
                         biblicalTermsSpelling = biblicalTermsSense = sourceWord;
                     }
-                    
+
                     // CHECK AGAINST SPELLING
                     List<Status> spellingRecords = new();
                     try
                     {
-                       spellingRecords = _spellingStatus.Status?.FindAll(s => string.Equals(s.Word,
-                            biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
+                        spellingRecords = _spellingStatus.Status?.FindAll(s => string.Equals(s.Word,
+                             biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
                     }
                     catch (Exception e)
                     {
@@ -509,13 +506,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     Word = "",
                                 });
                             });
-                          
+
                         }
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
+                var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
+                ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
+                var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories)
+                    .ToList();
+                string tref, lx, lt, li;
+                var bcnt = 0;
+                var lexlang = ProjectManager.CurrentParatextProject.Name;
+                var bookfilesfiltered = bookfiles.Where(s => s.ToString().Contains("\\" + lexlang)).ToList();
+
+                foreach (var f in bookfilesfiltered) // loop through books f
+                {
+                    projectBookFileData = File.ReadAllLines(f); // read file and check
+                    for (var k = 0; k < projectBookFileData.Count(); k++)
+                    {
+                        if (projectBookFileData[k].Contains("<item>"))
+                        {
+                            if (projectBookFileData[++k].Contains("<string>"))
+                            {
+                                tref = GetTagValue(projectBookFileData[k]);
+                                do
+                                {
+                                    if (projectBookFileData[++k]
+                                        .Contains(
+                                            "<Lexeme")) // build a dictionary where key = lexeme+gloss, and where value = references
+                                    {
+                                        lx = lt = li = "";
+                                        Lexparse(projectBookFileData[k], ref lx, ref lt, ref li);
+                                        if (LexMatRef.ContainsKey(li +
+                                                                  lx)) // key already exists so add references to previous value
+                                            LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
+                                        else // this is a new key so create a new key, value pair
+                                            LexMatRef.Add(li + lx, tref);
+                                    }
+                                } while (!projectBookFileData[k].Contains("</item>"));
+                            }
+                        }
+                    }
+                }
 
                 if (_lexicon.Entries != null)
                 {
@@ -524,6 +559,55 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     {
                         foreach (var senseEntry in entry.Entry.Sense)
                         {
+                            string vl = string.Empty;
+                            var pndx = 0;
+                            var simrefs = "";
+                            var simprefsString = "0";
+                            List<string> verseList = new List<string>();
+
+                            try
+                            {
+                                if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
+                                {
+                                    var rs = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
+                                    SortRefs(ref rs); // sort the List  
+                                    vl = string.Join(", ", rs); // change List back to comma delimited string
+
+                                    if (!vl.Contains("missing"))
+                                    {
+                                        if (vl != "")
+                                        {
+                                            //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
+                                            var longrefs = vl.Split(',').ToList();
+                                            var simprefs = new List<string>();
+
+                                            foreach (var longref in longrefs)
+                                            {
+                                                var booksplit = longref.Trim().Split(' ').ToList();
+                                                var bookNum =
+                                                    BookChapterVerseViewModel.GetBookNumFromBookName(booksplit[0]);
+                                                var chapterVerseSplit = booksplit[1].Split(':').ToList();
+                                                var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
+                                                var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
+                                                simprefs.Add(bookNum + chapterNum + verseNum);
+                                            }
+
+                                            verseList.AddRange(simprefs);
+                                            simprefsString = verseList.Count.ToString();
+                                        }
+                                        else
+                                        {
+                                            simprefsString = "0";
+                                            verseList = null;
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
+                            }
+
                             GridData.Add(new PinsDataTable
                             {
                                 Id = Guid.NewGuid(),
@@ -537,119 +621,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Notes = "",
                                 Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
                                 Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
-                                Refs = "",
-                                SimpRefs = "0",
+                                Refs = vl,
+                                SimpRefs = simprefsString,
                                 Source = entry.Lexeme.Form,
                                 Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
                                 Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
+                                VerseList = verseList,
                                 Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
                             });
                             cancellationToken.ThrowIfCancellationRequested();
-                        }
-                    }
-                }
-
-
-                if (GridData.Count > 0)
-                {
-                    BibleBookDict = BibleBooks.ToDictionary(item => item[2..5], item => item[..2]);
-                    var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
-                    ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
-                    var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories)
-                        .ToList();
-                    string tref, lx, lt, li;
-                    var bcnt = 0;
-                    var lexlang = ProjectManager.CurrentParatextProject.Name;
-                    var bookfilesfiltered = bookfiles.Where(s => s.ToString().Contains("\\" + lexlang)).ToList();
-
-                    foreach (var f in bookfilesfiltered) // loop through books f
-                    {
-                        projectBookFileData = File.ReadAllLines(f); // read file and check
-                        for (var k = 0; k < projectBookFileData.Count(); k++)
-                        {
-                            if (projectBookFileData[k].Contains("<item>"))
-                            {
-                                if (projectBookFileData[++k].Contains("<string>"))
-                                {
-                                    tref = GetTagValue(projectBookFileData[k]);
-                                    do
-                                    {
-                                        if (projectBookFileData[++k]
-                                            .Contains(
-                                                "<Lexeme")) // build a dictionary where key = lexeme+gloss, and where value = references
-                                        {
-                                            lx = lt = li = "";
-                                            Lexparse(projectBookFileData[k], ref lx, ref lt, ref li);
-                                            if (LexMatRef.ContainsKey(li +
-                                                                      lx)) // key already exists so add references to previous value
-                                                LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
-                                            else // this is a new key so create a new key, value pair
-                                                LexMatRef.Add(li + lx, tref);
-                                        }
-                                    } while (!projectBookFileData[k].Contains("</item>"));
-                                }
-                            }
-                        }
-                    }
-
-                    List<string> rs;
-                    string ky, vl;
-                    int ndx2;
-                    var pndx = 0;
-                    var simrefs = "";
-                    var results = new List<PinsDataTable>();
-                    PinsDataTable datrow;
-                    foreach (var LMR in LexMatRef)
-                    {
-                        try
-                        {
-                            rs = LMR.Value.Split(',')
-                                .ToList(); // change dictionary values from comma delimited string to List for sorting
-                            ky = LMR.Key;
-                            SortRefs(ref rs); // sort the List  
-                            vl = string.Join(", ", rs); // change List back to comma delimited string
-
-                            if (!vl.Contains("missing"))
-                            {
-                                var objectToFind = GridData.Where(s => s.Match == ky).FirstOrDefault();
-                                ndx2 = GridData.IndexOf(objectToFind); //.FindIndex(s => s.Match == ky);
-                                if (ndx2 >= 0)
-                                {
-                                    datrow = GridData[ndx2];
-                                    datrow.Refs = vl;
-
-                                    if (datrow.Refs != "")
-                                    {
-                                        //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
-                                        var longrefs = datrow.Refs.Split(',').ToList();
-                                        var simprefs = new List<string>();
-                                        foreach (var longref in longrefs)
-                                        {
-                                            var booksplit = longref.Trim().Split(' ').ToList();
-                                            var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
-                                            var chapterVerseSplit = booksplit[1].Split(':').ToList();
-                                            var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
-                                            var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
-                                            simprefs.Add(bookNum + chapterNum + verseNum);
-                                        }
-
-                                        var verseList = datrow.VerseList;
-                                        verseList.AddRange(simprefs);
-                                        datrow.VerseList = verseList;
-                                        datrow.SimpRefs = datrow.VerseList.Count.ToString();
-                                    }
-                                    else
-                                    {
-                                        datrow.SimpRefs = "0";
-                                        datrow.VerseList = null;
-
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                         }
                     }
                 }
@@ -691,16 +671,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
                         }), cancellationToken);
                 }
-            
             }
             finally
             {
                 _generateDataRunning = false;
-               
-                _longRunningTaskManager.TaskComplete(_taskName);
-               
-               
 
+                _longRunningTaskManager.TaskComplete(_taskName);
             }
             return false;
         }
@@ -739,31 +715,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             foreach (var r in refs)
             {
                 var tmp = r.Trim();
-                var book = tmp.Substring(0, 3);
-                var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
-                if (bookNum.Length > 0)
+                if (tmp.Length >= 3)
                 {
-                    tmp = tmp.Substring(3).Trim();
-                    var parts = tmp.Split(':');
-                    if (parts.Length > 1)
+                    var book = tmp.Substring(0, 3);//the issue is we are assuming the string is a certian length etc.  do more checking
+                    var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
+                    if (bookNum.Length > 0)
                     {
-                        string chapter = parts[0].Trim();
-                        string verse = parts[1].Trim();
-                        if (verse.IndexOf("-") > 0)
+                        if (tmp.Length >= 4)
                         {
-                            verse = verse.Substring(0, verse.IndexOf("-"));
-                        }
+                            tmp = tmp.Substring(3).Trim();
+                            var parts = tmp.Split(':');
+                            if (parts.Length > 1)
+                            {
+                                string chapter = parts[0].Trim();
+                                string verse = parts[1].Trim();
+                                if (verse.IndexOf("-") > 0)
+                                {
+                                    verse = verse.Substring(0, verse.IndexOf("-"));
+                                }
 
-                        if (verse.IndexOf(".") > 0)
-                        {
-                            verse = verse.Substring(0, verse.IndexOf("."));
-                        }
+                                if (verse.IndexOf(".") > 0)
+                                {
+                                    verse = verse.Substring(0, verse.IndexOf("."));
+                                }
 
-                        references.Add(new CoupleOfStrings
-                        {
-                            stringA = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}",
-                            stringB = r
-                        });
+                                references.Add(new CoupleOfStrings
+                                {
+                                    stringA = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}",
+                                    stringB = r
+                                });
+                            }
+                        }
                     }
                 }
             }
@@ -942,7 +924,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 await LoadVerseText(dataRow);
             }
-            
+
             ProgressBarVisibility = Visibility.Collapsed;
         }
 
@@ -1017,7 +999,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 return;
             }
-            
+
             await ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None);
         }
 

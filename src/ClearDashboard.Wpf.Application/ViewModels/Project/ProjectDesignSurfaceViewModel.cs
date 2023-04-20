@@ -7,50 +7,49 @@ using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+//using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Enums;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.ObjectModel;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.Shell;
+using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
+using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
-using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using ControlzEx.Standard;
-using System.Xml.Linq;
-using ClearDashboard.Wpf.Application.Properties;
-using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
-using ClearDashboard.Wpf.Application.Enums;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using System.Dynamic;
-using SIL.Scripture;
 
 
 // ReSharper disable once CheckNamespace
@@ -140,7 +139,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Constructor
 
         // Required for design-time binding
+#pragma warning disable CS8618
         public ProjectDesignSurfaceViewModel()
+#pragma warning restore CS8618
         {
             //no-op
         }
@@ -213,10 +214,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             catch (Exception ex)
             {
-                var s = ex.ToString();
+                Logger!.LogError(ex.Message, ex);
             }
 
-            ProjectName = ProjectManager.CurrentProject.ProjectName!;
+            ProjectName = ProjectManager!.CurrentProject.ProjectName!;
 
             await DrawDesignSurface();
 
@@ -397,7 +398,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             catch (Exception e)
             {
-                Logger.LogError(e.Message, e);
+                Logger!.LogError(e.Message, e);
             }
             finally
             {
@@ -767,7 +768,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
 
-                    var selectedProject = dialogViewModel.SelectedProject;
+                    var selectedProject = dialogViewModel!.SelectedProject;
                     var bookIds = dialogViewModel.BookIds;
                     var taskName = $"{selectedProject!.Name}";
                     _busyState.Add(taskName, true);
@@ -854,7 +855,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8604
                             // ReSharper disable once UnusedVariable
                             var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                                selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), selectedProject.ScrVers, cancellationToken, false);
+                                selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), selectedProject.ScrVers, cancellationToken);
 #pragma warning restore CS8604
 
 
@@ -940,15 +941,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
-            var connection = DesignSurfaceViewModel.ParallelCorpusConnections.FirstOrDefault(x => x.Id == connectionMenuItem.ConnectionId);
+            var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(x => x.Id == connectionMenuItem.ConnectionId);
 
             ParallelCorpusId parallelCorpusId;
             try
             {
-                parallelCorpusId = new ParallelCorpusId(connection.ParallelCorpusId.Id!,
-                    new TokenizedTextCorpusId(connection.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.Id),
-                    new TokenizedTextCorpusId(connection.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.Id), DisplayName,
-                    new Dictionary<string, object>(), new DateTimeOffset(), connection.ParallelCorpusId.UserId);
+                parallelCorpusId = new ParallelCorpusId(connection!.ParallelCorpusId!.Id,
+                    new TokenizedTextCorpusId(connection.ParallelCorpusId!.SourceTokenizedCorpusId!.CorpusId!.Id),
+                    new TokenizedTextCorpusId(connection.ParallelCorpusId!.TargetTokenizedCorpusId!.CorpusId!.Id), DisplayName,
+                    new Dictionary<string, object>(), new DateTimeOffset(), connection.ParallelCorpusId!.UserId!);
 
                 var parameters = new List<Autofac.Core.Parameter>
                 {
@@ -963,12 +964,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     try
                     {
-                        var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet!,
-                            dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
-                            dialogViewModel.SelectedAlignmentSet!.ParallelCorpusId!, Mediator!);
-
                         var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                        DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
+                        DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connection, topLevelProjectIds);
                         await SaveDesignSurfaceData();
 
                     }
@@ -989,7 +986,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private async Task AddNewAlignment(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
             var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
-            AddParallelCorpus(connection, ParallelProjectType.AlignmentOnly);
+            await AddParallelCorpus(connection!, ParallelProjectType.AlignmentOnly);
         }
 
         public async Task AddParallelCorpus(ParallelCorpusConnectionViewModel newParallelCorpusConnection,
@@ -1039,7 +1036,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (parallelProjectType == ParallelProjectType.WholeProcess)
                     {
                         newParallelCorpusConnection.ParallelCorpusId =
-                            dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
+                            dialogViewModel!.ParallelTokenizedCorpus.ParallelCorpusId;
                         newParallelCorpusConnection.ParallelCorpusDisplayName =
                             dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
                     }
@@ -1051,7 +1048,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else
                 {
-                    if (dialogViewModel.ProjectType == ParallelProjectType.WholeProcess)
+                    if (dialogViewModel!.ProjectType == ParallelProjectType.WholeProcess)
                     {
                         DesignSurfaceViewModel!.DeleteParallelCorpusConnection(newParallelCorpusConnection);
                     }
@@ -1080,7 +1077,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             if (!Enum.TryParse(selectedTokenizer, out Tokenizers tokenizer))
             {
                 Logger!.LogError($"UpdateParatextCorups received an invalid selectedTokenizer value '{selectedTokenizer}'");
-                throw new ArgumentException($"Unable to parse value as Enum '{selectedTokenizer}'", nameof(selectedTokenizer));
+                throw new ArgumentException($@"Unable to parse value as Enum '{selectedTokenizer}'", nameof(selectedTokenizer));
             }
 
             var dialogViewModel = LifetimeScope?.Resolve<UpdateParatextCorpusDialogViewModel>(parameters);
@@ -1191,7 +1188,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private static ITokenizer<string, int, string> InstantiateTokenizer(Tokenizers tokenizerEnum)
         {
             var assemblyTokenizerType = typeof(LatinWordTokenizer);
-            var assembly = assemblyTokenizerType!.Assembly;
+            var assembly = assemblyTokenizerType.Assembly;
             var tokenizerType = assembly.GetType($"{assemblyTokenizerType.Namespace}.{tokenizerEnum}");
 
             if (tokenizerType is null)
@@ -1289,13 +1286,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             IsRtl = connectionMenuItem.IsRtl,
                             //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            IsTargetRtl = connectionMenuItem.IsTargetRTL,
+                            IsTargetRtl = connectionMenuItem.IsTargetRtl,
                             IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds
                                 .AddAlignmentSetToNewEnhancedView,
                             SourceParatextId = connectionMenuItem.SourceParatextId,
                             TargetParatextId = connectionMenuItem.TargetParatextId
                         }, CancellationToken.None);
                     }
+                    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteAlignmentSet:
+                    await DeleteAlignmentSet(connectionMenuItem);
+                    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteTranslationSet:
+                    await DeleteTranslationSet(connectionMenuItem);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToCurrentEnhancedView:
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView:
@@ -1316,17 +1319,88 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //FIXME:surface serialization null,
                             IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds
                                     .AddInterlinearToNewEnhancedView,
-                            IsTargetRtl = connectionMenuItem.IsTargetRTL,
+                            IsTargetRtl = connectionMenuItem.IsTargetRtl,
                             SourceParatextId = connectionMenuItem.SourceParatextId,
                             TargetParatextId = connectionMenuItem.TargetParatextId
                         }, CancellationToken.None
                         );
                     }
                     break;
-                default:
-                    //no-op
-                    break;
+                //default:
+                //    //no-op
+                //    break;
             }
+        }
+
+        private async Task DeleteTranslationSet(ParallelCorpusConnectionMenuItemViewModel parallelCorpusConnectionMenuItemViewModel)
+        {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            var translationSetId = topLevelProjectIds.TranslationSetIds.FirstOrDefault(x => x.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.TranslationSetId);
+
+            if (translationSetId != null)
+            {
+                DesignSurfaceViewModel!.DeleteTranslationFromMenus(translationSetId);
+
+#pragma warning disable CS4014
+                Task.Factory.StartNew(async () =>
+                {
+                    await DAL.Alignment.Translation.TranslationSet.Delete(Mediator!, translationSetId);
+                });
+#pragma warning restore CS4014
+            }
+        }
+
+        private async Task DeleteAlignmentSet(
+            ParallelCorpusConnectionMenuItemViewModel parallelCorpusConnectionMenuItemViewModel)
+        {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            var alignmentSetId = topLevelProjectIds.AlignmentSetIds.FirstOrDefault(x =>
+
+                x.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.AlignmentSetId
+            );
+
+            if (alignmentSetId != null)
+            {
+                // see if this is the last one or not
+                var alignmentSetIdCount = topLevelProjectIds.AlignmentSetIds.Where(x =>
+                    x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId).ToList();
+                if (alignmentSetIdCount.Count == 1)
+                {
+                    var parallelCorpusConnectionViewModel = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(x =>
+                        x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId);
+
+                    if (parallelCorpusConnectionViewModel != null)
+                    {
+                        // kill off the whole parallel line
+                        DeleteParallelCorpusConnection(parallelCorpusConnectionViewModel);
+                        return;
+                    }
+                }
+
+                // remove any related translation sets
+                var translationSetId =
+                    topLevelProjectIds.TranslationSetIds.FirstOrDefault(x => x.AlignmentSetGuid == alignmentSetId.Id);
+                if (translationSetId is not null)
+                {
+                    DesignSurfaceViewModel!.DeleteTranslationFromMenus(translationSetId);
+                    //note that the translation set gets deleted automatically in the database
+                    //by the AlignmentSet.Delete() method below since it is linked.
+                }
+
+                DesignSurfaceViewModel!.DeleteAlignmentFromMenus(alignmentSetId);
+                
+#pragma warning disable CS4014
+                Task.Factory.StartNew(async () =>
+                {
+                    await AlignmentSet.Delete(Mediator!, alignmentSetId); 
+
+                });
+#pragma warning restore CS4014
+            }
+
+
         }
 
 
@@ -1355,7 +1429,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
                     var tokenizedCorpus =
                         topLevelProjectIds.TokenizedTextCorpusIds.FirstOrDefault(tc =>
-                            tc.CorpusId.Id == corpusNodeViewModel.CorpusId && tc.TokenizationFunction == corpusNodeMenuItem.Tokenizer);
+                            tc.CorpusId!.Id == corpusNodeViewModel.CorpusId && tc.TokenizationFunction == corpusNodeMenuItem.Tokenizer);
 
                     if (tokenizedCorpus == null)
                     {
@@ -1411,6 +1485,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
         {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+
+            var alignmentSetIds = topLevelProjectIds.AlignmentSetIds.Where(x => x.ParallelCorpusId == connection.ParallelCorpusId).ToList();
+
+            var translationSetIds = topLevelProjectIds.TranslationSetIds.Where(x => x.ParallelCorpusId == connection.ParallelCorpusId).ToList();
+
+
+            if (alignmentSetIds.Count > 1 || translationSetIds.Count > 1)
+            {
+                // show the warning dialog if there are multiple alignment sets that are going to be deleted
+                dynamic settings = new ExpandoObject();
+                settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.CanResize;
+                settings.MinWidth = 800;
+                settings.MinHeight = 600;
+                settings.Title = "Delete Alignments/Interlinears";
+
+                var viewModel = IoC.Get<DeleteParallelizationLineViewModel>();
+                viewModel.AlignmentSetIds = alignmentSetIds;
+                viewModel.TranslationSetIds = translationSetIds;
+                viewModel.DesignSurfaceViewModel = DesignSurfaceViewModel!;
+
+                IWindowManager manager = new WindowManager();
+                var ret = manager.ShowDialogAsync(viewModel, null, settings);
+
+                if ((bool)ret.GetType().GetProperty("Result").GetValue(ret, null) == false)
+                {
+                    // cancelled by user
+                    return;
+                }
+            }
+
+
             // Removes the connector between corpus nodes:
             DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
 

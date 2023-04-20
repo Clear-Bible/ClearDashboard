@@ -46,11 +46,9 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                         queryResult.Data = ExecuteSqliteCommandAndProcessData(
                             $"SELECT AppVersion FROM PROJECT LIMIT 1");
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        LogAndSetUnsuccessfulResult(ref queryResult,
-                            $"An unexpected error occurred while querying the '{ResourceName}' database for the database version'",
-                            ex);
+                        queryResult.Success = false;
                     }
                 }
                 return Task.FromResult(queryResult);
@@ -61,7 +59,10 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                 string appVersion = "unknown";
                 while (DataReader != null && DataReader.Read())
                 {
-                    appVersion = DataReader.GetString(0);
+                    if (!DataReader.IsDBNull(0))
+                    {
+                        appVersion = DataReader.GetString(0);
+                    }
                 }
                 return appVersion;
             }

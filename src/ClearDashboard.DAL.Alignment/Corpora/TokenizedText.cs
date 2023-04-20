@@ -13,7 +13,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         protected readonly TokenizedTextCorpusId tokenizedCorpusId_;
         protected readonly IMediator mediator_;
 
-        protected IEnumerable<TextRow>? TextRowsCache { get; set; }
+        protected List<TextRow>? TextRowsCache { get; set; }
         public bool UseCache { get; set; }
         public bool NonTokenized { get; }
 
@@ -44,7 +44,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             {
                 if (TextRowsCache == null)
                 {
-                    TextRowsCache = GetTextRows(mediator_, tokenizedCorpusId_, Id);
+                    TextRowsCache = GetTextRows(mediator_, tokenizedCorpusId_, Id)
+                        .ToList();
                 }
 
                 return TextRowsCache;

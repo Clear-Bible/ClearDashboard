@@ -78,20 +78,23 @@ public class ParallelCorpusHandler : DefaultMergeHandler
                     );
                 //var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(_mergeContext.Mediator, new TokenizedTextCorpusId(sourceTokenizedCorpusId));
                 //var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(_mergeContext.Mediator, new TokenizedTextCorpusId(targetTokenizedCorpusId));
+                var verseMappingsForAllVerses = EngineParallelTextCorpus.VerseMappingsForAllVerses(
+                    sourceVersification,
+                    targetVersification);
 
                 progress.Report(new ProgressStatus(0, $"Starting EngineAlignRows for Parallel Corpus '{displayName}'"));
                 logger.LogInformation($"Starting EngineAlignRows for Parallel Corpus '{displayName}'");
                 var engineParallelTextCorpus =
                     await Task.Run(() => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
-                        new List<ClearBible.Engine.Corpora.VerseMapping>()), cancellationToken);
+                        new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingsForAllVerses)), cancellationToken);
                 progress.Report(new ProgressStatus(0, $"Completed EngineAlignRows for Parallel Corpus '{displayName}'"));
                 logger.LogInformation($"Completed EngineAlignRows for Parallel Corpus '{displayName}'");
 
-                var parallelCorpusModel = ParallelCorpusDataUtil.BuildParallelCorpus(
+                var parallelCorpusModel = ParallelCorpusDataBuilder.BuildParallelCorpus(
                     parallelCorpusId,
                     sourceTokenizedCorpus,
                     targetTokenizedCorpus,
-                    engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
+                    verseMappingsForAllVerses,
                     displayName,
                     cancellationToken);
 
@@ -108,8 +111,8 @@ public class ParallelCorpusHandler : DefaultMergeHandler
 
                 projectDbContext.VerseMappings.AddRange(parallelCorpusModel.VerseMappings);
 
-                progress.Report(new ProgressStatus(0, $"Inserted {engineParallelTextCorpus.VerseMappingList.Count} verse mappings along with parallel corpus '{displayName}'"));
-                logger.LogInformation($"Inserted {engineParallelTextCorpus.VerseMappingList.Count} verse mappings along with parallel corpus '{displayName}'");
+                progress.Report(new ProgressStatus(0, $"Inserted {verseMappingsForAllVerses.Count()} verse mappings along with parallel corpus '{displayName}'"));
+                logger.LogInformation($"Inserted {verseMappingsForAllVerses.Count()} verse mappings along with parallel corpus '{displayName}'");
             },
             cancellationToken
         );

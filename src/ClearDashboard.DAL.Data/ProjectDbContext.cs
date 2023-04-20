@@ -262,6 +262,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .WithMany(p => p.TokenComposites)
                 .UsingEntity<TokenCompositeTokenAssociation>();
 
+            modelBuilder.Entity<VerseRow>().HasIndex(e => e.BookChapterVerse);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 
             modelBuilder.Entity<VerseRow>()
@@ -300,6 +301,9 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<AlignmentTopTargetTrainingText>()
                 .HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
+
+            modelBuilder.Entity<AlignmentTopTargetTrainingText>()
+                .HasIndex(e => new { e.AlignmentSetId, e.SourceTrainingText });
 
             // =============
             // LEXICON:

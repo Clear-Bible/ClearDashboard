@@ -167,12 +167,12 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                 var tokenInsertCount = 0;
                 var connection = projectDbContext.Database.GetDbConnection();
 
-                using var tokenComponentInsertCommand = TokenizedCorpusDataUtil.CreateTokenComponentInsertCommand(connection);
-                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataUtil.CreateTokenCompositeTokenAssociationInsertCommand(connection);
+                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
+                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
 
                 foreach (var bookId in bookIds)
                 {
-                    var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(
+                    var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(
                         textCorpus,
                         bookId,
                         GetModelSnapshotDisplayName(tokenizedCorpusSnapshot));
@@ -180,7 +180,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                     // This method currently doesn't have any way to use the real
                     // VerseRowIds when building VerseRows.  So we correct each
                     // token's VerseRowId before doing its insert
-                    var (verseRows, btTokenCount) = TokenizedCorpusDataUtil.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
+                    var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
 
                     foreach (var verseRow in verseRows)
                     {
@@ -193,7 +193,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                                 return t;
                             }).ToList();
 
-                            await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(
+                            await TokenizedCorpusDataBuilder.InsertTokenComponentsAsync(
                                 tokenComponents,
                                 tokenComponentInsertCommand,
                                 tokenCompositeTokenAssociationInsertCommand,
@@ -309,15 +309,15 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
 
                 var textCorpus = GetMaculaCorpus(corpusType); 
 
-                using var verseRowInsertCommand = TokenizedCorpusDataUtil.CreateVerseRowInsertCommand(connection);
-                using var tokenComponentInsertCommand = TokenizedCorpusDataUtil.CreateTokenComponentInsertCommand(connection);
-                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataUtil.CreateTokenCompositeTokenAssociationInsertCommand(connection);
+                using var verseRowInsertCommand = TokenizedCorpusDataBuilder.CreateVerseRowInsertCommand(connection);
+                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
+                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
 
                 var bookIds = textCorpus.Texts.Select(t => t.Id).ToList();
 
                 foreach (var bookId in bookIds)
                 {
-                    var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(
+                    var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(
                         textCorpus,
                         bookId,
                         GetModelSnapshotDisplayName(tokenizedCorpusSnapshot));
@@ -325,7 +325,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                     // This method currently doesn't have any way to use the real
                     // VerseRowIds when building VerseRows.  So we correct each
                     // token's VerseRowId before doing its insert
-                    var (verseRows, btTokenCount) = TokenizedCorpusDataUtil.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
+                    var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
 
                     foreach (var verseRow in verseRows)
                     {
@@ -334,10 +334,10 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                         verseRow.UserId = userId;
                         var tokenComponents = verseRow.TokenComponents.ToList();
 
-                        await TokenizedCorpusDataUtil.InsertVerseRowAsync(
+                        await TokenizedCorpusDataBuilder.InsertVerseRowAsync(
                             verseRow, verseRowInsertCommand,
                             projectDbContext.UserProvider!, cancellationToken);
-                        await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(
+                        await TokenizedCorpusDataBuilder.InsertTokenComponentsAsync(
                             tokenComponents, tokenComponentInsertCommand,
                             tokenCompositeTokenAssociationInsertCommand,
                             cancellationToken);
