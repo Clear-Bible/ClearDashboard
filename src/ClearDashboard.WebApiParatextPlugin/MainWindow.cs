@@ -416,7 +416,10 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             try
             {
-                HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
+                //TODO - Waiting on PARATEXT TEAM FOR AN ONCLOSE() EVENT AS THIS ONE BEHAVES LIKE ONFOCUSLOST()
+
+                //HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
+                //await Task.Delay(500);
             }
             catch (Exception ex)
             {
@@ -424,7 +427,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
             }
 
-            await Task.Delay(500);
+
 
             WebAppProxy?.Dispose();
 
