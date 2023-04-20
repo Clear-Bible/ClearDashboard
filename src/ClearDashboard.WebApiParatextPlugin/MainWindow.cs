@@ -23,11 +23,15 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using Microsoft.AspNet.SignalR.Client;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
+using Microsoft.AspNet.SignalR.Messaging;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -37,6 +41,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Properties
 
         private IProject _project;
+        private const int PortNumber = 9000;
 
         public IProject Project
         {
@@ -57,6 +62,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private List<TextCollection> _textCollections = new();
         private List<ParatextProjectMetadata> _projectMetadata;
         private bool _hasFontErrorBeenDisplayed = false;
+        private bool _hasSignalRfailed = false;
 
         #endregion
 
@@ -115,10 +121,8 @@ namespace ClearDashboard.WebApiParatextPlugin
             _host = host;
             _project = parent.CurrentState.Project;
             _parent = parent;
-            AppendText(Color.Green, $"OnAddedToParent called");
 
             UpdateProjectList();
-            //ShowScripture(_project);
         }
 
         public override string GetState()
@@ -151,33 +155,61 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
             {
-                AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                if (args.Name.StartsWith("WeifenLuo") == false || args.Name.StartsWith("Paratext") == false)
+                {
+                    return null;
+                }
+                
+                if (args.RequestingAssembly == null && args.Name.StartsWith("WeifenLuo") == false && args.Name.StartsWith("Paratext") == false)
+                {
+                    AppendText(Color.Orange, $"Cannot load {args.Name} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                }
+                else
+                {
+                    AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
+                }
+                
                 return null;
             }
             // Load the most up to date version
-            Assembly assembly;
+            Assembly assembly = null;
             try
             {
+                _hasSignalRfailed = true;
                 assembly = Assembly.Load(truncatedName);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                
+                AppendText(Color.Red, $"Cannot load [{assembly?.FullName}] {e.Message}");
             }
-            AppendText(Color.Orange, $"Cannot load {args.Name}, loading {assembly.FullName} instead.");
+            AppendText(Color.Orange, $"Cannot load:\n [{BustUpAssemblyName(args.Name)}]\nLoading instead:\n [{BustUpAssemblyName(assembly?.FullName)}]\n");
 
             return assembly;
         }
 
-
-        private void StartWebHost()
+        private string BustUpAssemblyName(string assemblyName)
         {
-            int portNumber = 9000;
+            try
+            {
+                int index = assemblyName.IndexOf(',', assemblyName.IndexOf(',') + 1);
+                assemblyName = assemblyName.Substring(0, index);
+            }
+            catch (Exception e)
+            {
+                AppendText(Color.Red, $"BustUpAssemblyName Error [{assemblyName}] [{e.Message}]");
+                return assemblyName;
+            }
 
+            return assemblyName;
+        }
+
+
+        private async Task StartWebHost()
+        {
             // check to see if the port is in use which means that we probably have 
             // a window open already
-            if (PortInUse(portNumber))
+            if (PortInUse(PortNumber))
             {
                 PortInUseMethod();
                 return;
@@ -190,18 +222,41 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             try
             {
-                var baseAddress = $"http://localhost:{portNumber}/";
+                bool error = false;
+                var baseAddress = $"http://localhost:{PortNumber}/";
                 WebAppProxy?.Dispose();
 
                 // Start OWIN host 
                 WebAppProxy = WebApp.Start(baseAddress,
                     (appBuilder) =>
                     {
-                        WebHostStartup = new WebHostStartup(_project, _verseRef, this, _host, _parent, this);
-                        WebHostStartup.Configuration(appBuilder);
+                        try
+                        {
+                            GlobalHost.Configuration.ConnectionTimeout = new TimeSpan(0, 0, 10);
+                            GlobalHost.Configuration.DisconnectTimeout = new TimeSpan(0, 0, 10);
+                            GlobalHost.Configuration.KeepAlive = new TimeSpan(0, 0, 3);
+                        }
+                        catch (Exception e)
+                        {
+                            AppendText(Color.Purple, $"\n\nERROR: {e.Message}");
+                            if (e.Message.StartsWith("Disconnect"))
+                            {
+                                ServerInUseMethod();
+                            }
+
+                            error = true;
+                        }
+                        finally
+                        {
+                            WebHostStartup = new WebHostStartup(_project, _verseRef, this, _host, _parent, this);
+                            WebHostStartup.Configuration(appBuilder);
+                        }
                     });
 
-                AppendText(Color.Green, "Owin Web Api host started");
+                if (error == false)
+                {
+                    AppendText(Color.Green, "Owin Web Api host started");
+                }
             }
             catch (Exception e)
             {
@@ -209,11 +264,50 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     PortInUseMethod();
                 }
+                else
+                {
+                    AppendText(Color.Purple,
+                        $"\n\nERROR: {e.Message}");
+                }
             }
             finally
             {
                 currentDomain.AssemblyResolve -= FailedAssemblyResolutionHandler;
             }
+
+
+            if (_hasSignalRfailed == false)
+            {
+                // signalR probably didn't load correctly and is listening
+                await TestConnection();
+            }
+        }
+
+        private async Task TestConnection()
+        {
+            var connection = new HubConnection("http://localhost:9000/signalr");
+            var hubProxy = connection.CreateHubProxy("Plugin");
+
+            hubProxy.On<string, string>("send", (name, msg) =>
+            {
+                var message = $"{name} - {msg}";
+                AppendText(Color.Orange, $"\n\nERROR: {message}");
+            });
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            try
+            {
+                await connection.Start();
+            }
+            catch (Exception e)
+            {
+                stopwatch.Stop();
+                AppendText(Color.Purple, $"\nERROR: {e.Message}");
+                AppendText(Color.Purple, $"TIME (ms): {stopwatch.ElapsedMilliseconds}");
+                return;
+            }
+
+            _ = await hubProxy.Invoke<string>("ping", "Message", 0);
         }
 
         private void PortInUseMethod()
@@ -222,6 +316,16 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             AppendText(Color.Purple,
                 $"\n\nIF YOU WISH TO SWITCH THE DASHBOARD PLUGIN TO BE ASSOCIATED WITH THE {_project.ShortName} PROJECT, PLEASE CLOSE ALL OTHER OPEN DASHBOARD PLUGIN WINDOWS FIRST.");
+        }
+
+        private void ServerInUseMethod()
+        {
+            ClearTextWindow();
+
+            AppendText(Color.Purple,
+                $"\n\nYOU NEED TO RESTART PARATEXT AS PARATEXT HAS NOT CLOSED THE WEB SERVER PROPERLY");
+
+            PlaySound.PlaySoundFromResource(SoundType.Error);
         }
 
         /// <summary>
@@ -301,6 +405,33 @@ namespace ClearDashboard.WebApiParatextPlugin
                 Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
             }
 
+        }
+
+
+        /// <summary>
+        /// Called when window is closed
+        /// </summary>
+        /// <param name="e"></param>
+        protected override async void OnLeave(EventArgs e)
+        {
+            try
+            {
+                //TODO - Waiting on PARATEXT TEAM FOR AN ONCLOSE() EVENT AS THIS ONE BEHAVES LIKE ONFOCUSLOST()
+
+                //HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
+                //await Task.Delay(500);
+            }
+            catch (Exception ex)
+            {
+                AppendText(Color.Red,
+                    $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
+            }
+
+
+
+            WebAppProxy?.Dispose();
+
+            base.OnLeave(e);
         }
 
         #endregion Paratext overrides - standard functions
@@ -732,7 +863,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnExportUSFM_Click(object sender, EventArgs e)
+        private  void btnExportUSFM_Click(object sender, EventArgs e)
         {
             var paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(_project, this);
@@ -773,8 +904,10 @@ namespace ClearDashboard.WebApiParatextPlugin
         private void btnClearWindow_Click(object sender, EventArgs e)
         {
             ClearTextWindow();
-
             AppendText(Color.Green, DateTime.Now.ToShortTimeString());
+
+            var ret = PortInUse(PortNumber);
+            AppendText(Color.Green, $"Port {PortNumber} in use: {ret}");
         }
 
         private void ClearTextWindow()
