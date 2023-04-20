@@ -292,7 +292,7 @@
                                         VerticalAlignment="Center"
                                         Kind="{Binding IconKind}">
                                         <iconPacks:PackIconPicolIcons.Style>
-                                            <Style TargetType="iconPacks:PackIconPicolIcons" >
+                                            <Style TargetType="iconPacks:PackIconPicolIcons">
                                                 <Setter Property="Foreground" Value="Black" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IconKind}" Value="Cancel">

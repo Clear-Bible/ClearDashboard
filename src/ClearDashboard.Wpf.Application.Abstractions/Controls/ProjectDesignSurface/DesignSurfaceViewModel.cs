@@ -322,8 +322,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         public CorpusNodeViewModel CreateCorpusNode(Corpus corpus, Point nodeLocation)
         {
-            var resourceList = GetParatextResourceNames();
-
             if (nodeLocation.X == 0 && nodeLocation.Y == 0)
             {
                 // figure out some offset based on the number of nodes already on the design surface
@@ -357,6 +355,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             // check to see if this is a resource and not a Standard
             if (node.CorpusType == CorpusType.Standard)
             {
+                var resourceList = GetParatextResourceNames();
                 var resource = resourceList.FirstOrDefault(x => x == corpus.CorpusId.Name);
                 if (resource != null)
                 {

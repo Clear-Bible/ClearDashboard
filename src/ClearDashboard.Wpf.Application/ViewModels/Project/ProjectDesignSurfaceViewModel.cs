@@ -320,8 +320,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task DrawDesignSurface()
         {
-            var resourceList = DesignSurfaceViewModel!.GetParatextResourceNames();
-            
             Logger!.LogInformation($"Drawing design surface for project '{ProjectName}'.");
             DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
             DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
@@ -361,6 +359,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         // check to see if this is a resource and not a Standard
                         if (corpus.CorpusId.CorpusType == CorpusType.Standard.ToString())
                         {
+                            var resourceList = DesignSurfaceViewModel!.GetParatextResourceNames();
                             var resource = resourceList.FirstOrDefault(x => x == corpus.CorpusId.Name);
                             if (resource != null)
                             {
