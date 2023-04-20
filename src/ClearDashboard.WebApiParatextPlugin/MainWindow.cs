@@ -6,11 +6,11 @@ using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
 using MediatR;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using Serilog;
-using Serilog.Parsing;
 using SIL.Linq;
 using SIL.Scripture;
 using System;
@@ -23,15 +23,12 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using Microsoft.AspNet.SignalR.Client;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
-using Microsoft.AspNet.SignalR.Messaging;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -45,8 +42,8 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public IProject Project
         {
-            get { return _project; }
-            set { _project = value; }
+            get => _project;
+            set => _project = value;
         }
 
         private List<IProject> _projectList = new();

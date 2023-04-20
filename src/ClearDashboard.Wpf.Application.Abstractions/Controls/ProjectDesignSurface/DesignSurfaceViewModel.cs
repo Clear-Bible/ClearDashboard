@@ -6,6 +6,7 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -20,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,6 +61,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         protected ILifetimeScope LifetimeScope { get; }
         protected IEventAggregator? EventAggregator { get; }
         protected IMediator Mediator { get; }
+        private readonly ParatextProxy _paratextProxy;
         protected readonly ILocalizationService LocalizationService;
 
 
@@ -243,12 +246,14 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             IEventAggregator? eventEventAggregator,
             ILifetimeScope lifetimeScope,
             IMediator mediator,
+            ParatextProxy paratextProxy,
             ILocalizationService localizationService)
         {
             Logger = logger;
             EventAggregator = eventEventAggregator;
             LifetimeScope = lifetimeScope;
             Mediator = mediator;
+            _paratextProxy = paratextProxy;
             LocalizationService = localizationService;
         }
         #endregion
@@ -317,7 +322,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         public CorpusNodeViewModel CreateCorpusNode(Corpus corpus, Point nodeLocation)
         {
-
             if (nodeLocation.X == 0 && nodeLocation.Y == 0)
             {
                 // figure out some offset based on the number of nodes already on the design surface
@@ -345,7 +349,20 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                       double.IsNaN(nodeLocation.Y))
                 ? 150
                 : nodeLocation.Y;
+
             node.CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusId.CorpusType);
+
+            // check to see if this is a resource and not a Standard
+            if (node.CorpusType == CorpusType.Standard)
+            {
+                var resourceList = GetParatextResourceNames();
+                var resource = resourceList.FirstOrDefault(x => x == corpus.CorpusId.Name);
+                if (resource != null)
+                {
+                    node.CorpusType = CorpusType.Resource;
+                }
+            }
+            
             node.ParatextProjectId = corpus.CorpusId.ParatextGuid ?? string.Empty;
             node.CorpusId = corpus.CorpusId.Id;
             node.IsRtl = corpus.CorpusId.IsRtl;
@@ -1220,6 +1237,28 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
 
             await ProjectDesignSurfaceViewModel.SaveDesignSurfaceData();
+        }
+
+
+        /// <summary>
+        /// Gets all the resource project names from the paratext
+        /// project's _resources directory
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetParatextResourceNames()
+        {
+            var fileList = new List<string>();
+            var directory = _paratextProxy.ParatextResourcePath;
+            if (Directory.Exists(directory))
+            {
+                var files = Directory.GetFiles(directory, "*.p8z");
+                foreach (var file in files)
+                {
+                    fileList.Add(Path.GetFileNameWithoutExtension(file));
+                }
+            }
+
+            return fileList;
         }
 
         private async Task<string?> GetFontFamily(string paratextProjectId)
