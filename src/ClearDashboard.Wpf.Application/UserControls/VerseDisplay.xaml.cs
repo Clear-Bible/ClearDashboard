@@ -605,11 +605,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
-            {
-                UpdateVerseSelection(tokenDisplay, false);
-            }
+            //var control = e.Source as FrameworkElement;
+            //if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
+            //{
+            //    UpdateVerseSelection(tokenDisplay, false);
+            //}
 
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }
@@ -645,8 +645,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     var element = (UIElement)sender;
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
-
-
             }
 
             RaiseTokenEvent(TokenMouseEnterEvent, e);

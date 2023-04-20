@@ -72,7 +72,10 @@
                         x:Name="UnjoinTokenMenuItem"
                         Click="OnTokenUnjoin"
                         Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
-                    <MenuItem Click="OnFilterPins" Header="{helpers:Localization EnhancedView_FilterPins}" />
+                    <MenuItem 
+                        x:Name="FilterPinsMenuItem"
+                        Click="OnFilterPins" 
+                        Header="{helpers:Localization EnhancedView_FilterPins}" />
                     <MenuItem Click="OnCopy" Header="{helpers:Localization Copy}" />
                     <MenuItem x:Name="DeleteAlignmentMenuItem" Click="OnTokenDeleteAlignment" Header="{helpers:Localization EnhancedView_DeleteAlignment}" />
                 </ContextMenu>
