@@ -79,20 +79,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
                 }
             }
 
-            //{
-            //    _logger.AppendText(Color.DarkOrange, $"Sending PluginStatus - {PluginConnectionChangeType.None}");
-            //    Clients.All.SendPluginClosing(new PluginClosing {PluginConnectionChangeType = PluginConnectionChangeType.None});
-            //}
-
-            //{
-            //    var result = await _mediator.Send(new GetTextCollectionsQuery());
-            //    if (result.Success)
-            //    {
-            //        _logger.AppendText(Color.DarkOrange, $"Sending TextCollections - {result.Data?.Count}");
-            //        Clients.All.SendTextCollections(result.Data);
-            //    }
-            //}
-
             await base.OnConnected();
         }
     }
