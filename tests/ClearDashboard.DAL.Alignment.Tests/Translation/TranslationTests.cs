@@ -62,11 +62,18 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
                 var syntaxTree = new SyntaxTrees();
                 var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree);
 
-                var targetCorpus = new ParatextTextCorpus(CorpusProjectPath)
+                var paratextTextCorpus = new ParatextTextCorpus(CorpusProjectPath);
+
+                var targetCorpus = paratextTextCorpus
                     .Tokenize<LatinWordTokenizer>()
                     .Transform<IntoTokensTextRowProcessor>();
 
-                var parallelTextCorpus = sourceCorpus.EngineAlignRows(targetCorpus, new());
+                var verseMappingList = EngineParallelTextCorpus.VerseMappingsForAllVerses(
+                    sourceCorpus.Versification,
+                    paratextTextCorpus.Versification);
+
+                var parallelTextCorpus = sourceCorpus.EngineAlignRows(targetCorpus,
+                    new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingList));
 
                 FunctionWordTextRowProcessor.Train(parallelTextCorpus);
 

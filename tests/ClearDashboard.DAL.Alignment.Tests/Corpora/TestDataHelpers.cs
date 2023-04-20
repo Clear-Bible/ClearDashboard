@@ -3,9 +3,12 @@ using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora
@@ -55,6 +58,39 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             return new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
                  .Tokenize<LatinWordTokenizer>()
                  .Transform<IntoTokensTextRowProcessor>();
+        }
+
+        public static SourceTextIdToVerseMappings GetSampleTextCorpusSourceTextIdToVerseMappings(ScrVers sourceVersification, ScrVers targetVersification)
+        {
+            var verseMappings = EngineParallelTextCorpus.VerseMappingsForAllVerses(
+                sourceVersification,
+                targetVersification);
+
+            List<VerseMapping> verseMappingsFiltered = verseMappings
+                .Where(verseMapping => verseMapping.SourceVerses
+                    .Where(verse => verse.Book == "MAT")
+                    .Where(verse => verse.ChapterNum == 1)
+                    .Where(verse => verse.VerseNum <= 5)
+                    .Any())
+                .ToList();
+
+            verseMappingsFiltered.AddRange(verseMappings
+                .Where(verseMapping => verseMapping.SourceVerses
+                    .Where(verse => verse.Book == "MAT")
+                    .Where(verse => verse.ChapterNum == 2)
+                    .Where(verse => verse.VerseNum <= 7)
+                    .Any())
+                .ToList());
+
+            verseMappingsFiltered.AddRange(verseMappings
+                .Where(verseMapping => verseMapping.SourceVerses
+                    .Where(verse => verse.Book == "MRK")
+                    .Where(verse => verse.ChapterNum == 1)
+                    .Where(verse => verse.VerseNum <= 4)
+                    .Any())
+                .ToList());
+
+            return new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingsFiltered);
         }
     }
 }

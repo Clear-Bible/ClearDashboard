@@ -38,15 +38,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 #endif
 
             var bookNumberForAbbreviation = ModelHelper.GetBookNumberForSILAbbreviation(request.BookId);
+            var bookNumberAsPaddedString = $"{bookNumberForAbbreviation:000}";
 
-            var tokensByVerseRowId = ProjectDbContext.Tokens
-                .Include(tc => tc.VerseRow)
-                .Where(tc => tc.Deleted == null)
-                .Where(tc => tc.TokenizedCorpusId == request.TokenizedCorpusId.Id)
-                .Where(tc => tc.BookNumber == bookNumberForAbbreviation)
-                .ToList()
-                .GroupBy(tc => tc.VerseRow)
-                .ToDictionary(g => g.Key!.Id, g => (VerseRow: g.Key!, Tokens: g.Select(tc => tc)));
+            var tokensByVerseRowId = ProjectDbContext.VerseRows
+                .Include(e => e.TokenComponents.Where(t => t.Deleted == null))
+                .Where(e => e.TokenizedCorpusId == request.TokenizedCorpusId.Id)
+                .Where(e => e.BookChapterVerse!.Substring(0, 3) == bookNumberAsPaddedString)
+                .OrderBy(e => e.BookChapterVerse)
+                .ToDictionary(e => e.Id, e => e);
 
 #if DEBUG
             sw.Stop();
@@ -58,7 +57,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
 
 #if DEBUG
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Get tokens by VerseRow [count: {tokensByVerseRowId.Count}]");
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Get tokens by VerseRow [count: {tokensByVerseRowId.Count}] for tokenized corpus '{request.TokenizedCorpusId.Id}' and book id '{request.BookId}'");
             sw.Restart();
 #endif
 
@@ -73,6 +72,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .ToList();
 
 #if DEBUG
+            sw.Stop();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Get TokenComposite / Token associations");
             sw.Restart();
 #endif
@@ -86,6 +86,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .ToDictionary(ta => ta.TokenId, ta => ta.TokenCompositeId);
 
 #if DEBUG
+            sw.Stop();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Get TokenComposites by Guid [count: {tokenCompositeTokensByGuid.Count}]");
             sw.Restart();
 #endif
@@ -94,8 +95,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Select(kvp => {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var chapter = int.Parse(kvp.Value.VerseRow.BookChapterVerse!.Substring(3, 3)).ToString();
-                    var verse = int.Parse(kvp.Value.VerseRow.BookChapterVerse!.Substring(6, 3)).ToString();
+                    var chapter = int.Parse(kvp.Value.BookChapterVerse!.Substring(3, 3)).ToString();
+                    var verse = int.Parse(kvp.Value.BookChapterVerse!.Substring(6, 3)).ToString();
 
                     var tokens = kvp.Value.Tokens
                         .Where(tc => !tokenCompositeGuidByTokenGuid.ContainsKey(tc.Id))
@@ -132,11 +133,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         chapter,
                         verse,
                         tokens,
-                        kvp.Value.VerseRow.IsSentenceStart,
-                        kvp.Value.VerseRow.IsInRange,
-                        kvp.Value.VerseRow.IsRangeStart,
-                        kvp.Value.VerseRow.IsEmpty,
-                        kvp.Value.VerseRow.OriginalText ?? string.Empty
+                        kvp.Value.IsSentenceStart,
+                        kvp.Value.IsInRange,
+                        kvp.Value.IsRangeStart,
+                        kvp.Value.IsEmpty,
+                        kvp.Value.OriginalText ?? string.Empty
                         );
                 }).ToList();
 
@@ -145,7 +146,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
 #if DEBUG
             sw.Stop();
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [verse token count: {verseTokens.Count}]");
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [verse token count: {verseTokens.Count}] for tokenized corpus '{request.TokenizedCorpusId.Id}' and book id '{request.BookId}'");
 #endif
 
             return new RequestResult<IEnumerable<VerseTokens>>

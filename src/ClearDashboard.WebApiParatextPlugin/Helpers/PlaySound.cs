@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Media;
 using System.Reflection;
 
-namespace ClearDashboard.Wpf.Application.Helpers
+namespace ClearDashboard.WebApiParatextPlugin.Helpers
 {
     public static class PlaySound
     {
@@ -20,17 +19,17 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
             switch (soundType)
             {
-                case SoundType.Success:
-                    soundFile = "ClearDashboard.Wpf.Application.Resources.Crystal Click 2.wav";
-                    break;
+                //case SoundType.Success:
+                //    soundFile = "ClearDashboard.Wpf.Application.Resources.Crystal Click 2.wav";
+                //    break;
 
                 case SoundType.Error:
-                    soundFile = "ClearDashboard.Wpf.Application.Resources.DashboardFailure.wav";
+                    soundFile = "ClearDashboard.WebApiParatextPlugin.Resources.DashboardFailure.wav";
                     break;
 
-                case SoundType.Disconnected:
-                    soundFile = "ClearDashboard.Wpf.Application.Resources.plugin_disconnect.wav";
-                    break;
+                //case SoundType.Disconnected:
+                //    soundFile = "ClearDashboard.Wpf.Application.Resources.plugin_disconnect.wav";
+                //    break;
             }
 
             if (soundFile != "")
