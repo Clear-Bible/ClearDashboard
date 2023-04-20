@@ -59,7 +59,10 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                 string appVersion = "unknown";
                 while (DataReader != null && DataReader.Read())
                 {
-                    appVersion = DataReader.GetString(0);
+                    if (!DataReader.IsDBNull(0))
+                    {
+                        appVersion = DataReader.GetString(0);
+                    }
                 }
                 return appVersion;
             }

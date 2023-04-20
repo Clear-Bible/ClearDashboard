@@ -12,7 +12,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
-    internal static class TokenizedCorpusDataUtil
+    internal static class TokenizedCorpusDataBuilder
     {
         public static IEnumerable<TokensTextRow> ExtractValidateBook(ITextCorpus textCorpus, string bookId, CorpusId corpusId)
         {
