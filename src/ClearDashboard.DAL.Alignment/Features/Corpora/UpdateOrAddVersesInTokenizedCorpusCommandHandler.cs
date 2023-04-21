@@ -52,23 +52,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
-                using var verseRowInsertCommand = TokenizedCorpusDataUtil.CreateVerseRowInsertCommand(connection);
-                using var tokenComponentInsertCommand = TokenizedCorpusDataUtil.CreateTokenComponentInsertCommand(connection);
-                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataUtil.CreateTokenCompositeTokenAssociationInsertCommand(connection);
+                using var verseRowInsertCommand = TokenizedCorpusDataBuilder.CreateVerseRowInsertCommand(connection);
+                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
+                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
 
                 if (bookIdsToInsert.Any())
                 {
                     foreach (var bookId in bookIdsToInsert)
                     {
-                        var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(request.TextCorpus, bookId, corpusId);
-                        var (verseRows, btTokenCount) = TokenizedCorpusDataUtil.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
+                        var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(request.TextCorpus, bookId, corpusId);
+                        var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
 
                         foreach (var verseRow in verseRows)
                         {
                             cancellationToken.ThrowIfCancellationRequested();
 
-                            await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                            await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
+                            await TokenizedCorpusDataBuilder.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
+                            await TokenizedCorpusDataBuilder.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                         }
                     }
                 }
@@ -89,7 +89,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     using var transSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Translation));
                     using var alignSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Alignment));
                     using var tvaSD   = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenVerseAssociation));
-                    using var verseRowUpdate = TokenizedCorpusDataUtil.CreateVerseRowUpdateCommand(connection);
+                    using var verseRowUpdate = TokenizedCorpusDataBuilder.CreateVerseRowUpdateCommand(connection);
 
                     async Task del(Guid id, DbCommand cmd) => await DataUtil.SoftDeleteByIdAsync(currentDateTime, id, cmd, cancellationToken);
 
@@ -97,8 +97,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     {
                         var bookNumberAsPaddedString = $"{ModelHelper.GetBookNumberForSILAbbreviation(bookId):000}";
 
-                        var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(request.TextCorpus, bookId, corpusId);
-                        var (verseRows, btTokenCount) = TokenizedCorpusDataUtil.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
+                        var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(request.TextCorpus, bookId, corpusId);
+                        var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
 
                         var bookVerseRowsDb = ProjectDbContext.VerseRows
                             .Where(vr => vr.TokenizedCorpusId == tokenizedCorpusGuid)
@@ -172,14 +172,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                         tc.VerseRowId = verseRowDb.Id;
                                     }
 
-                                    await TokenizedCorpusDataUtil.UpdateVerseRowAsync(verseRow, verseRowUpdate, cancellationToken);
-                                    await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
+                                    await TokenizedCorpusDataBuilder.UpdateVerseRowAsync(verseRow, verseRowUpdate, cancellationToken);
+                                    await TokenizedCorpusDataBuilder.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                                 }
                             }
                             else
                             {
-                                await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                                await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
+                                await TokenizedCorpusDataBuilder.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
+                                await TokenizedCorpusDataBuilder.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                             }
                         }
                     }

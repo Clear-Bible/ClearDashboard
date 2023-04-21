@@ -5,7 +5,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -15,7 +15,7 @@
         <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
 
         <DataTemplate x:Key="SourceTokenDisplay">
-            <local:TokenDisplay
+            <userControls:TokenDisplay
                 HorizontalAlignment="Left"
                 Copy="OnCopy"
                 DataContext="{Binding}"
@@ -37,6 +37,7 @@
                 ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
                 ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
                 TokenClicked="OnTokenClicked"
+                TokenCreateAlignment="OnTokenCreateAlignment"
                 TokenDeleteAlignment="OnTokenDeleteAlignment"
                 TokenDoubleClicked="OnTokenDoubleClicked"
                 TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
@@ -72,20 +73,20 @@
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
-                <local:TokenDisplay.CommandBindings>
+                <userControls:TokenDisplay.CommandBindings>
                     <CommandBinding Command="Copy" Executed="OnCopy" />
-                </local:TokenDisplay.CommandBindings>
+                </userControls:TokenDisplay.CommandBindings>
 
-                <local:TokenDisplay.InputBindings>
+                <userControls:TokenDisplay.InputBindings>
                     <KeyBinding
                         Key="C"
                         Command="Copy"
                         Modifiers="Control" />
-                </local:TokenDisplay.InputBindings>
-            </local:TokenDisplay>
+                </userControls:TokenDisplay.InputBindings>
+            </userControls:TokenDisplay>
         </DataTemplate>
         <DataTemplate x:Key="TargetTokenDisplay">
-            <local:TokenDisplay
+            <userControls:TokenDisplay
                 HorizontalAlignment="Left"
                 Copy="OnCopy"
                 DataContext="{Binding}"
@@ -107,6 +108,7 @@
                 ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
                 ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
                 TokenClicked="OnTokenClicked"
+                TokenCreateAlignment="OnTokenCreateAlignment"
                 TokenDeleteAlignment="OnTokenDeleteAlignment"
                 TokenDoubleClicked="OnTokenDoubleClicked"
                 TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
@@ -141,17 +143,17 @@
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
-                <local:TokenDisplay.CommandBindings>
+                <userControls:TokenDisplay.CommandBindings>
                     <CommandBinding Command="Copy" Executed="OnCopy" />
-                </local:TokenDisplay.CommandBindings>
+                </userControls:TokenDisplay.CommandBindings>
 
-                <local:TokenDisplay.InputBindings>
+                <userControls:TokenDisplay.InputBindings>
                     <KeyBinding
                         Key="C"
                         Command="Copy"
                         Modifiers="Control" />
-                </local:TokenDisplay.InputBindings>
-            </local:TokenDisplay>
+                </userControls:TokenDisplay.InputBindings>
+            </userControls:TokenDisplay>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="SourceWrapPanelTemplate">
             <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />

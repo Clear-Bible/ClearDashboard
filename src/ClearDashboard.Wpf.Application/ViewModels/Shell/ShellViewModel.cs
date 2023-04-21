@@ -510,6 +510,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
             Connected = message.Connected;
+
+            if (message.Connected == false)
+            {
+                PlaySound.PlaySoundFromResource(SoundType.Disconnected);
+            }
+
             await Task.CompletedTask;
         }
 

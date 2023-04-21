@@ -149,6 +149,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Brushes.Transparent));
 
         /// <summary>
+        /// Identifies the TokenBorder dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenBorderProperty = DependencyProperty.Register(
+            nameof(TokenBorder), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Transparent));
+
+        /// <summary>
         /// Identifies the TokenFlowDirection dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFlowDirectionProperty = DependencyProperty.Register(
@@ -295,6 +302,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent TokenClickedEvent = EventManager.RegisterRoutedEvent
             ("TokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
+
+        /// <summary>
+        /// Identifies the TokenCreateAlignment routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenCreateAlignmentEvent = EventManager.RegisterRoutedEvent
+            (nameof(TokenCreateAlignment), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenDeleteAlignment routed event.
@@ -482,8 +495,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent CopyEvent = EventManager.RegisterRoutedEvent
             ("Copy", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
-
-
         /// <summary>
         /// Identifies the TranslateQuickEvent routed event.
         /// </summary>
@@ -504,7 +515,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Occurs when an individual token is clicked.
+        /// Occurs when an alignment is created.
+        /// </summary>
+        public event RoutedEventHandler TokenCreateAlignment
+        {
+            add => AddHandler(TokenCreateAlignmentEvent, value);
+            remove => RemoveHandler(TokenCreateAlignmentEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an alignment is deleted.
         /// </summary>
         public event RoutedEventHandler TokenDeleteAlignment
         {
@@ -844,15 +864,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            var tokenDisplay = (TokenDisplayViewModel)DataContext;
             if (AllSelectedTokens != null)
             {
                 JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
                 JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
                 UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
+                FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
+                CreateAlignmentMenuItem.Visibility = tokenDisplay.VerseDisplay is AlignmentDisplayViewModel && AllSelectedTokens.CanCreateAlignment ? Visibility.Visible : Visibility.Collapsed;
+                DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned && AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
             }
+        }
 
-            var tokenDisplay = (TokenDisplayViewModel) DataContext;
-            DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned ? Visibility.Visible : Visibility.Collapsed;
+        private void OnTokenCreateAlignment(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenCreateAlignmentEvent, e);
         }
 
         private void OnTokenDeleteAlignment(object sender, RoutedEventArgs e)
@@ -1289,6 +1315,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token border.
+        /// </summary>
+        /// <remarks>
+        /// This property should not be set explicitly; it is computed from the token's selection status.
+        /// </remarks>
+        public Brush TokenBorder
+        {
+            get => (Brush)GetValue(TokenBorderProperty);
+            private set => SetValue(TokenBorderProperty, value);
+        }
+
+        /// <summary>
         /// Gets the strongly-typed <see cref="TokenDisplayViewModel"/> data source for this control.
         /// </summary>
         public TokenDisplayViewModel TokenDisplayViewModel => (TokenDisplayViewModel)DataContext;
@@ -1494,10 +1532,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, 1);
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeTokenMember ? Visibility.Visible : Visibility.Hidden;
             CompositeIndicatorComputedColor = TokenDisplayViewModel.CompositeIndicatorColor;
-            
-            TokenBackground = TokenDisplayViewModel.IsHighlighted ? HighlightedTokenBackground
-                : TokenDisplayViewModel.IsTokenSelected ? SelectedTokenBackground
-                : Brushes.Transparent;
+
+            TokenBorder = TokenDisplayViewModel.IsHighlighted ? HighlightedTokenBackground : Brushes.Transparent;
+            TokenBackground = TokenDisplayViewModel.IsTokenSelected ? SelectedTokenBackground : Brushes.Transparent;
             TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;

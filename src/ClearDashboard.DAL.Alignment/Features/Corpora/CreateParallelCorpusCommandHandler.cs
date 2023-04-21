@@ -13,6 +13,7 @@ using SIL.Extensions;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using System.Diagnostics;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Common;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -91,14 +92,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             // Create and Save the Parallel Corpus Model
             // + with Verse Mappings
-            var parallelCorpusModel = new Models.ParallelCorpus
-            {
-                SourceTokenizedCorpus = sourceTokenizedCorpus,
-                TargetTokenizedCorpus = targetTokenizedCorpus,
-                DisplayName = request.DisplayName
-            };
-
-            AddVerseMappings(request.VerseMappings, parallelCorpusModel, cancellationToken);
+            var parallelCorpusModel = ParallelCorpusDataBuilder.BuildParallelCorpus(
+                Guid.NewGuid(),
+                sourceTokenizedCorpus,
+                targetTokenizedCorpus,
+                request.VerseMappings,
+                request.DisplayName,
+                cancellationToken);
 
             ProjectDbContext.ParallelCorpa.Add(parallelCorpusModel);
             await ProjectDbContext.SaveChangesAsync(cancellationToken);
@@ -112,82 +112,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 #endif
 
             return new RequestResult<ParallelCorpusId>(new ParallelCorpusId(parallelCorpusModel.Id));
-        }
-
-        private static void AddVerseMappings(IEnumerable<VerseMapping> verseMappings, Models.ParallelCorpus parallelCorpusModel, CancellationToken cancellationToken)
-        {
-            var bookAbbreviationsToNumbers =
-                FileGetBookIds.BookIds.ToDictionary(x => x.silCannonBookAbbrev, x => int.Parse(x.silCannonBookNum), StringComparer.OrdinalIgnoreCase);
-
-            // FIXME:  if incoming VerseMappings contain ParellelCorpus composites, 
-            // do I need to add them to the database?  
-
-            parallelCorpusModel.VerseMappings.AddRange(verseMappings
-                .Select(vm =>
-                {
-                    var verseMapping = new Models.VerseMapping
-                    {
-                        ParallelCorpus = parallelCorpusModel
-                    };
-
-                    verseMapping.Verses.AddRange(vm.SourceVerses
-                        .Select(v => {
-                            cancellationToken.ThrowIfCancellationRequested();
-
-                            if (!bookAbbreviationsToNumbers.TryGetValue(v.Book, out int bookNumber))
-                            {
-                                throw new NullReferenceException($"Invalid book '{v.Book}' found in engine source verse. ");
-                            }
-                            var verse = new Models.Verse
-                            {
-                                VerseNumber = v.VerseNum,
-                                BookNumber = bookNumber,
-                                ChapterNumber = v.ChapterNum,
-                                CorpusId = parallelCorpusModel.SourceTokenizedCorpus!.CorpusId,
-                                ParallelCorpus = parallelCorpusModel
-                            };
-                            if (v.TokenIds.Any())
-                            {
-                                verse.TokenVerseAssociations.AddRange(v.TokenIds.Select((td, index) => new Models.TokenVerseAssociation
-                                {
-                                    TokenComponentId = td.Id,
-                                    Position = index
-                                }));
-                            }
-                            return verse;
-                        }
-                        ));
-
-                    verseMapping.Verses.AddRange(vm.TargetVerses
-                        .Select(v => {
-                            cancellationToken.ThrowIfCancellationRequested();
-
-                            if (!bookAbbreviationsToNumbers.TryGetValue(v.Book, out int bookNumber))
-                            {
-                                throw new NullReferenceException($"Invalid book '{v.Book}' found in engine target verse. ");
-                            }
-                            var verse = new Models.Verse
-                            {
-                                VerseNumber = v.VerseNum,
-                                BookNumber = bookNumber,
-                                ChapterNumber = v.ChapterNum,
-                                CorpusId = parallelCorpusModel.TargetTokenizedCorpus!.CorpusId,
-                                ParallelCorpus = parallelCorpusModel
-                            };
-                            if (v.TokenIds.Any())
-                            {
-                                verse.TokenVerseAssociations.AddRange(v.TokenIds.Select((td, index) => new Models.TokenVerseAssociation
-                                {
-                                    TokenComponentId = td.Id,
-                                    Position = index
-                                }));
-                            }
-                            return verse;
-                        }
-                        ));
-                    return verseMapping;
-                })
-            );
         }
     }
 }

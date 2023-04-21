@@ -27,4 +27,8 @@
 	  <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Features\ConnectionChange\" />
+	</ItemGroup>
+
 </Project>
