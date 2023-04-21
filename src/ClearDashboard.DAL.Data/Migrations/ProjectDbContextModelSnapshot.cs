@@ -190,6 +190,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("AlignmentSetId", "SourceTokenComponentId");
 
+                    b.HasIndex("AlignmentSetId", "SourceTrainingText");
+
                     b.ToTable("AlignmentTopTargetTrainingText");
                 });
 
@@ -1139,6 +1141,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookChapterVerse");
 
                     b.HasIndex("TokenizedCorpusId");
 

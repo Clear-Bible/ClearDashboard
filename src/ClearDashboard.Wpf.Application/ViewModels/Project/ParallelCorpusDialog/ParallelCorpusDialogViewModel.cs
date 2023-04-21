@@ -297,10 +297,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Parallelizing source and target corpora for '{parallelCorpusDisplayName}'...");
 
-                // TODO:  Ask Chris/Russell how to go from models VerseMapping to Engine VerseMapping
                 ParallelTextCorpus =
                     await Task.Run(() => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
-                            new List<ClearBible.Engine.Corpora.VerseMapping>()), cancellationToken);
+                        new SourceTextIdToVerseMappingsFromVerseMappings(EngineParallelTextCorpus.VerseMappingsForAllVerses(
+                            sourceTokenizedTextCorpus.Versification,
+                            targetTokenizedTextCorpus.Versification))), 
+                        cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
 

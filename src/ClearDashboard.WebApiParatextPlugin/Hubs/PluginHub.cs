@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {
@@ -39,6 +40,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
         public void SendVerse(string verse)
         {
             Clients.All.addMessage(verse);
+        }
+
+        public void SendPluginClosing(PluginClosing pluginClosing)
+        {
+            Clients.All.addMessage(pluginClosing);
         }
 
         public void SendTextCollections(List<TextCollection> textCollections)
@@ -72,15 +78,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
                     Clients.All.SendProject(result.Data);
                 }
             }
-
-            //{
-            //    var result = await _mediator.Send(new GetTextCollectionsQuery());
-            //    if (result.Success)
-            //    {
-            //        _logger.AppendText(Color.DarkOrange, $"Sending TextCollections - {result.Data?.Count}");
-            //        Clients.All.SendTextCollections(result.Data);
-            //    }
-            //}
 
             await base.OnConnected();
         }
