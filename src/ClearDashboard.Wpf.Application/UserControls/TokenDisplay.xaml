@@ -60,6 +60,14 @@
             <Button.ContextMenu>
                 <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
                     <MenuItem Click="OnCreateNote" Header="{helpers:Localization EnhancedView_CreateNote}" />
+                    <MenuItem 
+                        x:Name="CreateAlignmentMenuItem" 
+                        Click="OnTokenCreateAlignment" 
+                        Header="{helpers:Localization EnhancedView_CreateAlignment}" />
+                    <MenuItem 
+                        x:Name="DeleteAlignmentMenuItem" 
+                        Click="OnTokenDeleteAlignment" 
+                        Header="{helpers:Localization EnhancedView_DeleteAlignmentMenu}" />
                     <MenuItem
                         x:Name="JoinTokensMenuItem"
                         Click="OnTokenJoin"
@@ -72,12 +80,11 @@
                         x:Name="UnjoinTokenMenuItem"
                         Click="OnTokenUnjoin"
                         Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
+                    <MenuItem Click="OnCopy" Header="{helpers:Localization Copy}" />
                     <MenuItem 
                         x:Name="FilterPinsMenuItem"
                         Click="OnFilterPins" 
                         Header="{helpers:Localization EnhancedView_FilterPins}" />
-                    <MenuItem Click="OnCopy" Header="{helpers:Localization Copy}" />
-                    <MenuItem x:Name="DeleteAlignmentMenuItem" Click="OnTokenDeleteAlignment" Header="{helpers:Localization EnhancedView_DeleteAlignment}" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock

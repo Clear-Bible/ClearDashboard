@@ -143,6 +143,8 @@ namespace ClearDashboard.Wpf.Application.Collections
                                      && !SelectedTranslations.Any();
         public bool CanUnjoinToken => SelectedTokens.All(t => t.IsCompositeTokenMember) && SelectedTokenCompositeTokenCount == 1;
 
+        public bool CanCreateAlignment => SelectedTokens.Count(t => t.IsSource) == 1 &&
+                                          SelectedTokens.Count(t => t.IsTarget) == 1;
         public bool CanDeleteAlignment => SelectedTokens.Any(t => t.IsHighlighted);
     }
 }
