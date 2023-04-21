@@ -30,6 +30,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public bool AnyTargetTokens => SelectedTokens.Any(t => t.IsTarget && t.IsTokenSelected);
 
         public TokenDisplayViewModelCollection SelectedSourceTokens => new(SelectedTokens.Where(t=> t.IsSource && t.IsTokenSelected));
+        public TokenDisplayViewModelCollection SelectedTargetTokens => new(SelectedTokens.Where(t=> t.IsTarget && t.IsTokenSelected));
 
         public EntityIdCollection SelectedEntityIds => SelectedTokens.EntityIds;
         public NoteIdCollection SelectedNoteIds => SelectedTokens.NoteIds;

@@ -128,42 +128,43 @@ namespace ClearDashboard.Wpf.Application.Services
             return manager;
         }
 
-        public async Task AddAlignment(TokenDisplayViewModel targetTokenDisplay)
+        public async Task AddAlignment(TokenDisplayViewModel sourceTokenDisplay, TokenDisplayViewModel targetTokenDisplay)
         {
+            var alignmentPopupViewModel = GetAlignmentPopupViewModel(SimpleMessagePopupMode.Add, targetTokenDisplay, sourceTokenDisplay);
 
-            if (SelectionManager.AnySourceTokens)
+            var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null,
+                SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
+            if (result == true)
             {
-                // We have at least one source token, so we can display the dialog to ask if the user 
-                // wants to create an alignment.
-                var selectedTokens = SelectionManager.SelectedSourceTokens;
-                var sourceTokenDisplay = selectedTokens.First();
-                
-                var alignmentPopupViewModel = GetAlignmentPopupViewModel(SimpleMessagePopupMode.Add, targetTokenDisplay, sourceTokenDisplay);
-
-                var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null,
-                    SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
-                if (result == true)
+                var alignment = new Alignment(new AlignedTokenPairs(sourceTokenDisplay.CompositeToken ?? sourceTokenDisplay.Token, 
+                                                                    targetTokenDisplay.CompositeToken ?? targetTokenDisplay.Token, 1d),
+                                                                    "Verified");
+                try
                 {
-                    var alignment = new Alignment(new AlignedTokenPairs(sourceTokenDisplay.CompositeToken ?? sourceTokenDisplay.Token, 
-                                                                        targetTokenDisplay.CompositeToken ?? targetTokenDisplay.Token, 1d),
-                                                                        "Verified");
-                    try
+                    await AlignmentSet!.PutAlignment(alignment);
+
+                    if (alignment.AlignmentId != null)
                     {
-                        await AlignmentSet!.PutAlignment(alignment);
-
-                        Debug.Assert(alignment.AlignmentId != null);
-
                         Alignments!.Add(alignment);
-
                         await EventAggregator.PublishOnUIThreadAsync(new AlignmentAddedMessage(alignment, targetTokenDisplay));
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Logger.LogError(ex, "An unexpected error occurred while creating an alignment");
-                        //throw;
+                        Logger.LogError($"An unexpected error occurred while creating an alignment between {sourceTokenDisplay.Token.TokenId} and {targetTokenDisplay.Token.TokenId}.");
                     }
-                   
                 }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, $"An unexpected error occurred while creating an alignment between {sourceTokenDisplay.Token.TokenId} and {targetTokenDisplay.Token.TokenId}.");
+                }
+            }
+        }
+
+        public async Task AddAlignment(TokenDisplayViewModel targetTokenDisplay)
+        {
+            if (SelectionManager.AnySourceTokens)
+            {
+                await AddAlignment(SelectionManager.SelectedSourceTokens.First(), targetTokenDisplay);
             }
         }
 
