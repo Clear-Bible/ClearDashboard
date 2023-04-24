@@ -218,6 +218,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("Copy", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenCreateAlignment routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenCreateAlignmentEvent = EventManager.RegisterRoutedEvent
+            ("TokenCreateAlignment", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TokenDeleteAlignment routed event.
         /// </summary>
         public static readonly RoutedEvent TokenDeleteAlignmentEvent = EventManager.RegisterRoutedEvent
@@ -513,8 +519,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             RaiseTokenEvent(TokenClickedEvent, args);
         }
-
   
+        private void OnTokenCreateAlignment(object sender, RoutedEventArgs e)
+        {
+            if (e is TokenEventArgs args)
+            {
+                RaiseTokenEvent(TokenCreateAlignmentEvent, args);
+            }
+        }
+
         private void OnTokenDeleteAlignment(object sender, RoutedEventArgs e)
         {
             if (e is TokenEventArgs args)
@@ -605,11 +618,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
-            {
-                UpdateVerseSelection(tokenDisplay, false);
-            }
+            //var control = e.Source as FrameworkElement;
+            //if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
+            //{
+            //    UpdateVerseSelection(tokenDisplay, false);
+            //}
 
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }
@@ -645,8 +658,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     var element = (UIElement)sender;
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
-
-
             }
 
             RaiseTokenEvent(TokenMouseEnterEvent, e);
@@ -810,7 +821,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Occurs when an individual token is clicked.
+        /// Occurs when an alignment is created.
+        /// </summary>
+        public event RoutedEventHandler TokenCreateAlignment
+        {
+            add => AddHandler(TokenCreateAlignmentEvent, value);
+            remove => RemoveHandler(TokenCreateAlignmentEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an alignment is deleted.
         /// </summary>
         public event RoutedEventHandler TokenDeleteAlignment
         {

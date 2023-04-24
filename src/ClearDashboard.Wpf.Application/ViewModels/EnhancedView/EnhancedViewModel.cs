@@ -712,7 +712,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        //TokenDeleteAlignment
+        public async void TokenCreateAlignment(object sender, TokenEventArgs e)
+        {
+            if (SelectionManager.SelectedSourceTokens.Count == 1 && SelectionManager.SelectedTargetTokens.Count == 1)
+            {
+                if (e is { TokenDisplay.VerseDisplay: AlignmentDisplayViewModel alignmentDisplayViewModel })
+                {
+                    await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(SelectionManager.SelectedSourceTokens.First(), SelectionManager.SelectedTargetTokens.First());
+                }
+            }
+            else
+            {
+                Logger.LogError($"Could not create manual alignment with {SelectionManager.SelectedSourceTokens.Count} source tokens and {SelectionManager.SelectedTargetTokens.Count} target tokens selected.");
+            }
+        }
+
         public async void TokenDeleteAlignment(object sender, TokenEventArgs e)
         {
             if (e is { TokenDisplay.VerseDisplay: AlignmentDisplayViewModel alignmentDisplayViewModel })

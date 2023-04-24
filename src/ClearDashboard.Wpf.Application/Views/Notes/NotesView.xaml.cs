@@ -1,4 +1,7 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +10,7 @@ using ClearDashboard.Wpf.Application.Events;
 
 namespace ClearDashboard.Wpf.Application.Views.Notes
 {
-    public partial class NotesView : UserControl
+    public partial class NotesView : INotifyPropertyChanged
     {
         private NotesViewModel _vm;
         public NotesView()
@@ -125,6 +128,34 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             {
                 await _vm.AddReplyToNote(args.NoteViewModelWithReplies, args.Text);
             }
+        }
+
+        public bool RepliesExpanded { get; set; } = true;
+        public Visibility RepliesVisibility => RepliesExpanded ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ExpandButtonVisibility => RepliesExpanded ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility CollapseButtonVisibility => RepliesExpanded ? Visibility.Visible : Visibility.Hidden;
+        private void OnRepliesButtonClick(object sender, RoutedEventArgs e)
+        {
+            RepliesExpanded = !RepliesExpanded;
+            OnPropertyChanged(nameof(RepliesExpanded));
+            OnPropertyChanged(nameof(RepliesVisibility));
+            OnPropertyChanged(nameof(ExpandButtonVisibility));
+            OnPropertyChanged(nameof(CollapseButtonVisibility));
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }
