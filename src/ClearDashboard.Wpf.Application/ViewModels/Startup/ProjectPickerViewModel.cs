@@ -321,6 +321,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             foreach (var project in DashboardProjects)
             {
                 project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+
+                if (project.IsCompatibleVersion)
+                {
+                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
+                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
+                }
             }
 
             _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();

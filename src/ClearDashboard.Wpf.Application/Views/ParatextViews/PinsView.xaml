@@ -51,7 +51,10 @@
         </Grid.CommandBindings>
 
         <Grid.InputBindings>
-            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+            <KeyBinding
+                Key="F"
+                Command="Find"
+                Modifiers="Control" />
         </Grid.InputBindings>
 
         <StackPanel
@@ -98,8 +101,8 @@
                 Name="FilterBox"
                 Width="200"
                 Height="25"
-                materialDesign:TextFieldAssist.HasClearButton="True"
                 Margin="15,0,0,0"
+                materialDesign:TextFieldAssist.HasClearButton="True"
                 Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" />
             <!--<Button
                 Margin="10,5,0,5"
@@ -147,7 +150,10 @@
             </DataGrid.CommandBindings>
 
             <DataGrid.InputBindings>
-                <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                <KeyBinding
+                    Key="C"
+                    Command="Copy"
+                    Modifiers="Control" />
             </DataGrid.InputBindings>
 
             <DataGrid.ContextMenu>
