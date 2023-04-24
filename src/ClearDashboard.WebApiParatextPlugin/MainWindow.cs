@@ -15,6 +15,7 @@ using SIL.Linq;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -71,6 +72,9 @@ namespace ClearDashboard.WebApiParatextPlugin
             ConfigureLogging();
             DisplayPluginVersion();
             Disposed += HandleWindowDisposed;
+            
+            
+
 
             // NB:  Use the following for debugging plug-in start up crashes.
             Application.ThreadException += ThreadExceptionEventHandler;
@@ -96,21 +100,18 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
         #endregion Please leave these for debugging plug-in start up crashes
 
-        private void HandleWindowDisposed(object sender, EventArgs e)
+        private async void HandleWindowDisposed(object sender, EventArgs e)
         {
             WebAppProxy?.Dispose();
             WebAppProxy = null;
         }
 
-        #endregion
-
-
-        #region Paratext overrides - standard functions
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
         {
             parent.SetTitle(ClearDashboardWebApiPlugin.PluginName);
             parent.ProjectChanged += ProjectChanged;
             parent.VerseRefChanged += VerseRefChanged;
+            parent.WindowClosing += WindowClosing;
 
             SetProject(parent.CurrentState.Project);
             SetVerseRef(parent.CurrentState.VerseRef);
@@ -121,13 +122,6 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             UpdateProjectList();
         }
-
-        public override string GetState()
-        {
-            // override required by base class, return null string.
-            return null;
-        }
-
 
         public override void DoLoad(IProgressInfo progressInfo)
         {
@@ -141,6 +135,42 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             //zzSur
             //Invoke((Action)(() => GetUsfmForBook("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 40)));
+        }
+
+        private async void WindowClosing(IPluginChildWindow sender, CancelEventArgs args)
+        {
+            try
+            {
+                HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
+                await Task.Delay(500);
+            }
+            catch (Exception ex)
+            {
+                AppendText(Color.Red,
+                    $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Called when window is closed
+        /// </summary>
+        /// <param name="e"></param>
+        protected override async void OnLeave(EventArgs e)
+        {
+            WebAppProxy?.Dispose();
+
+            base.OnLeave(e);
+        }
+
+        #endregion
+
+
+        #region Paratext overrides - standard functions
+
+        public override string GetState()
+        {
+            // override required by base class, return null string.
+            return null;
         }
 
 
@@ -402,33 +432,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                 Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
             }
 
-        }
-
-
-        /// <summary>
-        /// Called when window is closed
-        /// </summary>
-        /// <param name="e"></param>
-        protected override async void OnLeave(EventArgs e)
-        {
-            try
-            {
-                //TODO - Waiting on PARATEXT TEAM FOR AN ONCLOSE() EVENT AS THIS ONE BEHAVES LIKE ONFOCUSLOST()
-
-                //HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
-                //await Task.Delay(500);
-            }
-            catch (Exception ex)
-            {
-                AppendText(Color.Red,
-                    $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
-            }
-
-
-
-            WebAppProxy?.Dispose();
-
-            base.OnLeave(e);
         }
 
         #endregion Paratext overrides - standard functions
