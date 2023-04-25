@@ -328,7 +328,6 @@
                         <!--  This was changed from a card to a border to handle Jira DI 96  -->
                         <Border
                             Width="532"
-                            Height="64"
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Background="Transparent"
@@ -339,8 +338,8 @@
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="{helpers:Localization ProjectPicker_DeleteProject}" />
                                 </ContextMenu>
                             </Border.ContextMenu>
-                            <StackPanel Margin="0" Orientation="Horizontal">
-                                <Grid Width="450" Height="45">
+                            <StackPanel Orientation="Horizontal">
+                                <Grid Width="450" ShowGridLines="False">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -348,7 +347,8 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
@@ -402,6 +402,25 @@
                                         <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Version}" />
                                         <Run FontSize="11" Text="{Binding Version}" />
                                     </TextBlock>
+
+                                    <Button
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        cal:Message.Attach="UpdateDatabase($dataContext)"
+                                        Content="Update Database">
+                                        <Button.Style>
+                                            <Style BasedOn="{StaticResource MaterialDesignRaisedSecondaryButton}" TargetType="Button">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding NeedsMigrationUpgrade}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+
+
+                                    </Button>
                                 </Grid>
 
                             </StackPanel>

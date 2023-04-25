@@ -1,21 +1,17 @@
-﻿<Window
-    x:Class="ClearDashboard.Wpf.Application.Views.PopUps.AboutView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    Title="AboutView"
-    Width="500"
-    Height="450"
-    helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
-    mc:Ignorable="d">
+﻿<Window x:Class="ClearDashboard.Wpf.Application.Views.PopUps.MigrateDatabaseView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
+        xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+        xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+        helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
+        mc:Ignorable="d"
+        Title="MigrateDatabaseView" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -41,7 +37,7 @@
             Grid.Row="3"
             Width="160"
             Height="40"
-            Margin="10,10,10,20"
+            Margin="10,10,10,40"
             Background="Transparent"
             BorderBrush="Transparent">
             <TextBlock
@@ -51,13 +47,5 @@
                 Text="Clear Bible"
                 TextDecorations="Underline" />
         </Button>
-        <Button
-            x:Name="Close"
-            Grid.Row="4"
-            Width="150"
-            Height="40"
-            Margin="3,0,3,5"
-            Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
     </Grid>
 </Window>
