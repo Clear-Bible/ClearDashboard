@@ -786,16 +786,18 @@
 
           top: 0; /* Position the navbar at the top of the page */
           width: 100%; /* Full width */
-          }
 
+          position: sticky; /* Stay in place */
+          }
           /* Links inside the navbar */
           .navbar a {
           float: left;
           display: block;
           color: #f2f2f2;
           text-align: center;
-          padding: 14px 16px;
+          padding: 12px 12px;
           text-decoration: none;
+          font-size: 12px;
           }
 
           /* Change background on mouse-over */
