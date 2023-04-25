@@ -59,6 +59,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             DependencyProperty.Register(nameof(ExtendedProperties), typeof(string), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the HighlightedTokenAlternateBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenAlternateBackgroundProperty = DependencyProperty.Register(
+            nameof(HighlightedTokenAlternateBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.MediumOrchid));
+
+        /// <summary>
         /// Identifies the HighlightedTokenBackground dependency property.
         /// </summary>
         public static readonly DependencyProperty HighlightedTokenBackgroundProperty = DependencyProperty.Register(
@@ -142,6 +149,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             DependencyProperty.Register(nameof(SurfaceText), typeof(string), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TokenAlternateColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenAlternateColorProperty = DependencyProperty.Register(
+            nameof(TokenAlternateColor), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.DarkGray));
+
+        /// <summary>
         /// Identifies the TokenBackground dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenBackgroundProperty = DependencyProperty.Register(
@@ -154,6 +168,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TokenBorderProperty = DependencyProperty.Register(
             nameof(TokenBorder), typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.Transparent));
+
+        /// <summary>
+        /// Identifies the TokenColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenColorProperty = DependencyProperty.Register(
+            nameof(TokenColor), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Black));
 
         /// <summary>
         /// Identifies the TokenFlowDirection dependency property.
@@ -192,6 +213,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TokenFontWeightProperty = DependencyProperty.Register(
             nameof(TokenFontWeight), typeof(FontWeight), typeof(TokenDisplay),
             new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the TokenForeground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenForegroundProperty = DependencyProperty.Register(
+            nameof(TokenForeground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Black));
 
         /// <summary>
         /// Identifies the TokenMargin dependency property.
@@ -1178,6 +1206,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the alternate <see cref="Brush"/> used to draw the token background when it is highlighted.
+        /// </summary>
+        public Brush HighlightedTokenAlternateBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenAlternateBackgroundProperty);
+            set => SetValue(HighlightedTokenAlternateBackgroundProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the token background when it is highlighted.
         /// </summary>
         public Brush HighlightedTokenBackground
@@ -1303,6 +1340,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the alternate <see cref="Brush"/> used to draw the token in an alignment view when
+        /// it does not participate in an alignment pair.
+        /// </summary>
+        public Brush TokenAlternateColor
+        {
+            get => (Brush)GetValue(TokenAlternateColorProperty);
+            set => SetValue(TokenAlternateColorProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the token background.
         /// </summary>
         /// <remarks>
@@ -1324,6 +1371,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Brush)GetValue(TokenBorderProperty);
             private set => SetValue(TokenBorderProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token normally.
+        /// </summary>
+        public Brush TokenColor
+        {
+            get => (Brush)GetValue(TokenColorProperty);
+            set => SetValue(TokenColorProperty, value);
         }
 
         /// <summary>
@@ -1374,6 +1430,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (FontWeight)GetValue(TokenFontWeightProperty);
             set => SetValue(TokenFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token.
+        /// </summary>
+        /// <remarks>
+        /// This property should not be set explicitly; it is computed from the token's alignment status.
+        /// </remarks>
+        public Brush TokenForeground
+        {
+            get => (Brush)GetValue(TokenForegroundProperty);
+            set => SetValue(TokenForegroundProperty, value);
         }
 
         /// <summary>
@@ -1533,8 +1601,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeTokenMember ? Visibility.Visible : Visibility.Hidden;
             CompositeIndicatorComputedColor = TokenDisplayViewModel.CompositeIndicatorColor;
 
-            TokenBorder = TokenDisplayViewModel.IsHighlighted ? HighlightedTokenBackground : Brushes.Transparent;
+            TokenBorder = TokenDisplayViewModel.IsHighlighted ? TokenDisplayViewModel.IsManualAlignment ? HighlightedTokenAlternateBackground : HighlightedTokenBackground : Brushes.Transparent;
             TokenBackground = TokenDisplayViewModel.IsTokenSelected ? SelectedTokenBackground : Brushes.Transparent;
+            TokenForeground = TokenDisplayViewModel.VerseDisplay is AlignmentDisplayViewModel
+                ? TokenDisplayViewModel.IsAligned ? TokenColor : TokenAlternateColor
+                : TokenColor;
             TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
