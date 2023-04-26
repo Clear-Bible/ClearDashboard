@@ -103,7 +103,7 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
         var notes = new List<GeneralModel<Models.Note>>();
         var noteBuilder = (NoteBuilder)GeneralModelBuilder.GetModelBuilder<Models.Note>();
 
-        NoteBuilder.GetNotes(builderContext.ProjectDbContext).ToList().ForEach(n =>
+        noteBuilder.GetNotes(builderContext.ProjectDbContext).ToList().ForEach(n =>
         {
             notes.Add(noteBuilder.BuildModelSnapshot(n, builderContext));
         });

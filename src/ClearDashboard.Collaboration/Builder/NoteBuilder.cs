@@ -17,6 +17,34 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
     private Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>>? _ndaByNoteId = null;
     private Dictionary<Guid, IEnumerable<Models.Note>>? _repliesByThreadId = null;
 
+    public Func<ProjectDbContext, IEnumerable<Models.Note>> GetNotes = (projectDbContext) =>
+    {
+        return projectDbContext.Notes.Where(n => n.ThreadId == null || n.ThreadId == n.Id).OrderBy(n => n.Created).ToList();
+    };
+
+    public Func<ProjectDbContext, Dictionary<Guid, IEnumerable<Models.Note>>> GetRepliesByThreadId = (projectDbContext) =>
+    {
+        return projectDbContext.Notes
+            .Where(n => n.ThreadId != null && n.ThreadId != n.Id)
+            .GroupBy(n => (Guid)n.ThreadId!)
+            .ToDictionary(g => g.Key, g => g.Select(n => n).OrderBy(n => n.Created).AsEnumerable());
+    };
+
+    public Func<ProjectDbContext, Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>>> GetNoteDomainEntityAssociationsByNoteId = (projectDbContext) =>
+    {
+        return projectDbContext.NoteDomainEntityAssociations
+            .ToList()
+            .GroupBy(e => e.NoteId)
+            .Select(g => new
+            {
+                NoteId = g.Key,
+                DomainEntityTypes = g.ToList()
+                    .GroupBy(gg => gg.DomainEntityIdName!)
+                    .ToDictionary(gg => gg.Key, gg => gg.Select(e => e))
+            })
+            .ToDictionary(g => g.NoteId, g => g.DomainEntityTypes);
+    };
+
     public override IEnumerable<GeneralModel<Models.Note>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.Note>>();
@@ -41,7 +69,7 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         return BuildModelSnapshotInternal(note, builderContext, _ndaByNoteId, _repliesByThreadId);
     }
 
-    private static GeneralModel<Models.Note> BuildModelSnapshotInternal(
+    private GeneralModel<Models.Note> BuildModelSnapshotInternal(
         Models.Note note,
         BuilderContext builderContext,
         Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>> ndaByNoteId,
@@ -74,9 +102,7 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         return modelSnapshot;
     }
 
-    public static IEnumerable<NoteModelRef> ExtractNoteModelRefs(
-        Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>> nda,
-        BuilderContext builderContext)
+    public Func<Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>, BuilderContext, IEnumerable<NoteModelRef>> ExtractNoteModelRefs = (nda, builderContext) =>
     {
         var noteModelRefs = new GeneralListModel<NoteModelRef>();
         foreach (var kvp in nda)
@@ -170,33 +196,5 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         }
 
         return noteModelRefs;
-    }
-
-    public static IEnumerable<Models.Note> GetNotes(ProjectDbContext projectDbContext)
-    {
-        return projectDbContext.Notes.Where(n => n.ThreadId == null || n.ThreadId == n.Id).OrderBy(n => n.Created).ToList();
-    }
-
-    public static Dictionary<Guid, IEnumerable<Models.Note>> GetRepliesByThreadId(ProjectDbContext projectDbContext)
-    {
-        return projectDbContext.Notes
-            .Where(n => n.ThreadId != null && n.ThreadId != n.Id)
-            .GroupBy(n => (Guid)n.ThreadId!)
-            .ToDictionary(g => g.Key, g => g.Select(n => n).OrderBy(n => n.Created).AsEnumerable());
-    }
-
-    public static Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>> GetNoteDomainEntityAssociationsByNoteId(ProjectDbContext projectDbContext)
-    {
-        return projectDbContext.NoteDomainEntityAssociations
-            .ToList()
-            .GroupBy(e => e.NoteId)
-            .Select(g => new
-            {
-                NoteId = g.Key,
-                DomainEntityTypes = g.ToList()
-                    .GroupBy(gg => gg.DomainEntityIdName!)
-                    .ToDictionary(gg => gg.Key, gg => gg.Select(e => e))
-            })
-            .ToDictionary(g => g.NoteId, g => g.DomainEntityTypes);
-    }
+    };
 }

@@ -24,10 +24,32 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
             { BOOK_CHAPTER_LOCATION, typeof(string) }
         };
 
+    public Func<ProjectDbContext, Guid, IEnumerable<(Models.Alignment alignment, Models.Token leadingToken)>> GetAlignments = (projectDbContext, alignmentSetId) =>
+    {
+        var alignments = projectDbContext.Alignments
+            .Include(e => e.SourceTokenComponent!)
+                .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
+            .Include(e => e.TargetTokenComponent!)
+            .Where(e => e.AlignmentSetId == alignmentSetId)
+            .Where(e => e.Deleted == null)
+            .ToList()
+            .Select(e => (
+                alignment: e,
+                leadingToken: e.SourceTokenComponent as Models.Token ??
+                             (e.SourceTokenComponent as Models.TokenComposite)!.Tokens.First()
+            ))
+            .OrderBy(e => e.leadingToken.EngineTokenId);
+
+        // Including 'leadingToken' so that even if an Alignment has a composite
+        // as its SourceTokenComponent, we can pull book and chapter numbers for
+        // grouping during serialization
+        return alignments;
+    };
+
     // We serialize this in groups where the AlignmentSetId is in the heading, so don't include it here:
     public override IEnumerable<string> NoSerializePropertyNames => new[] { nameof(Models.Alignment.AlignmentSetId) };
 
-    public static GeneralListModel<GeneralModel<Models.Alignment>> BuildModelSnapshots(Guid alignmentSetId, BuilderContext builderContext)
+    public GeneralListModel<GeneralModel<Models.Alignment>> BuildModelSnapshots(Guid alignmentSetId, BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.Alignment>>();
 
@@ -72,28 +94,6 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
         GeneralModelBuilder<Models.Alignment>.AddPropertyValuesToGeneralModel(alignmentModelSnapshot, modelProperties);
 
         return alignmentModelSnapshot;
-    }
-
-    public static IEnumerable<(Models.Alignment alignment, Models.Token leadingToken)> GetAlignments(ProjectDbContext projectDbContext, Guid alignmentSetId)
-    {
-        var alignments = projectDbContext.Alignments
-            .Include(e => e.SourceTokenComponent!)
-                .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
-            .Include(e => e.TargetTokenComponent!)
-            .Where(e => e.AlignmentSetId == alignmentSetId)
-            .Where(e => e.Deleted == null)
-            .ToList()
-            .Select(e => (
-                alignment: e,
-                leadingToken: e.SourceTokenComponent as Models.Token ??
-                             (e.SourceTokenComponent as Models.TokenComposite)!.Tokens.First()
-            ))
-            .OrderBy(e => e.leadingToken.EngineTokenId);
-
-        // Including 'leadingToken' so that even if an Alignment has a composite
-        // as its SourceTokenComponent, we can pull book and chapter numbers for
-        // grouping during serialization
-        return alignments;
     }
 
     public static void SaveAlignments(

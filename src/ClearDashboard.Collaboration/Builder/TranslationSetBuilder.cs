@@ -18,6 +18,17 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
             { SOURCE_TOKENIZED_CORPUS, typeof(TokenizedCorpusExtra) }
         };
 
+    public TranslationBuilder? TranslationBuilder = null;
+
+    public Func<ProjectDbContext, IEnumerable<Models.TranslationSet>> GetTranslationSets = (projectDbContext) =>
+    {
+        return projectDbContext.TranslationSets
+            .Include(e => e.ParallelCorpus)
+                .ThenInclude(e => e!.SourceTokenizedCorpus)
+            .OrderBy(c => c.Created)
+            .ToList();
+    };
+
     public override IEnumerable<GeneralModel<Models.TranslationSet>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.TranslationSet>>();
@@ -31,7 +42,7 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
         return modelSnapshot;
     }
 
-    public static GeneralModel<Models.TranslationSet> BuildModelSnapshot(Models.TranslationSet translationSet, BuilderContext builderContext)
+    public GeneralModel<Models.TranslationSet> BuildModelSnapshot(Models.TranslationSet translationSet, BuilderContext builderContext)
     {
         var modelSnapshot = ExtractUsingModelIds(translationSet, builderContext.CommonIgnoreProperties);
 
@@ -47,18 +58,10 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
 
         modelSnapshot.Add(SOURCE_TOKENIZED_CORPUS, sourceTokenizedCorpusExtra);
 
-        modelSnapshot.AddChild("Translations", TranslationBuilder.BuildModelSnapshots(translationSet.Id, builderContext).AsModelSnapshotChildrenList());
+        var translationBuilder = TranslationBuilder ?? new TranslationBuilder();
+        modelSnapshot.AddChild("Translations", translationBuilder.BuildModelSnapshots(translationSet.Id, builderContext).AsModelSnapshotChildrenList());
 
         return modelSnapshot;
-    }
-
-    public static IEnumerable<Models.TranslationSet> GetTranslationSets(ProjectDbContext projectDbContext)
-    {
-        return projectDbContext.TranslationSets
-            .Include(e => e.ParallelCorpus)
-                .ThenInclude(e => e!.SourceTokenizedCorpus)
-            .OrderBy(c => c.Created)
-            .ToList();
     }
 
     public static TranslationRef BuildTranslationRef(

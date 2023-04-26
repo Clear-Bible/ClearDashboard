@@ -43,7 +43,7 @@ public class TokenCompositeHandler : DefaultMergeHandler
                         .FirstOrDefault();
 
                     logger.LogDebug($"Converted TokenComposite TokenizedCorpusId ('{tokenizedCorpusId}') / VerseRowLocation ('{verseRowLocation}') to VerseRowId ('{verseRowId}')");
-                    return verseRowId;
+                    return (verseRowId != Guid.Empty) ? verseRowId : null;
                 }
                 else
                 {
@@ -52,7 +52,7 @@ public class TokenCompositeHandler : DefaultMergeHandler
 
             });
 
-        mergeContext.MergeBehavior.AddPropertyNameMapping(
+        mergeContext.MergeBehavior.AddPropertyNameMapping(  
             (typeof(Models.TokenComposite), "VerseRowLocation"),
             new[] { nameof(Models.TokenComposite.VerseRowId) });
 
@@ -107,9 +107,9 @@ DELETE FROM TokenComponent WHERE Id IN
         await base.HandleDeleteAsync(itemToDelete, cancellationToken);
     }
 
-    protected override async Task HandleCreateComplete<T>(T itemToCreate, CancellationToken cancellationToken)
+    protected override async Task<Guid> HandleCreateAsync<T>(T itemToCreate, CancellationToken cancellationToken)
     {
-        await base.HandleCreateComplete(itemToCreate, cancellationToken);
+        var id = await base.HandleCreateAsync(itemToCreate, cancellationToken);
 
         if (!typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
         {
@@ -161,6 +161,8 @@ DELETE FROM TokenComponent WHERE Id IN
                 await Task.CompletedTask;
             },
             cancellationToken);
+
+        return id;
     }
 
     public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)

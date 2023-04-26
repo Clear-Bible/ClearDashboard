@@ -8,7 +8,20 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 namespace ClearDashboard.Collaboration.Builder;
 
 public class LabelBuilder : GeneralModelBuilder<Models.Label>
-{ 
+{
+    public Func<ProjectDbContext, IEnumerable<Models.Label>> GetLabels = (projectDbContext) =>
+    {
+        return projectDbContext.Labels.OrderBy(l => l.Text).ToList();
+    };
+
+    public Func<ProjectDbContext, Dictionary<Guid, IEnumerable<Models.LabelNoteAssociation>>> GetLabelNoteAssociationsByLabelId = (projectDbContext) =>
+    {
+        return projectDbContext.LabelNoteAssociations
+            .ToList()
+            .GroupBy(e => e.LabelId)
+            .ToDictionary(g => g.Key, g => g.Select(e => e));
+    };
+
     public override IEnumerable<GeneralModel<Models.Label>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.Label>>();
@@ -32,18 +45,5 @@ public class LabelBuilder : GeneralModelBuilder<Models.Label>
         }
 
         return modelSnapshots;
-    }
-
-    public static IEnumerable<Models.Label> GetLabels(ProjectDbContext projectDbContext)
-    {
-        return projectDbContext.Labels.OrderBy(l => l.Text).ToList();
-    }
-
-    public static Dictionary<Guid, IEnumerable<Models.LabelNoteAssociation>> GetLabelNoteAssociationsByLabelId(ProjectDbContext projectDbContext)
-    {
-        return projectDbContext.LabelNoteAssociations
-            .ToList()
-            .GroupBy(e => e.LabelId)
-            .ToDictionary(g => g.Key, g => g.Select(e => e));
     }
 }

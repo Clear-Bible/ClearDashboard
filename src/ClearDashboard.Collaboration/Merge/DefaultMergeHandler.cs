@@ -447,6 +447,13 @@ public class DefaultMergeHandler
         await ModifyListDifferencesAsync(difference, currentChildren, targetCommitChildren, cancellationToken);
     }
 
+    /// <summary>
+    /// Called after the insert of a parent entity, this inserts the new parent entity's children (if any)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="parentSnapshot"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected virtual async Task CreateChildrenAsync<T>(
         T parentSnapshot,
         CancellationToken cancellationToken)

@@ -22,6 +22,23 @@ public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
             { TARGET_TOKENIZED_CORPUS, typeof(TokenizedCorpusExtra) },
         };
 
+    public AlignmentBuilder? AlignmentBuilder = null;
+
+    public Func<ProjectDbContext, IEnumerable<Models.AlignmentSet>> GetAlignmentSets = (projectDbContext) =>
+    {
+        // The only thing we can do with Alignments at present is auto-create them
+        // and possibly soft-delete them, grab any manually deleted ones:
+        return projectDbContext.AlignmentSets
+            .Include(e => e.ParallelCorpus)
+                .ThenInclude(e => e!.SourceTokenizedCorpus)
+                    .ThenInclude(e => e!.Corpus)
+            .Include(e => e.ParallelCorpus)
+                .ThenInclude(e => e!.TargetTokenizedCorpus)
+                    .ThenInclude(e => e!.Corpus)
+            .OrderBy(c => c.Created)
+            .ToList();
+    };
+
     public override IEnumerable<GeneralModel<Models.AlignmentSet>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.AlignmentSet>>();
@@ -35,7 +52,7 @@ public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
         return modelSnapshots;
     }
 
-    public static GeneralModel<Models.AlignmentSet> BuildModelSnapshot(Models.AlignmentSet alignmentSet, BuilderContext builderContext)
+    public GeneralModel<Models.AlignmentSet> BuildModelSnapshot(Models.AlignmentSet alignmentSet, BuilderContext builderContext)
     {
         var modelSnapshot = ExtractUsingModelIds(alignmentSet, builderContext.CommonIgnoreProperties);
 
@@ -61,24 +78,10 @@ public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
         modelSnapshot.Add(SOURCE_TOKENIZED_CORPUS, sourceTokenizedCorpusExtra);
         modelSnapshot.Add(TARGET_TOKENIZED_CORPUS, targetTokenizedCorpusExtra);
 
-        modelSnapshot.AddChild("Alignments", AlignmentBuilder.BuildModelSnapshots(alignmentSet.Id, builderContext).AsModelSnapshotChildrenList());
+        var alignmentBuilder = AlignmentBuilder ?? new AlignmentBuilder();
+        modelSnapshot.AddChild("Alignments", alignmentBuilder.BuildModelSnapshots(alignmentSet.Id, builderContext).AsModelSnapshotChildrenList());
 
         return modelSnapshot;
-    }
-
-    public static IEnumerable<Models.AlignmentSet> GetAlignmentSets(ProjectDbContext projectDbContext)
-    {
-        // The only thing we can do with Alignments at present is auto-create them
-        // and possibly soft-delete them, grab any manually deleted ones:
-        return projectDbContext.AlignmentSets
-            .Include(e => e.ParallelCorpus)
-                .ThenInclude(e => e!.SourceTokenizedCorpus)
-                    .ThenInclude(e => e!.Corpus)
-            .Include(e => e.ParallelCorpus)
-                .ThenInclude(e => e!.TargetTokenizedCorpus)
-                    .ThenInclude(e => e!.Corpus)
-            .OrderBy(c => c.Created)
-            .ToList();
     }
 
     public static AlignmentRef BuildAlignmentRef(

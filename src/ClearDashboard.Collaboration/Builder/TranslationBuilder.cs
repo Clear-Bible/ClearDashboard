@@ -26,7 +26,28 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
     // We serialize this in groups where the AlignmentSetId is in the heading, so don't include it here:
     public override IEnumerable<string> NoSerializePropertyNames => new[] { nameof(Models.Translation.TranslationSetId) };
 
-    public static GeneralListModel<GeneralModel<Models.Translation>> BuildModelSnapshots(Guid translationSetId, BuilderContext builderContext)
+    public Func<ProjectDbContext, Guid, IEnumerable<(Models.Translation translation, Models.Token leadingToken)>> GetTranslations = (projectDbContext, translationSetId) =>
+    {
+        var translations = projectDbContext.Translations
+            .Include(e => e.SourceTokenComponent!)
+                .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
+            .Where(e => e.TranslationSetId == translationSetId)
+            .Where(e => e.Deleted == null)
+            .ToList()
+            .Select(e => (
+                translation: e,
+                leadingToken: e.SourceTokenComponent as Models.Token ??
+                             (e.SourceTokenComponent as Models.TokenComposite)!.Tokens.First()
+            ))
+            .OrderBy(e => e.leadingToken.EngineTokenId);
+
+        // Including 'leadingToken' so that even if a Translation has a composite
+        // as its SourceTokenComponent, we can pull book and chapter numbers for
+        // grouping during serialization
+        return translations;
+    };
+
+    public GeneralListModel<GeneralModel<Models.Translation>> BuildModelSnapshots(Guid translationSetId, BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.Translation>>();
 
@@ -65,27 +86,6 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
         GeneralModelBuilder<Models.Translation>.AddPropertyValuesToGeneralModel(translationModelSnapshot, modelProperties);
 
         return translationModelSnapshot;
-    }
-
-    public static IEnumerable<(Models.Translation translation, Models.Token leadingToken)> GetTranslations(ProjectDbContext projectDbContext, Guid translationSetId)
-    {
-        var translations = projectDbContext.Translations
-            .Include(e => e.SourceTokenComponent!)
-                .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
-            .Where(e => e.TranslationSetId == translationSetId)
-            .Where(e => e.Deleted == null)
-            .ToList()
-            .Select(e => (
-                translation: e,
-                leadingToken: e.SourceTokenComponent as Models.Token ??
-                             (e.SourceTokenComponent as Models.TokenComposite)!.Tokens.First()
-            ))
-            .OrderBy(e => e.leadingToken.EngineTokenId);
-
-        // Including 'leadingToken' so that even if a Translation has a composite
-        // as its SourceTokenComponent, we can pull book and chapter numbers for
-        // grouping during serialization
-        return translations;
     }
 
     public static void SaveTranslations(

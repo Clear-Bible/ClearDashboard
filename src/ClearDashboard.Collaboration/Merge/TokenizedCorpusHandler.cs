@@ -225,7 +225,8 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
         {
             using (var reader = new StringReader(customVersData))
             {
-                versification = Versification.Table.Implementation.Load(reader, "not a file");
+                Versification.Table.Implementation.RemoveAllUnknownVersifications();
+                versification = Versification.Table.Implementation.Load(reader, "not a file", versification, "custom");
             }
         }
 

@@ -25,6 +25,7 @@ using Autofac.Configuration;
 using System.Configuration;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Collaboration.Features;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
@@ -33,9 +34,9 @@ namespace ClearDashboard.DAL.Alignment.Tests
         protected ITestOutputHelper Output { get; private set; }
         protected IContainer? Container { get; private set; }
 
-        protected IMediator? Mediator { get; private set; }
+        public IMediator? Mediator { get; private set; }
 
-        protected ProjectDbContext? ProjectDbContext { get; set; }
+        public ProjectDbContext? ProjectDbContext { get; set; }
         protected string? ProjectName { get; set; }
         protected bool DeleteDatabase { get; set; } = true;
         protected ILogger Logger { get; set; }
@@ -87,7 +88,10 @@ namespace ClearDashboard.DAL.Alignment.Tests
             services.AddScoped<ProjectDbContext>();
             services.AddScoped<ProjectDbContextFactory>();
             services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
-            services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
+            services.AddMediatR(
+                typeof(CreateParallelCorpusCommandHandler), 
+                typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler),
+                typeof(MergeProjectSnapshotCommandHandler));
             services.AddLogging();
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddSingleton<IProjectProvider, ProjectProvider>();

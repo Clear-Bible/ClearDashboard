@@ -8,6 +8,11 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class CorpusBuilder : GeneralModelBuilder<Models.Corpus>
 {
+    public Func<ProjectDbContext, IEnumerable<Models.Corpus>> GetCorpora = (projectDbContext) =>
+    {
+        return projectDbContext.Corpa.OrderBy(c => c.Created).ToList();
+    };
+
     public override IEnumerable<GeneralModel<Models.Corpus>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.Corpus>>();
@@ -25,10 +30,5 @@ public class CorpusBuilder : GeneralModelBuilder<Models.Corpus>
     {
         var modelSnapshot = ExtractUsingModelIds(dbModel, builderContext.CommonIgnoreProperties);
         return modelSnapshot;
-    }
-
-    public static IEnumerable<Models.Corpus> GetCorpora(ProjectDbContext projectDbContext)
-    {
-        return projectDbContext.Corpa.OrderBy(c => c.Created).ToList();
     }
 }

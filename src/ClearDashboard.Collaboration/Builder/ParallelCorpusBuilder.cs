@@ -8,6 +8,13 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class ParallelCorpusBuilder : GeneralModelBuilder<Models.ParallelCorpus>
 {
+    public TokenBuilder? TokenBuilder = null;
+
+    public Func<ProjectDbContext, IEnumerable<Models.ParallelCorpus>> GetParallelCorpora = (projectDbContext) =>
+    {
+        return projectDbContext.ParallelCorpa.OrderBy(c => c.Created).ToList();
+    };
+
     public override IEnumerable<GeneralModel<Models.ParallelCorpus>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.ParallelCorpus>>();
@@ -21,14 +28,15 @@ public class ParallelCorpusBuilder : GeneralModelBuilder<Models.ParallelCorpus>
         return modelSnapshot;
     }
 
-    public static GeneralModel<Models.ParallelCorpus> BuildModelSnapshot(Models.ParallelCorpus parallelCorpus, BuilderContext builderContext)
+    public GeneralModel<Models.ParallelCorpus> BuildModelSnapshot(Models.ParallelCorpus parallelCorpus, BuilderContext builderContext)
     {
         var modelSnapshot = ExtractUsingModelIds(parallelCorpus, builderContext.CommonIgnoreProperties);
         // TODO:  VerseMappings (once they can be altered in Dashboard)
         // TODO:  Verses (once they can be altered in Dashboard)
         // TODO:  TokenVerseAssociations (once they can be created in Dashboard)
 
-        var tokenCompositeTokens = TokenBuilder.GetParallelCorpusCompositeTokens(builderContext.ProjectDbContext, parallelCorpus.Id);
+        var tokenBuilder = TokenBuilder ?? new TokenBuilder();
+        var tokenCompositeTokens = tokenBuilder.GetParallelCorpusCompositeTokens(builderContext.ProjectDbContext, parallelCorpus.Id);
         if (tokenCompositeTokens.Any())
         {
             var compositeModelSnapshots = new GeneralListModel<GeneralModel<Models.TokenComposite>>();
@@ -42,10 +50,5 @@ public class ParallelCorpusBuilder : GeneralModelBuilder<Models.ParallelCorpus>
         }
 
         return modelSnapshot;
-    }
-
-    public static IEnumerable<Models.ParallelCorpus> GetParallelCorpora(ProjectDbContext projectDbContext)
-    {
-        return projectDbContext.ParallelCorpa.OrderBy(c => c.Created).ToList();
     }
 }

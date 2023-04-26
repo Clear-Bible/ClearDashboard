@@ -157,7 +157,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             else if (_entityValueResolvers.TryGetValue((entityType, propertyName), out EntityValueResolver? resolver))
             {
                 var entityPropertyValue = RunEntityValueResolver(modelSnapshot, propertyName, resolver);
-                command.Parameters[p.ParameterName].Value = entityPropertyValue;
+                command.Parameters[p.ParameterName].Value = entityPropertyValue ?? DBNull.Value;
 
                 continue;
             }
@@ -287,7 +287,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                 if (_entityValueResolvers.TryGetValue((entityType, ep), out var resolver))
                 {
                     propertyValue = RunEntityValueResolver(modelSnapshot, ep, resolver);
-                    command.Parameters[$"@{ep}"].Value = propertyValue;
+                    command.Parameters[$"@{ep}"].Value = propertyValue ?? DBNull.Value;
 
                     continue;
                 }
@@ -335,7 +335,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                 if (_entityValueResolvers.TryGetValue((entityType, ep), out var resolver))
                 {
                     var propertyValue = RunEntityValueResolver(modelSnapshot, ep, resolver);
-                    command.Parameters[$"@{ep}"].Value = propertyValue;
+                    command.Parameters[$"@{ep}"].Value = propertyValue ?? DBNull.Value;
                 }
                 else if (modelValueDifference.ModelType.IsAssignableTo(typeof(IDictionary<string, object>)))
                 {

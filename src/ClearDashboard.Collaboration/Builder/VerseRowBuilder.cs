@@ -5,12 +5,22 @@ using ClearDashboard.DataAccessLayer.Data;
 using System.Text.Json;
 using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.Collaboration.Factory;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using ClearDashboard.Collaboration.Merge;
 
 namespace ClearDashboard.Collaboration.Builder;
 
 public class VerseRowBuilder : GeneralModelBuilder<Models.VerseRow>
 {
-    public static GeneralListModel<GeneralModel<Models.VerseRow>> BuildModelSnapshots(Guid tokenizedCorpusId, BuilderContext builderContext)
+    public Func<ProjectDbContext, Guid, IEnumerable<Models.VerseRow>> GetVerseRows = (projectDbContext, tokenizedCorpusId) =>
+    {
+        return projectDbContext.VerseRows
+           .Where(vr => vr.TokenizedCorpusId == tokenizedCorpusId)
+           .OrderBy(vr => vr.BookChapterVerse)
+           .ToList();
+    };
+
+    public IEnumerable<GeneralModel<Models.VerseRow>> BuildModelSnapshots(Guid tokenizedCorpusId, BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.VerseRow>>();
 
@@ -46,14 +56,6 @@ public class VerseRowBuilder : GeneralModelBuilder<Models.VerseRow>
             .ToDictionary(
                 g => g.Key,
                 g => g.Select(vr => vr).OrderBy(vr => vr.BookChapterVerse!).AsEnumerable());
-    }
-
-    public static IEnumerable<Models.VerseRow> GetVerseRows(ProjectDbContext projectDbContext, Guid tokenizedCorpusId)
-    {
-        return projectDbContext.VerseRows
-            .Where(vr => vr.TokenizedCorpusId == tokenizedCorpusId)
-            .OrderBy(vr => vr.BookChapterVerse)
-            .ToList();
     }
 
     public static void SaveVerseRows(GeneralListModel<GeneralModel<Models.VerseRow>> verseRowSnapshots, string childPath, JsonSerializerOptions options, CancellationToken cancellationToken)
