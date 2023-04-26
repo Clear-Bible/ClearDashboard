@@ -267,6 +267,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 Settings.Default.NoteIndicatorSizeValue = value;
                 NotifyOfPropertyChange(() => NoteIndicatorsSizeValue);
             }
+        }        
+        
+        private bool _paragraphMode = Settings.Default.ParagraphMode;
+        public bool ParagraphMode
+        {
+            get => _paragraphMode;
+            set
+            {
+                _paragraphMode = value;
+                Settings.Default.ParagraphMode = value;
+                NotifyOfPropertyChange(() => ParagraphMode);
+            }
         }
 
         #endregion
