@@ -347,7 +347,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         #region Methods
 
-        public void UpdateDatabase(DashboardProject project)
+        public async void UpdateDatabase(DashboardProject project)
         {
             var localizedString = _localizationService!["MainView_About"];
 
@@ -359,6 +359,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<MigrateDatabaseViewModel>();
+            viewModel.Project = project;
 
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
