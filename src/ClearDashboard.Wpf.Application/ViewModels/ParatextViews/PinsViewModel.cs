@@ -31,6 +31,8 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
 using ClearApplicationFoundation.Framework.Input;
+using CefSharp.DevTools.CSS;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -107,6 +109,81 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
+        private bool _isAll = true;
+        public bool IsAll
+        {
+            get => _isAll;
+            set
+            {
+                _isAll = value;
+                NotifyOfPropertyChange(() => IsAll);
+                CheckAndRefreshGrid();
+            }
+        }
+
+        private bool _isBt;
+        public bool IsBt
+        {
+            get => _isBt;
+            set
+            {
+                _isBt = value;
+                NotifyOfPropertyChange(() => IsBt);
+                _selectedXmlSourceRadioDictionary[XmlSource.BiblicalTerms] = value;
+                CheckAndRefreshGrid();
+            }
+        }
+
+        private bool _isAbt;
+        public bool IsAbt
+        {
+            get => _isAbt;
+            set
+            {
+                _isAbt = value;
+                NotifyOfPropertyChange(() => IsAbt);
+                _selectedXmlSourceRadioDictionary[XmlSource.AllBiblicalTerms] = value;
+                CheckAndRefreshGrid();
+            }
+        }
+
+        private bool _isTr;
+        public bool IsTr
+        {
+            get => _isTr;
+            set
+            {
+                _isTr = value;
+                NotifyOfPropertyChange(() => IsTr);
+                _selectedXmlSourceRadioDictionary[XmlSource.TermsRenderings] = value;
+                CheckAndRefreshGrid();
+            }
+        }
+
+        private bool _isLx;
+        public bool IsLx
+        {
+            get => _isLx;
+            set
+            {
+                _isLx = value;
+                NotifyOfPropertyChange(() => IsLx);
+                _selectedXmlSourceRadioDictionary[XmlSource.Lexicon] = value;
+                CheckAndRefreshGrid();
+            }
+        }
+
+        private Dictionary<XmlSource, bool> _selectedXmlSourceRadioDictionary;
+        public Dictionary<XmlSource, bool> SelectedXmlSourceRadioDictionary
+        {
+            get => _selectedXmlSourceRadioDictionary;
+            set
+            {
+                _selectedXmlSourceRadioDictionary = value;
+                NotifyOfPropertyChange(() => SelectedXmlSourceRadioDictionary);
+            }
+        }
+
         private string _filterString = "";
         public string FilterString
         {
@@ -118,10 +195,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _filterString = value;
                 NotifyOfPropertyChange(() => FilterString);
 
-                if (GridData != null && GridCollectionView is not null)
-                {
-                    GridCollectionView.Refresh();
-                }
+                CheckAndRefreshGrid();
             }
         }
 
@@ -173,6 +247,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 FontSize = paratextProject.Language.Size;
                 IsRtl = paratextProject.Language.IsRtol;
             }
+
+            _selectedXmlSourceRadioDictionary = new Dictionary<XmlSource, bool>();
+            _selectedXmlSourceRadioDictionary.Add(XmlSource.BiblicalTerms, _isBt);
+            _selectedXmlSourceRadioDictionary.Add(XmlSource.AllBiblicalTerms, _isAbt);
+            _selectedXmlSourceRadioDictionary.Add(XmlSource.TermsRenderings, _isTr);
+            _selectedXmlSourceRadioDictionary.Add(XmlSource.Lexicon, _isLx);
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -416,10 +496,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             cancellationToken.ThrowIfCancellationRequested();
                         }
 
+                        var xmlSource = XmlSource.BiblicalTerms;
+
                         GridData.Add(new PinsDataTable
                         {
                             Id = Guid.NewGuid(),
-                            XmlSource = "BT",
+                            XmlSource = xmlSource,
+                            XmlSourceAbbreviation = xmlSource.GetDescription(),
                             XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
                             Code = "KeyTerm",
                             OriginID = terms.Id,
@@ -454,10 +537,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 cancellationToken.ThrowIfCancellationRequested();
                             }
 
+                            var xmlSource = XmlSource.AllBiblicalTerms;
+
                             GridData.Add(new PinsDataTable
                             {
                                 Id = Guid.NewGuid(),
-                                XmlSource = "ABT",
+                                XmlSource = xmlSource,
+                                XmlSourceAbbreviation = xmlSource.GetDescription(),
                                 XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
@@ -482,12 +568,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             // not found in either the BiblicalTerms or AllBiblicalTerms.xml lists
                             gloss = biblicalTermsSense == "" ? sourceWord : biblicalTermsSense;
 
+                            var xmlSource = XmlSource.TermsRenderings;
+
                             Dispatcher.CurrentDispatcher.Invoke(() =>
                             {
                                 GridData.Add(new PinsDataTable
                                 {
                                     Id = Guid.NewGuid(),
-                                    XmlSource = "TR",
+                                    XmlSource = xmlSource,
+                                    XmlSourceAbbreviation = xmlSource.GetDescription(),
                                     XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath, "TermRenderings.xml"),
                                     Code = "KeyTerm",
                                     OriginID = terms.Id,
@@ -608,10 +697,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                             }
 
+                            var xmlSource = XmlSource.Lexicon;
+
                             GridData.Add(new PinsDataTable
                             {
                                 Id = Guid.NewGuid(),
-                                XmlSource = "LX",
+                                XmlSource = xmlSource,
+                                XmlSourceAbbreviation = xmlSource.GetDescription(),
                                 XmlPath = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
                                 Code = senseEntry.Id,
                                 Gloss = senseEntry.Gloss.Text,
@@ -867,6 +959,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         #region Methods
 
+        private void CheckAndRefreshGrid()
+        {
+            if (GridData != null && GridCollectionView is not null)
+            {
+                GridCollectionView.Refresh();
+            }
+        }
+
         private string CorrectUnicode(string instr)
         {
             // There is a problem in Gk Unicode Vowels exhibiting in Paratext. See https://wiki.digitalclassicist.org/Greek_Unicode_duplicated_vowels
@@ -904,12 +1004,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (itemDt.Gloss is null)
             {
-                return itemDt.Source.Contains(_filterString) || itemDt.Notes.Contains(_filterString);
+                return (itemDt.Source.Contains(_filterString) || itemDt.Notes.Contains(_filterString))
+                    && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
             }
 
-            return itemDt.Source.Contains(_filterString) || itemDt.Gloss.Contains(_filterString) ||
-                   itemDt.Notes.Contains(_filterString);
-
+            return (itemDt.Source.Contains(_filterString) || itemDt.Gloss.Contains(_filterString) || itemDt.Notes.Contains(_filterString))
+                && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
         }
 
         /// <summary>
@@ -1011,6 +1111,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
         {
             FilterString = message.Message;
+            switch (message.XmlSource)
+            {
+                case XmlSource.All:
+                    IsAll = true;
+                    break;
+                case XmlSource.BiblicalTerms:
+                    IsBt = true;
+                    break;
+                case XmlSource.AllBiblicalTerms:
+                    IsAbt = true;
+                    break;
+                case XmlSource.TermsRenderings:
+                    IsTr = true;
+                    break;
+                case XmlSource.Lexicon:
+                    IsLx = true;
+                    break;
+            }
         }
 
         #endregion // Methods

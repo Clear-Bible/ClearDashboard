@@ -278,6 +278,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NotePaneVisibility = Visibility.Visible;
         }
 
+        public void FilterPinsByBiblicalTerms(NoteEventArgs e)
+        {
+            NotePaneVisibility = Visibility.Visible;
+        }
+
         public void TranslateQuick(NoteEventArgs e)
         {
             NotePaneVisibility = Visibility.Visible;

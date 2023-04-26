@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record UserMessage(User User);
 
 
-    public record FilterPinsMessage(string Message);
+    public record FilterPinsMessage(string Message, XmlSource XmlSource = XmlSource.All);
 
     public record CreateProjectMessage(string Message);
 

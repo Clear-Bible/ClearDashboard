@@ -51,7 +51,10 @@
         </Grid.CommandBindings>
 
         <Grid.InputBindings>
-            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+            <KeyBinding
+                Key="F"
+                Command="Find"
+                Modifiers="Control" />
         </Grid.InputBindings>
 
         <StackPanel
@@ -98,8 +101,8 @@
                 Name="FilterBox"
                 Width="200"
                 Height="25"
-                materialDesign:TextFieldAssist.HasClearButton="True"
                 Margin="15,0,0,0"
+                materialDesign:TextFieldAssist.HasClearButton="True"
                 Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" />
             <!--<Button
                 Margin="10,5,0,5"
@@ -109,6 +112,17 @@
                 Style="{StaticResource TransparentStyle}" />-->
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
+
+            <Label VerticalAlignment="Center" Content="All" Margin="10 0 0 0"/>
+            <RadioButton Name="AllXmlSourceRadio" GroupName="XmlSourceRadio" IsChecked="{Binding IsAll}"/>
+            <Label VerticalAlignment="Center" Content="BT" Margin="10 0 0 0"/>
+            <RadioButton Name="BtXmlSourceRadio" GroupName="XmlSourceRadio" IsChecked="{Binding IsBt}"/>
+            <Label VerticalAlignment="Center" Content="ABT" Margin="10 0 0 0"/>
+            <RadioButton Name="AbtXmlSourceRadio" GroupName="XmlSourceRadio" IsChecked="{Binding IsAbt}"/>
+            <Label VerticalAlignment="Center" Content="TR" Margin="10 0 0 0"/>
+            <RadioButton Name="TrXmlSourceRadio" GroupName="XmlSourceRadio" IsChecked="{Binding IsTr}"/>
+            <Label VerticalAlignment="Center" Content="LX" Margin="10 0 0 0"/>
+            <RadioButton Name="LxXmlSourceRadio" GroupName="XmlSourceRadio" IsChecked="{Binding IsLx}"/>
 
             <Button
                 Height="25"
@@ -147,7 +161,10 @@
             </DataGrid.CommandBindings>
 
             <DataGrid.InputBindings>
-                <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                <KeyBinding
+                    Key="C"
+                    Command="Copy"
+                    Modifiers="Control" />
             </DataGrid.InputBindings>
 
             <DataGrid.ContextMenu>
@@ -202,7 +219,7 @@
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Path='XmlSource'}"
+                                    Text="{Binding Path='XmlSourceAbbreviation'}"
                                     ToolTip="{Binding Path='XmlPath'}" />
                             </Border>
                         </DataTemplate>
