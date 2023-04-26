@@ -25,6 +25,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -35,7 +36,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         IHandle<NoteUpdatingMessage>,
         IHandle<NoteUpdatedMessage>,
         IHandle<NoteLabelAttachedMessage>,
-        IHandle<NoteLabelDetachedMessage>
+        IHandle<NoteLabelDetachedMessage>,
+        IHandle<ReloadProjectMessage>
     {
         private const string TaskName = "Notes";
         private const int ToleranceContainsFuzzyAssociationsDescriptions = 1;
@@ -611,6 +613,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                 await GetAllNotesAndSetNoteViewModelsAsync();
             else
                 ProgressBarVisibility = Visibility.Hidden;
+        }
+
+        public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
+        {
+            await GetAllNotesAndSetNoteViewModelsAsync();
         }
     }
 

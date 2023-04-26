@@ -68,7 +68,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
                 IHandle<FilterPinsMessage>, 
-                IHandle<BackgroundTaskChangedMessage>
+                IHandle<BackgroundTaskChangedMessage>,
+                IHandle<ReloadProjectMessage>
     {
         #region Member Variables
 
@@ -539,6 +540,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 await ProjectManager.UpdateCurrentUserWithParatextUserInformation();
             }
+
+            await Initialize(cancellationToken);
+            await base.OnInitializeAsync(cancellationToken);
+        }
+
+        private async Task Initialize(CancellationToken cancellationToken)
+        {
             await LoadParatextProjectMetadata(cancellationToken);
             await LoadProject();
             await NoteManager!.InitializeAsync();
@@ -546,7 +554,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
             await LoadEnhancedViewTabs(cancellationToken);
-            await base.OnInitializeAsync(cancellationToken);
         }
 
         private async Task LoadParatextProjectMetadata(CancellationToken cancellationToken)
@@ -1483,6 +1490,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_GatherLogs"), Id = "GatherLogsID", ViewModel = this, },
                         // About
                         new() { Header = _localizationService!.Get("MainView_About"), Id = "AboutID", ViewModel = this, },
+
+                        new() { Header = "Reload project", Id = "ReloadProjectID", ViewModel = this, },
                     }
                 }
 #if COLLAB_RELEASE || COLLAB_DEBUG
@@ -1979,6 +1988,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (!_longRunningTaskManager!.HasTasks())
             {
+                if (menuItem.Id == "ReloadProjectID")
+                {
+                    await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                    return;
+                }
+
                 if (menuItem.Id == "NewID")
                 {
                     StartupDialogViewModel.GoToSetup = true;
@@ -2002,7 +2017,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #endregion // Methods
 
-        #region IHandel
+        #region IHandle implementations
 
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
         {
@@ -2112,7 +2127,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
             return Task.CompletedTask;
         }
-
+        
+        public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
+        }
         #endregion
     }
 }
