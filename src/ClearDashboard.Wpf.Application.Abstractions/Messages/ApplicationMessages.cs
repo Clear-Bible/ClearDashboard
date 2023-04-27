@@ -20,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record BcvArrowMessage(BcvArrow Arrow);
     public record ProjectLoadCompleteMessage(bool Loaded);
 
-
+    public record PluginClosingMessage(PluginClosing PluginClosing);
     public record ProjectChangedMessage(ParatextProject Project);
 
     public record TextCollectionChangedMessage(List<TextCollection> TextCollections);

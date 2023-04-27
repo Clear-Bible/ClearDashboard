@@ -8,65 +8,107 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <converters:GuidInGuidsToBooleanConverter x:Key="GuidInGuidsToBooleanConverter" />
-        </ResourceDictionary>
+        <converters:GuidInGuidsToBooleanConverter x:Key="GuidInGuidsToBooleanConverter" />
+
+        <DataTemplate x:Key="NoteReplyTemplate" DataType="{x:Type userControls:NoteReplyDisplay}">
+            <StackPanel Orientation="Vertical">
+                <Separator Foreground="Blue"></Separator>
+                <userControls:NoteReplyDisplay
+                    x:Name="NoteDisplay"
+                    ParentNote="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext}"
+                    ReplyColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyColor}"
+                    ReplyFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontFamily}"
+                    ReplyFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"
+                    ReplyFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontStyle}"
+                    ReplyFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontWeight}"
+                    ReplyMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyMargin}"
+                    ReplyPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyPadding}"
+                    SeenColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenColor}"
+                    SeenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontFamily}"
+                    SeenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontSize}"
+                    SeenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontStyle}"
+                    SeenFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontWeight}"
+                    SeenMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenMargin}" 
+                    SeenPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenPadding}" 
+                    TimestampColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampColor}"
+                    TimestampFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
+                    TimestampFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
+                    TimestampFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontStyle}"
+                    TimestampFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}"
+                    TimestampMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                    TimestampPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampPadding}"
+                    NoteSeen="OnNoteSeen"
+                />
+            </StackPanel>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="NoteReplyPanelTemplate">
+            <StackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+
     </UserControl.Resources>
 
     <Grid>
         <StackPanel Orientation="Vertical">
-            <ListBox x:Name="SelectedNoteRepliesNoteViewModels" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteViewModelWithReplies.Replies}">
+            <ItemsControl
+                ItemTemplate="{StaticResource NoteReplyTemplate}"
+                ItemsPanel="{StaticResource NoteReplyPanelTemplate}"
+                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteViewModelWithReplies.Replies}" />
+            <Separator/>
+            <!--<ListBox
+                x:Name="SelectedNoteRepliesNoteViewModels"
+                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteViewModelWithReplies.Replies}"
+            >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <Separator />
-                            <TextBlock
-                                Grid.Column="1"
-                                FontSize="14"
-                                Text="{Binding Text}"
-                                TextWrapping="Wrap" />
-                            <StackPanel Orientation="Horizontal">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="4*" />
-                                        <ColumnDefinition Width="1*" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                        <TextBlock
+                            <StackPanel Orientation="Vertical">
+                                <Separator/>
+                                <TextBlock
+                                    FontSize="14"
+                                    Grid.Column="1"
+                                    Text="{Binding Text}"
+                                    TextWrapping="Wrap" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="4*" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+                  
+                                        <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                            <TextBlock
+                                                Text="{Binding ModifiedBy}"
+                                                FontSize="8"
+                                                Foreground="Gray"
+                                                TextWrapping="Wrap" />
+                                            <TextBlock
+                                                Text="{Binding Created}"
+                                                FontSize="8"
+                                                Foreground="Gray"
+                                                TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <CheckBox
+                                            Grid.Column="1"
+                                            Margin="5,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Content="{helpers:Localization Notes_NoteReplies_Read}"
                                             FontSize="8"
                                             Foreground="Gray"
-                                            Text="{Binding ModifiedBy}"
-                                            TextWrapping="Wrap" />
-                                        <TextBlock
-                                            FontSize="8"
-                                            Foreground="Gray"
-                                            Text="{Binding Created}"
-                                            TextWrapping="Wrap" />
-                                    </StackPanel>
-                                    <CheckBox
-                                        Grid.Column="1"
-                                        Margin="5,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Checked="CheckBox_Checked"
-                                        Content="{helpers:Localization Notes_NoteReplies_Read}"
-                                        FontSize="8"
-                                        Foreground="Gray"
-                                        Unchecked="CheckBox_UnChecked">
-                                        <CheckBox.IsChecked>
-                                            <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay">
-                                                <Binding Path="SeenByUserIds" />
-                                                <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
-                                            </MultiBinding>
-                                        </CheckBox.IsChecked>
-                                    </CheckBox>
-                                </Grid>
+                                            Checked="CheckBox_Checked" 
+                                            Unchecked="CheckBox_UnChecked">
+                                            <CheckBox.IsChecked>
+                                                <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay">
+                                                    <Binding Path="SeenByUserIds"/>
+                                                    <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                                                </MultiBinding>
+                                            </CheckBox.IsChecked>
+                                        </CheckBox>
+                                    </Grid>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
@@ -75,9 +117,8 @@
                         <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
                     </Style>
                 </ListBox.ItemContainerStyle>
-            </ListBox>
-            <TextBox
-                x:Name="AddReplyText"
+            </ListBox>-->
+            <TextBox 
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.FloatingScale="0.60"

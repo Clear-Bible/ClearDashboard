@@ -1527,6 +1527,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (!string.IsNullOrEmpty(SelectedLayoutText))
                 {
                     filePath = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath!, "shared");
+                    if (Directory.Exists(filePath) == false)
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
                     filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
                 }
             }

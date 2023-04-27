@@ -12,7 +12,6 @@ using System.Linq;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using SIL.Extensions;
-using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using TranslationCollection = ClearDashboard.Wpf.Application.Collections.TranslationCollection;
 
@@ -23,20 +22,7 @@ namespace ClearDashboard.Wpf.Application.Services
     /// </summary>
     public sealed class TranslationManager : PropertyChangedBase
     {
-        private EngineParallelTextRow? _parallelTextRow;
-        private EngineParallelTextRow? ParallelTextRow
-        {
-            get => _parallelTextRow;
-            set
-            {
-                _parallelTextRow = value;
-                if (_parallelTextRow is { SourceTokens: { } })
-                {
-                    SourceTokenIds = _parallelTextRow.SourceTokens.Select(t => t.TokenId).ToList();
-                }
-            }
-        }
-        private List<TokenId> SourceTokenIds { get; set; } = new();
+        private List<TokenId> SourceTokenIds { get; }
         private TranslationSetId TranslationSetId { get; }
         private TranslationSet? TranslationSet { get; set; }
         private TranslationCollection? Translations { get; set; } 
@@ -273,26 +259,32 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Creates an <see cref="TranslationManager"/> instance using the specified DI container.
         /// </summary>
         /// <param name="componentContext">A <see cref="IComponentContext"/> (i.e. LifetimeScope) with which to resolve dependencies.</param>
-        /// <param name="parallelTextRow">The <see cref="EngineParallelTextRow"/> containing the tokens to align.</param>
+        /// <param name="sourceTokenIds">The <see cref="TokenId"/>s of the tokens to gloss.</param>
         /// <param name="translationSetId">The ID of the translation set to use for the token translations.</param>
         /// <returns>The constructed AlignmentManager.</returns>
         public static async Task<TranslationManager> CreateAsync(IComponentContext componentContext,
-                                                                    EngineParallelTextRow parallelTextRow,
-                                                                    TranslationSetId translationSetId)
+                                                                 List<TokenId> sourceTokenIds,
+                                                                 TranslationSetId translationSetId)
         {
-            var manager = componentContext.Resolve<TranslationManager>(new NamedParameter("parallelTextRow", parallelTextRow),
+            var manager = componentContext.Resolve<TranslationManager>(new NamedParameter("sourceTokenIds", sourceTokenIds),
                                                                         new NamedParameter("translationSetId", translationSetId));
             await manager.InitializeAsync();
             return manager;
         }
 
-        public TranslationManager(EngineParallelTextRow parallelTextRow,
+        /// <summary>
+        /// Public constructor.
+        /// </summary>
+        /// <remarks>
+        /// This is for use by the DI container; use <see cref="CreateAsync"/> instead to create and initialize an instance.
+        /// </remarks>
+        public TranslationManager(List<TokenId> sourceTokenIds,
                                     TranslationSetId translationSetId,
                                     IEventAggregator eventAggregator,
                                     ILogger<TranslationManager> logger,
                                     IMediator mediator)
         {
-            ParallelTextRow = parallelTextRow;
+            SourceTokenIds = sourceTokenIds;
             TranslationSetId = translationSetId;
 
             EventAggregator = eventAggregator;

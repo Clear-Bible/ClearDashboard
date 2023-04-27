@@ -40,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
 
-        private string _ProjectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"ClearDashboard_Projects");
+        private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"ClearDashboard_Projects");
         #endregion
 
         #region Observable Objects
@@ -702,6 +702,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             Connected = message.Connected;
             IsParatextRunning = true;
+
             await Task.CompletedTask;
         }
 
