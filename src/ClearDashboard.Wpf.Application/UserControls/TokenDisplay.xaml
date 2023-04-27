@@ -37,7 +37,8 @@
             HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
             materialDesign:ShadowAssist.ShadowDepth="Depth0"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"
-            BorderThickness="0"
+            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBorder}"
+            BorderThickness="2"
             Click="OnTokenClicked"
             ContextMenuOpening="OnTokenContextMenuOpening"
             FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}"
@@ -45,7 +46,7 @@
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontSize}"
             FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontStyle}"
             FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontWeight}"
-            Foreground="{DynamicResource MaterialDesignBody}"
+            Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenForeground}"
             IsDefault="False"
             MouseDoubleClick="OnTokenDoubleClicked"
             MouseEnter="OnTokenMouseEnter"
@@ -59,6 +60,14 @@
             <Button.ContextMenu>
                 <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
                     <MenuItem Click="OnCreateNote" Header="{helpers:Localization EnhancedView_CreateNote}" />
+                    <MenuItem 
+                        x:Name="CreateAlignmentMenuItem" 
+                        Click="OnTokenCreateAlignment" 
+                        Header="{helpers:Localization EnhancedView_CreateAlignment}" />
+                    <MenuItem 
+                        x:Name="DeleteAlignmentMenuItem" 
+                        Click="OnTokenDeleteAlignment" 
+                        Header="{helpers:Localization EnhancedView_DeleteAlignmentMenu}" />
                     <MenuItem
                         x:Name="JoinTokensMenuItem"
                         Click="OnTokenJoin"
@@ -71,14 +80,17 @@
                         x:Name="UnjoinTokenMenuItem"
                         Click="OnTokenUnjoin"
                         Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
-                    <MenuItem Click="OnFilterPins" Header="{helpers:Localization EnhancedView_FilterPins}" />
                     <MenuItem Click="OnCopy" Header="{helpers:Localization Copy}" />
-                    <MenuItem x:Name="DeleteAlignmentMenuItem" Click="OnTokenDeleteAlignment" Header="{helpers:Localization EnhancedView_DeleteAlignment}" />
+                    <MenuItem 
+                        x:Name="FilterPinsMenuItem"
+                        Click="OnFilterPins" 
+                        Header="{helpers:Localization EnhancedView_FilterPins}" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock
                 x:Name="SurfaceTextBlock"
                 Margin="0"
+                Padding="2"
                 Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SurfaceText}" />
             <Button.ToolTip>
                 <ToolTip

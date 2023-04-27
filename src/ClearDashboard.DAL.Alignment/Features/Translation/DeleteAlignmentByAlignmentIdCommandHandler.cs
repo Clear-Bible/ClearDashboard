@@ -35,7 +35,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteAlignmentByAlignmentIdCommand request,
             CancellationToken cancellationToken)
         {
-            var alignment= ProjectDbContext!.Alignments
+            var alignment = ProjectDbContext!.Alignments
+                .Include(e => e.SourceTokenComponent)
                 .Where(e => e.Id == request.AlignmentId.Id)
                 .FirstOrDefault();
 

@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
 using Microsoft.AspNet.SignalR.Client;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -53,6 +50,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
 
                 });
 
+                hubProxy.On<PluginClosing>("sendPluginClosing",  (pluginClosing) =>
+                {
+                    Output.WriteLine($"sendPluginClosing received: {pluginClosing.PluginConnectionChangeType}");
+                   
+                });
+
+             
                 await connection.Start();
 
                 var numberOfMessages = 10;

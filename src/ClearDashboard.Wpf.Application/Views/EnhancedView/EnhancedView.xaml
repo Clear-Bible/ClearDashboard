@@ -85,12 +85,13 @@
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
                         <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
 
-                    <!--  ROW 5  -->
+                    <!--  ROW 6  -->
                     <Button
-                        Grid.Row="5"
+                        Grid.Row="6"
                         Grid.Column="0"
                         Width="66"
                         Height="20"
@@ -109,14 +110,13 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        FontWeight="Bold"
-                        Content="{helpers:Localization FontSettings_Title}">
-                    </Label>
+                        Content="{helpers:Localization FontSettings_Title}"
+                        FontWeight="Bold" />
                     <StackPanel
                         Grid.Row="0"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_TitleFontSize}"/>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_TitleFontSize}" />
                         <Slider
                             Name="TitleFontSizeSlider"
                             Width="100"
@@ -137,12 +137,13 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        FontWeight="Bold" Content="{helpers:Localization FontSettings_Source}"/>
+                        Content="{helpers:Localization FontSettings_Source}"
+                        FontWeight="Bold" />
                     <StackPanel
                         Grid.Row="1"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_SourceFontSize}"/>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_SourceFontSize}" />
                         <Slider
                             Name="SourceTokenFontSizeSlider"
                             Width="100"
@@ -161,7 +162,7 @@
                         Grid.Row="1"
                         Grid.Column="2"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Vertical}"/>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Vertical}" />
                         <Slider
                             Name="SourceTokenVerticalSpacingSlider"
                             Width="100"
@@ -180,7 +181,7 @@
                         Grid.Row="1"
                         Grid.Column="3"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Horizontal}"/>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Horizontal}" />
                         <Slider
                             Name="SourceHorizontalSpacingSlider"
                             Width="100"
@@ -201,14 +202,13 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         VerticalAlignment="Center"
-                        FontWeight="Bold"
-                        Content="{helpers:Localization FontSettings_Target}">
-                    </Label>
+                        Content="{helpers:Localization FontSettings_Target}"
+                        FontWeight="Bold" />
                     <StackPanel
                         Grid.Row="2"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_TargetFontSize}"/>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_TargetFontSize}" />
                         <Slider
                             Name="TokenFontSizeSlider"
                             Width="100"
@@ -268,13 +268,16 @@
                         Grid.Row="3"
                         Grid.Column="0"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" FontWeight="Bold" Content="{helpers:Localization FontSettings_Translations}"/>
+                        <Label
+                            VerticalAlignment="Center"
+                            Content="{helpers:Localization FontSettings_Translations}"
+                            FontWeight="Bold" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_FontSize}"/>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_FontSize}" />
                         <Slider
                             Name="TranslationFontSizeSlider"
                             Width="100"
@@ -294,7 +297,7 @@
                         Grid.Column="2"
                         Orientation="Horizontal"
                         Visibility="Collapsed">
-                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Vertical}"/>
+                        <Label VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Vertical}" />
                         <Slider
                             Name="TranslationVerticalSpacingSlider"
                             Width="100"
@@ -315,7 +318,10 @@
                         Grid.Row="4"
                         Grid.Column="0"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center" FontWeight="Bold" Content="{helpers:Localization FontSettings_NoteIndicators}"/>
+                        <Label
+                            VerticalAlignment="Center"
+                            Content="{helpers:Localization FontSettings_NoteIndicators}"
+                            FontWeight="Bold" />
                         <CheckBox
                             Name="ShowNoteIndicatorsCheckbox"
                             Margin="5,0,0,0"
@@ -327,7 +333,10 @@
                         Grid.Row="4"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label Margin="0,0,14,0" VerticalAlignment="Center" Content="{helpers:Localization FontSettings_Height}"/>
+                        <Label
+                            Margin="0,0,14,0"
+                            VerticalAlignment="Center"
+                            Content="{helpers:Localization FontSettings_Height}" />
                         <Slider
                             Name="NoteIndicatorHeightSlider"
                             Width="100"
@@ -344,6 +353,20 @@
                     </StackPanel>
 
                     <!--  ROW 5  -->
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Localization FontSettings_ParagraphMode}"
+                        FontWeight="Bold" />
+                    <CheckBox
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding ParagraphMode}"
+                        />
+
                     <StackPanel
                         Grid.Row="5"
                         Grid.Column="1"
@@ -554,9 +577,9 @@
                                             Height="20"
                                             Margin="3,0,0,0"
                                             VerticalAlignment="Center"
-                                            IsEnabled="{Binding DisableDeleteButton }"
                                             Command="{Binding ElementName=ItemsListView, Path=DataContext.DeleteCorpusRowCommand}"
-                                            CommandParameter="{Binding}">
+                                            CommandParameter="{Binding}"
+                                            IsEnabled="{Binding DisableDeleteButton}">
                                             <Button.Style>
                                                 <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
                                                     <Setter Property="Padding" Value="0" />

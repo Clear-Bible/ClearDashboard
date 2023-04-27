@@ -16,36 +16,38 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 .Where(x => x.EndsWith(".wav"))
                 .ToList();
 
-            switch(soundType)
+            string soundFile = "";
+
+            switch (soundType)
             {
                 case SoundType.Success:
-                { 
-                    using var stream =
-                        assembly.GetManifestResourceStream("ClearDashboard.Wpf.Application.Resources.Crystal Click 2.wav");
-                    { 
-                        var player = new SoundPlayer(stream);
-                        player.Play();
-                    }
-                } 
+                    soundFile = "ClearDashboard.Wpf.Application.Resources.Crystal Click 2.wav";
                     break;
 
                 case SoundType.Error:
-                {
-                    using var stream =
-                        assembly.GetManifestResourceStream("ClearDashboard.Wpf.Application.Resources.DashboardFailure.wav");
-                    {
-                        var player = new SoundPlayer(stream);
-                        player.Play();
-                    }
-                }
+                    soundFile = "ClearDashboard.Wpf.Application.Resources.DashboardFailure.wav";
                     break;
+
+                case SoundType.Disconnected:
+                    soundFile = "ClearDashboard.Wpf.Application.Resources.plugin_disconnect.wav";
+                    break;
+            }
+
+            if (soundFile != "")
+            {
+                using var stream = assembly.GetManifestResourceStream(soundFile);
+                {
+                    var player = new SoundPlayer(stream);
+                    player.Play();
+                }
             }
         }
     }
 
     public enum SoundType
     {
-        Success, 
-        Error
+        Success,
+        Error,
+        Disconnected
     }
 }
