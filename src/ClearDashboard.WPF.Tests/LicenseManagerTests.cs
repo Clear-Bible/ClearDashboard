@@ -26,7 +26,7 @@ namespace ClearDashboard.WPF.Tests
             var directoryPath = "LicenseTest";
             var filePath = "LicenseTest\\license.txt";
 
-            var originalLicenseUser = new LicenseUser
+            var originalLicenseUser = new User
             {
                 Id = Guid.NewGuid(),
                 LicenseKey = Guid.NewGuid().ToString("N"),
@@ -49,7 +49,7 @@ namespace ClearDashboard.WPF.Tests
             var directoryPath = "LicenseTest";
             var filePath = "LicenseTest\\license.txt";
 
-            var originalLicenseUser = new LicenseUser
+            var originalLicenseUser = new User
             {
                 Id = Guid.NewGuid(),
                 LicenseKey = Guid.NewGuid().ToString("N"),

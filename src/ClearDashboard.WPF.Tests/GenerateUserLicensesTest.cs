@@ -42,7 +42,7 @@ namespace ClearDashboard.WPF.Tests
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var filePath = Path.Combine(documentsPath, $"ClearDashboard_Projects\\{firstName+lastName}");
 
-            var licenseUser = new LicenseUser
+            var licenseUser = new User
             {
                 FirstName = firstName,
                 LastName = lastName,
