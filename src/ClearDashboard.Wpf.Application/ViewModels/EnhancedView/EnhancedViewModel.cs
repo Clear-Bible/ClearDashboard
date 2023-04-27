@@ -26,7 +26,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -275,9 +274,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _paragraphMode;
             set
             {
-                _paragraphMode = value;
-                Settings.Default.ParagraphMode = value;
-                NotifyOfPropertyChange(() => ParagraphMode);
+                if (_paragraphMode != value)
+                {
+                    _paragraphMode = value;
+                    Settings.Default.ParagraphMode = value;
+                    NotifyOfPropertyChange(() => ParagraphMode);
+                    if (VerseOffsetRange > 0)
+                    {
+                        Task.Run(() => EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter());
+                    }
+                }
             }
         }
 
