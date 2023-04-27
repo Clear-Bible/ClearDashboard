@@ -69,21 +69,6 @@ namespace ClearDashboard.DataAccessLayer
             return DecryptFromFile<T>(LicenseFilePath);
         }
 
-        public static TUser? DecryptFromFile<TUser>(string path)
-        {
-            try
-            {
-                var json = DecryptFromFile(path);
-
-                return Decrypt<TUser>(json);
-
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
         public static string DecryptFromFile(string path)
         {
             try
@@ -144,6 +129,21 @@ namespace ClearDashboard.DataAccessLayer
             return DecryptLicenseUserFromFile(LicenseFilePath);
         }
 
+        public static TUser? DecryptFromFile<TUser>(string path)
+        {
+            try
+            {
+                var json = DecryptFromFile(path);
+
+                return Decrypt<TUser>(json);
+
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         public static User DecryptLicenseUserFromFile(string path)
         {
             try
@@ -187,11 +187,11 @@ namespace ClearDashboard.DataAccessLayer
                 }
             }
         }
-        
+
         public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(User given, User decrypted)
         {
             if (given.FirstName == decrypted.FirstName && given.LastName == decrypted.LastName)// &&
-                //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
+                                                                                               //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
             {
                 return LicenseUserMatchType.Match;
             }
