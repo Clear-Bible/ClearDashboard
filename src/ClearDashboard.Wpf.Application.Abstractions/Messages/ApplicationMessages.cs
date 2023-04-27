@@ -35,4 +35,6 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record CreateProjectMessage(string Message);
 
     public record ProjectsMetadataChangedMessage(List<ParatextProjectMetadata> ProjectsMetadata);
+
+    public record ReloadProjectMessage();
 }
