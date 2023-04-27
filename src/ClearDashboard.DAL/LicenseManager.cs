@@ -84,21 +84,6 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static string DecryptLicenseFromFile(string path)
-        {
-            try
-            {
-                var str = File.ReadAllText(path);
-
-                return DecryptLicenseFromString(str);
-
-            }
-            catch (Exception)
-            {
-                return "";
-            }
-        }
-
         public static string DecryptLicenseFromString(string str)
         {
             try
@@ -112,6 +97,20 @@ namespace ClearDashboard.DataAccessLayer
                 var serialized = Encoding.ASCII.GetString(decryptedBytes);
 
                 return serialized;
+
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        public static string DecryptLicenseFromFile(string path)
+        {
+            try
+            {
+                var str = File.ReadAllText(path);
+
+                return DecryptLicenseFromString(str);
 
             }
             catch (Exception)
