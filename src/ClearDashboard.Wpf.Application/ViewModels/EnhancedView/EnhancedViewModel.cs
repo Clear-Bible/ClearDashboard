@@ -270,6 +270,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _paragraphMode = Settings.Default.ParagraphMode;
+        public bool ParagraphMode
+        {
+            get => _paragraphMode;
+            set
+            {
+                if (_paragraphMode != value)
+                {
+                    _paragraphMode = value;
+                    Settings.Default.ParagraphMode = value;
+                    NotifyOfPropertyChange(() => ParagraphMode);
+                    if (VerseOffsetRange > 0)
+                    {
+                        Task.Run(() => EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter());
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #endregion Observable Properties
