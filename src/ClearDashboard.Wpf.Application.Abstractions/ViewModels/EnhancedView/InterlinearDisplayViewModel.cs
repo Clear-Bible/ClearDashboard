@@ -10,6 +10,7 @@ using MediatR;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 
@@ -20,7 +21,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     /// </summary>
     public class InterlinearDisplayViewModel : VerseDisplayViewModel
     {
-        private EngineParallelTextRow ParallelTextRow { get; }
         private TranslationSetId TranslationSetId { get; }
         public IWindowManager WindowManager { get; }
         private TranslationManager? TranslationManager { get; set; }
@@ -102,7 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         protected override async Task InitializeAsync()
         {
-            TranslationManager = await TranslationManager.CreateAsync(LifetimeScope, ParallelTextRow, TranslationSetId);
+            TranslationManager = await TranslationManager.CreateAsync(LifetimeScope, SourceTokenMap.Tokens.TokenIds.ToList(), TranslationSetId);
 
             await base.InitializeAsync();
         }
@@ -111,16 +111,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Creates an <see cref="InterlinearDisplayViewModel"/> instance using the specified DI container.
         /// </summary>
         /// <param name="componentContext">A <see cref="IComponentContext"/> (i.e. LifetimeScope) with which to resolve dependencies.</param>
-        /// <param name="parallelTextRow">The <see cref="EngineParallelTextRow"/> containing the tokens to align.</param>
+        /// <param name="sourceTokens">The tokens to display.</param>
         /// <param name="parallelCorpusId">The <see cref="ParallelCorpusId"/> of the parallel corpus.</param>
         /// <param name="detokenizer">The detokenizer to use for the source tokens.</param>
         /// <param name="isRtl">True if the source tokens should be displayed right-to-left (RTL); false otherwise.</param>
         /// <param name="translationSetId">The ID of the translation set to use.</param>
         /// <returns>A constructed <see cref="InterlinearDisplayViewModel"/>.</returns>
-        public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, EngineParallelTextRow parallelTextRow, ParallelCorpusId parallelCorpusId, EngineStringDetokenizer detokenizer, bool isRtl, TranslationSetId translationSetId)
+        public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, 
+            IEnumerable<Token> sourceTokens, ParallelCorpusId parallelCorpusId, EngineStringDetokenizer detokenizer, bool isRtl, TranslationSetId translationSetId)
         {
             var verseDisplayViewModel = componentContext.Resolve<InterlinearDisplayViewModel>(
-                new NamedParameter("parallelTextRow", parallelTextRow),
+                new NamedParameter("sourceTokens", sourceTokens),
                 new NamedParameter("parallelCorpusId", parallelCorpusId),
                 new NamedParameter("sourceDetokenizer", detokenizer),
                 new NamedParameter("isSourceRtl", isRtl),
@@ -136,7 +137,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <remarks>
         /// This is for use by the DI container; use <see cref="CreateAsync"/> instead to create and initialize an instance of this view model.
         /// </remarks>
-        public InterlinearDisplayViewModel(EngineParallelTextRow parallelTextRow,
+        public InterlinearDisplayViewModel(IEnumerable<Token> sourceTokens,
             ParallelCorpusId parallelCorpusId,
             EngineStringDetokenizer sourceDetokenizer,
             bool isSourceRtl,
@@ -149,13 +150,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             IWindowManager windowManager)
             : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
-            ParallelTextRow = parallelTextRow;
             ParallelCorpusId = parallelCorpusId;
-            if (parallelTextRow.SourceTokens != null)
-            {
-                SourceTokenMap = new TokenMap(parallelTextRow.SourceTokens!, sourceDetokenizer, isSourceRtl);
-            }
-
+            SourceTokenMap = new TokenMap(sourceTokens, sourceDetokenizer, isSourceRtl);
             TranslationSetId = translationSetId;
             WindowManager = windowManager;
         }

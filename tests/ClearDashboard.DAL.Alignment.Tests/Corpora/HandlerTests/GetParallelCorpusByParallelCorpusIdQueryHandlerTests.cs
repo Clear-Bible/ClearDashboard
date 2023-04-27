@@ -41,7 +41,10 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, targetCorpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, 
+                new SourceTextIdToVerseMappingsFromVerseMappings(TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
+                    sourceTokenizedTextCorpus.Versification,
+                    targetTokenizedTextCorpus.Versification)));
 
             var sourceTokenizedCorpus = ProjectDbContext!.TokenizedCorpora
                 .Include(tc => tc.TokenComponents)
@@ -67,12 +70,14 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             Assert.True(targetTokenGuidIds.Keys.Count == 10);
             Assert.Empty(sourceTokenGuidIds.Keys.Intersect(targetTokenGuidIds.Keys));
 
-            Assert.NotNull(parallelTextCorpus.VerseMappingList);
-            Assert.True(parallelTextCorpus.VerseMappingList!.Count >= 5);
+            Assert.NotNull(parallelTextCorpus.SourceTextIdToVerseMappings);
+
+            var verseMappingList = parallelTextCorpus.SourceTextIdToVerseMappings.GetVerseMappings().ToList();
+            Assert.True(verseMappingList.Count >= 5);
 
             // Take the verse mapping list and recreate it but with TokenIds added to each set of verses
-            parallelTextCorpus.VerseMappingList =
-                parallelTextCorpus.VerseMappingList!.Take(5).Select(vm =>
+            verseMappingList =
+                verseMappingList.Take(5).Select(vm =>
                 {
                     return new VerseMapping(
                         vm.SourceVerses.Select(v =>
@@ -86,6 +91,8 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                     ); ;
                 }
                 ).ToList();
+
+            parallelTextCorpus.SourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingList);
 
             // Save:
             var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
@@ -147,26 +154,33 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             var query = new GetParallelCorpusByParallelCorpusIdQuery(parallelTokenizedCorpus.ParallelCorpusId);
             var queryResult = await Mediator!.Send(query);
 
+            // Get verse mappings:
+            var query2 = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(parallelTokenizedCorpus.ParallelCorpusId, null);
+            var queryResult2 = await Mediator!.Send(query2);
+
             // Validate:
             Assert.NotNull(queryResult);
             Assert.True(queryResult.Success);
             Assert.Equal(sourceTokenizedTextCorpus.TokenizedTextCorpusId, queryResult.Data.sourceTokenizedCorpusId);
             Assert.Equal(targetTokenizedTextCorpus.TokenizedTextCorpusId, queryResult.Data.targetTokenizedCorpusId);
-            Assert.Equal(5, queryResult.Data.verseMappings.Count());
 
-            Assert.Empty(queryResult.Data.verseMappings
+            Assert.NotNull(queryResult2);
+            Assert.True(queryResult2.Success);
+            Assert.Equal(5, queryResult2.Data!.Count());
+
+            Assert.Empty(queryResult2.Data!
                 .SelectMany(vm => vm.SourceVerses)
                 .Select(v => (v.Book, v.ChapterNum, v.VerseNum ))
-                .Except(parallelTextCorpus.VerseMappingList
+                .Except(verseMappingList
                 .SelectMany(vm => vm.SourceVerses)
                 .Select(v => (v.Book, v.ChapterNum, v.VerseNum))));
 
             // Check tokenId values and order between first VerseMapping/first Verse from the database and 
             // the tokenIds we added before calling 'parallelTextCorpus.Create':
-            var sourceTokenIdsFirstMappingFirstVerse = queryResult.Data.verseMappings.Take(1)
+            var sourceTokenIdsFirstMappingFirstVerse = queryResult2.Data!.Take(1)
                 .SelectMany(vm => vm.SourceVerses.Take(1)
                 .SelectMany(sv => sv.TokenIds));
-            var targetTokenIdsFirstMappingFirstVerse = queryResult.Data.verseMappings.Take(1)
+            var targetTokenIdsFirstMappingFirstVerse = queryResult2.Data!.Take(1)
                 .SelectMany(vm => vm.TargetVerses.Take(1)
                 .SelectMany(tva => tva.TokenIds));
 
@@ -257,7 +271,10 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, targetCorpus.CorpusId, "Unit Test", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, 
+                new SourceTextIdToVerseMappingsFromVerseMappings(TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
+                    sourceTokenizedTextCorpus.Versification,
+                    targetTokenizedTextCorpus.Versification)));
 
             var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 

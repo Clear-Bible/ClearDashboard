@@ -20,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     /// </summary>
     public class AlignmentDisplayViewModel : VerseDisplayViewModel
     {
-        private EngineParallelTextRow ParallelTextRow { get; }
+        private List<EngineParallelTextRow> ParallelTextRows { get; }
         private AlignmentSetId AlignmentSetId { get; }
 
         protected override IEnumerable<Token>? GetTargetTokens(bool isSource, TokenId tokenId)
@@ -76,7 +76,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         protected override async Task InitializeAsync()
         {
-            AlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, ParallelTextRow, AlignmentSetId);
+            AlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, ParallelTextRows, AlignmentSetId);
 
             await base.InitializeAsync();
         }
@@ -93,10 +93,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <param name="isTargetRtl">True if the source tokens should be displayed right-to-left (RTL); false otherwise.</param>
         /// <param name="alignmentSetId">The ID of the alignment set to use for aligning the tokens.</param>
         /// <returns>A constructed <see cref="InterlinearDisplayViewModel"/>.</returns>
-        public static async Task<AlignmentDisplayViewModel> CreateAsync(IComponentContext componentContext, EngineParallelTextRow parallelTextRow, ParallelCorpusId parallelCorpusId, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl, AlignmentSetId alignmentSetId)
+        public static async Task<AlignmentDisplayViewModel> CreateAsync(IComponentContext componentContext, List<EngineParallelTextRow> parallelTextRows, ParallelCorpusId parallelCorpusId, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl, AlignmentSetId alignmentSetId)
         {
             var viewModel = componentContext.Resolve<AlignmentDisplayViewModel>(
-                new NamedParameter("parallelTextRow", parallelTextRow),
+                new NamedParameter("parallelTextRows", parallelTextRows),
                 new NamedParameter("parallelCorpusId", parallelCorpusId),
                 new NamedParameter("sourceDetokenizer", sourceDetokenizer),
                 new NamedParameter("isSourceRtl", isSourceRtl),
@@ -114,7 +114,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <remarks>
         /// This is for use by the DI container; use <see cref="CreateAsync"/> instead to create and initialize an instance of this view model.
         /// </remarks>
-        public AlignmentDisplayViewModel(EngineParallelTextRow parallelTextRow,
+        public AlignmentDisplayViewModel(List<EngineParallelTextRow> parallelTextRows,
             ParallelCorpusId parallelCorpusId,
             EngineStringDetokenizer sourceDetokenizer,
             bool isSourceRtl,
@@ -128,16 +128,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             ILogger<AlignmentDisplayViewModel> logger)
             : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
-            ParallelTextRow = parallelTextRow;
+            ParallelTextRows = parallelTextRows;
             ParallelCorpusId = parallelCorpusId;
-            if (parallelTextRow.SourceTokens != null)
+
+            var sourceTokens = new List<Token>();
+            foreach (var row in parallelTextRows)
             {
-                SourceTokenMap = new TokenMap(parallelTextRow.SourceTokens, sourceDetokenizer, isSourceRtl);
+                if (row.SourceTokens != null)
+                {
+                    sourceTokens.AddRange(row.SourceTokens);
+                }
             }
-            if (parallelTextRow.TargetTokens != null)
+            SourceTokenMap = new TokenMap(sourceTokens, sourceDetokenizer, isSourceRtl);
+
+            var targetTokens = new List<Token>();
+            foreach (var row in parallelTextRows)
             {
-                TargetTokenMap = new TokenMap(parallelTextRow.TargetTokens, targetDetokenizer, isTargetRtl);
+                if (row.TargetTokens != null)
+                {
+                    targetTokens.AddRange(row.TargetTokens);
+                }
             }
+            TargetTokenMap = new TokenMap(targetTokens, targetDetokenizer, isTargetRtl);
 
             AlignmentSetId = alignmentSetId;
         }

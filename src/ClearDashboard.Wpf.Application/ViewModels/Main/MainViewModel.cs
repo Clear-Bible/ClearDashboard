@@ -1313,6 +1313,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (!string.IsNullOrEmpty(SelectedLayoutText))
                 {
                     filePath = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath!, "shared");
+                    if (Directory.Exists(filePath) == false)
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
                     filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
                 }
             }
@@ -1797,7 +1801,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #endregion // Methods
 
-        #region IHandel
+        #region IHandle
 
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
         {

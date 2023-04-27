@@ -343,27 +343,17 @@
                 <DataGridTemplateColumn MinWidth="40">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="!" ToolTip="{helpers:Localization Notes_UnreadReplies}">
-                                <TextBlock.Visibility>
-                                    <MultiBinding
-                                        Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
-                                        ConverterParameter="{StaticResource True}"
-                                        Mode="OneWay">
-                                        <Binding Path="UserIdsSeenAllReplies" />
-                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
-                                    </MultiBinding>
-                                </TextBlock.Visibility>
-                            </TextBlock>
-                            <!--<CheckBox
-                                VerticalAlignment="Center"
-                                IsEnabled="False">
-                                <CheckBox.IsChecked>
-                                    <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
+                            <Image Height="24" 
+                                   Source="/Resources/OpenBook50.png"
+                                   ToolTip="{helpers:Localization Notes_UnreadReplies}"
+                                   >
+                                <Image.Visibility>
+                                    <MultiBinding Converter="{StaticResource GuidInGuidsToVisibilityConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
                                         <Binding Path="UserIdsSeenAllReplies"/>
                                         <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
                                     </MultiBinding>
-                                </CheckBox.IsChecked>
-                            </CheckBox>-->
+                                </Image.Visibility>
+                            </Image>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -585,13 +575,48 @@
                 <GroupBox
                     Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                    BorderThickness="1"
-                    Header="{helpers:Localization Notes_NoteReplies}">
-
-                    <userControls:NoteRepliesDisplay
-                        NoteReplyAdd="OnNoteReplyAdd"
-                        NoteSeen="OnNoteSeen"
-                        NoteViewModelWithReplies="{Binding Path=SelectedNoteViewModel}" />
+                    BorderThickness="1">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label
+                                Margin="10,5,5,5"
+                                VerticalAlignment="Center"
+                                Content="{helpers:Localization Notes_NoteReplies}" />
+                            <Button
+                                Width="Auto"
+                                Height="Auto"
+                                Margin="0,0,0,0"
+                                Padding="0"
+                                HorizontalAlignment="Left"
+                                HorizontalContentAlignment="Left"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Click="OnRepliesButtonClick"
+                                FontSize="13"
+                                FontWeight="SemiBold">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon
+                                        Margin="0,2,0,0"
+                                        Kind="ArrowDownThin"
+                                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ExpandButtonVisibility}" />
+                                    <materialDesign:PackIcon
+                                        Margin="0,2,0,0"
+                                        Kind="ArrowUpThin"
+                                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CollapseButtonVisibility}" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <userControls:NoteRepliesDisplay
+                            NoteViewModelWithReplies="{Binding Path=SelectedNoteViewModel}"
+                            NoteReplyAdded="OnNoteReplyAdd"
+                            NoteSeen="OnNoteSeen"
+                            Margin="20,0"
+                            TimestampFontStyle="Normal"
+                            TimestampColor="DarkGray"
+                            TimestampMargin="-2,0,10,0"
+                            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}"
+                        />
+                    </StackPanel>
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>

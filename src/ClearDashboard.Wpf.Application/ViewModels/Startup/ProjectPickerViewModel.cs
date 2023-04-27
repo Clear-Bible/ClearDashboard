@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly IMediator _mediator;
         private readonly TranslationSource? _translationSource;
 
-        private string _ProjectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"ClearDashboard_Projects");
+        private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"ClearDashboard_Projects");
         #endregion
 
         #region Observable Objects
@@ -480,6 +480,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             Connected = message.Connected;
             IsParatextRunning = true;
+
             await Task.CompletedTask;
         }
 

@@ -35,7 +35,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         IHandle<NoteUpdatingMessage>,
         IHandle<NoteUpdatedMessage>,
         IHandle<NoteLabelAttachedMessage>,
-        IHandle<NoteLabelDetachedMessage>
+        IHandle<NoteLabelDetachedMessage>,
+        IHandle<TokenizedCorpusUpdatedMessage>
     {
         private const string TaskName = "Notes";
         private const int ToleranceContainsFuzzyAssociationsDescriptions = 1;
@@ -611,6 +612,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                 await GetAllNotesAndSetNoteViewModelsAsync();
             else
                 ProgressBarVisibility = Visibility.Hidden;
+        }
+
+        public async Task HandleAsync(TokenizedCorpusUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            await GetAllNotesAndSetNoteViewModelsAsync();
         }
     }
 

@@ -16,6 +16,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.Application;
 
@@ -143,7 +146,6 @@ public class DashboardProjectManager : ProjectManager
         List<string> requestedVerses = new();
         // ReSharper disable AsyncVoidLambda
         HubProxy.On<string>("sendVerse", async (verse) =>
-
         {
             requestedVerses.Add(verse);
             if (!UpdatingCurrentVerse)
@@ -176,6 +178,17 @@ public class DashboardProjectManager : ProjectManager
         {
             await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollection));
         });
+
+        HubProxy.On<PluginClosing>("sendPluginClosing", async (pluginClosing) =>
+        {
+            if (pluginClosing.PluginConnectionChangeType == PluginConnectionChangeType.Closing)
+            {
+                await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(false));
+            }
+            
+            Logger.LogInformation($"sendPluginClosing received: {pluginClosing.PluginConnectionChangeType}");
+        });
+
 
         // ReSharper restore AsyncVoidLambda
 
