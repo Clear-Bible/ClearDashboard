@@ -52,7 +52,7 @@ public class DashboardProjectManager : ProjectManager
     public override async Task Initialize()
     {
         await base.Initialize();
-        SetCurrentUserFromLicense(); // unnecessary?
+        SetCurrentUserFromLicense();
         await ConfigureSignalRClient();
 
     }

@@ -180,7 +180,7 @@ namespace ClearDashboard.DataAccessLayer
             if (result.Success && result.HasData)
             {
                 var paratextUserName = result.Data!.Name;
-                SetCurrentUserFromLicense();//unnessesary?
+                SetCurrentUserFromLicense();
                 CurrentUser.ParatextUserName = paratextUserName;
                 await PublishParatextUser(CurrentUser);
             }
