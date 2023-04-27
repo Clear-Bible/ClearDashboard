@@ -1,19 +1,13 @@
-﻿using Autofac.Core.Lifetime;
+﻿using Autofac;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Autofac;
 
 namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
 {

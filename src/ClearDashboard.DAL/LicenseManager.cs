@@ -64,25 +64,25 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        //public static T? GetUser<T>()
-        //{
-        //    return DecryptFromFile<T>(LicenseFilePath);
-        //}
+        public static T? GetUser<T>()
+        {
+            return DecryptFromFile<T>(LicenseFilePath);
+        }
 
-        //public static TUser? DecryptFromFile<TUser>(string path)
-        //{
-        //    try
-        //    {
-        //        var json = DecryptFromFile(path);
+        public static TUser? DecryptFromFile<TUser>(string path)
+        {
+            try
+            {
+                var json = DecryptFromFile(path);
 
-        //        return Decrypt<TUser>(json);
+                return Decrypt<TUser>(json);
 
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return default;
-        //    }
-        //}
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
 
         public static string DecryptFromFile(string path)
         {
@@ -99,11 +99,11 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        //public static T? DecryptFromString<T>(string licenseKey)//only used in a test
-        //{
-        //    var json = DecryptFromString(licenseKey);
-        //    return Decrypt<T>(json);
-        //}
+        public static T? DecryptFromString<T>(string licenseKey)//only used in a test
+        {
+            var json = DecryptFromString(licenseKey);
+            return Decrypt<T>(json);
+        }
 
         public static string DecryptFromString(string str)
         {
@@ -126,20 +126,19 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        //public static T? Decrypt<T>(string decryptedLicenseKey)
-        //{
-        //    try
-        //    {
-        //        var entity = JsonSerializer.Deserialize<T>(decryptedLicenseKey);
-        //        return entity ?? default(T);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return default;
-        //    }
-        //}
+        public static T? Decrypt<T>(string decryptedLicenseKey)
+        {
+            try
+            {
+                var entity = JsonSerializer.Deserialize<T>(decryptedLicenseKey);
+                return entity ?? default(T);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
 
-        //----------------------------------v New Stuff v-----------------------------------------------------------------//
         public static User GetLicenseUser()
         {
             return DecryptLicenseUserFromFile(LicenseFilePath);
@@ -178,7 +177,6 @@ namespace ClearDashboard.DataAccessLayer
                         LastName = temporaryLicenseUser.LastName,
                         LicenseKey = temporaryLicenseUser.LicenseKey,
                         ParatextUserName = temporaryLicenseUser.ParatextUserName,
-                        //MatchType = temporaryLicenseUser.MatchType,
                         Id = Guid.Parse(temporaryLicenseUser.Id)
                     };
                     return licenseUser;
@@ -189,9 +187,7 @@ namespace ClearDashboard.DataAccessLayer
                 }
             }
         }
-
-        //----------------------------------^ New Stuff ^-----------------------------------------------------------------//
-
+        
         public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(User given, User decrypted)
         {
             if (given.FirstName == decrypted.FirstName && given.LastName == decrypted.LastName)// &&

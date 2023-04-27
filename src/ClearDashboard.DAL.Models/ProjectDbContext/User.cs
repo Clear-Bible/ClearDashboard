@@ -28,7 +28,5 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
         public virtual ICollection<TranslationSet> TranslationSets { get; set; }
-
-        //public LicenseUserMatchType MatchType { get; set; }
     }
 }

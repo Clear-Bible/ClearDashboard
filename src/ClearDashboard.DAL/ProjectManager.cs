@@ -4,6 +4,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Exceptions;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Features.Projects;
+using ClearDashboard.DataAccessLayer.Features.User;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.User;
@@ -11,10 +12,8 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Features.User;
 
 namespace ClearDashboard.DataAccessLayer
 {

@@ -156,7 +156,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
 
                 var match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
-                //LicenseUser.MatchType = match;
                 
                 switch (match)
                 {
