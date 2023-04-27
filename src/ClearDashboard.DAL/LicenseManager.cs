@@ -1,9 +1,9 @@
-﻿using System;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -34,7 +34,7 @@ namespace ClearDashboard.DataAccessLayer
             return cryptProvider;
         }
 
-        public static void EncryptToFile(LicenseUser licenseUser, string path)
+        public static void EncryptToFile(User licenseUser, string path)
         {
 
             var str = EncryptToString(licenseUser, path);
@@ -48,7 +48,7 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        public static string EncryptToString(LicenseUser licenseUser, string path)
+        public static string EncryptToString(User licenseUser, string path)
         {
 
             var cryptProvider = CreateCryptoProvider();
@@ -64,10 +64,25 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        public static T? GetUser<T>()
-        {
-            return DecryptFromFile<T>(LicenseFilePath);
-        }
+        //public static T? GetUser<T>()
+        //{
+        //    return DecryptFromFile<T>(LicenseFilePath);
+        //}
+
+        //public static TUser? DecryptFromFile<TUser>(string path)
+        //{
+        //    try
+        //    {
+        //        var json = DecryptFromFile(path);
+
+        //        return Decrypt<TUser>(json);
+
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return default;
+        //    }
+        //}
 
         public static string DecryptFromFile(string path)
         {
@@ -84,11 +99,11 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static T? DecryptFromString<T>(string licenseKey)
-        {
-            var json = DecryptFromString(licenseKey);
-            return Decrypt<T>(json);
-        }
+        //public static T? DecryptFromString<T>(string licenseKey)//only used in a test
+        //{
+        //    var json = DecryptFromString(licenseKey);
+        //    return Decrypt<T>(json);
+        //}
 
         public static string DecryptFromString(string str)
         {
@@ -111,67 +126,73 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static T? Decrypt<T>(string decryptedLicenseKey)
+        //public static T? Decrypt<T>(string decryptedLicenseKey)
+        //{
+        //    try
+        //    {
+        //        var entity = JsonSerializer.Deserialize<T>(decryptedLicenseKey);
+        //        return entity ?? default(T);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return default;
+        //    }
+        //}
+
+        //----------------------------------v New Stuff v-----------------------------------------------------------------//
+        public static User GetLicenseUser()
         {
-            try
-            {
-                var entity = JsonSerializer.Deserialize<T>(decryptedLicenseKey);
-                return entity ?? default(T);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
+            return DecryptLicenseUserFromFile(LicenseFilePath);
         }
 
-
-        public static TUser? DecryptFromFile<TUser>(string path)
+        public static User DecryptLicenseUserFromFile(string path)
         {
             try
             {
                 var json = DecryptFromFile(path);
 
-                return Decrypt<TUser>(json);
+                return DecryptedJsonToLicenseUser(json);
 
             }
             catch (Exception)
             {
-                return default;
+                return new User();
             }
         }
 
-        public static LicenseUser DecryptedJsonToLicenseUser(string decryptedLicenseKey)
+        public static User DecryptedJsonToLicenseUser(string decryptedLicenseKey)
         {
             try
             {
-                var licenseUser = JsonSerializer.Deserialize<LicenseUser>(decryptedLicenseKey);
-                return licenseUser ?? new LicenseUser();
+                var licenseUser = JsonSerializer.Deserialize<User>(decryptedLicenseKey);
+                return licenseUser ?? new User();
             }
             catch (Exception)
             {
                 try
                 {
                     var temporaryLicenseUser = JsonSerializer.Deserialize<TemporaryLicenseUser>(decryptedLicenseKey);
-                    var licenseUser = new LicenseUser
+                    var licenseUser = new User
                     {
                         FirstName = temporaryLicenseUser.FirstName,
                         LastName = temporaryLicenseUser.LastName,
                         LicenseKey = temporaryLicenseUser.LicenseKey,
                         ParatextUserName = temporaryLicenseUser.ParatextUserName,
-                        MatchType = temporaryLicenseUser.MatchType,
+                        //MatchType = temporaryLicenseUser.MatchType,
                         Id = Guid.Parse(temporaryLicenseUser.Id)
                     };
                     return licenseUser;
                 }
                 catch
                 {
-                    return new LicenseUser();
+                    return new User();
                 }
-               
             }
         }
 
-        public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
+        //----------------------------------^ New Stuff ^-----------------------------------------------------------------//
+
+        public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(User given, User decrypted)
         {
             if (given.FirstName == decrypted.FirstName && given.LastName == decrypted.LastName)// &&
                 //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid

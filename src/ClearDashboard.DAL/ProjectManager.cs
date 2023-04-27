@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Features.User;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -119,17 +120,27 @@ namespace ClearDashboard.DataAccessLayer
 
         // TODO:  Review - should we be throwing an exception here if a licensed user can not be loaded?
         private Guid TemporaryUserGuid => Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7");
-        public User GetLicensedUser()
+        public bool SetCurrentUserFromLicense()
         {
-            var user = LicenseManager.GetUser<User>() ?? new User
-            {
-                Id = TemporaryUserGuid,
-            };
+            var user = LicenseManager.GetLicenseUser();
 
+            if (user.Id == Guid.Empty)
+            {
+                CurrentUser ??= user;
+                return false;
+            }
+
+            CurrentUser = user;
+
+            return true;
+        }
+
+        public void CheckForCurrentUser()
+        {
             if (CurrentProject != null && CurrentProject.ProjectName != null)
             {
                 var requestResults = ExecuteRequest(new GetProjectUserSlice.GetProjectUserQuery(CurrentProject.ProjectName), CancellationToken.None);
-                
+
                 if (requestResults.IsCompleted && requestResults.Result.Success && requestResults.Result.HasData)
                 {
                     var currentUserIsInDatabase = false;
@@ -144,18 +155,10 @@ namespace ClearDashboard.DataAccessLayer
 
                     if (!currentUserIsInDatabase)
                     {
-                        var firstUser = requestResults.Result.Data.FirstOrDefault();
-
-                        user = new User
-                        {
-                            FirstName = firstUser.FirstName,
-                            LastName = firstUser.LastName,
-                            Id = firstUser.Id
-                        };
+                        ExecuteRequest(new AddUserCommand(CurrentUser), CancellationToken.None);
                     }
                 }
             }
-            return user;
         }
 
         public async Task<User> UpdateCurrentUserWithParatextUserInformation()
@@ -163,7 +166,7 @@ namespace ClearDashboard.DataAccessLayer
           
             if (CurrentUser == null || CurrentUser.Id == TemporaryUserGuid)
             {
-                CurrentUser = GetLicensedUser();
+                SetCurrentUserFromLicense();
             }
 
             var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
@@ -174,7 +177,7 @@ namespace ClearDashboard.DataAccessLayer
             if (result.Success && result.HasData)
             {
                 var paratextUserName = result.Data!.Name;
-                CurrentUser = GetLicensedUser();
+                SetCurrentUserFromLicense();//unnessesary?
                 CurrentUser.ParatextUserName = paratextUserName;
                 await PublishParatextUser(CurrentUser);
             }
