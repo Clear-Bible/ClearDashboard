@@ -11,5 +11,6 @@ namespace ClearDashboard.Wpf.Application.Infrastructure.EnhancedView
         Dictionary<string, string> BcvDictionary { get; set; }
         BookChapterVerseViewModel CurrentBcv { get; set; }
         int VerseOffsetRange { get; set; }
+        bool ParagraphMode { get; set; }
     }
 }

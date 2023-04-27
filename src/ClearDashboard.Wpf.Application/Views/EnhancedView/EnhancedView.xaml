@@ -85,12 +85,13 @@
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
                         <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
 
-                    <!--  ROW 5  -->
+                    <!--  ROW 6  -->
                     <Button
-                        Grid.Row="5"
+                        Grid.Row="6"
                         Grid.Column="0"
                         Width="66"
                         Height="20"
@@ -352,6 +353,20 @@
                     </StackPanel>
 
                     <!--  ROW 5  -->
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Localization FontSettings_ParagraphMode}"
+                        FontWeight="Bold" />
+                    <CheckBox
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding ParagraphMode}"
+                        />
+
                     <StackPanel
                         Grid.Row="5"
                         Grid.Column="1"

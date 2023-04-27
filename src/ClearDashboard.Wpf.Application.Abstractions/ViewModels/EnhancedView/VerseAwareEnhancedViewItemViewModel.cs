@@ -25,9 +25,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
+using Token = ClearBible.Engine.Corpora.Token;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using SIL.Machine.Corpora;
 
 // ReSharper disable InconsistentNaming
 
@@ -339,12 +343,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 if (bookFound)
                 {
-                    // combine verse list into one VerseDisplayViewModel
                     BindableCollection<VerseDisplayViewModel> verses = new();
-
-                    foreach (var textRow in tokensTextRowsRange)
+                    if (IsParagraphMode)
                     {
-                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                        // For "paragraph mode" concatenate the tokens in the rows into a single verse display.
+                        var tokens = new List<Token>();
+                        foreach (var row in tokensTextRowsRange)
+                        {
+                            tokens.AddRange(row.Tokens);
+                        }
+                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                    }
+                    else
+                    {
+                        // Otherwise, create a separate verse display for each row.
+                        foreach (var textRow in tokensTextRowsRange)
+                        {
+                            verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                        }
                     }
                     OnUIThread(() =>
                     {
@@ -412,6 +428,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return title;
         }
 
+        private bool IsParagraphMode
+        {
+            get
+            {
+                if (ParentViewModel is IEnhancedViewModel vm) return vm.ParagraphMode;
+                return false;
+            }
+        }
+
         private async Task GetInterlinearData(InterlinearEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
             try
@@ -422,16 +447,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
 
                 var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum);
-
                 if (rows == null || rows.Count == 0)
                 {
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
                 }
                 Verses.Clear();
-                foreach (var row in rows)
+
+                if (IsParagraphMode)
                 {
-                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                    // For "paragraph mode" concatenate the tokens in the rows into a single verse display.
+                    var tokens = new List<Token>();
+                    foreach (var row in rows)
+                    {
+                        if (row.SourceTokens != null) tokens.AddRange(row.SourceTokens);
+                    }
+                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                }
+                else
+                {
+                    // Otherwise, create a separate verse display for each row.
+                    foreach (var row in rows)
+                    {
+                        Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row.SourceTokens, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                    }
                 }
 
                 Title = CreateParallelCorpusItemTitle(metadatum, "EnhancedView_Interlinear", rows.Count);
@@ -454,21 +493,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     return;
                 }
                 Verses.Clear();
-                foreach (var row in rows)
+
+                if (IsParagraphMode)
                 {
-                    Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 
-                        row, 
-                        metadatum.ParallelCorpus.ParallelCorpusId, 
+                    // For "paragraph mode" include all of the rows in a single verse display.
+                    Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!,
+                        rows,
+                        metadatum.ParallelCorpus.ParallelCorpusId,
                         metadatum.ParallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
                         metadatum.IsRtl ?? false,
                         metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
                         metadatum.IsTargetRtl ?? false,
                         new AlignmentSetId(Guid.Parse(metadatum.AlignmentSetId))
-                        ));
+                    ));
                 }
-
+                else
+                {
+                    // Otherwise, create a separate verse display for each row.
+                    foreach (var row in rows)
+                    {
+                        Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 
+                            new List<EngineParallelTextRow> {row}, 
+                            metadatum.ParallelCorpus.ParallelCorpusId, 
+                            metadatum.ParallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
+                            metadatum.IsRtl ?? false,
+                            metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
+                            metadatum.IsTargetRtl ?? false,
+                            new AlignmentSetId(Guid.Parse(metadatum.AlignmentSetId))
+                            ));
+                    }
+                }
                 Title = CreateParallelCorpusItemTitle(metadatum, "EnhancedView_Alignment", rows.Count);
-
             }
             catch (Exception)
             {
