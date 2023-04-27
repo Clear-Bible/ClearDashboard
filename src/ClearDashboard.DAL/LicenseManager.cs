@@ -64,18 +64,33 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        public static T? GetUser<T>()
+        public static User GetUserFromLicense()
         {
-            return DecryptFromFile<T>(LicenseFilePath);
+            return DecryptLicenseFromFileToUser(LicenseFilePath);
         }
 
-        public static string DecryptFromFile(string path)
+        public static User DecryptLicenseFromFileToUser(string path)
+        {
+            try
+            {
+                var json = DecryptLicenseFromFile(path);
+
+                return DecryptedJsonToUser(json);
+
+            }
+            catch (Exception)
+            {
+                return new User();
+            }
+        }
+
+        public static string DecryptLicenseFromFile(string path)
         {
             try
             {
                 var str = File.ReadAllText(path);
 
-                return DecryptFromString(str);
+                return DecryptLicenseFromString(str);
 
             }
             catch (Exception)
@@ -84,13 +99,7 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static T? DecryptFromString<T>(string licenseKey)//only used in a test
-        {
-            var json = DecryptFromString(licenseKey);
-            return Decrypt<T>(json);
-        }
-
-        public static string DecryptFromString(string str)
+        public static string DecryptLicenseFromString(string str)
         {
             try
             {
@@ -111,55 +120,7 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static T? Decrypt<T>(string decryptedLicenseKey)
-        {
-            try
-            {
-                var entity = JsonSerializer.Deserialize<T>(decryptedLicenseKey);
-                return entity ?? default(T);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public static User GetLicenseUser()
-        {
-            return DecryptLicenseUserFromFile(LicenseFilePath);
-        }
-
-        public static TUser? DecryptFromFile<TUser>(string path)
-        {
-            try
-            {
-                var json = DecryptFromFile(path);
-
-                return Decrypt<TUser>(json);
-
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public static User DecryptLicenseUserFromFile(string path)
-        {
-            try
-            {
-                var json = DecryptFromFile(path);
-
-                return DecryptedJsonToLicenseUser(json);
-
-            }
-            catch (Exception)
-            {
-                return new User();
-            }
-        }
-
-        public static User DecryptedJsonToLicenseUser(string decryptedLicenseKey)
+        public static User DecryptedJsonToUser(string decryptedLicenseKey)
         {
             try
             {

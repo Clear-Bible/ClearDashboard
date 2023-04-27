@@ -140,8 +140,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
 
-                var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
-                var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+                var decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(LicenseKey);
+                var decryptedLicenseUser = LicenseManager.DecryptedJsonToUser(decryptedLicenseKey);
 
                 if (decryptedLicenseUser.Id == Guid.Empty)
                 {

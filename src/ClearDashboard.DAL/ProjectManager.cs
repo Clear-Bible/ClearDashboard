@@ -121,7 +121,7 @@ namespace ClearDashboard.DataAccessLayer
         private Guid TemporaryUserGuid => Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7");
         public bool SetCurrentUserFromLicense()
         {
-            var user = LicenseManager.GetLicenseUser();
+            var user = LicenseManager.GetUserFromLicense();
 
             if (user.Id == Guid.Empty)
             {
