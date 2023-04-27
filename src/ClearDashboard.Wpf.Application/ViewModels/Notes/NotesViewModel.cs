@@ -7,6 +7,7 @@ using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -36,7 +37,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         IHandle<NoteUpdatedMessage>,
         IHandle<NoteLabelAttachedMessage>,
         IHandle<NoteLabelDetachedMessage>,
-        IHandle<TokenizedCorpusUpdatedMessage>
+        IHandle<TokenizedCorpusUpdatedMessage>,
+        IHandle<ReloadProjectMessage>
     {
         private const string TaskName = "Notes";
         private const int ToleranceContainsFuzzyAssociationsDescriptions = 1;
@@ -618,6 +620,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             await GetAllNotesAndSetNoteViewModelsAsync();
         }
+
+        public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
+        {
+            await GetAllNotesAndSetNoteViewModelsAsync();
+        }
+
+
     }
 
     public static class Extensions

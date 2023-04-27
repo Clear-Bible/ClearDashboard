@@ -62,7 +62,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
                 IHandle<FilterPinsMessage>,
-                IHandle<BackgroundTaskChangedMessage>
+                IHandle<BackgroundTaskChangedMessage>,
+                IHandle<ReloadProjectMessage>
     {
         #region Member Variables
 
@@ -316,6 +317,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 await ProjectManager.UpdateCurrentUserWithParatextUserInformation();
             }
+
+            await Initialize(cancellationToken);
+            await base.OnInitializeAsync(cancellationToken);
+        }
+
+        private async Task Initialize(CancellationToken cancellationToken)
+        {
             await LoadParatextProjectMetadata(cancellationToken);
             await LoadProject();
             await NoteManager!.InitializeAsync();
@@ -323,8 +331,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
             await LoadEnhancedViewTabs(cancellationToken);
-            await base.OnInitializeAsync(cancellationToken);
         }
+
 
         private async Task LoadParatextProjectMetadata(CancellationToken cancellationToken)
         {
@@ -1202,6 +1210,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_GatherLogs"), Id = MenuIds.GatherLogs, ViewModel = this, },
                         // About
                         new() { Header = _localizationService!.Get("MainView_About"), Id = MenuIds.About, ViewModel = this, },
+
+                        // Test reloading a project.
+                        //new() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
                     }
                 }
             };
@@ -1771,6 +1782,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     return;
 
                 }
+                else if (menuItem.Id == MenuIds.ReloadProject)
+                {
+                    if (menuItem.Id == "ReloadProjectID")
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                        return;
+                    }
+
+                }
                 else
                 {
                     switch (menuItem.Id)
@@ -1924,6 +1944,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
             return Task.CompletedTask;
         }
+
+        public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
+        }
+
 
         #endregion
     }
