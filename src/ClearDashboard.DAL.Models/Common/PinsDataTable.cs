@@ -1,4 +1,7 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models
+﻿using System.ComponentModel;
+using System.Reflection;
+
+namespace ClearDashboard.DataAccessLayer.Models
 {
     public class PinsDataTable
     {
@@ -6,7 +9,8 @@
         // 9. Phrase, 10. Word, 11. Prefix, 12. Stem, 13. Suffix
         public Guid Id { get; set; }
         public string OriginID { get; set; } = string.Empty;
-        public string XmlSource { get; set; } = string.Empty;
+        public XmlSource XmlSource { get; set; }
+        public string XmlSourceAbbreviation { get; set; } = string.Empty;
         public string XmlPath { get; set; } = string.Empty;
         public string Source { get; set; } = string.Empty;
         public string Lform { get; set; } = string.Empty;
@@ -23,6 +27,39 @@
         public string Stem { get; set; } = string.Empty;
         public string Suffix { get; set; } = string.Empty;
         public List<string> VerseList { get; set; } = new ();
+
+    }
+
+    public enum XmlSource
+    {
+        [Description("All")]
+        All,
+        [Description("KT")]
+        BiblicalTerms,
+        [Description("ABT")]
+        AllBiblicalTerms,
+        [Description("TR")]
+        TermsRenderings,
+        [Description("LX")]
+        Lexicon,
+    }
+
+    public static class EnumExtensionMethods
+    {
+        public static string GetDescription(this Enum GenericEnum)
+        {
+            Type genericEnumType = GenericEnum.GetType();
+            MemberInfo[] memberInfo = genericEnumType.GetMember(GenericEnum.ToString());
+            if ((memberInfo != null && memberInfo.Length > 0))
+            {
+                var _Attribs = memberInfo[0].GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false);
+                if ((_Attribs != null && _Attribs.Count() > 0))
+                {
+                    return ((System.ComponentModel.DescriptionAttribute)_Attribs.ElementAt(0)).Description;
+                }
+            }
+            return GenericEnum.ToString();
+        }
 
     }
 }

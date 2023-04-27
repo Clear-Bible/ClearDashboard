@@ -49,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
             switch (columnIndex)
             {
                 case (0):
-                    copyText = pinsTableItem.XmlSource;
+                    copyText = pinsTableItem.XmlSourceAbbreviation;
                     break;
                 case (1):
                     copyText = pinsTableItem.SimpRefs;
