@@ -46,7 +46,7 @@
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontSize}"
             FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontStyle}"
             FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontWeight}"
-            Foreground="{DynamicResource MaterialDesignBody}"
+            Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenForeground}"
             IsDefault="False"
             MouseDoubleClick="OnTokenDoubleClicked"
             MouseEnter="OnTokenMouseEnter"
@@ -85,6 +85,10 @@
                         x:Name="FilterPinsMenuItem"
                         Click="OnFilterPins"
                         Header="{helpers:Localization EnhancedView_FilterPins}" />
+                    <MenuItem 
+                        x:Name="FilterPinsByBiblicalTermsMenuItem"
+                        Click="OnFilterPinsByBiblicalTerms" 
+                        Header="{helpers:Localization EnhancedView_FilterPinsByKeyTerms}" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock

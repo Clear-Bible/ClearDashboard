@@ -26,6 +26,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Uri = System.Uri;
 
@@ -266,6 +267,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 _noteIndicatorsSizeValue = value;
                 Settings.Default.NoteIndicatorSizeValue = value;
                 NotifyOfPropertyChange(() => NoteIndicatorsSizeValue);
+            }
+        }
+
+        private bool _paragraphMode = Settings.Default.ParagraphMode;
+        public bool ParagraphMode
+        {
+            get => _paragraphMode;
+            set
+            {
+                if (_paragraphMode != value)
+                {
+                    _paragraphMode = value;
+                    Settings.Default.ParagraphMode = value;
+                    NotifyOfPropertyChange(() => ParagraphMode);
+                    if (VerseOffsetRange > 0)
+                    {
+                        Task.Run(() => EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter());
+                    }
+                }
             }
         }
 
@@ -800,6 +820,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public void FilterPins(object? sender, NoteEventArgs e)
         {
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
+        }
+
+        public void FilterPinsByBiblicalTerms(object? sender, NoteEventArgs e)
+        {
+            EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText, XmlSource.BiblicalTerms));
         }
 
         public void Copy(object sender, NoteEventArgs e)

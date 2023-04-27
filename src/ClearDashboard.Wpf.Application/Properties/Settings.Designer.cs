@@ -321,5 +321,17 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["RunAquaInstall"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ParagraphMode {
+            get {
+                return ((bool)(this["ParagraphMode"]));
+            }
+            set {
+                this["ParagraphMode"] = value;
+            }
+        }
     }
 }

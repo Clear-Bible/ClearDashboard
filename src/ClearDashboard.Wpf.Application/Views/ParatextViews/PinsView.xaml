@@ -113,6 +113,47 @@
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
 
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="All" />
+            <RadioButton
+                Name="AllXmlSourceRadio"
+                GroupName="XmlSourceRadio"
+                IsChecked="{Binding IsAll}" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="KT" />
+            <RadioButton
+                Name="BtXmlSourceRadio"
+                GroupName="XmlSourceRadio"
+                IsChecked="{Binding IsBt}" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="ABT" />
+            <RadioButton
+                Name="AbtXmlSourceRadio"
+                GroupName="XmlSourceRadio"
+                IsChecked="{Binding IsAbt}" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="TR" />
+            <RadioButton
+                Name="TrXmlSourceRadio"
+                GroupName="XmlSourceRadio"
+                IsChecked="{Binding IsTr}" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="LX" />
+            <RadioButton
+                Name="LxXmlSourceRadio"
+                GroupName="XmlSourceRadio"
+                IsChecked="{Binding IsLx}" />
+
             <Button
                 Height="25"
                 Margin="10,0,0,0"
@@ -208,7 +249,7 @@
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Path='XmlSource'}"
+                                    Text="{Binding Path='XmlSourceAbbreviation'}"
                                     ToolTip="{Binding Path='XmlPath'}" />
                             </Border>
                         </DataTemplate>
