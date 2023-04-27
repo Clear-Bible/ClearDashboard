@@ -120,7 +120,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 var row = await GetVerseTextRow(001001001);
                 var translationSet = await GetFirstTranslationSet();
 
-                VerseDisplayViewModel = await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row, new ParallelCorpusId(Guid.Empty), Detokenizer, true, translationSet.TranslationSetId);
+                VerseDisplayViewModel = await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row.SourceTokens, new ParallelCorpusId(Guid.Empty), Detokenizer, true, translationSet.TranslationSetId);
 
                 //await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
