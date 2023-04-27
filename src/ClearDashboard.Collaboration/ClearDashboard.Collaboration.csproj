@@ -37,7 +37,6 @@
     <Folder Include="Builder\" />
     <Folder Include="DifferenceModel\" />
     <Folder Include="Factory\" />
-    <Folder Include="Merge\" />
     <Folder Include="Serializer\" />
     <Folder Include="Util\" />
     <Folder Include="Exceptions\" />

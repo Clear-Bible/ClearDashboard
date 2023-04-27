@@ -526,7 +526,7 @@ public class CollaborationManager
         using (var repo = new Repository(_repositoryPath))
         {
             RepositoryStatus status = repo.RetrieveStatus();
-            if (status.IsDirty && status.Staged.Any())
+            if (status.IsDirty && (!IsCurrentProjectInRepository() || status.Staged.Any()))
             {
                 progress.Report(new ProgressStatus(0, "Committing changes to source control"));
                 var commit = repo.Commit(commitMessage, userSignature, userSignature);

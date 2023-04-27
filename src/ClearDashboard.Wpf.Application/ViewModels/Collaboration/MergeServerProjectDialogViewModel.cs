@@ -210,7 +210,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                     _cancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                    await _collaborationManager.MergeProjectLatestChangesAsync(true, false, _cancellationTokenSource.Token, progress);
+                    if (_collaborationManager.IsCurrentProjectInRepository())
+                    {
+                        await _collaborationManager.MergeProjectLatestChangesAsync(true, false, _cancellationTokenSource.Token, progress);
+                    }
                     await _collaborationManager.StageProjectChangesAsync(_cancellationTokenSource.Token, progress);
 
                     CommitSha = _collaborationManager.CommitChanges(CommitMessage, progress);

@@ -31,6 +31,7 @@ public sealed class MergeContext
         RemoteOverridesLocal = remoteOverridesLocal;
 
         DefaultMergeHandler = new DefaultMergeHandler(this);
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Corpus>), new CorpusHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenizedCorpus>), new TokenizedCorpusHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.VerseRow>), new VerseRowHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenComposite>), new TokenCompositeHandler(this));
