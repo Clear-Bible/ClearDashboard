@@ -125,7 +125,11 @@ namespace ClearDashboard.DataAccessLayer
 
             if (user.Id == Guid.Empty)
             {
-                CurrentUser ??= user;
+                if (CurrentUser == null)
+                {
+                    user.Id = TemporaryUserGuid;
+                    CurrentUser = user;
+                }
                 return false;
             }
 
