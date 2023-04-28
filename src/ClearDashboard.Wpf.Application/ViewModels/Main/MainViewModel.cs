@@ -1358,6 +1358,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         //ViewModel mergenew() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
                     }
                 }
+
+#if COLLAB_RELEASE || COLLAB_DEBUG
+                ,
+                new()
+                {
+                    // Collaboration
+                    Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
+                    MenuItems = collaborationItems,
+                }
+#endif
             };
 
             await Task.CompletedTask;
