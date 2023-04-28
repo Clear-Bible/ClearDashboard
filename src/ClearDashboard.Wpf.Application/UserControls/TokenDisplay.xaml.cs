@@ -518,6 +518,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the FilterPinsByBiblicalTermsEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent FilterPinsByBiblicalTermsEvent = EventManager.RegisterRoutedEvent
+            ("FilterPinsByBiblicalTerms", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the CopyEvent routed event.
         /// </summary>
         public static readonly RoutedEvent CopyEvent = EventManager.RegisterRoutedEvent
@@ -820,6 +826,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             add => AddHandler(FilterPinsEvent, value);
             remove => RemoveHandler(FilterPinsEvent, value);
         }
+        /// <summary>
+        /// Occurs when the user requests to filter pins by biblical terms.
+        /// </summary>
+        public event RoutedEventHandler FilterPinsByBiblicalTerms
+        {
+            add => AddHandler(FilterPinsByBiblicalTermsEvent, value);
+            remove => RemoveHandler(FilterPinsByBiblicalTermsEvent, value);
+        }
 
         /// <summary>
         /// Occurs when the user requests to copy.
@@ -1119,6 +1133,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnFilterPins(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(FilterPinsEvent, e);
+        }
+
+        private void OnFilterPinsByBiblicalTerms(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(FilterPinsByBiblicalTermsEvent, e);
         }
 
         private void OnCopy(object sender, RoutedEventArgs e)

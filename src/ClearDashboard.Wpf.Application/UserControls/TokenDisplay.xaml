@@ -85,6 +85,10 @@
                         x:Name="FilterPinsMenuItem"
                         Click="OnFilterPins" 
                         Header="{helpers:Localization EnhancedView_FilterPins}" />
+                    <MenuItem 
+                        x:Name="FilterPinsByBiblicalTermsMenuItem"
+                        Click="OnFilterPinsByBiblicalTerms" 
+                        Header="{helpers:Localization EnhancedView_FilterPinsByKeyTerms}" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock

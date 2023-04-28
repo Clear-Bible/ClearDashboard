@@ -112,11 +112,4 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
 
         }
     }
-
-    public static class MenuIds
-    {
-        public const string NewId = "NewID";
-        public const string OpenId= "OpenID";
-        public const string ReloadProjectID = "ReloadProjectID";
-    }
 }
