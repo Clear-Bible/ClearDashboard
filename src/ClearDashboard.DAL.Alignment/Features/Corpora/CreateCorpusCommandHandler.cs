@@ -55,6 +55,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 modelCorpus.CorpusType = ModelCorpusType.Unknown;
             }
 
+            if (Corpus.FixedCorpusIdsByCorpusType.TryGetValue(modelCorpus.CorpusType, out Guid corpusId))
+            {
+                modelCorpus.Id = corpusId;
+            }
+
             ProjectDbContext.Corpa.Add(modelCorpus);
 
             // NB:  passing in the cancellation token to SaveChangesAsync.
