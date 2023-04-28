@@ -5,24 +5,17 @@ using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Model;
 using Models = ClearDashboard.DataAccessLayer.Models;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
-using System.Linq;
-using SIL.Machine.Tokenization;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.Collaboration.Exceptions;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using Microsoft.EntityFrameworkCore;
 using ClearBible.Engine.Persistence;
 using ClearDashboard.Collaboration.Factory;
-using MediatR;
-using System.Threading;
 using SIL.Machine.Utils;
-using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -30,81 +23,6 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
 {
     public TokenizedCorpusHandler(MergeContext mergeContext) : base(mergeContext)
     {
-        mergeContext.MergeBehavior.AddEntityValueResolver(
-            (typeof(Models.TokenizedCorpus), nameof(Models.TokenizedCorpus.Id)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
-
-                if (modelSnapshot is not IModelSnapshot<Models.TokenizedCorpus>)
-                {
-                    throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.TokenizedCorpus>");
-                }
-
-                var tokenizedCorpusId = (Guid)modelSnapshot.GetId();
-
-                if (TokenizedCorpusBuilder.TokenizedCorpusManuscriptIds.ContainsValue(tokenizedCorpusId) &&
-                    !projectDbContext.TokenizedCorpora.Any(e => e.Id == tokenizedCorpusId))
-                {
-                    var corpusType = TokenizedCorpusBuilder.TokenizedCorpusManuscriptIds
-                        .First(x => x.Value == tokenizedCorpusId)
-                        .Key;
-
-                    var id = projectDbContext.TokenizedCorpora
-                        .Include(e => e.Corpus)
-                        .Where(e => e.Corpus!.CorpusType == corpusType)
-                        .Select(e => e.Id)
-                        .FirstOrDefault();
-
-                    if (id != default)
-                    {
-                        tokenizedCorpusId = id;
-                    }
-                }
-
-                return tokenizedCorpusId;
-            });
-
-        mergeContext.MergeBehavior.AddEntityValueResolver(
-            (typeof(Models.TokenizedCorpus), nameof(Models.TokenizedCorpus.CorpusId)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
-
-                if (modelSnapshot is not IModelSnapshot<Models.TokenizedCorpus>)
-                {
-                    throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.TokenizedCorpus>");
-                }
-
-                if (modelSnapshot.TryGetPropertyValue(nameof(Models.TokenizedCorpus.CorpusId), out var value))
-                {
-                    var corpusId = (Guid)value!;
-
-                    if (CorpusBuilder.CorpusManuscriptIds.ContainsValue(corpusId) &&
-                        !projectDbContext.Corpa.Any(e => e.Id == corpusId))
-                    {
-                        var corpusType = CorpusBuilder.CorpusManuscriptIds
-                            .First(x => x.Value == corpusId)
-                            .Key;
-
-                        var id = projectDbContext.Corpa
-                            .Where(e => e.CorpusType == corpusType)
-                            .Select(e => e.Id)
-                            .FirstOrDefault();
-
-                        if (id != default)
-                        {
-                            corpusId = id;
-                        }
-                        else
-                        {
-                            throw new PropertyResolutionException($"Incoming TokenizedCorpus '{modelSnapshot.GetId()}' has a manuscript corpus type '{corpusType}' but no matching Corpus can be found by CorpusType or Id");
-                        }
-                    }
-
-                    return corpusId;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"Incoming TokenizedCorpus '{modelSnapshot.GetId()}' does not have a CorpusId");
-                }
-            });
     }
 
     public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)

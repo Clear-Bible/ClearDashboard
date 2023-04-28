@@ -500,7 +500,7 @@ public class DefaultMergeHandler
 
     public static void LoadTokenizedCorpusLocationsIntoCache(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, MergeCache cache)
     {
-        if (!cache.ContainsKey((typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString())))
+        if (!cache.ContainsCacheKey((typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString())))
         {
             var tokenComponentsByLocationId = projectDbContext.TokenComponents
                 .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)

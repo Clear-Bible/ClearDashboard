@@ -50,7 +50,7 @@ public class MergeCache
         return false;
     }
 
-    public bool ContainsKey((Type EntityType, string key) key)
+    public bool ContainsCacheKey((Type EntityType, string key) key)
     {
         return _cache.ContainsKey(key);
     }

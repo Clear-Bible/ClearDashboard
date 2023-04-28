@@ -9,14 +9,12 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class CorpusBuilder : GeneralModelBuilder<Models.Corpus>
 {
-    public readonly static Dictionary<Models.CorpusType, Guid> CorpusManuscriptIds = new() {
-        { Models.CorpusType.ManuscriptHebrew, Guid.Parse("3D275D10-5374-4649-8D0D-9E69281E5B81") },
-        { Models.CorpusType.ManuscriptGreek, Guid.Parse("3D275D10-5374-4649-8D0D-9E69281E5B82") }
-    };
-
     public Func<ProjectDbContext, IEnumerable<Models.Corpus>> GetCorpora = (projectDbContext) =>
     {
-        return projectDbContext.Corpa.AsNoTrackingWithIdentityResolution().OrderBy(c => c.Created).ToList();
+        return projectDbContext.Corpa
+            .AsNoTrackingWithIdentityResolution()
+            .OrderBy(c => c.Created)
+            .ToList();
     };
 
     public override IEnumerable<GeneralModel<Models.Corpus>> BuildModelSnapshots(BuilderContext builderContext)
@@ -34,12 +32,6 @@ public class CorpusBuilder : GeneralModelBuilder<Models.Corpus>
 
     public static GeneralModel<Models.Corpus> BuildModelSnapshot(Models.Corpus dbModel, BuilderContext builderContext)
     {
-        if (dbModel.CorpusType == Models.CorpusType.ManuscriptHebrew ||
-            dbModel.CorpusType == Models.CorpusType.ManuscriptGreek)
-        {
-            dbModel.Id = CorpusManuscriptIds[dbModel.CorpusType];
-        }
-
         var modelSnapshot = ExtractUsingModelIds(dbModel, builderContext.CommonIgnoreProperties);
         return modelSnapshot;
     }
