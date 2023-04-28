@@ -7,6 +7,7 @@ using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -25,18 +26,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
-    public class NotesViewModel : 
-        ToolViewModel, 
+    public class NotesViewModel :
+        ToolViewModel,
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
         IHandle<NoteUpdatingMessage>,
         IHandle<NoteUpdatedMessage>,
         IHandle<NoteLabelAttachedMessage>,
         IHandle<NoteLabelDetachedMessage>,
+        IHandle<TokenizedCorpusUpdatedMessage>,
         IHandle<ReloadProjectMessage>
     {
         private const string TaskName = "Notes";
@@ -67,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        public Guid UserId => currentUser_?.Id 
+        public Guid UserId => currentUser_?.Id
             ?? throw new InvalidStateEngineException(name: "currentUser_", value: "null");
 
         private FilterNoteStatusEnum filterStatus_;
@@ -330,7 +331,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private async Task<IEnumerable<NoteViewModel>> AssembleNotes(
             NoteManager noteManager,
             CancellationToken cancellationToken,
-            string taskName, 
+            string taskName,
             Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus)
         {
             HashSet<NoteId> noteIds = new HashSet<NoteId>(new IIdEqualityComparer());
@@ -357,7 +358,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             SelectedNoteLabels.Clear();
             selectedNoteViewModel?.Labels
-                .Select(l => { 
+                .Select(l => {
                     SelectedNoteLabels.Add(l);
                     return l;
                 })
@@ -615,10 +616,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                 ProgressBarVisibility = Visibility.Hidden;
         }
 
+        public async Task HandleAsync(TokenizedCorpusUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            await GetAllNotesAndSetNoteViewModelsAsync();
+        }
+
         public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
         {
             await GetAllNotesAndSetNoteViewModelsAsync();
         }
+
+
     }
 
     public static class Extensions

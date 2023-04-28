@@ -46,7 +46,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
                 NotifyOfPropertyChange(() => IsEnabled);
             }
         }
-        
+
         private Icon _icon;
         public Icon Icon
         {
@@ -99,17 +99,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
 
         private async void Execute()
         {
-            if (Id is "NewID" or "OpenID" or "ReloadProjectID")
-            {
-                await ViewModel.ExecuteMenuCommand(this);
-                return;
-            }
-            if (ViewModel != null)
-            {
-                ViewModel.WindowIdToLoad = Id;
-            }
-
-
+            await ViewModel.ExecuteMenuCommand(this);
         }
     }
 }
