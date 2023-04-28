@@ -75,6 +75,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 TokenizationFunction = request.TokenizationFunction
             };
 
+            if (TokenizedTextCorpus.FixedTokenizedCorpusIdsByCorpusType.TryGetValue(corpus.CorpusType, out Guid tokenizedCorpusId))
+            {
+                tokenizedCorpus.Id = tokenizedCorpusId;
+            }
+
             if (request.Versification.IsCustomized)
             {
                 tokenizedCorpus.ScrVersType = (int)request.Versification.BaseVersification.Type;

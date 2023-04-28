@@ -1,14 +1,17 @@
-﻿using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DAL.Alignment.Features;
+﻿using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Notes;
-using ClearDashboard.DAL.Alignment.Notes;
+using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class Corpus
     {
+        public readonly static Dictionary<Models.CorpusType, Guid> FixedCorpusIdsByCorpusType = new() {
+            { Models.CorpusType.ManuscriptHebrew, Guid.Parse("3D275D10-5374-4649-8D0D-9E69281E5B81") },
+            { Models.CorpusType.ManuscriptGreek, Guid.Parse("3D275D10-5374-4649-8D0D-9E69281E5B82") }
+        };
+
         public const string DefaultFontFamily = "Segoe UI";
 
         public CorpusId CorpusId { get; set; }

@@ -1,8 +1,8 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
-using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
@@ -11,6 +11,11 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class TokenizedTextCorpus : ScriptureTextCorpus, ICache
     {
+        public readonly static Dictionary<Models.CorpusType, Guid> FixedTokenizedCorpusIdsByCorpusType = new() {
+            { Models.CorpusType.ManuscriptHebrew, Guid.Parse("3D275D10-5374-4649-8D0D-9E69281E5B83") },
+            { Models.CorpusType.ManuscriptGreek, Guid.Parse("3D275D10-5374-4649-8D0D-9E69281E5B84") }
+        };
+
         public TokenizedTextCorpusId TokenizedTextCorpusId { get; set; }
         public bool NonTokenized { get; }
 
