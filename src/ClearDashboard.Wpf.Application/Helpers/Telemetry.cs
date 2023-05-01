@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
 namespace ClearDashboard.Wpf.Application.Helpers
@@ -15,6 +16,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         private const string TelemetryKey = "<23ded420-f989-4a10-a980-8ed61e5599f2>";
 
         private static TelemetryClient _telemetry = GetAppInsightsClient();
+        
 
         public static bool Enabled { get; set; } = true;
 
@@ -36,6 +38,42 @@ namespace ClearDashboard.Wpf.Application.Helpers
             return client;
         }
 
+        private static TelemetryClient AppInsights = GetAppInsightsClient2();
+        private static IOperationHolder<RequestTelemetry> AppRunTelemetry;
+        private static TelemetryClient GetAppInsightsClient2()
+        {
+            try
+            {
+                if (AppInsights == null) // make sure doesn't run more than once!
+                {
+                    var config = new TelemetryConfiguration()
+                    {
+                        // `Telemetry.Key` is a secret key in a static value loaded
+                        //  from secure storage (from Azure Portal)
+                        ConnectionString = "InstrumentationKey=23ded420-f989-4a10-a980-8ed61e5599f2;" +
+                                           "IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;" +
+                                           "LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"
+                    };
+
+                    // Initialize App Insights
+                    AppInsights = new TelemetryClient(config);
+                    AppInsights.Context.Session.Id = Guid.NewGuid().ToString();
+                    AppInsights.Context.Component.Version = "GetVersion()";
+
+                    // Create the actual logging instance that will be used to log 
+                    AppRunTelemetry =
+                        AppInsights.StartOperation<RequestTelemetry>(
+                            $"{"GetVersion()"} - {"InternalUseCount"} - {"UnlockKey.LicenseKey"}");
+                    AppRunTelemetry.Telemetry.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                var someexception = ex;
+            }
+            return AppInsights;
+        }
+
         public static void SetUser(string user)
         {
             _telemetry.Context.User.AuthenticatedUserId = user;
@@ -46,6 +84,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (Enabled)
             {
                 _telemetry.TrackEvent(key, properties, metrics);
+                AppInsights.TrackEvent(key, properties, metrics);
             }
         }
 
