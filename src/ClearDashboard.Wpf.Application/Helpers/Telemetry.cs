@@ -13,17 +13,18 @@ namespace ClearDashboard.Wpf.Application.Helpers
 {
     public static class Telemetry
     {
-        private const string TelemetryKey = "<23ded420-f989-4a10-a980-8ed61e5599f2>";
-
         private static TelemetryClient _telemetry = GetAppInsightsClient();
-        
+        private static IOperationHolder<RequestTelemetry> AppRunTelemetry;
 
         public static bool Enabled { get; set; } = true;
 
         private static TelemetryClient GetAppInsightsClient()
         {
             var config = new TelemetryConfiguration();
-            config.InstrumentationKey = TelemetryKey;
+            config.ConnectionString = "InstrumentationKey=23ded420-f989-4a10-a980-8ed61e5599f2;" +
+                                      "IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;" +
+                                      "LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/";
+            //config.InstrumentationKey = TelemetryKey;
             config.TelemetryChannel = new Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.ServerTelemetryChannel();
             //config.TelemetryChannel = new Microsoft.ApplicationInsights.Channel.InMemoryChannel(); // Default channel
             config.TelemetryChannel.DeveloperMode = Debugger.IsAttached;
@@ -35,43 +36,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
             client.Context.Session.Id = Guid.NewGuid().ToString();
             client.Context.User.Id = (Environment.UserName + Environment.MachineName).GetHashCode().ToString();
             client.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
+
+            AppRunTelemetry = client.StartOperation<RequestTelemetry>($"{client.Context.Component.Version} - {"InternalUseCount"} - {"UnlockKey.LicenseKey"}");
+            AppRunTelemetry.Telemetry.Start();
+
             return client;
-        }
-
-        private static TelemetryClient AppInsights = GetAppInsightsClient2();
-        private static IOperationHolder<RequestTelemetry> AppRunTelemetry;
-        private static TelemetryClient GetAppInsightsClient2()
-        {
-            try
-            {
-                if (AppInsights == null) // make sure doesn't run more than once!
-                {
-                    var config = new TelemetryConfiguration()
-                    {
-                        // `Telemetry.Key` is a secret key in a static value loaded
-                        //  from secure storage (from Azure Portal)
-                        ConnectionString = "InstrumentationKey=23ded420-f989-4a10-a980-8ed61e5599f2;" +
-                                           "IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;" +
-                                           "LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"
-                    };
-
-                    // Initialize App Insights
-                    AppInsights = new TelemetryClient(config);
-                    AppInsights.Context.Session.Id = Guid.NewGuid().ToString();
-                    AppInsights.Context.Component.Version = "GetVersion()";
-
-                    // Create the actual logging instance that will be used to log 
-                    AppRunTelemetry =
-                        AppInsights.StartOperation<RequestTelemetry>(
-                            $"{"GetVersion()"} - {"InternalUseCount"} - {"UnlockKey.LicenseKey"}");
-                    AppRunTelemetry.Telemetry.Start();
-                }
-            }
-            catch (Exception ex)
-            {
-                var someexception = ex;
-            }
-            return AppInsights;
         }
 
         public static void SetUser(string user)
@@ -84,7 +53,6 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (Enabled)
             {
                 _telemetry.TrackEvent(key, properties, metrics);
-                AppInsights.TrackEvent(key, properties, metrics);
             }
         }
 
