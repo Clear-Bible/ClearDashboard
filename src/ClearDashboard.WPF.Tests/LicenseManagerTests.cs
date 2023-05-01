@@ -23,8 +23,8 @@ namespace ClearDashboard.WPF.Tests
         [Fact]
         public async Task EncryptDecryptTest()
         {
-            var directoryPath = "LicenseTest";
-            var filePath = "LicenseTest\\license.txt";
+            var directoryPath = Path.Combine(LicenseManager.LicenseFolderPath,"LicenseTest");
+            var filePath = Path.Combine(directoryPath,LicenseManager.LicenseFileName);
 
             var originalLicenseUser = new User
             {
@@ -46,8 +46,8 @@ namespace ClearDashboard.WPF.Tests
         [Fact]
         public async Task EncryptLicenseUserDecryptUserTest()
         {
-            var directoryPath = "LicenseTest";
-            var filePath = "LicenseTest\\license.txt";
+            var directoryPath = Path.Combine(LicenseManager.LicenseFolderPath, "LicenseTest");
+            var filePath = Path.Combine(directoryPath, LicenseManager.LicenseFileName);
 
             var originalLicenseUser = new User
             {

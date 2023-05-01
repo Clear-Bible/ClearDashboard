@@ -9,10 +9,13 @@ namespace ClearDashboard.DataAccessLayer
 {
     public static class LicenseManager
     {
-
-        public static string LicenseFilePath =
+        public static string LegacyLicenseFilePath =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects",
                 "license.txt");
+
+        public static string LicenseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets", "License");
+        public static string LicenseFileName = "license.txt";
+        public static string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
 
         private static Aes CreateCryptoProvider()
         {
@@ -44,7 +47,7 @@ namespace ClearDashboard.DataAccessLayer
                 Directory.CreateDirectory(path);
             }
 
-            File.WriteAllText(Path.Combine(path, "license.txt"), str);
+            File.WriteAllText(Path.Combine(path, LicenseFileName), str);
 
         }
 
@@ -108,6 +111,11 @@ namespace ClearDashboard.DataAccessLayer
         {
             try
             {
+                if (path == LicenseFilePath && !File.Exists(LicenseFilePath))
+                {
+                    path = LegacyLicenseFilePath;
+                }
+
                 var str = File.ReadAllText(path);
 
                 return DecryptLicenseFromString(str);

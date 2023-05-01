@@ -25,8 +25,7 @@ namespace GenerateLicenseKeyForDashboard
 
         private string GenerateLicense(string firstName, string lastName, Guid id, Guid licenseKey)
         {
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var filePath = Path.Combine(documentsPath, $"ClearDashboard_Projects\\{firstName + lastName}");
+            var folderPath = Path.Combine(LicenseManager.LicenseFolderPath, $"{firstName + lastName}");
 
             var licenseUser = new User
             {
@@ -36,8 +35,8 @@ namespace GenerateLicenseKeyForDashboard
                 LicenseKey = licenseKey.ToString("N"),
             };
 
-            LicenseManager.EncryptToFile(licenseUser, filePath);
-            var encryptedLicenseKey = LicenseManager.EncryptToString(licenseUser, filePath);
+            LicenseManager.EncryptToFile(licenseUser, folderPath);
+            var encryptedLicenseKey = LicenseManager.EncryptToString(licenseUser, folderPath);
 
             return encryptedLicenseKey;
         }

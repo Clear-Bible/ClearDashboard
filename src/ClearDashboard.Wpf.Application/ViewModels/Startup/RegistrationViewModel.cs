@@ -137,8 +137,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             try
             {
-                var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
+                File.Delete(LicenseManager.LicenseFilePath);
 
                 var decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(LicenseKey);
                 var decryptedLicenseUser = LicenseManager.DecryptedJsonToUser(decryptedLicenseKey);
@@ -160,7 +159,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 switch (match)
                 {
                     case LicenseUserMatchType.Match:
-                        File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
+                        File.WriteAllText(LicenseManager.LicenseFilePath, LicenseKey);
                         await MoveForwards();
                         await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
                         break;
