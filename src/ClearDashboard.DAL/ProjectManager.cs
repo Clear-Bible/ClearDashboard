@@ -133,6 +133,11 @@ namespace ClearDashboard.DataAccessLayer
                 return false;
             }
 
+            if (!File.Exists(LicenseManager.LicenseFilePath))
+            {
+                LicenseManager.EncryptToFile(user, LicenseManager.LicenseFolderPath);
+            }
+
             CurrentUser = user;
 
             return true;

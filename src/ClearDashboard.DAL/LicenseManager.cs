@@ -37,21 +37,21 @@ namespace ClearDashboard.DataAccessLayer
             return cryptProvider;
         }
 
-        public static void EncryptToFile(User licenseUser, string path)
+        public static void EncryptToFile(User licenseUser, string folderPath)
         {
 
-            var str = EncryptToString(licenseUser, path);
+            var str = EncryptToString(licenseUser, folderPath);
 
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(folderPath))
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(folderPath);
             }
 
-            File.WriteAllText(Path.Combine(path, LicenseFileName), str);
+            File.WriteAllText(Path.Combine(folderPath, LicenseFileName), str);
 
         }
 
-        public static string EncryptToString(User licenseUser, string path)
+        public static string EncryptToString(User licenseUser, string folderPath)
         {
 
             var cryptProvider = CreateCryptoProvider();
@@ -72,11 +72,11 @@ namespace ClearDashboard.DataAccessLayer
             return DecryptLicenseFromFileToUser(LicenseFilePath);
         }
 
-        public static User DecryptLicenseFromFileToUser(string path)
+        public static User DecryptLicenseFromFileToUser(string filePath)
         {
             try
             {
-                var json = DecryptLicenseFromFile(path);
+                var json = DecryptLicenseFromFile(filePath);
 
                 return DecryptedJsonToUser(json);
 
@@ -107,16 +107,16 @@ namespace ClearDashboard.DataAccessLayer
                 return "";
             }
         }
-        public static string DecryptLicenseFromFile(string path)
+        public static string DecryptLicenseFromFile(string filePath)
         {
             try
             {
-                if (path == LicenseFilePath && !File.Exists(LicenseFilePath))
+                if (!File.Exists(LicenseFilePath)&& filePath == LicenseFilePath)
                 {
-                    path = LegacyLicenseFilePath;
+                    filePath = LegacyLicenseFilePath;
                 }
 
-                var str = File.ReadAllText(path);
+                var str = File.ReadAllText(filePath);
 
                 return DecryptLicenseFromString(str);
 
