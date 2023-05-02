@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
@@ -17,6 +18,9 @@ namespace ClearDashboard.Wpf.Application.Helpers
         private static IOperationHolder<RequestTelemetry> AppRunTelemetry;
 
         public static bool Enabled { get; set; } = true;
+        public static Dictionary<string, string> PropertiesDictionary { get; set; } = new();
+        public static Dictionary<string, double> MetricsDictionary { get; set; } = new();
+        public static Dictionary<TelemetryDictionaryKeys, Stopwatch> StopwatchDictionary { get; set; } = new();
 
         private static TelemetryClient GetAppInsightsClient()
         {
@@ -48,6 +52,15 @@ namespace ClearDashboard.Wpf.Application.Helpers
             _telemetry.Context.User.AuthenticatedUserId = user;
         }
 
+        public static void SendFullReport(string key)
+        {
+            if (Enabled)
+            {
+                AddStopwatchDictionaryToMetricsDictionary();
+                _telemetry.TrackEvent(key, PropertiesDictionary, MetricsDictionary);
+            }
+        }
+
         public static void TrackEvent(string key, IDictionary<string, string> properties = null, IDictionary<string, double> metrics = null)
         {
             if (Enabled)
@@ -69,6 +82,44 @@ namespace ClearDashboard.Wpf.Application.Helpers
         internal static void Flush()
         {
             _telemetry.Flush();
+        }
+
+        public static void StartStopwatch(TelemetryDictionaryKeys key)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            StopwatchDictionary.Add(key, sw);
+        }
+
+        public static void StopStopwatch(TelemetryDictionaryKeys key)
+        {
+            StopwatchDictionary[key].Stop();
+        }
+
+        public static void AddStopwatchDictionaryToMetricsDictionary()
+        {
+            foreach (var stopWatchDefinition in StopwatchDictionary)
+            {
+                MetricsDictionary.Add(stopWatchDefinition.Key.ToString(), stopWatchDefinition.Value.Elapsed.TotalHours);
+            }
+        }
+
+        public static void IncrementMetric(TelemetryDictionaryKeys key, int increment)
+        {
+            var keyString = key.ToString();
+
+            if (!MetricsDictionary.ContainsKey(keyString))
+            {
+                MetricsDictionary.Add(keyString, 0);
+            }
+
+            MetricsDictionary[keyString] += increment;
+        }
+
+        public enum TelemetryDictionaryKeys
+        {
+            AppHours,
+            NoteCreationCount
         }
     }
 }

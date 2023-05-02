@@ -876,6 +876,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
 
             Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
+
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteCreationCount, 1);
         }
 
         public void NoteUpdated(object sender, NoteEventArgs e)
