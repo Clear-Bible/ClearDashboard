@@ -6,7 +6,6 @@
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
 	<Version>1.0.5.1</Version>
-	<Version>1.0.5.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
