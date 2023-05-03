@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.Views.Notes
 {
@@ -102,6 +103,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             {
                 await _vm.UpdateNoteStatus(noteViewModel, NoteStatus.Resolved);
             }
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteClosedCount, 1);
         }
 
         private async void OnNoteSeen(object sender, RoutedEventArgs e)
@@ -128,6 +130,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             {
                 await _vm.AddReplyToNote(args.NoteViewModelWithReplies, args.Text);
             }
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteReplyCount, 1);
         }
 
         public bool RepliesExpanded { get; set; } = true;

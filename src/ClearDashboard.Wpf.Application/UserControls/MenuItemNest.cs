@@ -52,13 +52,24 @@ public class MenuItemNest : INotifyPropertyChanged
     }
 
 
-    private string _textBoxText { get; set; }
+    private string _textBoxText { get; set; } = string.Empty;
     public string TextBoxText
     {
         get => _textBoxText;
         set
         {
             _textBoxText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _placeholder { get; set; }
+    public string Placeholder
+    {
+        get => _placeholder;
+        set
+        {
+            _placeholder = value;
             OnPropertyChanged();
         }
     }

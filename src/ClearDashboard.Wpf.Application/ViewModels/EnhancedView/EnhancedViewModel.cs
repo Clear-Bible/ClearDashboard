@@ -876,6 +876,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
 
             Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
+
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteCreationCount, 1);
         }
 
         public void NoteUpdated(object sender, NoteEventArgs e)
@@ -900,6 +902,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 await NoteManager.SendToParatextAsync(e.Note);
                 Message = $"Note '{e.Note.Text}' sent to Paratext.";
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
             }
             catch (Exception ex)
             {

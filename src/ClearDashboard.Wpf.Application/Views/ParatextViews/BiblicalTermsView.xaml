@@ -586,8 +586,8 @@
                     Margin="5"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding SelectedItemVerses}"
-                    ScrollViewer.CanContentScroll="False"
-                    PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
+                    PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
+                    ScrollViewer.CanContentScroll="False">
 
                     <ListView.CommandBindings>
                         <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
@@ -662,7 +662,6 @@
                                         Margin="0,0,10,0"
                                         FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
                                         FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
-                                        
                                         TextWrapping="Wrap">
                                         <TextBlock.Style>
                                             <Style TargetType="helpers:BindableTextBlock">
