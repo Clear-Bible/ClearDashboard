@@ -16,6 +16,7 @@ public partial class DesignSurfaceViewModel
         public const string AddTokenizedCorpusToNewEnhancedView = "AddTokenizedCoprusToNewEnhancedView"; // was ShowVerseId
         public const string CreateNewAlignmentSet = "CreateNewAlignmentSet"; // was CreateAlignmentSetId
         public const string CreateNewInterlinear = "CreateNewInterlinear"; // was CreateNewInterlinearId
+        public const string ResetVerseVersifications = "ResetVerseVersifications";
         public const string Separator = "Separator"; // was SeparatorId
         public const string ShowCorpusNodeProperties = "ShowCorpusNodeProperties";  // was PropertiesId
         public const string ShowParallelCorpusProperties = "ShowParallelCoprusProperties"; // was PropertiesId
