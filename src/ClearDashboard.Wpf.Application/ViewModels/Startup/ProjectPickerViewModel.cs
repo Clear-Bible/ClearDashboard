@@ -22,6 +22,8 @@ using ClearDashboard.Wpf.Application.Services;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 using System.Diagnostics;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using System.Dynamic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -30,13 +32,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
         private readonly IMediator _mediator;
+        private readonly ILocalizationService _localizationService;
         private readonly TranslationSource? _translationSource;
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"ClearDashboard_Projects");
         #endregion
 
         #region Observable Objects
-        public ObservableCollection<DashboardProject>? DashboardProjects { get; set; } = new ObservableCollection<DashboardProject>();
+        private ObservableCollection<DashboardProject> _dashboardProjects = new();
+        public ObservableCollection<DashboardProject> DashboardProjects
+        {
+            get => _dashboardProjects;
+            set
+            {
+                _dashboardProjects = value; 
+                NotifyOfPropertyChange(() => DashboardProjects);   
+            }
+        }
+
 
         private Visibility _searchBlankVisibility;
         public Visibility SearchBlankVisibility
@@ -207,15 +220,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(TranslationSource translationSource, DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
-            INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+        public ProjectPickerViewModel(TranslationSource translationSource, 
+            DashboardProjectManager projectManager, 
+            ParatextProxy paratextProxy, 
+            INavigationService navigationService, 
+            ILogger<ProjectPickerViewModel> logger, 
+            IEventAggregator eventAggregator,
+            IMediator mediator, 
+            ILifetimeScope? lifetimeScope, 
+            ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
             _paratextProxy = paratextProxy;
             _mediator = mediator;
+            _localizationService = localizationService;
             AlertVisibility = Visibility.Collapsed;
             _translationSource = translationSource;
             NoProjectVisibility = Visibility.Visible;
@@ -259,6 +279,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             await base.OnActivateAsync(cancellationToken);
         }
+
+        #endregion Constructor
+
+        #region Methods
 
         private async Task GetProjectsVersion()
         {
@@ -321,15 +345,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             foreach (var project in DashboardProjects)
             {
                 project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+
+                if (project.IsCompatibleVersion)
+                {
+                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
+                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
+                }
             }
 
             _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
             _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+
+            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
         }
 
-        #endregion Constructor
+        public async void UpdateDatabase(DashboardProject project)
+        {
+            var localizedString = _localizationService!["Migrate_Header"];
 
-        #region Methods
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<MigrateDatabaseViewModel>();
+            viewModel.Project = project;
+            viewModel.ProjectPickerViewModel = this;
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
+        }
+
+        public async Task RefreshProjectList()
+        {
+            await GetProjectsVersion();
+        }
+
+
         private bool IsDashboardRunningAlready()
         {
             var process = Process.GetProcessesByName("ClearDashboard.Wpf.Application");

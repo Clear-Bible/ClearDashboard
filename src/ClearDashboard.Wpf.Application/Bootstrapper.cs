@@ -273,6 +273,10 @@ namespace ClearDashboard.Wpf.Application
             _host.StartAsync();
 
             Logger?.LogInformation("ClearDashboard application is starting.");
+
+            Telemetry.TrackEvent("ClearDashboard application is starting.");
+            Telemetry.StartStopwatch(Telemetry.TelemetryDictionaryKeys.AppHours);
+            
             base.OnStartup(sender, e);
         }
 
@@ -307,6 +311,9 @@ namespace ClearDashboard.Wpf.Application
         protected override void OnExit(object sender, EventArgs e)
         {
             Logger?.LogInformation("ClearDashboard application is exiting.");
+
+            Telemetry.SendFullReport("ClearDashboard application is exiting.");
+            Thread.Sleep(500);
 
             StopParatext();
 

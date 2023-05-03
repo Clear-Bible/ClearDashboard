@@ -26,6 +26,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -266,8 +268,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 Settings.Default.NoteIndicatorSizeValue = value;
                 NotifyOfPropertyChange(() => NoteIndicatorsSizeValue);
             }
-        }        
-        
+        }
+
         private bool _paragraphMode = Settings.Default.ParagraphMode;
         public bool ParagraphMode
         {
@@ -820,6 +822,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }
 
+        public void FilterPinsByBiblicalTerms(object? sender, NoteEventArgs e)
+        {
+            EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText, XmlSource.BiblicalTerms));
+        }
+
         public void Copy(object sender, NoteEventArgs e)
         {
             var surfaceText = e.SelectedTokens.CombinedSurfaceText.Replace(',', ' ');
@@ -869,6 +876,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
 
             Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
+
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteCreationCount, 1);
         }
 
         public void NoteUpdated(object sender, NoteEventArgs e)
@@ -893,6 +902,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 await NoteManager.SendToParatextAsync(e.Note);
                 Message = $"Note '{e.Note.Text}' sent to Paratext.";
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
             }
             catch (Exception ex)
             {

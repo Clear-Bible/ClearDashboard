@@ -18,6 +18,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Image Source="/Assets/ClearDashboard_logo_250.png" />
 
@@ -40,7 +41,7 @@
             Grid.Row="3"
             Width="160"
             Height="40"
-            Margin="10,10,10,40"
+            Margin="10,10,10,20"
             Background="Transparent"
             BorderBrush="Transparent">
             <TextBlock
@@ -50,11 +51,13 @@
                 Text="Clear Bible"
                 TextDecorations="Underline" />
         </Button>
-        <!--<Button
+        <Button
             x:Name="Close"
-            Grid.Row="3"
-            Margin="3"
+            Grid.Row="4"
+            Width="150"
+            Height="40"
+            Margin="3,0,3,5"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />-->
+            Style="{StaticResource TransparentStyle}" />
     </Grid>
 </Window>

@@ -1,18 +1,11 @@
 ﻿using ClearBible.Engine.Corpora;
-using Models = ClearDashboard.DataAccessLayer.Models;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Features;
-using SIL.Machine.FiniteState;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
+using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Corpora;
 
-internal class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMappings
+public class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMappings
 {
     private readonly IMediator _mediator;
     private readonly ParallelCorpusId _parallelCorpusId;

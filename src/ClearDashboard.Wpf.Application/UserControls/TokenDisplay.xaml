@@ -60,13 +60,13 @@
             <Button.ContextMenu>
                 <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
                     <MenuItem Click="OnCreateNote" Header="{helpers:Localization EnhancedView_CreateNote}" />
-                    <MenuItem 
-                        x:Name="CreateAlignmentMenuItem" 
-                        Click="OnTokenCreateAlignment" 
+                    <MenuItem
+                        x:Name="CreateAlignmentMenuItem"
+                        Click="OnTokenCreateAlignment"
                         Header="{helpers:Localization EnhancedView_CreateAlignment}" />
-                    <MenuItem 
-                        x:Name="DeleteAlignmentMenuItem" 
-                        Click="OnTokenDeleteAlignment" 
+                    <MenuItem
+                        x:Name="DeleteAlignmentMenuItem"
+                        Click="OnTokenDeleteAlignment"
                         Header="{helpers:Localization EnhancedView_DeleteAlignmentMenu}" />
                     <MenuItem
                         x:Name="JoinTokensMenuItem"
@@ -81,10 +81,14 @@
                         Click="OnTokenUnjoin"
                         Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
                     <MenuItem Click="OnCopy" Header="{helpers:Localization Copy}" />
-                    <MenuItem 
+                    <MenuItem
                         x:Name="FilterPinsMenuItem"
-                        Click="OnFilterPins" 
+                        Click="OnFilterPins"
                         Header="{helpers:Localization EnhancedView_FilterPins}" />
+                    <MenuItem 
+                        x:Name="FilterPinsByBiblicalTermsMenuItem"
+                        Click="OnFilterPinsByBiblicalTerms" 
+                        Header="{helpers:Localization EnhancedView_FilterPinsByKeyTerms}" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock
