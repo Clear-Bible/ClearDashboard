@@ -29,10 +29,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables
 
         private readonly ILogger<AboutViewModel> _logger;
-        //private readonly DashboardProjectManager? _projectManager;
-        //private readonly IEventAggregator _eventAggregator;
         private readonly IMediator _mediator;
-        //private readonly ILocalizationService _localizationService;
 
         private TopLevelProjectIds _topLevelProjectIds;
 
@@ -121,10 +118,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _logger = logger;
-            //_projectManager = projectManager;
-            //_eventAggregator = eventAggregator;
             _mediator = mediator;
-            //_localizationService = localizationService;
         }
 
         protected override async void OnViewLoaded(object view)
