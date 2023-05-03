@@ -407,7 +407,7 @@
                                         Grid.Row="3"
                                         Grid.Column="1"
                                         cal:Message.Attach="UpdateDatabase($dataContext)"
-                                        Content="Update Database">
+                                        Content="Database Update Needed">
                                         <Button.Style>
                                             <Style BasedOn="{StaticResource MaterialDesignRaisedSecondaryButton}" TargetType="Button">
                                                 <Setter Property="Visibility" Value="Collapsed" />
