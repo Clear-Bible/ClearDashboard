@@ -36,8 +36,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private ReadOnlyCollection<TimeZoneInfo> _timezones = TimeZoneInfo.GetSystemTimeZones();
 
-        private string _temporaryNameTextBoxValue = string.Empty;
-
         private string _defaultIndividualText = "new individual";
 
         private string _defaultGroupText = "new group";
@@ -389,12 +387,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
-
-            //if (sender is TextBox textBox && textBox.Text == string.Empty)
-            //{
-            //    textBox.Text = _temporaryNameTextBoxValue;
-            //}
-
             SortMenuItemsGroup();
             InstantClockRefresh();
             SaveMenuToSettings();
@@ -478,8 +470,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         UtcStringList = utcComboList,
                         UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
                     });
-
-                    SortMenuItemsGroup();
+                    
                     InstantClockRefresh();
                     SaveMenuToSettings();
                 }
@@ -578,18 +569,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 for (int j = 0; j < collection.Count - 1; j++)
                 {
-                    if (collection[j].TextBoxText == string.Empty)
-                    {
-                        //collection.Move(collection.IndexOf(collection[j]), collection.IndexOf(collection[j + 1]));
-                        collection.Move(j, j + 1);
-                    }
-                    else if (collection[i].TextBoxText == string.Empty)
-                    {
-                        //collection.Move(collection.IndexOf(collection[j]), collection.IndexOf(collection[j + 1]));
-                        collection.Move(i-1, i-1 + 1);
-                    }
-                    else if (collection[j].TimeZoneInfo.BaseUtcOffset.CompareTo(
-                          collection[j + 1].TimeZoneInfo.BaseUtcOffset) > 0)
+                    if (collection[j].TimeZoneInfo.BaseUtcOffset.CompareTo(
+                            collection[j + 1].TimeZoneInfo.BaseUtcOffset) > 0)
                     {
                         collection.Move(j, j + 1);
                     }
@@ -603,13 +584,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 for (int j = 0; j < MenuItems[0].MenuItems.Count - 2; j++)
                 {
-                    if (MenuItems[0].MenuItems[j].TextBoxText == string.Empty)
+                    
+                    if (MenuItems[0].MenuItems[j].TextBoxText.CompareTo(MenuItems[0].MenuItems[j + 1].TextBoxText) > 0)
                     {
                         MenuItems[0].MenuItems.Move(
                             MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j]),
                             MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j + 1]));
                     }
-                    else if (MenuItems[0].MenuItems[j].TextBoxText.CompareTo(MenuItems[0].MenuItems[j + 1].TextBoxText) > 0)
+                    if (MenuItems[0].MenuItems[j].TextBoxText == string.Empty)
                     {
                         MenuItems[0].MenuItems.Move(
                             MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j]),
@@ -621,10 +603,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void TextBox_OnMouseEnter(object sender, MouseEventArgs e)
         {
-            //if (sender is TextBox textBox )//&& (textBox.Text == _defaultGroupText || textBox.Text == _defaultIndividualText))
-            //{
-            //    textBox.Foreground = Brushes.Gray;
-            //}
             if (sender is ComboBox cbox)
             {
                 cbox.Background = Brushes.White;
@@ -633,10 +611,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void TextBox_OnMouseLeave(object sender, MouseEventArgs e)
         {
-            //if (sender is TextBox box)
-            //{
-            //    box.Foreground = Brushes.Black;
-            //}
             if (sender is ComboBox cbox)
             {
                 cbox.Background = Brushes.Transparent;
@@ -655,48 +629,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 handler(this, new PropertyChangedEventArgs(propName));
             }
-        }
-
-        private void NameTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            //    if (sender is TextBox textBox && (textBox.Text == _defaultGroupText || textBox.Text == _defaultIndividualText))
-            //    {
-            //        _temporaryNameTextBoxValue = textBox.Text;
-            //        textBox.Text = string.Empty;
-            //    }
-        }
-
-        private void NameTextBox_OnPreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            //if (Menu.IsKeyboardFocusWithin)
-            //{
-            //    e.Handled = true;
-            //}
-        }
-
-        private void Menu_OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            var two = 1 + 1;
-        }
-
-        private void Menu_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            var two = 1 + 1;
-        }
-
-        private void Menu_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            var two = 1 + 1;
-        }
-
-        private void Menu_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            var two = 1 + 1;
-        }
-
-        private void Menu_OnContextMenuClosing(object sender, ContextMenuEventArgs e)
-        {
-            var two = 1 + 1;
         }
     }
 

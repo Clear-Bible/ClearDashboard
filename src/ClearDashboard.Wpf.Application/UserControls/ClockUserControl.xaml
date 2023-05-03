@@ -22,12 +22,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             VerticalContentAlignment="Center"
-            ContextMenuClosing="Menu_OnContextMenuClosing"
-            ContextMenuOpening="Menu_OnContextMenuOpening"
-            ItemsSource="{Binding MenuItems}"
-            LostFocus="Menu_OnLostFocus"
-            LostKeyboardFocus="Menu_OnLostKeyboardFocus"
-            Unloaded="Menu_OnUnloaded">
+            ItemsSource="{Binding MenuItems}">
 
             <Menu.ItemContainerStyle>
                 <Style x:Name="ItemTemp" TargetType="{x:Type MenuItem}">
@@ -137,8 +132,6 @@
                                 LostFocus="TextBox_OnLostFocus"
                                 MouseEnter="TextBox_OnMouseEnter"
                                 MouseLeave="TextBox_OnMouseLeave"
-                                PreviewKeyDown="NameTextBox_OnPreviewKeyDown"
-                                PreviewLostKeyboardFocus="NameTextBox_OnPreviewLostKeyboardFocus"
                                 Text="{Binding TextBoxText}"
                                 ToolTip="{helpers:Localization ClockUserControl_Name}"
                                 Visibility="{Binding TextBoxVisibility}">
