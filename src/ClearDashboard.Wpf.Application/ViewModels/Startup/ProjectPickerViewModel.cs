@@ -361,7 +361,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async void UpdateDatabase(DashboardProject project)
         {
-            var localizedString = _localizationService!["MainView_About"];
+            var localizedString = _localizationService!["Migrate_Header"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;

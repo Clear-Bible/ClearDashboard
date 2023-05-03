@@ -362,7 +362,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     node.CorpusType = CorpusType.Resource;
                 }
             }
-            
+
             node.ParatextProjectId = corpus.CorpusId.ParatextGuid ?? string.Empty;
             node.CorpusId = corpus.CorpusId.Id;
             node.IsRtl = corpus.CorpusId.IsRtl;
@@ -442,6 +442,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddMenuSeparator(connectionMenuItems);
             AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(connectionMenuItems);
+            AddResetVerseMappings(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems);
+            AddMenuSeparator(connectionMenuItems);
+
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
 
@@ -471,10 +474,25 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             });
         }
 
+        private void AddResetVerseMappings(ParallelCorpusConnectionViewModel parallelCorpusConnection, 
+            IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel, 
+            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
+        {
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            {
+                Header = LocalizationService.Get("Pds_ResetVerseVersification"),
+                Id = DesignSurfaceMenuIds.ResetVerseVersifications,
+                IconKind = PackIconPicolIconsKind.Refresh.ToString(),
+                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                ConnectionId = parallelCorpusConnection.Id,
+            });
+        }
+
+
 
         private void AddInterlinearMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection,
-            TopLevelProjectIds topLevelProjectIds, IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
-            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
+        TopLevelProjectIds topLevelProjectIds, IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
+        BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
         {
 
             var alignmentSetCount = topLevelProjectIds.AlignmentSetIds.Count(alignmentSet =>

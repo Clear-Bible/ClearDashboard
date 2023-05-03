@@ -24,6 +24,7 @@ using ClearDashboard.DataAccessLayer;
 using System.Reflection;
 using ClearDashboard.DataAccessLayer.Features.Projects;
 using System.Xml.XPath;
+using System.Linq;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -101,6 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         public ProjectPickerViewModel ProjectPickerViewModel { get; set; }
+        public Guid ParallelId { get; set; }
 
         #endregion //Observable Properties
 
@@ -139,27 +141,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             StartEnabled = false;
 
-            ProjectManager!.CurrentDashboardProject = Project;
+            if (Project is not null)
+            {
+                ProjectManager!.CurrentDashboardProject = Project;
+
+                await Task.Run(async () =>
+                {
+                    await ProjectManager!.LoadProject(Project.ProjectName);
+                });
+            }
 
             await Task.Run(async () =>
             {
-                await ProjectManager!.LoadProject(Project.ProjectName);
-
                 _topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
             });
 
-            
             var parallelCorpusIds = _topLevelProjectIds.ParallelCorpusIds;
 
             ParallelIdLists = new();
-
-            foreach (var parallelCorpusId in parallelCorpusIds)
+            if (Project is not null)
             {
-                ParallelIdLists.Add(new ParallelIdList
+                foreach (var parallelCorpusId in parallelCorpusIds)
                 {
-                    Status = ParallelIdList.JobStatus.NeedToRun,
-                    ParallelCorpusId = parallelCorpusId,
-                });
+                    ParallelIdLists.Add(new ParallelIdList
+                    {
+                        Status = ParallelIdList.JobStatus.NeedToRun,
+                        ParallelCorpusId = parallelCorpusId,
+                    });
+                }
+            }
+            else
+            {
+                var parallelCorpus = parallelCorpusIds.FirstOrDefault(x => x.IdEquals(this.ParallelId));
+                if (parallelCorpus is not null)
+                {
+                    ParallelIdLists.Add(new ParallelIdList
+                    {
+                        Status = ParallelIdList.JobStatus.NeedToRun,
+                        ParallelCorpusId = parallelCorpus!,
+                    });
+                }
             }
 
             ProgressCircle = Visibility.Collapsed;
@@ -208,22 +229,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 NotifyOfPropertyChange(nameof(ParallelIdLists));
             }
 
-            // update the database to current app version
-            var result = await Mediator.Send(new LoadProjectQuery(Project.ProjectName));
-            if (result.Success)
-            {
-                var project = result.Data;
-                project.AppVersion = Assembly.GetEntryAssembly()!.GetName().Version.ToString();
-                
-                var result2 = await Mediator.Send(new UpdateProjectCommand(project));
-                if (result2.Success == false)
-                {
-                    _logger.LogError(result2.Message);
-                }
-            }
-
             _completedRuns = true;
 
+            if (Project is not null)
+            {
+                // update the database to current app version
+                var result = await Mediator.Send(new LoadProjectQuery(Project.ProjectName));
+                if (result.Success)
+                {
+                    var project = result.Data;
+                    project.AppVersion = Assembly.GetEntryAssembly()!.GetName().Version.ToString();
+
+                    var result2 = await Mediator.Send(new UpdateProjectCommand(project));
+                    if (result2.Success == false)
+                    {
+                        _logger.LogError(result2.Message);
+                    }
+                }
+                _completedRuns = false;
+            }
+            
             CloseEnabled = true;
 
             PlaySound.PlaySoundFromResource(SoundType.Success);
