@@ -15,9 +15,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
+using ClearDashboard.DataAccessLayer;
+using System.Reflection;
+using ClearDashboard.DataAccessLayer.Features.Projects;
+using System.Xml.XPath;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -29,6 +35,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly DashboardProjectManager? _projectManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly IMediator _mediator;
+        private readonly ILifetimeScope? _lifetimeScope;
         private readonly ILocalizationService _localizationService;
 
         private TopLevelProjectIds _topLevelProjectIds;
@@ -59,14 +66,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private Visibility _startupProgressCircle = Visibility.Visible;
-        public Visibility StartupProgressCircle
+        private Visibility _progressCircle = Visibility.Visible;
+        public Visibility ProgressCircle
         {
-            get => _startupProgressCircle;
+            get => _progressCircle;
             set
             {
-                _startupProgressCircle = value; 
-                NotifyOfPropertyChange(nameof(StartupProgressCircle));
+                _progressCircle = value; 
+                NotifyOfPropertyChange(nameof(ProgressCircle));
             }
         }
 
@@ -93,7 +100,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-
+        public ProjectPickerViewModel ProjectPickerViewModel { get; set; }
 
         #endregion //Observable Properties
 
@@ -102,7 +109,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public MigrateDatabaseViewModel()
         {
-            
+            // no-op
         }
 
         public MigrateDatabaseViewModel(INavigationService navigationService, 
@@ -118,6 +125,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _projectManager = projectManager;
             _eventAggregator = eventAggregator;
             _mediator = mediator;
+            _lifetimeScope = lifetimeScope;
             _localizationService = localizationService;
         }
 
@@ -129,12 +137,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         protected override async void OnViewLoaded(object view)
         {
+            StartEnabled = false;
+
             ProjectManager!.CurrentDashboardProject = Project;
 
-            await ProjectManager!.LoadProject(Project.ProjectName);
+            await Task.Run(async () =>
+            {
+                await ProjectManager!.LoadProject(Project.ProjectName);
 
-            _topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                _topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            });
 
+            
             var parallelCorpusIds = _topLevelProjectIds.ParallelCorpusIds;
 
             ParallelIdLists = new();
@@ -148,9 +162,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 });
             }
 
-            StartupProgressCircle = Visibility.Collapsed;
+            ProgressCircle = Visibility.Collapsed;
 
-            _completedRuns = true;
+            StartEnabled = true;
 
             base.OnViewLoaded(view);
         }
@@ -177,30 +191,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             StartEnabled = false;
             CloseEnabled = false;
 
+            ProgressCircle = Visibility.Visible;
+
             foreach (var parallelId in ParallelIdLists)
             {
                 parallelId.Status = ParallelIdList.JobStatus.Working;
                 NotifyOfPropertyChange(nameof(ParallelIdLists));
-                await Task.Delay(500);
 
                 var parallelCorpus = await ParallelCorpus.Get(_mediator, parallelId.ParallelCorpusId);
-                await RunRegenerationOnParallelCorpus(parallelCorpus);
+                await Task.Run(async () =>
+                {
+                    await RunRegenerationOnParallelCorpus(parallelCorpus);
+                });
 
                 parallelId.Status = ParallelIdList.JobStatus.Completed;
                 NotifyOfPropertyChange(nameof(ParallelIdLists));
-                await Task.Delay(500);
             }
+
+            // update the database to current app version
+            var result = await Mediator.Send(new LoadProjectQuery(Project.ProjectName));
+            if (result.Success)
+            {
+                var project = result.Data;
+                project.AppVersion = Assembly.GetEntryAssembly()!.GetName().Version.ToString();
+                
+                var result2 = await Mediator.Send(new UpdateProjectCommand(project));
+                if (result2.Success == false)
+                {
+                    _logger.LogError(result2.Message);
+                }
+            }
+
+            _completedRuns = true;
 
             CloseEnabled = true;
 
             PlaySound.PlaySoundFromResource(SoundType.Success);
+            ProgressCircle = Visibility.Collapsed;
         }
 
-        public void Close()
+        public async void Close()
         {
             if (_completedRuns)
             {
-                
+                await ProjectPickerViewModel.RefreshProjectList();
             }
 
             this.TryCloseAsync();

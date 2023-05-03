@@ -39,7 +39,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Observable Objects
-        public ObservableCollection<DashboardProject>? DashboardProjects { get; set; } = new ObservableCollection<DashboardProject>();
+        private ObservableCollection<DashboardProject> _dashboardProjects = new();
+        public ObservableCollection<DashboardProject> DashboardProjects
+        {
+            get => _dashboardProjects;
+            set
+            {
+                _dashboardProjects = value; 
+                NotifyOfPropertyChange(() => DashboardProjects);   
+            }
+        }
+
 
         private Visibility _searchBlankVisibility;
         public Visibility SearchBlankVisibility
@@ -270,6 +280,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await base.OnActivateAsync(cancellationToken);
         }
 
+        #endregion Constructor
+
+        #region Methods
+
         private async Task GetProjectsVersion()
         {
             DashboardProjects.Clear();
@@ -341,11 +355,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
             _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+
+            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
         }
-
-        #endregion Constructor
-
-        #region Methods
 
         public async void UpdateDatabase(DashboardProject project)
         {
@@ -360,11 +372,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             var viewModel = IoC.Get<MigrateDatabaseViewModel>();
             viewModel.Project = project;
+            viewModel.ProjectPickerViewModel = this;
 
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
         }
-        
+
+        public async Task RefreshProjectList()
+        {
+            await GetProjectsVersion();
+        }
+
 
         private bool IsDashboardRunningAlready()
         {

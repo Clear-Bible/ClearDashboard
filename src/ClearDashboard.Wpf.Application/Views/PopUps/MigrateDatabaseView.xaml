@@ -155,13 +155,16 @@
             </DataGrid.Columns>
         </DataGrid>
 
+
         <ProgressBar
-            Grid.Row="0"
-            Width="140"
-            Height="140"
+            HorizontalAlignment="Left"
+            Grid.Row="1"
+            Margin="25 0 0 0"
+            Width="40"
+            Height="40"
             IsIndeterminate="True"
             Style="{StaticResource MaterialDesignCircularProgressBar}"
-            Visibility="{Binding StartupProgressCircle}"
+            Visibility="{Binding ProgressCircle}"
             Value="0" />
 
         <StackPanel
