@@ -119,7 +119,14 @@ namespace ClearDashboard.Wpf.Application.Helpers
         public enum TelemetryDictionaryKeys
         {
             AppHours,
-            NoteCreationCount
+            NoteCreationCount,
+            BcvChangeCount,
+            NotePushCount,
+            NoteClosedCount,
+            NoteReplyCount,
+            InterlinearViewAddedCount,
+            AlignmentViewAddedCount,
+            VerseViewAddedCount,
         }
     }
 }
