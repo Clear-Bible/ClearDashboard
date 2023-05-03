@@ -902,6 +902,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 await NoteManager.SendToParatextAsync(e.Note);
                 Message = $"Note '{e.Note.Text}' sent to Paratext.";
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
             }
             catch (Exception ex)
             {
