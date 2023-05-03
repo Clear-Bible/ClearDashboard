@@ -732,7 +732,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenCreateAlignment(object sender, TokenEventArgs e)
         {
-            if (SelectionManager.SelectedSourceTokens.Count == 1 && SelectionManager.SelectedTargetTokens.Count == 1)
+            if (SelectionManager.SelectedTokens.SourceTokenCount == 1 && SelectionManager.SelectedTokens.TargetTokenCount == 1)
             {
                 if (e is { TokenDisplay.VerseDisplay: AlignmentDisplayViewModel alignmentDisplayViewModel })
                 {
