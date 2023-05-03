@@ -70,6 +70,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly IWindowManager? _windowManager;
         public readonly BackgroundTasksViewModel BackgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
+        private readonly ILocalizationService _localizationService;
         private readonly SystemPowerModes _systemPowerModes;
         #endregion //Member Variables
 
@@ -167,6 +168,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _windowManager = windowManager;
             BackgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
+            _localizationService = localizationService;
 
             EventAggregator.SubscribeOnUIThread(this);
 
@@ -1004,6 +1006,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await AddParallelCorpus(connection!, ParallelProjectType.AlignmentOnly);
         }
 
+        private async Task ResetVerseVersification(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var localizedString = _localizationService!["Migrate_Header"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<MigrateDatabaseViewModel>();
+            viewModel.Project = null;
+            viewModel.ProjectPickerViewModel = null;
+            viewModel.ParallelId = connectionMenuItem.ConnectionId;
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
+        }
+
         public async Task AddParallelCorpus(ParallelCorpusConnectionViewModel newParallelCorpusConnection,
             ParallelProjectType parallelProjectType = ParallelProjectType.WholeProcess)
         {
@@ -1285,6 +1307,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.CreateNewInterlinear:
                     await AddNewInterlinear(connectionMenuItem);
+                    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.ResetVerseVersifications:
+                    await ResetVerseVersification(connectionMenuItem);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToCurrentEnhancedView:
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView:
