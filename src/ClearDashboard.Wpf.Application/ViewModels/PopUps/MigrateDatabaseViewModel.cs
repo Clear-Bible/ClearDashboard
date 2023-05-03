@@ -1,30 +1,26 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Features.Projects;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DataAccessLayer.Models;
-using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
-using ClearDashboard.DataAccessLayer.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using ClearDashboard.DataAccessLayer;
-using System.Reflection;
-using ClearDashboard.DataAccessLayer.Features.Projects;
-using System.Xml.XPath;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
+using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -33,23 +29,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables
 
         private readonly ILogger<AboutViewModel> _logger;
-        private readonly DashboardProjectManager? _projectManager;
-        private readonly IEventAggregator _eventAggregator;
+        //private readonly DashboardProjectManager? _projectManager;
+        //private readonly IEventAggregator _eventAggregator;
         private readonly IMediator _mediator;
-        private readonly ILifetimeScope? _lifetimeScope;
-        private readonly ILocalizationService _localizationService;
+        //private readonly ILocalizationService _localizationService;
 
         private TopLevelProjectIds _topLevelProjectIds;
-        private ProjectDbContext _projectDbContext;
 
-        private bool _completedRuns = false;
+        private bool _runsCompleted;
 
         #endregion //Member Variables
 
 
         #region Public Properties
 
-        public DashboardProject Project { get; set; }
+        public DashboardProject? Project { get; set; }
 
         #endregion //Public Properties
 
@@ -74,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set
             {
                 _progressCircle = value; 
-                NotifyOfPropertyChange(nameof(ProgressCircle));
+                NotifyOfPropertyChange(() =>ProgressCircle);
             }
         }
 
@@ -109,12 +103,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Constructor
 
+#pragma warning disable CS8618
         public MigrateDatabaseViewModel()
         {
             // no-op
         }
 
+
         public MigrateDatabaseViewModel(INavigationService navigationService, 
+#pragma warning restore CS8618
             ILogger<AboutViewModel> logger,
             DashboardProjectManager? projectManager, 
             IEventAggregator eventAggregator, 
@@ -124,18 +121,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _logger = logger;
-            _projectManager = projectManager;
-            _eventAggregator = eventAggregator;
+            //_projectManager = projectManager;
+            //_eventAggregator = eventAggregator;
             _mediator = mediator;
-            _lifetimeScope = lifetimeScope;
-            _localizationService = localizationService;
+            //_localizationService = localizationService;
         }
-
-        protected override void OnViewReady(object view)
-        {
-            base.OnViewReady(view);
-        }
-
 
         protected override async void OnViewLoaded(object view)
         {
@@ -172,13 +162,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                var parallelCorpus = parallelCorpusIds.FirstOrDefault(x => x.IdEquals(this.ParallelId));
+                var parallelCorpus = parallelCorpusIds.FirstOrDefault(x => x.Id.ToString() == this.ParallelId.ToString());
                 if (parallelCorpus is not null)
                 {
                     ParallelIdLists.Add(new ParallelIdList
                     {
                         Status = ParallelIdList.JobStatus.NeedToRun,
-                        ParallelCorpusId = parallelCorpus!,
+                        ParallelCorpusId = parallelCorpus,
                     });
                 }
             }
@@ -229,40 +219,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 NotifyOfPropertyChange(nameof(ParallelIdLists));
             }
 
-            _completedRuns = true;
+            _runsCompleted = false;
 
             if (Project is not null)
             {
                 // update the database to current app version
-                var result = await Mediator.Send(new LoadProjectQuery(Project.ProjectName));
+                var result = await Mediator!.Send(new LoadProjectQuery(Project.ProjectName!));
                 if (result.Success)
                 {
                     var project = result.Data;
-                    project.AppVersion = Assembly.GetEntryAssembly()!.GetName().Version.ToString();
-
-                    var result2 = await Mediator.Send(new UpdateProjectCommand(project));
-                    if (result2.Success == false)
+                    if (project != null)
                     {
-                        _logger.LogError(result2.Message);
+                        project.AppVersion = Assembly.GetEntryAssembly()!.GetName().Version?.ToString();
+
+                        var result2 = await Mediator.Send(new UpdateProjectCommand(project));
+                        if (result2.Success == false)
+                        {
+                            _logger.LogError(result2.Message);
+                        }
                     }
                 }
-                _completedRuns = false;
+                _runsCompleted = true;
             }
             
             CloseEnabled = true;
 
-            PlaySound.PlaySoundFromResource(SoundType.Success);
+            PlaySound.PlaySoundFromResource();
             ProgressCircle = Visibility.Collapsed;
         }
 
         public async void Close()
         {
-            if (_completedRuns)
+            if (_runsCompleted)
             {
                 await ProjectPickerViewModel.RefreshProjectList();
             }
 
-            this.TryCloseAsync();
+            await this.TryCloseAsync();
         }
 
         #endregion // Methods

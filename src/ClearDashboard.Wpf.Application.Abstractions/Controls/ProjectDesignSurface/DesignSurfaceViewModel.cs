@@ -484,7 +484,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 Id = DesignSurfaceMenuIds.ResetVerseVersifications,
                 IconKind = PackIconPicolIconsKind.Refresh.ToString(),
                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                ConnectionId = parallelCorpusConnection.Id,
+                ConnectionId = parallelCorpusConnection.ParallelCorpusId.Id,
             });
         }
 
