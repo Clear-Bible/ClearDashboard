@@ -127,6 +127,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             InterlinearViewAddedCount,
             AlignmentViewAddedCount,
             VerseViewAddedCount,
+            TimerStartCount
         }
     }
 }

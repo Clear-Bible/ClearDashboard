@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Helpers;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -90,6 +91,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 PlayIcon.Visibility = Visibility.Collapsed;
                 _timerOn = true;
                 _timer.Enabled = true;
+
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.TimerStartCount, 1);
             }
 
             StartStopButton.Focus();
