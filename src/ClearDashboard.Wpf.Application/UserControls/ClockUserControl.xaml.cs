@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization.Metadata;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -365,7 +366,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     if (_timeDisplayIndex >= 0)
                     {
                         MenuItems[0].NameTime = CheckedList[_timeDisplayIndex].NameTime;
-                        MenuItems[0].TextBlockText = " " + CheckedList[_timeDisplayIndex].TextBoxText;
+
+                        var displayText = CheckedList[_timeDisplayIndex].TextBoxText;
+                        if (displayText == string.Empty)
+                        {
+                            displayText = _defaultIndividualText;
+                        }
+
+                        MenuItems[0].TextBlockText = " " + displayText;
                         MenuItems[0].Foreground = CheckedList[_timeDisplayIndex].Foreground;
                     }
                 });
@@ -570,8 +578,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 for (int j = 0; j < collection.Count - 1; j++)
                 {
-                    if (collection[j].TimeZoneInfo.BaseUtcOffset.CompareTo(
-                            collection[j + 1].TimeZoneInfo.BaseUtcOffset) > 0)
+                    if (collection[j].TextBoxText == string.Empty)
+                    {
+                        //collection.Move(collection.IndexOf(collection[j]), collection.IndexOf(collection[j + 1]));
+                        collection.Move(j, j + 1);
+                    }
+                    else if (collection[i].TextBoxText == string.Empty)
+                    {
+                        //collection.Move(collection.IndexOf(collection[j]), collection.IndexOf(collection[j + 1]));
+                        collection.Move(i-1, i-1 + 1);
+                    }
+                    else if (collection[j].TimeZoneInfo.BaseUtcOffset.CompareTo(
+                          collection[j + 1].TimeZoneInfo.BaseUtcOffset) > 0)
                     {
                         collection.Move(j, j + 1);
                     }
@@ -585,7 +603,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 for (int j = 0; j < MenuItems[0].MenuItems.Count - 2; j++)
                 {
-                    if (MenuItems[0].MenuItems[j].TextBoxText.CompareTo(MenuItems[0].MenuItems[j + 1].TextBoxText) > 0)
+                    if (MenuItems[0].MenuItems[j].TextBoxText == string.Empty)
+                    {
+                        MenuItems[0].MenuItems.Move(
+                            MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j]),
+                            MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j + 1]));
+                    }
+                    else if (MenuItems[0].MenuItems[j].TextBoxText.CompareTo(MenuItems[0].MenuItems[j + 1].TextBoxText) > 0)
                     {
                         MenuItems[0].MenuItems.Move(
                             MenuItems[0].MenuItems.IndexOf(MenuItems[0].MenuItems[j]),
@@ -635,11 +659,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void NameTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-        //    if (sender is TextBox textBox && (textBox.Text == _defaultGroupText || textBox.Text == _defaultIndividualText))
-        //    {
-        //        _temporaryNameTextBoxValue = textBox.Text;
-        //        textBox.Text = string.Empty;
-        //    }
+            //    if (sender is TextBox textBox && (textBox.Text == _defaultGroupText || textBox.Text == _defaultIndividualText))
+            //    {
+            //        _temporaryNameTextBoxValue = textBox.Text;
+            //        textBox.Text = string.Empty;
+            //    }
         }
 
         private void NameTextBox_OnPreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -648,6 +672,31 @@ namespace ClearDashboard.Wpf.Application.UserControls
             //{
             //    e.Handled = true;
             //}
+        }
+
+        private void Menu_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            var two = 1 + 1;
+        }
+
+        private void Menu_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            var two = 1 + 1;
+        }
+
+        private void Menu_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            var two = 1 + 1;
+        }
+
+        private void Menu_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var two = 1 + 1;
+        }
+
+        private void Menu_OnContextMenuClosing(object sender, ContextMenuEventArgs e)
+        {
+            var two = 1 + 1;
         }
     }
 

@@ -22,7 +22,12 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             VerticalContentAlignment="Center"
-            ItemsSource="{Binding MenuItems}">
+            ContextMenuClosing="Menu_OnContextMenuClosing"
+            ContextMenuOpening="Menu_OnContextMenuOpening"
+            ItemsSource="{Binding MenuItems}"
+            LostFocus="Menu_OnLostFocus"
+            LostKeyboardFocus="Menu_OnLostKeyboardFocus"
+            Unloaded="Menu_OnUnloaded">
 
             <Menu.ItemContainerStyle>
                 <Style x:Name="ItemTemp" TargetType="{x:Type MenuItem}">
@@ -31,7 +36,8 @@
                     <Setter Property="VerticalAlignment" Value="Center" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="Padding" Value="-30,0,-5,0" />
-                    
+                    <Setter Property="StaysOpenOnClick" Value="True" />
+                    <Setter Property="Focusable" Value="False" />
 
                     <!--<EventSetter Event="Click" Handler="Utc_OnClick" />-->
 
@@ -40,11 +46,14 @@
                             <Setter Property="Width" Value="157" />
                             <Setter Property="Height" Value="44" />
                             <Setter Property="Padding" Value="5,0,0,0" />
-                         
+                            <Setter Property="StaysOpenOnClick" Value="True" />
+                            <Setter Property="Focusable" Value="False" />
+
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Group">
                             <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightForegroundBrush}" />
                             <Setter Property="Background" Value="{DynamicResource MaterialDesignTextAreaInteractiveBorder}" />
+                            <Setter Property="StaysOpenOnClick" Value="True" />
                             <Setter Property="Focusable" Value="False" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=MenuLevel}" Value="Individual">
