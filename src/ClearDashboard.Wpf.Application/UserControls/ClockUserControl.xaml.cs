@@ -14,6 +14,7 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Services;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Xaml.Behaviors;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -33,6 +34,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private int _timeDisplayIndex = 0;
 
         private ReadOnlyCollection<TimeZoneInfo> _timezones = TimeZoneInfo.GetSystemTimeZones();
+
+        private string _temporaryNameTextBoxValue = string.Empty;
+
+        private string _defaultIndividualText = "new individual";
+
+        private string _defaultGroupText = "new group";
 
         #endregion //Member Variables
 
@@ -103,6 +110,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                         CheckBoxIsChecked = individualArr[0],
                                         CheckBoxVisibility = Visibility.Visible,
                                         TextBoxText = individualArr[1],
+                                        Placeholder = _defaultIndividualText,
                                         TextBoxVisibility = Visibility.Visible,
                                         NameTime = TimeZoneInfo.ConvertTime(DateTime.Now, timezone).ToShortTimeString(),
                                         NameTimeVisibility = Visibility.Visible,
@@ -129,6 +137,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         CheckBoxIsChecked = selfArr[0],
                         CheckBoxVisibility = Visibility.Visible,
                         TextBoxText = selfArr[1],
+                        Placeholder = _defaultGroupText,
                         TextBoxVisibility = Visibility.Visible,
                         NameTimeVisibility = Visibility.Collapsed,
                         TextBlockText = selfArr[2],
@@ -372,7 +381,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
-            sortMenuItemsGroup();
+
+            //if (sender is TextBox textBox && textBox.Text == string.Empty)
+            //{
+            //    textBox.Text = _temporaryNameTextBoxValue;
+            //}
+
+            SortMenuItemsGroup();
             InstantClockRefresh();
             SaveMenuToSettings();
         }
@@ -394,9 +409,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         nest.Insert(nest.Count, new MenuItemNest
                         {
                             AddButtonVisibility = Visibility.Collapsed,
-                            CheckBoxIsChecked = "True",
+                            CheckBoxIsChecked = "False",
                             CheckBoxVisibility = Visibility.Visible,
-                            TextBoxText = "new individual",
+                            Placeholder = _defaultIndividualText,
                             TextBoxVisibility = Visibility.Visible,
                             NameTime = DateTime.Now.ToShortTimeString(),
                             TextBlockText = TimeZoneInfo.Local.DisplayName,
@@ -411,7 +426,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
                         });
 
-                        sortMenuItemsIndividual(nest);
+                        SortMenuItemsIndividual(nest);
                         InstantClockRefresh();
                         SaveMenuToSettings();
                     }
@@ -421,9 +436,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     MenuItems[0].MenuItems.Insert(MenuItems[0].MenuItems.Count - 1, new MenuItemNest
                     {
                         AddButtonVisibility = Visibility.Visible,
-                        CheckBoxIsChecked = "True",
+                        CheckBoxIsChecked = "False",
                         CheckBoxVisibility = Visibility.Visible,
-                        TextBoxText = "new group",
+                        Placeholder = _defaultGroupText,
                         TextBoxVisibility = Visibility.Visible,
                         NameTimeVisibility = Visibility.Collapsed,
                         TextBlockText = "self",
@@ -439,9 +454,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     MenuItems[0].MenuItems[MenuItems[0].MenuItems.Count - 2].MenuItems.Add(new MenuItemNest
                     {
                         AddButtonVisibility = Visibility.Collapsed,
-                        CheckBoxIsChecked = "True",
+                        CheckBoxIsChecked = "False",
                         CheckBoxVisibility = Visibility.Visible,
-                        TextBoxText = "new individual",
+                        Placeholder = _defaultIndividualText,
                         TextBoxVisibility = Visibility.Visible,
                         NameTime = DateTime.Now.ToShortTimeString(),
                         NameTimeVisibility = Visibility.Visible,
@@ -456,7 +471,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
                     });
 
-                    sortMenuItemsGroup();
+                    SortMenuItemsGroup();
                     InstantClockRefresh();
                     SaveMenuToSettings();
                 }
@@ -535,7 +550,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                 {
                                     if (individual == nest)
                                     {
-                                        sortMenuItemsIndividual(group.MenuItems);
+                                        SortMenuItemsIndividual(group.MenuItems);
                                         break;
                                     }
                                 }
@@ -549,7 +564,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-        private void sortMenuItemsIndividual(ObservableCollection<MenuItemNest> collection)
+        private void SortMenuItemsIndividual(ObservableCollection<MenuItemNest> collection)
         {
             for (int i = 0; i < collection.Count; i++)
             {
@@ -564,7 +579,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-        private void sortMenuItemsGroup()
+        private void SortMenuItemsGroup()
         {
             for (int i = 0; i < MenuItems[0].MenuItems.Count - 1; i++)
             {
@@ -582,10 +597,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void TextBox_OnMouseEnter(object sender, MouseEventArgs e)
         {
-            if (sender is TextBox box)
-            {
-                box.Foreground = Brushes.Gray;
-            }
+            //if (sender is TextBox textBox )//&& (textBox.Text == _defaultGroupText || textBox.Text == _defaultIndividualText))
+            //{
+            //    textBox.Foreground = Brushes.Gray;
+            //}
             if (sender is ComboBox cbox)
             {
                 cbox.Background = Brushes.White;
@@ -594,10 +609,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void TextBox_OnMouseLeave(object sender, MouseEventArgs e)
         {
-            if (sender is TextBox box)
-            {
-                box.Foreground = Brushes.Black;
-            }
+            //if (sender is TextBox box)
+            //{
+            //    box.Foreground = Brushes.Black;
+            //}
             if (sender is ComboBox cbox)
             {
                 cbox.Background = Brushes.Transparent;
@@ -615,6 +630,59 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propName));
+            }
+        }
+
+        private void NameTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+        //    if (sender is TextBox textBox && (textBox.Text == _defaultGroupText || textBox.Text == _defaultIndividualText))
+        //    {
+        //        _temporaryNameTextBoxValue = textBox.Text;
+        //        textBox.Text = string.Empty;
+        //    }
+        }
+
+        private void NameTextBox_OnPreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            //if (Menu.IsKeyboardFocusWithin)
+            //{
+            //    e.Handled = true;
+            //}
+        }
+    }
+
+    public class TextBoxEnterKeyUpdateBehavior : Behavior<TextBox>
+    {
+        protected override void OnAttached()
+        {
+            if (this.AssociatedObject != null)
+            {
+                base.OnAttached();
+                this.AssociatedObject.KeyDown += AssociatedObject_KeyDown;
+            }
+        }
+
+        protected override void OnDetaching()
+        {
+            if (this.AssociatedObject != null)
+            {
+                this.AssociatedObject.KeyDown -= AssociatedObject_KeyDown;
+                base.OnDetaching();
+            }
+        }
+
+        private void AssociatedObject_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                if (e.Key == Key.Return)
+                {
+                    if (e.Key == Key.Enter)
+                    {
+                        textBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    }
+                }
             }
         }
     }
