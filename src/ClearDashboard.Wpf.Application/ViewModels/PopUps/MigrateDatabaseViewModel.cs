@@ -143,7 +143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var parallelCorpusIds = _topLevelProjectIds.ParallelCorpusIds;
 
             ParallelIdLists = new();
-            if (Project is not null)
+            if (Project is not null)  // we are loading all the parallel corpus for the project
             {
                 foreach (var parallelCorpusId in parallelCorpusIds)
                 {
@@ -156,6 +156,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
+                // we are only loading up one parallel corpus from the right click menu
                 var parallelCorpus = parallelCorpusIds.FirstOrDefault(x => x.Id.ToString() == this.ParallelId.ToString());
                 if (parallelCorpus is not null)
                 {
@@ -215,7 +216,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             _runsCompleted = false;
 
-            if (Project is not null)
+            if (Project is not null) // we have updated the whole project so reset the version number
             {
                 // update the database to current app version
                 var result = await Mediator!.Send(new LoadProjectQuery(Project.ProjectName!));
