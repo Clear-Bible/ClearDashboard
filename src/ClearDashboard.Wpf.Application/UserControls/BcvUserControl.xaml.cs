@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -325,6 +326,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 CboBook.SelectedIndex -= 1;
             }
             _bookChangeInProgress = false;
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.BcvChangeCount, 1);
         }
 
         private void BookDownArrow_Click(object sender, RoutedEventArgs e)
@@ -334,6 +336,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CboBook.SelectedIndex += 1;
 
             _bookChangeInProgress = false;
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.BcvChangeCount, 1);
         }
 
         private void ChapterUpArrow_Click(object sender, RoutedEventArgs e)
@@ -343,6 +346,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (CboChapter.SelectedIndex > 0)
             {
                 CboChapter.SelectedIndex -= 1;
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.BcvChangeCount, 1);
             }
             else // Switch to the previous book.
             {
@@ -359,6 +363,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (CboChapter.SelectedIndex < CboChapter.Items.Count - 1)
             {
                 CboChapter.SelectedIndex += 1;
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.BcvChangeCount, 1);
             }
             else // Switch to the next book.
             {
@@ -374,6 +379,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (CboVerse.SelectedIndex > 0)
             {
                 CboVerse.SelectedIndex -= 1;
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.BcvChangeCount, 1);
             }
             else // Switch to the previous chapter.
             {
@@ -389,6 +395,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (CboVerse.SelectedIndex < CboVerse.Items.Count - 1)
             {
                 CboVerse.SelectedIndex += 1;
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.BcvChangeCount, 1);
             }
             else // Switch to the next chapter.
             {

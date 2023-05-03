@@ -1333,6 +1333,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             TargetParatextId = connectionMenuItem.TargetParatextId
                         }, CancellationToken.None);
                     }
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentViewAddedCount, 1);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.DeleteAlignmentSet:
                     await DeleteAlignmentSet(connectionMenuItem);
@@ -1364,6 +1365,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             TargetParatextId = connectionMenuItem.TargetParatextId
                         }, CancellationToken.None
                         );
+                        Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.InterlinearViewAddedCount, 1);
                     }
                     break;
                 //default:
@@ -1490,6 +1492,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         IsNewWindow = corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView,
                         DisplayName = corpusNodeViewModel.Name + " (" + corpusNodeMenuItem.Tokenizer! + ")"
                     }, CancellationToken.None);
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.VerseViewAddedCount, 1);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowCorpusNodeProperties:
                     // node properties
