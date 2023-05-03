@@ -164,7 +164,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 AlignmentManager!.Alignments!.Add(alignment);
             }
 
-            var tokenDisplayViewModel = message.TokenDisplayViewModel;
+            var tokenDisplayViewModel = message.TargetTokenDisplayViewModel;
             await HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.AlignmentToken.TokenId);
 
             await Task.CompletedTask;
