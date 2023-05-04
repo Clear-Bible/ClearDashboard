@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
@@ -9,11 +10,14 @@ using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
 
@@ -162,7 +166,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             // get those books which actually have text in them from Paratext
             CancellationToken cancellationTokenProject = new();
             var request = await _projectManager?.ExecuteRequest(new GetVersificationAndBookIdByParatextProjectIdQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
-
+            
             if (request.Success && request.HasData)
             {
                 if (request.HasData)
@@ -189,6 +193,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 }
             }
 
+            var tokenizedBookRequest = await _projectManager?.ExecuteRequest(new GetBooksFromTokenizedCorpusQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
+
+            if (tokenizedBookRequest.Success && tokenizedBookRequest.HasData)
+            {
+                var books = tokenizedBookRequest.Data;
+
+                // iterate through and enable those books which have text
+                foreach (var book in books)
+                {
+                    if (Int32.TryParse(book, out int index))
+                    {
+                        SelectedBooks[index-1].IsEnabled = false;
+                        SelectedBooks[index-1].IsSelected = true;
+                        SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Black);
+                    }
+                }
+                NotifyOfPropertyChange(() => SelectedBooks);
+            }
             base.OnActivateAsync(cancellationToken);
         }
 

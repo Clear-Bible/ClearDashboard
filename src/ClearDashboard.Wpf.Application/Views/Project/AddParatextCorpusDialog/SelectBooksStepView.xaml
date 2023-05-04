@@ -878,7 +878,6 @@
                 Command="{Binding BackCommand}"
                 Content="{helpers:Localization Back}"
                 FontSize="12"
-                IsEnabled="{Binding ContinueEnabled}"
                 Style="{StaticResource TransparentStyle}" />
             <Button
                 Width="90"
