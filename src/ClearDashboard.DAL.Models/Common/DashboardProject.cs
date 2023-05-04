@@ -123,5 +123,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public bool HasProjectPath => !string.IsNullOrEmpty(ProjectName);
 
         public bool HasFullFilePath => !string.IsNullOrEmpty(FullFilePath);
+
+        public bool NeedsMigrationUpgrade { get; set; } = false;
     }
 }

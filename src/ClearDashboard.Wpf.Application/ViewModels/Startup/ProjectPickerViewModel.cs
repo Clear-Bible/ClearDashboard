@@ -28,6 +28,8 @@ using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 using System.Diagnostics;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using System.Dynamic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -36,6 +38,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
         private readonly IMediator _mediator;
+        private readonly ILocalizationService _localizationService;
         private readonly TranslationSource? _translationSource;
         private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
@@ -44,17 +47,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Observable Objects
-        public ObservableCollection<DashboardProject>? DashboardProjects { get; set; } = new ObservableCollection<DashboardProject>();
-        public ObservableCollection<DashboardCollabProject> DashboardCollabProjects { get; set; } = new ObservableCollection<DashboardCollabProject>();
-
-        private Visibility _searchBlankVisibility;
-        public Visibility SearchBlankVisibility
+        private ObservableCollection<DashboardProject> _dashboardProjects = new();
+        public ObservableCollection<DashboardProject> DashboardProjects
         {
-            get => _searchBlankVisibility;
+            get => _dashboardProjects;
             set
             {
-                _searchBlankVisibility = value;
-                NotifyOfPropertyChange(() => SearchBlankVisibility);
+                _dashboardProjects = value; 
+                NotifyOfPropertyChange(() => DashboardProjects);   
+            }
+        }
+
+        private ObservableCollection<DashboardCollabProject> _dashboardCollabProjects = new();
+        public ObservableCollection<DashboardCollabProject> DashboardCollabProjects
+        {
+            get => _dashboardCollabProjects;
+            set
+            {
+                _dashboardCollabProjects = value;
+                NotifyOfPropertyChange(() => DashboardCollabProjects);
             }
         }
 
@@ -100,6 +111,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 _collabButtonsEnabled = value;
                 NotifyOfPropertyChange(() => CollabButtonsEnabled);
+            }
+        }
+
+        private Visibility _searchBlankVisibility;
+        public Visibility SearchBlankVisibility
+        {
+            get => _searchBlankVisibility;
+            set
+            {
+                _searchBlankVisibility = value;
+                NotifyOfPropertyChange(() => SearchBlankVisibility);
             }
         }
 
@@ -273,23 +295,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(TranslationSource translationSource, DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
-            INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService,
-            IWindowManager windowManager, CollaborationManager collaborationManager)
+        public ProjectPickerViewModel(TranslationSource translationSource, 
+            DashboardProjectManager projectManager, 
+            ParatextProxy paratextProxy, 
+            INavigationService navigationService, 
+            ILogger<ProjectPickerViewModel> logger, 
+            IEventAggregator eventAggregator,
+            IMediator mediator, 
+            ILifetimeScope? lifetimeScope, 
+            ILocalizationService localizationService,
+            IWindowManager windowManager,
+            CollaborationManager collaborationManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
             _paratextProxy = paratextProxy;
             _mediator = mediator;
-            _windowManager = windowManager;
-            _collaborationManager = collaborationManager;
+            _localizationService = localizationService;
             AlertVisibility = Visibility.Collapsed;
             _translationSource = translationSource;
             NoProjectVisibility = Visibility.Visible;
             SearchBlankVisibility = Visibility.Collapsed;
 
+            _windowManager = windowManager;
+            _collaborationManager = collaborationManager;
             SetCollabVisibility();
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
@@ -331,6 +361,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             await base.OnActivateAsync(cancellationToken);
         }
+
+        #endregion Constructor
+
+        #region Methods
 
         private async Task GetProjectsVersion()
         {
@@ -393,15 +427,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             foreach (var project in DashboardProjects)
             {
                 project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+
+                if (project.IsCompatibleVersion)
+                {
+                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
+                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
+                }
             }
 
+            _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
 
-            if (_dashboardProjectsDisplay is null)
-            {
-                _dashboardProjectsDisplay = new();
-            }
+            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+        }
 
-            CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+        public async void UpdateDatabase(DashboardProject project)
+        {
+            var localizedString = _localizationService!["Migrate_Header"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<MigrateDatabaseViewModel>();
+            viewModel.Project = project;
+            viewModel.ProjectPickerViewModel = this;
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
+        }
+
+        public async Task RefreshProjectList()
+        {
+            await GetProjectsVersion();
         }
 
         private async Task GetCollabProjects()
@@ -477,9 +538,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 #endif
         }
 
-        #endregion Constructor
-
-        #region Methods
         private bool IsDashboardRunningAlready()
         {
             var process = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
