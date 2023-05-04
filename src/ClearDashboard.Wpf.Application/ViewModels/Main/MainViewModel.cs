@@ -326,6 +326,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             await LoadParatextProjectMetadata(cancellationToken);
             await LoadProject();
+            ProjectManager.CheckForCurrentUser();
             await NoteManager!.InitializeAsync();
             await RebuildMainMenu();
             await ActivateDockedWindowViewModels(cancellationToken);

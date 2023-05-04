@@ -1,20 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Services;
-using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup;
 
