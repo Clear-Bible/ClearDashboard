@@ -4,17 +4,17 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
@@ -52,7 +52,7 @@ public class DashboardProjectManager : ProjectManager
     public override async Task Initialize()
     {
         await base.Initialize();
-        CurrentUser = GetLicensedUser();
+        SetCurrentUserFromLicense();
         await ConfigureSignalRClient();
 
     }
@@ -225,70 +225,7 @@ public class DashboardProjectManager : ProjectManager
 
         return project;
     }
-
-  
     
-    public void CheckLicense<TViewModel>(TViewModel viewModel)
-    {
-        if (!_licenseCleared)
-        {
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var filePath = Path.Combine(documentsPath, "ClearDashboard_Projects\\license.txt");
-            if (File.Exists(filePath))
-            {
-                try
-                {
-                    var decryptedLicenseKey = LicenseManager.DecryptFromFile(filePath);
-                    var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
-                    if (decryptedLicenseUser.Id != null)
-                    {
-                        CurrentUser = new User
-                        {
-                            FirstName = decryptedLicenseUser.FirstName,
-                            LastName = decryptedLicenseUser.LastName,
-                            Id = decryptedLicenseUser.Id
-                        };
-
-                    }
-
-                    _licenseCleared = true;
-                }
-                catch (Exception)
-                {
-                    //MessageBox.Show("There was an issue decrypting your license key.");
-                    PopupRegistration(viewModel);
-                }
-            }
-            else
-            {
-                //MessageBox.Show("Your license key file is missing.");
-                PopupRegistration(viewModel);
-            }
-        }
-    }
-
-    private void PopupRegistration<TViewModel>(TViewModel viewModel)
-    {
-        Logger.LogInformation("Registration called.");
-
-        dynamic settings = new ExpandoObject();
-        settings.Width = 850;
-        settings.WindowStyle = WindowStyle.None;
-        settings.ShowInTaskbar = false;
-        settings.PopupAnimation = PopupAnimation.Fade;
-        settings.Placement = PlacementMode.Absolute;
-        settings.HorizontalOffset = SystemParameters.FullPrimaryScreenWidth / 2 - 100;
-        settings.VerticalOffset = SystemParameters.FullPrimaryScreenHeight / 2 - 50;
-        settings.Title = "License Registration";
-        settings.WindowState = WindowState.Normal;
-        settings.ResizeMode = ResizeMode.NoResize;
-
-        var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
-        _licenseCleared = true;
-    }
-
-
-
     public async Task InvokeDialog<TDialogViewModel, TNavigationViewModel>(dynamic settings, Func<TDialogViewModel, Task<bool>> callback, DialogMode dialogMode = DialogMode.Add) where TDialogViewModel : new()
     {
         var dialogViewModel = IoC.Get<TDialogViewModel>();

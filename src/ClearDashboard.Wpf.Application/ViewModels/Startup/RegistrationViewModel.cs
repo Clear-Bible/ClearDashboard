@@ -18,7 +18,7 @@ using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<LicenseUser>
+    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<User>
     {
         private readonly DashboardProjectManager _dashboardProjectManager;
         private readonly ILocalizationService _localizationService;
@@ -28,8 +28,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Observable Objects
-        private LicenseUser _licenseUser;
-        public LicenseUser LicenseUser
+        private User _licenseUser;
+        public User LicenseUser
         {
             get { return _licenseUser; }
             set { _licenseUser = value; }
@@ -90,13 +90,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IEventAggregator? eventAggregator,
             IMediator? mediator,
             ILifetimeScope? lifetimeScope,
-            IValidator<LicenseUser> licenseValidator,
+            IValidator<User> licenseValidator,
             ILocalizationService localizationService)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
             _dashboardProjectManager = dashboardProjectManager;
             _localizationService = localizationService;
-            LicenseUser = new LicenseUser();
+            LicenseUser = new User();
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -137,18 +137,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             try
             {
-                var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
+                File.Delete(LicenseManager.LicenseFilePath);
 
-                var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
-                var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+                var decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(LicenseKey);
+                var decryptedLicenseUser = LicenseManager.DecryptedJsonToUser(decryptedLicenseKey);
 
                 if (decryptedLicenseUser.Id == Guid.Empty)
                 {
                     throw new Exception("License has empty guid.");
                 }
 
-                var givenLicenseUser = new LicenseUser
+                var givenLicenseUser = new User
                 {
                     FirstName = FirstName, //_registrationViewModel.FirstName;
                     LastName = LastName //_registrationViewModel.LastName;
@@ -156,12 +155,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
 
                 var match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
-                LicenseUser.MatchType = match;
                 
                 switch (match)
                 {
                     case LicenseUserMatchType.Match:
-                        File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
+                        File.WriteAllText(LicenseManager.LicenseFilePath, LicenseKey);
                         await MoveForwards();
                         await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
                         break;

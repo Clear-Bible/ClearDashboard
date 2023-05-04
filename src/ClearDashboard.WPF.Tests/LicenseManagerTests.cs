@@ -23,10 +23,10 @@ namespace ClearDashboard.WPF.Tests
         [Fact]
         public async Task EncryptDecryptTest()
         {
-            var directoryPath = "LicenseTest";
-            var filePath = "LicenseTest\\license.txt";
+            var directoryPath = Path.Combine(LicenseManager.LicenseFolderPath,"LicenseTest");
+            var filePath = Path.Combine(directoryPath,LicenseManager.LicenseFileName);
 
-            var originalLicenseUser = new LicenseUser
+            var originalLicenseUser = new User
             {
                 Id = Guid.NewGuid(),
                 LicenseKey = Guid.NewGuid().ToString("N"),
@@ -35,8 +35,8 @@ namespace ClearDashboard.WPF.Tests
             };
 
             LicenseManager.EncryptToFile(originalLicenseUser, directoryPath);
-            var decryptedJson = LicenseManager.DecryptFromFile(filePath);
-            var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedJson);
+            var decryptedJson = LicenseManager.DecryptLicenseFromFile(filePath);
+            var decryptedLicenseUser = LicenseManager.DecryptedJsonToUser(decryptedJson);
 
             Assert.Equal(LicenseUserMatchType.Match,LicenseManager.CompareGivenUserAndDecryptedUser(originalLicenseUser, decryptedLicenseUser));
 
@@ -46,10 +46,10 @@ namespace ClearDashboard.WPF.Tests
         [Fact]
         public async Task EncryptLicenseUserDecryptUserTest()
         {
-            var directoryPath = "LicenseTest";
-            var filePath = "LicenseTest\\license.txt";
+            var directoryPath = Path.Combine(LicenseManager.LicenseFolderPath, "LicenseTest");
+            var filePath = Path.Combine(directoryPath, LicenseManager.LicenseFileName);
 
-            var originalLicenseUser = new LicenseUser
+            var originalLicenseUser = new User
             {
                 Id = Guid.NewGuid(),
                 LicenseKey = Guid.NewGuid().ToString("N"),
@@ -61,7 +61,7 @@ namespace ClearDashboard.WPF.Tests
             //var decryptedJson = LicenseManager.DecryptFromFile(filePath);
             //var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedJson);
 
-            var user = LicenseManager.DecryptFromFile<User>(filePath);
+            var user = LicenseManager.DecryptLicenseFromFileToUser(filePath);
             Assert.NotNull(user);
 
             Assert.Equal(user.Id, originalLicenseUser.Id);
@@ -79,8 +79,9 @@ namespace ClearDashboard.WPF.Tests
         public void DecryptFromString()
         {
 
-            var user = LicenseManager.DecryptFromString<User>(
+            var json = LicenseManager.DecryptLicenseFromString(
                 "KJPQAD+QnfioxDbZmFnw9VMkcZyWlMUFmoHUUO9YWzS+j0Ir0ZkXY58OXVvRq6Dji/ou+tuViioXpATAdM0RLNQPqjNUi8FPU7zPbhFbHEBbDTCvgpDMGpdBjcUJBOsBcYBtLq2l+YmtgrlT7HNsq2EDEb4sgrf3PGc/tUTXu2BI/l7uMYvyIObqs7NXTfNsC17KSS9b9H2GA1eJFD7vipZ7aeELfuZIi9B5HsLOFKUOAo8Q85y1WHIBSidLboca");
+            var user = LicenseManager.DecryptedJsonToUser(json);
             Assert.NotNull(user);
             Assert.Equal("Michael Gerfen", user.FullName);
             Assert.NotEqual(user.Id.ToString("N"), user.LicenseKey);

@@ -2,7 +2,9 @@ using Autofac;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Exceptions;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Features.Projects;
+using ClearDashboard.DataAccessLayer.Features.User;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.User;
@@ -117,14 +119,54 @@ namespace ClearDashboard.DataAccessLayer
 
         // TODO:  Review - should we be throwing an exception here if a licensed user can not be loaded?
         private Guid TemporaryUserGuid => Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7");
-        public User GetLicensedUser()
+        public bool SetCurrentUserFromLicense()
         {
-            var user = LicenseManager.GetUser<User>() ?? new User
-            {
-                Id = TemporaryUserGuid,
-            };
+            var user = LicenseManager.GetUserFromLicense();
 
-            return user;
+            if (user.Id == Guid.Empty)
+            {
+                if (CurrentUser == null)
+                {
+                    user.Id = TemporaryUserGuid;
+                    CurrentUser = user;
+                }
+                return false;
+            }
+
+            if (!File.Exists(LicenseManager.LicenseFilePath))
+            {
+                LicenseManager.EncryptToFile(user, LicenseManager.LicenseFolderPath);
+            }
+
+            CurrentUser = user;
+
+            return true;
+        }
+
+        public void CheckForCurrentUser()
+        {
+            if (CurrentProject != null && CurrentProject.ProjectName != null)
+            {
+                var requestResults = ExecuteRequest(new GetProjectUserSlice.GetProjectUserQuery(CurrentProject.ProjectName), CancellationToken.None);
+
+                if (requestResults.IsCompleted && requestResults.Result.Success && requestResults.Result.HasData)
+                {
+                    var currentUserIsInDatabase = false;
+
+                    foreach (var item in requestResults.Result.Data)
+                    {
+                        if (item.Id == CurrentUser.Id)
+                        {
+                            currentUserIsInDatabase = true;
+                        }
+                    }
+
+                    if (!currentUserIsInDatabase)
+                    {
+                        ExecuteRequest(new AddUserCommand(CurrentUser), CancellationToken.None);
+                    }
+                }
+            }
         }
 
         public async Task<User> UpdateCurrentUserWithParatextUserInformation()
@@ -132,7 +174,7 @@ namespace ClearDashboard.DataAccessLayer
           
             if (CurrentUser == null || CurrentUser.Id == TemporaryUserGuid)
             {
-                CurrentUser = GetLicensedUser();
+                SetCurrentUserFromLicense();
             }
 
             var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
@@ -143,7 +185,7 @@ namespace ClearDashboard.DataAccessLayer
             if (result.Success && result.HasData)
             {
                 var paratextUserName = result.Data!.Name;
-                CurrentUser = GetLicensedUser();
+                SetCurrentUserFromLicense();
                 CurrentUser.ParatextUserName = paratextUserName;
                 await PublishParatextUser(CurrentUser);
             }
