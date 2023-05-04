@@ -1,4 +1,5 @@
 ﻿using System;
+using ClearDashboard.Collaboration.Builder;
 using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Interfaces;
@@ -36,19 +37,23 @@ public sealed class MergeContext
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenComposite>), new TokenCompositeHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.AlignmentSet>), new AlignmentSetHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Alignment>), new AlignmentHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TranslationSet>), new TranslationSetHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Translation>), new TranslationHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.ParallelCorpus>), new ParallelCorpusHandler(this));
         _mergeHandlerRegistry.Add(typeof(NoteModelRef), new NoteModelRefHandler(this));
     }
 
-    public DefaultMergeHandler FindMergeHandler<T>()
+    public DefaultMergeHandler<T> FindMergeHandler<T>() where T : IModelSnapshot
     {
         if (_mergeHandlerRegistry.TryGetValue(typeof(T), out var mergeHandler))
         {
-            return mergeHandler;
+            return (DefaultMergeHandler<T>)mergeHandler;
         }
 
-        return DefaultMergeHandler;
+        var handler = new DefaultMergeHandler<T>(this);
+        _mergeHandlerRegistry.Add(typeof(T), handler);
+
+        return handler;
     }
 
     public DefaultMergeHandler FindMergeHandler(Type type)
@@ -58,7 +63,15 @@ public sealed class MergeContext
             return mergeHandler;
         }
 
-        return DefaultMergeHandler;
+        Type[] handlerTypeArgs = { type };
+        var handlerType = typeof(DefaultMergeHandler<>).MakeGenericType(handlerTypeArgs);
+
+        object?[] constructorArgs = { this };
+        var handler = (DefaultMergeHandler)Activator.CreateInstance(handlerType, constructorArgs)!;
+
+        _mergeHandlerRegistry.Add(type, handler);
+
+        return handler;
     }
 }
 

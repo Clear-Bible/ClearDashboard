@@ -27,7 +27,7 @@ namespace ClearDashboard.Collaboration.Merge;
 /// in the current database (assuming the referenced domain entity
 /// ids can be found!)
 /// </summary>
-public class NoteModelRefHandler : DefaultMergeHandler
+public class NoteModelRefHandler : DefaultMergeHandler<NoteModelRef>
 {
     public delegate Guid ModelRefResolver<T>(T modelRef, ProjectDbContext projectDbContext, ILogger logger);
 
@@ -146,9 +146,13 @@ public class NoteModelRefHandler : DefaultMergeHandler
                 nameof(Models.NoteDomainEntityAssociation.DomainEntityIdName)
             });
 
-        mergeContext.MergeBehavior.AddPropertyNameMapping(
+        mergeContext.MergeBehavior.AddIdPropertyNameMapping(
             (typeof(Models.NoteDomainEntityAssociation), "NoteDomainEntityAssociationId"),
             new[] { nameof(Models.NoteDomainEntityAssociation.Id) });
+
+        mergeContext.MergeBehavior.AddIdReversePropertyNameMapping(
+            (typeof(Models.NoteDomainEntityAssociation), nameof(Models.NoteDomainEntityAssociation.Id)),
+            "NoteDomainEntityAssociationId");
     }
 }
 

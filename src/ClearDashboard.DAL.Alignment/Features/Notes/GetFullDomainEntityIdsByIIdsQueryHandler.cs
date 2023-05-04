@@ -7,6 +7,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -61,7 +62,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 switch (true)
                 {
                     case true when kvp.Key == typeof(TokenId).Name:
-                        fullIds.AddRange(ProjectDbContext!.Tokens
+                        fullIds.AddRange(ProjectDbContext!.TokenComponents
+                            .Include(e => ((TokenComposite)e).Tokens)
                             .Where(e => kvp.Value.Contains(e.Id))
                             .Select(e => ModelHelper.BuildTokenId(e)));
                         break;

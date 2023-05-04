@@ -13,13 +13,13 @@ using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public class AlignmentSetHandler : DefaultMergeHandler
+public class AlignmentSetHandler : DefaultMergeHandler<IModelSnapshot<Models.AlignmentSet>>
 {
 	public AlignmentSetHandler(MergeContext mergeContext) : base(mergeContext)
     {
     }
 
-    protected override async Task CreateChildrenAsync<T>(T parentSnapshot, CancellationToken cancellationToken)
+    protected override async Task HandleCreateChildrenAsync(IModelSnapshot<Models.AlignmentSet> parentSnapshot, CancellationToken cancellationToken)
     {
         var alignmentSetId = (Guid)parentSnapshot.GetId();
 

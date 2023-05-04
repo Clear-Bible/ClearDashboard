@@ -17,7 +17,7 @@ using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public class TranslationHandler : DefaultMergeHandler
+public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Translation>>
 {
     public static Guid LookupSourceTokenizedCorpusId(ProjectDbContext projectDbContext, Guid translationSetId, MergeCache cache)
     {

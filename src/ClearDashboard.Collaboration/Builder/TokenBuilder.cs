@@ -52,8 +52,8 @@ public class TokenBuilder : GeneralModelBuilder<Models.TokenComposite>
             tokenComposite,
             new List<string>() { "VerseRowId" });
 
-        modelSnapshot.Add("VerseRowLocation", tokenComposite.VerseRow?.BookChapterVerse, typeof(string));
-        modelSnapshot.Add("TokenLocations", childTokens.Select(t => BuildTokenLocation(t)).ToGeneralListModel<string>());
+        modelSnapshot.Add(VERSE_ROW_LOCATION, tokenComposite.VerseRow?.BookChapterVerse, typeof(string));
+        modelSnapshot.Add(TOKEN_LOCATIONS, childTokens.Select(t => BuildTokenLocation(t)).ToGeneralListModel<string>());
 
         return modelSnapshot;
     }

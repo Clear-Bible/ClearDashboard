@@ -17,30 +17,146 @@ using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-/// <summary>
-/// FIXME:  need logging - everywhere
-/// </summary>
-public class DefaultMergeHandler
+public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapshot
 {
-    protected readonly MergeContext _mergeContext;
-    public DefaultMergeHandler(MergeContext mergeContext)
+    public DefaultMergeHandler(MergeContext mergeContext) : base(mergeContext)
     {
-        _mergeContext = mergeContext;
     }
 
-    public Expression<Func<T, bool>> BuildIdLookupWhereExpression<T>(IModelSnapshot<T> snapshot)
-        where T : Models.IdentifiableEntity
+    public async Task DeleteListDifferencesAsync(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, CancellationToken cancellationToken = default)
     {
-        var id = (Guid)snapshot.EntityPropertyValues["Id"]!;
-        return e => e.Id == id;
+        if (listDifference.HasMembershipDeletes)
+        {
+            // OnlyIn1: part of last commit merged, then deleted at some point on some remote
+            //      if not in current:   they were deleted both here in some remote
+            //      if in current:  delete (hard)
+            foreach (var onlyIn1 in listDifference.OnlyIn1)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(onlyIn1.GetId());
+                if (itemInCurrentSnapshot is not null)
+                {
+                    await HandleDeleteAsync(itemInCurrentSnapshot, cancellationToken);
+                }
+                else
+                {
+                    _mergeContext.Progress.Report(new ProgressStatus(0, $"Unable to delete - model item of type '{typeof(T).ShortDisplayName()}' having id '{onlyIn1}' not found in current snapshot"));
+                    _mergeContext.Logger.LogInformation($"Unable to delete - model item of type '{typeof(T).ShortDisplayName()}' having id '{onlyIn1}' not found in current snapshot");
+                }
+            }
+        }
+
+        if (listDifference.HasListMemberModelDifferences)
+        {
+            foreach (var modelDifference in listDifference.ListMemberModelDifferences)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (modelDifference.ChildListDifferences.Any())
+                {
+                    // Since this is a ModelDifference of an IModelSnapshot, its Id should
+                    // never be null:
+                    var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(modelDifference.Id!);
+
+                    await HandleChildListDifferenceDeleteAsync(modelDifference.ChildListDifferences, itemInCurrentSnapshot, cancellationToken);
+                }
+            }
+        }
     }
 
-    protected virtual async Task HandleDeleteAsync<T>(T itemToDelete, CancellationToken cancellationToken)
-        where T : IModelSnapshot
+    public async Task CreateListDifferencesAsync(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, CancellationToken cancellationToken = default)
+    {
+        if (listDifference.HasMembershipCreates)
+        {
+            // OnlyIn2: added since last merge on some remote
+            //      if not in current:  add
+            //      if in current:  added both here and some remote - what to do?  look for differences between the items in OnlyIn2
+            //      and current snapshot and apply them?
+            foreach (var onlyIn2 in listDifference.OnlyIn2)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(onlyIn2.GetId());
+
+                // Added since last merge on some remote
+                //      if nitemInCurrentSnapshotot in current:  add
+                //      if in current:  added both here and some remote - what to do?  look for differences between the items in OnlyIn2
+                //      and current snapshot and apply them?
+                if (itemInCurrentSnapshot is null)
+                {
+                    // FIXME:  should we call something like currentSnapshotList.AddById()?
+                    HandleCreateStart(onlyIn2);
+                    await HandleCreateAsync(onlyIn2, cancellationToken);
+                    await HandleCreateComplete(onlyIn2, cancellationToken);
+
+                    var name = GetModelSnapshotDisplayName(onlyIn2);
+
+                    _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserted {onlyIn2.EntityType.ShortDisplayName()} having name '{name}' and id '{onlyIn2.GetId()}'"));
+                    _mergeContext.Logger.LogInformation($"Inserted {onlyIn2.EntityType.ShortDisplayName()} having id '{onlyIn2.GetId()}'");
+
+                    await HandleCreateChildrenAsync(onlyIn2, cancellationToken);
+                }
+                else
+                {
+                    var modelDifference = (IModelDifference<T>)itemInCurrentSnapshot.GetModelDifference((IModelDistinguishable<T>)onlyIn2);
+                    await HandleModifyPropertiesAsync(modelDifference, itemInCurrentSnapshot, cancellationToken);
+                }
+            }
+        }
+    }
+
+    public virtual async Task ModifyListDifferencesAsync(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, IEnumerable<T>? targetCommitSnapshotList, CancellationToken cancellationToken = default)
+    {
+        if (listDifference.HasListMemberModelDifferences)
+        {
+            foreach (var modelDifference in listDifference.ListMemberModelDifferences)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                // Since this is a ModelDifference of an IModelSnapshot, its Id should
+                // never be null:
+                var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(modelDifference.Id!);
+                var itemInTargetCommitSnapshot = targetCommitSnapshotList.FindById<T>(modelDifference.Id!);
+
+                if (itemInCurrentSnapshot is not null)
+                {
+                    await HandleModifyPropertiesAsync(modelDifference, itemInCurrentSnapshot, cancellationToken);
+                }
+                else
+                {
+                    if (itemInTargetCommitSnapshot is not null)
+                    {
+                        // FIXME:  does this mean it got deleted locally but in the commits it
+                        // was never deleted but modified instead?
+                        HandleCreateStart(itemInTargetCommitSnapshot);
+                        await HandleCreateAsync(itemInTargetCommitSnapshot, cancellationToken);
+                        await HandleCreateComplete(itemInTargetCommitSnapshot, cancellationToken);
+
+                        var name = GetModelSnapshotDisplayName(itemInTargetCommitSnapshot);
+
+                        _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserted {itemInTargetCommitSnapshot.EntityType.ShortDisplayName()} having name '{name}' and id '{itemInTargetCommitSnapshot.GetId()}'"));
+                        _mergeContext.Logger.LogInformation($"Inserted {itemInTargetCommitSnapshot.EntityType.ShortDisplayName()} having id '{itemInTargetCommitSnapshot.GetId()}'");
+                    }
+                    else
+                    {
+                        throw new InvalidDifferenceStateException($"Model difference of type '{modelDifference.GetType().ShortDisplayName()}' exists for id {modelDifference.Id}, but IModelSnapshot not found in target commit snapshot.");
+                    }
+                }
+
+                if (modelDifference.ChildListDifferences.Any())
+                {
+                    await HandleChildListDifferenceAsync(modelDifference.ChildListDifferences, itemInCurrentSnapshot, itemInTargetCommitSnapshot, cancellationToken);
+                }
+            }
+        }
+    }
+
+    protected virtual async Task HandleDeleteAsync(T itemToDelete, CancellationToken cancellationToken)
     {
         var modelSnapshot = (IModelSnapshot)itemToDelete;
 
-        var where = new Dictionary<string, object>() { { modelSnapshot.IdentityKey, modelSnapshot.EntityPropertyValues[modelSnapshot.IdentityKey]! } };
+        var where = new Dictionary<string, object>() { { modelSnapshot.IdentityKey, modelSnapshot.GetId() } };
         await _mergeContext.MergeBehavior.DeleteModelAsync(modelSnapshot, where, cancellationToken);
 
         //// If deleting a parent, need to first delete all its children
@@ -77,19 +193,208 @@ public class DefaultMergeHandler
         //}
     }
 
-    protected virtual void HandleCreateStart<T>(T itemToCreate) where T : IModelSnapshot
+    protected virtual void HandleCreateStart(T itemToCreate)
     {
         _mergeContext.MergeBehavior.StartInsertModelCommand(itemToCreate);
     }
-    protected virtual async Task<Guid> HandleCreateAsync<T>(T itemToCreate, CancellationToken cancellationToken) where T : IModelSnapshot
+    protected virtual async Task<Guid> HandleCreateAsync(T itemToCreate, CancellationToken cancellationToken)
     {
         var id = await _mergeContext.MergeBehavior.RunInsertModelCommand(itemToCreate, cancellationToken);
         return id;
     }
-    protected virtual async Task HandleCreateComplete<T>(T itemToCreate, CancellationToken cancellationToken) where T : IModelSnapshot
+    protected virtual async Task HandleCreateComplete(T itemToCreate, CancellationToken cancellationToken)
     {
         _mergeContext.MergeBehavior.CompleteInsertModelCommand(itemToCreate.EntityType);
         await Task.CompletedTask;
+    }
+
+    public virtual async Task<bool> HandleModifyPropertiesAsync(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    {
+        if (typeof(T).IsAssignableTo(typeof(IModelSnapshot)))
+        {
+            var modelSnapshotToModify = (IModelSnapshot)itemToModify;
+            var modelMergeResult = CheckMerge(modelDifference, itemToModify);
+
+            if (modelMergeResult == ModelMergeResult.ShouldMerge)
+            {
+                //if (!modelSnapshotToModify.EntityPropertyValues.ContainsKey(modelSnapshotToModify.IdentityKey))
+                //{
+                //    throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality for retrieving where clause values");
+                //}
+
+                var where = new Dictionary<string, object>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
+                await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
+
+                return true;
+            }
+        }
+        else
+        {
+            throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
+        }
+
+        return false;
+    }
+
+    protected virtual async Task HandleChildListDifferenceAsync(
+        IReadOnlyDictionary<string, IListDifference> childListDifferences,
+        T? parentItemInCurrentSnapshot,
+        T? parentItemInTargetCommitSnapshot,
+        CancellationToken cancellationToken)
+    {
+        foreach (var (childName, listDifference) in childListDifferences)
+        {
+            IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot = null;
+            IEnumerable<IModelDistinguishable>? childrenInTargetCommitSnapshot = null;
+
+            if (parentItemInCurrentSnapshot is not null && ((IModelSnapshot)parentItemInCurrentSnapshot).Children.ContainsKey(childName))
+            {
+                childrenInCurrentSnapshot = ((IModelSnapshot)parentItemInCurrentSnapshot).Children[childName];
+            }
+
+            if (parentItemInTargetCommitSnapshot is not null && ((IModelSnapshot)parentItemInTargetCommitSnapshot).Children.ContainsKey(childName))
+            {
+                childrenInTargetCommitSnapshot = ((IModelSnapshot)parentItemInTargetCommitSnapshot).Children[childName];
+            }
+
+            if (listDifference.GetType().IsAssignableToGenericType(typeof(IListDifference<>)))
+            {
+                var handler = _mergeContext.FindMergeHandler(listDifference.GetType().GetGenericArguments()[0]);
+
+                MethodInfo createMethod = handler.GetType().GetMethod(nameof(DefaultMergeHandler<T>.CreateListDifferencesAsync))!;
+                dynamic createAwaitable = createMethod.Invoke(handler, new object?[] { listDifference, childrenInCurrentSnapshot, cancellationToken })!;
+                await createAwaitable;
+
+                MethodInfo modifyMethod = handler.GetType().GetMethod(nameof(DefaultMergeHandler<T>.ModifyListDifferencesAsync))!;
+                dynamic modifyAwaitable = modifyMethod.Invoke(handler, new object?[] { listDifference, childrenInCurrentSnapshot, childrenInTargetCommitSnapshot, cancellationToken })!;
+                await modifyAwaitable;
+            }
+            else
+            {
+                throw new InvalidDifferenceStateException($"Encountered child IListDifference without any generic model type!");
+            }
+        }
+    }
+    protected virtual async Task HandleChildListDifferenceDeleteAsync(
+    IReadOnlyDictionary<string, IListDifference> childListDifferences,
+    T? parentItemInCurrentSnapshot,
+    CancellationToken cancellationToken)
+    {
+        foreach (var (childName, listDifference) in childListDifferences)
+        {
+            IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot = null;
+
+            if (parentItemInCurrentSnapshot is not null && ((IModelSnapshot)parentItemInCurrentSnapshot).Children.ContainsKey(childName))
+            {
+                childrenInCurrentSnapshot = ((IModelSnapshot)parentItemInCurrentSnapshot).Children[childName];
+            }
+
+            if (listDifference.GetType().IsAssignableToGenericType(typeof(IListDifference<>)))
+            {
+                var handler = _mergeContext.FindMergeHandler(listDifference.GetType().GetGenericArguments()[0]);
+
+                MethodInfo deleteMethod = handler.GetType().GetMethod(nameof(DefaultMergeHandler<T>.DeleteListDifferencesAsync))!;
+                dynamic deleteAwaitable = deleteMethod.Invoke(handler, new object?[] { listDifference, childrenInCurrentSnapshot, cancellationToken })!;
+                await deleteAwaitable;
+            }
+            else
+            {
+                throw new InvalidDifferenceStateException($"Encountered child IListDifference without any generic model type!");
+            }
+        }
+    }
+    /// <summary>
+    /// Called after the insert of a parent entity, this inserts the new parent entity's children (if any)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="parentSnapshot"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    protected virtual async Task HandleCreateChildrenAsync(
+        T parentSnapshot,
+        CancellationToken cancellationToken)
+    {
+        foreach (var childName in parentSnapshot.Children.Keys)
+        {
+            _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserting {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'"));
+            _mergeContext.Logger.LogInformation($"Inserting {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'");
+
+            Type childType = parentSnapshot.Children[childName].GetType().GetGenericArguments()[0];
+            if (childType.IsAssignableToGenericType(typeof(IModelSnapshot<>)) && childType.GetGenericArguments().Any())
+            {
+                var t = typeof(IModelSnapshot<>);
+                Type[] typeArgs = { childType.GetGenericArguments()[0] };
+                childType = t.MakeGenericType(typeArgs);
+            }
+
+            var handler = _mergeContext.FindMergeHandler(childType);
+
+            MethodInfo createMethod = handler.GetType().GetMethod(nameof(DefaultMergeHandler<T>.CreateListItemsAsync), BindingFlags.Instance | BindingFlags.Public)!;
+            dynamic createAwaitable = createMethod.Invoke(handler, new object?[] { parentSnapshot.Children[childName], cancellationToken })!;
+            var insertCount = await createAwaitable;
+
+            _mergeContext.Logger.LogInformation($"Completed inserting {insertCount} {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'");
+        }
+    }
+
+    public async Task<int> CreateListItemsAsync(IEnumerable<T> snapshotList, CancellationToken cancellationToken = default)
+    {
+        var insertCount = 0;
+
+        var firstChild = snapshotList.FirstOrDefault();
+
+        if (firstChild is not null)
+        {
+            HandleCreateStart(firstChild);
+            foreach (var modelSnapshot in snapshotList)
+            {
+                await HandleCreateAsync(modelSnapshot, cancellationToken);
+                insertCount++;
+            }
+            await HandleCreateComplete(firstChild, cancellationToken);
+        }
+
+        return insertCount;
+    }
+
+    public async Task MergeListDifferenceGroup(
+        IListDifference listDifference,
+        IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot,
+        IEnumerable<IModelDistinguishable>? childrenInTargetCommitSnapshot,
+        CancellationToken cancellationToken
+        )
+    {
+        if (!listDifference.GetType().IsAssignableTo(typeof(IListDifference<T>)))
+        {
+            throw new InvalidDifferenceStateException($"Encountered child IListDifference without any generic model type!");
+        }
+
+        if (childrenInCurrentSnapshot is not null && !childrenInCurrentSnapshot.GetType().IsAssignableTo(typeof(IEnumerable<T>)))
+        {
+            throw new InvalidDifferenceStateException($"Encountered non-IModelSnapshot children in current snapshot list!");
+        }
+
+        if (childrenInTargetCommitSnapshot is not null && !childrenInTargetCommitSnapshot.GetType().IsAssignableTo(typeof(IEnumerable<T>)))
+        {
+            throw new InvalidDifferenceStateException($"Encountered non-IModelSnapshot children in target commit snapshot list!");
+        }
+
+        var difference = (IListDifference<T>)listDifference;
+        var currentChildren = (IEnumerable<T>?)childrenInCurrentSnapshot;
+        var targetCommitChildren = (IEnumerable<T>?)childrenInTargetCommitSnapshot;
+
+        await DeleteListDifferencesAsync(difference, currentChildren, cancellationToken);
+        await CreateListDifferencesAsync(difference, currentChildren, cancellationToken);
+        await ModifyListDifferencesAsync(difference, currentChildren, targetCommitChildren, cancellationToken);
+    }
+}
+
+public class DefaultMergeHandler
+{
+    protected readonly MergeContext _mergeContext;
+    public DefaultMergeHandler(MergeContext mergeContext)
+    {
+        _mergeContext = mergeContext;
     }
 
     protected bool CheckMergePropertyValueDifferences(IModelDifference modelDifference, IReadOnlyDictionary<string, object?> propertyValues)
@@ -154,7 +459,7 @@ public class DefaultMergeHandler
         return hasChange;
     }
 
-    protected virtual ModelMergeResult CheckMerge<T>(IModelDifference modelDifference, T itemToModify)
+    protected virtual ModelMergeResult CheckMerge<T>(IModelDifference<T> modelDifference, T itemToModify)
         where T : IModelDistinguishable
     {
         var hasChange = false;
@@ -187,297 +492,24 @@ public class DefaultMergeHandler
         return ModelMergeResult.NoChange;
     }
 
-    public virtual async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
-        where T : IModelDistinguishable
+    protected static string GetModelSnapshotDisplayName(IModelSnapshot modelSnapshot)
     {
-        if (typeof(T).IsAssignableTo(typeof(IModelSnapshot)))
-        {
-            var modelSnapshotToModify = (IModelSnapshot)itemToModify;
-            var modelMergeResult = CheckMerge(modelDifference, itemToModify);
-
-            if (modelMergeResult == ModelMergeResult.ShouldMerge)
-            {
-                //if (!modelSnapshotToModify.EntityPropertyValues.ContainsKey(modelSnapshotToModify.IdentityKey))
-                //{
-                //    throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality for retrieving where clause values");
-                //}
-
-                var where = new Dictionary<string, object>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.EntityPropertyValues[modelSnapshotToModify.IdentityKey]! } };
-                await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
-
-                return true;
-            }
-        }
-        else
-        {
-            throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
-        }
-
-        return false;
-    }
-
-    public async Task DeleteListDifferencesAsync<T>(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, CancellationToken cancellationToken = default)
-        where T : IModelSnapshot
-    {
-        if (listDifference.HasMembershipDeletes)
-        {
-            var handler = _mergeContext.FindMergeHandler<T>();
-
-            // OnlyIn1: part of last commit merged, then deleted at some point on some remote
-            //      if not in current:   they were deleted both here in some remote
-            //      if in current:  delete (hard)
-            foreach (var onlyIn1 in listDifference.OnlyIn1)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(onlyIn1.GetId());
-                if (itemInCurrentSnapshot is not null)
-                {
-                    await handler.HandleDeleteAsync(itemInCurrentSnapshot, cancellationToken);
-                }
-                else
-                {
-                    _mergeContext.Progress.Report(new ProgressStatus(0, $"Unable to delete - model item of type '{typeof(T).ShortDisplayName()}' having id '{onlyIn1}' not found in current snapshot"));
-                    _mergeContext.Logger.LogInformation($"Unable to delete - model item of type '{typeof(T).ShortDisplayName()}' having id '{onlyIn1}' not found in current snapshot");
-                }
-            }
-        }
-    }
-
-    public async Task CreateListDifferencesAsync<T>(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, CancellationToken cancellationToken = default)
-        where T : IModelSnapshot
-    {
-        if (listDifference.HasMembershipCreates)
-        {
-            var handler = _mergeContext.FindMergeHandler<T>();
-
-            // OnlyIn2: added since last merge on some remote
-            //      if not in current:  add
-            //      if in current:  added both here and some remote - what to do?  look for differences between the items in OnlyIn2
-            //      and current snapshot and apply them?
-            foreach (var onlyIn2 in listDifference.OnlyIn2)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(onlyIn2.GetId());
-
-                // Added since last merge on some remote
-                //      if nitemInCurrentSnapshotot in current:  add
-                //      if in current:  added both here and some remote - what to do?  look for differences between the items in OnlyIn2
-                //      and current snapshot and apply them?
-                if (itemInCurrentSnapshot is null)
-                {
-                    // FIXME:  should we call something like currentSnapshotList.AddById()?
-                    handler.HandleCreateStart(onlyIn2);
-                    await handler.HandleCreateAsync(onlyIn2, cancellationToken);
-                    await handler.HandleCreateComplete(onlyIn2, cancellationToken);
-
-                    var name = GetModelSnapshotDisplayName(onlyIn2);
-
-                    _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserted {onlyIn2.EntityType.ShortDisplayName()} having name '{name}' and id '{onlyIn2.GetId()}'"));
-                    _mergeContext.Logger.LogInformation($"Inserted {onlyIn2.EntityType.ShortDisplayName()} having id '{onlyIn2.GetId()}'");
-
-                    await handler.CreateChildrenAsync(onlyIn2, cancellationToken);
-                }
-                else
-                {
-                    var modelDifference = (IModelDifference<T>)itemInCurrentSnapshot.GetModelDifference((IModelDistinguishable<T>)onlyIn2);
-                    await handler.HandleModifyPropertiesAsync<T>(modelDifference, itemInCurrentSnapshot, cancellationToken);
-                }
-            }
-        }
-    }
-
-    protected string GetModelSnapshotDisplayName(IModelSnapshot modelSnapshot)
-    {
+        // GeneralModelSnapshot version of ToString() (used here for log output)
         modelSnapshot.TryGetPropertyValue("DisplayName", out object? displayName);
         if (string.IsNullOrEmpty((string?)displayName))
         {
             modelSnapshot.TryGetPropertyValue("Name", out displayName);
         }
+        if (string.IsNullOrEmpty((string?)displayName))
+        {
+            modelSnapshot.TryGetPropertyValue(key: "Text", out displayName);
+        }
+        if (string.IsNullOrEmpty((string?)displayName))
+        {
+            modelSnapshot.TryGetPropertyValue(key: "FirstName", out displayName);
+        }
 
         return string.IsNullOrEmpty((string?)displayName) ? "Unknown" : (string)displayName;
-    }
-
-    public async Task ModifyListDifferencesAsync<T>(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, IEnumerable<T>? targetCommitSnapshotList, CancellationToken cancellationToken = default)
-        where T : IModelSnapshot
-    {
-        if (listDifference.HasListMemberModelDifferences)
-        {
-            var handler = _mergeContext.FindMergeHandler<T>();
-
-            foreach (var modelDifference in listDifference.ListMemberModelDifferences)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                // Since this is a ModelDifference of an IModelSnapshot, its Id should
-                // never be null:
-                var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(modelDifference.Id!);
-                var itemInTargetCommitSnapshot = targetCommitSnapshotList.FindById<T>(modelDifference.Id!);
-
-                if (itemInCurrentSnapshot is not null)
-                {
-                    await handler.HandleModifyPropertiesAsync(modelDifference, itemInCurrentSnapshot, cancellationToken);
-                }
-                else
-                {
-                    if (itemInTargetCommitSnapshot is not null)
-                    {
-                        // FIXME:  does this mean it got deleted locally but in the commits it
-                        // was never deleted but modified instead?
-                        handler.HandleCreateStart(itemInTargetCommitSnapshot);
-                        await handler.HandleCreateAsync(itemInTargetCommitSnapshot, cancellationToken);
-                        await handler.HandleCreateComplete(itemInTargetCommitSnapshot, cancellationToken);
-
-                        var name = GetModelSnapshotDisplayName(itemInTargetCommitSnapshot);
-
-                        _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserted {itemInTargetCommitSnapshot.EntityType.ShortDisplayName()} having name '{name}' and id '{itemInTargetCommitSnapshot.GetId()}'"));
-                        _mergeContext.Logger.LogInformation($"Inserted {itemInTargetCommitSnapshot.EntityType.ShortDisplayName()} having id '{itemInTargetCommitSnapshot.GetId()}'");
-                    }
-                    else
-                    {
-                        throw new InvalidDifferenceStateException($"Model difference of type '{modelDifference.GetType().ShortDisplayName()}' exists for id {modelDifference.Id}, but IModelSnapshot not found in target commit snapshot.");
-                    }
-                }
-
-                if (modelDifference.ChildListDifferences.Any())
-                {
-                    await handler.ChildListDifferenceAsync(modelDifference.ChildListDifferences, itemInCurrentSnapshot, itemInTargetCommitSnapshot, cancellationToken);
-                }
-            }
-        }
-    }
-
-    public async Task<int> CreateListItemsAsync<T>(IEnumerable<T> snapshotList, CancellationToken cancellationToken = default)
-        where T : IModelSnapshot
-    {
-        var insertCount = 0;
-
-        var handler = _mergeContext.FindMergeHandler<T>();
-        var firstChild = snapshotList.FirstOrDefault();
-
-        if (firstChild is not null)
-        {
-            handler.HandleCreateStart(firstChild);
-            foreach (var modelSnapshot in snapshotList)
-            {
-                await handler.HandleCreateAsync(modelSnapshot, cancellationToken);
-                insertCount++;
-            }
-            await handler.HandleCreateComplete(firstChild, cancellationToken);
-        }
-
-        return insertCount;
-    }
-
-    protected virtual async Task ChildListDifferenceAsync<T>(
-        IReadOnlyDictionary<string, IListDifference> childListDifferences,
-        T? parentItemInCurrentSnapshot,
-        T? parentItemInTargetCommitSnapshot,
-        CancellationToken cancellationToken)
-        where T: IModelSnapshot
-    {
-        foreach (var (childName, listDifference) in childListDifferences)
-        {
-            IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot = null;
-            IEnumerable<IModelDistinguishable>? childrenInTargetCommitSnapshot = null;
-
-            if (parentItemInCurrentSnapshot is not null && ((IModelSnapshot)parentItemInCurrentSnapshot).Children.ContainsKey(childName))
-            {
-                childrenInCurrentSnapshot = ((IModelSnapshot)parentItemInCurrentSnapshot).Children[childName];
-            }
-
-            if (parentItemInTargetCommitSnapshot is not null && ((IModelSnapshot)parentItemInTargetCommitSnapshot).Children.ContainsKey(childName))
-            {
-                childrenInTargetCommitSnapshot = ((IModelSnapshot)parentItemInTargetCommitSnapshot).Children[childName];
-            }
-
-            if (listDifference.GetType().IsAssignableToGenericType(typeof(IListDifference<>)))
-            {
-                MethodInfo deleteMethod = typeof(DefaultMergeHandler).GetMethod(nameof(DefaultMergeHandler.DeleteListDifferencesAsync))!;
-                MethodInfo deleteMethodGeneric = deleteMethod.MakeGenericMethod(listDifference.GetType().GetGenericArguments()[0]);
-                dynamic deleteAwaitable = deleteMethodGeneric.Invoke(this, new object?[] { listDifference, childrenInCurrentSnapshot, cancellationToken })!;
-                await deleteAwaitable;
-
-                MethodInfo createMethod = typeof(DefaultMergeHandler).GetMethod(nameof(DefaultMergeHandler.CreateListDifferencesAsync))!;
-                MethodInfo createMethodGeneric = createMethod.MakeGenericMethod(listDifference.GetType().GetGenericArguments()[0]);
-                dynamic createAwaitable = createMethodGeneric.Invoke(this, new object?[] { listDifference, childrenInCurrentSnapshot, cancellationToken })!;
-                await createAwaitable;
-
-                MethodInfo modifyMethod = typeof(DefaultMergeHandler).GetMethod(nameof(DefaultMergeHandler.ModifyListDifferencesAsync))!;
-                MethodInfo modifyMethodGeneric = modifyMethod.MakeGenericMethod(listDifference.GetType().GetGenericArguments()[0]);
-                dynamic modifyAwaitable = modifyMethodGeneric.Invoke(this, new object?[] { listDifference, childrenInCurrentSnapshot, childrenInTargetCommitSnapshot, cancellationToken })!;
-                await modifyAwaitable;
-            }
-            else
-            {
-                throw new InvalidDifferenceStateException($"Encountered child IListDifference without any generic model type!");
-            }
-        }
-    }
-
-    protected async Task HandleListDifferenceGroup<T>(
-        IListDifference listDifference,
-        IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot,
-        IEnumerable<IModelDistinguishable>? childrenInTargetCommitSnapshot,
-        CancellationToken cancellationToken
-        ) where T: IModelSnapshot
-    {
-        if (!listDifference.GetType().IsAssignableToGenericType(typeof(IListDifference<>)))
-        {
-            throw new InvalidDifferenceStateException($"Encountered child IListDifference without any generic model type!");
-        }
-
-        if (childrenInCurrentSnapshot is not null && !childrenInCurrentSnapshot.GetType().IsAssignableTo(typeof(IEnumerable<T>)))
-        {
-            throw new InvalidDifferenceStateException($"Encountered non-IModelSnapshot children in current snapshot list!");
-        }
-
-        if (childrenInTargetCommitSnapshot is not null && !childrenInTargetCommitSnapshot.GetType().IsAssignableTo(typeof(IEnumerable<T>)))
-        {
-            throw new InvalidDifferenceStateException($"Encountered non-IModelSnapshot children in target commit snapshot list!");
-        }
-
-        var difference = (IListDifference<T>)listDifference;
-        var currentChildren = (IEnumerable<T>?)childrenInCurrentSnapshot;
-        var targetCommitChildren = (IEnumerable<T>?)childrenInTargetCommitSnapshot;
-
-        await DeleteListDifferencesAsync(difference, currentChildren, cancellationToken);
-        await CreateListDifferencesAsync(difference, currentChildren, cancellationToken);
-        await ModifyListDifferencesAsync(difference, currentChildren, targetCommitChildren, cancellationToken);
-    }
-
-    /// <summary>
-    /// Called after the insert of a parent entity, this inserts the new parent entity's children (if any)
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="parentSnapshot"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    protected virtual async Task CreateChildrenAsync<T>(
-        T parentSnapshot,
-        CancellationToken cancellationToken)
-        where T : IModelSnapshot
-    {
-        foreach (var childName in parentSnapshot.Children.Keys)
-        {
-            _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserting {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'"));
-            _mergeContext.Logger.LogInformation($"Inserting {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'");
-
-            Type childType = parentSnapshot.Children[childName].GetType().GetGenericArguments()[0];
-            if (childType.IsAssignableToGenericType(typeof(IModelSnapshot<>)) && childType.GetGenericArguments().Any())
-            {
-                var t = typeof(IModelSnapshot<>);
-                Type[] typeArgs = { childType.GetGenericArguments()[0] };
-                childType = t.MakeGenericType(typeArgs);
-            }
-            MethodInfo createMethod = typeof(DefaultMergeHandler).GetMethod(nameof(DefaultMergeHandler.CreateListItemsAsync), BindingFlags.Instance | BindingFlags.Public)!;
-            MethodInfo createMethodGeneric = createMethod.MakeGenericMethod(childType);
-            dynamic createAwaitable = createMethodGeneric.Invoke(this, new object?[] { parentSnapshot.Children[childName], cancellationToken })!;
-            var insertCount = await createAwaitable;
-
-            _mergeContext.Logger.LogInformation($"Completed inserting {insertCount} {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'");
-        }
     }
 
     public static Guid LookupTokenComponent(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, string engineTokenId, MergeCache cache)

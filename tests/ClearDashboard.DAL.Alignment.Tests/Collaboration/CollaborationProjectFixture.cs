@@ -15,12 +15,19 @@ using ClearDashboard.Collaboration.Model;
 using ClearDashboard.Collaboration;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using System.Text.RegularExpressions;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DataAccessLayer;
+using System.Xml.Linq;
+using ClearBible.Engine.Corpora;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
-    public class CollaborationProjectFixture : TestBase, IAsyncDisposable
+    public class CollaborationProjectFixture : TestBase, IDisposable
     {
+        public const string ShaBase = "shasha";
+        private bool disposedValue;
+
         public List<Models.User> Users { get; private set; } = new();
         public List<Models.Corpus> Corpora { get; private set; } = new();
         public List<Models.TokenizedCorpus> TokenizedCorpora { get; private set; } = new();
@@ -37,20 +44,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         public List<Models.LabelNoteAssociation> LabelNoteAssociations { get; private set; } = new();
 
         public ProjectSnapshot? ProjectSnapshotLastMerged { get; private set; } = null;
-        public ScrVers CustomVersification { get; private set; } = ScrVers.Original;
 
         public CollaborationProjectFixture(IMessageSink diagnosticMessageSink) : base(new TestOutputMessageSinkAdapter(diagnosticMessageSink))
         {
-            CustomVersification = BuildCustomVersification(ScrVers.RussianProtestant);
-
             BuildInitialEntities();
-
-            var testProject = ProjectDbContext!.Projects.First();
-
-            var snapshotLastMerged = ProjectSnapshotFactoryCommon.BuildEmptySnapshot(testProject.Id);
-            var snapshotToMerge = ToProjectSnapshot();
-
-            MergeIntoDatabase("shasha", snapshotLastMerged, snapshotToMerge, new Progress<ProgressStatus>(Report)).Wait();
         }
 
         public void BuildInitialEntities()
@@ -62,14 +59,13 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Users.Add(new Models.User() { Id = testUserId2, FirstName = "tester", LastName = "two", LicenseKey = "67890" });
 
             var testCorpus1 = BuildTestCorpus(Guid.NewGuid(), "test corpus 1", "language one", Models.CorpusType.Standard, testUserId1);
-            var testCorpus2 = BuildTestCorpus(Guid.NewGuid(), "test corpus 2", "language two", Models.CorpusType.ManuscriptHebrew, testUserId1);
             Corpora.Clear();
             Corpora.Add(testCorpus1);
-            Corpora.Add(testCorpus2);
 
-            var testTokenizedCorpus1 = BuildTestTokenizedCorpus(Guid.NewGuid(), testCorpus1, "test tokenized corpus one", "LatinWordTokenizer", CustomVersification, testUserId1);
-            var testTokenizedCorpus2 = BuildTestTokenizedCorpus(Guid.NewGuid(), testCorpus2, "test tokenized corpus two", "LatinWordTokenizer", CustomVersification, testUserId1);
+            var testTokenizedCorpus1 = BuildTestTokenizedCorpus(Guid.NewGuid(), testCorpus1, "test tokenized corpus one", "LatinWordTokenizer", ScrVers.English, testUserId1);
 
+            // This should result in 23 TokenComponents.  If any of the VerseRow OriginalText data is changed below,
+            // the final Assert in the constructor will need to be changed accordingly
             testTokenizedCorpus1.VerseRows = new List<Models.VerseRow>
             {
                 BuildTestVerseRow(Guid.NewGuid(), testTokenizedCorpus1.Id, "001001001", "yes, the worms did eat my food because they were thirsty", testUserId1),
@@ -79,7 +75,6 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             };
             TokenizedCorpora.Clear();
             TokenizedCorpora.Add(testTokenizedCorpus1);
-            TokenizedCorpora.Add(testTokenizedCorpus2);
 
             TokenComposites.Clear();
             TokenComposites.AddRange(BuildTestTokenComposites(testTokenizedCorpus1, null, new List<string> 
@@ -91,8 +86,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         public ProjectSnapshot ToProjectSnapshot()
         {
-            var testProject = ProjectDbContext!.Projects.First();
-            var builderContext = new BuilderContext(ProjectDbContext!);
+            var testProject = ProjectDbContext.Projects.First();
+            var builderContext = new BuilderContext(ProjectDbContext);
 
             var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(testProject));
             projectSnapshot.AddGeneralModelList(ToUserBuilder(Users).BuildModelSnapshots(builderContext));
@@ -116,14 +111,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 true,
                 false,
                 progress);
-            var result = await Mediator!.Send(command, CancellationToken.None);
+            var result = await Mediator.Send(command, CancellationToken.None);
             result.ThrowIfCanceledOrFailed();
 
             Assert.NotNull(result);
             Assert.True(result.Success);
 
-            ProjectDbContext!.ChangeTracker.Clear();
-            Assert.Equal(commitShaToMerge, ProjectDbContext!.Projects.First().LastMergedCommitSha);
+            ProjectDbContext.ChangeTracker.Clear();
+            Assert.Equal(commitShaToMerge, ProjectDbContext.Projects.First().LastMergedCommitSha);
 
             ProjectSnapshotLastMerged = snapshotToMerge;
         }
@@ -131,7 +126,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         public async Task<ProjectSnapshot> GetDatabaseProjectSnapshot()
         {
             var command = new GetProjectSnapshotQuery();
-            var result = await Mediator!.Send(command, CancellationToken.None);
+            var result = await Mediator.Send(command, CancellationToken.None);
             result.ThrowIfCanceledOrFailed();
 
             Assert.NotNull(result);
@@ -160,13 +155,79 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Name = name,
                 DisplayName = name,
                 Language = language,
-                ParatextGuid = "123456789",
+                ParatextGuid = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",  // zz_SUR
                 CorpusType = corpusType,
                 Created = DateTimeOffset.UtcNow,
                 UserId = userId
             };
 
             return corpus;
+        }
+
+        public static (Models.Corpus, Models.TokenizedCorpus) BuildTestManuscriptHebrew(Guid userId)
+        {
+            var corpus = new Models.Corpus()
+            {
+                Id = Corpus.FixedCorpusIdsByCorpusType[Models.CorpusType.ManuscriptHebrew],
+                IsRtl = true,
+                FontFamily = FontNames.HebrewFontFamily,
+                Name = "Macula Hebrew",
+                Language = "Hebrew",
+                ParatextGuid = ManuscriptIds.HebrewManuscriptId,
+                CorpusType = Models.CorpusType.ManuscriptHebrew,
+                Created = DateTimeOffset.UtcNow,
+                UserId = userId
+            };
+
+            var tokenizedCorpus = new Models.TokenizedCorpus
+            {
+                Id = TokenizedTextCorpus.FixedTokenizedCorpusIdsByCorpusType[Models.CorpusType.ManuscriptHebrew],
+                CorpusId = corpus.Id,
+                Corpus = corpus,
+                DisplayName = "Macula Hebrew",
+                TokenizationFunction = "WhitespaceTokenizer",
+                Metadata = new(),
+                LastTokenized = DateTimeOffset.UtcNow,
+                Created = DateTimeOffset.UtcNow,
+                UserId = userId
+            };
+
+            SetVersification(tokenizedCorpus, ScrVers.Original);
+
+            return (corpus, tokenizedCorpus);
+        }
+
+        public static (Models.Corpus, Models.TokenizedCorpus) BuildTestManuscriptGreek(Guid userId)
+        {
+            var corpus = new Models.Corpus
+            {
+                Id = Corpus.FixedCorpusIdsByCorpusType[Models.CorpusType.ManuscriptGreek],
+                IsRtl = false,
+                FontFamily = FontNames.GreekFontFamily,
+                Name = "Macula Greek",
+                Language = "Greek",
+                ParatextGuid = ManuscriptIds.GreekManuscriptId,
+                CorpusType = Models.CorpusType.ManuscriptGreek,
+                Created = DateTimeOffset.UtcNow,
+                UserId = userId
+            };
+
+            var tokenizedCorpus = new Models.TokenizedCorpus
+            {
+                Id = TokenizedTextCorpus.FixedTokenizedCorpusIdsByCorpusType[Models.CorpusType.ManuscriptGreek],
+                CorpusId = corpus.Id,
+                Corpus = corpus,
+                DisplayName = "Macula Greek",
+                TokenizationFunction = "WhitespaceTokenizer",
+                Metadata = new(),
+                LastTokenized = DateTimeOffset.UtcNow,
+                Created = DateTimeOffset.UtcNow,
+                UserId = userId
+            };
+
+            SetVersification(tokenizedCorpus, ScrVers.Original);
+
+            return (corpus, tokenizedCorpus);
         }
 
         public static Models.TokenizedCorpus BuildTestTokenizedCorpus(Guid id, Models.Corpus corpus, string? displayName, string tokenizationFunction, ScrVers versification, Guid userId)
@@ -207,9 +268,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             }
         }
 
-        public static ScrVers BuildCustomVersification(ScrVers baseVersification)
+        public static ScrVers BuildCustomVersification(ScrVers baseVersification, int mapValue = 3)
         {
-            string customVersificationAddition = "&MAT 1:2 = MAT 1:1\nMAT 1:3 = MAT 1:2\nMAT 1:1 = MAT 1:3\n";
+            string customVersificationAddition = $"&MAT 1:2 = MAT 1:1\nMAT 1:{mapValue} = MAT 1:2\nMAT 1:1 = MAT 1:{mapValue}\n";
             using (var reader = new StringReader(customVersificationAddition))
             {
                 Versification.Table.Implementation.RemoveAllUnknownVersifications();
@@ -263,7 +324,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return tokenComposites;
         }
 
-        public static Models.TokenCompositeTokenAssociation BuildTestTokenCompositeTokenAssociation(Models.TokenComposite tokenComposite, string engineTokenId)
+        protected static Models.TokenCompositeTokenAssociation BuildTestTokenCompositeTokenAssociation(Models.TokenComposite tokenComposite, string engineTokenId)
         {
             var token = BuildTestToken(tokenComposite.TokenizedCorpus!, engineTokenId);
             var association =  new Models.TokenCompositeTokenAssociation
@@ -422,12 +483,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         public static (Models.NoteDomainEntityAssociation, NoteModelRef) BuildTestNoteTokenAssociation(Guid noteId, Guid tokenizedCorpusId, string tokenLocation, BuilderContext builderContext)
         {
+            var tokenIdType = (tokenLocation.Contains('-')) ? "CompositeTokenId" : "TokenId";
+
             var nd = new Models.NoteDomainEntityAssociation
             {
                 Id = Guid.NewGuid(),
                 NoteId = noteId,
                 DomainEntityIdGuid = Guid.NewGuid(),
-                DomainEntityIdName = "ClearBible.Engine.Utils.EntityId`1[[ClearBible.Engine.Corpora.TokenId, ClearBible.Engine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], ClearBible.Engine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                DomainEntityIdName = $"ClearBible.Engine.Utils.EntityId`1[[ClearBible.Engine.Corpora.{tokenIdType}, ClearBible.Engine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], ClearBible.Engine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             };
 
             var noteModelRef = new NoteModelRef<TokenRef>
@@ -436,6 +499,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 nd.NoteId,
                 TokenBuilder.BuildTokenRef(new Models.Token { TokenizedCorpusId = tokenizedCorpusId, EngineTokenId = tokenLocation }, builderContext)
             );
+
+            if (tokenIdType == "CompositeTokenId")
+            {
+                ((TokenRef)noteModelRef.ModelRef).IsComposite = true;
+            }
 
             return (nd, noteModelRef);
         }
@@ -608,7 +676,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 },
                 ExtractNoteModelRefs = (nda, builderContext) =>
                 {
-                    return new GeneralListModel<NoteModelRef>(noteAssociations.Select(e => e.noteModelRef));
+                    var ndaIds = nda.Values.SelectMany(nds => nds.Select(nd => nd.Id));
+                    return new GeneralListModel<NoteModelRef>(noteAssociations.Where(e => ndaIds.Contains(e.nd.Id)).Select(e => e.noteModelRef));
                 }
             };
 
@@ -631,9 +700,23 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             };
         }
 
-        public async ValueTask DisposeAsync()
+        protected virtual void Dispose(bool disposing)
         {
-            await DeleteDatabaseContext();
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    DeleteDatabaseContext().Wait();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
     }

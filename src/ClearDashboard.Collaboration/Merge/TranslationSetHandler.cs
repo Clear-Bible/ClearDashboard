@@ -11,13 +11,13 @@ using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public class TranslationSetHandler : DefaultMergeHandler
+public class TranslationSetHandler : DefaultMergeHandler<IModelSnapshot<Models.TranslationSet>>
 {
 	public TranslationSetHandler(MergeContext mergeContext) : base(mergeContext)
     {
     }
 
-    protected override async Task CreateChildrenAsync<T>(T parentSnapshot, CancellationToken cancellationToken)
+    protected override async Task HandleCreateChildrenAsync(IModelSnapshot<Models.TranslationSet> parentSnapshot, CancellationToken cancellationToken)
     {
         var translationSetId = (Guid)parentSnapshot.GetId();
 

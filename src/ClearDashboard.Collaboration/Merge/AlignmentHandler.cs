@@ -18,7 +18,7 @@ using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public class AlignmentHandler : DefaultMergeHandler
+public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignment>>
 {
     public static Guid LookupSourceTokenizedCorpusId(ProjectDbContext projectDbContext, Guid alignmentSetId, MergeCache cache)
     {

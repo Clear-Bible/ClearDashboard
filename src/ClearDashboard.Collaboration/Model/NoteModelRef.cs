@@ -114,14 +114,6 @@ public abstract class NoteModelRef : IModelSnapshot<Models.NoteDomainEntityAssoc
     public string IdentityKey => nameof(Models.NoteDomainEntityAssociation.Id);
 
     [JsonIgnore]
-    public IReadOnlyDictionary<string, object?> EntityPropertyValues => new Dictionary<string, object?>() {
-        { nameof(Models.NoteDomainEntityAssociation.Id), NoteDomainEntityAssociationId },
-        { nameof(Models.NoteDomainEntityAssociation.NoteId), NoteId },
-        { nameof(Models.NoteDomainEntityAssociation.DomainEntityIdName), null },  // These should get replaced with real values when merging into db
-        { nameof(Models.NoteDomainEntityAssociation.DomainEntityIdGuid), null }   // These should get replaced with real values when merging into db
-    }.AsReadOnly();
-
-    [JsonIgnore]
     public IReadOnlyDictionary<string, IEnumerable<IModelDistinguishable>> Children =>
         new Dictionary<string, IEnumerable<IModelDistinguishable>>().AsReadOnly();
 

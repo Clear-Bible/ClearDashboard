@@ -45,6 +45,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     protected readonly Dictionary<(Type EntityType, string EntityPropertyName), EntityValueResolver> _entityValueResolvers = new();
     protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _propertyNameMap = new();
     protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _idPropertyNameMap = new();
+    protected readonly Dictionary<(Type EntityType, string EntityPropertyName), string> _idReversePropertyNameMap = new();
 
     public MergeBehaviorBase(ILogger logger, MergeCache mergeCache, IProgress<ProgressStatus> progress)
     {
@@ -75,6 +76,11 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     public void AddIdPropertyNameMapping((Type EntityType, string PropertyName) key, IEnumerable<string> entityPropertyNames)
     {
         _idPropertyNameMap.Add(key, entityPropertyNames);
+    }
+
+    public void AddIdReversePropertyNameMapping((Type EntityType, string EntityPropertyName) key, string propertyName)
+    {
+        _idReversePropertyNameMap.Add(key, propertyName);
     }
 
     public virtual async Task MergeStartAsync(CancellationToken cancellationToken) { await Task.CompletedTask; }
@@ -142,13 +148,23 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
             if (identityPropertyName == propertyName)
             {
-                // Were adding an entity, so not trying to resolve to some existing
+                // We're adding an entity, so not trying to resolve to some existing
                 // database id value.  If the modelSnapshot happens to have an Id
                 // already, use it.  Otherwise create a new Guid:
                 if (modelSnapshot.PropertyValues.ContainsKey(propertyName))
+                {
                     identityPropertyValue = (Guid)modelSnapshot.PropertyValues[propertyName]!;
+                }
+                else if (_idReversePropertyNameMap.TryGetValue((entityType, propertyName), out var modelSnapshotPropertyName) &&
+                        modelSnapshot.PropertyValues.TryGetValue(modelSnapshotPropertyName, out var value) &&
+                        value is Guid guidValue)
+                {
+                    identityPropertyValue = guidValue;
+                }
                 else
+                {
                     identityPropertyValue = Guid.NewGuid();
+                }
 
                 command.Parameters[p.ParameterName].Value = identityPropertyValue;
 

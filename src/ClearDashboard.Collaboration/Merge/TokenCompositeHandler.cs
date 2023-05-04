@@ -13,10 +13,11 @@ using ClearDashboard.DAL.CQRS;
 using MediatR;
 using ClearDashboard.DAL.Alignment.Corpora;
 using SIL.Machine.Utils;
+using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public class TokenCompositeHandler : DefaultMergeHandler
+public class TokenCompositeHandler : DefaultMergeHandler<IModelSnapshot<Models.TokenComposite>>
 {
     public TokenCompositeHandler(MergeContext mergeContext) : base(mergeContext)
     {
@@ -33,8 +34,8 @@ public class TokenCompositeHandler : DefaultMergeHandler
             (typeof(Models.TokenComposite), nameof(Models.TokenComposite.VerseRowId)),
             entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.EntityPropertyValues.TryGetValue("VerseRowLocation", out var verseRowLocation) &&
-                    modelSnapshot.EntityPropertyValues.TryGetValue("TokenizedCorpusId", out var tokenizedCorpusId))
+                if (modelSnapshot.PropertyValues.TryGetValue(TokenBuilder.VERSE_ROW_LOCATION, out var verseRowLocation) &&
+                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusId))
                 {
                     var verseRowId = projectDbContext.VerseRows
                         .Where(e => (Guid)e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
@@ -53,11 +54,11 @@ public class TokenCompositeHandler : DefaultMergeHandler
             });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(  
-            (typeof(Models.TokenComposite), "VerseRowLocation"),
+            (typeof(Models.TokenComposite), TokenBuilder.VERSE_ROW_LOCATION),
             new[] { nameof(Models.TokenComposite.VerseRowId) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.TokenComposite), "TokenLocations"),
+            (typeof(Models.TokenComposite), TokenBuilder.TOKEN_LOCATIONS),
             Enumerable.Empty<string>());
     }
 
@@ -102,19 +103,14 @@ DELETE FROM TokenComponent WHERE Id IN
     // is approach this at a low level - no business logic - and assume that the
     // snapshot carries across changes to affected Translations and Alignments.
 
-    protected override async Task HandleDeleteAsync<T>(T itemToDelete, CancellationToken cancellationToken)
+    protected override async Task HandleDeleteAsync(IModelSnapshot<Models.TokenComposite> itemToDelete, CancellationToken cancellationToken)
     {
         await base.HandleDeleteAsync(itemToDelete, cancellationToken);
     }
 
-    protected override async Task<Guid> HandleCreateAsync<T>(T itemToCreate, CancellationToken cancellationToken)
+    protected override async Task<Guid> HandleCreateAsync(IModelSnapshot<Models.TokenComposite> itemToCreate, CancellationToken cancellationToken)
     {
         var id = await base.HandleCreateAsync(itemToCreate, cancellationToken);
-
-        if (!typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
-        {
-            throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
-        }
 
         // Not only do we need to create the TokenComposite record itself,
         // but we also need to find all TokenLocation tokens and set their
@@ -165,14 +161,9 @@ DELETE FROM TokenComponent WHERE Id IN
         return id;
     }
 
-    public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<bool> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.TokenComposite>> modelDifference, IModelSnapshot<Models.TokenComposite> itemToModify, CancellationToken cancellationToken = default)
     {
-        var modified = await base.HandleModifyPropertiesAsync<T>(modelDifference, itemToModify, cancellationToken);
-
-        if (!typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
-        {
-            throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
-        }
+        var modified = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
 
         // If the modifications included changes to which tokens were part of
         // the composite, we need to do two things:

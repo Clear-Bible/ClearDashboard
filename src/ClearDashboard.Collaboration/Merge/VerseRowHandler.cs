@@ -13,7 +13,7 @@ using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public class VerseRowHandler : DefaultMergeHandler
+public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRow>>
 {
     public List<(string bookChapterVerse, string text, bool isSentenceStart)> VerseRowsForTokenization = new();
     public Dictionary<(string bookChapterVerse, Guid tokenizedCorpusId), (Guid verseRowId, Guid userId)> VerseRowLookup = new();
@@ -29,8 +29,8 @@ public class VerseRowHandler : DefaultMergeHandler
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.VerseRow>");
                 }
 
-                if (modelSnapshot.EntityPropertyValues.TryGetValue("BookChapterVerse", out var bookChapterVerse) &&
-                    modelSnapshot.EntityPropertyValues.TryGetValue("TokenizedCorpusId", out var tokenizedCorpusId))
+                if (modelSnapshot.PropertyValues.TryGetValue("BookChapterVerse", out var bookChapterVerse) &&
+                    modelSnapshot.PropertyValues.TryGetValue("TokenizedCorpusId", out var tokenizedCorpusId))
                 {
                     var verseRowId = projectDbContext.VerseRows
                         .Where(e => (Guid)e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
@@ -90,19 +90,16 @@ public class VerseRowHandler : DefaultMergeHandler
         VerseRowLookup.Add((bookChapterVerse, tokenizedCorpusId), (id, userId));
     }
 
-    protected override async Task HandleDeleteAsync<T>(T itemToDelete, CancellationToken cancellationToken)
+    protected override async Task HandleDeleteAsync(IModelSnapshot<Models.VerseRow> itemToDelete, CancellationToken cancellationToken)
     {
-        if (typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.VerseRow>)))
-        {
-            // We need to manually delete any TokenComposites that are associated
-            // with the token(s) that are about to get deleted (might be that not
-            // all of a TokenComposite's tokens get cascade deleted, but the
-            // TokenComposite would no longer be valid):
-            await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
-                $"Deleting any TokenComposites related by Token to VerseRow '{itemToDelete.GetId()}'",
-                TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQueryAsync((Guid)itemToDelete.GetId()),
-                cancellationToken);
-        }
+        // We need to manually delete any TokenComposites that are associated
+        // with the token(s) that are about to get deleted (might be that not
+        // all of a TokenComposite's tokens get cascade deleted, but the
+        // TokenComposite would no longer be valid):
+        await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+            $"Deleting any TokenComposites related by Token to VerseRow '{itemToDelete.GetId()}'",
+            TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQueryAsync((Guid)itemToDelete.GetId()),
+            cancellationToken);
 
         // VerseRow has a Cascade Delete foreign key relationship in Sqlite with
         // TokenComponent, so related TokenComponents should get deleted
@@ -111,55 +108,44 @@ public class VerseRowHandler : DefaultMergeHandler
         await base.HandleDeleteAsync(itemToDelete, cancellationToken);
     }
 
-    protected override async Task<Guid> HandleCreateAsync<T>(T itemToCreate, CancellationToken cancellationToken)
+    protected override async Task<Guid> HandleCreateAsync(IModelSnapshot<Models.VerseRow> itemToCreate, CancellationToken cancellationToken)
     {
         var id = await base.HandleCreateAsync(itemToCreate, cancellationToken);
-
-        if (typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.VerseRow>)))
-        {
-            AddVerseRowForTokenization((Guid)id!, (IModelSnapshot<Models.VerseRow>)itemToCreate, null);
-        }
+        AddVerseRowForTokenization((Guid)id!, (IModelSnapshot<Models.VerseRow>)itemToCreate, null);
 
         return id;
     }
 
-    public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<bool> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.VerseRow>> modelDifference, IModelSnapshot<Models.VerseRow> itemToModify, CancellationToken cancellationToken = default)
     {
-        if (typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.VerseRow>)))
+        var modelSnapshotToModify = (IModelSnapshot<Models.VerseRow>)itemToModify;
+        var modelSnapshotDifference = (IModelDifference<IModelSnapshot<Models.VerseRow>>)modelDifference;
+
+        var modelMergeResult = CheckMerge(modelDifference, itemToModify);
+
+        if (modelMergeResult == ModelMergeResult.ShouldMerge)
         {
-            var modelSnapshotToModify = (IModelSnapshot<Models.VerseRow>)itemToModify;
-            var modelSnapshotDifference = (IModelDifference<IModelSnapshot<Models.VerseRow>>)modelDifference;
+            var where = new Dictionary<string, object>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
+            var resolvedWhereClause = await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
 
-            var modelMergeResult = CheckMerge<T>(modelDifference, itemToModify);
-
-            if (modelMergeResult == ModelMergeResult.ShouldMerge)
+            if (modelDifference.PropertyDifferences.Where(pd => pd.PropertyName == nameof(Models.VerseRow.OriginalText)).Any())
             {
-                var where = new Dictionary<string, object>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.EntityPropertyValues[modelSnapshotToModify.IdentityKey]! } };
-                var resolvedWhereClause = await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
+                var verseRowId = (Guid)resolvedWhereClause[nameof(Models.VerseRow.Id)];
 
-                if (modelDifference.PropertyDifferences.Where(pd => pd.PropertyName == nameof(Models.VerseRow.OriginalText)).Any())
-                {
-                    var verseRowId = (Guid)resolvedWhereClause[nameof(Models.VerseRow.Id)];
+                await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+                    $"Deleting any TokenComposites related by Token to VerseRow '{modelSnapshotToModify.GetId()}'",
+                    TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQueryAsync(verseRowId),
+                    cancellationToken);
 
-                    await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
-                        $"Deleting any TokenComposites related by Token to VerseRow '{modelSnapshotToModify.GetId()}'",
-                        TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQueryAsync(verseRowId),
-                        cancellationToken);
+                await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+                    $"Deleting any TokenComponents related by VerseRow '{modelSnapshotToModify.GetId()}'",
+                    TokenCompositeHandler.GetDeleteTokenComponentsByVerseRowIdQueryAsync(verseRowId),
+                    cancellationToken);
 
-                    await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
-                        $"Deleting any TokenComponents related by VerseRow '{modelSnapshotToModify.GetId()}'",
-                        TokenCompositeHandler.GetDeleteTokenComponentsByVerseRowIdQueryAsync(verseRowId),
-                        cancellationToken);
-
-                    AddVerseRowForTokenization(verseRowId, modelSnapshotToModify, modelSnapshotDifference);
-                }
-
-                return true;
+                AddVerseRowForTokenization(verseRowId, modelSnapshotToModify, modelSnapshotDifference);
             }
-        }
-        else
-        {
-            throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
+
+            return true;
         }
 
         return false;
@@ -167,8 +153,8 @@ public class VerseRowHandler : DefaultMergeHandler
 
     public Expression<Func<Models.VerseRow, bool>> BuildVerseRowLookupWhereExpression(IModelSnapshot<Models.VerseRow> snapshot)
     {
-        var bookChapterVerse = (string)snapshot.EntityPropertyValues["BookChapterVerse"]!;
-        var tokenizedCorpusId = (Guid)snapshot.EntityPropertyValues["TokenizedCorpusId"]!;
+        var bookChapterVerse = (string)snapshot.PropertyValues["BookChapterVerse"]!;
+        var tokenizedCorpusId = (Guid)snapshot.PropertyValues["TokenizedCorpusId"]!;
         return vr => vr.BookChapterVerse == bookChapterVerse && vr.TokenizedCorpusId == tokenizedCorpusId;
     }
 }

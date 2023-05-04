@@ -16,16 +16,19 @@ using Microsoft.EntityFrameworkCore;
 using ClearBible.Engine.Persistence;
 using ClearDashboard.Collaboration.Factory;
 using SIL.Machine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public class TokenizedCorpusHandler : DefaultMergeHandler
+public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.TokenizedCorpus>>
 {
+    public List<Guid> VersificationChangedParallelCorpusGuids = new();
+
     public TokenizedCorpusHandler(MergeContext mergeContext) : base(mergeContext)
     {
     }
 
-    public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<bool> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.TokenizedCorpus>> modelDifference, IModelSnapshot<Models.TokenizedCorpus> itemToModify, CancellationToken cancellationToken = default)
     {
         var modified = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
 
@@ -39,14 +42,46 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             if (tokenizationDifference is not null)
             {
                 // FIXME:  delete all existing tokens for this tokenized corpus and retokenize?
+            }
 
+            if (modelDifference.PropertyDifferences
+                .Where(pd => 
+                    pd.PropertyName == nameof(Models.TokenizedCorpus.ScrVersType) || 
+                    pd.PropertyName == nameof(Models.TokenizedCorpus.CustomVersData))
+                .Any())
+            {
+
+                var tokenizedCorpusId = (Guid)itemToModify.GetId();
+
+                await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+                    $"Finding ParallelCorpora for which to replace VerseMappings",
+                    async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
+
+                        var dependentParallelCorpusGuids = projectDbContext.ParallelCorpa
+                            .Where(e => 
+                                e.SourceTokenizedCorpusId == tokenizedCorpusId ||
+                                e.TargetTokenizedCorpusId == tokenizedCorpusId)
+                            .Select(e => e.Id)
+                            .ToList();
+
+                        VersificationChangedParallelCorpusGuids.AddRange(dependentParallelCorpusGuids);
+
+                        foreach (var guid in dependentParallelCorpusGuids)
+                        {
+                            logger.LogInformation($"Versification changed for tokenized corpus '{tokenizedCorpusId}', found dependent parallel corpus '{guid}' for which to update verse mappings");
+                        }
+
+                        await Task.CompletedTask;
+                    },
+                    cancellationToken
+                );
             }
         }
 
         return modified;
     }
 
-    protected override async Task CreateChildrenAsync<T>(T parentSnapshot, CancellationToken cancellationToken)
+    protected override async Task HandleCreateChildrenAsync(IModelSnapshot<Models.TokenizedCorpus> parentSnapshot, CancellationToken cancellationToken)
     {
         // Sequence is important here, which is why the base class method is
         // overridden:
@@ -61,7 +96,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             verseRowHandler.VerseRowLookup.Clear();
 
             _mergeContext.Logger.LogInformation($"Inserting verse row children for tokenized corpus  '{parentSnapshot.GetId()}'");
-            var insertCount = await CreateListItemsAsync<IModelSnapshot<Models.VerseRow>>(
+            var insertCount = await verseRowHandler.CreateListItemsAsync(
                 (IEnumerable<IModelSnapshot<Models.VerseRow>>)parentSnapshot.Children[verseRowChildName],
                 cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed inserting {insertCount} verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
@@ -70,32 +105,32 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             await InsertTokens((IModelSnapshot<Models.TokenizedCorpus>)parentSnapshot, verseRowHandler, cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed inserting tokens for imported verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
         }
-        else
+
+        if (TokenizedTextCorpus.FixedTokenizedCorpusIdsByCorpusType.ContainsValue((Guid)parentSnapshot.GetId()))
         {
-            if (parentSnapshot is not null)
-            {
-                _mergeContext.Logger.LogInformation($"Inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
-                await ImportManuscriptVerseRowsTokens((IModelSnapshot<Models.TokenizedCorpus>)parentSnapshot!, cancellationToken);
-                _mergeContext.Logger.LogInformation($"Completed inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
-            }
+            _mergeContext.Logger.LogInformation($"Inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
+            await ImportManuscriptVerseRowsTokens((IModelSnapshot<Models.TokenizedCorpus>)parentSnapshot!, cancellationToken);
+            _mergeContext.Logger.LogInformation($"Completed inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
         }
 
         var compositeChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.TokenComposite)].childName;
-        if (parentSnapshot!.Children.ContainsKey(compositeChildName))
+        if (parentSnapshot.Children.ContainsKey(compositeChildName))
         {
+            var tokenCompositeHandler = _mergeContext.FindMergeHandler<IModelSnapshot<Models.TokenComposite>>();
+
             _mergeContext.Logger.LogInformation($"Inserting composite token children for tokenized corpus '{parentSnapshot.GetId()}'");
-            var insertCount = await CreateListItemsAsync<IModelSnapshot<Models.TokenComposite>>(
+            var insertCount = await tokenCompositeHandler.CreateListItemsAsync(
                 (IEnumerable<IModelSnapshot<Models.TokenComposite>>)parentSnapshot.Children[compositeChildName],
                 cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed inserting {insertCount} composite token children for tokenized corpus '{parentSnapshot.GetId()}'");
         }
     }
 
-    protected override async Task ChildListDifferenceAsync<T>(
+    protected override async Task HandleChildListDifferenceAsync(
         IReadOnlyDictionary<string, IListDifference> childListDifferences,
-        T? parentItemInCurrentSnapshot,
-        T? parentItemInTargetCommitSnapshot,
-        CancellationToken cancellationToken) where T : default
+        IModelSnapshot<Models.TokenizedCorpus>? parentItemInCurrentSnapshot,
+        IModelSnapshot<Models.TokenizedCorpus>? parentItemInTargetCommitSnapshot,
+        CancellationToken cancellationToken)
     {
         var verseRowChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.VerseRow)].childName;
         if (childListDifferences.ContainsKey(verseRowChildName))
@@ -107,7 +142,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             verseRowHandler.VerseRowLookup.Clear();
 
             _mergeContext.Logger.LogInformation($"Starting handle verse row child list differences for tokenized corpus");
-            await HandleListDifferenceGroup<IModelSnapshot<Models.VerseRow>>(
+            await verseRowHandler.MergeListDifferenceGroup(
                 childListDifferences[verseRowChildName],
                 parentItemInCurrentSnapshot?.Children[verseRowChildName],
                 parentItemInTargetCommitSnapshot?.Children[verseRowChildName],
@@ -125,8 +160,10 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
         var compositeChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.TokenComposite)].childName;
         if (childListDifferences.ContainsKey(compositeChildName))
         {
+            var tokenCompositeHandler = _mergeContext.FindMergeHandler< IModelSnapshot<TokenCompositeHandler>>();
+
             _mergeContext.Logger.LogInformation($"Starting handle composite token child list differences for tokenized corpus");
-            await HandleListDifferenceGroup<IModelSnapshot<Models.TokenComposite>>(
+            await tokenCompositeHandler.MergeListDifferenceGroup(
                 childListDifferences[compositeChildName],
                 parentItemInCurrentSnapshot?.Children[compositeChildName],
                 parentItemInTargetCommitSnapshot?.Children[compositeChildName],
