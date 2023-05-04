@@ -100,6 +100,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 backgroundTaskStatus.Description = _localizationService!.Get("BackgroundTasks_TaskCancelled");
                 NotifyOfPropertyChange(() => BackgroundTaskStatuses);
 
+                _eventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus));
+
                 ToggleSpinner();
             }
 

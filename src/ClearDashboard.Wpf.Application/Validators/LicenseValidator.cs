@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {
-    public class LicenseUserValidator : AbstractValidator<LicenseUser>
+    public class LicenseUserValidator : AbstractValidator<User>
     {
         private ILogger _logger;
         private ILocalizationService _localizationService;

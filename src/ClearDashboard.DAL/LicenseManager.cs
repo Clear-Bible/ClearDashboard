@@ -1,18 +1,21 @@
-﻿using System;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer
 {
     public static class LicenseManager
     {
-
-        public static string LicenseFilePath =
+        public static string LegacyLicenseFilePath =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects",
                 "license.txt");
+
+        public static string LicenseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets", "License");
+        public static string LicenseFileName = "license.txt";
+        public static string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
 
         private static Aes CreateCryptoProvider()
         {
@@ -34,21 +37,21 @@ namespace ClearDashboard.DataAccessLayer
             return cryptProvider;
         }
 
-        public static void EncryptToFile(LicenseUser licenseUser, string path)
+        public static void EncryptToFile(User licenseUser, string folderPath)
         {
 
-            var str = EncryptToString(licenseUser, path);
+            var str = EncryptToString(licenseUser, folderPath);
 
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(folderPath))
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(folderPath);
             }
 
-            File.WriteAllText(Path.Combine(path, "license.txt"), str);
+            File.WriteAllText(Path.Combine(folderPath, LicenseFileName), str);
 
         }
 
-        public static string EncryptToString(LicenseUser licenseUser, string path)
+        public static string EncryptToString(User licenseUser, string folderPath)
         {
 
             var cryptProvider = CreateCryptoProvider();
@@ -64,33 +67,27 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        public static T? GetUser<T>()
+        public static User GetUserFromLicense()
         {
-            return DecryptFromFile<T>(LicenseFilePath);
+            return DecryptLicenseFromFileToUser(LicenseFilePath);
         }
 
-        public static string DecryptFromFile(string path)
+        public static User DecryptLicenseFromFileToUser(string filePath)
         {
             try
             {
-                var str = File.ReadAllText(path);
+                var json = DecryptLicenseFromFile(filePath);
 
-                return DecryptFromString(str);
+                return DecryptedJsonToUser(json);
 
             }
             catch (Exception)
             {
-                return "";
+                return new User();
             }
         }
 
-        public static T? DecryptFromString<T>(string licenseKey)
-        {
-            var json = DecryptFromString(licenseKey);
-            return Decrypt<T>(json);
-        }
-
-        public static string DecryptFromString(string str)
+        public static string DecryptLicenseFromString(string str)
         {
             try
             {
@@ -110,71 +107,59 @@ namespace ClearDashboard.DataAccessLayer
                 return "";
             }
         }
-
-        public static T? Decrypt<T>(string decryptedLicenseKey)
+        public static string DecryptLicenseFromFile(string filePath)
         {
             try
             {
-                var entity = JsonSerializer.Deserialize<T>(decryptedLicenseKey);
-                return entity ?? default(T);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
+                if (!File.Exists(LicenseFilePath)&& filePath == LicenseFilePath)
+                {
+                    filePath = LegacyLicenseFilePath;
+                }
 
+                var str = File.ReadAllText(filePath);
 
-        public static TUser? DecryptFromFile<TUser>(string path)
-        {
-            try
-            {
-                var json = DecryptFromFile(path);
-
-                return Decrypt<TUser>(json);
+                return DecryptLicenseFromString(str);
 
             }
             catch (Exception)
             {
-                return default;
+                return "";
             }
         }
 
-        public static LicenseUser DecryptedJsonToLicenseUser(string decryptedLicenseKey)
+        public static User DecryptedJsonToUser(string decryptedLicenseKey)
         {
             try
             {
-                var licenseUser = JsonSerializer.Deserialize<LicenseUser>(decryptedLicenseKey);
-                return licenseUser ?? new LicenseUser();
+                var licenseUser = JsonSerializer.Deserialize<User>(decryptedLicenseKey);
+                return licenseUser ?? new User();
             }
             catch (Exception)
             {
                 try
                 {
                     var temporaryLicenseUser = JsonSerializer.Deserialize<TemporaryLicenseUser>(decryptedLicenseKey);
-                    var licenseUser = new LicenseUser
+                    var licenseUser = new User
                     {
                         FirstName = temporaryLicenseUser.FirstName,
                         LastName = temporaryLicenseUser.LastName,
                         LicenseKey = temporaryLicenseUser.LicenseKey,
                         ParatextUserName = temporaryLicenseUser.ParatextUserName,
-                        MatchType = temporaryLicenseUser.MatchType,
                         Id = Guid.Parse(temporaryLicenseUser.Id)
                     };
                     return licenseUser;
                 }
                 catch
                 {
-                    return new LicenseUser();
+                    return new User();
                 }
-               
             }
         }
 
-        public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
+        public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(User given, User decrypted)
         {
             if (given.FirstName == decrypted.FirstName && given.LastName == decrypted.LastName)// &&
-                //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
+                                                                                               //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
             {
                 return LicenseUserMatchType.Match;
             }
