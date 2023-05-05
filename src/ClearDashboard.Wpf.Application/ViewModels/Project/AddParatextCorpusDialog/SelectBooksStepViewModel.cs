@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
@@ -204,13 +205,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 {
                     if (Int32.TryParse(book, out int index))
                     {
-                        SelectedBooks[index-1].IsEnabled = false;
-                        SelectedBooks[index-1].IsSelected = true;
+                        SelectedBooks[index - 1].IsEnabled = false;
+                        SelectedBooks[index - 1].IsSelected = true;
                         SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Black);
                     }
                 }
                 NotifyOfPropertyChange(() => SelectedBooks);
             }
+
+            if (ParentViewModel.UsfmErrors != null)
+            {
+                foreach (var error in ParentViewModel.UsfmErrors)
+                {
+                    var indexString = BookChapterVerseViewModel.GetBookNumFromBookName(error.Reference.Substring(0, 3));
+                    if (Int32.TryParse(indexString, out int index))
+                    {
+                        SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Red);
+                        SelectedBooks[index - 1].BackColor = new SolidColorBrush(Colors.IndianRed);
+                    }
+                }
+                NotifyOfPropertyChange(() => SelectedBooks);
+            }
+            
             base.OnActivateAsync(cancellationToken);
         }
 
