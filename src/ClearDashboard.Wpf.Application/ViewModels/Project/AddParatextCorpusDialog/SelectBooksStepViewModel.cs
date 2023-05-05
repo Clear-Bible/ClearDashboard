@@ -151,7 +151,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             OkCommand = new RelayCommand(Ok);
             NextCommand = new RelayCommand(Next);
             BackCommand = new RelayCommand(BackAsync);
+        }
 
+        private void FormatSelectedBooks()
+        {
             // initialize the Bible books 
             var books = SelectedBook.Init();
             foreach (var book in books)
@@ -164,6 +167,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         protected async override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            FormatSelectedBooks();
             // get those books which actually have text in them from Paratext
             CancellationToken cancellationTokenProject = new();
             var request = await _projectManager?.ExecuteRequest(new GetVersificationAndBookIdByParatextProjectIdQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
