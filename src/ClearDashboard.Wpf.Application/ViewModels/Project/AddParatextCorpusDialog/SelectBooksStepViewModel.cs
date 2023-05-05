@@ -1,26 +1,24 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models;
+using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using ClearApplicationFoundation.Framework.Input;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Features.Corpa;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {

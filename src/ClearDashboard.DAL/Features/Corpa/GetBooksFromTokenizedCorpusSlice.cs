@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Threading;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer.Features.Corpa
 {
@@ -30,8 +27,6 @@ namespace ClearDashboard.DataAccessLayer.Features.Corpa
 
         protected override async Task<RequestResult<List<string>>> GetDataAsync(GetBooksFromTokenizedCorpusQuery request, CancellationToken cancellationToken)
         {
-            // need an await to get the compiler to be 'quiet'
-            //await Task.CompletedTask;
             List<string> tokenizedBookList = new();
 
             try
