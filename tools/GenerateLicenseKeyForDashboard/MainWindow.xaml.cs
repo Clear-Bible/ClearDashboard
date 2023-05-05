@@ -25,10 +25,9 @@ namespace GenerateLicenseKeyForDashboard
 
         private string GenerateLicense(string firstName, string lastName, Guid id, Guid licenseKey)
         {
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var filePath = Path.Combine(documentsPath, $"ClearDashboard_Projects\\{firstName + lastName}");
+            var folderPath = Path.Combine(LicenseManager.LicenseFolderPath, $"{firstName + lastName}");
 
-            var licenseUser = new LicenseUser
+            var licenseUser = new User
             {
                 FirstName = firstName,
                 LastName = lastName,
@@ -36,16 +35,16 @@ namespace GenerateLicenseKeyForDashboard
                 LicenseKey = licenseKey.ToString("N"),
             };
 
-            LicenseManager.EncryptToFile(licenseUser, filePath);
-            var encryptedLicenseKey = LicenseManager.EncryptToString(licenseUser, filePath);
+            LicenseManager.EncryptToFile(licenseUser, folderPath);
+            var encryptedLicenseKey = LicenseManager.EncryptToString(licenseUser, folderPath);
 
             return encryptedLicenseKey;
         }
 
         private void DecryptLicenseKey_OnClick(object sender, RoutedEventArgs e)
         {
-            var json = LicenseManager.DecryptFromString(LicenseKeyDecryptionBox.Text);
-            var licenseUser = LicenseManager.DecryptedJsonToLicenseUser(json);
+            var json = LicenseManager.DecryptLicenseFromString(LicenseKeyDecryptionBox.Text);
+            var licenseUser = LicenseManager.DecryptedJsonToUser(json);
 
             DecryptedFirstNameBox.Text = licenseUser.FirstName;
             DecryptedLastNameBox.Text = licenseUser.LastName;

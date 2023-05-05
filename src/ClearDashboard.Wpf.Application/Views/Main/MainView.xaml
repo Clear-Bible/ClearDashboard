@@ -251,15 +251,21 @@
 
         </Grid>
 
-        <Grid
-            x:Name="GridIsVisible"
+        <materialDesign:Card  
+            BorderThickness="1"
+            materialDesign:ElevationAssist.Elevation="Dp0"
+            MaxWidth="400"
+            Margin="10"
+            Background="#EEEBEB"
             Grid.Row="0"
             Grid.Column="0"
-            Width="250"
-            Background="{StaticResource SecondaryHueMidBrush}"
             Visibility="{Binding GridIsVisible, Mode=TwoWay}">
+        <Grid 
+            x:Name="GridIsVisible"
+            Margin="4"
+            Width="250">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20" />
+                <RowDefinition Height="24" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
@@ -301,15 +307,24 @@
                 </Button>
             </DockPanel>
         </Grid>
+            </materialDesign:Card>
 
-        <Grid
-            x:Name="DeleteGridIsVisible"
+        <materialDesign:Card  
+            BorderThickness="1"
+            materialDesign:ElevationAssist.Elevation="Dp0"
+            MaxWidth="400"
+            Margin="10"
+            Background="#EEEBEB"
             Grid.Row="0"
             Grid.Column="0"
+            Visibility="{Binding DeleteGridIsVisible, Mode=TwoWay}">
+
+            <Grid
+            x:Name="DeleteGridIsVisible"
+            Margin="4"
             Width="250"
             Height="150"
-            Background="{StaticResource SecondaryHueMidBrush}"
-            Visibility="{Binding DeleteGridIsVisible, Mode=TwoWay}">
+            >
             <Grid.RowDefinitions>
                 <RowDefinition Height="25" />
                 <RowDefinition Height="*" />
@@ -320,10 +335,12 @@
                 x:Name="FileLayouts"
                 Grid.Row="1"
                 BorderBrush="{DynamicResource MaterialDesignCardBackground}"
-                BorderThickness="2">
+                BorderThickness="1">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Padding" Value="0" />
+                            <Setter Property="Background" Value="{DynamicResource MaterialDesignCardBackground}"></Setter>
+                        
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
@@ -331,7 +348,7 @@
                         <Grid
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            Background="{DynamicResource MaterialDesignCardBackground}">
+                           >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="24" />
                                 <ColumnDefinition Width="*" />
@@ -341,6 +358,9 @@
                                     <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
                                         <Setter Property="IsEnabled" Value="True" />
                                         <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand" />
+                                            </Trigger>
                                             <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
                                                 <Setter Property="IsEnabled" Value="False" />
                                             </DataTrigger>
@@ -395,6 +415,7 @@
 
 
         </Grid>
+            </materialDesign:Card>
         <ProgressBar
             x:Name="ProgressBarVisibility"
             Grid.Row="1"
