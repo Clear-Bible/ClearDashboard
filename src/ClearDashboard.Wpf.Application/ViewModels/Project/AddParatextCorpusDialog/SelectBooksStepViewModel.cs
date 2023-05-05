@@ -170,31 +170,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             FormatSelectedBooks();
             // get those books which actually have text in them from Paratext
             CancellationToken cancellationTokenProject = new();
-            var request = await _projectManager?.ExecuteRequest(new GetVersificationAndBookIdByParatextProjectIdQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
+            var requestFromParatext = await _projectManager?.ExecuteRequest(new GetVersificationAndBookIdByParatextProjectIdQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
             
-            if (request.Success && request.HasData)
+            if (requestFromParatext.Success && requestFromParatext.HasData)
             {
-                if (request.HasData)
+                var booksInProject = requestFromParatext.Data;
+
+                // iterate through and enable those books which have text
+                foreach (var book in SelectedBooks)
                 {
-                    var books = request.Data;
-
-                    // iterate through and enable those books which have text
-                    foreach (var book in SelectedBooks)
+                    var found = booksInProject.BookAbbreviations.FirstOrDefault(x => x == book.Abbreviation);
+                    if(found != null)
                     {
-                        var found = books.BookAbbreviations.FirstOrDefault(x => x == book.Abbreviation);
-                        if(found != null)
-                        {
-                            book.IsEnabled = true;
-                            book.IsSelected = false; // set to false so that the end user doesn't automatically just select every book to enter
-                        }
-                        else
-                        {
-                            book.IsEnabled =false;
-                            book.IsSelected = false;
-                        }
+                        book.IsEnabled = true;
+                        book.IsSelected = false; // set to false so that the end user doesn't automatically just select every book to enter
                     }
-
-                    NotifyOfPropertyChange(() => SelectedBooks);
+                    else
+                    {
+                        book.IsEnabled =false;
+                        book.IsSelected = false;
+                    }
                 }
             }
 
@@ -202,10 +197,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
             if (tokenizedBookRequest.Success && tokenizedBookRequest.HasData)
             {
-                var books = tokenizedBookRequest.Data;
+                var booksTokenized = tokenizedBookRequest.Data;
 
                 // iterate through and enable those books which have text
-                foreach (var book in books)
+                foreach (var book in booksTokenized)
                 {
                     if (Int32.TryParse(book, out int index))
                     {
@@ -214,7 +209,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                         SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Black);
                     }
                 }
-                NotifyOfPropertyChange(() => SelectedBooks);
             }
 
             if (ParentViewModel.UsfmErrors != null)
@@ -228,9 +222,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                         SelectedBooks[index - 1].HasUsfmError = true;
                     }
                 }
-                NotifyOfPropertyChange(() => SelectedBooks);
             }
-            
+
+            NotifyOfPropertyChange(() => SelectedBooks);
+
             base.OnActivateAsync(cancellationToken);
         }
 
