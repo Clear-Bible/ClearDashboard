@@ -221,7 +221,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                     if (Int32.TryParse(indexString, out int index))
                     {
                         SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Red);
-                        SelectedBooks[index - 1].BackColor = new SolidColorBrush(Colors.IndianRed);
+                        SelectedBooks[index - 1].HasUsfmError = true;
                     }
                 }
                 NotifyOfPropertyChange(() => SelectedBooks);
