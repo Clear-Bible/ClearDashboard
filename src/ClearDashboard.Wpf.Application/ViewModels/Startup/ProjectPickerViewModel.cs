@@ -182,8 +182,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay;
-       
+        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay = new();
         public ObservableCollection<DashboardProject>? DashboardProjectsDisplay
         {
             get => _dashboardProjectsDisplay;
@@ -284,7 +283,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         #region Methods
 
-        private async Task GetProjectsVersion()
+        private async Task GetProjectsVersion(DashboardProject? updatedProject = null)
         {
             DashboardProjects.Clear();
 
@@ -324,7 +323,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     bool isClosed = true;
                     if (currentlyOpenProjectsList.Contains(directoryInfo.Name))
                     {
-                        isClosed = false;
+                        if (updatedProject is not null && updatedProject.FullFilePath == file)
+                        {
+                            isClosed = true; // post migration project
+                        }
+                        else
+                        {
+                            isClosed = false;
+                        }
                     }
 
                     // add as ListItem
@@ -353,7 +359,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 }
             }
 
-            _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
+            DashboardProjectsDisplay.Clear();
             _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
 
             NotifyOfPropertyChange(() => DashboardProjectsDisplay);
@@ -378,9 +384,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             manager.ShowDialogAsync(viewModel, null, settings);
         }
 
-        public async Task RefreshProjectList()
+        public async Task RefreshProjectList(DashboardProject? dashboardProject)
         {
-            await GetProjectsVersion();
+            await GetProjectsVersion(dashboardProject);
         }
 
 
