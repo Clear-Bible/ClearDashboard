@@ -259,7 +259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             if (_runsCompleted)
             {
-                await ProjectPickerViewModel.RefreshProjectList(this.Project);
+                await ProjectPickerViewModel.RefreshProjectList();
             }
 
             await this.TryCloseAsync();

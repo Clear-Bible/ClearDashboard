@@ -283,7 +283,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         #region Methods
 
-        private async Task GetProjectsVersion(DashboardProject? updatedProject = null)
+        private async Task GetProjectsVersion()
         {
             DashboardProjects.Clear();
 
@@ -323,14 +323,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     bool isClosed = true;
                     if (currentlyOpenProjectsList.Contains(directoryInfo.Name))
                     {
-                        if (updatedProject is not null && updatedProject.FullFilePath == file)
-                        {
-                            isClosed = true; // post migration project
-                        }
-                        else
-                        {
-                            isClosed = false;
-                        }
+                        isClosed = false;
                     }
 
                     // add as ListItem
@@ -384,9 +377,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             manager.ShowDialogAsync(viewModel, null, settings);
         }
 
-        public async Task RefreshProjectList(DashboardProject? dashboardProject)
+        public async Task RefreshProjectList()
         {
-            await GetProjectsVersion(dashboardProject);
+            await GetProjectsVersion();
         }
 
 
