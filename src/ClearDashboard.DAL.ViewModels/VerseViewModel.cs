@@ -5,19 +5,19 @@ using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.ViewModels
 {
-    public class VerseViewModel : ViewModelBase<Verse>
+    public class VerseViewModel : ViewModelBase<VerseObject>
     {
         public VerseViewModel() : base()
         {
             
         }
 
-        public VerseViewModel(Verse entity): base(entity)
+        public VerseViewModel(VerseObject entity): base(entity)
         {
 
         }
 
-        public Guid Id
+        public Guid? Id
         {
             get => Entity.Id;
             set
