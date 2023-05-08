@@ -182,8 +182,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay;
-       
+        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay = new();
         public ObservableCollection<DashboardProject>? DashboardProjectsDisplay
         {
             get => _dashboardProjectsDisplay;
@@ -353,7 +352,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 }
             }
 
-            _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
+            DashboardProjectsDisplay.Clear();
             _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
 
             NotifyOfPropertyChange(() => DashboardProjectsDisplay);

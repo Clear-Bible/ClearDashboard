@@ -135,6 +135,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 });
             }
 
+            ProjectManager!.CheckForCurrentUser();
+
+
             await Task.Run(async () =>
             {
                 _topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
@@ -196,6 +199,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             StartEnabled = false;
             CloseEnabled = false;
+            bool errorEncountered = false;
 
             ProgressCircle = Visibility.Visible;
 
@@ -207,7 +211,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var parallelCorpus = await ParallelCorpus.Get(_mediator, parallelId.ParallelCorpusId);
                 await Task.Run(async () =>
                 {
-                    await RunRegenerationOnParallelCorpus(parallelCorpus);
+                    try
+                    {
+                        await RunRegenerationOnParallelCorpus(parallelCorpus);
+                    }
+                    catch (Exception e)
+                    {
+                        errorEncountered = true;
+                        _logger.LogError(e.Message, e);
+                    }
                 });
 
                 parallelId.Status = ParallelIdList.JobStatus.Completed;
@@ -216,7 +228,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             _runsCompleted = false;
 
-            if (Project is not null) // we have updated the whole project so reset the version number
+            if (Project is not null && errorEncountered == false) // we have updated the whole project so reset the version number if no errors
             {
                 // update the database to current app version
                 var result = await Mediator!.Send(new LoadProjectQuery(Project.ProjectName!));
