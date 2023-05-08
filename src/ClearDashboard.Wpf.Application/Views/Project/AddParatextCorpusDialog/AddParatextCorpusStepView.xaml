@@ -5,13 +5,14 @@
     xmlns:addParatextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog"
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
+    xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:AddParatextCorpusStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="500"
@@ -120,6 +121,7 @@
         <converters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter" />
         <converters:EnumToValuesConverter x:Key="EnumToValuesConverter" />
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <converters1:EnumDescriptionConverter x:Key="enumDescriptionConverter" />
     </UserControl.Resources>
 
     <Border Background="{StaticResource MaterialDesignLightBackground}">
@@ -132,16 +134,16 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical">
-                <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
+                <Label Margin="0,0,0,-10" Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
                 <controls:AutoCompleteComboBox
-                    ScrollViewer.CanContentScroll="False"
-                    materialDesign:HintAssist.Hint="ParatextCorpus"
                     Height="Auto"
                     Margin="15"
                     VerticalAlignment="Top"
+                    materialDesign:HintAssist.Hint="ParatextCorpus"
                     FontSize="16"
                     IsEnabled="{Binding IsEnabledSelectedProject}"
                     ItemsSource="{Binding Projects}"
+                    ScrollViewer.CanContentScroll="False"
                     SelectedItem="{Binding SelectedProject}"
                     Style="{StaticResource MaterialDesignFilledComboBox}"
                     TextSearch.TextPath="CombinedName">
@@ -290,7 +292,7 @@
                 Visibility="{Binding ShowSpinner}" />
 
             <StackPanel Grid.Row="2" Orientation="Vertical">
-                <Label Content="{helpers:Localization AddCorpusDialog_SelectEngine}" />
+                <Label Margin="0,0,0,-10" Content="{helpers:Localization AddCorpusDialog_SelectEngine}" />
                 <ComboBox
                     Margin="15"
                     VerticalAlignment="Top"
@@ -300,7 +302,7 @@
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock FontSize="18" Text="{Binding .}" />
+                                <TextBlock FontSize="18" Text="{Binding Converter={StaticResource enumDescriptionConverter}}" />
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
