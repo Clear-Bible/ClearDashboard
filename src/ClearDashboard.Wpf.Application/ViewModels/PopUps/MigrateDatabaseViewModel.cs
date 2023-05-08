@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
@@ -32,6 +33,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly IMediator _mediator;
 
         private TopLevelProjectIds _topLevelProjectIds;
+        private bool _closing = false;
 
         private bool _runsCompleted;
 
@@ -178,6 +180,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             base.OnViewLoaded(view);
         }
 
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (_closing == false)
+            {
+                Close();
+            }
+
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
         #endregion //Constructor
 
 
@@ -261,6 +274,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 await ProjectPickerViewModel.RefreshProjectList();
             }
+
+            _closing = true;
 
             await this.TryCloseAsync();
         }
