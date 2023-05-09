@@ -39,10 +39,9 @@ namespace ClearDashboard.WPF.Tests
 
         private void GenerateLicense(string firstName, string lastName, Guid id, Guid licenseKey)
         {
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var filePath = Path.Combine(documentsPath, $"ClearDashboard_Projects\\{firstName+lastName}");
+            var folderPath = Path.Combine(LicenseManager.LicenseFolderPath, $"{firstName+lastName}");
 
-            var licenseUser = new LicenseUser
+            var licenseUser = new User
             {
                 FirstName = firstName,
                 LastName = lastName,
@@ -50,7 +49,7 @@ namespace ClearDashboard.WPF.Tests
                 LicenseKey = id.ToString("N"),
             };
 
-            LicenseManager.EncryptToFile(licenseUser, filePath);
+            LicenseManager.EncryptToFile(licenseUser, folderPath);
         }
     }
 }

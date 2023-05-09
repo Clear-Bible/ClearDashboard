@@ -1,21 +1,24 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models;
+using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearApplicationFoundation.Framework.Input;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.Services;
+using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -146,7 +149,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             OkCommand = new RelayCommand(Ok);
             NextCommand = new RelayCommand(Next);
             BackCommand = new RelayCommand(BackAsync);
+        }
 
+        private void FormatSelectedBooks()
+        {
             // initialize the Bible books 
             var books = SelectedBook.Init();
             foreach (var book in books)
@@ -159,35 +165,64 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         protected async override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            FormatSelectedBooks();
             // get those books which actually have text in them from Paratext
             CancellationToken cancellationTokenProject = new();
-            var request = await _projectManager?.ExecuteRequest(new GetVersificationAndBookIdByParatextProjectIdQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
-
-            if (request.Success && request.HasData)
+            var requestFromParatext = await _projectManager?.ExecuteRequest(new GetVersificationAndBookIdByParatextProjectIdQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
+            
+            if (requestFromParatext.Success && requestFromParatext.HasData)
             {
-                if (request.HasData)
+                var booksInProject = requestFromParatext.Data;
+
+                // iterate through and enable those books which have text
+                foreach (var book in SelectedBooks)
                 {
-                    var books = request.Data;
-
-                    // iterate through and enable those books which have text
-                    foreach (var book in SelectedBooks)
+                    var found = booksInProject.BookAbbreviations.FirstOrDefault(x => x == book.Abbreviation);
+                    if(found != null)
                     {
-                        var found = books.BookAbbreviations.FirstOrDefault(x => x == book.Abbreviation);
-                        if(found != null)
-                        {
-                            book.IsEnabled = true;
-                            book.IsSelected = false; // set to false so that the end user doesn't automatically just select every book to enter
-                        }
-                        else
-                        {
-                            book.IsEnabled =false;
-                            book.IsSelected = false;
-                        }
+                        book.IsEnabled = true;
+                        book.IsSelected = false; // set to false so that the end user doesn't automatically just select every book to enter
                     }
-
-                    NotifyOfPropertyChange(() => SelectedBooks);
+                    else
+                    {
+                        book.IsEnabled =false;
+                        book.IsSelected = false;
+                    }
                 }
             }
+
+            var tokenizedBookRequest = await _projectManager?.ExecuteRequest(new GetBooksFromTokenizedCorpusQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
+
+            if (tokenizedBookRequest.Success && tokenizedBookRequest.HasData)
+            {
+                var booksTokenized = tokenizedBookRequest.Data;
+
+                // iterate through and enable those books which have text
+                foreach (var book in booksTokenized)
+                {
+                    if (Int32.TryParse(book, out int index))
+                    {
+                        SelectedBooks[index - 1].IsEnabled = false;
+                        SelectedBooks[index - 1].IsSelected = true;
+                        SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Black);
+                    }
+                }
+            }
+
+            if (ParentViewModel.UsfmErrors != null)
+            {
+                foreach (var error in ParentViewModel.UsfmErrors)
+                {
+                    var indexString = BookChapterVerseViewModel.GetBookNumFromBookName(error.Reference.Substring(0, 3));
+                    if (Int32.TryParse(indexString, out int index))
+                    {
+                        SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Red);
+                        SelectedBooks[index - 1].HasUsfmError = true;
+                    }
+                }
+            }
+
+            NotifyOfPropertyChange(() => SelectedBooks);
 
             base.OnActivateAsync(cancellationToken);
         }
