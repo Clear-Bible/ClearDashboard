@@ -32,6 +32,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
         private readonly IMediator _mediator;
+        private readonly HttpClientServices _httpClientServices;
         private readonly ILocalizationService _localizationService;
         private readonly TranslationSource? _translationSource;
 
@@ -226,7 +227,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ILogger<ProjectPickerViewModel> logger, 
             IEventAggregator eventAggregator,
             IMediator mediator, 
-            ILifetimeScope? lifetimeScope, 
+            ILifetimeScope? lifetimeScope,
+            HttpClientServices httpClientServices,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
@@ -234,6 +236,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             //_windowManager = windowManager;
             _paratextProxy = paratextProxy;
             _mediator = mediator;
+            _httpClientServices = httpClientServices;
             _localizationService = localizationService;
             AlertVisibility = Visibility.Collapsed;
             _translationSource = translationSource;
@@ -282,6 +285,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
+
+        public void TestProjects()
+        {
+            _ = _httpClientServices.GetAllProjects();
+        }
 
         private async Task GetProjectsVersion()
         {

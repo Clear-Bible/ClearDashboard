@@ -43,6 +43,9 @@ namespace ClearDashboard.Wpf.Application
             // (which calls Caliburn.Micro "Initialize", which calls FoundationBootstrapper
             // "configure").  So, 
 
+
+
+
             _host = Host.CreateDefaultBuilder()
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureServices(services =>
@@ -54,6 +57,9 @@ namespace ClearDashboard.Wpf.Application
                         //Host will try to wait 30 seconds before stopping the service. 
                         options.ShutdownTimeout = TimeSpan.FromSeconds(5);
                     });
+
+
+
                 })
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
