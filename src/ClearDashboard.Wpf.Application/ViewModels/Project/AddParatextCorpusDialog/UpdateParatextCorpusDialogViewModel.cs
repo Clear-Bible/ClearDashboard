@@ -3,21 +3,22 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -36,6 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         #region Public Properties
 
         public List<string>? BookIds { get; set; } = new();
+        public ObservableCollection<UsfmError> UsfmErrors { get; set; }
 
         #endregion //Public Properties
 

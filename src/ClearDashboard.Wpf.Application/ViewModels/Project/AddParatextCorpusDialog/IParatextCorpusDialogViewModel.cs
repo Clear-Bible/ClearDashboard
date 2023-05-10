@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
+﻿using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -17,7 +17,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         ParatextProjectMetadata SelectedProject { get; set; }
         Tokenizers SelectedTokenizer { get; set; }
         List<string>? BookIds { get; set; }
-
+        ObservableCollection<UsfmError> UsfmErrors { get; set; }
 
         void Ok();
         void Cancel();

@@ -10,7 +10,7 @@ public enum Tokenizers
     //[Description("Latin Word Detokenizer")]
     //LatinWordDetokenizer,
 
-    [Description("Latin Word TokenizedCorpus")]
+    [Description("Latin Word TokenizedCorpus (most common)")]
     LatinWordTokenizer,
 
     //[Description("Line Segment Tokenizer")]

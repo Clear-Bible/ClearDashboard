@@ -912,7 +912,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
             else
             {
-                Logger?.LogInformation("Dashboard_Instructions.pdf missing.");
+                var message = "Dashboard_Instructions.pdf missing.";
+                MessageBox.Show(message);
+                Logger?.LogInformation(message);
             }
         }
         private void ShowLogs()
@@ -1670,7 +1672,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <param name="windowTag"></param>
         private void UnhideWindow(string windowTag)
         {
-
+            WindowIdToLoad = windowTag;
             // test for tool window
             var windowPane = _dockingManager.Layout.Descendents()
                 .OfType<LayoutAnchorable>()
@@ -1967,75 +1969,170 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 else if (menuItem.Id == MenuIds.FileNew || menuItem.Id == MenuIds.FileOpen)
                 {
                     if (menuItem.Id == MenuIds.FileNew)
-                    {
-                        StartupDialogViewModel.GoToSetup = true;
-                    }
-
-                    var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
-                    startupDialogViewModel.MimicParatextConnection = true;
-
-                    var result = await WindowManager!.ShowDialogAsync(startupDialogViewModel);
-
-                    if (result == true)
-                    {
-                        await OnDeactivateAsync(false, CancellationToken.None);
-                        NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-                        await OnInitializeAsync(CancellationToken.None);
-                        await OnActivateAsync(CancellationToken.None);
-                        await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-                    }
-
-                    return;
-
-                }
-                else if (menuItem.Id == MenuIds.ReloadProject)
+                switch (menuItem.Id)
                 {
-                    if (menuItem.Id == "ReloadProjectID")
+                    case { } a when a.StartsWith(MenuIds.ProjectLayout):
                     {
-                        await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
-                        return;
+                        LoadLayoutById(menuItem.Id);
+                        break;
                     }
 
-                }
-                else
-                {
-                    switch (menuItem.Id)
+                    case { } b when b.StartsWith(MenuIds.StandardLayout):
                     {
-                        case MenuIds.Layout:
-                            Console.WriteLine();
-                            break;
-                        case MenuIds.BiblicalTerms:
-                            WindowIdToLoad = WindowIds.BiblicalTerms;
-                            break;
-                        case MenuIds.EnhancedCorpus:
-                            WindowIdToLoad = WindowIds.EnhancedView;
-                            break;
-                        case MenuIds.Pins:
-                            WindowIdToLoad = WindowIds.Pins;
-                            break;
-                        //case MenuIds.WordMeanings":
-                        //     WindowIdToLoad = WindowIds.WordMeanings;
-                        //    break;
-                        case MenuIds.Marble:
-                            WindowIdToLoad = WindowIds.Marble;
-                            break;
-                        case MenuIds.TextCollection:
-                            WindowIdToLoad = WindowIds.TextCollection;
-                            break;
-                        case MenuIds.Notes:
-                            WindowIdToLoad = WindowIds.Notes;
-                            break;
-
-                        default:
-                            WindowIdToLoad = menuItem.Id;
-                            break;
+                        LoadLayoutById(menuItem.Id);
+                        break;
                     }
 
-                    UnhideWindow(WindowIdToLoad);
-                    return;
+                    case MenuIds.Separator:
+                    {
+                        // no-op
+                        break; 
+                    }
+
+                    case MenuIds.Save:
+                    {
+                        GridIsVisible = Visibility.Visible;
+                        DeleteGridIsVisible = Visibility.Collapsed;
+                        break;
+                    }
+
+                    case MenuIds.Delete:
+                    {
+                        DeleteGridIsVisible = Visibility.Visible;
+                        GridIsVisible = Visibility.Collapsed;
+                        break;
+                    }
+
+                    case MenuIds.NewEnhancedCorpus:
+                    {
+                        await AddNewEnhancedView();
+                        break;
+                    }
+
+                    case MenuIds.GettingStartedGuide:
+                    {
+                        LaunchGettingStartedGuide();
+                        break;
+                    }
+
+                    case MenuIds.ShowLog:
+                    {
+                        ShowLogs();
+                        break;
+                    }
+
+                    case MenuIds.GatherLogs:
+                    {
+                        GatherLogs();
+                        break;
+                    }
+
+                    case MenuIds.Settings:
+                    {
+                        await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
+                        break;
+                    }
+
+                    case MenuIds.About:
+                    {
+                        ShowAboutWindow();
+                        break;
+                    }
+
+                    case MenuIds.FileNew:
+                    {
+                        await ShowStartupDialog(menuItem);
+                        break;
+                        }
+                    case MenuIds.FileOpen:
+                    {
+                        await ShowStartupDialog(menuItem);
+                        break;
+                    }
+
+                    case MenuIds.ReloadProject:
+                    {
+                       await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                       break;
+
+                    }
+                    case MenuIds.Layout:
+                    {
+                        //no-op
+                        break;
+                    }
+
+                    case MenuIds.BiblicalTerms:
+                    {  
+                        UnhideWindow(WindowIds.BiblicalTerms);
+                        break;
+                    }
+
+                    case MenuIds.EnhancedCorpus:
+                    {
+                        UnhideWindow(WindowIds.EnhancedView);
+                        break;
+                    }
+
+                    case MenuIds.Pins:
+                    {
+                        UnhideWindow(WindowIds.Pins);
+                        break;
+                    }
+
+                    //case MenuIds.WordMeanings":
+                    //{
+                    //     UnhideWindow(WindowIds.WordMeanings);
+                    //    break;
+                    //}
+
+                    case MenuIds.Marble:
+                    {
+                        UnhideWindow(WindowIds.Marble);
+                        break;
+                    }
+
+                    case MenuIds.TextCollection:
+                    {
+                        UnhideWindow(WindowIds.TextCollection);
+                        break;
+                    }
+
+                    case MenuIds.Notes:
+                    {
+                        UnhideWindow(WindowIds.Notes);
+                        break;
+                    }
+
+                    default:
+                    {
+                        UnhideWindow(menuItem.Id);
+                        break;
+                    }
                 }
             }
+        }
 
+        private async Task ShowStartupDialog(MenuItemViewModel menuItem)
+        {
+            if (menuItem.Id == MenuIds.FileNew)
+            {
+                StartupDialogViewModel.GoToSetup = true;
+            }
+
+            var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
+            startupDialogViewModel.MimicParatextConnection = true;
+
+            var result = await WindowManager!.ShowDialogAsync(startupDialogViewModel);
+
+            if (result == true)
+            {
+                await OnDeactivateAsync(false, CancellationToken.None);
+                NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+                await OnInitializeAsync(CancellationToken.None);
+                await OnActivateAsync(CancellationToken.None);
+                await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+            }
         }
 
         #endregion // Methods
