@@ -181,7 +181,6 @@
                         Foreground="{StaticResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
                         <Run Text="{helpers:Localization ShellView_User}" />
-                        <Run Text=":" />
                     </TextBlock>
                     <TextBlock
                         x:Name="ParatextUserName"
@@ -195,7 +194,7 @@
                         VerticalAlignment="Center"
                         Foreground="{StaticResource PrimaryHueMidBrush}">
                         <Run Text="ClearDashboard" />
-                        <Run Text="{helpers:Localization ProjectPicker_Project}" />
+                        <Run Text="{helpers:Localization Landing_Project}" />
                     </TextBlock>
                     <TextBlock
                         x:Name="DashboardProjectName"
@@ -209,7 +208,7 @@
                         VerticalAlignment="Center"
                         Foreground="{StaticResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
-                        <Run Text="{helpers:Localization ProjectPicker_Project}" />
+                        <Run Text="{helpers:Localization Landing_Project}" />
                     </TextBlock>
                     <TextBlock
                         x:Name="ParatextProjectName"
