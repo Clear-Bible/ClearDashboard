@@ -428,7 +428,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             ProjectManager!.CurrentDashboardProject = project;
-            
+            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectMessage(ProjectManager!.CurrentDashboardProject));
+
             OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
 
             ParentViewModel!.ExtraData = project;
