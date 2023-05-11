@@ -860,21 +860,6 @@
     </b>
   </xsl:template>
 
-  <xsl:template match="verse[@sid]">
-    <sup class="verse">
-      <xsl:attribute name="id">
-        <!--put your logic in variable-->
-        <xsl:variable name="str">
-          <xsl:value-of select="@sid" />
-        </xsl:variable>
-        <!--normalize space will prevent spaces from left and right of string, then all spaces inside will be replaced by '-' -->
-        <xsl:value-of select="translate(normalize-space($str), ' ', '-')"/>
-      </xsl:attribute>
-
-      <xsl:value-of select="@number" />
-    </sup>
-  </xsl:template>
-
   <xsl:template match="book">
     <div>
       <xsl:attribute name="id">
@@ -912,6 +897,21 @@
       <xsl:copy>
         <xsl:apply-templates select="@*|node()" />
       </xsl:copy>
+    </sup>
+  </xsl:template>
+
+  <xsl:template match="verse[@sid]">
+    <sup class="verse">
+      <xsl:attribute name="id">
+        <!--put your logic in variable-->
+        <xsl:variable name="str">
+          <xsl:value-of select="@sid" />
+        </xsl:variable>
+        <!--normalize space will prevent spaces from left and right of string, then all spaces inside will be replaced by '-' -->
+        <xsl:value-of select="translate(normalize-space($str), ' ', '-')"/>
+      </xsl:attribute>
+
+      <xsl:value-of select="@number" />
     </sup>
   </xsl:template>
 

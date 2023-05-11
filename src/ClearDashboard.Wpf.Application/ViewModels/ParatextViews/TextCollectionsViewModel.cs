@@ -290,9 +290,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 "<div id='"+startPart+"'>" +
                                     "<details open>" +
                                         "<summary>" +
-                                            "<a href='#Home'>" +
-                                                "<i class='material-icons'>home</i>" +
-                                            "<a/>"+
                                             startPart+":" +
                                         "</summary>"
                                         +"<span class=\"vh\">"

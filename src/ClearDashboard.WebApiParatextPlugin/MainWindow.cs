@@ -72,8 +72,8 @@ namespace ClearDashboard.WebApiParatextPlugin
             ConfigureLogging();
             DisplayPluginVersion();
             Disposed += HandleWindowDisposed;
-            
-            
+
+
 
 
             // NB:  Use the following for debugging plug-in start up crashes.
@@ -186,7 +186,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     return null;
                 }
-                
+
                 if (args.RequestingAssembly == null && args.Name.StartsWith("WeifenLuo") == false && args.Name.StartsWith("Paratext") == false)
                 {
                     AppendText(Color.Orange, $"Cannot load {args.Name} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
@@ -195,7 +195,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
                 }
-                
+
                 return null;
             }
             // Load the most up to date version
@@ -207,7 +207,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception e)
             {
-                
+
                 AppendText(Color.Red, $"Cannot load [{assembly?.FullName}] {e.Message}");
             }
             AppendText(Color.Orange, $"Cannot load:\n [{BustUpAssemblyName(args.Name)}]\nLoading instead:\n [{BustUpAssemblyName(assembly?.FullName)}]\n");
@@ -538,7 +538,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// textcollection panel in Paratext
         /// </summary>
         /// <returns></returns>
-        public List<TextCollection> GetTextCollectionsData(bool fetchUsx=false)
+        public List<TextCollection> GetTextCollectionsData(bool fetchUsx = false)
         {
             // get the text collections
             List<TextCollection> textCollections = new();
@@ -569,20 +569,21 @@ namespace ClearDashboard.WebApiParatextPlugin
                                 if (fetchUsx)
                                 {
                                     var usxString = project.GetUSX(_verseRef.BookNum);
-                                    
+
                                     try
                                     {
-
                                         List<XmlNode> verseNodeList = new();
                                         XmlDocument xDoc = new();
                                         if (usxString != null)
                                         {
                                             xDoc.LoadXml(usxString);
 
+                                            //var recursiveTextCollections = AttemptRecursion(xDoc.DocumentElement.ChildNodes);
+
                                             bool nextStartMarkerFound = false;
                                             bool startMarkerFound = false;
                                             bool endMarkerFound = false;
-                                            var count = 0;
+
                                             foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
                                             {
                                                 endMarkerFound = false;
@@ -597,18 +598,17 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 {
                                                     startMarkerFound = true;
 
-                                                    TryAddHighlightAttributeToNode(project, xDoc, node);
+                                                    FindAndHighlightNode(project, xDoc, node);
                                                 }
 
                                                 if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                                                 {
                                                     endMarkerFound = true;
 
-                                                    TryAddHighlightAttributeToNode(project, xDoc, node);
+                                                    FindAndHighlightNode(project, xDoc, node);
                                                 }
 
-                                                else if (node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") ||
-                                                        node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
+                                                else if (node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") && node.OuterXml.Contains("-"))
                                                 {
                                                     var nodeVerseElementList = node.SelectNodes("verse");
 
@@ -622,7 +622,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                         {
                                                             var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
                                                             var SidVerseNumberIsRange = nodeSidVerseNumber.Contains("-");
-                                                            
+
                                                             if (SidVerseNumberIsRange)
                                                             {
                                                                 var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
@@ -635,46 +635,56 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                                     <= upperSid)
                                                                 {
                                                                     startMarkerFound = true;
-                                                                }
-                                                            }
-                                                        }
 
-                                                        else
-                                                        {
-                                                            var nodeEidValue = nodeVerseElement.Attributes["eid"];
-
-                                                            if (nodeEidValue != null)
-                                                            {
-                                                                var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
-                                                                var EidVerseNumberIsRange = nodeEidVerseNumber.Contains("-");
-                                                                
-                                                                if (EidVerseNumberIsRange)
-                                                                {
-                                                                    var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
-
-                                                                    int.TryParse(nodeEidVerseRange[0], out var lowerEid);
-                                                                    int.TryParse(nodeEidVerseRange[1], out var upperEid);
-
-                                                                    if (lowerEid <=
-                                                                        _verseRef.VerseNum && _verseRef.VerseNum 
-                                                                        <= upperEid)
-                                                                    {
-                                                                        endMarkerFound = true;
-                                                                    }
+                                                                    FindAndHighlightNode(project, xDoc, node);
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                    
+                                                }
+
+                                                else if (node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":")&& node.OuterXml.Contains("-"))
+                                                {
+                                                    var nodeVerseElementList = node.SelectNodes("verse");
+
+                                                    if (nodeVerseElementList.Count > 0)
+                                                    {
+                                                        var nodeVerseElement = nodeVerseElementList.Item(0);
+
+                                                        var nodeEidValue = nodeVerseElement.Attributes["eid"];
+
+                                                        if (nodeEidValue != null)
+                                                        {
+                                                            var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
+                                                            var EidVerseNumberIsRange = nodeEidVerseNumber.Contains("-");
+
+                                                            if (EidVerseNumberIsRange)
+                                                            {
+                                                                var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
+
+                                                                int.TryParse(nodeEidVerseRange[0], out var lowerEid);
+                                                                int.TryParse(nodeEidVerseRange[1], out var upperEid);
+
+                                                                if (lowerEid <=
+                                                                    _verseRef.VerseNum && _verseRef.VerseNum
+                                                                    <= upperEid)
+                                                                {
+                                                                    endMarkerFound = true;
+
+                                                                    FindAndHighlightNode(project, xDoc, node);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
 
                                                 if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
-                                                { 
+                                                {
                                                     verseNodeList.Add(node);
                                                 }
                                             }
                                         }
-                                        
+
                                         if (verseNodeList.Count == 0)
                                         {
                                             textCollections = UsfmToTextCollection(project, textCollection, textCollections);
@@ -781,7 +791,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             return textCollections;
         }
 
-        private void TryAddHighlightAttributeToNode(IProject project, XmlDocument xDoc, XmlNode node)
+        private void FindAndHighlightNode(IProject project, XmlDocument xDoc, XmlNode node)
         {
             if (node.ChildNodes != null && !ProjectIsKnownCommentary(project))
             {
@@ -789,37 +799,74 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     foreach (XmlNode child in node.ChildNodes)
                     {
-                        if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString())
-                        {
-                            child.Attributes["style"].Value="vh";
-                        }
-
-                        if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString())
-                        {
-                            XmlAttribute attr = xDoc.CreateAttribute("style");
-                            attr.Value = "vh";
-
-                            child.Attributes.Append(attr);
-                        }
+                        AddHighlightAttributeToNode(xDoc, child);
                     }
                 }
                 else
                 {
-                    if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString())
-                    {
-                        node.Attributes["style"].Value="vh";
-                    }
-
-                    if (node.LocalName == "verse" && node.Attributes["eid"] != null && node.Attributes["eid"].Value == _verseRef.ToString())
-                    {
-                        XmlAttribute attr = xDoc.CreateAttribute("style");
-                        attr.Value = "vh";
-
-                        node.Attributes.Append(attr);
-                    }
+                    AddHighlightAttributeToNode(xDoc, node);
                 }
             }
         }
+
+        private void AddHighlightAttributeToNode(XmlDocument xDoc, XmlNode node)
+        {
+            if (node.LocalName == "verse" &&
+                (
+                (node.Attributes["eid"] != null&& node.Attributes["eid"].Value == _verseRef.ToString())||
+                (node.Attributes["eid"] != null&& node.Attributes["eid"].Value.Contains('-')&& node.Attributes["eid"].Value.Contains(_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
+                )
+               )
+            {
+                if (node.Attributes["style"] != null)
+                {
+                    node.Attributes["style"].Value="vh";
+                }
+                else
+                {
+                    XmlAttribute attr = xDoc.CreateAttribute("style");
+                    attr.Value = "vh";
+
+                    node.Attributes.Append(attr);
+                }
+            }
+
+            if (node.LocalName == "verse" &&
+                (
+                (node.Attributes["sid"] != null&& node.Attributes["sid"].Value == _verseRef.ToString())||
+                (node.Attributes["sid"] != null&& node.Attributes["sid"].Value.Contains('-')&& node.Attributes["sid"].Value.Contains(_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
+                )
+               )
+            {
+                if (node.Attributes["style"] != null)
+                {
+                    node.Attributes["style"].Value="vh";
+                }
+                else
+                {
+                    XmlAttribute attr = xDoc.CreateAttribute("style");
+                    attr.Value = "vh";
+
+                    node.Attributes.Append(attr);
+                }
+            }
+        }
+
+        //private List<TextCollection> _recursiveTextCollection;
+        //private bool _nextStartMarkerFound = false;
+        private bool _startMarkerFound = false;
+        private bool _endMarkerFound = false;
+        //private List<TextCollection> AttemptRecursion(XmlNodeList nodeList)
+        //{
+        //    foreach (XmlNode node in nodeList)
+        //    {
+        //        //does the node contain a verse?  if not we don't need it
+        //        //if(node.OuterXml)
+        //        //does the node contain children? if not then this is the verse
+        //        //does the node contain children and a verse?  then we call AttemptRecursion()
+        //    }
+        //    return _recursiveTextCollection;
+        //}
 
         private bool ProjectIsKnownCommentary(IProject project)
         {
@@ -835,7 +882,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                     return false;
             }
         }
-
 
         /// <summary>
         /// Append colored text to the rich text box
@@ -863,7 +909,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private  void btnExportUSFM_Click(object sender, EventArgs e)
+        private void btnExportUSFM_Click(object sender, EventArgs e)
         {
             var paratextExtractUSFM = new ParatextExtractUSFM();
             paratextExtractUSFM.ExportUSFMScripture(_project, this);
@@ -964,7 +1010,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     switch (project.Versification.Type)
                     {
                         case StandardScrVersType.Unknown:
-                            scrVersType = ScrVersType.Unknown; 
+                            scrVersType = ScrVersType.Unknown;
                             break;
                         case StandardScrVersType.Original:
                             scrVersType = ScrVersType.Original;
@@ -1056,7 +1102,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     _hasFontErrorBeenDisplayed = true;
                 }
             }
-            
+
             return _projectMetadata;
         }
 
@@ -1540,7 +1586,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 }
 
                 if (token is IUSFMMarkerToken marker)
-                {   
+                {
                     // a verse token
                     if (marker.Type == MarkerType.Verse)
                     {
