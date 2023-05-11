@@ -924,9 +924,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// Utility method to delete a connection from the view-model.
         /// </summary>
-        public void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel parallelCorpusConnection)
+        public void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel parallelCorpusConnection, bool isCurrentlyParallelizing = false)
         {
-            if (parallelCorpusConnection.ParallelCorpusId != null)
+            if (!isCurrentlyParallelizing)
             {
                 EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusDeletedMessage(
                      SourceParatextId: parallelCorpusConnection.SourceConnector!.ParentNode!.ParatextProjectId,
