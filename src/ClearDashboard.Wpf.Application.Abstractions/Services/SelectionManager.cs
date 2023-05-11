@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -76,11 +78,27 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
+        {
+            SelectedTokens = new TokenDisplayViewModelCollection();
+            SelectionUpdated();
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
+        {
+            SelectedTokens = new TokenDisplayViewModelCollection();
+            SelectionUpdated();
+            await Task.CompletedTask;
+        }
+
         public SelectionManager(IEventAggregator eventAggregator, ILogger<SelectionManager> logger, IMediator mediator)
         {
             EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
+
+            EventAggregator.SubscribeOnUIThread(this);
         }
     }
 }
