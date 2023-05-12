@@ -244,27 +244,51 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.Equal(12, alignmentSetVerseContexts.Count());
 
             var one = alignmentSetVerseContexts.FirstOrDefault();
-            if (one != default)
-            {
-                Assert.Equal(6, one.sourceTokenTrainingTextVerseTokens.Count());
-                Assert.Equal(6, one.targetTokenTrainingTextVerseTokens.Count());
-                Assert.Equal((uint)3, one.sourceTokenTrainingTextTokensIndex);
-                Assert.Equal((uint)3, one.targetTokenTrainingTextTokensIndex);
+            Assert.True(one != default);
 
-                Output.WriteLine($"Alignment source: {one.alignment.AlignedTokenPair.SourceToken.TokenId}");
-                Output.WriteLine($"Alignment target: {one.alignment.AlignedTokenPair.TargetToken.TokenId}");
-                Output.WriteLine($"Verse context index (source): {one.sourceTokenTrainingTextTokensIndex}");
-                foreach (var vc in one.sourceTokenTrainingTextVerseTokens)
-                {
-                    Output.WriteLine($"\t{vc.TokenId}");
-                }
-                Output.WriteLine($"Verse context index (target): {one.targetTokenTrainingTextTokensIndex}");
-                foreach (var vc in one.targetTokenTrainingTextVerseTokens)
-                {
-                    Output.WriteLine($"\t{vc.TokenId}");
-                }
+            Assert.Equal(6, one.sourceTokenTrainingTextVerseTokens.Count());
+            Assert.Equal(6, one.targetTokenTrainingTextVerseTokens.Count());
+            Assert.Equal((uint)3, one.sourceTokenTrainingTextTokensIndex);
+            Assert.Equal((uint)3, one.targetTokenTrainingTextTokensIndex);
+
+            Output.WriteLine($"Alignment source: {one.alignment.AlignedTokenPair.SourceToken.TokenId}");
+            Output.WriteLine($"Verse context index (source): {one.sourceTokenTrainingTextTokensIndex}");
+            foreach (var vc in one.sourceTokenTrainingTextVerseTokens)
+            {
+                Output.WriteLine($"\t{vc.TokenId}");
+            }
+            Output.WriteLine($"Alignment target: {one.alignment.AlignedTokenPair.TargetToken.TokenId}");
+            Output.WriteLine($"Verse context index (target): {one.targetTokenTrainingTextTokensIndex}");
+            foreach (var vc in one.targetTokenTrainingTextVerseTokens)
+            {
+                Output.WriteLine($"\t{vc.TokenId}");
             }
 
+            Output.WriteLine("");
+
+            var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts("one_verse_three", "three", CancellationToken.None);
+            Assert.Equal(12, alignmentSetVerseContexts.Count());
+
+            var two = alignmentSetVerseContexts2.FirstOrDefault();
+            Assert.True(two != default);
+
+            Assert.Equal(4, two.sourceTokenTrainingTextVerseTokens.Count());
+            Assert.Equal(6, two.targetTokenTrainingTextVerseTokens.Count());
+            Assert.Equal((uint)1, two.sourceTokenTrainingTextTokensIndex);
+            Assert.Equal((uint)4, two.targetTokenTrainingTextTokensIndex);
+
+            Output.WriteLine($"Alignment source: {two.alignment.AlignedTokenPair.SourceToken.TokenId}");
+            Output.WriteLine($"Verse context index (source): {two.sourceTokenTrainingTextTokensIndex}");
+            foreach (var vc in two.sourceTokenTrainingTextVerseTokens)
+            {
+                Output.WriteLine($"\t{vc.TokenId}");
+            }
+            Output.WriteLine($"Alignment target: {two.alignment.AlignedTokenPair.TargetToken.TokenId}");
+            Output.WriteLine($"Verse context index (target): {two.targetTokenTrainingTextTokensIndex}");
+            foreach (var vc in two.targetTokenTrainingTextVerseTokens)
+            {
+                Output.WriteLine($"\t{vc.TokenId}");
+            }
         }
         finally
         {
