@@ -245,8 +245,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay;
-       
+        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay = new();
         public ObservableCollection<DashboardProject>? DashboardProjectsDisplay
         {
             get => _dashboardProjectsDisplay;
@@ -366,17 +365,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         #region Methods
 
-        private async Task GetProjectsVersion()
+        private async Task GetProjectsVersion(bool afterMigration=false)
         {
             DashboardProjects.Clear();
 
             // check for Projects subfolder
             var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
 
-            if (!IsDashboardRunningAlready())
+            if (!IsDashboardRunningAlready() && !afterMigration)
             {
                 OpenProjectManager.ClearOpenProjectList();
-
+           
                 OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
             }
 
@@ -435,7 +434,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 }
             }
 
-            _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
+            DashboardProjectsDisplay.Clear();
             _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
 
             NotifyOfPropertyChange(() => DashboardProjectsDisplay);
@@ -462,7 +461,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task RefreshProjectList()
         {
-            await GetProjectsVersion();
+            await GetProjectsVersion(true);
         }
 
         private async Task GetCollabProjects()
@@ -592,7 +591,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             ProjectManager!.CurrentDashboardProject = project;
-            
+            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectMessage(ProjectManager!.CurrentDashboardProject));
+
             OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
 
             ParentViewModel!.ExtraData = project;

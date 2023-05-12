@@ -1607,15 +1607,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
             }));
 
-            // Removes the CorpusNode form the project design surface:
-            DesignSurfaceViewModel!.DeleteCorpusNode(node);
-
             // Deletes the ParallelCorpora and removes the connector between nodes. 
             foreach (var connection in node.AttachedConnections)
             {
                 //connection.ParallelCorpusId
                 DeleteParallelCorpusConnection(connection);
             }
+
+
+            // Removes the CorpusNode form the project design surface:
+            DesignSurfaceViewModel!.DeleteCorpusNode(node);
+
+
 
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 

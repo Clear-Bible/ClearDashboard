@@ -916,7 +916,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 }
 
 
-                EventAggregator.PublishOnUIThreadAsync(new CorpusDeletedMessage(node.ParatextProjectId));
+                EventAggregator.PublishOnUIThreadAsync(new CorpusDeletedMessage(node.ParatextProjectId, node.CorpusId));
             });
 
         }
@@ -929,7 +929,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusDeletedMessage(
                  SourceParatextId: parallelCorpusConnection.SourceConnector!.ParentNode!.ParatextProjectId,
                  TargetParatextId: parallelCorpusConnection.DestinationConnector!.ParentNode!.ParatextProjectId,
-                 ConnectorGuid: parallelCorpusConnection.Id));
+                 ConnectorGuid: parallelCorpusConnection.Id,
+                 ParallelCorpusId: parallelCorpusConnection.ParallelCorpusId!.Id));
 
             if (ParallelCorpusConnections.Contains(parallelCorpusConnection))
             {

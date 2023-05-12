@@ -173,7 +173,9 @@
                             </Style>
                         </Image.Style>
                     </Image>
+
                     <TextBlock
+                        x:Name="ParatextUserNameTitle"
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
                         Foreground="{StaticResource PrimaryHueMidBrush}">
@@ -182,6 +184,34 @@
                     </TextBlock>
                     <TextBlock
                         x:Name="ParatextUserName"
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Center"
+                        d:Text="Joe Schmoe" />
+
+                    <TextBlock
+                        x:Name="DashboardProjectNameTitle"
+                        Margin="5,0,5,0"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource PrimaryHueMidBrush}">
+                        <Run Text="ClearDashboard" />
+                        <Run Text="{helpers:Localization Landing_Project}" />
+                    </TextBlock>
+                    <TextBlock
+                        x:Name="DashboardProjectName"
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Center"
+                        d:Text="Joe Schmoe" />
+
+                    <TextBlock
+                        x:Name="ParatextProjectNameTitle"
+                        Margin="5,0,5,0"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource PrimaryHueMidBrush}">
+                        <Run Text="Paratext" />
+                        <Run Text="{helpers:Localization Landing_Project}" />
+                    </TextBlock>
+                    <TextBlock
+                        x:Name="ParatextProjectName"
                         Margin="0,0,5,0"
                         VerticalAlignment="Center"
                         d:Text="Joe Schmoe" />

@@ -3,6 +3,7 @@ using System;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230512160749_bulk-alignment")]
+    partial class bulkalignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
@@ -675,9 +678,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<bool>("IsRtl")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("LastMergedCommitSha")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("ProjectName")
                         .HasColumnType("TEXT");
 
@@ -843,9 +843,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
-
-                    b.Property<long?>("LastTokenized")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Metadata")
                         .IsRequired()
@@ -1049,6 +1046,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VerseBBBCCCVVV")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("VerseMappingId")
@@ -1631,8 +1631,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseRow", "VerseRow")
                         .WithMany("TokenComponents")
-                        .HasForeignKey("VerseRowId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("VerseRowId");
 
                     b.Navigation("TokenizedCorpus");
 
