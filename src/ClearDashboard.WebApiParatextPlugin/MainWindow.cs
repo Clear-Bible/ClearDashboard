@@ -584,137 +584,25 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                                             //var recursiveTextCollections = AttemptRecursion(xDoc.DocumentElement.ChildNodes);
 
-                                            bool nextStartMarkerFound = false;
-                                            bool startMarkerFound = false;
-                                            bool endMarkerFound = false;
-
-                                            foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
-                                            {
-                                                //_endMarkerFound = false;
-                                                endMarkerFound = false;
-
-                                                if (startMarkerFound && node.OuterXml.Contains("sid=")) 
-                                                    //if (_startMarkerFound && node.OuterXml.Contains("sid="))
-                                                {
-                                                    //_startMarkerFound = false;
-                                                    startMarkerFound = false;
-                                                    nextStartMarkerFound = true;
-                                                }
-
-                                                if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
-                                                {
-                                                    startMarkerFound = true;
-
-                                                    FindAndHighlightNode(project, xDoc, node);
-                                                }
-
-                                                if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
-                                                {
-                                                    endMarkerFound = true;
-
-                                                    FindAndHighlightNode(project, xDoc, node);
-                                                }
-
-                                                else if (node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") && node.OuterXml.Contains("-"))
-                                                {
-                                                    var nodeVerseElementList = node.SelectNodes("verse");
-
-                                                    if (nodeVerseElementList.Count > 0)
-                                                    {
-                                                        var nodeVerseElement = nodeVerseElementList.Item(0);
-
-                                                        var nodeSidValue = nodeVerseElement.Attributes["sid"];
-
-                                                        if (nodeSidValue != null)
-                                                        {
-                                                            var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
-                                                            var SidVerseNumberIsRange = nodeSidVerseNumber.Contains("-");
-
-                                                            if (SidVerseNumberIsRange)
-                                                            {
-                                                                var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
-
-                                                                int.TryParse(nodeSidVerseRange[0], out var lowerSid);
-                                                                int.TryParse(nodeSidVerseRange[1], out var upperSid);
-
-                                                                if (lowerSid <=
-                                                                    _verseRef.VerseNum && _verseRef.VerseNum
-                                                                    <= upperSid)
-                                                                {
-                                                                    startMarkerFound = true;
-
-                                                                    FindAndHighlightNode(project, xDoc, node);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                else if (node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":")&& node.OuterXml.Contains("-"))
-                                                {
-                                                    var nodeVerseElementList = node.SelectNodes("verse");
-
-                                                    if (nodeVerseElementList.Count > 0)
-                                                    {
-                                                        var nodeVerseElement = nodeVerseElementList.Item(0);
-
-                                                        var nodeEidValue = nodeVerseElement.Attributes["eid"];
-
-                                                        if (nodeEidValue != null)
-                                                        {
-                                                            var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
-                                                            var EidVerseNumberIsRange = nodeEidVerseNumber.Contains("-");
-
-                                                            if (EidVerseNumberIsRange)
-                                                            {
-                                                                var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
-
-                                                                int.TryParse(nodeEidVerseRange[0], out var lowerEid);
-                                                                int.TryParse(nodeEidVerseRange[1], out var upperEid);
-
-                                                                if (lowerEid <=
-                                                                    _verseRef.VerseNum && _verseRef.VerseNum
-                                                                    <= upperEid)
-                                                                {
-                                                                    endMarkerFound = true;
-
-                                                                    FindAndHighlightNode(project, xDoc, node);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                //if ((_startMarkerFound || _endMarkerFound) && !nextStartMarkerFound)
-                                                //{
-                                                //    verseNodeList.Add(node);
-                                                //}
-                                                if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
-                                                {
-                                                    verseNodeList.Add(node);
-                                                }
-                                            }
+                                            verseNodeList = CreateVerseNodeList(project, xDoc, true);
                                         }
 
                                         if (verseNodeList.Count == 0)
                                         {
-                                            textCollections = UsfmToTextCollection(project, textCollection, textCollections);
+                                            if (xDoc.DocumentElement != null)
+                                            {
+                                                verseNodeList = CreateVerseNodeListForCommentaries(project, xDoc, false);
+                                                textCollections =AddNodeListToTextCollections(verseNodeList, project, textCollections);
+                                            }
+                                            if (verseNodeList.Count == 0)
+                                            {
+                                                textCollections = UsfmToTextCollection(project, textCollection,
+                                                    textCollections);
+                                            }
                                         }
                                         else
                                         {
-                                            usxString = "<usx version=\"3.0\">";
-                                            foreach (XmlNode node in verseNodeList)
-                                            {
-                                                usxString += node.OuterXml;
-                                            }
-
-                                            usxString += "</usx>";
-
-                                            textCollections.Add(new TextCollection()
-                                            {
-                                                ReferenceShort = project.ShortName,
-                                                Data = usxString
-                                            });
+                                            textCollections =AddNodeListToTextCollections(verseNodeList, project, textCollections);
                                         }
                                     }
                                     catch (Exception ex)
@@ -735,6 +623,268 @@ namespace ClearDashboard.WebApiParatextPlugin
             _textCollections = textCollections;
 
             return _textCollections;
+        }
+
+        private List<XmlNode> CreateVerseNodeListForCommentaries(IProject project,XmlDocument xDoc, bool isVerseByVerse)
+        {
+
+            List<XmlNode> verseNodeList = new();
+            bool nextStartMarkerFound = false;
+            bool startMarkerFound = false;
+            bool endMarkerFound = false;
+
+            foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
+            {
+                //foreach (XmlNode node in middlenode.ChildNodes)
+                //{
+                    _endMarkerFound = false;
+                    endMarkerFound = false;
+
+                    if (startMarkerFound && node.OuterXml.Contains("sid="))
+                    {
+                        startMarkerFound = false;
+                        nextStartMarkerFound = true;
+                    }
+                    if (_startMarkerFound && node.OuterXml.Contains("sid="))
+                    {
+                        _startMarkerFound = false;
+                        nextStartMarkerFound = true;
+                    }
+
+                    if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
+                    {
+                        startMarkerFound = true;
+
+                        FindAndHighlightNode(project, xDoc, node);
+                    }
+
+                    if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                    {
+                        endMarkerFound = true;
+
+                        FindAndHighlightNode(project, xDoc, node);
+                    }
+
+                    else if (node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") && node.OuterXml.Contains("-"))
+                    {
+                        var nodeVerseElementList = node.SelectNodes("verse");
+
+                        if (nodeVerseElementList.Count > 0)
+                        {
+                            var nodeVerseElement = nodeVerseElementList.Item(0);
+
+                            var nodeSidValue = nodeVerseElement.Attributes["sid"];
+
+                            if (nodeSidValue != null)
+                            {
+                                var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
+                                var SidVerseNumberIsRange = nodeSidVerseNumber.Contains("-");
+
+                                if (SidVerseNumberIsRange)
+                                {
+                                    var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
+
+                                    int.TryParse(nodeSidVerseRange[0], out var lowerSid);
+                                    int.TryParse(nodeSidVerseRange[1], out var upperSid);
+
+                                    if (lowerSid <=
+                                        _verseRef.VerseNum && _verseRef.VerseNum
+                                        <= upperSid)
+                                    {
+                                        startMarkerFound = true;
+
+                                        FindAndHighlightNode(project, xDoc, node);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    else if (node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":")&& node.OuterXml.Contains("-"))
+                    {
+                        var nodeVerseElementList = node.SelectNodes("verse");
+
+                        if (nodeVerseElementList.Count > 0)
+                        {
+                            var nodeVerseElement = nodeVerseElementList.Item(0);
+
+                            var nodeEidValue = nodeVerseElement.Attributes["eid"];
+
+                            if (nodeEidValue != null)
+                            {
+                                var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
+                                var EidVerseNumberIsRange = nodeEidVerseNumber.Contains("-");
+
+                                if (EidVerseNumberIsRange)
+                                {
+                                    var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
+
+                                    int.TryParse(nodeEidVerseRange[0], out var lowerEid);
+                                    int.TryParse(nodeEidVerseRange[1], out var upperEid);
+
+                                    if (lowerEid <=
+                                        _verseRef.VerseNum && _verseRef.VerseNum
+                                        <= upperEid)
+                                    {
+                                        endMarkerFound = true;
+
+                                        FindAndHighlightNode(project, xDoc, node);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    switch (isVerseByVerse)//commentarise don't need this, get rid of it becuase they never are formatted "verse by verse"
+                    {
+                        case true:
+                            if ((_startMarkerFound || _endMarkerFound) && !nextStartMarkerFound)
+                            {
+                                verseNodeList.Add(node);
+                            }
+                            break;
+                        case false:
+                            if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
+                            {
+                                verseNodeList.Add(node);
+                            }
+                            break;
+                    }
+                //}
+            }
+
+            return verseNodeList;
+        }
+
+        private List<XmlNode> CreateVerseNodeList(IProject project, XmlDocument xDoc, bool isVerseByVerse)
+        {
+
+            List<XmlNode> verseNodeList = new();
+            bool nextStartMarkerFound = false;
+            bool startMarkerFound = false;
+            bool endMarkerFound = false;
+
+            foreach (XmlNode middlenode in xDoc.DocumentElement.ChildNodes)
+            {
+                foreach (XmlNode node in middlenode.ChildNodes)
+                {
+                    _endMarkerFound = false;
+                endMarkerFound = false;
+
+                if (startMarkerFound && node.OuterXml.Contains("sid="))
+                {
+                    startMarkerFound = false;
+                    nextStartMarkerFound = true;
+                }
+                if (_startMarkerFound && node.OuterXml.Contains("sid="))
+                {
+                    _startMarkerFound = false;
+                    nextStartMarkerFound = true;
+                }
+
+                if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
+                {
+                    startMarkerFound = true;
+
+                    FindAndHighlightNode(project, xDoc, node, isVerseByVerse);
+                }
+
+                if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                {
+                    endMarkerFound = true;
+
+                    FindAndHighlightNode(project, xDoc, node, isVerseByVerse);
+                }
+
+                else if (node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") && node.OuterXml.Contains("-"))
+                {
+                    var nodeVerseElementList = node.SelectNodes("verse");
+
+                    if (nodeVerseElementList.Count > 0)
+                    {
+                        var nodeVerseElement = nodeVerseElementList.Item(0);
+
+                        var nodeSidValue = nodeVerseElement.Attributes["sid"];
+
+                        if (nodeSidValue != null)
+                        {
+                            var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
+                            var SidVerseNumberIsRange = nodeSidVerseNumber.Contains("-");
+
+                            if (SidVerseNumberIsRange)
+                            {
+                                var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
+
+                                int.TryParse(nodeSidVerseRange[0], out var lowerSid);
+                                int.TryParse(nodeSidVerseRange[1], out var upperSid);
+
+                                if (lowerSid <=
+                                    _verseRef.VerseNum && _verseRef.VerseNum
+                                    <= upperSid)
+                                {
+                                    startMarkerFound = true;
+
+                                    FindAndHighlightNode(project, xDoc, node, isVerseByVerse);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                else if (node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":")&& node.OuterXml.Contains("-"))
+                {
+                    var nodeVerseElementList = node.SelectNodes("verse");
+
+                    if (nodeVerseElementList.Count > 0)
+                    {
+                        var nodeVerseElement = nodeVerseElementList.Item(0);
+
+                        var nodeEidValue = nodeVerseElement.Attributes["eid"];
+
+                        if (nodeEidValue != null)
+                        {
+                            var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
+                            var EidVerseNumberIsRange = nodeEidVerseNumber.Contains("-");
+
+                            if (EidVerseNumberIsRange)
+                            {
+                                var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
+
+                                int.TryParse(nodeEidVerseRange[0], out var lowerEid);
+                                int.TryParse(nodeEidVerseRange[1], out var upperEid);
+
+                                if (lowerEid <=
+                                    _verseRef.VerseNum && _verseRef.VerseNum
+                                    <= upperEid)
+                                {
+                                    endMarkerFound = true;
+
+                                    FindAndHighlightNode(project, xDoc, node, isVerseByVerse);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                switch (isVerseByVerse)
+                {
+                    case true:
+                        if ((_startMarkerFound || _endMarkerFound) && !nextStartMarkerFound)
+                        {
+                            verseNodeList.Add(node);
+                        }
+                        break;
+                    case false:
+                        if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
+                        {
+                            verseNodeList.Add(node);
+                        }
+                        break;
+                }
+                }
+            }
+
+            return verseNodeList;
         }
 
         private List<TextCollection> UsfmToTextCollection(IProject project, TextCollection textCollection, List<TextCollection> textCollections)
@@ -802,7 +952,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             return textCollections;
         }
 
-        private void FindAndHighlightNode(IProject project, XmlDocument xDoc, XmlNode node)
+        private void FindAndHighlightNode(IProject project, XmlDocument xDoc, XmlNode node, bool isVerseByVerse = false)
         {
             if (node.ChildNodes != null && !ProjectIsKnownCommentary(project))
             {
@@ -810,17 +960,17 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     foreach (XmlNode child in node.ChildNodes)
                     {
-                        AddHighlightAttributeToNode(xDoc, child);
+                        AddHighlightAttributeToNode(xDoc, child, isVerseByVerse);
                     }
                 }
                 else
                 {
-                    AddHighlightAttributeToNode(xDoc, node);
+                    AddHighlightAttributeToNode(xDoc, node, isVerseByVerse);
                 }
             }
         }
 
-        private void AddHighlightAttributeToNode(XmlDocument xDoc, XmlNode node)
+        private void AddHighlightAttributeToNode(XmlDocument xDoc, XmlNode node, bool isVerseByVerse)
         {
             if (node.LocalName == "verse" &&
                 (
@@ -831,16 +981,24 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 if (node.Attributes["style"] != null)
                 {
-                    node.Attributes["style"].Value="vh";
-                    //_endMarkerFound = true;
+                    if (!isVerseByVerse)
+                    {
+                        node.Attributes["style"].Value="vh";
+                    }
+                   
+                    _endMarkerFound = true;
                 }
                 else
                 {
-                    XmlAttribute attr = xDoc.CreateAttribute("style");
-                    attr.Value = "vh";
+                    if (!isVerseByVerse)
+                    {
+                        XmlAttribute attr = xDoc.CreateAttribute("style");
+                        attr.Value = "vh";
 
-                    node.Attributes.Append(attr);
-                    //_endMarkerFound = true;
+                        node.Attributes.Append(attr);
+                    }
+                  
+                    _endMarkerFound = true;
                 }
             }
 
@@ -853,24 +1011,51 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 if (node.Attributes["style"] != null)
                 {
-                    node.Attributes["style"].Value="vh";
-                    //_startMarkerFound = true;
+                    if (!isVerseByVerse)
+                    {
+                        node.Attributes["style"].Value="vh";
+                    }
+                  
+                    _startMarkerFound = true;
                 }
                 else
                 {
-                    XmlAttribute attr = xDoc.CreateAttribute("style");
-                    attr.Value = "vh";
+                    if (!isVerseByVerse)
+                    {
+                        XmlAttribute attr = xDoc.CreateAttribute("style");
+                        attr.Value = "vh";
 
-                    node.Attributes.Append(attr);
-                    //_startMarkerFound = true;
+                        node.Attributes.Append(attr);
+                    }
+                   
+                    _startMarkerFound = true;
                 }
             }
         }
 
+        private List<TextCollection> AddNodeListToTextCollections(List<XmlNode> verseNodeList, IProject project, List<TextCollection> textCollections)
+        {
+            var usxString = "<usx version=\"3.0\">";
+            foreach (XmlNode node in verseNodeList)
+            {
+                usxString += node.OuterXml;
+            }
+
+            usxString += "</usx>";
+
+            textCollections.Add(new TextCollection()
+            {
+                ReferenceShort = project.ShortName,
+                Data = usxString
+            });
+
+            return textCollections;
+        }
+
+        private bool _startMarkerFound = false;
+        private bool _endMarkerFound = false;
         //private List<TextCollection> _recursiveTextCollection;
         //private bool _nextStartMarkerFound = false;
-        //private bool _startMarkerFound = false;
-        //private bool _endMarkerFound = false;
         //private List<TextCollection> AttemptRecursion(XmlNodeList nodeList)
         //{
         //    foreach (XmlNode node in nodeList)
