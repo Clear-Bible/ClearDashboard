@@ -21,7 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// <param name="verse">the verse from which we want to extract the chapter</param>
         /// <param name="paratextProject"></param>
         /// <returns></returns>
-        public static List<string> ParseUSFM(ParatextProject project, Verse verse)
+        public static List<string> ParseUSFM(ParatextProject project, VerseObject verse)
         {
             var logger = IoC.Get<ILogger<ParatextProxy>>();
             ParatextProxy paratextUtils = new ParatextProxy(logger);
@@ -153,7 +153,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return stylesheetPath;
         }
 
-        private static string GetUsfmBookPath(ParatextProject project, Verse verse, string projectPath)
+        private static string GetUsfmBookPath(ParatextProject project, VerseObject verse, string projectPath)
         {
             // get the file name for that book
             string prefix = "";
