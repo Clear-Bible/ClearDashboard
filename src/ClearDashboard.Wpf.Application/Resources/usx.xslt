@@ -812,9 +812,13 @@
           color:#0069C0;
           }
 
+          .w{
+          margin-left:4px;
+          }
+
           .material-icons{
           font-size:20px;
-          color:#C79100;
+          color:#C79100;}
 
 
         </style>

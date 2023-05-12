@@ -563,6 +563,10 @@ namespace ClearDashboard.WebApiParatextPlugin
                         var projects = tc.AllProjects;
                         foreach (var project in projects)
                         {
+                            if (project.ShortName == "HBKENG")
+                            {
+                                var two = 2;
+                            }
                             TextCollection textCollection = new();
                             if (project != null)
                             {
@@ -586,10 +590,13 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                                             foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
                                             {
+                                                //_endMarkerFound = false;
                                                 endMarkerFound = false;
 
-                                                if (startMarkerFound && node.OuterXml.Contains("sid="))
+                                                if (startMarkerFound && node.OuterXml.Contains("sid=")) 
+                                                    //if (_startMarkerFound && node.OuterXml.Contains("sid="))
                                                 {
+                                                    //_startMarkerFound = false;
                                                     startMarkerFound = false;
                                                     nextStartMarkerFound = true;
                                                 }
@@ -678,6 +685,10 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                     }
                                                 }
 
+                                                //if ((_startMarkerFound || _endMarkerFound) && !nextStartMarkerFound)
+                                                //{
+                                                //    verseNodeList.Add(node);
+                                                //}
                                                 if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
                                                 {
                                                     verseNodeList.Add(node);
@@ -821,6 +832,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 if (node.Attributes["style"] != null)
                 {
                     node.Attributes["style"].Value="vh";
+                    //_endMarkerFound = true;
                 }
                 else
                 {
@@ -828,6 +840,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     attr.Value = "vh";
 
                     node.Attributes.Append(attr);
+                    //_endMarkerFound = true;
                 }
             }
 
@@ -841,6 +854,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 if (node.Attributes["style"] != null)
                 {
                     node.Attributes["style"].Value="vh";
+                    //_startMarkerFound = true;
                 }
                 else
                 {
@@ -848,14 +862,15 @@ namespace ClearDashboard.WebApiParatextPlugin
                     attr.Value = "vh";
 
                     node.Attributes.Append(attr);
+                    //_startMarkerFound = true;
                 }
             }
         }
 
         //private List<TextCollection> _recursiveTextCollection;
         //private bool _nextStartMarkerFound = false;
-        private bool _startMarkerFound = false;
-        private bool _endMarkerFound = false;
+        //private bool _startMarkerFound = false;
+        //private bool _endMarkerFound = false;
         //private List<TextCollection> AttemptRecursion(XmlNodeList nodeList)
         //{
         //    foreach (XmlNode node in nodeList)
