@@ -45,8 +45,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 );
             }
 
+#if DEBUG
             Stopwatch sw = new();
             sw.Start();
+#endif
 
             var alignmentsQueryable = ProjectDbContext.Alignments
                 .Include(e => e.SourceTokenComponent)
@@ -84,8 +86,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     as IDictionary<string, IDictionary<string, uint>>;
             }
 
+#if DEBUG
             sw.Stop();
             Logger.LogInformation("Elapsed {0}", sw.Elapsed);
+#endif
 
             return new RequestResult<IDictionary<string, IDictionary<string, uint>>>
             (

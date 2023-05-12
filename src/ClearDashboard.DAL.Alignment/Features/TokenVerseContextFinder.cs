@@ -98,8 +98,10 @@ namespace ClearDashboard.DAL.Alignment.Features
         /// <returns></returns>
         public static IDictionary<IId, (IEnumerable<Token> TokenTrainingTextVerseTokens, uint TokenTrainingTextTokensIndex)> GetTokenVerseContexts(Models.ParallelCorpus parallelCorpus, IEnumerable<Token> tokens, bool isSource, ProjectDbContext projectDbContext, ILogger logger)
         {
+#if DEBUG
             Stopwatch sw = new();
             sw.Start();
+#endif
 
             var corpusId = isSource ? parallelCorpus.SourceTokenizedCorpus!.CorpusId : parallelCorpus.TargetTokenizedCorpus!.CorpusId;
             var tokenizedCorpusId = isSource ? parallelCorpus.SourceTokenizedCorpusId : parallelCorpus.TargetTokenizedCorpusId;
@@ -110,9 +112,11 @@ namespace ClearDashboard.DAL.Alignment.Features
             var tokenIdTVAs = GetAllRelatedTVAs(tokens, projectDbContext);
             var tokenTVAs = tokenIdTVAs.SelectMany(e => e.Value.Select(tva => tva));
 
+#if DEBUG
             sw.Stop();
             logger.LogInformation("Elapsed={0} - TokenVerseAssociation (by Token Ids) database query [count: {1}]", sw.Elapsed, tokenTVAs.Count());
             sw.Restart();
+#endif
 
             // For TokenComposite tokens, the Id of the composite together with
             // the BCV for each child token is returned.  (Filtering out any
@@ -138,9 +142,11 @@ namespace ClearDashboard.DAL.Alignment.Features
                     .Any())
                 .ToList();
 
+#if DEBUG
             sw.Stop();
             logger.LogInformation("Elapsed={0} - VerseMappings (by bcv) database query [count: {1}]", sw.Elapsed, allTokenBCVVerseMappings.Count);
             sw.Restart();
+#endif
 
             // VerseIds from both TVAs and BCVs:
             var allVerseIds = tokenBCVVerseMappings
@@ -162,9 +168,11 @@ namespace ClearDashboard.DAL.Alignment.Features
                 .Where(e => allVerseIds.Contains(e.VerseId))
                 .ToList();
 
+#if DEBUG
             sw.Stop();
             logger.LogInformation("Elapsed={0} - TokenVerseAssociation (by VerseMapping Verse Id) database query [count: {1}]", sw.Elapsed, allVerseTVAs.Count);
             sw.Restart();
+#endif
 
             // Now we extract all the source and target BCV values from the
             // entire set of VerseMapping Verses (excluding any having
@@ -207,18 +215,22 @@ namespace ClearDashboard.DAL.Alignment.Features
                 )
                 .ToList();
 
+#if DEBUG
             sw.Stop();
             logger.LogInformation("Elapsed={0} - All tokens for relevant VerseMappings by BCV database query [count: {1}]", sw.Elapsed, tokensForVerseBCVs.Count);
             sw.Restart();
+#endif
 
             var tokensByVerseMappingId = AssembleVerseMappingTokens(
                 tokensForVerseBCVs,
                 allVerseTVAs,
                 tokenizedCorpusId);
 
+#if DEBUG
             sw.Stop();
             logger.LogInformation("Elapsed={0} - Assemble VerseMapping Tokens", sw.Elapsed);
             sw.Restart();
+#endif
 
             var tokenComponentIdToVerseMappingIds = BuildTokenComponentIdToVerseMappingIds(tokenIdBCVs, verseMappingsByBCV);
 
