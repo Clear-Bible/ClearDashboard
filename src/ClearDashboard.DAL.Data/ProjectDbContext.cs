@@ -61,6 +61,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<TokenComposite> TokenComposites => Set<TokenComposite>();
         public virtual DbSet<TokenCompositeTokenAssociation> TokenCompositeTokenAssociations => Set<TokenCompositeTokenAssociation>();
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
+        public virtual DbSet<TokenVerseAssociation> TokenVerseAssociations => Set<TokenVerseAssociation>();
         public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<Translation> Translations => Set<Translation>();
         public virtual DbSet<TranslationModelEntry> TranslationModelEntries => Set<TranslationModelEntry>();
@@ -292,6 +293,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Verse>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Verse>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Verse>().HasIndex(e => e.VerseNumber);
+            modelBuilder.Entity<Verse>().HasIndex(e => e.BBBCCCVVV);
 
             modelBuilder.Entity<AlignmentTopTargetTrainingText>()
                 .HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
