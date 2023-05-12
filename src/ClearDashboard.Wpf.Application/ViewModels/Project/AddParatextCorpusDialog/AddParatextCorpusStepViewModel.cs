@@ -257,7 +257,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         {
             CanOk = false;
 
-            await CheckUsfm(ParentViewModel);//should I await this?
+            await CheckUsfm(ParentViewModel);
 
             ValidationResult = Validator?.Validate(this);
             CanOk = ValidationResult.IsValid;
