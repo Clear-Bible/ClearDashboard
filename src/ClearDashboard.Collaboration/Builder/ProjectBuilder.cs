@@ -28,7 +28,6 @@ public class ProjectBuilder : GeneralModelBuilder<Models.Project>
             project,
             new List<string>() {
                 nameof(Models.Project.LastMergedCommitSha),
-                nameof(Models.Project.DesignSurfaceLayout),
                 nameof(Models.Project.WindowTabLayout)
             });
 
