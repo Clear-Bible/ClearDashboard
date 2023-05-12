@@ -35,6 +35,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
 
+        public string? BBBCCCVVV { get; set; }
 
 
         // TODO:  These need to be removed which is going to cause refactoring in many view models.

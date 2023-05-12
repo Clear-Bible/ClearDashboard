@@ -28,6 +28,7 @@ using Autofac;
 using SIL.Machine.Utils;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -105,6 +106,172 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         finally
         {
             await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    public async Task AlignmentSet_GetAlignmentTrainingTextCounts()
+    {
+        Stopwatch sw = new();
+        try
+        {
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+
+            Assert.NotNull(alignmentSet);
+
+            sw.Start();
+
+            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, CancellationToken.None);
+            Assert.Equal(13, alignmentTrainingTextCounts.Count);
+
+            var one = alignmentTrainingTextCounts.Skip(1).First();
+            Assert.Equal(3, one.Value.Count);
+
+            Output.WriteLine($"{one.Key}");
+            foreach (var v in one.Value)
+            {
+                Output.WriteLine($"\t{v.Key}    {v.Value}");
+            }
+
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0} - Overall", sw.Elapsed);
+        }
+    }
+    
+    [Fact]
+    public async Task TokenizedCorpus_GetTokenVerseRowContext()
+    {
+        Stopwatch sw = new();
+
+        try
+        {
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            sw.Start();
+
+            var token1 = ProjectDbContext!.Tokens
+                .Skip(10)
+                .Select(e => ModelHelper.BuildToken(e))
+                .FirstOrDefault();
+            Assert.NotNull(token1);
+
+            var (tokens, index) = TokenVerseContextFinder.GetTokenVerseRowContext(token1, ProjectDbContext!, Logger);
+
+            Output.WriteLine($"Token Id: {token1.TokenId}");
+            Output.WriteLine($"Index: {index}");
+            foreach (var t in tokens)
+            {
+                Output.WriteLine($"\t{t.TokenId}");
+            }
+
+            var token2 = ProjectDbContext!.TokenComposites
+                .Include(e => e.Tokens)
+                .Select(e => ModelHelper.BuildToken(e))
+                .FirstOrDefault();
+            Assert.NotNull(token2);
+
+            var (tokens2, index2) = TokenVerseContextFinder.GetTokenVerseRowContext(token2, ProjectDbContext!, Logger);
+
+            Output.WriteLine($"Token Id: {token2.TokenId}");
+            Output.WriteLine($"Index: {index2}");
+            foreach (var t in tokens2)
+            {
+                Output.WriteLine($"\t{t.TokenId}");
+            }
+
+            var token3 = ((CompositeToken)token2).Tokens.First();
+            var (tokens3, index3) = TokenVerseContextFinder.GetTokenVerseRowContext(token3, ProjectDbContext!, Logger);
+
+            Output.WriteLine($"Token Id: {token3.TokenId}");
+            Output.WriteLine($"Index: {index3}");
+            foreach (var t in tokens3)
+            {
+                Output.WriteLine($"\t{t.TokenId}");
+            }
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0} - Overall", sw.Elapsed);
+
+        }
+    }
+
+    [Fact]
+    public async Task AlignmentSet_GetAlignmentVerseContexts()
+    {
+        Stopwatch sw = new();
+
+        try
+        { 
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+
+            Assert.NotNull(alignmentSet);
+
+            sw.Start();
+
+            var alignmentSetVerseContexts = await alignmentSet.GetAlignmentVerseContexts("verse", "verse", CancellationToken.None);
+            Assert.Equal(12, alignmentSetVerseContexts.Count());
+
+            var one = alignmentSetVerseContexts.FirstOrDefault();
+            if (one != default)
+            {
+                Assert.Equal(6, one.sourceTokenTrainingTextVerseTokens.Count());
+                Assert.Equal(6, one.targetTokenTrainingTextVerseTokens.Count());
+                Assert.Equal((uint)3, one.sourceTokenTrainingTextTokensIndex);
+                Assert.Equal((uint)3, one.targetTokenTrainingTextTokensIndex);
+
+                Output.WriteLine($"Alignment source: {one.alignment.AlignedTokenPair.SourceToken.TokenId}");
+                Output.WriteLine($"Alignment target: {one.alignment.AlignedTokenPair.TargetToken.TokenId}");
+                Output.WriteLine($"Verse context index (source): {one.sourceTokenTrainingTextTokensIndex}");
+                foreach (var vc in one.sourceTokenTrainingTextVerseTokens)
+                {
+                    Output.WriteLine($"\t{vc.TokenId}");
+                }
+                Output.WriteLine($"Verse context index (target): {one.targetTokenTrainingTextTokensIndex}");
+                foreach (var vc in one.targetTokenTrainingTextVerseTokens)
+                {
+                    Output.WriteLine($"\t{vc.TokenId}");
+                }
+            }
+
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0} - Overall", sw.Elapsed);
         }
     }
 
