@@ -24,6 +24,8 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public bool IsEnabled { get; set; }
 
+        public bool HasUsfmError { get; set; }
+
         public string Abbreviation { get; set; }
 
         public Brush BackColor { get; set; }

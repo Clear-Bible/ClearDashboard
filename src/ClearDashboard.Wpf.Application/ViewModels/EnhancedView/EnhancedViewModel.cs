@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -18,7 +19,6 @@ using Microsoft.Extensions.Logging;
 using SIL.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,12 +26,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+    using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
+
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
@@ -40,7 +40,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<ReloadDataMessage>,
         IHandle<TokenizedCorpusUpdatedMessage>,
         IHandle<HighlightTokensMessage>,
-        IHandle<UnhighlightTokensMessage>
+        IHandle<UnhighlightTokensMessage>,
+        IHandle<ParallelCorpusDeletedMessage>,
+        IHandle<CorpusDeletedMessage>
     {
         #region Commands
 
@@ -698,6 +700,56 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 await enhancedViewItemViewModel.UnhighlightTokensAsync(message, cancellationToken);
             }
+        }
+
+        public Task HandleAsync(ParallelCorpusDeletedMessage message, CancellationToken cancellationToken)
+        {
+            bool deleteHappened = false;
+            var parallelCorpusID = message.ParallelCorpusId;
+
+            var verseItems = Items.Where(item => item is VerseAwareEnhancedViewItemViewModel)
+                .Cast<VerseAwareEnhancedViewItemViewModel>();
+
+            foreach (var item in verseItems.Reverse())
+            {
+                if (item.ParallelCorpusId == parallelCorpusID)
+                {
+                    Items.Remove(item);
+                    deleteHappened = true;
+                }
+            }
+
+            if (deleteHappened)
+            {
+                NotifyOfPropertyChange(() => VerseAwareEnhancedViewItemViewModels);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(CorpusDeletedMessage message, CancellationToken cancellationToken)
+        {
+            bool deleteHappened = false;
+            var corpusId = message.CorpusId;
+
+            var verseItems = Items.Where(item => item is VerseAwareEnhancedViewItemViewModel)
+                .Cast<VerseAwareEnhancedViewItemViewModel>();
+
+            foreach (var item in verseItems.Reverse())
+            {
+                if (item.CorpusId == corpusId)
+                {
+                    Items.Remove(item);
+                    deleteHappened = true;
+                }
+            }
+
+            if (deleteHappened)
+            {
+                NotifyOfPropertyChange(() => VerseAwareEnhancedViewItemViewModels);
+            }
+            
+            return Task.CompletedTask;
         }
 
         #endregion

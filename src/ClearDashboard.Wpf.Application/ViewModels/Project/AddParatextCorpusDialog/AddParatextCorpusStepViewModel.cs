@@ -284,6 +284,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                     ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_ErrorCount");
                 }
 
+                ParentViewModel.UsfmErrors = UsfmErrors;
+
             }
 
             ShowSpinner = Visibility.Collapsed;

@@ -129,6 +129,7 @@ namespace ClearDashboard.DataAccessLayer
                 {
                     user.Id = TemporaryUserGuid;
                     CurrentUser = user;
+                    CheckForCurrentUser();
                 }
                 return false;
             }
@@ -139,6 +140,7 @@ namespace ClearDashboard.DataAccessLayer
             }
 
             CurrentUser = user;
+            CheckForCurrentUser();
 
             return true;
         }
