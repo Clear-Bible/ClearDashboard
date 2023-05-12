@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using Nito.AsyncEx.Synchronous;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -101,11 +102,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             set
             {
                 Set(ref _selectedProject, value);
-
-                CheckUsfm();
-
-                ValidationResult = Validator?.Validate(this);
-                CanOk = ValidationResult.IsValid;
             }
         }
 
@@ -257,9 +253,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             Clipboard.SetText(sb.ToString());
         }
 
+        public async void ProjectSelected()
+        {
+            CanOk = false;
 
+            await CheckUsfm(ParentViewModel);//should I await this?
 
-        private async Task CheckUsfm()
+            ValidationResult = Validator?.Validate(this);
+            CanOk = ValidationResult.IsValid;
+        }
+
+        private async Task CheckUsfm(IParatextCorpusDialogViewModel? parentViewModel)
         {
             if (SelectedProject is null)
             {
@@ -284,7 +288,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                     ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_ErrorCount");
                 }
 
-                ParentViewModel.UsfmErrors = UsfmErrors;
+                parentViewModel.UsfmErrors = UsfmErrors;
 
             }
 
