@@ -517,9 +517,26 @@
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="16"
                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
-                Text="{helpers:Localization ProjectPicker_DeleteError}"
                 TextWrapping="Wrap"
-                Visibility="{Binding DeleteErrorVisibility}" />
+                Visibility="{Binding DeleteErrorVisibility}">
+                <Run Text="*" />
+                <Run Text="{helpers:Localization ProjectPicker_DeleteError}" />
+            </TextBlock>
+
+            <TextBlock
+                Width="500"
+                MaxWidth="340"
+                Margin="11,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                FontSize="16"
+                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                TextWrapping="Wrap"
+                Visibility="{Binding AlreadyOpenMessageVisibility}">
+                <Run Text="*" />
+                <Run Text="This project is open already." />
+            </TextBlock>
             <Button
                 x:Name="InitializeCollaboration"
                 Width="340"

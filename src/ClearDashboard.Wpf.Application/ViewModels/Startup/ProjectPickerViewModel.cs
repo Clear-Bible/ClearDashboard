@@ -158,6 +158,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private Visibility _alreadyOpenMessageVisibility = Visibility.Collapsed;
+        public Visibility AlreadyOpenMessageVisibility
+        {
+            get => _alreadyOpenMessageVisibility;
+            set
+            {
+                _alreadyOpenMessageVisibility = value;
+                NotifyOfPropertyChange(() => AlreadyOpenMessageVisibility);
+            }
+        }
+
         private string? _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
         public string? Message
         {
@@ -379,8 +390,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
             }
 
-            var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
-
             foreach (var directoryName in directories)
             {
                 var directoryInfo = new DirectoryInfo(directoryName);
@@ -402,12 +411,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         version = results.Data;
                     }
 
-                    bool isClosed = true;
-                    if (currentlyOpenProjectsList.Contains(directoryInfo.Name))
-                    {
-                        isClosed = false;
-                    }
-
                     // add as ListItem
                     var dashboardProject = new DashboardProject
                     {
@@ -416,7 +419,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         ShortFilePath = fileInfo.Name,
                         FullFilePath = fileInfo.FullName,
                         Version = version,
-                        IsClosed = isClosed
                     };
 
                     DashboardProjects.Add(dashboardProject);
@@ -589,6 +591,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
+            
+            var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
+            if (currentlyOpenProjectsList.Contains(project.ProjectName))
+            {
+                AlreadyOpenMessageVisibility = Visibility.Visible;
+                return;
+            }
+            AlreadyOpenMessageVisibility = Visibility.Collapsed;
+            
 
             ProjectManager!.CurrentDashboardProject = project;
             EventAggregator.PublishOnUIThreadAsync(new DashboardProjectMessage(ProjectManager!.CurrentDashboardProject));
