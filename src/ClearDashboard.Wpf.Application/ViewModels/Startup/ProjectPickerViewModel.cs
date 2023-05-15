@@ -365,17 +365,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         #region Methods
 
-        private async Task GetProjectsVersion()
+        private async Task GetProjectsVersion(bool afterMigration=false)
         {
             DashboardProjects.Clear();
 
             // check for Projects subfolder
             var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
 
-            if (!IsDashboardRunningAlready())
+            if (!IsDashboardRunningAlready() && !afterMigration)
             {
                 OpenProjectManager.ClearOpenProjectList();
-
+           
                 OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
             }
 
@@ -461,7 +461,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task RefreshProjectList()
         {
-            await GetProjectsVersion();
+            await GetProjectsVersion(true);
         }
 
         private async Task GetCollabProjects()
@@ -591,7 +591,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             ProjectManager!.CurrentDashboardProject = project;
-            
+            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectMessage(ProjectManager!.CurrentDashboardProject));
+
             OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
 
             ParentViewModel!.ExtraData = project;

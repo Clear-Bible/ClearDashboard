@@ -164,7 +164,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             get => _windowIdToLoad;
             set => Set(ref _windowIdToLoad, value);
         }
-        private void ShowCollaborationInitialize()
+        private async Task ShowCollaborationInitialize()
         {
             if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
             {
@@ -185,13 +185,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // LastMergedCommitSha value should already be in database
                     }
 
-                    // FIXME:  how?
-                    RebuildMainMenu().Wait();
+                    await RebuildMainMenu();
                 }
             }
         }
 
-        private void ShowCollaborationGetLatest()
+        private async Task ShowCollaborationGetLatest()
         {
             if (_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
             {
@@ -212,11 +211,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
                 }
 
-                RebuildMainMenu().Wait();
+                await RebuildMainMenu();
             }
         }
 
-        private void ShowCollaborationCommit()
+        private async Task ShowCollaborationCommit()
         {
             if (_collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable())
             {
@@ -235,10 +234,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     if (viewModel.CommitSha is not null)
                     {
                         ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
-                        ProjectManager.UpdateProject(ProjectManager.CurrentProject).Wait();
+                        await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
                     }
 
-                    RebuildMainMenu().Wait();
+                    await RebuildMainMenu();
                 }
             }
         }
@@ -1976,109 +1975,184 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         LoadLayoutById(menuItem.Id);
                         break;
                     }
+                switch (menuItem.Id)
+                {
+                    case { } a when a.StartsWith(MenuIds.ProjectLayout):
+                        {
+                            LoadLayoutById(menuItem.Id);
+                            break;
+                        }
 
                     case { } b when b.StartsWith(MenuIds.StandardLayout):
-                    {
-                        LoadLayoutById(menuItem.Id);
-                        break;
-                    }
+                        {
+                            LoadLayoutById(menuItem.Id);
+                            break;
+                        }
 
                     case MenuIds.Separator:
-                    {
-                        // no-op
-                        break; 
-                    }
+                        {
+                            // no-op
+                            break;
+                        }
 
                     case MenuIds.Save:
-                    {
-                        GridIsVisible = Visibility.Visible;
-                        DeleteGridIsVisible = Visibility.Collapsed;
-                        break;
-                    }
+                        {
+                            GridIsVisible = Visibility.Visible;
+                            DeleteGridIsVisible = Visibility.Collapsed;
+                            break;
+                        }
 
                     case MenuIds.Delete:
-                    {
-                        DeleteGridIsVisible = Visibility.Visible;
-                        GridIsVisible = Visibility.Collapsed;
-                        break;
-                    }
+                        {
+                            DeleteGridIsVisible = Visibility.Visible;
+                            GridIsVisible = Visibility.Collapsed;
+                            break;
+                        }
 
                     case MenuIds.NewEnhancedCorpus:
-                    {
-                        await AddNewEnhancedView();
-                        break;
-                    }
+                        {
+                            await AddNewEnhancedView();
+                            break;
+                        }
 
                     case MenuIds.GettingStartedGuide:
-                    {
-                        LaunchGettingStartedGuide();
-                        break;
-                    }
+                        {
+                            LaunchGettingStartedGuide();
+                            break;
+                        }
 
                     case MenuIds.ShowLog:
-                    {
-                        ShowLogs();
-                        break;
-                    }
+                        {
+                            ShowLogs();
+                            break;
+                        }
 
                     case MenuIds.GatherLogs:
-                    {
-                        GatherLogs();
-                        break;
-                    }
+                        {
+                            GatherLogs();
+                            break;
+                        }
 
                     case MenuIds.Settings:
-                    {
-                        await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
-                        break;
-                    }
+                        {
+                            await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
+                            break;
+                        }
+
+                    case MenuIds.CollaborationInitialize:
+                        {
+                            await ShowCollaborationInitialize();
+                            break;
+                        }
+
+                    case MenuIds.CollaborationGetLatest:
+                        {
+                            await ShowCollaborationGetLatest();
+                            break;
+                        }
+
+                    case MenuIds.CollaborationCommit:
+                        {
+                            await ShowCollaborationCommit();
+                            break;
+                        }
+
+                    case MenuIds.CollaborationFetchMerge:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable())
+                            {
+                                _collaborationManager.FetchMergeRemote();
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
+
+                    case MenuIds.CollaborationHardReset:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                            {
+                                _collaborationManager.HardResetChanges();
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
+
+                    case MenuIds.CollaborationCreateBackup:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                            {
+                                await _collaborationManager.CreateProjectBackupAsync(CancellationToken.None);
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
+
+                    case MenuIds.CollaborationDumpDifferencesLastMergedHead:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                            {
+                                _collaborationManager.DumpDifferencesBetweenLastMergedCommitAndHead();
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
+
+                    case MenuIds.CollaborationDumpDifferencesHeadCurrentDb:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                            {
+                                await _collaborationManager.DumpDifferencesBetweenHeadAndCurrentDatabaseAsync();
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
 
                     case MenuIds.About:
-                    {
-                        ShowAboutWindow();
-                        break;
-                    }
+                        {
+                            ShowAboutWindow();
+                            break;
+                        }
 
                     case MenuIds.FileNew:
-                    {
-                        await ShowStartupDialog(menuItem);
-                        break;
+                        {
+                            await ShowStartupDialog(menuItem);
+                            break;
                         }
                     case MenuIds.FileOpen:
-                    {
-                        await ShowStartupDialog(menuItem);
-                        break;
-                    }
+                        {
+                            await ShowStartupDialog(menuItem);
+                            break;
+                        }
 
                     case MenuIds.ReloadProject:
-                    {
-                       await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
-                       break;
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                            break;
 
-                    }
+                        }
                     case MenuIds.Layout:
-                    {
-                        //no-op
-                        break;
-                    }
+                        {
+                            //no-op
+                            break;
+                        }
 
                     case MenuIds.BiblicalTerms:
-                    {  
-                        UnhideWindow(WindowIds.BiblicalTerms);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.BiblicalTerms);
+                            break;
+                        }
 
                     case MenuIds.EnhancedCorpus:
-                    {
-                        UnhideWindow(WindowIds.EnhancedView);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.EnhancedView);
+                            break;
+                        }
 
                     case MenuIds.Pins:
-                    {
-                        UnhideWindow(WindowIds.Pins);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.Pins);
+                            break;
+                        }
 
                     //case MenuIds.WordMeanings":
                     //{
@@ -2087,28 +2161,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     //}
 
                     case MenuIds.Marble:
-                    {
-                        UnhideWindow(WindowIds.Marble);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.Marble);
+                            break;
+                        }
 
                     case MenuIds.TextCollection:
-                    {
-                        UnhideWindow(WindowIds.TextCollection);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.TextCollection);
+                            break;
+                        }
 
                     case MenuIds.Notes:
-                    {
-                        UnhideWindow(WindowIds.Notes);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.Notes);
+                            break;
+                        }
 
                     default:
-                    {
-                        UnhideWindow(menuItem.Id);
-                        break;
-                    }
+                        {
+                            UnhideWindow(menuItem.Id);
+                            break;
+                        }
                 }
             }
         }

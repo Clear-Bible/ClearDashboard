@@ -60,7 +60,8 @@ public static class ParallelCorpusDataBuilder
                     BookNumber = bookNumber,
                     ChapterNumber = v.ChapterNum,
                     CorpusId = corpusId,
-                    ParallelCorpusId = parallelCorpusId
+                    ParallelCorpusId = parallelCorpusId,
+                    BBBCCCVVV = $"{bookNumber:000}{v.ChapterNum:000}{v.VerseNum:000}"
                 };
                 if (v.TokenIds.Any())
                 {

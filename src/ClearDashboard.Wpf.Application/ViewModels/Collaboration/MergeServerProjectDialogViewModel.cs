@@ -60,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
         }
 
-        public string CommitMessage { get; set; }
+        public string CommitMessage { get; set; } = "Commit issued";  // Set by MainViewModel
         public string? CommitSha { get; private set; }
 
         private Visibility? _progressBarVisibility = Visibility.Hidden;
@@ -168,7 +168,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                         progress);
 
                     });
+
                 await _runningTask;
+
+                if (CommitSha is not null) 
+                {
+                    await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                }
             }
             catch (OperationCanceledException)
             {
@@ -212,7 +218,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                     if (_collaborationManager.IsCurrentProjectInRepository())
                     {
-                        await _collaborationManager.MergeProjectLatestChangesAsync(true, false, _cancellationTokenSource.Token, progress);
+                        var lastMergedCommitSha = await _collaborationManager.MergeProjectLatestChangesAsync(
+                            true, 
+                            false, 
+                            _cancellationTokenSource.Token, 
+                            progress);
+
+                        if (lastMergedCommitSha != null)
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                        }
                     }
                     await _collaborationManager.StageProjectChangesAsync(_cancellationTokenSource.Token, progress);
 

@@ -62,6 +62,28 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return result.Data!;
         }
 
+        public async Task<IDictionary<string, IDictionary<string, uint>>> GetAlignmentCounts(bool sourceToTarget, CancellationToken cancellationToken)
+        {
+            var result = await mediator_.Send(new GetAlignmentCountsByTrainingTextQuery(AlignmentSetId, sourceToTarget));
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
+        }
+
+        public async Task<IEnumerable<(
+            Alignment alignment,
+            IEnumerable<Token> sourceTokenTrainingTextVerseTokens,
+            uint sourceTokenTrainingTextTokensIndex,
+            IEnumerable<Token> targetTokenTrainingTextVerseTokens,
+            uint targetTokenTrainingTextTokensIndex
+        )>> GetAlignmentVerseContexts(string sourceTokenTrainingText, string targetTokenTrainingText, CancellationToken cancellationToken)
+        {
+            var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(AlignmentSetId, sourceTokenTrainingText, targetTokenTrainingText));
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
+        }
+
         public async Task Update(CancellationToken token = default)
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId

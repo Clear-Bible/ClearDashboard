@@ -28,6 +28,7 @@ using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -36,7 +37,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         IHandle<UserMessage>,
         IHandle<GetApplicationWindowSettings>,
         IHandle<UiLanguageChangedMessage>,
-        IHandle<PerformanceModeMessage>
+        IHandle<PerformanceModeMessage>,
+        IHandle<DashboardProjectMessage>,
+        IHandle<ProjectChangedMessage>
     {
 
         //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
@@ -66,6 +69,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             get => _paratextUserName;
             set => Set(ref _paratextUserName, value);
+        }
+
+        private string? _dashboardProjectName;
+        public string? DashboardProjectName
+        {
+            get => _dashboardProjectName;
+            set => Set(ref _dashboardProjectName, value);
+        }
+
+        private string? _paratextProjectName;
+        public string? ParatextProjectName
+        {
+            get => _paratextProjectName;
+            set => Set(ref _paratextProjectName, value);
         }
 
 
@@ -554,6 +571,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
 
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            ParatextProjectName = message.Project.ShortName;
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(DashboardProjectMessage message, CancellationToken cancellationToken)
+        {
+            DashboardProjectName = message.project.ProjectName;
+            await Task.CompletedTask;
         }
 
         #endregion
