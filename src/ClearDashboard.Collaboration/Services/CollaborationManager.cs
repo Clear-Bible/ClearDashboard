@@ -30,12 +30,13 @@ public class CollaborationManager
     private readonly IMediator _mediator;
     private readonly IUserProvider _userProvider;
     private readonly IProjectProvider _projectProvider;
-    private readonly string _repositoryPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
+    private readonly string _repositoryBasePath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
     private readonly string _backupsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Backups";
     private readonly string _dumpsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Dumps";
 
     private readonly CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = false;
+    private string _repositoryPath = "LocalOnly";
 
     public const string BranchName = "master";
     public const string RemoteOrigin = "origin";
@@ -53,6 +54,21 @@ public class CollaborationManager
 		_projectProvider = projectProvider;
 
         _configuration = configuration;
+
+        if (!string.IsNullOrEmpty(_configuration.RemoteUrl))
+        {
+            try
+            {
+                var configRemoteUri = new Uri(_configuration.RemoteUrl);
+                var lastPartOfPath = Path.GetFileNameWithoutExtension(configRemoteUri.AbsolutePath);
+
+                _repositoryPath = _repositoryBasePath + Path.DirectorySeparatorChar + lastPartOfPath;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Invalid value in RemoteUrl configuration: '{_configuration.RemoteUrl}'");
+            }
+        }
     }
 
     public string RepositoryPath => _repositoryPath;
@@ -255,6 +271,7 @@ public class CollaborationManager
         return project.ProjectName ?? "Unnamed-Project";
     }
 
+    // TODO:  create repo-sticky file to put into project folder:
     public async Task<string> InitializeProjectDatabaseAsync(Guid projectId, bool includeMerge, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         using (var repo = new Repository(_repositoryPath))
@@ -331,6 +348,8 @@ public class CollaborationManager
         }
     }
 
+    // TODO:  throw an exception if the contents of the project-sticky file
+    // isn't there or doesn't match the current repository configuration
     public async Task<string?> MergeProjectLatestChangesAsync(bool remoteOverridesLocal, bool createBackupSnapshot, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         progress.Report(new ProgressStatus(0, "Finding latest commit"));
@@ -426,6 +445,8 @@ public class CollaborationManager
         factory.SaveSnapshot(result.Data!);
     }
 
+    // TODO:  throw an exception if the contents of the project-sticky file
+    // isn't there or doesn't match the current repository configuration
     public async Task StageProjectChangesAsync(CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         EnsureValidRepository(_repositoryPath);
@@ -540,6 +561,8 @@ public class CollaborationManager
 
     public void PushChangesToRemote()
     {
+        EnsureValidRepository(_repositoryPath);
+
         using (var repo = new Repository(_repositoryPath))
         {
             Remote remote = repo.Network.Remotes[RemoteOrigin];
