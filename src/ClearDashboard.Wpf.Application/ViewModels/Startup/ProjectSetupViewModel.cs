@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -65,6 +66,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
+
+            var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
+            if (currentlyOpenProjectsList.Contains(ProjectName))
+            {
+                return;
+            }
+
+            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectName));
+
+            OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
 
             ProjectManager!.CurrentDashboardProject.ProjectName = Project.ProjectName;
             ProjectManager.CurrentDashboardProject.IsNew = true;
