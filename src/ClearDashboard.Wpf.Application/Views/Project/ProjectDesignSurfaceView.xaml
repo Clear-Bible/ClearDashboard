@@ -755,23 +755,5 @@
                 </controls:ZoomAndPanControl>
             </ScrollViewer>
         </Grid>
-
-        <xctk:PropertyGrid
-            x:Name="_propertyGrid"
-            Grid.Row="1"
-            Margin="5,5,35,5"
-            Filter=""
-            Foreground="Black"
-            HideInheritedProperties="False"
-            IsCategorized="False"
-            IsMiscCategoryLabelHidden="False"
-            IsReadOnly="False"
-            IsVirtualizing="False"
-            SelectedObject="{Binding SelectedDesignSurfaceComponent}"
-            ShowAdvancedOptions="False"
-            ShowHorizontalScrollBar="True"
-            ShowSummary="False"
-            UpdateTextBoxSourceOnEnterKey="True"
-            Visibility="Collapsed" />
     </Grid>
 </UserControl>

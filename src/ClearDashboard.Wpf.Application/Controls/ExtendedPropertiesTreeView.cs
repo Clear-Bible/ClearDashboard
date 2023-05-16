@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
-using Xceed.Wpf.Toolkit;
 
 namespace ClearDashboard.Wpf.Application.Controls
 {
