@@ -20,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// A control for displaying a single <see cref="Token"/> alongside a possible <see cref="Translation"/>
     /// and possible note indicator.
     /// </summary>
-    public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>
+    public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>, IHandle<AlignmentAddedMessage>, IHandle<AlignmentDeletedMessage>
     {
         #region Static DependencyProperties
 
@@ -914,7 +914,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
                 FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                 CreateAlignmentMenuItem.Visibility = tokenDisplay.VerseDisplay is AlignmentDisplayViewModel && AllSelectedTokens.CanCreateAlignment ? Visibility.Visible : Visibility.Collapsed;
-                DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned && AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
+                DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned && AllSelectedTokens.SelectedTokenCount == 1 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -1153,6 +1153,26 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
             AllSelectedTokens = message.SelectedTokens;
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.SourceTokenDisplayViewModel == TokenDisplayViewModel || message.TargetTokenDisplayViewModel == TokenDisplayViewModel)
+            {
+                CalculateLayout();
+            }
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Alignment.AlignedTokenPair.SourceToken.TokenId.IdEquals(TokenDisplayViewModel.AlignmentToken.TokenId) ||
+                message.Alignment.AlignedTokenPair.TargetToken.TokenId.IdEquals(TokenDisplayViewModel.AlignmentToken.TokenId))
+            {
+                TokenDisplayViewModel.IsHighlighted = false;
+                CalculateLayout();
+            }
             await Task.CompletedTask;
         }
 

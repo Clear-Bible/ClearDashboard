@@ -663,8 +663,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     return;
                 }
 
-                await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
-                await LoadEnhancedViewData(enhancedViews);
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
+                    await LoadEnhancedViewData(enhancedViews);
+                });
+              
 
                 sw.Stop();
                 Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
@@ -706,34 +710,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task DrawEnhancedViewTabs(List<EnhancedViewLayout> enhancedViewLayouts, CancellationToken cancellationToken)
         {
-            var index = 0;
-            foreach (var enhancedViewLayout in enhancedViewLayouts)
+            try
             {
-                EnhancedViewModel enhancedViewModel = null;
-                if (index == 0)
+                var index = 0;
+                foreach (var enhancedViewLayout in enhancedViewLayouts)
                 {
-                    ++index;
-                    enhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
-                }
-
-                var isNewEnhancedView = enhancedViewModel is null;
-                if (isNewEnhancedView)
-                {
-                    // create a new one
-                    enhancedViewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-
-                    var enhancedViewLayoutDocument = new LayoutDocument
+                    EnhancedViewModel enhancedViewModel = null;
+                    if (index == 0)
                     {
-                        Content = enhancedViewModel,
-                        Title = enhancedViewLayout.Title,
-                    };
+                        ++index;
+                        enhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
+                    }
+
+                    var isNewEnhancedView = enhancedViewModel is null;
+                    if (isNewEnhancedView)
+                    {
+
+                        // create a new one
+                        enhancedViewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+
+                        var enhancedViewLayoutDocument = new LayoutDocument
+                        {
+                            Content = enhancedViewModel,
+                            Title = enhancedViewLayout.Title,
+                        };
 
 
-                    AddNewEnhancedViewTab(enhancedViewLayoutDocument);
+                        AddNewEnhancedViewTab(enhancedViewLayoutDocument);
+
+
+                    }
+
+                    await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
+                    await Task.Delay(100, cancellationToken);
                 }
 
-                await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
-                await Task.Delay(100, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "an unexpected error occurred while activating an EnhancedViewModel.");
+                throw;
             }
         }
 
@@ -1798,8 +1814,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (metadatum.IsNewWindow == false)
             {
 
-
-
                 if (dockableWindows.Count == 1)
                 {
                     await EnhancedViewModels.First().AddItem(metadatum, cancellationToken);
@@ -1968,13 +1982,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 else if (menuItem.Id == MenuIds.FileNew || menuItem.Id == MenuIds.FileOpen)
                 {
                     if (menuItem.Id == MenuIds.FileNew)
-                switch (menuItem.Id)
-                {
-                    case { } a when a.StartsWith(MenuIds.ProjectLayout):
-                    {
-                        LoadLayoutById(menuItem.Id);
-                        break;
-                    }
                 switch (menuItem.Id)
                 {
                     case { } a when a.StartsWith(MenuIds.ProjectLayout):

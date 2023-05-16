@@ -283,7 +283,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             var concordanceSelection = Concordance.SelectIfContainsText(TokenDisplay.TargetTranslationText);
             SelectedTranslation ??= concordanceSelection;
 
-            if (SelectedTranslation == null)
+            if (SelectedTranslation == null && TokenDisplay.TargetTranslationText != Translation.DefaultTranslationText)
             {
                 SelectedTranslation = new LexiconTranslationViewModel { Text = TokenDisplay.TargetTranslationText, IsSelected = true};
                 Concordance.Insert(0, SelectedTranslation);
