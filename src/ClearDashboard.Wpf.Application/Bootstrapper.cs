@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Application
 
 
         /// <summary>
-        /// Creates an instance of IHo[st used for denormalizing project databases.
+        /// Creates an instance of IHost used for denormalizing project databases.
         /// </summary>
         /// <remarks>
         /// 
