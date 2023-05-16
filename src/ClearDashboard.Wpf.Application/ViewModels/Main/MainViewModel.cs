@@ -577,8 +577,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     return;
                 }
 
-                await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
-                await LoadEnhancedViewData(enhancedViews);
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
+                    await LoadEnhancedViewData(enhancedViews);
+                });
+              
 
                 sw.Stop();
                 Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
@@ -620,34 +624,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task DrawEnhancedViewTabs(List<EnhancedViewLayout> enhancedViewLayouts, CancellationToken cancellationToken)
         {
-            var index = 0;
-            foreach (var enhancedViewLayout in enhancedViewLayouts)
+            try
             {
-                EnhancedViewModel enhancedViewModel = null;
-                if (index == 0)
+                var index = 0;
+                foreach (var enhancedViewLayout in enhancedViewLayouts)
                 {
-                    ++index;
-                    enhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
-                }
-
-                var isNewEnhancedView = enhancedViewModel is null;
-                if (isNewEnhancedView)
-                {
-                    // create a new one
-                    enhancedViewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-
-                    var enhancedViewLayoutDocument = new LayoutDocument
+                    EnhancedViewModel enhancedViewModel = null;
+                    if (index == 0)
                     {
-                        Content = enhancedViewModel,
-                        Title = enhancedViewLayout.Title,
-                    };
+                        ++index;
+                        enhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
+                    }
+
+                    var isNewEnhancedView = enhancedViewModel is null;
+                    if (isNewEnhancedView)
+                    {
+
+                        // create a new one
+                        enhancedViewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+
+                        var enhancedViewLayoutDocument = new LayoutDocument
+                        {
+                            Content = enhancedViewModel,
+                            Title = enhancedViewLayout.Title,
+                        };
 
 
-                    AddNewEnhancedViewTab(enhancedViewLayoutDocument);
+                        AddNewEnhancedViewTab(enhancedViewLayoutDocument);
+
+
+                    }
+
+                    await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
+                    await Task.Delay(100, cancellationToken);
                 }
 
-                await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
-                await Task.Delay(100, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "an unexpected error occurred while activating an EnhancedViewModel.");
             }
         }
 
@@ -1646,8 +1661,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (metadatum.IsNewWindow == false)
             {
 
-
-
                 if (dockableWindows.Count == 1)
                 {
                     await EnhancedViewModels.First().AddItem(metadatum, cancellationToken);
@@ -1712,113 +1725,113 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 switch (menuItem.Id)
                 {
                     case { } a when a.StartsWith(MenuIds.ProjectLayout):
-                    {
-                        LoadLayoutById(menuItem.Id);
-                        break;
-                    }
+                        {
+                            LoadLayoutById(menuItem.Id);
+                            break;
+                        }
 
                     case { } b when b.StartsWith(MenuIds.StandardLayout):
-                    {
-                        LoadLayoutById(menuItem.Id);
-                        break;
-                    }
+                        {
+                            LoadLayoutById(menuItem.Id);
+                            break;
+                        }
 
                     case MenuIds.Separator:
-                    {
-                        // no-op
-                        break; 
-                    }
+                        {
+                            // no-op
+                            break;
+                        }
 
                     case MenuIds.Save:
-                    {
-                        GridIsVisible = Visibility.Visible;
-                        DeleteGridIsVisible = Visibility.Collapsed;
-                        break;
-                    }
+                        {
+                            GridIsVisible = Visibility.Visible;
+                            DeleteGridIsVisible = Visibility.Collapsed;
+                            break;
+                        }
 
                     case MenuIds.Delete:
-                    {
-                        DeleteGridIsVisible = Visibility.Visible;
-                        GridIsVisible = Visibility.Collapsed;
-                        break;
-                    }
+                        {
+                            DeleteGridIsVisible = Visibility.Visible;
+                            GridIsVisible = Visibility.Collapsed;
+                            break;
+                        }
 
                     case MenuIds.NewEnhancedCorpus:
-                    {
-                        await AddNewEnhancedView();
-                        break;
-                    }
+                        {
+                            await AddNewEnhancedView();
+                            break;
+                        }
 
                     case MenuIds.GettingStartedGuide:
-                    {
-                        LaunchGettingStartedGuide();
-                        break;
-                    }
+                        {
+                            LaunchGettingStartedGuide();
+                            break;
+                        }
 
                     case MenuIds.ShowLog:
-                    {
-                        ShowLogs();
-                        break;
-                    }
+                        {
+                            ShowLogs();
+                            break;
+                        }
 
                     case MenuIds.GatherLogs:
-                    {
-                        GatherLogs();
-                        break;
-                    }
+                        {
+                            GatherLogs();
+                            break;
+                        }
 
                     case MenuIds.Settings:
-                    {
-                        await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
-                        break;
-                    }
+                        {
+                            await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
+                            break;
+                        }
 
                     case MenuIds.About:
-                    {
-                        ShowAboutWindow();
-                        break;
-                    }
+                        {
+                            ShowAboutWindow();
+                            break;
+                        }
 
                     case MenuIds.FileNew:
-                    {
-                        await ShowStartupDialog(menuItem);
-                        break;
+                        {
+                            await ShowStartupDialog(menuItem);
+                            break;
                         }
                     case MenuIds.FileOpen:
-                    {
-                        await ShowStartupDialog(menuItem);
-                        break;
-                    }
+                        {
+                            await ShowStartupDialog(menuItem);
+                            break;
+                        }
 
                     case MenuIds.ReloadProject:
-                    {
-                       await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
-                       break;
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                            break;
 
-                    }
+                        }
                     case MenuIds.Layout:
-                    {
-                        //no-op
-                        break;
-                    }
+                        {
+                            //no-op
+                            break;
+                        }
 
                     case MenuIds.BiblicalTerms:
-                    {  
-                        UnhideWindow(WindowIds.BiblicalTerms);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.BiblicalTerms);
+                            break;
+                        }
 
                     case MenuIds.EnhancedCorpus:
-                    {
-                        UnhideWindow(WindowIds.EnhancedView);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.EnhancedView);
+                            break;
+                        }
 
                     case MenuIds.Pins:
-                    {
-                        UnhideWindow(WindowIds.Pins);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.Pins);
+                            break;
+                        }
 
                     //case MenuIds.WordMeanings":
                     //{
@@ -1827,28 +1840,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     //}
 
                     case MenuIds.Marble:
-                    {
-                        UnhideWindow(WindowIds.Marble);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.Marble);
+                            break;
+                        }
 
                     case MenuIds.TextCollection:
-                    {
-                        UnhideWindow(WindowIds.TextCollection);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.TextCollection);
+                            break;
+                        }
 
                     case MenuIds.Notes:
-                    {
-                        UnhideWindow(WindowIds.Notes);
-                        break;
-                    }
+                        {
+                            UnhideWindow(WindowIds.Notes);
+                            break;
+                        }
 
                     default:
-                    {
-                        UnhideWindow(menuItem.Id);
-                        break;
-                    }
+                        {
+                            UnhideWindow(menuItem.Id);
+                            break;
+                        }
                 }
             }
         }
