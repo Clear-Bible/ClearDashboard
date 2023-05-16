@@ -439,7 +439,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             
 
             ProjectManager!.CurrentDashboardProject = project;
-            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectMessage(ProjectManager!.CurrentDashboardProject));
+            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
 
             OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
 
