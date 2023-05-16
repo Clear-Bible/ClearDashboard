@@ -146,7 +146,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     if (alignment.AlignmentId != null)
                     {
                         Alignments!.Add(alignment);
-                        await EventAggregator.PublishOnUIThreadAsync(new AlignmentAddedMessage(alignment, targetTokenDisplay));
+                        await EventAggregator.PublishOnUIThreadAsync(new AlignmentAddedMessage(alignment, sourceTokenDisplay, targetTokenDisplay));
                     }
                     else
                     {
