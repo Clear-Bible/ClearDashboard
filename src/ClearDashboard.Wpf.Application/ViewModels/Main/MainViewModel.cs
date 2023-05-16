@@ -663,6 +663,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             catch (Exception ex)
             {
                 Logger.LogError(ex, "an unexpected error occurred while activating an EnhancedViewModel.");
+                throw;
             }
         }
 
