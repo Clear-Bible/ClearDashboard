@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Clear Dashboard"
-#define MyAppVersion "1.0.4.1"
+#define MyAppVersion "1.0.5.6"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -137,11 +137,11 @@ Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
 //Source: "UninsIS.dll"; Flags: dontcopy
 
 ; Install PluginManager
-Source: "..\tools\PluginManager\bin\Release\net7.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\tools\PluginManager\bin\Release\net7.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 
 ;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\ClearDashboard.Wpf.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencryption
 

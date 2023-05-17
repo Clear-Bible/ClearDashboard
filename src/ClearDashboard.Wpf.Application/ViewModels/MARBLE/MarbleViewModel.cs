@@ -1073,7 +1073,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             else
             {
                 // a normal verse
-                _ = new Verse
+                _ = new VerseObject
                 {
                     VerseBBBCCCVVV = _currentVerse
                 };
