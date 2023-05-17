@@ -28,6 +28,10 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Autofac.Configuration;
+using ClearDashboard.Collaboration.Features;
+using ClearDashboard.Collaboration.Services;
+using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
 
 namespace ClearDashboard.Wpf.Application

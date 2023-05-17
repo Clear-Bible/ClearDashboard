@@ -1,37 +1,53 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
-using FluentValidation;
-using FluentValidation.Results;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Utils;
+using System;
+using System.Collections.ObjectModel;
+using System.Dynamic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using System.Collections.ObjectModel;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Collaboration.Services;
-using System.Windows.Threading;
-using System;
-using System.Dynamic;
 using System.Windows.Controls.Primitives;
-using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using SIL.Machine.Utils;
-using System.Text.RegularExpressions;
+using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
+    public enum CollaborationDialogAction
+    {
+        Import,
+        Merge,
+        Commit,
+        Initialize
+    }
+
     public class MergeServerProjectDialogViewModel : DashboardApplicationScreen
     {
+        #region Member Variables   
+
         private readonly CollaborationManager _collaborationManager;
         private CancellationTokenSource _cancellationTokenSource;
         private Task? _runningTask;
+        private string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
+        public string ProgressLabel => $"{OkAction} Progress";
 
         private CollaborationDialogAction _dialogAction = CollaborationDialogAction.Import;
         public CollaborationDialogAction CollaborationDialogAction
@@ -44,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         public Guid ProjectId
         {
             get => _projectId;
-            set =>_projectId = value;
+            set => _projectId = value;
         }
 
         private string _projectName = string.Empty;
@@ -64,11 +80,54 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         public string? CommitSha { get; private set; }
 
         private Visibility? _progressBarVisibility = Visibility.Hidden;
+
         public Visibility? ProgressBarVisibility
         {
             get => _progressBarVisibility;
             set => Set(ref _progressBarVisibility, value);
         }
+
+        public bool CanCancel => true /* can always cancel */;
+
+
+        public string OkAction => CollaborationDialogAction.ToString();
+
+        private bool _canOkAction;
+        public bool CanOkAction
+        {
+            get => _canOkAction;
+            set => Set(ref _canOkAction, value);
+        }
+
+        private bool _canCancelAction = true;
+        public bool CanCancelAction
+        {
+            get => _canCancelAction;
+            set => Set(ref _canCancelAction, value);
+        }
+
+        private string _cancelAction = "Close";
+        public string CancelAction
+        {
+            get => _cancelAction;
+            set => Set(ref _cancelAction, value);
+        }
+
+        private ObservableCollection<string> _mergeProgressUpdates = new();
+        public ObservableCollection<string> MergeProgressUpdates
+        {
+            get => _mergeProgressUpdates;
+            set
+            {
+                _mergeProgressUpdates = value;
+                NotifyOfPropertyChange(() => MergeProgressUpdates);
+            }
+        }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
 
         public MergeServerProjectDialogViewModel(CollaborationManager collaborationManager, DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
@@ -80,6 +139,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
             //return base.OnInitializeAsync(cancellationToken);
         }
+
+        #endregion //Constructor
+
+
+        #region Methods
 
         private bool PreAction()
         {
@@ -167,8 +231,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                         _cancellationTokenSource.Token,
                         progress);
 
-                    });
-
+                });
                 await _runningTask;
 
                 if (CommitSha is not null) 
@@ -274,7 +337,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
             return true;
         }
-        public string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
+
+        
 
         public dynamic DialogSettings()
         {
@@ -291,7 +355,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             return settings;
         }
 
-        public bool CanCancel => true /* can always cancel */;
         public async Task Cancel()
         {
             if (_runningTask is not null)
@@ -333,30 +396,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
         }
 
-        public string ProgressLabel => $"{OkAction} Progress";
-        public string OkAction => CollaborationDialogAction.ToString();
-
-        private bool _canOkAction;
-        public bool CanOkAction
-        {
-            get => _canOkAction;
-            set => Set(ref _canOkAction, value);
-        }
-
-        private bool _canCancelAction = true;
-        public bool CanCancelAction
-        {
-            get => _canCancelAction;
-            set => Set(ref _canCancelAction, value);
-        }
-
-        private string _cancelAction = "Close";
-        public string CancelAction
-        {
-            get => _cancelAction;
-            set => Set(ref _cancelAction, value);
-        }
-
         public void Report(ProgressStatus status)
         {
             var message = Regex.Replace(status.Message ?? string.Empty, "{PercentCompleted(:.*)?}", "{0$1}");
@@ -367,23 +406,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             System.Windows.Application.Current.Dispatcher.Invoke(() => MergeProgressUpdates.Add(description));
         }
 
-        private ObservableCollection<string> _mergeProgressUpdates = new();
-        public ObservableCollection<string> MergeProgressUpdates
-        {
-            get => _mergeProgressUpdates;
-            set
-            {
-                _mergeProgressUpdates = value;
-                NotifyOfPropertyChange(() => MergeProgressUpdates);
-            }
-        }
+        #endregion // Methods
+
+
+
     }
 
-    public enum CollaborationDialogAction
-    {
-        Import,
-        Merge,
-        Commit,
-        Initialize
-    }
+
 }
