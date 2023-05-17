@@ -316,6 +316,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ILifetimeScope? lifetimeScope, 
             ILocalizationService localizationService,
             IWindowManager windowManager,
+            HttpClientServices httpClientServices,
             CollaborationManager collaborationManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
