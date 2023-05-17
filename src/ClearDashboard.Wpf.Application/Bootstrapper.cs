@@ -79,6 +79,9 @@ namespace ClearDashboard.Wpf.Application
                         //Host will try to wait 30 seconds before stopping the service. 
                         options.ShutdownTimeout = TimeSpan.FromSeconds(5);
                     });
+
+
+
                 })
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
