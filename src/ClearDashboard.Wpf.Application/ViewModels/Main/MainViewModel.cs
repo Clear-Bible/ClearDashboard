@@ -46,9 +46,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Wpf.Application.Helpers;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
+using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using CefSharp.DevTools.CSS;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -70,6 +73,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #nullable disable
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
+        private readonly CollaborationManager _collaborationManager;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
         private INavigationService NavigationService { get; }
@@ -160,6 +164,84 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             get => _windowIdToLoad;
             set => Set(ref _windowIdToLoad, value);
         }
+        private async Task ShowCollaborationInitialize()
+        {
+            if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
+            {
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    viewModel.CommitMessage = "Initial Commit";
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Initialize;
+
+                    this.WindowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        // LastMergedCommitSha value should already be in database
+                    }
+
+                    await RebuildMainMenu();
+                }
+            }
+        }
+
+        private async Task ShowCollaborationGetLatest()
+        {
+            if (_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
+            {
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Merge;
+
+                    this.WindowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        // LastMergedCommitSha value should already be in database
+                    }
+                }
+
+                await RebuildMainMenu();
+            }
+        }
+
+        private async Task ShowCollaborationCommit()
+        {
+            if (_collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable())
+            {
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    // FIXME:  need to prompt user:
+                    viewModel.CommitMessage = $"Commit issued: {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss}";
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Commit;
+
+                    this.WindowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
+                    }
+
+                    await RebuildMainMenu();
+                }
+            }
+        }
+
 
         private BindableCollection<MenuItemViewModel> _menuItems = new();
         public BindableCollection<MenuItemViewModel> MenuItems
@@ -279,10 +361,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                              IWindowManager windowManager,
                              ILifetimeScope lifetimeScope,
                              NoteManager noteManager,
-                             LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService)
+                             LongRunningTaskManager longRunningTaskManager,
+                             ILocalizationService localizationService,
+                             CollaborationManager collaborationManager)
         {
             _longRunningTaskManager = longRunningTaskManager;
             _localizationService = localizationService;
+            _collaborationManager = collaborationManager;
+
             LifetimeScope = lifetimeScope;
             WindowManager = windowManager;
             NoteManager = noteManager;
@@ -1094,6 +1180,62 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async Task RebuildMainMenu()
         {
             FileLayouts = GetFileLayouts();
+            BindableCollection<MenuItemViewModel> collaborationItems = new()
+            {
+                // add in the standard menu items
+
+                // Save Current Layout
+                new MenuItemViewModel
+                {
+                    Header = "Initialize Server with Project", Id = MenuIds.CollaborationInitialize,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Get Latest from Server", Id = MenuIds.CollaborationGetLatest,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Commit Changes to Server", Id = MenuIds.CollaborationCommit,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
+                },
+                // separator
+                new() { Header = "---------------------------------", Id = MenuIds.Separator, ViewModel = this, },
+                new MenuItemViewModel
+                {
+                    Header = "Git Fetch + Merge", Id = MenuIds.CollaborationFetchMerge,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Git Hard Reset", Id = MenuIds.CollaborationHardReset,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Create Project Snapshot Backup", Id = MenuIds.CollaborationCreateBackup,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Dump Differences between Last Merged and Head", Id = MenuIds.CollaborationDumpDifferencesLastMergedHead,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Dump Differences between Head and Current Database", Id = MenuIds.CollaborationDumpDifferencesHeadCurrentDb,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                },
+            };
             BindableCollection<MenuItemViewModel> layouts = new()
             {
                 // add in the standard menu items
@@ -1231,9 +1373,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_About"), Id = MenuIds.About, ViewModel = this, },
 
                         // Test reloading a project.
-                        //new() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
+                        //ViewModel mergenew() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
                     }
                 }
+
+#if COLLAB_RELEASE || COLLAB_DEBUG
+                ,
+                new()
+                {
+                    // Collaboration
+                    Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
+                    MenuItems = collaborationItems,
+                }
+#endif
             };
 
             await Task.CompletedTask;
@@ -1722,7 +1874,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             if (!_longRunningTaskManager!.HasTasks())
             {
-
                 switch (menuItem.Id)
                 {
                     case { } a when a.StartsWith(MenuIds.ProjectLayout):
@@ -1784,6 +1935,74 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     case MenuIds.Settings:
                         {
                             await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
+                            break;
+                        }
+
+                    case MenuIds.CollaborationInitialize:
+                        {
+                            await ShowCollaborationInitialize();
+                            break;
+                        }
+
+                    case MenuIds.CollaborationGetLatest:
+                        {
+                            await ShowCollaborationGetLatest();
+                            break;
+                        }
+
+                    case MenuIds.CollaborationCommit:
+                        {
+                            await ShowCollaborationCommit();
+                            break;
+                        }
+
+                    case MenuIds.CollaborationFetchMerge:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable())
+                            {
+                                _collaborationManager.FetchMergeRemote();
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
+
+                    case MenuIds.CollaborationHardReset:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                            {
+                                _collaborationManager.HardResetChanges();
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
+
+                    case MenuIds.CollaborationCreateBackup:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                            {
+                                await _collaborationManager.CreateProjectBackupAsync(CancellationToken.None);
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
+
+                    case MenuIds.CollaborationDumpDifferencesLastMergedHead:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                            {
+                                _collaborationManager.DumpDifferencesBetweenLastMergedCommitAndHead();
+                                await RebuildMainMenu();
+                            }
+                            break;
+                        }
+
+                    case MenuIds.CollaborationDumpDifferencesHeadCurrentDb:
+                        {
+                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                            {
+                                await _collaborationManager.DumpDifferencesBetweenHeadAndCurrentDatabaseAsync();
+                                await RebuildMainMenu();
+                            }
                             break;
                         }
 
@@ -1891,7 +2110,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #endregion // Methods
 
-        #region IHandle
+        #region IHandle implementations
 
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
         {

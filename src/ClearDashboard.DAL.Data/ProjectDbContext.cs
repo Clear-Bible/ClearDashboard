@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -262,6 +261,12 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasMany(p => p.Tokens)
                 .WithMany(p => p.TokenComposites)
                 .UsingEntity<TokenCompositeTokenAssociation>();
+
+            modelBuilder.Entity<VerseRow>()
+                .HasMany(e => e.TokenComponents)
+                .WithOne(e => e.VerseRow)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<VerseRow>().HasIndex(e => e.BookChapterVerse);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);

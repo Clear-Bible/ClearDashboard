@@ -80,6 +80,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 tokenizedCorpus.Id = tokenizedCorpusId;
             }
 
+            tokenizedCorpus.LastTokenized = tokenizedCorpus.Created;
+
             if (request.Versification.IsCustomized)
             {
                 tokenizedCorpus.ScrVersType = (int)request.Versification.BaseVersification.Type;
@@ -139,7 +141,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 foreach (var bookId in bookIds)
                 {
-                    var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(textCorpus, bookId, corpusId);
+                    var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(textCorpus, bookId, corpusId.Name);
                     var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
 
                     foreach (var verseRow in verseRows)
