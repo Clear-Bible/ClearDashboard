@@ -595,12 +595,8 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         }
 
                                         if (verseNodeList.Count == 0)
-                                        {
-                                            if (verseNodeList.Count == 0)
-                                            {
-                                                textCollections = UsfmToTextCollection(project, textCollection,
-                                                    textCollections);
-                                            }
+                                        { 
+                                            textCollections = UsfmToTextCollection(project, textCollection, textCollections);
                                         }
                                         else
                                         {
