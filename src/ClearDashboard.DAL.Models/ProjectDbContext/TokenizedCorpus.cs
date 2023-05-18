@@ -47,4 +47,6 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
 
     [Column(TypeName = "jsonb")]
     public Dictionary<string, object> Metadata { get; set; }
+
+    public DateTimeOffset? LastTokenized { get; set; }
 }
