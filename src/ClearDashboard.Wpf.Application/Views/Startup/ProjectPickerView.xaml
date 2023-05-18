@@ -166,7 +166,7 @@
                 <TextBlock
                     Margin="5,0,5,0"
                     VerticalAlignment="Center"
-                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                    Foreground="{StaticResource PrimaryHueMidBrush}"
                     Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
                     <Run Text="{helpers:Localization ProjectPicker_Paratext}" />
                     <Run Text="{helpers:Localization ShellView_User}" />
@@ -519,7 +519,7 @@
                 VerticalAlignment="Center"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="16"
-                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
                 TextWrapping="Wrap"
                 Visibility="{Binding DeleteErrorVisibility}">
                 <Run Text="*" />
@@ -534,7 +534,7 @@
                 VerticalAlignment="Center"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="16"
-                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
                 TextWrapping="Wrap"
                 Visibility="{Binding AlreadyOpenMessageVisibility}">
                 <Run Text="*" />
