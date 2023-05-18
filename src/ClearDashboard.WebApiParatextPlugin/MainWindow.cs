@@ -592,17 +592,10 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                     verseNodeList = CreateVerseNodeList(project, xDoc, false, false);
                                                     break;
                                             }
-                                            //verseNodeList = CreateVerseNodeList(project, xDoc, isVerseByVerse, false);
-                                            //verseNodeList = CreateVerseNodeListRecursive(project, xDoc.DocumentElement,xDoc, isVerseByVerse, false);
                                         }
 
                                         if (verseNodeList.Count == 0)
                                         {
-                                            //if (xDoc.DocumentElement != null && isVerseByVerse)
-                                            //{
-                                            //    verseNodeList = CreateVerseNodeList(project, xDoc, false,true);
-                                            //    textCollections = AddNodeListToTextCollections(verseNodeList, project, textCollections);
-                                            //}
                                             if (verseNodeList.Count == 0)
                                             {
                                                 textCollections = UsfmToTextCollection(project, textCollection,
