@@ -791,6 +791,17 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             Tokenizer = tokenizer.ToString(),
                         });
 
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        {
+                            // Show Verses in New Windows
+                            Header = "Alignments Batch Review",
+                            Id = DesignSurfaceMenuIds.AlignmentsBatchReviewView,
+                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                            IconKind = PackIconPicolIconsKind.AvatarEdit.ToString(),
+                            CorpusNodeViewModel = corpusNodeViewModel,
+                            Tokenizer = tokenizer.ToString(),
+                        });
+
                         foreach (var menuBuilder in menuBuilders)
                         {
                             menuBuilder.CreateOnlyForNonResouceCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
