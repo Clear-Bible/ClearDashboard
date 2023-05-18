@@ -467,7 +467,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 note.NoteStatus,
                 (note.ThreadId is not null) ? new EntityId<NoteId>() { Id = note.ThreadId.Value } : null,
                 note.LabelNoteAssociations
-                    .Select(ln => new Label(new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty)).ToHashSet(),
+                    .Select(ln => new Label(new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty, ln.Label!.TemplateText)).ToHashSet(),
                 note.NoteDomainEntityAssociations
                     .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet(),
                 note.NoteUserSeenAssociations

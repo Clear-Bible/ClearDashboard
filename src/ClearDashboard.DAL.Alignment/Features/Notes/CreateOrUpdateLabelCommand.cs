@@ -5,5 +5,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
     public record CreateOrUpdateLabelCommand(
         LabelId? LabelId,
-        string Text) : ProjectRequestCommand<LabelId>;
+        string Text,
+        string? TemplateText) : ProjectRequestCommand<LabelId>;
 }

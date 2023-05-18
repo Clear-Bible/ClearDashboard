@@ -33,6 +33,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             (
                 ProjectDbContext.Alignments
                     .Where(a => a.AlignmentSetId == request.AlignmentSetId.Id)
+                    .Where(a => a.Deleted == null)
                     .Where(a => a.SourceTokenComponent!.TrainingText == request.SourceTrainingText)
                     .Select(a => ModelHelper.BuildToken(a.TargetTokenComponent!))
                     .ToList()

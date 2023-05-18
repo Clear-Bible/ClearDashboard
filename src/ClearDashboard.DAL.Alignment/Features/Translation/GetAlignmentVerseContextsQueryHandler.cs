@@ -63,7 +63,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .ThenInclude(e => e!.SourceTokenizedCorpus)
                 .Include(e => e.ParallelCorpus)
                     .ThenInclude(e => e!.TargetTokenizedCorpus)
-                .First();
+                .Where(e => e.Id == request.AlignmentSetId.Id)
+                .FirstOrDefault();
 
             if (alignmentSet == null)
             {
@@ -124,12 +125,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         alignmentSet.ParallelCorpus.SourceTokenizedCorpus,
                         alignmentSet.ParallelCorpus.TargetTokenizedCorpus,
                         e.SourceTokenComponent!),
-                        new AlignedTokenPairs(
-                            ModelHelper.BuildToken(e.SourceTokenComponent!),
-                            ModelHelper.BuildToken(e.TargetTokenComponent!),
-                            e.Score),
-                        e.AlignmentVerification.ToString(),
-                        e.AlignmentOriginatedFrom.ToString()))
+                    new AlignedTokenPairs(
+                        ModelHelper.BuildToken(e.SourceTokenComponent!),
+                        ModelHelper.BuildToken(e.TargetTokenComponent!),
+                        e.Score),
+                    e.AlignmentVerification.ToString(),
+                    e.AlignmentOriginatedFrom.ToString()))
                 .ToList();
 
 #if DEBUG
