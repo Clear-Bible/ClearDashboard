@@ -241,7 +241,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _textCollectionCallInProgress = true;
 
                 var workWithUsx = true;
-                var showVerseByVerse = true;
+                var showVerseByVerse = false;
                 try
                 {
                     var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx, showVerseByVerse), CancellationToken.None).ConfigureAwait(false);
