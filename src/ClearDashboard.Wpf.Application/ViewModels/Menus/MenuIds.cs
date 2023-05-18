@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using System.Runtime.CompilerServices;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Menus;
 
@@ -8,7 +9,17 @@ public static class MenuIds
     public const string BiblicalTerms = "BiblicalTermsID";
     public const string Delete = "DeleteID";
     public const string EnhancedCorpus = "EnhancedCorpusID";
-  
+
+    public const string CollaborationInitialize = "CollaborationInitializeID";
+    public const string CollaborationGetLatest = "CollaborationGetLatestID";
+    public const string CollaborationCommit = "CollaborationCommitID";
+    public const string CollaborationFetchMerge = "CollaborationFetchMergeID";
+    public const string CollaborationHardReset = "CollaborationHardResetID";
+    public const string CollaborationCreateBackup = "CollaborationCreateBackupID";
+    public const string CollaborationDumpDifferencesLastMergedHead = "CollaborationDumpDifferencesLastMergedHeadID";
+    public const string CollaborationDumpDifferencesHeadCurrentDb = "CollaborationDumpDifferencesHeadCurrentDbID";
+
+
     public const string File = "FileID";
     public const string FileNew = "NewID";
     public const string FileOpen = "OpenID";

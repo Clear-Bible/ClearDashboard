@@ -7,5 +7,6 @@
         public string? DesignSurfaceLayout { get; set; }
         public string? WindowTabLayout { get; set; }
         public string? AppVersion { get; set; }
+        public string? LastMergedCommitSha { get; set; }
     }
 }
