@@ -241,9 +241,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _textCollectionCallInProgress = true;
 
                 var workWithUsx = true;
+                var showVerseByVerse = true;
                 try
                 {
-                    var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx), CancellationToken.None).ConfigureAwait(false);
+                    var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx, showVerseByVerse), CancellationToken.None).ConfigureAwait(false);
 
                     if (result.Success)
                     {
@@ -286,18 +287,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     Console.WriteLine(e);
                                 }
 
-                                collectiveBody +=
-                                "<div id='"+startPart+"'>" +
-                                    "<details open>" +
+                                if (showVerseByVerse)
+                                {
+                                    collectiveBody +=
+                                        "<div id='"+startPart+"'>" +
+                                        "<details open>" +
                                         "<summary>" +
-                                            startPart+":" +
+                                        startPart+":" +
+                                        "</summary>"
+                                        +"<span>"
+                                        +endPart+
+                                        "</p>"+
+                                        "</details>" +
+                                        "</div>" +
+                                        "<hr>";
+                                }
+                                else
+                                {
+                                    collectiveBody +=
+                                        "<div id='"+startPart+"'>" +
+                                        "<details open>" +
+                                        "<summary>" +
+                                        startPart+":" +
                                         "</summary>"
                                         +"<span class=\"vh\">"
-                                            +endPart+
+                                        +endPart+
                                         "</p>"+
-                                    "</details>" +
-                                "</div>" +
-                                "<hr>";
+                                        "</details>" +
+                                        "</div>" +
+                                        "<hr>";
+                                }
+
+                                
                             }
 
                             string topAnchor = string.Empty;

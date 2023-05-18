@@ -816,6 +816,8 @@
           margin-left:4px;
           }
 
+          .text{}
+
           .material-icons{
           font-size:20px;
           color:#C79100;}

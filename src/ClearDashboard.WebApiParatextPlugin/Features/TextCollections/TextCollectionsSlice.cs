@@ -31,7 +31,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.TextCollections
             }
             public Task<RequestResult<List<TextCollection>>> Handle(GetTextCollectionsQuery request, CancellationToken cancellationToken)
             {
-                var textCollections = _mainwindow.GetTextCollectionsData(request.FetchUsx);
+                var textCollections = _mainwindow.GetTextCollectionsData(request.FetchUsx, request.IsVerseByVerse);
                 var result = new RequestResult<List<TextCollection>>(textCollections);
                 return Task.FromResult(result);
             }
