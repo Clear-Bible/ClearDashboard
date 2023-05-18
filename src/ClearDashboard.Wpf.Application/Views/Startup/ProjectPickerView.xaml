@@ -92,7 +92,7 @@
             Margin="0,0,0,0"
             Orientation="Horizontal">
 
-            <Button x:Name="TestProjects" Content="TEST"/>
+            <!--<Button x:Name="TestProjects" Content="TEST"/>-->
 
             <Image
                 Width="50"
