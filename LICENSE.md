@@ -1,3 +1,5 @@
+# Source Code License
+
 MIT License
 
 Copyright (c) 2023 Clear Bible, Inc.
@@ -19,3 +21,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Other, Open Source, Third-Party Library Licenses are listed on the [README.md]
+
+## MARBLE XML Datasets
+The MARBLE datasets are included and distributed in the ClearDashboard product.  They are 
+Copyright 2023, United Bible Societies Institute for Computer Assisted Publishing  
+Permission granted for their inclusion into ClearDashboard was granted by: Reinier De Blois
