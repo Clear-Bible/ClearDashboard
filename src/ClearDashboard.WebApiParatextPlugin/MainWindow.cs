@@ -585,7 +585,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                     verseNodeList = CreateVerseNodeListRecursive(project, xDoc.DocumentElement, xDoc, isVerseByVerse, false);
                                                     break;
                                                 case false:
-                                                    verseNodeList = CreateVerseNodeList(project, xDoc, false, false);
+                                                    verseNodeList = CreateVerseNodeList(project, xDoc, isVerseByVerse, false);
                                                     break;
                                             }
                                         }
@@ -623,6 +623,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             List<XmlNode> verseNodeList = new();
             bool nextStartMarkerFound = false;
+            //bool startMarkerFound = false;
+            //bool endMarkerFound = false;
 
             IEnumerable parentNode;
             parentNode = xDoc;
@@ -631,6 +633,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 foreach (XmlNode node in middlenode.ChildNodes)
                 {
+                    //endMarkerFound = false;
                     var attributeTagName = string.Empty;
 
                     if (_inVerse && node.OuterXml.Contains("sid="))
@@ -683,31 +686,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                             var nodeIdValue = nodeVerseElement.Attributes[attributeTagName];
 
-                            if (nodeIdValue != null)
-                            {
-                                var nodeIdVerseNumber = nodeIdValue.Value.Split(':')[1];
-                                var idVerseNumberIsRange = nodeIdVerseNumber.Contains("-");
-
-                                if (idVerseNumberIsRange)
-                                {
-                                    var nodeIdVerseRange = nodeIdVerseNumber.Split('-');
-
-                                    var numberOnlyLowerId = Regex.Replace(nodeIdVerseRange[0], "[^0-9.]", "");
-                                    var numberOnlyUpperId = Regex.Replace(nodeIdVerseRange[1], "[^0-9.]", "");
-
-                                    int.TryParse(numberOnlyLowerId, out var lowerId);
-                                    int.TryParse(numberOnlyUpperId, out var upperId);
-
-                                    if (lowerId <=
-                                        _verseRef.VerseNum && _verseRef.VerseNum
-                                        <= upperId)
-                                    {
-                                        _inVerse = true;
-
-                                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary);
-                                    }
-                                }
-                            }
+                            RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue);
                         }
                     }
                     if (_inVerse && !nextStartMarkerFound)
@@ -720,8 +699,36 @@ namespace ClearDashboard.WebApiParatextPlugin
             return verseNodeList;
         }
 
+        private void RangedVerseCheck(IProject project, XmlDocument xDoc, XmlNode node, bool isVerseByVerse, bool isCommentary, XmlAttribute nodeIdValue)
+        {
+            if (nodeIdValue != null)
+            {
+                var nodeIdVerseNumber = nodeIdValue.Value.Split(':')[1];
+                var idVerseNumberIsRange = nodeIdVerseNumber.Contains("-");
+
+                if (idVerseNumberIsRange)
+                {
+                    var nodeIdVerseRange = nodeIdVerseNumber.Split('-');
+
+                    var numberOnlyLowerId = Regex.Replace(nodeIdVerseRange[0], "[^0-9.]", "");
+                    var numberOnlyUpperId = Regex.Replace(nodeIdVerseRange[1], "[^0-9.]", "");
+
+                    int.TryParse(numberOnlyLowerId, out var lowerId);
+                    int.TryParse(numberOnlyUpperId, out var upperId);
+
+                    if (lowerId <=
+                        _verseRef.VerseNum && _verseRef.VerseNum
+                        <= upperId)
+                    {
+                        _inVerse = true;
+
+                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary);
+                    }
+                }
+            }
+        }
+
         private bool _inVerse = false;
-        private bool _recursiveInVerse = false;
 
         private List<XmlNode> CreateVerseNodeListRecursive(IProject project, XmlNode node, XmlDocument xDoc, bool isVerseByVerse, bool isCommentary)
         {
@@ -749,15 +756,15 @@ namespace ClearDashboard.WebApiParatextPlugin
                 }
             }
 
-            if (_recursiveInVerse && node.OuterXml.Contains("sid="))
+            if (_inVerse && node.OuterXml.Contains("sid="))
             {
-                _recursiveInVerse = false;
+                _inVerse = false;
                 nextStartMarkerFound = true;
             }
 
             if (nodeSidValueRecursive == _verseRef.ToString() || nodeEidValueRecursive == _verseRef.ToString())
             {
-                _recursiveInVerse = true;
+                _inVerse = true;
             }
 
             else if (nodeSidValueRecursive.Contains(_verseRef.BookCode + " " + _verseRef.ChapterNum + ":")  && nodeSidValueRecursive.Contains("-"))
@@ -775,36 +782,14 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                 var nodeIdValue = node.Attributes[attributeTagName];
 
-                if (nodeIdValue != null)
-                {
-                    var nodeIdVerseNumber = nodeIdValue.Value.Split(':')[1];
-                    var idVerseNumberIsRange = nodeIdVerseNumber.Contains("-");
-
-                    if (idVerseNumberIsRange)
-                    {
-                        var nodeIdVerseRange = nodeIdVerseNumber.Split('-');
-
-                        var numberOnlyLowerId = Regex.Replace(nodeIdVerseRange[0], "[^0-9.]", "");
-                        var numberOnlyUpperId = Regex.Replace(nodeIdVerseRange[1], "[^0-9.]", "");
-
-                        int.TryParse(numberOnlyLowerId, out var lowerId);
-                        int.TryParse(numberOnlyUpperId, out var upperId);
-
-                        if (lowerId <=
-                            _verseRef.VerseNum && _verseRef.VerseNum
-                            <= upperId)
-                        {
-                            _recursiveInVerse = true;
-                        }
-                    }
-                }
+                RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue);
             }
-            if (_recursiveInVerse && !nextStartMarkerFound)
+            if (_inVerse && !nextStartMarkerFound)
             {
                 verseNodeList.Add(node);
             }
 
-            if (!_recursiveInVerse)
+            if (!_inVerse)
             {
                 foreach (XmlNode child in node.ChildNodes)
                 {
