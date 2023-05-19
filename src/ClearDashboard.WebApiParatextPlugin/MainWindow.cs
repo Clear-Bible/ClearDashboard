@@ -696,8 +696,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             List<XmlNode> verseNodeList = new();
             bool nextStartMarkerFound = false;
-            //bool startMarkerFound = false;
-            //bool endMarkerFound = false;
 
             IEnumerable parentNode;
             parentNode = xDoc;
@@ -706,7 +704,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 foreach (XmlNode node in middlenode.ChildNodes)
                 {
-                    //endMarkerFound = false;
                     var attributeTagName = string.Empty;
 
                     if (_inVerse && node.OuterXml.Contains("sid="))
