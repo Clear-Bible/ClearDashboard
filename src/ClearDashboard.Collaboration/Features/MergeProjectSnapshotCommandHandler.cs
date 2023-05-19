@@ -80,7 +80,7 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
 
                 request.Progress.Report(new ProgressStatus(0, "Starting merge..."));
 
-                var mergeContext = new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior, request.RemoteOverridesLocal);
+                var mergeContext = new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior, request.MergeMode);
                 var merger = new Merger(mergeContext);
                 await merger.MergeAsync(projectDifferences, currentProjectSnapshot, request.ProjectSnapshotToMerge, cancellationToken);
 

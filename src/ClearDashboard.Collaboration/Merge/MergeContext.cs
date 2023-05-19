@@ -1,9 +1,7 @@
 ﻿using System;
-using ClearDashboard.Collaboration.Builder;
-using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.Collaboration.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
@@ -13,7 +11,8 @@ namespace ClearDashboard.Collaboration.Merge;
 
 public sealed class MergeContext
 {
-    public bool RemoteOverridesLocal { get; private set; }
+    public MergeMode MergeMode {  get; private set; }
+
     public MergeBehaviorBase MergeBehavior { get; private set; }
     public IProgress<ProgressStatus> Progress { get => MergeBehavior.Progress; }
 
@@ -24,12 +23,12 @@ public sealed class MergeContext
 
     public bool FireAlignmentDenormalizationEvent = false;
 
-    public MergeContext(IUserProvider userProvider, ILogger logger, MergeBehaviorBase mergeBehavior, bool remoteOverridesLocal)
+    public MergeContext(IUserProvider userProvider, ILogger logger, MergeBehaviorBase mergeBehavior, MergeMode mergeMode)
 	{
         UserProvider = userProvider;
         Logger = logger;
         MergeBehavior = mergeBehavior;
-        RemoteOverridesLocal = remoteOverridesLocal;
+        MergeMode = mergeMode;
 
         DefaultMergeHandler = new DefaultMergeHandler(this);
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenizedCorpus>), new TokenizedCorpusHandler(this));

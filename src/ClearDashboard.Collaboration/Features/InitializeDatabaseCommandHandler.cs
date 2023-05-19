@@ -115,7 +115,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
 
                         request.Progress.Report(new ProgressStatus(0, "Starting merge..."));
 
-                        var merger = new Merger(new MergeContext(projectContext.UserProvider, _logger, mergeBehavior, true));
+                        var merger = new Merger(new MergeContext(projectContext.UserProvider, _logger, mergeBehavior, MergeMode.RemoteOverridesLocal));
                         await merger.MergeAsync(projectDifferences, projectSnapshotLastMerged, projectSnapshotToMerge, cancellationToken);
 
                         request.Progress.Report(new ProgressStatus(0, "Merge complete!"));
