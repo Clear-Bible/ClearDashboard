@@ -623,8 +623,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             List<XmlNode> verseNodeList = new();
             bool nextStartMarkerFound = false;
-            bool startMarkerFound = false;
-            bool endMarkerFound = false;
 
             IEnumerable parentNode;
             parentNode = xDoc;
@@ -633,25 +631,24 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 foreach (XmlNode node in middlenode.ChildNodes)
                 {
-                    endMarkerFound = false;
                     var attributeTagName = string.Empty;
 
-                    if (startMarkerFound && node.OuterXml.Contains("sid="))
+                    if (_inVerse && node.OuterXml.Contains("sid="))
                     {
-                        startMarkerFound = false;
+                        _inVerse = false;
                         nextStartMarkerFound = true;
                     }
 
                     if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
                     {
-                        startMarkerFound = true;
+                        _inVerse = true;
 
                         FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary);
                     }
 
                     if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                     {
-                        endMarkerFound = true;
+                        _inVerse = true;
 
                         FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary);
                     }
@@ -684,36 +681,28 @@ namespace ClearDashboard.WebApiParatextPlugin
                         if (nodeVerseElement.Name == "verse")
                         {
 
-                            var nodeEidValue = nodeVerseElement.Attributes[attributeTagName];
+                            var nodeIdValue = nodeVerseElement.Attributes[attributeTagName];
 
-                            if (nodeEidValue != null)
+                            if (nodeIdValue != null)
                             {
-                                var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
-                                var EidVerseNumberIsRange = nodeEidVerseNumber.Contains("-");
+                                var nodeIdVerseNumber = nodeIdValue.Value.Split(':')[1];
+                                var idVerseNumberIsRange = nodeIdVerseNumber.Contains("-");
 
-                                if (EidVerseNumberIsRange)
+                                if (idVerseNumberIsRange)
                                 {
-                                    var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
+                                    var nodeIdVerseRange = nodeIdVerseNumber.Split('-');
 
-                                    var numberOnlyLowerId = Regex.Replace(nodeEidVerseRange[0], "[^0-9.]", "");
-                                    var numberOnlyUpperId = Regex.Replace(nodeEidVerseRange[1], "[^0-9.]", "");
+                                    var numberOnlyLowerId = Regex.Replace(nodeIdVerseRange[0], "[^0-9.]", "");
+                                    var numberOnlyUpperId = Regex.Replace(nodeIdVerseRange[1], "[^0-9.]", "");
 
-                                    int.TryParse(numberOnlyLowerId, out var lowerEid);
-                                    int.TryParse(numberOnlyUpperId, out var upperEid);
+                                    int.TryParse(numberOnlyLowerId, out var lowerId);
+                                    int.TryParse(numberOnlyUpperId, out var upperId);
 
-                                    if (lowerEid <=
+                                    if (lowerId <=
                                         _verseRef.VerseNum && _verseRef.VerseNum
-                                        <= upperEid)
+                                        <= upperId)
                                     {
-                                        switch (attributeTagName)
-                                        {
-                                            case "sid":
-                                                startMarkerFound = true;
-                                                break;
-                                            case "eid":
-                                                endMarkerFound = true;
-                                                break;
-                                        }
+                                        _inVerse = true;
 
                                         FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary);
                                     }
@@ -721,7 +710,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                             }
                         }
                     }
-                    if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
+                    if (_inVerse && !nextStartMarkerFound)
                     {
                         verseNodeList.Add(node);
                     }
@@ -731,6 +720,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             return verseNodeList;
         }
 
+        private bool _inVerse = false;
         private bool _recursiveInVerse = false;
 
         private List<XmlNode> CreateVerseNodeListRecursive(IProject project, XmlNode node, XmlDocument xDoc, bool isVerseByVerse, bool isCommentary)
@@ -797,12 +787,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                         var numberOnlyLowerId = Regex.Replace(nodeIdVerseRange[0], "[^0-9.]", "");
                         var numberOnlyUpperId = Regex.Replace(nodeIdVerseRange[1], "[^0-9.]", "");
 
-                        int.TryParse(numberOnlyLowerId, out var lowerEid);
-                        int.TryParse(numberOnlyUpperId, out var upperEid);
+                        int.TryParse(numberOnlyLowerId, out var lowerId);
+                        int.TryParse(numberOnlyUpperId, out var upperId);
 
-                        if (lowerEid <=
+                        if (lowerId <=
                             _verseRef.VerseNum && _verseRef.VerseNum
-                            <= upperEid)
+                            <= upperId)
                         {
                             _recursiveInVerse = true;
                         }
