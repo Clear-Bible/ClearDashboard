@@ -743,10 +743,3 @@ internal static class RepositoryExtensions
             .ToList();
     }
 }
-
-public enum MergeMode
-{
-    RemoteOverridesLocal,
-    LocalOverridesRemote,
-    RequireConflictResolution
-}

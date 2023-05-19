@@ -473,7 +473,7 @@ public class DefaultMergeHandler
         {
             string conflictMessage = $"Merge conflict(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'";
 
-            if (_mergeContext.MergeMode == MergeMode.RequireConflictResolution)
+            if (_mergeContext.MergeMode == MergeMode.RequiresConflictResolution)
             {
                 _mergeContext.Progress.Report(new ProgressStatus(0, conflictMessage));
                 _mergeContext.Logger.LogInformation(conflictMessage);
