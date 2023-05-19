@@ -60,7 +60,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 {
                     foreach (var bookId in bookIdsToInsert)
                     {
-                        var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(request.TextCorpus, bookId, corpusId);
+                        var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(request.TextCorpus, bookId, corpusId.Name);
                         var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
 
                         foreach (var verseRow in verseRows)
@@ -97,7 +97,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     {
                         var bookNumberAsPaddedString = $"{ModelHelper.GetBookNumberForSILAbbreviation(bookId):000}";
 
-                        var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(request.TextCorpus, bookId, corpusId);
+                        var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(request.TextCorpus, bookId, corpusId.Name);
                         var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
 
                         var bookVerseRowsDb = ProjectDbContext.VerseRows

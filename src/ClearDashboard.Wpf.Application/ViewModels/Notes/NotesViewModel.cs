@@ -29,8 +29,8 @@ using System.Windows.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
-    public class NotesViewModel : 
-        ToolViewModel, 
+    public class NotesViewModel :
+        ToolViewModel,
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
         IHandle<NoteUpdatingMessage>,
@@ -68,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        public Guid UserId => currentUser_?.Id 
+        public Guid UserId => currentUser_?.Id
             ?? throw new InvalidStateEngineException(name: "currentUser_", value: "null");
 
         private FilterNoteStatusEnum filterStatus_;
@@ -331,7 +331,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private async Task<IEnumerable<NoteViewModel>> AssembleNotes(
             NoteManager noteManager,
             CancellationToken cancellationToken,
-            string taskName, 
+            string taskName,
             Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus)
         {
             HashSet<NoteId> noteIds = new HashSet<NoteId>(new IIdEqualityComparer());
@@ -358,7 +358,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             SelectedNoteLabels.Clear();
             selectedNoteViewModel?.Labels
-                .Select(l => { 
+                .Select(l => {
                     SelectedNoteLabels.Add(l);
                     return l;
                 })

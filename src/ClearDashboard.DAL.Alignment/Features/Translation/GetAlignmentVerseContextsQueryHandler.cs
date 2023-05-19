@@ -68,8 +68,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             if (alignmentSet == null)
             {
-                sw.Stop();
-                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [error]");
+                //sw.Stop();
+               // Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [error]");
 
                 return new RequestResult<IEnumerable<(
                     Alignment.Translation.Alignment alignment,

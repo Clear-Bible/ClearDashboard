@@ -18,7 +18,7 @@ public class Translation
         public const string None = "None";
     }
 
-    private const string DefaultTranslationText = "___";
+    public const string DefaultTranslationText = "___";
 
     public TranslationId? TranslationId { get; private set; }
     public Token SourceToken { get; private set; }

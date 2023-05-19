@@ -2,12 +2,15 @@
 using Autofac.Extensions.DependencyInjection;
 using Caliburn.Micro;
 using ClearApplicationFoundation;
+using ClearApplicationFoundation.Extensions;
 using ClearDashboard.DAL.Alignment.BackgroundServices;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Validators;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
@@ -18,32 +21,54 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearApplicationFoundation.Extensions;
-using ClearDashboard.Wpf.Application.Extensions;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using Autofac.Configuration;
+using ClearDashboard.Collaboration.Features;
+using ClearDashboard.Collaboration.Services;
+using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
-using KeyTrigger = Microsoft.Xaml.Behaviors.Input.KeyTrigger;
-using System.Diagnostics;
 
 namespace ClearDashboard.Wpf.Application
 {
     internal class Bootstrapper : FoundationBootstrapper
     {
-        private readonly IHost _host;
-        public Bootstrapper() 
+        private IHost _host;
+        public Bootstrapper()
         {
+            _host = CreateDenormalizationHost();
+        }
+
+
+        /// <summary>
+        /// Creates an instance of IHost used for denormalizing project databases.
+        /// </summary>
+        /// <remarks>
+        /// 
+        ///     PLEASE READ!
+        ///
+        /// 
+        ///     This DI setup is for setting up a DI container for denormalizing project databases. Please do not add 
+        ///     or change any DI registrations here unless you know what you are doing!
+        /// 
+        ///     INSTEAD - add your DI registrations to ApplicationModule
+        /// 
+        /// </remarks>
+        /// <returns></returns>
+        private IHost CreateDenormalizationHost()
+        {
+
+
             // Autofac container should already be built by call to base() constructor
             // (which calls Caliburn.Micro "Initialize", which calls FoundationBootstrapper
             // "configure").  So, 
 
-            _host = Host.CreateDefaultBuilder()
+           return Host.CreateDefaultBuilder()
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureServices(services =>
                 {
@@ -54,6 +79,9 @@ namespace ClearDashboard.Wpf.Application
                         //Host will try to wait 30 seconds before stopping the service. 
                         options.ShutdownTimeout = TimeSpan.FromSeconds(5);
                     });
+
+
+
                 })
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
@@ -77,7 +105,7 @@ namespace ClearDashboard.Wpf.Application
                     builder.RegisterType<BackgroundServiceDelegateProgress<AlignmentTargetTextDenormalizer>>().WithProperty(
                         "ProcessName",
                         ClearDashboard.DAL.Alignment.Features.Denormalization.LocalizationStrings.Get(
-                            "Denormalization_AlignmentTopTargets_BackgroundTaskName", 
+                            "Denormalization_AlignmentTopTargets_BackgroundTaskName",
                             Container!.Resolve<ILogger<Bootstrapper>>()));
                 })
                 .Build();
@@ -197,21 +225,46 @@ namespace ClearDashboard.Wpf.Application
             }
         }
 
+        private ConfigurationModule configurationModule;
         protected override void PopulateServiceCollection(ServiceCollection serviceCollection)
         {
             serviceCollection.AddClearDashboardDataAccessLayer();
-            serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>(); 
+            serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+
+            var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddUserSecrets<Bootstrapper>();
+
+            var config = configBuilder.Build();
+            configurationModule = new ConfigurationModule(config);
+            serviceCollection.AddSingleton<IConfiguration>(config);
+            serviceCollection.AddSingleton<CollaborationConfiguration>(sp =>
+            {
+                var c = sp.GetService<IConfiguration>();
+                var section = c.GetSection("Collaboration");
+                return new CollaborationConfiguration()
+                {
+                    RemoteUrl = section["RemoteUrl"],
+                    RemoteEmail = section["RemoteEmail"],
+                    RemoteUserName = section["RemoteUserName"],
+                    RemotePassword = section["RemotePassword"]
+                };
+            });
+
             base.PopulateServiceCollection(serviceCollection);
         }
 
-
-        
         protected override void LoadModules(ContainerBuilder builder)
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
             builder.RegisterModule<AbstractionsModule>();
-        }
+            builder.RegisterModule(configurationModule);
+            builder.RegisterType<CollaborationManager>().AsSelf().SingleInstance();
+
+            builder
+                .RegisterAssemblyTypes(typeof(GetProjectSnapshotQueryHandler).Assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
+            }
 
         protected override async Task NavigateToMainWindow()
         {

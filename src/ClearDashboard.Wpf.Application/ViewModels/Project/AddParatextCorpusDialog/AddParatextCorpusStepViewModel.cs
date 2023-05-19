@@ -101,11 +101,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             set
             {
                 Set(ref _selectedProject, value);
-
-                CheckUsfm();
-
-                ValidationResult = Validator?.Validate(this);
-                CanOk = ValidationResult.IsValid;
             }
         }
 
@@ -257,9 +252,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             Clipboard.SetText(sb.ToString());
         }
 
+        public async void ProjectSelected()
+        {
+            CanOk = false;
 
+            await CheckUsfm(ParentViewModel);
 
-        private async Task CheckUsfm()
+            ValidationResult = Validator?.Validate(this);
+            CanOk = ValidationResult.IsValid;
+        }
+
+        private async Task CheckUsfm(IParatextCorpusDialogViewModel? parentViewModel)
         {
             if (SelectedProject is null)
             {
@@ -284,7 +287,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                     ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_ErrorCount");
                 }
 
-                ParentViewModel.UsfmErrors = UsfmErrors;
+                parentViewModel.UsfmErrors = UsfmErrors;
 
             }
 

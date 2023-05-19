@@ -66,6 +66,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
+            var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
+            if (currentlyOpenProjectsList.Contains(ProjectName))
+            {
+                return;
+            }
+
+            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectName));
+
+            OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
+
             ProjectManager!.CurrentDashboardProject.ProjectName = Project.ProjectName;
             ProjectManager.CurrentDashboardProject.IsNew = true;
            

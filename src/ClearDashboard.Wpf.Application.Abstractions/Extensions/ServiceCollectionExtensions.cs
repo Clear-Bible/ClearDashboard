@@ -7,8 +7,10 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+
 
 
 namespace ClearDashboard.Wpf.Application.Extensions
@@ -26,6 +28,19 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddSingleton<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddSingleton<IProjectProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
+            serviceCollection.AddSingleton<GitLabClient>();
+            serviceCollection.AddSingleton<HttpClientServices>();
+
+            var value = Encryption.Decrypt("s8stjAZFhWZUd8pzck0Q7qK+RK1GnnqcmUZ8tRVuE89OmJ3sa+CaTuc8cgARuQwE");
+            // add in a service for the GitLab repository
+            serviceCollection.AddHttpClient<GitLabClient>("GitLabClient", client =>
+            {
+                // Other settings
+                client.BaseAddress = new Uri("https://gitlab.cleardashboard.org/api/v4/");
+                client.DefaultRequestHeaders.Add("Accept", "*/*");
+                client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
+                client.DefaultRequestHeaders.Add("Authorization", value);
+            });
 
 
             serviceCollection.AddScoped<ParatextProxy>();
