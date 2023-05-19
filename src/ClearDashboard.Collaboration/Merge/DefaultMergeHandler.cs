@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Model;
+using ClearDashboard.Collaboration.Services;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using System.Reflection;
 using System.Collections.Generic;
@@ -9,10 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using System.Threading;
-using ClearDashboard.DAL.Alignment.Translation;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
@@ -473,13 +471,31 @@ public class DefaultMergeHandler
 
         if (modelDifference.HasMergeConflict)
         {
-            _mergeContext.Progress.Report(new ProgressStatus(0, $"Merge conflict(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'"));
-            _mergeContext.Logger.LogInformation($"Merge conflict(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
-            if (!_mergeContext.RemoteOverridesLocal)
+            string conflictMessage = $"Merge conflict(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'";
+
+            if (_mergeContext.MergeMode == MergeMode.RequireConflictResolution)
             {
+                _mergeContext.Progress.Report(new ProgressStatus(0, conflictMessage));
+                _mergeContext.Logger.LogInformation(conflictMessage);
+
                 throw new MergeConflictException(modelDifference);
             }
-            return ModelMergeResult.ShouldMerge;
+            else if (_mergeContext.MergeMode == MergeMode.LocalOverridesRemote)
+            {
+                conflictMessage += ", but MergeMode is LocalOverridesRemote, so leaving local as-is";
+                _mergeContext.Progress.Report(new ProgressStatus(0, conflictMessage));
+                _mergeContext.Logger.LogInformation(conflictMessage);
+
+                return ModelMergeResult.NoChange;
+            }
+            else
+            {
+                conflictMessage += ", and MergeMode is RemoteOverridesLocal, so merging in remote changes";
+                _mergeContext.Progress.Report(new ProgressStatus(0, conflictMessage));
+                _mergeContext.Logger.LogInformation(conflictMessage);
+
+                return ModelMergeResult.ShouldMerge;
+            }
         }
         else if (hasChange)
         {

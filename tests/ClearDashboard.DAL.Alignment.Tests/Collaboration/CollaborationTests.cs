@@ -131,7 +131,7 @@ public class CollaborationTests : TestBase
     //[Fact]
     protected async Task GetCurrentProjectChangesFromServer()
     {
-        bool remoteOverridesLocal = false;  // Configuration?  User choice?
+        MergeMode mergeMode = MergeMode.RemoteOverridesLocal;  // Configuration?  User choice?
 
         var projectProvider = Container!.Resolve<IProjectProvider>();
         var collaborationManager = Container!.Resolve<CollaborationManager>();
@@ -139,7 +139,7 @@ public class CollaborationTests : TestBase
         // Pull down and merge HEAD into local git repository:
         collaborationManager.FetchMergeRemote();
 
-        await collaborationManager.MergeProjectLatestChangesAsync(remoteOverridesLocal, false, default, new Progress<ProgressStatus>());
+        await collaborationManager.MergeProjectLatestChangesAsync(mergeMode, false, default, new Progress<ProgressStatus>());
     }
 
     //[Fact]
@@ -157,7 +157,7 @@ public class CollaborationTests : TestBase
     //[Fact]
     protected async Task GetProjectsChangesFromServer()
     {
-        bool remoteOverridesLocal = false;  // Configuration?  User choice?
+        MergeMode mergeMode = MergeMode.RemoteOverridesLocal;  // Configuration?  User choice?
 
         var projectProvider = Container!.Resolve<IProjectProvider>();
         var collaborationManager = Container!.Resolve<CollaborationManager>();
@@ -185,7 +185,7 @@ public class CollaborationTests : TestBase
                 var project = ProjectDbContext.Projects.FirstOrDefault();
                 projectProvider!.CurrentProject = project;
 
-                await collaborationManager.MergeProjectLatestChangesAsync(remoteOverridesLocal, false, default, new Progress<ProgressStatus>());
+                await collaborationManager.MergeProjectLatestChangesAsync(mergeMode, false, default, new Progress<ProgressStatus>());
             }
         }
 

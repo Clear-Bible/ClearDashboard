@@ -350,7 +350,7 @@ public class CollaborationManager
 
     // TODO:  throw an exception if the contents of the project-sticky file
     // isn't there or doesn't match the current repository configuration
-    public async Task<string?> MergeProjectLatestChangesAsync(bool remoteOverridesLocal, bool createBackupSnapshot, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
+    public async Task<string?> MergeProjectLatestChangesAsync(MergeMode mergeMode, bool createBackupSnapshot, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         progress.Report(new ProgressStatus(0, "Finding latest commit"));
 
@@ -413,7 +413,7 @@ public class CollaborationManager
         }
 
         // Merge into the project database:
-        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, remoteOverridesLocal, _logMergeOnly, progress);
+        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, mergeMode, _logMergeOnly, progress);
         var result = await _mediator.Send(command, cancellationToken);
         result.ThrowIfCanceledOrFailed();
 
@@ -742,4 +742,11 @@ internal static class RepositoryExtensions
             .Select(parsed => parsed.id)
             .ToList();
     }
+}
+
+public enum MergeMode
+{
+    RemoteOverridesLocal,
+    LocalOverridesRemote,
+    RequireConflictResolution
 }
