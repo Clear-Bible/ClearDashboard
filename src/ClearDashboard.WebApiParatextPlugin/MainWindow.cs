@@ -591,7 +591,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         }
 
                                         if (verseNodeList.Count == 0)
-                                        { 
+                                        {
                                             textCollections = UsfmToTextCollection(project, textCollection, textCollections);
                                         }
                                         else
@@ -619,114 +619,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             return _textCollections;
         }
 
-        private List<XmlNode> CreateVerseNodeList(IProject project, XmlDocument xDoc, bool isVerseByVerse, bool isCommentary)
-        {
-            List<XmlNode> verseNodeList = new();
-            bool nextStartMarkerFound = false;
-            //bool startMarkerFound = false;
-            //bool endMarkerFound = false;
-
-            IEnumerable parentNode;
-            parentNode = xDoc;
-
-            foreach (XmlNode middlenode in parentNode)
-            {
-                foreach (XmlNode node in middlenode.ChildNodes)
-                {
-                    //endMarkerFound = false;
-                    var attributeTagName = string.Empty;
-
-                    if (_inVerse && node.OuterXml.Contains("sid="))
-                    {
-                        _inVerse = false;
-                        nextStartMarkerFound = true;
-                    }
-
-                    if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
-                    {
-                        _inVerse = true;
-
-                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary);
-                    }
-
-                    if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
-                    {
-                        _inVerse = true;
-
-                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary);
-                    }
-
-                    else if (node.OuterXml.Contains("sid=\"" + _verseRef.BookCode + " " + _verseRef.ChapterNum + ":") &&
-                             node.OuterXml.Contains("-"))
-                    {
-                        attributeTagName = "sid";
-
-                    }
-                    else if (node.OuterXml.Contains("eid=\"" + _verseRef.BookCode + " " + _verseRef.ChapterNum + ":") &&
-                             node.OuterXml.Contains("-"))
-                    {
-                        attributeTagName = "eid";
-                    }
-
-                    if (attributeTagName != string.Empty)
-                    {
-                        var nodeVerseElementList = node.SelectNodes("verse");
-                        XmlNode nodeVerseElement;
-                        if (nodeVerseElementList.Count > 0)
-                        {
-                            nodeVerseElement = nodeVerseElementList.Item(0);
-                        }
-                        else
-                        {
-                            nodeVerseElement = node;
-                        }
-
-                        if (nodeVerseElement.Name == "verse")
-                        {
-
-                            var nodeIdValue = nodeVerseElement.Attributes[attributeTagName];
-
-                            RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue);
-                        }
-                    }
-                    if (_inVerse && !nextStartMarkerFound)
-                    {
-                        verseNodeList.Add(node);
-                    }
-                }
-            }
-
-            return verseNodeList;
-        }
-
-        private void RangedVerseCheck(IProject project, XmlDocument xDoc, XmlNode node, bool isVerseByVerse, bool isCommentary, XmlAttribute nodeIdValue)
-        {
-            if (nodeIdValue != null)
-            {
-                var nodeIdVerseNumber = nodeIdValue.Value.Split(':')[1];
-                var idVerseNumberIsRange = nodeIdVerseNumber.Contains("-");
-
-                if (idVerseNumberIsRange)
-                {
-                    var nodeIdVerseRange = nodeIdVerseNumber.Split('-');
-
-                    var numberOnlyLowerId = Regex.Replace(nodeIdVerseRange[0], "[^0-9.]", "");
-                    var numberOnlyUpperId = Regex.Replace(nodeIdVerseRange[1], "[^0-9.]", "");
-
-                    int.TryParse(numberOnlyLowerId, out var lowerId);
-                    int.TryParse(numberOnlyUpperId, out var upperId);
-
-                    if (lowerId <=
-                        _verseRef.VerseNum && _verseRef.VerseNum
-                        <= upperId)
-                    {
-                        _inVerse = true;
-
-                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary);
-                    }
-                }
-            }
-        }
 
         private bool _inVerse = false;
 
@@ -782,7 +674,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                 var nodeIdValue = node.Attributes[attributeTagName];
 
-                RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue);
+                RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue, attributeTagName);
             }
             if (_inVerse && !nextStartMarkerFound)
             {
@@ -800,50 +692,144 @@ namespace ClearDashboard.WebApiParatextPlugin
             return verseNodeList;
         }
 
-        private void FindAndHighlightNode(IProject project, XmlDocument xDoc, XmlNode node, bool isVerseByVerse, bool isCommentary)
+        private List<XmlNode> CreateVerseNodeList(IProject project, XmlDocument xDoc, bool isVerseByVerse, bool isCommentary)
         {
-            if (node.ChildNodes != null && !ProjectIsKnownCommentary(project))
+            List<XmlNode> verseNodeList = new();
+            bool nextStartMarkerFound = false;
+            //bool startMarkerFound = false;
+            //bool endMarkerFound = false;
+
+            IEnumerable parentNode;
+            parentNode = xDoc;
+
+            foreach (XmlNode middlenode in parentNode)
+            {
+                foreach (XmlNode node in middlenode.ChildNodes)
+                {
+                    //endMarkerFound = false;
+                    var attributeTagName = string.Empty;
+
+                    if (_inVerse && node.OuterXml.Contains("sid="))
+                    {
+                        _inVerse = false;
+                        nextStartMarkerFound = true;
+                    }
+
+                    if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
+                    {
+                        _inVerse = true;
+
+                        attributeTagName = "sid";
+
+                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary, attributeTagName);
+                    }
+
+                    if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                    {
+                        _inVerse = true;
+
+                        attributeTagName = "eid";
+
+                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary, attributeTagName);
+                    }
+
+                    else if (node.OuterXml.Contains("sid=\"" + _verseRef.BookCode + " " + _verseRef.ChapterNum + ":") &&
+                             node.OuterXml.Contains("-"))
+                    {
+                        attributeTagName = "sid";
+
+                    }
+                    else if (node.OuterXml.Contains("eid=\"" + _verseRef.BookCode + " " + _verseRef.ChapterNum + ":") &&
+                             node.OuterXml.Contains("-"))
+                    {
+                        attributeTagName = "eid";
+                    }
+
+                    if (attributeTagName != string.Empty)
+                    {
+                        var nodeVerseElementList = node.SelectNodes("verse");
+                        XmlNode nodeVerseElement;
+                        if (nodeVerseElementList.Count > 0)
+                        {
+                            nodeVerseElement = nodeVerseElementList.Item(0);
+                        }
+                        else
+                        {
+                            nodeVerseElement = node;
+                        }
+
+                        if (nodeVerseElement.Name == "verse")
+                        {
+
+                            var nodeIdValue = nodeVerseElement.Attributes[attributeTagName];
+
+                            RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue, attributeTagName);
+                        }
+                    }
+                    if (_inVerse && !nextStartMarkerFound)
+                    {
+                        verseNodeList.Add(node);
+                    }
+                }
+            }
+
+            return verseNodeList;
+        }
+
+        private void RangedVerseCheck(IProject project, XmlDocument xDoc, XmlNode node, bool isVerseByVerse, bool isCommentary, XmlAttribute nodeIdValue, string attributeTagName)
+        {
+            if (nodeIdValue != null)
+            {
+                var nodeIdVerseNumber = nodeIdValue.Value.Split(':')[1];
+                var idVerseNumberIsRange = nodeIdVerseNumber.Contains("-");
+
+                if (idVerseNumberIsRange)
+                {
+                    var nodeIdVerseRange = nodeIdVerseNumber.Split('-');
+
+                    var numberOnlyLowerId = Regex.Replace(nodeIdVerseRange[0], "[^0-9.]", "");
+                    var numberOnlyUpperId = Regex.Replace(nodeIdVerseRange[1], "[^0-9.]", "");
+
+                    int.TryParse(numberOnlyLowerId, out var lowerId);
+                    int.TryParse(numberOnlyUpperId, out var upperId);
+
+                    if (lowerId <=
+                        _verseRef.VerseNum && _verseRef.VerseNum
+                        <= upperId)
+                    {
+                        _inVerse = true;
+
+                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary, attributeTagName);
+                    }
+                }
+            }
+        }
+
+        private void FindAndHighlightNode(IProject project, XmlDocument xDoc, XmlNode node, bool isVerseByVerse, bool isCommentary, string attributeTagName)
+        {
+            if (!ProjectIsKnownCommentary(project))
             {
                 if (node.ChildNodes.Count > 0)
                 {
                     foreach (XmlNode child in node.ChildNodes)
                     {
-                        AddHighlightAttributeToNode(xDoc, child, isVerseByVerse, isCommentary);
+                        AddHighlightAttributeToNode(xDoc, child, isVerseByVerse, isCommentary, attributeTagName);
                     }
                 }
                 else
                 {
-                    AddHighlightAttributeToNode(xDoc, node, isVerseByVerse, isCommentary);
+                    AddHighlightAttributeToNode(xDoc, node, isVerseByVerse, isCommentary, attributeTagName);
                 }
             }
         }
 
-        private void AddHighlightAttributeToNode(XmlDocument xDoc, XmlNode node, bool isVerseByVerse, bool isCommentary)
+        private void AddHighlightAttributeToNode(XmlDocument xDoc, XmlNode node, bool isVerseByVerse, bool isCommentary, string attributeTagName)
         {
-            if (node.LocalName == "verse" &&
+            if (node.LocalName == "verse" && node.Attributes[attributeTagName] != null &&
                 (
-                (node.Attributes["eid"] != null&& node.Attributes["eid"].Value == _verseRef.ToString())||
-                (node.Attributes["eid"] != null&& node.Attributes["eid"].Value.Contains('-')&& node.Attributes["eid"].Value.Contains(_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
-                )
-               )
-            {
-                if (node.Attributes["style"] != null)
-                {
-                    node.Attributes["style"].Value="vh";
-                }
-                else
-                {
-                    XmlAttribute attr = xDoc.CreateAttribute("style");
-                    attr.Value = "vh";
-
-                    node.Attributes.Append(attr);
-                }
-            }
-
-            if (node.LocalName == "verse" &&
-                (
-                (node.Attributes["sid"] != null&& node.Attributes["sid"].Value == _verseRef.ToString())||
-                (node.Attributes["sid"] != null&& node.Attributes["sid"].Value.Contains('-')&& node.Attributes["sid"].Value.Contains(_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
+                    node.Attributes[attributeTagName].Value == _verseRef.ToString() ||
+                    (node.Attributes[attributeTagName].Value.Contains('-')
+                     && node.Attributes[attributeTagName].Value.Contains(_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
                 )
                )
             {
