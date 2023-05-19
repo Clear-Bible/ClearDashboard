@@ -729,38 +729,37 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                         FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary, attributeTagName);
                     }
-
-                    else if (node.OuterXml.Contains("sid=\"" + _verseRef.BookCode + " " + _verseRef.ChapterNum + ":") &&
-                             node.OuterXml.Contains("-"))
+                    
+                    var nodeVerseElementList = node.SelectNodes("verse");
+                    if (nodeVerseElementList.Count > 0)
                     {
-                        attributeTagName = "sid";
-
-                    }
-                    else if (node.OuterXml.Contains("eid=\"" + _verseRef.BookCode + " " + _verseRef.ChapterNum + ":") &&
-                             node.OuterXml.Contains("-"))
-                    {
-                        attributeTagName = "eid";
-                    }
-
-                    if (attributeTagName != string.Empty)
-                    {
-                        var nodeVerseElementList = node.SelectNodes("verse");
-                        if (nodeVerseElementList.Count > 0)
+                        foreach (XmlNode child in nodeVerseElementList)
                         {
-                            foreach (XmlNode child in nodeVerseElementList)
+
+                            if (child.OuterXml.Contains("sid=\"" + _verseRef.BookCode + " " + _verseRef.ChapterNum + ":") &&
+                                child.OuterXml.Contains("-"))
                             {
-                                var nodeIdValue = child.Attributes[attributeTagName];
+                                attributeTagName = "sid";
 
-                                RangedVerseCheck(project, xDoc, child, isVerseByVerse, isCommentary, nodeIdValue, attributeTagName);
                             }
-                        }
-                        else
-                        {
-                            var nodeIdValue = node.Attributes[attributeTagName];
+                            else if (child.OuterXml.Contains("eid=\"" + _verseRef.BookCode + " " + _verseRef.ChapterNum + ":") &&
+                                     child.OuterXml.Contains("-"))
+                            {
+                                attributeTagName = "eid";
+                            }
 
-                            RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue, attributeTagName);
+                            var nodeIdValue = child.Attributes[attributeTagName];
+
+                            RangedVerseCheck(project, xDoc, child, isVerseByVerse, isCommentary, nodeIdValue, attributeTagName);
                         }
                     }
+                    else if (node.Name == "verse")
+                    {
+                        var nodeIdValue = node.Attributes[attributeTagName];
+
+                        RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue, attributeTagName);
+                    }
+                    
                     if (_inVerse && !nextStartMarkerFound)
                     {
                         verseNodeList.Add(node);
