@@ -564,10 +564,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                         var projects = tc.AllProjects;
                         foreach (var project in projects)
                         {
-                            if (project.ShortName == "MSG")
-                            {
-                                var two = 2;
-                            }
                             TextCollection textCollection = new();
                             if (project != null)
                             {
@@ -724,8 +720,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                                 }
                             }
                         }
-
-                        attributeTagName = string.Empty;
                     }
                     if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
                     {
@@ -789,19 +783,19 @@ namespace ClearDashboard.WebApiParatextPlugin
             if (attributeTagName != string.Empty)
             {
 
-                var nodeEidValue = node.Attributes[attributeTagName];
+                var nodeIdValue = node.Attributes[attributeTagName];
 
-                if (nodeEidValue != null)
+                if (nodeIdValue != null)
                 {
-                    var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
-                    var EidVerseNumberIsRange = nodeEidVerseNumber.Contains("-");
+                    var nodeIdVerseNumber = nodeIdValue.Value.Split(':')[1];
+                    var idVerseNumberIsRange = nodeIdVerseNumber.Contains("-");
 
-                    if (EidVerseNumberIsRange)
+                    if (idVerseNumberIsRange)
                     {
-                        var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
+                        var nodeIdVerseRange = nodeIdVerseNumber.Split('-');
 
-                        var numberOnlyLowerId = Regex.Replace(nodeEidVerseRange[0], "[^0-9.]", "");
-                        var numberOnlyUpperId = Regex.Replace(nodeEidVerseRange[1], "[^0-9.]", "");
+                        var numberOnlyLowerId = Regex.Replace(nodeIdVerseRange[0], "[^0-9.]", "");
+                        var numberOnlyUpperId = Regex.Replace(nodeIdVerseRange[1], "[^0-9.]", "");
 
                         int.TryParse(numberOnlyLowerId, out var lowerEid);
                         int.TryParse(numberOnlyUpperId, out var upperEid);
