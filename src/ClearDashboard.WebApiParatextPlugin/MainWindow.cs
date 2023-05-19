@@ -745,20 +745,18 @@ namespace ClearDashboard.WebApiParatextPlugin
                     if (attributeTagName != string.Empty)
                     {
                         var nodeVerseElementList = node.SelectNodes("verse");
-                        XmlNode nodeVerseElement;
                         if (nodeVerseElementList.Count > 0)
                         {
-                            nodeVerseElement = nodeVerseElementList.Item(0);
+                            foreach (XmlNode child in nodeVerseElementList)
+                            {
+                                var nodeIdValue = child.Attributes[attributeTagName];
+
+                                RangedVerseCheck(project, xDoc, child, isVerseByVerse, isCommentary, nodeIdValue, attributeTagName);
+                            }
                         }
                         else
                         {
-                            nodeVerseElement = node;
-                        }
-
-                        if (nodeVerseElement.Name == "verse")
-                        {
-
-                            var nodeIdValue = nodeVerseElement.Attributes[attributeTagName];
+                            var nodeIdValue = node.Attributes[attributeTagName];
 
                             RangedVerseCheck(project, xDoc, node, isVerseByVerse, isCommentary, nodeIdValue, attributeTagName);
                         }
@@ -796,7 +794,8 @@ namespace ClearDashboard.WebApiParatextPlugin
                     {
                         _inVerse = true;
 
-                        FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary, attributeTagName);
+                        if(!isVerseByVerse)
+                            FindAndHighlightNode(project, xDoc, node, isVerseByVerse, isCommentary, attributeTagName);
                     }
                 }
             }
