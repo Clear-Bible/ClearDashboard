@@ -296,6 +296,12 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .IsUnique();
 
             modelBuilder
+                .Entity<LabelGroup>()
+                .HasMany(p => p.Labels)
+                .WithMany(p => p.LabelGroups)
+                .UsingEntity<LabelGroupAssociation>();
+
+            modelBuilder
                 .Entity<Note>()
                 .HasMany(p => p.Labels)
                 .WithMany(p => p.Notes)

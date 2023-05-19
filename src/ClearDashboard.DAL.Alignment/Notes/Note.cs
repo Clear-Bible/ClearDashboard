@@ -185,14 +185,14 @@ namespace ClearDashboard.DAL.Alignment.Notes
             return this;
         }
 
-        public async Task<Label> CreateAssociateLabel(IMediator mediator, string labelText, CancellationToken token = default)
+        public async Task<Label> CreateAssociateLabel(IMediator mediator, string labelText, string? templateText, CancellationToken token = default)
         {
             if (NoteId is null)
             {
                 throw new MediatorErrorEngineException("'CreateOrUpdate Note before associating with Label");
             }
 
-            var label = await new Label { Text = labelText }.CreateOrUpdate(mediator, token);
+            var label = await new Label { Text = labelText, TemplateText = templateText }.CreateOrUpdate(mediator, token);
             await AssociateLabel(mediator, label, token);
 
             return label;

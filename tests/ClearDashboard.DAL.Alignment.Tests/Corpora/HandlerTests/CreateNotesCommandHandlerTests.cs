@@ -87,6 +87,8 @@ public class CreateNotesCommandHandlerTests : TestBase
             ProjectDbContext!.Users.Add(user3);
             await ProjectDbContext.SaveChangesAsync();
 
+            ProjectDbContext.ChangeTracker.Clear();
+
             var sourceCorpus = await Corpus.Create(Mediator!, false,
                 "New Testament 1",
                 "grc",
@@ -143,7 +145,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             sw.Restart();
             #endregion
 
-            var label = await new Label { Text = "boo label full of label-ness" }.CreateOrUpdate(Mediator!);
+            var label = await new Label { Text = "boo label full of label-ness", TemplateText = "Template text 1" }.CreateOrUpdate(Mediator!);
 
             var note = new Note { Text = "a boo note", AbbreviatedText = "not sure", NoteStatus = "Resolved" };
             note.SeenByUserIds.Add(user3.Id);
@@ -151,9 +153,23 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             var resolvedNoteId = note.NoteId;
             await note.AssociateLabel(Mediator!, label);
-            var label2 = await note.CreateAssociateLabel(Mediator!, "boo label created in context of boo note");
+            var label2 = await note.CreateAssociateLabel(Mediator!, "boo label created in context of boo note", null);
 
-            Assert.Equal(2, note.Labels.Count());
+            var labelGroup = await new LabelGroup { Name = "LabelGroup1"}.CreateOrUpdate(Mediator!);
+            var lgLabel1 = await labelGroup.CreateAssociateLabel(Mediator!, "baa label 1 created in label group", "Template text 2");
+            var lgLabel2 = await labelGroup.CreateAssociateLabel(Mediator!, "baa label 2 created in label group", null);
+            await labelGroup.AssociateLabel(Mediator!, label2);
+
+            var user2Id = new UserId(user2.Id, user2.FirstName);
+            labelGroup.PutAsUserDefault(Mediator!, user2Id);
+            Assert.Equal(labelGroup.LabelGroupId!.Id, ProjectDbContext.Users.Where(e => e.Id == user2.Id).First().DefaultLabelGroupId);
+            Assert.Equal(labelGroup.LabelGroupId, await LabelGroup.GetUserDefault(Mediator!, user2Id));
+            await LabelGroup.PutUserDefault(Mediator!, null, user2Id);
+            ProjectDbContext.ChangeTracker.Clear();
+            Assert.Null(ProjectDbContext.Users.Where(e => e.Id == user2.Id).First().DefaultLabelGroupId);
+            Assert.Null(await LabelGroup.GetUserDefault(Mediator!, user2Id));
+
+            Assert.Equal(2, note.Labels.Count);
             Assert.Equal(Models.NoteStatus.Resolved.ToString(), note.NoteStatus);
             Assert.Equal(2, note.SeenByUserIds.Count);  // User3.Id + IUserProvider.CurrentUser.Id
 
@@ -188,7 +204,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             var labels = await Label.Get(Mediator!, "boo lab");
             Assert.True(labels.Count() == 2);
             await note2.AssociateLabel(Mediator!, labels.First());
-            await note2.CreateAssociateLabel(Mediator!, "super third");
+            await note2.CreateAssociateLabel(Mediator!, "super third", "super third template text");
             await note2.AssociateDomainEntity(Mediator!, sourceTokenizedTextCorpus.TokenizedTextCorpusId);
             await note2.AssociateDomainEntity(Mediator!, parallelCorpus.ParallelCorpusId);
 
@@ -209,7 +225,7 @@ public class CreateNotesCommandHandlerTests : TestBase
                 Output.WriteLine($"Note - Text: '{n.Text}', Id: '{n.NoteId!.Id}'");
                 foreach (var l in n.Labels)
                 {
-                    Output.WriteLine($"\tLabel - Text: '{l.Text}', Id: '{l.LabelId!.Id}'");
+                    Output.WriteLine($"\tLabel - Text: '{l.Text}', Template Text: '{l.TemplateText}', Id: '{l.LabelId!.Id}'");
                     allNoteLabelIds.Add(l.LabelId);
                 }
                 foreach (var nd in n.DomainEntityIds)
@@ -230,7 +246,7 @@ public class CreateNotesCommandHandlerTests : TestBase
                     Output.WriteLine($"\tNote - Text: '{n.Text}', Id: '{n.NoteId!.Id}'");
                     foreach (var l in n.Labels)
                     {
-                        Output.WriteLine($"\t\tLabel - Text: '{l.Text}', Id: '{l.LabelId!.Id}'");
+                        Output.WriteLine($"\t\tLabel - Text: '{l.Text}', Template Text: '{l.TemplateText}', Id: '{l.LabelId!.Id}'");
                     }
                 }
             }
@@ -283,9 +299,31 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.Equal(note2.ThreadId, openNote.ThreadId);
 
             var allLabels = await Label.GetAll(Mediator!);
-            Assert.Equal(3, ProjectDbContext.Labels.Count());
-            Assert.Equal(3, allLabels.Count());
+            var labelGroups = await LabelGroup.GetAll(Mediator!);
+
+            Assert.Equal(5, ProjectDbContext.Labels.Count());
+            Assert.Equal(5, allLabels.Count());
             Assert.Equal(3, allNoteLabelIds.Count);
+            Assert.Single(labelGroups);
+
+            var labelIdsInGroup = await labelGroups.First().GetLabelIds(Mediator!);
+            Assert.Equal(3, labelIdsInGroup.Count());
+
+            var labelGroupLabels = await Label.GetAll(Mediator!, labelGroups.First().LabelGroupId);
+            Assert.Equal(3, labelGroupLabels.Count());
+
+            Output.WriteLine($"\nLabel group labels");
+            foreach (var l in labelGroupLabels)
+            {
+                Output.WriteLine($"\tLabel - Text: '{l.Text}', Template Text: '{l.TemplateText}', Id: '{l.LabelId!.Id}'");
+            }
+
+            await labelGroups.First().DetachLabel(Mediator!, lgLabel2);
+            labelIdsInGroup = await labelGroups.First().GetLabelIds(Mediator!);
+            Assert.Equal(2, labelIdsInGroup.Count());
+
+            labelGroups.First().Delete(Mediator!);
+            Assert.Equal(0, ProjectDbContext.LabelGroups.Count());
 
             Assert.Equal(2, ProjectDbContext.Notes.Count());
             Assert.Equal(2, allNotes.Count());
@@ -306,7 +344,7 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(3, ProjectDbContext.Labels.Count());
+            Assert.Equal(5, ProjectDbContext.Labels.Count());
             Assert.Equal(2, ProjectDbContext.Notes.Count());
             Assert.Equal(3, ProjectDbContext.LabelNoteAssociations.Count());
             Assert.Equal(5, ProjectDbContext.NoteDomainEntityAssociations.Count());
@@ -319,7 +357,7 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(1, ProjectDbContext.Labels.Count());
+            Assert.Equal(3, ProjectDbContext.Labels.Count());
             Assert.Equal(2, ProjectDbContext.Notes.Count());
             Assert.Equal(1, ProjectDbContext.LabelNoteAssociations.Count());
             Assert.Equal(5, ProjectDbContext.NoteDomainEntityAssociations.Count());
@@ -327,6 +365,9 @@ public class CreateNotesCommandHandlerTests : TestBase
             // Test Note.Delete and make sure the cascade delete works:
             await note.Delete(Mediator!);
             await note2.Delete(Mediator!);
+
+            lgLabel1.Delete(Mediator!);
+            lgLabel2.Delete(Mediator!);
 
             ProjectDbContext.ChangeTracker.Clear();
 

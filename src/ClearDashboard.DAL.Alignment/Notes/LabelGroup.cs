@@ -46,29 +46,29 @@ namespace ClearDashboard.DAL.Alignment.Notes
             await PutUserDefault(mediator, LabelGroupId, userId, token);
         }
 
-        public async Task<IEnumerable<Label>> GetLabels(IMediator mediator, string? partialText, CancellationToken token = default)
+        public async Task<IEnumerable<LabelId>> GetLabelIds(IMediator mediator, CancellationToken token = default)
         {
             if (LabelGroupId == null)
             {
                 throw new MediatorErrorEngineException("Create LabelGroup before getting labels in group");
             }
 
-            var command = new GetLabelsByPartialTextQuery(partialText, LabelGroupId);
+            var command = new GetAllLabelsQuery(LabelGroupId);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
 
-            return result.Data!;
+            return result.Data!.Select(e => e.LabelId!);
         }
 
-        public async Task<Label> CreateAssociateLabel(IMediator mediator, string labelText, CancellationToken token = default)
+        public async Task<Label> CreateAssociateLabel(IMediator mediator, string labelText, string? labelTemplateText, CancellationToken token = default)
         {
             if (LabelGroupId is null)
             {
                 throw new MediatorErrorEngineException("'CreateOrUpdate LabelGroup before associating with Label");
             }
 
-            var label = await new Label { Text = labelText }.CreateOrUpdate(mediator, token);
+            var label = await new Label { Text = labelText, TemplateText = labelTemplateText }.CreateOrUpdate(mediator, token);
             await AssociateLabel(mediator, label, token);
 
             return label;
