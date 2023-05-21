@@ -46,7 +46,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="11*" />
-                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
             </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="{helpers:Localization Aqua_Version_CorpusInformation}" FontSize="20"></Label>
                     <StackPanel Orientation="Vertical" Grid.Row="1"  VerticalAlignment="Top">
@@ -64,21 +64,6 @@
                             UpdateSourceTrigger="PropertyChanged"
                             ValidatesOnDataErrors="True" />
                             </TextBox.Text>
-                            <Validation.ErrorTemplate>
-                                <ControlTemplate>
-                                    <StackPanel Orientation="Vertical">
-                                        <AdornedElementPlaceholder />
-                                        <TextBlock
-                                    MaxWidth="400"
-                                    Margin="10"
-                                    FontSize="16"
-                                    Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
-                                    Text="{Binding [0].ErrorContent}"
-                                    TextWrapping="Wrap" />
-                                    </StackPanel>
-                                </ControlTemplate>
-                            </Validation.ErrorTemplate>
-
                         </TextBox>
                         <!--<TextBox x:Name="UnvalidatedText"
                          materialDesign:HintAssist.FloatingScale="0.60"
@@ -109,7 +94,7 @@
                             <controls1:AutoCompleteComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock FontSize="12" Text="{Binding iso693}" />
+                                        <TextBlock FontSize="12" Text="{Binding iso639}" />
                                         <TextBlock FontSize="24" Text="{Binding name}" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -260,7 +245,7 @@
                         <TextBox x:Name="Abbreviation"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                        materialDesign:HintAssist.Hint="{helpers:Localization Aqua_version_Abbreviation}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_Abbreviation}"
                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                         Foreground="{DynamicResource MaterialDesignBody}"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -271,21 +256,6 @@
                         UpdateSourceTrigger="PropertyChanged"
                         ValidatesOnDataErrors="True" />
                             </TextBox.Text>
-                            <Validation.ErrorTemplate>
-                                <ControlTemplate>
-                                    <StackPanel Orientation="Vertical">
-                                        <AdornedElementPlaceholder />
-                                        <TextBlock
-                                MaxWidth="400"
-                                Margin="10"
-                                FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
-                                Text="{Binding [0].ErrorContent}"
-                                TextWrapping="Wrap" />
-                                    </StackPanel>
-                                </ControlTemplate>
-                            </Validation.ErrorTemplate>
-
                         </TextBox>
                         <!--<TextBox x:Name="NumericText"
                          materialDesign:HintAssist.FloatingScale="0.60"
