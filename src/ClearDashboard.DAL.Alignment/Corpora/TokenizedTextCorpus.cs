@@ -6,7 +6,6 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
-using ClearDashboard.DAL.Alignment.Features.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
