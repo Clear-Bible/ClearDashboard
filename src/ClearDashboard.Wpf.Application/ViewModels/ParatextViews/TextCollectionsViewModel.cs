@@ -170,7 +170,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-
+        private bool _verseByVerseEnabled;
+        public bool VerseByVerseEnabled
+        {
+            get => _verseByVerseEnabled;
+            set
+            {
+                _verseByVerseEnabled = value;
+                NotifyOfPropertyChange(() => _verseByVerseEnabled);
+            }
+        }
 
         #endregion BCV
 
@@ -192,6 +201,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             Title = "🗐 " + LocalizationService!.Get("Windows_TextCollection");
             this.ContentId = "TEXTCOLLECTION";
 
+            VerseByVerseEnabled = Settings.Default.VerseByVerseTextCollectionsEnabled;
 
             // wire up the commands
             RefreshCommand = new RelayCommand(Refresh);
@@ -338,6 +348,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public async void Refresh(object? obj)
         {
             await CallGetTextCollections();
+        }
+
+        public void ParagraphVerseToggle(bool value)
+        {
+            Settings.Default.VerseByVerseTextCollectionsEnabled = VerseByVerseEnabled;
+            Settings.Default.Save();
+
+            Refresh(null);
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
