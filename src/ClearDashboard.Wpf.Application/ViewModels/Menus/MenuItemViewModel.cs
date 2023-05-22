@@ -46,7 +46,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
                 NotifyOfPropertyChange(() => IsEnabled);
             }
         }
-        
+
         private Icon _icon;
         public Icon Icon
         {

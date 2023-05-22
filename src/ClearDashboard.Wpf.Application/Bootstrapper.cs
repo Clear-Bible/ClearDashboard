@@ -28,6 +28,10 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Autofac.Configuration;
+using ClearDashboard.Collaboration.Features;
+using ClearDashboard.Collaboration.Services;
+using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
 
 namespace ClearDashboard.Wpf.Application
@@ -75,6 +79,9 @@ namespace ClearDashboard.Wpf.Application
                         //Host will try to wait 30 seconds before stopping the service. 
                         options.ShutdownTimeout = TimeSpan.FromSeconds(5);
                     });
+
+
+
                 })
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
@@ -218,21 +225,46 @@ namespace ClearDashboard.Wpf.Application
             }
         }
 
+        private ConfigurationModule configurationModule;
         protected override void PopulateServiceCollection(ServiceCollection serviceCollection)
         {
             serviceCollection.AddClearDashboardDataAccessLayer();
-            serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>(); 
+            serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>();
+
+            var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddUserSecrets<Bootstrapper>();
+
+            var config = configBuilder.Build();
+            configurationModule = new ConfigurationModule(config);
+            serviceCollection.AddSingleton<IConfiguration>(config);
+            serviceCollection.AddSingleton<CollaborationConfiguration>(sp =>
+            {
+                var c = sp.GetService<IConfiguration>();
+                var section = c.GetSection("Collaboration");
+                return new CollaborationConfiguration()
+                {
+                    RemoteUrl = section["RemoteUrl"],
+                    RemoteEmail = section["RemoteEmail"],
+                    RemoteUserName = section["RemoteUserName"],
+                    RemotePassword = section["RemotePassword"]
+                };
+            });
+
             base.PopulateServiceCollection(serviceCollection);
         }
 
-
-        
         protected override void LoadModules(ContainerBuilder builder)
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
             builder.RegisterModule<AbstractionsModule>();
-        }
+            builder.RegisterModule(configurationModule);
+            builder.RegisterType<CollaborationManager>().AsSelf().SingleInstance();
+
+            builder
+                .RegisterAssemblyTypes(typeof(GetProjectSnapshotQueryHandler).Assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
+            }
 
         protected override async Task NavigateToMainWindow()
         {

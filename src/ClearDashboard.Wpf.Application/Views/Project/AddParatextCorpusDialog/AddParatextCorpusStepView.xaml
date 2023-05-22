@@ -14,6 +14,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:cm="http://caliburnmicro.com"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:AddParatextCorpusStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="500"
@@ -143,6 +144,7 @@
                     cm:Message.Attach="ProjectSelected"
                     materialDesign:HintAssist.Hint="ParatextCorpus"
                     FontSize="16"
+                    cm:Message.Attach="ProjectSelected"
                     IsEnabled="{Binding IsEnabledSelectedProject}"
                     ItemsSource="{Binding Projects}"
                     ScrollViewer.CanContentScroll="False"
