@@ -1,57 +1,68 @@
-﻿using ClearDashboard.Collaboration.Factory;
+﻿using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Factory;
 using ClearDashboard.Collaboration.Features;
+using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using Models = ClearDashboard.DataAccessLayer.Models;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Collaboration.Exceptions;
-using ClearDashboard.Collaboration.Merge;
-using System.Configuration;
-using System.Security.Policy;
-using Microsoft.VisualBasic;
-using ClearDashboard.Collaboration.Builder;
-using ClearDashboard.Collaboration.Model;
-using System.Text.Json;
-using Paratext.PluginInterfaces;
 using SIL.Machine.Utils;
-using System;
-using System.Threading;
+using System.Text.Json;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Services;
 
 public class CollaborationManager
 {
+
+    #region Member Variables
+
     private readonly ILogger<CollaborationManager> _logger;
     private readonly IMediator _mediator;
     private readonly IUserProvider _userProvider;
     private readonly IProjectProvider _projectProvider;
-    private readonly string _repositoryBasePath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
-    private readonly string _backupsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+
+    private readonly string _repositoryBasePath =
+        FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
+
+    private readonly string _backupsPath =
+        FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+
     private readonly string _dumpsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Dumps";
 
     private readonly CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = false;
-    private string _repositoryPath = "LocalOnly";
+    private readonly string _repositoryPath = "LocalOnly";
+
+    #endregion //Member Variables
+
+
+    #region Public Properties
 
     public const string BranchName = "master";
     public const string RemoteOrigin = "origin";
+    public string RepositoryPath => _repositoryPath;
+
+    #endregion //Public Properties
+
+
+    #region Constructor
 
     public CollaborationManager(
-		ILogger<CollaborationManager> logger,
-		IMediator mediator,
+        ILogger<CollaborationManager> logger,
+        IMediator mediator,
         IUserProvider userProvider,
-		IProjectProvider projectProvider,
+        IProjectProvider projectProvider,
         CollaborationConfiguration configuration)
-	{
-		_logger = logger;
-		_mediator = mediator;
-		_userProvider = userProvider;
-		_projectProvider = projectProvider;
+    {
+        _logger = logger;
+        _mediator = mediator;
+        _userProvider = userProvider;
+        _projectProvider = projectProvider;
 
         _configuration = configuration;
 
@@ -71,7 +82,10 @@ public class CollaborationManager
         }
     }
 
-    public string RepositoryPath => _repositoryPath;
+    #endregion //Constructor
+
+
+    #region Methods
 
     private Models.Project EnsureCurrentProject()
     {
@@ -113,8 +127,10 @@ public class CollaborationManager
                     if (gitRemoteUri.Host == configRemoteUri.Host ||
                         gitRemoteUri.AbsolutePath != configRemoteUri.AbsolutePath)
                     {
-                        _logger.LogError($"Current git repository remote.origin.url '{gitRemoteUri}' is different than what is configuration in secrets.json '{configRemoteUri}'.  Either delete the Collaboration folder and start over or change the secrets.json file to match.");
-                        throw new GitRepositoryNotFoundException($"Current git repository remote.origin.url '{gitRemoteUri}' is different than what is configuration in secrets.json '{configRemoteUri}'.  Either delete the Collaboration folder and start over or change the secrets.json file to match.");
+                        _logger.LogError(
+                            $"Current git repository remote.origin.url '{gitRemoteUri}' is different than what is configuration in secrets.json '{configRemoteUri}'.  Either delete the Collaboration folder and start over or change the secrets.json file to match.");
+                        throw new GitRepositoryNotFoundException(
+                            $"Current git repository remote.origin.url '{gitRemoteUri}' is different than what is configuration in secrets.json '{configRemoteUri}'.  Either delete the Collaboration folder and start over or change the secrets.json file to match.");
                     }
                 }
             }
@@ -123,11 +139,11 @@ public class CollaborationManager
 
     public bool HasRemoteConfigured()
     {
-        return 
+        return
             !string.IsNullOrEmpty(_configuration.RemoteUrl) &&
             !string.IsNullOrEmpty(_configuration.RemoteEmail) &&
             !string.IsNullOrEmpty(_configuration.RemoteUserName) &&
-            !string.IsNullOrEmpty(_configuration.RemotePassword);
+            !string.IsNullOrEmpty(_configuration.RemotePersonalAccessToken);
     }
 
     public bool IsRepositoryInitialized()
@@ -143,7 +159,7 @@ public class CollaborationManager
         }
 
         using (var repo = new Repository(_repositoryPath))
-        { 
+        {
             if (!repo.Network.Remotes.Any() && HasRemoteConfigured())
             {
                 repo.Network.Remotes.Add(RemoteOrigin, _configuration.RemoteUrl);
@@ -173,7 +189,7 @@ public class CollaborationManager
                 new UsernamePasswordCredentials()
                 {
                     Username = _configuration.RemoteUserName,
-                    Password = _configuration.RemotePassword
+                    Password = _configuration.RemotePersonalAccessToken
                 });
 
             foreach (Remote remote in repo.Network.Remotes)
@@ -206,7 +222,8 @@ public class CollaborationManager
         }
         catch (Exception ex)
         {
-            _logger.LogInformation($"Unable to determine if there are any unmerged changes, so to be safe returning true.  Exception: {ex.Message}");
+            _logger.LogInformation(
+                $"Unable to determine if there are any unmerged changes, so to be safe returning true.  Exception: {ex.Message}");
             return true;
         }
     }
@@ -246,7 +263,7 @@ public class CollaborationManager
     public IEnumerable<(Guid projectId, string projectName, string appVersion, DateTimeOffset created)> GetAllProjects()
     {
         return GetAllProjectModelSnapshotsById().Select(kvp => (
-            kvp.Key, 
+            kvp.Key,
             (string)kvp.Value.PropertyValues[nameof(Models.Project.ProjectName)]!,
             (string)kvp.Value.PropertyValues[nameof(Models.Project.AppVersion)]!,
             (DateTimeOffset)kvp.Value.PropertyValues[nameof(Models.Project.Created)]!)
@@ -272,7 +289,8 @@ public class CollaborationManager
     }
 
     // TODO:  create repo-sticky file to put into project folder:
-    public async Task<string> InitializeProjectDatabaseAsync(Guid projectId, bool includeMerge, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
+    public async Task<string> InitializeProjectDatabaseAsync(Guid projectId, bool includeMerge,
+        CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         using (var repo = new Repository(_repositoryPath))
         {
@@ -280,7 +298,8 @@ public class CollaborationManager
 
             if (headCommitSha is not null)
             {
-                var command = new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId, includeMerge, progress);
+                var command =
+                    new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId, includeMerge, progress);
                 var result = await _mediator.Send(command, cancellationToken);
                 result.ThrowIfCanceledOrFailed();
 
@@ -288,7 +307,8 @@ public class CollaborationManager
             }
             else
             {
-                throw new CommitNotFoundException($"No commits found for project Id '{projectId}' with which to initialize project database");
+                throw new CommitNotFoundException(
+                    $"No commits found for project Id '{projectId}' with which to initialize project database");
             }
         }
     }
@@ -305,7 +325,7 @@ public class CollaborationManager
                 new UsernamePasswordCredentials()
                 {
                     Username = _configuration.RemoteUserName,
-                    Password = _configuration.RemotePassword
+                    Password = _configuration.RemotePersonalAccessToken
                 });
 
             foreach (Remote remote in repo.Network.Remotes)
@@ -322,6 +342,7 @@ public class CollaborationManager
                 repo.Merge(b.Tip, signature);
             }
         }
+
         Console.WriteLine(logMessage);
     }
 
@@ -338,7 +359,7 @@ public class CollaborationManager
                     new UsernamePasswordCredentials()
                     {
                         Username = _configuration.RemoteUserName,
-                        Password = _configuration.RemotePassword
+                        Password = _configuration.RemotePersonalAccessToken
                     });
 
             var signature = new LibGit2Sharp.Signature(
@@ -350,7 +371,8 @@ public class CollaborationManager
 
     // TODO:  throw an exception if the contents of the project-sticky file
     // isn't there or doesn't match the current repository configuration
-    public async Task<string?> MergeProjectLatestChangesAsync(MergeMode mergeMode, bool createBackupSnapshot, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
+    public async Task<string?> MergeProjectLatestChangesAsync(MergeMode mergeMode, bool createBackupSnapshot,
+        CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         progress.Report(new ProgressStatus(0, "Finding latest commit"));
 
@@ -379,8 +401,10 @@ public class CollaborationManager
         if (lastMergedCommitShaIndex == -1 && project.LastMergedCommitSha is not null)
         {
             // FIXME:  not sure what to do here.  Wrong commit tree or something?
-            progress.Report(new ProgressStatus(0, $"Last merged commit sha '{project.LastMergedCommitSha}' is not in commit tree.  Unable to merge!"));
-            _logger.LogInformation($"Last merged commit sha '{project.LastMergedCommitSha}' is not in commit tree.  Unable to merge!");
+            progress.Report(new ProgressStatus(0,
+                $"Last merged commit sha '{project.LastMergedCommitSha}' is not in commit tree.  Unable to merge!"));
+            _logger.LogInformation(
+                $"Last merged commit sha '{project.LastMergedCommitSha}' is not in commit tree.  Unable to merge!");
             throw new CommitNotFoundException(project.LastMergedCommitSha);
         }
 
@@ -388,7 +412,8 @@ public class CollaborationManager
         {
             // We are already at the latest
             progress.Report(new ProgressStatus(0, $"Already at latest commit '{project.LastMergedCommitSha}'"));
-            _logger.LogInformation($"MergeLastestChangesAsync called, but already at latest commit '{project.LastMergedCommitSha}'");
+            _logger.LogInformation(
+                $"MergeLastestChangesAsync called, but already at latest commit '{project.LastMergedCommitSha}'");
             return null;
         }
 
@@ -413,7 +438,8 @@ public class CollaborationManager
         }
 
         // Merge into the project database:
-        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, mergeMode, _logMergeOnly, progress);
+        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge,
+            mergeMode, _logMergeOnly, progress);
         var result = await _mediator.Send(command, cancellationToken);
         result.ThrowIfCanceledOrFailed();
 
@@ -433,7 +459,7 @@ public class CollaborationManager
         Directory.CreateDirectory(_backupsPath);
 
         var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id) +
-            DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
+                         DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
 
         // Extract the latest from the project database:
         var command = new GetProjectSnapshotQuery();
@@ -500,10 +526,11 @@ public class CollaborationManager
         if (projectIdFilter != default)
         {
             var projectFolderName = ProjectSnapshotFactoryCommon.ToProjectFolderName((Guid)projectIdFilter!);
-            statusOptions.PathSpec = new[] { $"{projectFolderName}{Path.DirectorySeparatorChar}" }; 
+            statusOptions.PathSpec = new[] { $"{projectFolderName}{Path.DirectorySeparatorChar}" };
         }
 
-        FileStatus[] fileStatuses = {
+        FileStatus[] fileStatuses =
+        {
             LibGit2Sharp.FileStatus.NewInWorkdir,
             LibGit2Sharp.FileStatus.ModifiedInWorkdir,
             LibGit2Sharp.FileStatus.NewInIndex,
@@ -531,7 +558,7 @@ public class CollaborationManager
     }
 
     public string? CommitChanges(string commitMessage, IProgress<ProgressStatus> progress)
-	{
+    {
         EnsureValidRepository(_repositoryPath);
 
         //GitHelper.RetrieveStatus(path, Logger, LibGit2Sharp.FileStatus.NewInIndex, LibGit2Sharp.FileStatus.ModifiedInIndex, LibGit2Sharp.FileStatus.RenamedInIndex, LibGit2Sharp.FileStatus.DeletedFromIndex);
@@ -542,7 +569,7 @@ public class CollaborationManager
             _configuration.RemoteUserName,
             _configuration.RemoteEmail,
             DateTimeOffset.UtcNow
-            );
+        );
 
         using (var repo = new Repository(_repositoryPath))
         {
@@ -568,7 +595,8 @@ public class CollaborationManager
             Remote remote = repo.Network.Remotes[RemoteOrigin];
             var options = new PushOptions();
             options.CredentialsProvider = (_url, _user, _cred) =>
-                new UsernamePasswordCredentials { Username = _configuration.RemoteUserName, Password = _configuration.RemotePassword };
+                new UsernamePasswordCredentials
+                    { Username = _configuration.RemoteUserName, Password = _configuration.RemotePersonalAccessToken };
             repo.Network.Push(remote, @"refs/heads/master", options);
         }
 
@@ -636,7 +664,9 @@ public class CollaborationManager
 
                         projectIds.Add((Guid)projectModelSnapshot.GetId());
                     }
-                    catch (Exception) { }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
         }
@@ -661,14 +691,16 @@ public class CollaborationManager
 
             if (project.LastMergedCommitSha is null)
             {
-                _logger.LogInformation($"No last merged commit for project '{project.ProjectName}' - unable to dump differences between last merged commit and head");
+                _logger.LogInformation(
+                    $"No last merged commit for project '{project.ProjectName}' - unable to dump differences between last merged commit and head");
                 return;
             }
 
             var lastMergedCommitShaIndex = commitShas.FindIndex(c => c == project.LastMergedCommitSha);
             if (lastMergedCommitShaIndex == -1)
             {
-                _logger.LogInformation($"Last merged commit for project '{project.ProjectName}' is not in git commit list - unable to dump differences between last merged commit and head");
+                _logger.LogInformation(
+                    $"Last merged commit for project '{project.ProjectName}' is not in git commit list - unable to dump differences between last merged commit and head");
                 return;
             }
 
@@ -677,10 +709,11 @@ public class CollaborationManager
             var projectSnapshotHead = factory.LoadSnapshot(commitShas.First(), project.Id);
             var projectSnapshotLastMerged = factory.LoadSnapshot(project.LastMergedCommitSha, project.Id);
 
-            var projectDifferences = new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotHead, CancellationToken.None);
+            var projectDifferences =
+                new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotHead, CancellationToken.None);
 
-            var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id) + "_LastMergedToHead" + 
-                DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
+            var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id) + "_LastMergedToHead" +
+                             DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
             projectDifferences.Serialize(Path.Combine(_dumpsPath, folderName));
         }
     }
@@ -716,30 +749,33 @@ public class CollaborationManager
             var projectDifferences = new ProjectDifferences(projectSnapshotHead, result.Data!, CancellationToken.None);
 
             var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id) + "_HeadToDb" +
-                DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
+                             DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
             projectDifferences.Serialize(Path.Combine(_dumpsPath, folderName));
         }
     }
+
+    #endregion Methods
 }
 
-internal static class RepositoryExtensions
-{
-    internal static IEnumerable<string> ToTopLevelPropertiesPaths(this IEnumerable<string> paths)
-    {
-        return  paths.Select(e => e.Split(Path.DirectorySeparatorChar)[0])
-            .Distinct()
-            .Select(e => $"{e}{Path.DirectorySeparatorChar}_Properties")
-            .ToList();
-    }
 
-    internal static IEnumerable<Guid> ToProjectIds(this IEnumerable<string> paths)
-    {
-        return paths
-            .Select(e => e.Split(Path.DirectorySeparatorChar)[0].Substring("Project_".Length))
-            .Distinct()
-            .Select(e => (success: Guid.TryParse(e, out var id), id: id))
-            .Where(parsed => parsed.success)
-            .Select(parsed => parsed.id)
-            .ToList();
-    }
-}
+//internal static class RepositoryExtensions
+//    {
+//        internal static IEnumerable<string> ToTopLevelPropertiesPaths(this IEnumerable<string> paths)
+//        {
+//            return paths.Select(e => e.Split(Path.DirectorySeparatorChar)[0])
+//                .Distinct()
+//                .Select(e => $"{e}{Path.DirectorySeparatorChar}_Properties")
+//                .ToList();
+//        }
+
+//        internal static IEnumerable<Guid> ToProjectIds(this IEnumerable<string> paths)
+//        {
+//            return paths
+//                .Select(e => e.Split(Path.DirectorySeparatorChar)[0].Substring("Project_".Length))
+//                .Distinct()
+//                .Select(e => (success: Guid.TryParse(e, out var id), id: id))
+//                .Where(parsed => parsed.success)
+//                .Select(parsed => parsed.id)
+//                .ToList();
+//        }
+//    }

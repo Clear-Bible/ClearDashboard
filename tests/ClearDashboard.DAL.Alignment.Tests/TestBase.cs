@@ -81,7 +81,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
                     RemoteUrl = section["RemoteUrl"],
                     RemoteEmail = section["RemoteEmail"],
                     RemoteUserName = section["RemoteUserName"],
-                    RemotePassword = section["RemotePassword"]
+                    RemotePersonalAccessToken = section["RemotePassword"]
                 };
             });
 

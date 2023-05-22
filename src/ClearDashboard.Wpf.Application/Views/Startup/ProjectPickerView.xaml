@@ -2,9 +2,9 @@
     x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectPickerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:applicationConverters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
-    xmlns:applicationConverters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -15,6 +15,7 @@
     xmlns:startup="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    x:Name="UserControl"
     Width="Auto"
     Height="635"
     MinWidth="886"
@@ -27,6 +28,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <applicationConverters:WidthSubtraction x:Key="WidthSubtraction" />
             <applicationConverters:BooleanAndConverter x:Key="BooleanAndConverter" />
             <system:Boolean x:Key="True">True</system:Boolean>
             <system:Boolean x:Key="False">False</system:Boolean>
@@ -76,24 +78,25 @@
         Background="White"
         ShowGridLines="False">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="80" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="575" MinWidth="550" />
-            <ColumnDefinition Width="*" MinWidth="250" />
+            <ColumnDefinition
+                Width="*"
+                MinWidth="250"
+                MaxWidth="600" />
         </Grid.ColumnDefinitions>
 
+        <!--  Logo / Dashboard Name  -->
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
             Margin="0,0,0,0"
             Orientation="Horizontal">
-
-            <!--<Button x:Name="TestProjects" Content="TEST"/>-->
-
             <Image
                 Width="50"
                 Height="50"
@@ -104,8 +107,9 @@
                 VerticalAlignment="Center"
                 FontSize="32"
                 Text="{helpers:Localization ProjectPicker_AppName}" />
-
         </StackPanel>
+
+        <!--  Paratext Not Installed  -->
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
@@ -134,6 +138,8 @@
                 Text="{helpers:Localization ProjectPicker_NotInstalled}"
                 TextWrapping="Wrap" />
         </StackPanel>
+
+        <!--  Paratext User  -->
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
@@ -141,7 +147,11 @@
             HorizontalAlignment="Left"
             Orientation="Horizontal"
             Visibility="{Binding IsParatextInstalled, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
-            <Image Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
+            <Image
+                Width="36"
+                Height="36"
+                Margin="0,0,5,0"
+                Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
                 <Image.Style>
                     <Style>
                         <Style.Triggers>
@@ -190,16 +200,13 @@
                 <Button
                     x:Name="StartParatext"
                     Width="340"
-                    Height="80"
-                    VerticalAlignment="Bottom"
+                    Height="60"
+                    VerticalAlignment="Center"
                     VerticalContentAlignment="Bottom"
                     cal:Message.Attach="StartParatext"
                     Style="{StaticResource TransparentStyle}">
                     <StackPanel Orientation="Horizontal">
-                        <Image
-                            Width="30"
-                            Height="30"
-                            Margin="10">
+                        <Image Width="30" Height="30">
                             <Image.Style>
                                 <Style>
                                     <Style.Triggers>
@@ -214,7 +221,7 @@
                             </Image.Style>
                         </Image>
                         <StackPanel
-                            Margin="15"
+                            Margin="15,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Orientation="Vertical">
@@ -229,6 +236,63 @@
                 </Button>
             </StackPanel>
         </StackPanel>
+
+        <Line
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Stroke="{StaticResource PrimaryHueMidBrush}"
+            StrokeThickness="3"
+            X1="20"
+            X2="{Binding ElementName=UserControl, Path=ActualWidth, Converter={applicationConverters:WidthSubtraction}, ConverterParameter='20'}"
+            Y1="75"
+            Y2="75" />
+
+
+        <!--  Get Started  -->
+        <StackPanel Grid.Row="1">
+            <Label
+                Margin="40,0,0,0"
+                Content="{helpers:Localization ProjectPicker_GetStarted}"
+                FontSize="19"
+                FontWeight="Medium" />
+            <Button
+                x:Name="MoveForwards"
+                Width="340"
+                Height="60"
+                Margin="10,5,40,10"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Top"
+                cal:Message.Attach="MoveForwards"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="DarkGray"
+                BorderThickness="0"
+                IsEnabled="{Binding Connected}"
+                Style="{StaticResource TransparentStyle}">
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <Image
+                        Height="30"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Source="../../Assets/newproject.png" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="19"
+                            FontWeight="Normal"
+                            Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
+                        <TextBlock
+                            Margin="0,2"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontWeight="Light"
+                            Text="{helpers:Localization ProjectPicker_CreateLong}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
         <!--<StackPanel Grid.Row="1"
             Grid.Column="0"
             VerticalAlignment="Center">
@@ -254,10 +318,14 @@
                 </TextBox.Text>
             </TextBox>
         </StackPanel>-->
+
+
+        <!--  Open Recent  -->
         <StackPanel Grid.Row="2" Grid.Column="0">
             <TextBlock
-                Margin="40,0"
+                Margin="40,0,0,0"
                 FontSize="19"
+                FontWeight="Medium"
                 Text="{helpers:Localization ProjectPicker_OpenRecent}" />
             <TextBox
                 x:Name="SearchText"
@@ -283,7 +351,7 @@
 
             <materialDesign:Card
                 Width="475"
-                Height="81"
+                Height="60"
                 Margin="5"
                 HorizontalAlignment="Center"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
@@ -298,7 +366,7 @@
             <Button
                 x:Name="CreateProjectFromSearchText"
                 Width="475"
-                Height="81"
+                Height="60"
                 Margin="15"
                 HorizontalContentAlignment="Left"
                 VerticalContentAlignment="Top"
@@ -435,10 +503,11 @@
             </ListView>
         </StackPanel>
 
+        <!--  Language Picker  -->
         <StackPanel
             Grid.Row="1"
             Grid.Column="1"
-            VerticalAlignment="Center">
+            VerticalAlignment="Top">
             <ComboBox
                 x:Name="SelectedLanguage"
                 Width="200"
@@ -465,85 +534,45 @@
 
         </StackPanel>-->
 
+        <!--  Collab  -->
         <StackPanel
             Grid.Row="2"
             Grid.Column="1"
-            Margin="0,0,0,0">
-            <!--  Open Recent  -->
-            <Label
-                Margin="7,0"
-                Content="{helpers:Localization ProjectPicker_GetStarted}"
-                FontSize="19" />
+            Margin="0,0,0,0"
+            Background="Beige">
+
             <Button
-                x:Name="MoveForwards"
+                x:Name="NewCollabUser"
                 Width="340"
-                Height="80"
+                Height="60"
                 Margin="10,5,40,10"
                 HorizontalContentAlignment="Left"
                 VerticalContentAlignment="Top"
-                cal:Message.Attach="MoveForwards"
+                cal:Message.Attach="[Event Click]=[Action InitializeCollaborationUser()]"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="DarkGray"
                 BorderThickness="0"
-                IsEnabled="{Binding Connected}"
-                Style="{StaticResource TransparentStyle}">
+                Style="{StaticResource TransparentStyle}"
+                Visibility="{Binding CreateCollabUserVisibilityVisibility}">
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <Image
-                        Height="30"
-                        Margin="5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Source="../../Assets/newproject.png" />
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="19"
-                            FontWeight="Normal"
-                            Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
-                        <TextBlock
-                            Margin="0,2"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            FontWeight="Light"
-                            Text="{helpers:Localization ProjectPicker_CreateLong}"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
+                    <iconPacks:PackIconMaterial
+                        Width="32"
+                        Height="32"
+                        Foreground="{StaticResource PrimaryHueMidBrush}"
+                        Kind="AccountPlus" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="19"
+                        FontWeight="Normal"
+                        Text="Create New Collaboration User" />
                 </StackPanel>
             </Button>
 
-            <TextBlock
-                Width="500"
-                MaxWidth="340"
-                Margin="11,10,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="16"
-                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
-                TextWrapping="Wrap"
-                Visibility="{Binding DeleteErrorVisibility}">
-                <Run Text="*" />
-                <Run Text="{helpers:Localization ProjectPicker_DeleteError}" />
-            </TextBlock>
-
-            <TextBlock
-                Width="500"
-                MaxWidth="340"
-                Margin="11,10,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="16"
-                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
-                TextWrapping="Wrap"
-                Visibility="{Binding AlreadyOpenMessageVisibility}">
-                <Run Text="*" />
-                <Run Text="This project is open already." />
-            </TextBlock>
             <Button
                 x:Name="InitializeCollaboration"
                 Width="340"
-                Height="80"
+                Height="60"
                 Margin="10,5,40,10"
                 HorizontalContentAlignment="Left"
                 VerticalContentAlignment="Top"
@@ -551,12 +580,12 @@
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="DarkGray"
                 BorderThickness="0"
-                Visibility="{Binding InitializeCollaborationVisibility}"
-                Style="{StaticResource TransparentStyle}">
+                Style="{StaticResource TransparentStyle}"
+                Visibility="{Binding InitializeCollaborationVisibility}">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                        <Binding Path="Connected"/>
-                        <Binding Path="CollabButtonsEnabled"/>
+                        <Binding Path="Connected" />
+                        <Binding Path="CollabButtonsEnabled" />
                     </MultiBinding>
                 </Button.IsEnabled>
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
@@ -578,19 +607,19 @@
             <Label
                 Margin="7,0"
                 Content="Import Server Project"
-                FontSize="19" 
-                Visibility="{Binding CollabProjectVisibility}"/>
-            <ListView 
-                x:Name="CollabProjectListView" 
-                Height="231" 
+                FontSize="19"
+                Visibility="{Binding CollabProjectVisibility}" />
+            <ListView
+                x:Name="CollabProjectListView"
+                Height="231"
                 ItemsSource="{Binding DashboardCollabProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                 Visibility="{Binding CollabProjectVisibility}">
                 <ListView.IsEnabled>
                     <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                        <Binding Path="Connected"/>
-                        <Binding Path="CollabButtonsEnabled"/>
+                        <Binding Path="Connected" />
+                        <Binding Path="CollabButtonsEnabled" />
                     </MultiBinding>
                 </ListView.IsEnabled>
                 <ListView.ItemTemplate>
@@ -650,7 +679,7 @@
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </TextBlock.Style><Run FontSize="11" Text="Version: " /><Run Text=" "/><Run FontSize="11" Text="{Binding AppVersion}" /></TextBlock>
+                                        </TextBlock.Style><Run FontSize="11" Text="Version: " /><Run Text=" " /><Run FontSize="11" Text="{Binding AppVersion}" /></TextBlock>
                                 </Grid>
                             </StackPanel>
                         </Border>
@@ -658,6 +687,39 @@
                 </ListView.ItemTemplate>
             </ListView>
 
+        </StackPanel>
+
+        <!--  Errors  -->
+        <StackPanel Grid.Row="3" Grid.Column="0">
+            <TextBlock
+                Width="500"
+                MaxWidth="340"
+                Margin="11,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                FontSize="16"
+                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
+                TextWrapping="Wrap"
+                Visibility="{Binding DeleteErrorVisibility}">
+                <Run Text="*" />
+                <Run Text="{helpers:Localization ProjectPicker_DeleteError}" />
+            </TextBlock>
+
+            <TextBlock
+                Width="500"
+                MaxWidth="340"
+                Margin="11,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                FontSize="16"
+                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
+                TextWrapping="Wrap"
+                Visibility="{Binding AlreadyOpenMessageVisibility}">
+                <Run Text="*" />
+                <Run Text="This project is open already." />
+            </TextBlock>
         </StackPanel>
 
         <StatusBar

@@ -246,7 +246,7 @@ namespace ClearDashboard.Wpf.Application
                     RemoteUrl = section["RemoteUrl"],
                     RemoteEmail = section["RemoteEmail"],
                     RemoteUserName = section["RemoteUserName"],
-                    RemotePassword = section["RemotePassword"]
+                    RemotePersonalAccessToken = section["RemotePersonalAccessToken"]
                 };
             });
 

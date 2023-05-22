@@ -70,6 +70,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private Visibility _createCollabUserVisibility = Visibility.Collapsed;
+        public Visibility CreateCollabUserVisibilityVisibility
+        {
+            get => _createCollabUserVisibility;
+            set
+            {
+                _createCollabUserVisibility = value;
+                NotifyOfPropertyChange(() => CreateCollabUserVisibilityVisibility);
+            }
+        }
+
+
+
         private Visibility _initializeCollaborationVisibility;
         public Visibility InitializeCollaborationVisibility
         {
@@ -351,8 +364,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            await GetRemoteUser();
             await GetProjectsVersion().ConfigureAwait(false);
             await GetCollabProjects().ConfigureAwait(false);
+
+
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
@@ -378,10 +394,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
-
-        public void TestProjects()
+        public void InitializeCollaborationUser()
         {
-            _ = _httpClientServices.GetAllProjects();
+            var localizedString = _localizationService!["MainView_About"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<NewCollabUserViewModel>();
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
+        }
+
+        private async Task GetRemoteUser()
+        {
+            if (_collaborationManager.HasRemoteConfigured())
+            {
+                // collab user present
+                CreateCollabUserVisibilityVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                // no user present
+                CreateCollabUserVisibilityVisibility = Visibility.Visible;
+            }
         }
 
         private async Task GetProjectsVersion(bool afterMigration=false)

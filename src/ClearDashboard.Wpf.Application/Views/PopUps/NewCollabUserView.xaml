@@ -1,0 +1,159 @@
+﻿<Window
+    x:Class="ClearDashboard.Wpf.Application.Views.PopUps.NewCollabUserView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
+    Title="NewCollabUserView"
+    Width="800"
+    Height="450"
+    d:DataContext="{d:DesignInstance Type=popUps:NewCollabUserViewModel,
+                                     IsDesignTimeCreatable=True}"
+    helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <iconPacks:PackIconMaterial
+                Width="32"
+                Height="32"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource PrimaryHueMidBrush}"
+                Kind="AccountPlus" />
+            <TextBlock
+                Margin="10,0,0,0"
+                FontSize="30"
+                Style="{StaticResource MaterialDesignHeadline1TextBlock}"
+                TextAlignment="Center">
+                Create a Collaboration User
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <controls:AutoCompleteComboBox
+                Height="Auto"
+                Margin="15"
+                VerticalAlignment="Top"
+                cm:Message.Attach="GroupSelected"
+                materialDesign:HintAssist.Hint="Select Organization"
+                FontSize="16"
+                IsEnabled="True"
+                ItemsSource="{Binding Groups}"
+                ScrollViewer.CanContentScroll="False"
+                SelectedItem="{Binding SelectedGroup}"
+                Style="{StaticResource MaterialDesignFilledComboBox}"
+                TextSearch.TextPath="CombinedStrings">
+                <controls:AutoCompleteComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="24" Text="{Binding Name}" />
+                            <TextBlock FontSize="12" Text="{Binding Description}" />
+                            <TextBlock FontSize="12" Text="{Binding Id}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </controls:AutoCompleteComboBox.ItemTemplate>
+            </controls:AutoCompleteComboBox>
+            <TextBox
+                x:Name="FirstName"
+                Margin="10,5,10,5"
+                materialDesign:HintAssist.Foreground="Green"
+                materialDesign:HintAssist.Hint="First Name"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+
+            <!--  Last Name  -->
+            <TextBox
+                x:Name="LastName"
+                Margin="10,5,10,5"
+                materialDesign:HintAssist.Foreground="Green"
+                materialDesign:HintAssist.Hint="Last Name"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+            <!--  Email  -->
+            <TextBox
+                x:Name="Email"
+                Margin="10,5,10,5"
+                materialDesign:HintAssist.Foreground="Green"
+                materialDesign:HintAssist.Hint="Email Address"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <TextBox.Text>
+                    <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validators:EmailValidator />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <Button
+                x:Name="CheckUser"
+                IsEnabled="{Binding}"
+                Style="{StaticResource TransparentStyle}">
+                Check User
+            </Button>
+
+            <Label>Check your email and enter in the code:</Label>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBox
+                    x:Name="EmailCode"
+                    Width="85"
+                    Style="{StaticResource MaterialDesignFilledTextBox}" />
+                <Button
+                    x:Name="ValidateEmailCode"
+                    Height="30"
+                    Margin="10,0,0,0"
+                    IsEnabled="{Binding}"
+                    Style="{StaticResource TransparentStyle}">
+                    Validate Email Code
+                </Button>
+            </StackPanel>
+
+        </StackPanel>
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="{Binding SelectedGroup.Name}" />
+
+        <Button
+            x:Name="CreateGitLabUser"
+            Grid.Row="2"
+            Grid.Column="1"
+            IsEnabled="{Binding}"
+            Style="{StaticResource TransparentStyle}">
+            Generate User
+        </Button>
+
+
+    </Grid>
+</Window>
