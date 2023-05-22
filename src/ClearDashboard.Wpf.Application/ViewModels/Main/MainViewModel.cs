@@ -536,7 +536,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             return false;
                         });
 
-                    if (windowsDockable is not null)
+                    if (windowsDockable is not null && enhancedViewModel.EnhancedViewLayout is not null)
                     {
                         title = windowsDockable.Title;
                         enhancedViewModel.EnhancedViewLayout.Title = title;
@@ -1934,7 +1934,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     case MenuIds.Settings:
                         {
-                            await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
+                            await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(EventAggregator), null, null);
                             break;
                         }
 

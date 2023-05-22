@@ -117,6 +117,29 @@
                         Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </StackPanel>
             </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="FormatListText" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Text="{helpers:Localization Settings_TextCollections}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Orientation="Vertical">
+                    <GroupBox Margin="16" Header="{helpers:Localization Settings_TextCollections}">
+                        <CheckBox
+                            cm:Message.Attach="VerseByVerseTextCollectionsEnabledCheckBox($datacontext)"
+                            Content="{helpers:Localization Settings_VerseByVerseTextCollectionsEnabled}"
+                            IsChecked="{Binding IsVerseByVerseTextCollectionsEnabled}" />
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
             <!--<TabItem>
                 <TabItem.Header>
                     <StackPanel Width="auto" Height="auto">
