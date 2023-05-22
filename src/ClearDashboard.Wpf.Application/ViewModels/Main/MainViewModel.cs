@@ -536,7 +536,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             return false;
                         });
 
-                    if (windowsDockable is not null)
+                    if (windowsDockable is not null && enhancedViewModel.EnhancedViewLayout is not null)
                     {
                         title = windowsDockable.Title;
                         enhancedViewModel.EnhancedViewLayout.Title = title;
