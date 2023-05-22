@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {

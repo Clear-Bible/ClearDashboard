@@ -1934,7 +1934,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     case MenuIds.Settings:
                         {
-                            await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
+                            await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(EventAggregator), null, null);
                             break;
                         }
 
