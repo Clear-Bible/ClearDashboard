@@ -20,6 +20,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables   
 
         private readonly ILogger<DashboardSettingsViewModel> _logger;
+        private readonly IEventAggregator _eventAggregator;
         private bool _isAquaEnabledOnStartup;
 
         #endregion //Member Variables
@@ -96,10 +97,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Constructor
 
         // ReSharper disable once EmptyConstructor
-        public DashboardSettingsViewModel()
+        public DashboardSettingsViewModel(IEventAggregator eventAggregator)
         {
             // for Caliburn Micro
             _logger = IoC.Get<ILogger<DashboardSettingsViewModel>>();
+            _eventAggregator = eventAggregator;
         }
 
         protected override void OnViewReady(object view)
@@ -197,8 +199,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.VerseByVerseTextCollectionsEnabled = IsVerseByVerseTextCollectionsEnabled;
             Settings.Default.Save();
 
-            var eventAggregator = IoC.Get<EventAggregator>();
-            eventAggregator.PublishOnUIThreadAsync(new RefreshTextCollectionsMessage());
+            _eventAggregator.PublishOnUIThreadAsync(new RefreshTextCollectionsMessage());
         }
 
         #endregion // Methods
