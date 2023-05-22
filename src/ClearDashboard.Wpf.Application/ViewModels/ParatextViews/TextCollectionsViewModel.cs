@@ -27,6 +27,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using AvalonDock.Properties;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.Wpf.Application.Properties;
 using HtmlAgilityPack;
 using Serilog;
 
@@ -34,7 +35,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class TextCollectionsViewModel : ToolViewModel,
-        IHandle<VerseChangedMessage>
+        IHandle<VerseChangedMessage>,
+        IHandle<RefreshTextCollectionsMessage>
     {
         private readonly DashboardProjectManager? _projectManager;
 
@@ -241,7 +243,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _textCollectionCallInProgress = true;
 
                 var workWithUsx = true;
-                var showVerseByVerse = false;
+                var showVerseByVerse = Settings.Default.VerseByVerseTextCollectionsEnabled;
                 try
                 {
                     var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx, showVerseByVerse), CancellationToken.None).ConfigureAwait(false);
@@ -371,6 +373,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         #endregion // Methods
+
+        public Task HandleAsync(RefreshTextCollectionsMessage message, CancellationToken cancellationToken)
+        {
+            Refresh(null);
+            return Task.CompletedTask;
+        }
     }
 
     public class ChromiumWebBrowserHelper
