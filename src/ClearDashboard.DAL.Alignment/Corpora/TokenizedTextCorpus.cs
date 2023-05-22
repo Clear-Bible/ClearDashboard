@@ -165,16 +165,6 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache, true);
         }
 
-        public static async Task<(IEnumerable<Token> TokenTrainingTextVerseTokens, uint TokenTrainingTextTokensIndex)> GetTokenVerseContext(ParallelCorpusId? parallelCorpusId, Token token, IMediator mediator, CancellationToken cancellationToken = default)
-        {
-            var command = new GetTokenVerseContextQuery(parallelCorpusId, token);
-
-            var result = await mediator.Send(command, cancellationToken);
-            result.ThrowIfCanceledOrFailed();
-
-            return result.Data!;
-        }
-
         /// <summary>
         /// If the incoming CompositeToken is new (not in the database yet) this method creates it
         /// 
