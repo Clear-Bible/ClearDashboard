@@ -127,12 +127,12 @@
                             Kind="FormatListText" />
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="{helpers:Localization TextCollections_Settings}"
+                            Text="{helpers:Localization Settings_TextCollections}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
                 <StackPanel Orientation="Vertical">
-                    <GroupBox Margin="16" Header="{helpers:Localization Settings_Plugins}">
+                    <GroupBox Margin="16" Header="{helpers:Localization Settings_TextCollections}">
                         <CheckBox
                             cm:Message.Attach="VerseByVerseTextCollectionsEnabledCheckBox($datacontext)"
                             Content="{helpers:Localization Settings_VerseByVerseTextCollectionsEnabled}"
