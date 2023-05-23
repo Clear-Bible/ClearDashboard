@@ -56,7 +56,6 @@
 
   <ItemGroup>
     <Folder Include="DragAndDrop\" />
-    <Folder Include="Views\EnhancedView\" />
   </ItemGroup>
 
 </Project>

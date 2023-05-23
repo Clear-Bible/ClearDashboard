@@ -10,6 +10,7 @@ namespace ClearDashboard.Wpf.Application.Services
             registry.RegisterType<InterlinearEnhancedViewItemMetadatum>();
             registry.RegisterType<AlignmentEnhancedViewItemMetadatum>();
             registry.RegisterType<TokenizedCorpusEnhancedViewItemMetadatum>();
+            registry.RegisterType<AlignmentsBatchReviewEnhancedViewItemMetadatum>();
         }
     }
 }

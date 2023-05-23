@@ -10,7 +10,6 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 //using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -1281,6 +1280,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var connectionViewModel = connectionMenuItem.ConnectionViewModel;
             switch (connectionMenuItem.Id)
             {
+
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView:
+                    await AddAlignmentsBatchReview(connectionMenuItem);
+
+                    break;
+
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTranslationSet:
                     // find the right connection to send
                     var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
@@ -1374,6 +1380,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        private async Task AddAlignmentsBatchReview(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            await EnhancedViewManager.AddMetadatumEnhancedView(new AlignmentsBatchReviewEnhancedViewItemMetadatum
+                {
+
+                    // TODO:  set this based on the menu id (add to existing or new enhanced view)
+                    IsNewWindow = connectionMenuItem.Id ==
+                                  DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView,
+                    DisplayName = $"{connectionMenuItem.DisplayName} - Alignments Batch Review",
+                    AlignmentSetId = connectionMenuItem.AlignmentSetId,
+              
+                    ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
+                                       throw new InvalidDataEngineException(name: "ParallelCorpusId",
+                                           value: "null"),
+                    ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
+                    //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                    IsRtl = connectionMenuItem.IsRtl,
+                    //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                    IsTargetRtl = connectionMenuItem.IsTargetRtl,
+                  
+                    SourceParatextId = connectionMenuItem.SourceParatextId,
+                    TargetParatextId = connectionMenuItem.TargetParatextId
+            }, CancellationToken.None
+            );
+
+
+
+
+
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentBatchReviewCount, 1);
+        }
+
         private async Task DeleteTranslationSet(ParallelCorpusConnectionMenuItemViewModel parallelCorpusConnectionMenuItemViewModel)
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
@@ -1457,6 +1495,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             switch (corpusNodeMenuItem.Id)
             {
+             
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddParatextCorpus:
                     // kick off the add new tokenization dialog
                     await AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);

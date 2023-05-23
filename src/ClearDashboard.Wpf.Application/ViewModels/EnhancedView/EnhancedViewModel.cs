@@ -484,14 +484,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns></returns>
         protected async Task<EnhancedViewItemViewModel> ActivateItemFromMetadatumAsync(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var viewModelType = enhancedViewItemMetadatum.ConvertToEnhancedViewItemViewModelType();
-            var viewModel = (EnhancedViewItemViewModel) LifetimeScope!.Resolve(viewModelType);
-            viewModel.Parent = this;
-            viewModel.ConductWith(this);
-            var view = ViewLocator.LocateForModel(viewModel, null, null);
-            ViewModelBinder.Bind(viewModel, view, null);
-            await ActivateItemAsync(viewModel, cancellationToken);
-            return viewModel;
+            try
+            {
+                var viewModelType = enhancedViewItemMetadatum.ConvertToEnhancedViewItemViewModelType();
+                var viewModel = (EnhancedViewItemViewModel)LifetimeScope!.Resolve(viewModelType);
+                viewModel.Parent = this;
+                viewModel.ConductWith(this);
+                var view = ViewLocator.LocateForModel(viewModel, null, null);
+                ViewModelBinder.Bind(viewModel, view, null);
+                await ActivateItemAsync(viewModel, cancellationToken);
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+                var s = ex.Message;
+                throw;
+            }
+            ;
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {

@@ -445,6 +445,36 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddResetVerseMappings(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(connectionMenuItems);
 
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            {
+                Header = "Alignments Batch Review",
+                Id = Guid.NewGuid().ToString(),  //TODO - what should this be?
+                IconKind = PackIconPicolIconsKind.Relevance.ToString(),
+                MenuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>
+                {
+
+                    new()
+                    {
+                        // Show Verses in New Windows
+                        Header = "Alignments Batch Review to current EnhancedView",
+                        Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView,
+                        ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                        IconKind = PackIconPicolIconsKind.AvatarEdit.ToString(),
+                        ConnectionId = parallelCorpusConnection.ParallelCorpusId.Id,
+                    },
+
+                    new()
+                    {
+                        // Show Verses in New Windows
+                        Header = "Alignments Batch Review to new EnhancedView",
+                        Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView,
+                        ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                        IconKind = PackIconPicolIconsKind.AvatarEdit.ToString(),
+                        ConnectionId = parallelCorpusConnection.ParallelCorpusId.Id,
+                    }
+                }
+            });
+
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
 
@@ -474,8 +504,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             });
         }
 
-        private void AddResetVerseMappings(ParallelCorpusConnectionViewModel parallelCorpusConnection, 
-            IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel, 
+        private void AddResetVerseMappings(ParallelCorpusConnectionViewModel parallelCorpusConnection,
+            IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
             BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
         {
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
@@ -770,8 +800,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                                 IconKind = PackIconPicolIconsKind.DocumentText.ToString(),
                                 CorpusNodeViewModel = corpusNodeViewModel,
                                 Tokenizer = tokenizer.ToString(),
-                            }
-                        }
+                            },
+
+
+                }
                     };
 
                     var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
@@ -791,16 +823,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             Tokenizer = tokenizer.ToString(),
                         });
 
-                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
-                        {
-                            // Show Verses in New Windows
-                            Header = "Alignments Batch Review",
-                            Id = DesignSurfaceMenuIds.AlignmentsBatchReviewView,
-                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                            IconKind = PackIconPicolIconsKind.AvatarEdit.ToString(),
-                            CorpusNodeViewModel = corpusNodeViewModel,
-                            Tokenizer = tokenizer.ToString(),
-                        });
+
 
                         foreach (var menuBuilder in menuBuilders)
                         {
