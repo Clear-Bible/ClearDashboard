@@ -144,7 +144,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
             var atp2 = someAlignments.Skip(3).Take(1).Select(a => a.AlignedTokenPair).First();
 
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp1, "Verified"));
+            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp1, "Unverified"));
             await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp2, "Verified"));
 
             sw.Start();

@@ -57,7 +57,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Select(e => new { 
                     SourceTrainingText = e.SourceTokenComponent!.TrainingText!, 
                     TargetTrainingText = e.TargetTokenComponent!.TrainingText!,
-                    Status = e.AlignmentVerification.ToString()
+                    Status = e.AlignmentOriginatedFrom == Models.AlignmentOriginatedFrom.FromAlignmentModel 
+                        ? e.AlignmentOriginatedFrom.ToString() 
+                        : e.AlignmentVerification.ToString()
                 });
 
             IDictionary<string, IDictionary<string, IDictionary<string, uint>>>? alignmentCountsByTrainingText = default;
