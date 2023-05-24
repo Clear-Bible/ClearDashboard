@@ -130,19 +130,63 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Assert.NotNull(alignmentSet);
 
+            var count = 0;
+            List<EngineParallelTextRow> someRows = new();
+            foreach (var e in parallelCorpus)
+            {
+                someRows.Add((EngineParallelTextRow)e);
+                if (count++ > 10) break;
+            }
+
+            var someAlignments = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.All);
+            Assert.True(someAlignments.Any());
+
+            var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
+            var atp2 = someAlignments.Skip(3).Take(1).Select(a => a.AlignedTokenPair).First();
+
+            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp1, "Verified"));
+            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp2, "Verified"));
+
             sw.Start();
 
             var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, CancellationToken.None);
             Assert.Equal(13, alignmentTrainingTextCounts.Count);
 
-            var one = alignmentTrainingTextCounts.Skip(1).First();
-            Assert.Equal(3, one.Value.Count);
+            var one = alignmentTrainingTextCounts.Skip(4).First();
+            Assert.Equal(1, one.Value.Count);
 
-            Output.WriteLine($"{one.Key}");
-            foreach (var v in one.Value)
+            Output.WriteLine("");
+            Output.WriteLine($"Source training text:  {one.Key}");
+            foreach (var one2 in one.Value)
             {
-                Output.WriteLine($"\t{v.Key}    {v.Value}");
+                Assert.Equal(2, one2.Value.Count);
+                Output.WriteLine($"\tTarget training text: {one2.Key}");
+                foreach (var one3 in one2.Value)
+                {
+                    Output.WriteLine($"\t\tStatus:  {one3.Key}    Count:  {one3.Value}");
+                }
             }
+
+            Output.WriteLine("");
+
+            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, CancellationToken.None);
+            Assert.Equal(12, alignmentTrainingTextCounts2.Count);
+
+            var verse = alignmentTrainingTextCounts2.Skip(1).First();
+            Assert.Equal(3, verse.Value.Count);
+
+            Output.WriteLine("");
+            Output.WriteLine($"Target training text:  {verse.Key}");
+            foreach (var verse2 in verse.Value)
+            {
+                Output.WriteLine($"\tSource training text: {verse2.Key}");
+                foreach (var verse3 in verse2.Value)
+                {
+                    Output.WriteLine($"\t\tStatus:  {verse3.Key}    Count:  {verse3.Value}");
+                }
+            }
+
+            Output.WriteLine("");
 
         }
         finally
@@ -246,20 +290,20 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var one = alignmentSetVerseContexts.FirstOrDefault();
             Assert.True(one != default);
 
-            Assert.Equal(6, one.sourceTokenTrainingTextVerseTokens.Count());
-            Assert.Equal(6, one.targetTokenTrainingTextVerseTokens.Count());
-            Assert.Equal((uint)3, one.sourceTokenTrainingTextTokensIndex);
-            Assert.Equal((uint)3, one.targetTokenTrainingTextTokensIndex);
+            Assert.Equal(6, one.sourceVerseTokens.Count());
+            Assert.Equal(6, one.targetVerseTokens.Count());
+            Assert.Equal((uint)3, one.sourceVerseTokensIndex);
+            Assert.Equal((uint)3, one.targetVerseTokensIndex);
 
             Output.WriteLine($"Alignment source: {one.alignment.AlignedTokenPair.SourceToken.TokenId}");
-            Output.WriteLine($"Verse context index (source): {one.sourceTokenTrainingTextTokensIndex}");
-            foreach (var vc in one.sourceTokenTrainingTextVerseTokens)
+            Output.WriteLine($"Verse context index (source): {one.sourceVerseTokensIndex}");
+            foreach (var vc in one.sourceVerseTokens)
             {
                 Output.WriteLine($"\t{vc.TokenId}");
             }
             Output.WriteLine($"Alignment target: {one.alignment.AlignedTokenPair.TargetToken.TokenId}");
-            Output.WriteLine($"Verse context index (target): {one.targetTokenTrainingTextTokensIndex}");
-            foreach (var vc in one.targetTokenTrainingTextVerseTokens)
+            Output.WriteLine($"Verse context index (target): {one.targetVerseTokensIndex}");
+            foreach (var vc in one.targetVerseTokens)
             {
                 Output.WriteLine($"\t{vc.TokenId}");
             }
@@ -267,25 +311,25 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Output.WriteLine("");
 
             var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts("one_verse_three", "three", CancellationToken.None);
-            Assert.Equal(12, alignmentSetVerseContexts.Count());
+            Assert.Equal(2, alignmentSetVerseContexts2.Count());
 
             var two = alignmentSetVerseContexts2.FirstOrDefault();
             Assert.True(two != default);
 
-            Assert.Equal(4, two.sourceTokenTrainingTextVerseTokens.Count());
-            Assert.Equal(6, two.targetTokenTrainingTextVerseTokens.Count());
-            Assert.Equal((uint)1, two.sourceTokenTrainingTextTokensIndex);
-            Assert.Equal((uint)4, two.targetTokenTrainingTextTokensIndex);
+            Assert.Equal(4, two.sourceVerseTokens.Count());
+            Assert.Equal(6, two.targetVerseTokens.Count());
+            Assert.Equal((uint)1, two.sourceVerseTokensIndex);
+            Assert.Equal((uint)4, two.targetVerseTokensIndex);
 
             Output.WriteLine($"Alignment source: {two.alignment.AlignedTokenPair.SourceToken.TokenId}");
-            Output.WriteLine($"Verse context index (source): {two.sourceTokenTrainingTextTokensIndex}");
-            foreach (var vc in two.sourceTokenTrainingTextVerseTokens)
+            Output.WriteLine($"Verse context index (source): {two.sourceVerseTokensIndex}");
+            foreach (var vc in two.sourceVerseTokens)
             {
                 Output.WriteLine($"\t{vc.TokenId}");
             }
             Output.WriteLine($"Alignment target: {two.alignment.AlignedTokenPair.TargetToken.TokenId}");
-            Output.WriteLine($"Verse context index (target): {two.targetTokenTrainingTextTokensIndex}");
-            foreach (var vc in two.targetTokenTrainingTextVerseTokens)
+            Output.WriteLine($"Verse context index (target): {two.targetVerseTokensIndex}");
+            foreach (var vc in two.targetVerseTokens)
             {
                 Output.WriteLine($"\t{vc.TokenId}");
             }
@@ -663,10 +707,14 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var manualOnly = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.ManualOnly);
             Assert.Equal(4, manualOnly.Count());
 
-            // The PutAlignments above should effectively 'hide' five auto alignments (five
-            // because the last PutAlignment uses tokens from two different auto alignments)
-            // from the perspective of ManualOnlyNonManualAuto mode.
             var manualOnlyNonManualAuto = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto);
+
+            // DeleteAlignment above reduces someAlignments count by 1 (79 -> 78), and the
+            // subsequent four PutAlignments should effectively 'hide' four auto alignments
+            // (by including auto alignment tokens: atp1, atp2, a4 and a5 in new manual
+            // alignments).  So that takes the number of auto alignments returned when using
+            // "ManualAndOnlyNonManualAuto" from 78 -> 74.  
+
             Assert.Equal(someAlignments.Count() - 5, manualOnlyNonManualAuto.Where(a => a.OriginatedFrom == Models.AlignmentOriginatedFrom.FromAlignmentModel.ToString()).Count());
             Assert.Equal(4, manualOnlyNonManualAuto.Where(a => a.OriginatedFrom == Models.AlignmentOriginatedFrom.Assigned.ToString()).Count());
 

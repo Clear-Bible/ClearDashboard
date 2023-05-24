@@ -5,5 +5,5 @@ using ClearDashboard.DAL.CQRS.Features;
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public record GetAlignmentCountsByTrainingTextQuery(AlignmentSetId AlignmentSetId, bool SourceToTarget) : 
-        ProjectRequestQuery<IDictionary<string, IDictionary<string, uint>>>;
+        ProjectRequestQuery<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>;
 }

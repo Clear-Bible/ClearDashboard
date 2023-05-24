@@ -54,15 +54,23 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return result.Data!;
         }
 
-        public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText)
+        public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText, ManualAutoAlignmentMode manualAutoAlignmentMode = ManualAutoAlignmentMode.All)
         {
-            var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText));
+            var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText, manualAutoAlignmentMode));
             result.ThrowIfCanceledOrFailed(true);
  
             return result.Data!;
         }
 
-        public async Task<IDictionary<string, IDictionary<string, uint>>> GetAlignmentCounts(bool sourceToTarget, CancellationToken cancellationToken)
+        /// <summary>
+        /// For machine generated auto alignments, only return the count of Alignments that don’t 
+        /// also have alignmentpairs between the same tokens for other alignment types.
+        /// </summary>
+        /// <param name="sourceToTarget"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Dictionary<sourceString, Dictionary<targetString, Dictionary<statusName, count>> if 
+        /// sourceToTarget == true, reverse 'sourceString' and 'targetString' if false</returns>
+        public async Task<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>> GetAlignmentCounts(bool sourceToTarget, CancellationToken cancellationToken)
         {
             var result = await mediator_.Send(new GetAlignmentCountsByTrainingTextQuery(AlignmentSetId, sourceToTarget));
             result.ThrowIfCanceledOrFailed(true);
@@ -72,10 +80,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public async Task<IEnumerable<(
             Alignment alignment,
-            IEnumerable<Token> sourceTokenTrainingTextVerseTokens,
-            uint sourceTokenTrainingTextTokensIndex,
-            IEnumerable<Token> targetTokenTrainingTextVerseTokens,
-            uint targetTokenTrainingTextTokensIndex
+            IEnumerable<Token> sourceVerseTokens,
+            uint sourceVerseTokensIndex,
+            IEnumerable<Token> targetVerseTokens,
+            uint targetVerseTokensIndex
         )>> GetAlignmentVerseContexts(string sourceTokenTrainingText, string targetTokenTrainingText, CancellationToken cancellationToken)
         {
             var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(AlignmentSetId, sourceTokenTrainingText, targetTokenTrainingText));

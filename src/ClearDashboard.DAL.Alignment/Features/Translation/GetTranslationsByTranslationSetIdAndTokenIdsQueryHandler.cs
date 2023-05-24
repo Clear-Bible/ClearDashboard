@@ -93,6 +93,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     translationSet, 
                     request.TranslationSetId.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.Language,
                     request.TranslationSetId.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language,
+                    request.ManualAutoAlignmentMode,
                     cancellationToken);
 
 #if DEBUG
@@ -150,6 +151,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             Models.TranslationSet translationSet,
             string? sourceLanguage,
             string? targetLanguage,
+            ManualAutoAlignmentMode manualAutoAlignmentMode,
             CancellationToken cancellationToken)
         {
             var combined = translations.ToList();
@@ -268,6 +270,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
                         .Where(a => sourceTokenTrainingTexts.Keys.Contains(a.SourceTokenComponent!.TrainingText))
                         .ToList()
+                        .FilterByAlignmentMode(manualAutoAlignmentMode)
                         .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
                         .ToDictionary(g => g.Key, g => g
                             .GroupBy(a => a.TargetTokenComponent!.TrainingText)

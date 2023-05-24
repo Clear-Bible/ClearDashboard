@@ -20,6 +20,7 @@ using ClearDashboard.DataAccessLayer.Threading;
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 {
@@ -89,7 +90,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                         .ToList()
                         .GroupBy(t => t.AlignmentSetId))
                     {
-                        await ProcessAlignmentSet(g.Key, g.Select(g => g), phaseProgress, cancellationToken);
+                        await ProcessAlignmentSet(
+                            g.Key, 
+                            request.ManualAutoAlignmentMode, 
+                            g.Select(g => g), 
+                            phaseProgress, 
+                            cancellationToken);
                     }
 
 #if DEBUG
@@ -125,6 +131,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
         private async Task ProcessAlignmentSet(
             Guid alignmentSetId,
+            ManualAutoAlignmentMode manualAutoAlignmentMode,
             IEnumerable<AlignmentSetDenormalizationTask> tasks,
             IProgress<ProgressStatus> progressStatus,
             CancellationToken cancellationToken)
@@ -145,7 +152,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
             using (PhaseProgress phaseProgress = reporter.StartNextPhase())
                 (sourceTrainingTextsFromTasks, alignmentTopTargetTrainingTextsToCreate, alignmentTopTargetTrainingTextGuidsToDelete) =
-                    await QueryDataToDenormalize(alignmentSetId, tasks, phaseProgress, cancellationToken);
+                    await QueryDataToDenormalize(alignmentSetId, manualAutoAlignmentMode, tasks, phaseProgress, cancellationToken);
 
 #if DEBUG
             sw.Stop();
@@ -191,6 +198,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
         private async Task<(IEnumerable<string>?, IEnumerable<AlignmentTopTargetTrainingText>, IEnumerable<Guid>?)> QueryDataToDenormalize(
             Guid alignmentSetId,
+            ManualAutoAlignmentMode manualAutoAlignmentMode,
             IEnumerable<AlignmentSetDenormalizationTask> tasks,
             IProgress<ProgressStatus> progress,
             CancellationToken cancellationToken)
@@ -232,7 +240,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             else
             {
                 // Or, if any are for NULL SourceText, this means for the entire alignment set:
-                alignmentResults = await alignments.Where(a => a.SourceTokenComponent!.TrainingText != null)
+                alignmentResults = await alignments
+                    .Where(a => a.SourceTokenComponent!.TrainingText != null)
                     .ToListAsync(cancellationToken);
             }
 
@@ -240,6 +249,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             {
                 return (sourceTrainingTextsFromTasks, alignmentTopTargetTrainingTextsToCreate, alignmentTopTargetTrainingTextGuidsToDelete);
             }
+
+            alignmentResults = alignmentResults.FilterByAlignmentMode(manualAutoAlignmentMode).ToList();
 
             progress.Report(new ProgressStatus(0, string.Format(
                 LocalizationStrings.Get("Denormalization_AlignmentTopTargets_FindingTopTargetTextPerSourceText", Logger),

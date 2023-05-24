@@ -26,16 +26,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<IEnumerable<Token>>> GetDataAsync(GetAlignmentSetTargetTokensBySourceTrainingTextQuery request, CancellationToken cancellationToken)
         {
-            // need an await to get the compiler to be 'quiet'
-            await Task.CompletedTask;
-
             return new RequestResult<IEnumerable<Token>>
             (
-                ProjectDbContext.Alignments
+                await ProjectDbContext.Alignments
                     .Where(a => a.AlignmentSetId == request.AlignmentSetId.Id)
+                    .Where(a => a.Deleted == null)
                     .Where(a => a.SourceTokenComponent!.TrainingText == request.SourceTrainingText)
+                    .FilterByAlignmentMode(request.ManualAutoAlignmentMode).AsQueryable()
                     .Select(a => ModelHelper.BuildToken(a.TargetTokenComponent!))
-                    .ToList()
+                    .ToListAsync()
             );
         }
     }

@@ -5,6 +5,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
         Unverified,
         Verified,
-        Question
+        Question,
+        Invalid
     }
 }
