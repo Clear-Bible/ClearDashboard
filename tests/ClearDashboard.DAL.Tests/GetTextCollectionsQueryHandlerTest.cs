@@ -22,7 +22,7 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task GetTextCollections()
         {
-            var results = await ExecuteParatextAndTestRequest<GetTextCollectionsQuery, RequestResult<List<TextCollection>>, List<TextCollection>>(new GetTextCollectionsQuery());
+            var results = await ExecuteParatextAndTestRequest<GetTextCollectionsQuery, RequestResult<List<TextCollection>>, List<TextCollection>>(new GetTextCollectionsQuery(false, false));
             Assert.NotNull(results);
         }
     }

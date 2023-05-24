@@ -54,61 +54,74 @@
             <!--<RowDefinition Height="*" />-->
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <Button
-                Width="20"
-                Height="20"
-                Margin="5,5,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+
+        <Button
+            Grid.Column="0"
+            Width="20"
+            Height="20"
+            Margin="5,5,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+            ToolTip="{helpers:Localization ExpandView}">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <materialDesign:PackIcon
                 cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                ToolTip="{helpers:Localization ExpandView}">
-                <Button.Style>
-                    <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Background" Value="Transparent" />
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                                <Setter Property="RenderTransform">
-                                    <Setter.Value>
-                                        <ScaleTransform ScaleX="2" ScaleY="2" />
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-                <materialDesign:PackIcon
-                    cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                    Background="Transparent"
-                    Foreground="{StaticResource SecondaryHueDarkBrush}"
-                    Kind="ArrowExpandAll" />
-            </Button>
+                Background="Transparent"
+                Foreground="{StaticResource SecondaryHueDarkBrush}"
+                Kind="ArrowExpandAll" />
+        </Button>
 
-            <userControls:BcvUserControl
-                Margin="50,0,0,0"
-                BcvDictionary="{Binding Path=BcvDictionary}"
-                CurrentBcv="{Binding Path=CurrentBcv}"
-                IsControlEnabled="False"
-                IsControlMinimal="True"
-                ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                ShowHeader="False"
-                ShowOffsetControl="False"
-                VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <userControls:BcvUserControl
+            Grid.Column="1"
+            Margin="50,0,0,0"
+            BcvDictionary="{Binding Path=BcvDictionary}"
+            CurrentBcv="{Binding Path=CurrentBcv}"
+            IsControlEnabled="False"
+            IsControlMinimal="True"
+            ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ShowHeader="False"
+            ShowOffsetControl="False"
+            VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
+        <Button
+            Grid.Column="2"
+            Width="30"
+            Height="25"
+            Margin="10,0,0,0"
+            Command="{Binding Path=DataContext.RefreshCommand, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
+            CommandParameter="{Binding}"
+            Style="{StaticResource SmallTransparentStyle}"
+            ToolTip="{helpers:Localization Refresh}">
+            <iconPacks:PackIconOcticons Kind="Sync" />
+        </Button>
 
-            <Button
-                Width="30"
-                Height="25"
-                Margin="10,0,0,0"
-                Command="{Binding Path=DataContext.RefreshCommand, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
-                CommandParameter="{Binding}"
-                Style="{StaticResource SmallTransparentStyle}"
-                ToolTip="{helpers:Localization Refresh}">
-                <iconPacks:PackIconOcticons Kind="Sync" />
-            </Button>
+        <StackPanel Grid.Column="3" Orientation="Horizontal">
             <TextBox
                 Name="SearchBox"
                 Width="150"
@@ -133,9 +146,20 @@
                 <Path Data="M 0 0 L 6 6 L 12 0 Z" Fill="Black" />
             </Button>
         </StackPanel>
+
+        <StackPanel
+            Grid.Column="5"
+            Margin="0,0,10,0"
+            Orientation="Horizontal">
+            <Label Content="Paragraph" />
+            <ToggleButton cm:Message.Attach="ParagraphVerseToggle($datacontext)" IsChecked="{Binding VerseByVerseEnabled}" />
+            <Label Content="Verse" />
+        </StackPanel>
+
         <Border
             x:Name="LowerBorder"
             Grid.Row="1"
+            Grid.ColumnSpan="6"
             Margin="5"
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="1">
