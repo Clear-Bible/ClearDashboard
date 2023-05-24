@@ -4,6 +4,8 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Caliburn.Micro;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -102,8 +104,10 @@ namespace ClearDashboard.DataAccessLayer
                 return serialized;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var logger = IoC.Get<ILogger<LicenseUserMatchType>>();
+                logger.LogError("DecryptLicenseFromString failed details: "+ex);
                 return "";
             }
         }
@@ -134,8 +138,10 @@ namespace ClearDashboard.DataAccessLayer
                 var licenseUser = JsonSerializer.Deserialize<User>(decryptedLicenseKey);
                 return licenseUser ?? new User();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var logger = IoC.Get<ILogger<LicenseUserMatchType>>();
+                logger.LogError("DecryptedJsonToUser initial deserialization failed: "+ex);
                 try
                 {
                     var temporaryLicenseUser = JsonSerializer.Deserialize<TemporaryLicenseUser>(decryptedLicenseKey);
@@ -151,6 +157,7 @@ namespace ClearDashboard.DataAccessLayer
                 }
                 catch
                 {
+                    logger.LogError("DecryptedJsonToUser second deserialization failed: "+ex);
                     return new User();
                 }
             }
