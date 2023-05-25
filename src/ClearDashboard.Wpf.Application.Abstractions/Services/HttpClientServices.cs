@@ -1,19 +1,15 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
-using HttpClientToCurl;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using StringContent = System.Net.Http.StringContent;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -105,9 +101,8 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Checks to see if the user already exists on GitLab
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> CheckForExistingUser(string userName)
+        public async Task<bool> CheckForExistingUser(string userName, string email)
         {
-            var list = new List<GitLabUser>();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/users");
             try
             {
@@ -115,16 +110,15 @@ namespace ClearDashboard.Wpf.Application.Services
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
 
-                list = JsonSerializer.Deserialize<List<GitLabUser>>(result)!;
+                List<GitLabUser> list = JsonSerializer.Deserialize<List<GitLabUser>>(result)!;
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
-
-                var found = list.FirstOrDefault(s => s.UserName == userName);
+                // check both username & email fields
+                var found = list.FirstOrDefault(s => s.UserName == userName || s.Email == email);
                 if (found is null)
                 {
                     return false;
                 }
-                
             }
             catch (Exception e)
             {
@@ -135,7 +129,7 @@ namespace ClearDashboard.Wpf.Application.Services
             return true;
         }
 
-        #endregion
+        #endregion // GET Requests
 
 
         #region POST Requests
@@ -157,11 +151,13 @@ namespace ClearDashboard.Wpf.Application.Services
             var request = new HttpRequestMessage(HttpMethod.Post, "users");
 
             var content = new MultipartFormDataContent();
-            content.Add(new StringContent(Uri.EscapeDataString($"{firstName} {lastName}")), "name");
+            //content.Add(new StringContent(Uri.EscapeDataString($"{firstName} {lastName}")), "name");
+            content.Add(new StringContent($"{firstName} {lastName}"), "name");
             content.Add(new StringContent(username), "username");
             content.Add(new StringContent(email), "email");
             content.Add(new StringContent(password), "password");
             content.Add(new StringContent(organization), "organization");
+            content.Add(new StringContent("true"),"skip_confirmation");
             request.Content = content;
 
             try
@@ -198,7 +194,43 @@ namespace ClearDashboard.Wpf.Application.Services
             return user;
         }
 
-        #endregion
+
+        /// <summary>
+        /// Generates a personal access token for the user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<string> GeneratePersonalAccessToken(GitLabUser user)
+        {
+            GitAccessToken accessToken = new();
+            var request = new HttpRequestMessage(HttpMethod.Post, $"users/{user.Id}/personal_access_tokens");
+
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent($"{user.UserName}-AccessToken"), "name");
+            content.Add(new StringContent($"{user.Id}"), "user_id");
+            content.Add(new StringContent("api"), "scopes");
+            request.Content = content;
+
+            try
+            {
+                //var curl = _gitLabClient.Client.GenerateCurlInString(request);
+
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var result = await response.Content.ReadAsStringAsync();
+                accessToken = JsonSerializer.Deserialize<GitAccessToken>(result)!;
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return accessToken.Token;
+        }
+
+        #endregion // POST Requests
 
         #endregion // Methods
     }

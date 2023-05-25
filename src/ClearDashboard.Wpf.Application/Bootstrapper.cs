@@ -241,12 +241,25 @@ namespace ClearDashboard.Wpf.Application
             {
                 var c = sp.GetService<IConfiguration>();
                 var section = c.GetSection("Collaboration");
+
+                int userId;
+                try
+                {
+                    userId = Convert.ToInt16(section["userId"]);
+                }
+                catch (Exception )
+                {
+                    userId = 2;
+                }
                 return new CollaborationConfiguration()
                 {
                     RemoteUrl = section["RemoteUrl"],
                     RemoteEmail = section["RemoteEmail"],
                     RemoteUserName = section["RemoteUserName"],
-                    RemotePersonalAccessToken = section["RemotePersonalAccessToken"]
+                    RemotePersonalAccessToken = section["RemotePersonalAccessToken"],
+                    Group  = section["Group"],
+                    RemotePersonalPassword = section["RemotePersonalPassword"], 
+                    UserId = userId
                 };
             });
 

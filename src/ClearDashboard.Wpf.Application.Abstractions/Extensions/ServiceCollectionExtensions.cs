@@ -31,7 +31,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddSingleton<GitLabClient>();
             serviceCollection.AddSingleton<HttpClientServices>();
 
-            var value = Encryption.Decrypt("s8stjAZFhWZUd8pzck0Q7qK+RK1GnnqcmUZ8tRVuE89OmJ3sa+CaTuc8cgARuQwE");
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             // add in a service for the GitLab repository
             serviceCollection.AddHttpClient<GitLabClient>("GitLabClient", client =>
             {

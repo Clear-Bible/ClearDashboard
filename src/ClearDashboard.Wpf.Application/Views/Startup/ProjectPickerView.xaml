@@ -541,6 +541,25 @@
             Margin="0,0,0,0"
             Background="Beige">
 
+            <TextBlock
+                Visibility="{Binding ShowCollabUserInfo}"
+                Margin="5,10,0,0">
+                <Run FontWeight="Bold" Text="Username: " />
+                <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
+                <LineBreak />
+                <Run FontWeight="Bold" Text="Group: " />
+                <Run Text="{Binding CollaborationConfig.Group}" />
+                <LineBreak />
+                <Run FontWeight="Bold" Text="Email: " />
+                <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
+                <LineBreak />
+                <Run FontWeight="Bold" Text="Password: " />
+                <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
+                <LineBreak />
+                <Run FontWeight="Bold" Text="Access Token: " />
+                <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
+            </TextBlock>
+
             <Button
                 x:Name="NewCollabUser"
                 Width="340"

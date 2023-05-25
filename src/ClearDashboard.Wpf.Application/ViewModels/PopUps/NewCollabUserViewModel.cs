@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using Autofac;
 using Caliburn.Micro;
+using CefSharp.DevTools.CSS;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -16,10 +19,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class NewCollabUserViewModel : DashboardApplicationScreen
     {
-        private readonly HttpClientServices _httpClientServices;
-        private readonly CollaborationConfiguration _collaborationConfiguration;
+        #region Member Variables
 
-        #region Member Variables   
+        private readonly ILogger<AboutViewModel> _logger;
+        private readonly DashboardProjectManager? _projectManager;
+        private readonly HttpClientServices _httpClientServices;
+        private readonly CollaborationManager _collaborationManager;
+        private CollaborationConfiguration _collaborationConfiguration;
+
+        private string _emailValidationString = "";
+
 
         #endregion //Member Variables
 
@@ -42,7 +51,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private GitLabGroup _selectedGroup = null;
+        private GitLabGroup _selectedGroup;
         public GitLabGroup SelectedGroup
         {
             get => _selectedGroup;
@@ -50,50 +59,54 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 _selectedGroup = value;
                 NotifyOfPropertyChange(() => SelectedGroup);
+                CheckEntryFields();
             }
         }
 
-        private string _firstName;
+        private string _firstName = string.Empty;
         public string FirstName
         {
             get => _firstName;
             set
             {
-                _firstName = value;
+                _firstName = value.Trim();
                 NotifyOfPropertyChange(() => FirstName);
+                CheckEntryFields();
             }
         }
 
-        private string _lastName;
+        private string _lastName = string.Empty;
         public string LastName
         {
             get => _lastName;
             set
             {
-                _lastName = value;
+                _lastName = value.Trim();
                 NotifyOfPropertyChange(() => LastName);
+                CheckEntryFields();
             }
         }
 
-        private string _email;
+        private string _email = string.Empty;
         public string Email
         {
             get => _email;
             set
             {
-                _email = value;
+                _email = value.Trim();
                 NotifyOfPropertyChange(() => Email);
+                CheckEntryFields();
             }
         }
 
-        private CollaborationConfiguration _collaboration = new();
-        public CollaborationConfiguration Collaboration
+        private CollaborationConfiguration _collaborationConfig = new();
+        public CollaborationConfiguration CollaborationConfig
         {
-            get => _collaboration;
+            get => _collaborationConfig;
             set
             {
-                _collaboration = value;
-                NotifyOfPropertyChange(() => Collaboration);
+                _collaborationConfig = value;
+                NotifyOfPropertyChange(() => CollaborationConfig);
             }
         }
 
@@ -103,11 +116,87 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             get => _emailCode;
             set
             {
-                _emailCode = value;
+                _emailCode = value.Trim();
                 NotifyOfPropertyChange(() => EmailCode);
             }
         }
 
+        private bool _badEmailValidationCode = false;
+        public bool BadEmailValidationCode
+        {
+            get => _badEmailValidationCode;
+            set
+            {
+                _badEmailValidationCode = value;
+                NotifyOfPropertyChange(() => BadEmailValidationCode);
+            }
+        }
+
+        private bool _emailSendError = false;
+        public bool EmailSendError
+        {
+            get => _emailSendError;
+            set
+            {
+                _emailSendError = value;
+                NotifyOfPropertyChange(() => EmailSendError);
+            }
+        }
+
+        private bool _emailSent;
+        public bool EmailSent
+        {
+            get => _emailSent;
+            set
+            {
+                _emailSent = value;
+                NotifyOfPropertyChange(() => EmailSent);
+            }
+        }
+
+        private bool _showCheckUserButtonEnabled;
+        public bool ShowCheckUserButtonEnabled
+        {
+            get => _showCheckUserButtonEnabled;
+            set
+            {
+                _showCheckUserButtonEnabled = value;
+                NotifyOfPropertyChange(() => ShowCheckUserButtonEnabled);
+            }
+        }
+
+        private bool _showValidateEmailButtonEnabled;
+        public bool ShowValidateEmailButtonEnabled
+        {
+            get => _showValidateEmailButtonEnabled;
+            set
+            {
+                _showValidateEmailButtonEnabled = value;
+                NotifyOfPropertyChange(() => ShowValidateEmailButtonEnabled);
+            }
+        }
+
+        private bool _showGenerateUserButtonEnabled;
+        public bool ShowGenerateUserButtonEnabled
+        {
+            get => _showGenerateUserButtonEnabled;
+            set
+            {
+                _showGenerateUserButtonEnabled = value;
+                NotifyOfPropertyChange(() => ShowGenerateUserButtonEnabled);
+            }
+        }
+
+        private string _errorMessage = "";
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set
+            {
+                _errorMessage = value; 
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
+        }
 
 
         #endregion //Observable Properties
@@ -121,8 +210,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
        
-
-
         public NewCollabUserViewModel(INavigationService navigationService, 
             ILogger<AboutViewModel> logger,
             DashboardProjectManager? projectManager, 
@@ -131,15 +218,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ILifetimeScope? lifetimeScope, 
             ILocalizationService localizationService,
             HttpClientServices httpClientServices,
+            CollaborationManager collaborationManager,
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
+            _logger = logger;
+            _projectManager = projectManager;
             _httpClientServices = httpClientServices;
+            _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
         }
 
         protected override async void OnViewLoaded(object view)
         {
+            if (_projectManager.CurrentUser is not null)
+            {
+                FirstName = _projectManager.CurrentUser.FirstName ?? string.Empty;
+                LastName = _projectManager.CurrentUser.LastName ?? string.Empty;
+            }
+
             if (InternetAvailability.IsInternetAvailable())
             {
                 Groups = await _httpClientServices.GetAllGroups();
@@ -147,81 +244,157 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             base.OnViewLoaded(view);
         }
 
-
-        //protected override void OnViewReady(object view)
-        //{
-
-        //    Console.WriteLine();
-        //    base.OnViewReady(view);
-        //}
-
-
         #endregion //Constructor
 
 
         #region Methods
 
-        public void GroupSelected()
+        /// <summary>
+        /// Function to generate a user name from first & lastnames
+        /// </summary>
+        /// <returns></returns>
+        private string GetUserName() => (FirstName + "." + LastName).ToLower();
+
+
+
+        public async void close()
         {
-            // no-op
+            await TryCloseAsync();
         }
 
-        public async void CreateGitLabUser()
-        {
-            Console.WriteLine();
-            var password = GenerateRandomPassword.RandomPassword(16);
 
-            GitLabUser user = await _httpClientServices.CreateNewUser(FirstName, LastName, GetUserName(), password,
-                Email, SelectedGroup.Name);
+        private void CheckEntryFields()
+        {
+            ErrorMessage = "";
+
+            // from https://uibakery.io/regex-library/email-regex-csharp
+            Regex validateEmailRegex = new Regex("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+            var isMatch = validateEmailRegex.IsMatch(Email!.Trim());
+            if (isMatch == false)
+            {
+                ShowCheckUserButtonEnabled = false;
+                return;
+            }
+
+            if (FirstName == string.Empty || LastName == string.Empty || SelectedGroup is null)
+            {
+                ShowCheckUserButtonEnabled = false;
+                return;
+            }
+            
+            ShowCheckUserButtonEnabled = true;
         }
+
 
         /// <summary>
-        /// checks to see if the user is already on the system
+        /// checks to see if the user is already on the system and sends out a validation email
         /// </summary>
         public async void CheckUser()
         {
             var username = GetUserName();
-            var isAlreadyOnGitLab = await _httpClientServices.CheckForExistingUser(username);
+            var isAlreadyOnGitLab = await _httpClientServices.CheckForExistingUser(username, Email);
 
             // not a user
             if (isAlreadyOnGitLab == false)
             {
+                _emailValidationString = GenerateRandomPassword.RandomNumber(1000, 9999).ToString();
+
+
                 var mailMessage = new MimeMessage();
                 mailMessage.From.Add(new MailboxAddress("cleardas@cleardashboard.org", "cleardas@cleardashboard.org"));
                 mailMessage.To.Add(new MailboxAddress(FirstName + " " + LastName, Email));
                 mailMessage.Subject = "ClearDashboard Email Validation Code";
                 mailMessage.Body = new TextPart("plain")
                 {
-                    Text = "Hello"
+                    Text = "Email Verification Code: " + _emailValidationString
                 };
 
                 try
                 {
-                    using (var smtpClient = new SmtpClient())
-                    {
-                        //smtpClient.Connect("mail.gmail.com", 587, true);
-                        smtpClient.Connect("mail.cleardashboard.org", 587, true);
-                        smtpClient.Authenticate("cleardas@cleardashboard.org", "SP$s74g7h5@o_OZiPrU9");
-                        smtpClient.Send(mailMessage);
-                        smtpClient.Disconnect(true);
-                    }
+                    using var smtpClient = new SmtpClient();
+                    await smtpClient.ConnectAsync("mail.cleardashboard.org", 465, true);
+                    await smtpClient.AuthenticateAsync("cleardas@cleardashboard.org", "SP$s74g7h5@o_OZiPrU9");
+                    await smtpClient.SendAsync(mailMessage);
+                    await smtpClient.DisconnectAsync(true);
+
+                    ShowValidateEmailButtonEnabled = true;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    _logger.LogError("Email Sending Error", e);
+                    EmailSendError = true;
                 }
+
+                EmailSent = true;
             }
+            else
+            {
+                ErrorMessage = "User is already on the system!";
+            }
+
+
         }
 
-        private string GetUserName()
+        public void GroupSelected()
         {
-            return (FirstName.Trim() + "." + LastName.Trim()).ToLower();
+            // no-op
+        }
+
+        /// <summary>
+        /// Creates the User on the GitLab Server
+        /// </summary>
+        public async void CreateGitLabUser()
+        {
+            var password = GenerateRandomPassword.RandomPassword(16);
+
+            GitLabUser user = await _httpClientServices.CreateNewUser(FirstName, LastName, GetUserName(), password,
+                Email, SelectedGroup.Name);
+
+            if (user.Id == 0)
+            {
+                ErrorMessage = "Error Creating user on Server";
+
+                CollaborationConfig = new();
+            }
+            else
+            {
+                var _newUser = "Username: " + user.UserName + "\nPassword: " + password;
+
+                var accessToken = await _httpClientServices.GeneratePersonalAccessToken(user);
+
+                CollaborationConfig = new CollaborationConfiguration
+                {
+                    Group = SelectedGroup.Name,
+                    RemoteEmail = Email,
+                    RemotePersonalAccessToken = accessToken,
+                    RemotePersonalPassword = password,
+                    RemoteUrl = "",
+                    RemoteUserName = user.UserName,
+                    UserId = user.Id,
+                };
+
+                _collaborationConfiguration = CollaborationConfig;
+                _collaborationManager.SaveCollaborationLicense(_collaborationConfiguration);
+            }
+            
         }
 
 
+        /// <summary>
+        /// checks to see if email validation code sent through the email
+        /// is the same as the one the user inputted
+        /// </summary>
         public void ValidateEmailCode()
         {
-            Console.WriteLine();
+            if (EmailCode == _emailValidationString)
+            {
+                BadEmailValidationCode = true;
+                ShowGenerateUserButtonEnabled = true;
+            }
+            else
+            {
+                BadEmailValidationCode = false;
+            }
         }
 
         #endregion // Methods

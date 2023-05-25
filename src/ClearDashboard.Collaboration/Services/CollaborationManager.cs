@@ -12,6 +12,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Services;
@@ -34,7 +35,7 @@ public class CollaborationManager
 
     private readonly string _dumpsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Dumps";
 
-    private readonly CollaborationConfiguration _configuration;
+    private CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = false;
     private readonly string _repositoryPath = "LocalOnly";
 
@@ -46,6 +47,14 @@ public class CollaborationManager
     public const string BranchName = "master";
     public const string RemoteOrigin = "origin";
     public string RepositoryPath => _repositoryPath;
+
+
+    private const string UserSecretsId = "b02febcf-d7fc-48e1-abb1-f03647ca553c";
+    private static readonly string _secretsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets", UserSecretsId);
+    private const string SecretsFileName = "secrets.json";
+    private static readonly string _secretsFilePath = Path.Combine(_secretsFolderPath, SecretsFileName);
+
+
 
     #endregion //Public Properties
 
@@ -86,6 +95,42 @@ public class CollaborationManager
 
 
     #region Methods
+
+    public void SaveCollaborationLicense(CollaborationConfiguration collaborationConfiguration)
+    {
+        _configuration = new CollaborationConfiguration
+        {
+            Group = collaborationConfiguration.Group,
+            RemoteEmail = collaborationConfiguration.RemoteEmail,
+            RemotePersonalAccessToken = collaborationConfiguration.RemotePersonalAccessToken,
+            RemotePersonalPassword = collaborationConfiguration.RemotePersonalPassword,
+            RemoteUrl = "",
+            RemoteUserName = collaborationConfiguration.RemoteUserName,
+            UserId = collaborationConfiguration.UserId
+        };
+
+        var gitCollaboration = new GitCollaboration
+        {
+            GitAccessToken = _configuration
+        };
+
+        var jsonString = JsonSerializer.Serialize(gitCollaboration);
+        try
+        {
+            if (Directory.Exists(_secretsFolderPath) == false)
+            {
+                Directory.CreateDirectory(_secretsFolderPath);
+            }
+
+            File.WriteAllText(_secretsFilePath, jsonString);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+    }
+
 
     private Models.Project EnsureCurrentProject()
     {
@@ -140,7 +185,6 @@ public class CollaborationManager
     public bool HasRemoteConfigured()
     {
         return
-            !string.IsNullOrEmpty(_configuration.RemoteUrl) &&
             !string.IsNullOrEmpty(_configuration.RemoteEmail) &&
             !string.IsNullOrEmpty(_configuration.RemoteUserName) &&
             !string.IsNullOrEmpty(_configuration.RemotePersonalAccessToken);
@@ -596,7 +640,7 @@ public class CollaborationManager
             var options = new PushOptions();
             options.CredentialsProvider = (_url, _user, _cred) =>
                 new UsernamePasswordCredentials
-                    { Username = _configuration.RemoteUserName, Password = _configuration.RemotePersonalAccessToken };
+                { Username = _configuration.RemoteUserName, Password = _configuration.RemotePersonalAccessToken };
             repo.Network.Push(remote, @"refs/heads/master", options);
         }
 
@@ -755,6 +799,20 @@ public class CollaborationManager
     }
 
     #endregion Methods
+
+    public CollaborationConfiguration GetConfig()
+    {
+        return new CollaborationConfiguration
+        {
+            Group = _configuration.Group,
+            RemoteEmail = _configuration.RemoteEmail,
+            RemotePersonalAccessToken = _configuration.RemotePersonalAccessToken,
+            RemotePersonalPassword = _configuration.RemotePersonalPassword,
+            RemoteUrl = _configuration.RemoteUrl,
+            RemoteUserName = _configuration.RemoteUserName,
+            UserId = _configuration.UserId
+        };
+    }
 }
 
 
@@ -779,3 +837,10 @@ public class CollaborationManager
 //                .ToList();
 //        }
 //    }
+
+
+public class GitCollaboration
+{
+    [JsonPropertyName("Collaboration")]
+    public CollaborationConfiguration GitAccessToken { get; set; }
+}

@@ -6,7 +6,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
     public static class GenerateRandomPassword
     {
         // Generate a random number between two numbers
-        private static int RandomNumber(int min, int max)
+        public static int RandomNumber(int min, int max)
         {
             Random random = new Random();
             return random.Next(min, max);

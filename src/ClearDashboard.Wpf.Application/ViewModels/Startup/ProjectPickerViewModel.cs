@@ -6,13 +6,19 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -20,16 +26,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.Wpf.Application.Services;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
-using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
-using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
-using System.Diagnostics;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using System.Dynamic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -48,6 +46,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Observable Objects
+
+        private CollaborationConfiguration _collaborationConfig = new();
+        public CollaborationConfiguration CollaborationConfig
+        {
+            get => _collaborationConfig;
+            set
+            {
+                _collaborationConfig = value;
+                NotifyOfPropertyChange(() => CollaborationConfig);
+            }
+        }
+
+
         private ObservableCollection<DashboardProject> _dashboardProjects = new();
         public ObservableCollection<DashboardProject> DashboardProjects
         {
@@ -78,6 +89,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 _createCollabUserVisibility = value;
                 NotifyOfPropertyChange(() => CreateCollabUserVisibilityVisibility);
+            }
+        }
+
+        private Visibility _showCollabUserInfo = Visibility.Visible;
+        public Visibility ShowCollabUserInfo
+        {
+            get => _showCollabUserInfo;
+            set
+            {
+                _showCollabUserInfo = value; 
+                NotifyOfPropertyChange(() => ShowCollabUserInfo);
             }
         }
 
@@ -417,11 +439,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 // collab user present
                 CreateCollabUserVisibilityVisibility = Visibility.Collapsed;
+
+                ShowCollabUserInfo = Visibility.Visible;
+                CollaborationConfig = _collaborationManager.GetConfig();
             }
             else
             {
                 // no user present
                 CreateCollabUserVisibilityVisibility = Visibility.Visible;
+                ShowCollabUserInfo = Visibility.Collapsed;
             }
         }
 
