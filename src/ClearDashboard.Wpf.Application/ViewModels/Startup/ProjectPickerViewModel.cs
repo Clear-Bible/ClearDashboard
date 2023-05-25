@@ -416,7 +416,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
-        public void InitializeCollaborationUser()
+        public async Task InitializeCollaborationUser()
         {
             var localizedString = _localizationService!["MainView_About"];
 
@@ -430,7 +430,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var viewModel = IoC.Get<NewCollabUserViewModel>();
 
             IWindowManager manager = new WindowManager();
-            manager.ShowDialogAsync(viewModel, null, settings);
+            await manager.ShowDialogAsync(viewModel, null, settings);
+
+            await GetRemoteUser();
+            await GetProjectsVersion().ConfigureAwait(false);
+            await GetCollabProjects().ConfigureAwait(false);
         }
 
         private async Task GetRemoteUser()
