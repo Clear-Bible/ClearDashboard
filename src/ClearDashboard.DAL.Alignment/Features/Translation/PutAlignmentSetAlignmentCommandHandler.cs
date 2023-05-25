@@ -66,15 +66,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 );
             }
 
-            if (originatedType == ModelOriginatedType.FromAlignmentModel)
-            {
-                return new RequestResult<Alignment.Translation.AlignmentId>
-                (
-                    success: false,
-                    message: $"Invoking PutAlignment with OriginatedFrom value of '{request.Alignment.OriginatedFrom}' (i.e. from auto alignment) is not supported"
-                );
-            }
-
             if (!ProjectDbContext!.TokenComponents
                 .Where(tc => tc.Deleted == null)
                 .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
