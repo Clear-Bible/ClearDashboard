@@ -12,6 +12,8 @@ namespace GenerateLicenseKeyForDashboard
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int _licenseVersion = 1;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,7 +35,8 @@ namespace GenerateLicenseKeyForDashboard
                 LastName = lastName,
                 Id = id,
                 LicenseKey = licenseKey.ToString("N"),
-                IsInternal = IsInternalCheckBox.IsChecked
+                IsInternal = IsInternalCheckBox.IsChecked,
+                LicenseVersion = _licenseVersion
             };
 
             LicenseManager.EncryptToFile(licenseUser, folderPath);

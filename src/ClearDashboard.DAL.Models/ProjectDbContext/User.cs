@@ -27,6 +27,9 @@ namespace ClearDashboard.DataAccessLayer.Models
         [NotMapped] 
         public bool? IsInternal { get; set; } = false;
 
+        [NotMapped]
+        public int? LicenseVersion { get; set; } = 0;
+
         public int? LastAlignmentLevelId { get; set; }
 
         public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
