@@ -883,7 +883,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             TokenDisplayViewModelCollection sortedTokens = new TokenDisplayViewModelCollection(e.SelectedTokens.OrderBy(x => x.AlignmentToken.Position));
             sortedTokens.Refresh();
-            var surfaceText = sortedTokens.CombinedSurfaceText.Replace(',', ' ');
+            var surfaceText = sortedTokens.CombinedSurfaceText.Replace(",", "");
             Clipboard.SetText(surfaceText);
         }
 
