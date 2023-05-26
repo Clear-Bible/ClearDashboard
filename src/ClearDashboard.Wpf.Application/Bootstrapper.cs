@@ -366,9 +366,10 @@ namespace ClearDashboard.Wpf.Application
             Logger?.LogInformation("ClearDashboard application is exiting.");
 
             Telemetry.SendFullReport("ClearDashboard application is exiting.");
+#if RELEASE
             Telemetry.Flush();
             Task.Delay(5000).Wait();
-
+#endif
             StopParatext();
 
             StopAndDisposeHost();
