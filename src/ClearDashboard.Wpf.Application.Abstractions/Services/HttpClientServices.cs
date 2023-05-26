@@ -101,6 +101,29 @@ namespace ClearDashboard.Wpf.Application.Services
             return list;
         }
 
+        public async Task<List<GitUser>> GetAllUsers()
+        {
+            var list = new List<GitUser>();
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/users");
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+                list = JsonSerializer.Deserialize<List<GitUser>>(result)!;
+                // sort the list
+                list = list.OrderBy(s => s.Name).ToList();
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return list;
+        }
+
         /// <summary>
         /// Checks to see if the user already exists on GitLab
         /// </summary>

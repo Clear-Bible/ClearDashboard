@@ -1,18 +1,12 @@
-﻿using ClearDashboard.Wpf.Application.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -106,7 +100,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             // get the user's projects
             Projects = await _httpClientServices.GetProjectForUser(_collaborationManager.GetConfig());
-
+            var users = await _httpClientServices.GetAllUsers();
             base.OnViewLoaded(view);
         }
 
@@ -122,7 +116,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private async void GetUsersForProject()
         {
-            ProjectUsers = await _httpClientServices.GetUsersForProject( _collaborationConfiguration, SelectedProject.Id);
+            ProjectUsers = await _httpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);
         }
 
         #endregion // Methods

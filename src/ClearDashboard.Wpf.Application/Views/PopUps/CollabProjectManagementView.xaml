@@ -50,8 +50,7 @@
                 Height="Auto"
                 Margin="15"
                 VerticalAlignment="Top"
-                cm:Message.Attach="GroupSelected"
-                materialDesign:HintAssist.Hint="Select Organization"
+                materialDesign:HintAssist.Hint="Select Project"
                 FontSize="16"
                 IsEnabled="True"
                 ItemsSource="{Binding Projects}"
@@ -68,6 +67,16 @@
                     </DataTemplate>
                 </controls:AutoCompleteComboBox.ItemTemplate>
             </controls:AutoCompleteComboBox>
+
+            <ListBox ItemsSource="{Binding ProjectUsers}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding UserName}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
         </StackPanel>
 

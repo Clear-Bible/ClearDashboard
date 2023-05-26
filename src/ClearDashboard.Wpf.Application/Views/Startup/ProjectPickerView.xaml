@@ -541,9 +541,7 @@
             Margin="0,0,0,0"
             Background="Beige">
 
-            <TextBlock
-                Visibility="{Binding ShowCollabUserInfo}"
-                Margin="5,10,0,0">
+            <TextBlock Margin="5,10,0,0" Visibility="{Binding ShowCollabUserInfo}">
                 <Run FontWeight="Bold" Text="Username: " />
                 <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
                 <LineBreak />
@@ -567,7 +565,7 @@
                 Margin="10,5,40,10"
                 HorizontalContentAlignment="Left"
                 VerticalContentAlignment="Top"
-                cal:Message.Attach="[Event Click]=[Action InitializeCollaborationUser()]"
+                cal:Message.Attach="[Event Click]=[Action CollabProjectManager()]"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="DarkGray"
                 BorderThickness="0"
@@ -584,7 +582,35 @@
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Create New Collaboration User" />
+                        Text="Manage Collab Projects" />
+                </StackPanel>
+            </Button>
+
+            <Button
+                x:Name="CollabProjectManager"
+                Width="340"
+                Height="60"
+                Margin="10,5,40,10"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Top"
+                cal:Message.Attach="[Event Click]=[Action InitializeCollaborationUser()]"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="DarkGray"
+                BorderThickness="0"
+                Style="{StaticResource TransparentStyle}"
+                Visibility="Visible">
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <iconPacks:PackIconBoxIcons
+                        Width="32"
+                        Height="32"
+                        Foreground="{StaticResource OrangeDarkBrush}"
+                        Kind="LogosGitlab" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="19"
+                        FontWeight="Normal"
+                        Text="Manage Collaboration Projects" />
                 </StackPanel>
             </Button>
 

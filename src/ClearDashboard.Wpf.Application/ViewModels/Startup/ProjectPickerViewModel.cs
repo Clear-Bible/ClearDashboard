@@ -437,6 +437,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await GetCollabProjects().ConfigureAwait(false);
         }
 
+        public async Task CollabProjectManager()
+        {
+            var localizedString = _localizationService!["MainView_About"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<CollabProjectManagementViewModel>();
+
+            IWindowManager manager = new WindowManager();
+            await manager.ShowDialogAsync(viewModel, null, settings);
+        }
+
         public async Task InitializeCollaboration()
         {
             // Only respond to a Left button click otherwise,
