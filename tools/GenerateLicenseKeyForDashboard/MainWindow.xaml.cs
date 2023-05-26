@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.DataAccessLayer;
@@ -17,7 +18,13 @@ namespace GenerateLicenseKeyForDashboard
         public MainWindow()
         {
             InitializeComponent();
+
+            //get the assembly version
+            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            TheWindow.Title +=  $" - {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
         }
+
+        
 
         private void GenerateLicenseKey_OnClick(object sender, RoutedEventArgs e)
         {
