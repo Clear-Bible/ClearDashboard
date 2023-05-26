@@ -33,6 +33,7 @@ namespace GenerateLicenseKeyForDashboard
                 LastName = lastName,
                 Id = id,
                 LicenseKey = licenseKey.ToString("N"),
+                IsInternal = IsInternalCheckBox.IsChecked
             };
 
             LicenseManager.EncryptToFile(licenseUser, folderPath);

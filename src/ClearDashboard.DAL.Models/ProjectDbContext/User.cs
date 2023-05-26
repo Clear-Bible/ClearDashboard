@@ -24,6 +24,9 @@ namespace ClearDashboard.DataAccessLayer.Models
         [NotMapped]
         public string? ParatextUserName { get; set; }
 
+        [NotMapped] 
+        public bool? IsInternal { get; set; } = false;
+
         public int? LastAlignmentLevelId { get; set; }
 
         public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
