@@ -92,7 +92,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                     {
                         await ProcessAlignmentSet(
                             g.Key, 
-                            request.ManualAutoAlignmentMode, 
+                            request.AlignmentOriginationFilterMode, 
                             g.Select(g => g), 
                             phaseProgress, 
                             cancellationToken);
@@ -131,7 +131,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
         private async Task ProcessAlignmentSet(
             Guid alignmentSetId,
-            ManualAutoAlignmentMode manualAutoAlignmentMode,
+            AlignmentOriginationFilterMode alignmentOriginationFilterMode,
             IEnumerable<AlignmentSetDenormalizationTask> tasks,
             IProgress<ProgressStatus> progressStatus,
             CancellationToken cancellationToken)
@@ -152,7 +152,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
             using (PhaseProgress phaseProgress = reporter.StartNextPhase())
                 (sourceTrainingTextsFromTasks, alignmentTopTargetTrainingTextsToCreate, alignmentTopTargetTrainingTextGuidsToDelete) =
-                    await QueryDataToDenormalize(alignmentSetId, manualAutoAlignmentMode, tasks, phaseProgress, cancellationToken);
+                    await QueryDataToDenormalize(alignmentSetId, alignmentOriginationFilterMode, tasks, phaseProgress, cancellationToken);
 
 #if DEBUG
             sw.Stop();
@@ -198,7 +198,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
         private async Task<(IEnumerable<string>?, IEnumerable<AlignmentTopTargetTrainingText>, IEnumerable<Guid>?)> QueryDataToDenormalize(
             Guid alignmentSetId,
-            ManualAutoAlignmentMode manualAutoAlignmentMode,
+            AlignmentOriginationFilterMode alignmentOriginationFilterMode,
             IEnumerable<AlignmentSetDenormalizationTask> tasks,
             IProgress<ProgressStatus> progress,
             CancellationToken cancellationToken)
@@ -250,7 +250,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                 return (sourceTrainingTextsFromTasks, alignmentTopTargetTrainingTextsToCreate, alignmentTopTargetTrainingTextGuidsToDelete);
             }
 
-            alignmentResults = alignmentResults.FilterByAlignmentMode(manualAutoAlignmentMode).ToList();
+            alignmentResults = alignmentResults.FilterByAlignmentMode(alignmentOriginationFilterMode).ToList();
 
             progress.Report(new ProgressStatus(0, string.Format(
                 LocalizationStrings.Get("Denormalization_AlignmentTopTargets_FindingTopTargetTextPerSourceText", Logger),

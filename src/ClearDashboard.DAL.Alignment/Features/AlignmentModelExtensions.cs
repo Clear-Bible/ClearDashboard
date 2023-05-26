@@ -14,29 +14,29 @@ namespace ClearDashboard.DAL.Alignment.Features
 {
     public static class AlignmentModelExtensions
     {
-        public static IEnumerable<Models.Alignment> FilterByAlignmentMode(this IEnumerable<Models.Alignment> alignments, ManualAutoAlignmentMode manualAutoAlignmentMode)
+        public static IEnumerable<Models.Alignment> FilterByAlignmentMode(this IEnumerable<Models.Alignment> alignments, AlignmentOriginationFilterMode alignmentOriginationFilterMode)
         {
             var filteredAlignments = alignments;
 
-            if (manualAutoAlignmentMode == ManualAutoAlignmentMode.ManualOnly ||
-                manualAutoAlignmentMode == ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto)
+            if (alignmentOriginationFilterMode == AlignmentOriginationFilterMode.AssignedOnly ||
+                alignmentOriginationFilterMode == AlignmentOriginationFilterMode.AssignedOrFromAlignmentModel)
             {
                 filteredAlignments = alignments
                     .Where(al => al.AlignmentOriginatedFrom == Models.AlignmentOriginatedFrom.Assigned);
 
-                if (manualAutoAlignmentMode == ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto)
+                if (alignmentOriginationFilterMode == AlignmentOriginationFilterMode.AssignedOrFromAlignmentModel)
                 {
                     // Only include "FromAlignmentModel" alignments that touch tokens that
                     // are not touched by any "Assigned" alignments:
                     var filteredSetSourceTokenIdFilterer = filteredAlignments.ToHashSet(new AlignmentTokenIdEqualityComparer(true));
                     var filteredSetTargetTokenIdFilterer = filteredAlignments.ToHashSet(new AlignmentTokenIdEqualityComparer(false));
 
-                    var nonManualAutoAlignments = alignments
+                    var nonAssignedFromAlignmentModelAlignments = alignments
                         .Where(al => al.AlignmentOriginatedFrom == Models.AlignmentOriginatedFrom.FromAlignmentModel)
                         .Where(v => !filteredSetSourceTokenIdFilterer.Contains(v))
                         .Where(v => !filteredSetTargetTokenIdFilterer.Contains(v));
 
-                    filteredAlignments = filteredAlignments.Union(nonManualAutoAlignments);
+                    filteredAlignments = filteredAlignments.Union(nonAssignedFromAlignmentModelAlignments);
                 }
             }
 

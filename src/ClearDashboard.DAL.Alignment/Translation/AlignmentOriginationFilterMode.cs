@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
-    public enum ManualAutoAlignmentMode
+    public enum AlignmentOriginationFilterMode
     {
         All,
-        ManualOnly,
-        ManualAndOnlyNonManualAuto
+        AssignedOnly,
+        AssignedOrFromAlignmentModel
     }
 }

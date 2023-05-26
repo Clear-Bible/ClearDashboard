@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Text;
 using SIL.Machine.Tokenization;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using OriginatedFromValues = ClearDashboard.DAL.Alignment.Translation.Translation.OriginatedFromValues;
 using Token = ClearBible.Engine.Corpora.Token;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -138,7 +139,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 if (count++ > 10) break;
             }
 
-            var someAlignments = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.All);
+            var someAlignments = await alignmentSet.GetAlignments(someRows, AlignmentOriginationFilterMode.All);
             Assert.True(someAlignments.Any());
 
             var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
@@ -689,7 +690,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 if (count++ > 10) break;
             }
 
-            var someAlignments = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.All);
+            var someAlignments = await alignmentSet.GetAlignments(someRows, AlignmentOriginationFilterMode.All);
             Assert.True(someAlignments.Any());
 
             var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
@@ -704,10 +705,10 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"));
             await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified"));
 
-            var manualOnly = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.ManualOnly);
+            var manualOnly = await alignmentSet.GetAlignments(someRows, AlignmentOriginationFilterMode.AssignedOnly);
             Assert.Equal(4, manualOnly.Count());
 
-            var manualOnlyNonManualAuto = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto);
+            var manualOnlyNonManualAuto = await alignmentSet.GetAlignments(someRows, AlignmentOriginationFilterMode.AssignedOrFromAlignmentModel);
 
             // DeleteAlignment above reduces someAlignments count by 1 (79 -> 78), and the
             // subsequent four PutAlignments should effectively 'hide' four auto alignments
@@ -842,7 +843,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Output.WriteLine("");
             foreach (var translation in translations)
             {
-                if (translation.OriginatedFrom != "FromTranslationModel" && translation.OriginatedFrom != "FromAlignmentModel")
+                if (translation.OriginatedFrom != OriginatedFromValues.FromTranslationModel && translation.OriginatedFrom != OriginatedFromValues.FromAlignmentModel)
                 {
                     Assert.InRange<TokenId>(translation.SourceToken.TokenId, new TokenId("040001003001001"), new TokenId("040001005006001"), Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
                 }
@@ -913,7 +914,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translationsForNewToken = await translationSet.GetTranslations(new List<TokenId>() { newToken.TokenId });
             Assert.Single(translationsForNewToken);
             Assert.Equal(newToken.TokenId, translationsForNewToken.First().SourceToken.TokenId);
-            Assert.Equal("FromAlignmentModel", translationsForNewToken.First().OriginatedFrom);
+            Assert.Equal(OriginatedFromValues.FromAlignmentModel, translationsForNewToken.First().OriginatedFrom);
             Assert.Empty(translationsForNewToken.First().TargetTranslationText);
             Assert.Null(translationsForNewToken.First().TranslationId);  // The Translation returned should be a default 'empty' translation - not from the DB
 
@@ -1057,7 +1058,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translations = await translationSet.GetTranslations(tokenIds);
             Assert.Equal(3, translations.Count());
 
-            var translationsFromLexicon = translations.Where(t => t.OriginatedFrom == "FromLexicon");
+            var translationsFromLexicon = translations.Where(t => t.OriginatedFrom == OriginatedFromValues.FromLexicon);
             Assert.Equal(2, translationsFromLexicon.Count());
 
             var translation1 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexeme1.Lemma).FirstOrDefault();

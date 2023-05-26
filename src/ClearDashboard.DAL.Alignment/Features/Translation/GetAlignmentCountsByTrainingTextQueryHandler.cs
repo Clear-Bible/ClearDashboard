@@ -53,7 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Where(e => e.AlignmentSetId == request.AlignmentSetId.Id)
                 .Where(e => e.Deleted == null)
                 .ToList()
-                .FilterByAlignmentMode(ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto)
+                .FilterByAlignmentMode(AlignmentOriginationFilterMode.AssignedOrFromAlignmentModel)
                 .Select(e => new { 
                     SourceTrainingText = e.SourceTokenComponent!.TrainingText!, 
                     TargetTrainingText = e.TargetTokenComponent!.TrainingText!,

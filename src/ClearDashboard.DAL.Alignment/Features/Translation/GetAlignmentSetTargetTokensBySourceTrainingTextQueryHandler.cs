@@ -32,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .Where(a => a.AlignmentSetId == request.AlignmentSetId.Id)
                     .Where(a => a.Deleted == null)
                     .Where(a => a.SourceTokenComponent!.TrainingText == request.SourceTrainingText)
-                    .FilterByAlignmentMode(request.ManualAutoAlignmentMode).AsQueryable()
+                    .FilterByAlignmentMode(request.AlignmentOriginationFilterMode).AsQueryable()
                     .Select(a => ModelHelper.BuildToken(a.TargetTokenComponent!))
                     .ToListAsync()
             );

@@ -16,7 +16,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public AlignmentSetId AlignmentSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
 
-        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, ManualAutoAlignmentMode mode = ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto, CancellationToken token = default)
+        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, AlignmentOriginationFilterMode mode = AlignmentOriginationFilterMode.AssignedOrFromAlignmentModel, CancellationToken token = default)
         {
             var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows, mode), token);
             result.ThrowIfCanceledOrFailed(true);
@@ -54,9 +54,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return result.Data!;
         }
 
-        public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText, ManualAutoAlignmentMode manualAutoAlignmentMode = ManualAutoAlignmentMode.All)
+        public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText, AlignmentOriginationFilterMode alignmentOriginationFilterMode = AlignmentOriginationFilterMode.All)
         {
-            var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText, manualAutoAlignmentMode));
+            var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText, alignmentOriginationFilterMode));
             result.ThrowIfCanceledOrFailed(true);
  
             return result.Data!;
