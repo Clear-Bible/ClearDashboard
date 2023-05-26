@@ -87,6 +87,7 @@
                 Name="LastNameBox"
                 Margin="10"
                 materialDesign:HintAssist.Hint="Enter last name here." />
+            <CheckBox Name="IsInternalCheckBox" Content="User is Internal to Clear and thus should not be counted for usage metrics." />
             <Button
                 Margin="10"
                 Click="GenerateLicenseKey_OnClick"
