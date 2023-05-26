@@ -15,6 +15,6 @@ namespace ClearDashboard.Collaboration.Services
         public string RemotePersonalAccessToken { get; set; } = string.Empty;
         public string RemotePersonalPassword { get; set; } = string.Empty;
         public string Group { get; set; } = string.Empty;
-
+        public int NamespaceId { get; set; }
     }
 }

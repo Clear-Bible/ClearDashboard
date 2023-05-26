@@ -1,0 +1,81 @@
+﻿<Window
+    x:Class="ClearDashboard.Wpf.Application.Views.PopUps.CollabProjectManagementView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    Title="CollabProjectManagementView"
+    Width="800"
+    Height="450"
+    d:DataContext="{d:DesignInstance Type=popUps:CollabProjectManagementViewModel,
+                                     IsDesignTimeCreatable=True}"
+    helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  HEADER  -->
+        <TextBlock>Projects:</TextBlock>
+
+        <!--  PROJECTS  -->
+        <StackPanel
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Orientation="Vertical">
+            <controls:AutoCompleteComboBox
+                Height="Auto"
+                Margin="15"
+                VerticalAlignment="Top"
+                cm:Message.Attach="GroupSelected"
+                materialDesign:HintAssist.Hint="Select Organization"
+                FontSize="16"
+                IsEnabled="True"
+                ItemsSource="{Binding Projects}"
+                ScrollViewer.CanContentScroll="False"
+                SelectedItem="{Binding  SelectedProject}"
+                Style="{StaticResource MaterialDesignFilledComboBox}"
+                TextSearch.TextPath="CombinedStrings">
+                <controls:AutoCompleteComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="18" Text="{Binding Name}" />
+                            <TextBlock FontSize="12" Text="{Binding Description}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </controls:AutoCompleteComboBox.ItemTemplate>
+            </controls:AutoCompleteComboBox>
+
+        </StackPanel>
+
+        <Button
+            x:Name="Close"
+            Grid.Row="3"
+            Grid.Column="1">
+            Close
+        </Button>
+    </Grid>
+</Window>

@@ -437,6 +437,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await GetCollabProjects().ConfigureAwait(false);
         }
 
+        public async Task InitializeCollaboration()
+        {
+            // Only respond to a Left button click otherwise,
+            // the context menu will not be shown on a right click.
+            if (CheckIfConnectedToParatext() == false)
+            {
+                return;
+            }
+
+            CollabButtonsEnabled = false;
+            await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);
+
+            if (!_collaborationManager.IsRepositoryInitialized())
+            {
+                _collaborationManager.InitializeRepository();
+            }
+
+            try
+            {
+                _collaborationManager.FetchMergeRemote();
+            }
+            catch (Exception ex)
+            {
+                Logger!.LogError(ex, "Unable to fetch from server");
+            }
+
+            await GetCollabProjects().ConfigureAwait(false);
+            SetCollabVisibility();
+        }
+
         private async Task GetRemoteUser()
         {
             if (_collaborationManager.HasRemoteConfigured())
@@ -446,6 +476,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 ShowCollabUserInfo = Visibility.Visible;
                 CollaborationConfig = _collaborationManager.GetConfig();
+
+
+                // get the user's projects
+                var list = await _httpClientServices.GetProjectForUser(_collaborationManager.GetConfig());
             }
             else
             {
@@ -589,7 +623,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private void SetCollabVisibility()
         {
-#if COLLAB_RELEASE || COLLAB_DEBUG
+//#if COLLAB_RELEASE || COLLAB_DEBUG
             if (!_collaborationManager.HasRemoteConfigured())
             {
                 CollabProjectVisibility = Visibility.Collapsed;
@@ -612,10 +646,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     InitializeCollaborationLabel = "Refresh Server Projects";
                 }
             }
-#else
-            CollabProjectVisibility = Visibility.Collapsed;
-            InitializeCollaborationVisibility = Visibility.Collapsed;
-#endif
+//#else
+//            CollabProjectVisibility = Visibility.Collapsed;
+//            InitializeCollaborationVisibility = Visibility.Collapsed;
+//#endif
         }
 
         private bool IsDashboardRunningAlready()
@@ -687,36 +721,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             ParentViewModel!.ExtraData = project;
             ParentViewModel.Ok();
-        }
-
-        public async Task InitializeCollaboration()
-        {
-            // Only respond to a Left button click otherwise,
-            // the context menu will not be shown on a right click.
-            if (CheckIfConnectedToParatext() == false)
-            {
-                return;
-            }
-
-            CollabButtonsEnabled = false;
-            await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);
-
-            if (!_collaborationManager.IsRepositoryInitialized())
-            {
-                _collaborationManager.InitializeRepository();
-            }
-
-            try
-            {
-                _collaborationManager.FetchMergeRemote();
-            }
-            catch (Exception ex)
-            {
-                Logger!.LogError(ex, "Unable to fetch from server");
-            }
-
-            await GetCollabProjects().ConfigureAwait(false);
-            SetCollabVisibility();
         }
 
         public async Task ImportServerProject(DashboardCollabProject project, MouseButtonEventArgs args)

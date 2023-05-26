@@ -343,14 +343,17 @@
                 <DataGridTemplateColumn MinWidth="40">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Height="24" 
-                                   Source="/Resources/OpenBook50.png"
-                                   ToolTip="{helpers:Localization Notes_UnreadReplies}"
-                                   >
+                            <Image
+                                Height="24"
+                                Source="/Resources/OpenBook50.png"
+                                ToolTip="{helpers:Localization Notes_UnreadReplies}">
                                 <Image.Visibility>
-                                    <MultiBinding Converter="{StaticResource GuidInGuidsToVisibilityConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
-                                        <Binding Path="UserIdsSeenAllReplies"/>
-                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                                    <MultiBinding
+                                        Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
+                                        ConverterParameter="{StaticResource True}"
+                                        Mode="OneWay">
+                                        <Binding Path="UserIdsSeenAllReplies" />
+                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
                                     </MultiBinding>
                                 </Image.Visibility>
                             </Image>
@@ -607,15 +610,14 @@
                             </Button>
                         </StackPanel>
                         <userControls:NoteRepliesDisplay
-                            NoteViewModelWithReplies="{Binding Path=SelectedNoteViewModel}"
+                            Margin="20,0"
                             NoteReplyAdded="OnNoteReplyAdd"
                             NoteSeen="OnNoteSeen"
-                            Margin="20,0"
-                            TimestampFontStyle="Normal"
+                            NoteViewModelWithReplies="{Binding Path=SelectedNoteViewModel}"
                             TimestampColor="DarkGray"
+                            TimestampFontStyle="Normal"
                             TimestampMargin="-2,0,10,0"
-                            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}"
-                        />
+                            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}" />
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

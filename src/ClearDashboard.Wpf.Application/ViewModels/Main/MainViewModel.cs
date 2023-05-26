@@ -1377,7 +1377,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
                 }
 
-#if COLLAB_RELEASE || COLLAB_DEBUG
+//#if COLLAB_RELEASE || COLLAB_DEBUG
                 ,
                 new()
                 {
@@ -1385,7 +1385,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
                     MenuItems = collaborationItems,
                 }
-#endif
+//#endif
             };
 
             await Task.CompletedTask;

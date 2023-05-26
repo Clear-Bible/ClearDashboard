@@ -1,6 +1,9 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
+using HttpClientToCurl;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using StringContent = System.Net.Http.StringContent;
 
@@ -129,6 +133,61 @@ namespace ClearDashboard.Wpf.Application.Services
             return true;
         }
 
+
+        public async Task<List<GitLabProject>> GetProjectForUser(CollaborationConfiguration user)
+        {
+            List<GitLabProject> list = new();
+
+            GitAccessToken accessToken = new();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"users/{user.UserId}/projects");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+                
+                list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
+                // sort the list
+                list = list.OrderBy(s => s.Name).ToList();
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return list;
+        }
+
+        public async Task<List<GitLabProjectUsers>> GetUsersForProject(CollaborationConfiguration collaborationConfiguration, int projectId)
+        {
+            List<GitLabProjectUsers> list = new();
+
+            GitAccessToken accessToken = new();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}/users");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+
+                list = JsonSerializer.Deserialize<List<GitLabProjectUsers>>(result)!;
+                // sort the list
+                list = list.OrderBy(s => s.Name).ToList();
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return list;
+        }
+
         #endregion // GET Requests
 
 
@@ -229,6 +288,44 @@ namespace ClearDashboard.Wpf.Application.Services
 
             return accessToken.Token;
         }
+
+        public async Task<string> CreateNewProjectForUser(GitLabUser user, string projectName, string projectDescription)
+        {
+            GitAccessToken accessToken = new();
+            var request = new HttpRequestMessage(HttpMethod.Post, $"projects");
+
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent($"{user.Id}"), "user_id");
+            content.Add(new StringContent($"{projectName}"), "name");
+            // namespace_id: needed to point to the user that this project should fall under
+            content.Add(new StringContent($"{user.NamespaceId}"), "namespace_id"); 
+            content.Add(new StringContent($"{projectDescription}"), "description");
+            request.Content = content;
+
+            try
+            {
+                //var curl = _gitLabClient.Client.GenerateCurlInString(request);
+
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var result = await response.Content.ReadAsStringAsync();
+
+                // todo
+
+                //accessToken = JsonSerializer.Deserialize<GitAccessToken>(result)!;
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return accessToken.Token;
+        }
+
+
+
 
         #endregion // POST Requests
 
