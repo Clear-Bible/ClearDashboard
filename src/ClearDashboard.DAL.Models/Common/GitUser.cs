@@ -2,27 +2,30 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Models.Common
 {
     public class GitUser
     {
-        [JsonProperty("id")]
+        public bool IsSelected { get; set; }
+
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonProperty("username")]
+        [JsonPropertyName("username")]
         public string UserName { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("state")]
+        [JsonPropertyName("state")]
         public string State { get; set; }
         
-        [JsonProperty("organization")]
+        [JsonPropertyName("organization")]
         public string Organization { get; set; }
 
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string Email { get; set; }
 
     }

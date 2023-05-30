@@ -5,6 +5,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using HttpClientToCurl;
 using Microsoft.Extensions.Logging;
+using Mono.Unix.Native;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -112,8 +113,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 var result = await response.Content.ReadAsStringAsync();
 
                 list = JsonSerializer.Deserialize<List<GitUser>>(result)!;
+                list = list.Where(c => c.Organization != "").ToList();
+
                 // sort the list
-                list = list.OrderBy(s => s.Name).ToList();
+                list = list.OrderBy(s => s.Organization).ThenBy(s => s.Name).ToList();
             }
             catch (Exception e)
             {
@@ -347,8 +350,32 @@ namespace ClearDashboard.Wpf.Application.Services
             return accessToken.Token;
         }
 
+        public async Task<object> AddUserToProject(GitUser user, GitLabProject selectedProject)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, $"projects/{selectedProject.Id}/members");
 
+            var content = new MultipartFormDataContent();
+            //content.Add(new StringContent(Uri.EscapeDataString($"{firstName} {lastName}")), "name");
+            content.Add(new StringContent(user.Id.ToString()), "user_id");
+            content.Add(new StringContent("30"), "access_level");
+            request.Content = content;
 
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var result = await response.Content.ReadAsStringAsync();
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return user;
+        }
 
         #endregion // POST Requests
 

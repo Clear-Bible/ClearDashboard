@@ -7,6 +7,9 @@ using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -18,6 +21,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly CollaborationConfiguration _collaborationConfiguration;
 
         #region Member Variables   
+
+        private List<GitUser> _gitLabUsers;
 
         #endregion //Member Variables
 
@@ -55,8 +60,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private List<GitLabProjectUsers> _projectUsers = new();
-        public List<GitLabProjectUsers>  ProjectUsers
+        private ObservableCollection<GitLabProjectUsers> _projectUsers = new();
+        public ObservableCollection<GitLabProjectUsers>  ProjectUsers
         {
             get => _projectUsers;
             set
@@ -66,6 +71,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+
+        private ObservableCollection<GitUser> _collabUsers = new();
+        public ObservableCollection<GitUser> CollabUsers
+        {
+            get => _collabUsers;
+            set
+            {
+                _collabUsers = value;
+                NotifyOfPropertyChange(() => CollabUsers);
+            }
+        }
 
 
         #endregion //Observable Properties
@@ -100,7 +116,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             // get the user's projects
             Projects = await _httpClientServices.GetProjectForUser(_collaborationManager.GetConfig());
-            var users = await _httpClientServices.GetAllUsers();
+
+            
+            _gitLabUsers = await _httpClientServices.GetAllUsers();
+            CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
+
             base.OnViewLoaded(view);
         }
 
@@ -116,7 +136,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private async void GetUsersForProject()
         {
-            ProjectUsers = await _httpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);
+            var users = await _httpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);
+            ProjectUsers = new ObservableCollection<GitLabProjectUsers>(users);
+
+            // remove existing users from the selectable list
+            _collabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
+            // get the list of current users
+            var ids = ProjectUsers.Select(u => u.Id).ToList();
+            //
+            _collabUsers.RemoveAll(x => ids.Contains(x.Id));
+            NotifyOfPropertyChange(() =>  CollabUsers);
+        }
+
+
+        public async void SelectUsers()
+        {
+            for (int i = CollabUsers.Count - 1; i >= 0; i--)
+            {
+                var user = CollabUsers[i];
+                if (user.IsSelected)
+                {
+                    var result = await _httpClientServices.AddUserToProject(user, SelectedProject);
+                    CollabUsers.RemoveAt(i);
+                }
+            }
         }
 
         #endregion // Methods
