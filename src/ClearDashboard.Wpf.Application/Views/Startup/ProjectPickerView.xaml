@@ -582,7 +582,7 @@
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Manage Collab Projects" />
+                        Text="Add New Collab User" />
                 </StackPanel>
             </Button>
 

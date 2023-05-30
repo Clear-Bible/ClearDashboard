@@ -36,7 +36,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="350" />
         </Grid.ColumnDefinitions>
 
         <!--  HEADER  -->
@@ -181,13 +181,13 @@
                                 <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}" />
                                 <TextBlock
                                     Grid.Column="1"
-                                    Margin="5,0,5,0"
+                                    Margin="5,0,10,0"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
                                     Text="{Binding Organization}" />
                                 <StackPanel Grid.Column="2">
-
                                     <TextBlock
+                                        HorizontalAlignment="Stretch"
                                         Background="{StaticResource SecondaryHueLightBrush}"
                                         FontWeight="Bold"
                                         Text="{Binding Name}" />
