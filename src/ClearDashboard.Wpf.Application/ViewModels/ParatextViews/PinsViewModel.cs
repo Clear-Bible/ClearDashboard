@@ -711,15 +711,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Lform = entry.Lexeme.Type,
                                 Match = senseEntry.Id + entry.Lexeme.Form,
                                 Notes = "",
-                                Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
-                                Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
+                                LexemeType = entry.Lexeme.Type,
+                                //Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
+                                //Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
                                 Refs = vl,
                                 SimpRefs = simprefsString,
                                 Source = entry.Lexeme.Form,
-                                Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
-                                Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
+                                //Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
+                                //Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
                                 VerseList = verseList,
-                                Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
+                                //Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
                             });
                             cancellationToken.ThrowIfCancellationRequested();
                         }

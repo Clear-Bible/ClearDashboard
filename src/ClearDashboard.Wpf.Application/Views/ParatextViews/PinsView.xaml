@@ -348,7 +348,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  language  -->
-                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_Language}">
+                <!--<DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_Language}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -358,7 +358,7 @@
                                 Text="{Binding Path='Lang'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  Code  -->
                 <!--<DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_Code}">
@@ -386,8 +386,21 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>-->
 
+                <!--  LexemeType  -->
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_LexemeType}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Width="auto"
+                                MinWidth="80"
+                                Margin="0,0,0,5"
+                                Text="{Binding Path='LexemeType'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <!--  Phrase  -->
-                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Phrase}">
+                <!--<DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Phrase}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -397,10 +410,10 @@
                                 Text="{Binding Path='Phrase'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  Word  -->
-                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Word}">
+                <!--<DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Word}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -410,10 +423,10 @@
                                 Text="{Binding Path='Word'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  Prefix  -->
-                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Prefix}">
+                <!--<DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Prefix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -423,10 +436,10 @@
                                 Text="{Binding Path='Prefix'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  Stem  -->
-                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Stem}">
+                <!--<DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Stem}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -436,10 +449,10 @@
                                 Text="{Binding Path='Stem'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  Suffix  -->
-                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Suffix}">
+                <!--<DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Suffix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -449,7 +462,7 @@
                                 Text="{Binding Path='Suffix'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
                 <!--  Notes  -->
                 <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_Notes}">
