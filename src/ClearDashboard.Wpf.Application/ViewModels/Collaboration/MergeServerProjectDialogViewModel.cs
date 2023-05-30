@@ -226,7 +226,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     _collaborationManager.FetchMergeRemote();
 
                     CommitSha = await _collaborationManager.MergeProjectLatestChangesAsync(
-                        true,
+                        MergeMode.RemoteOverridesLocal,
                         false,
                         _cancellationTokenSource.Token,
                         progress);
@@ -282,7 +282,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     if (_collaborationManager.IsCurrentProjectInRepository())
                     {
                         var lastMergedCommitSha = await _collaborationManager.MergeProjectLatestChangesAsync(
-                            true, 
+                            MergeMode.RemoteOverridesLocal, 
                             false, 
                             _cancellationTokenSource.Token, 
                             progress);

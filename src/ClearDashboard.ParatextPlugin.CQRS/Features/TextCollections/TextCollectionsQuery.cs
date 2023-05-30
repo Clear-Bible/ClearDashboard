@@ -7,9 +7,11 @@ using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections
 {
-    public record GetTextCollectionsQuery(bool FetchUsx = false) : IRequest<RequestResult<List<TextCollection>>>
+    public record GetTextCollectionsQuery(bool FetchUsx, bool IsVerseByVerse) : IRequest<RequestResult<List<TextCollection>>>
     {
         public bool FetchUsx { get; } = FetchUsx;
+
+        public bool IsVerseByVerse { get; } = IsVerseByVerse;
 
     };
 }

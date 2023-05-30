@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using ClearDashboard.DataAccessLayer;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.QuickPulse;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
@@ -24,6 +22,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         private static TelemetryClient GetAppInsightsClient()
         {
+            var user = LicenseManager.GetUserFromLicense();
             var config = new TelemetryConfiguration();
             config.ConnectionString = "InstrumentationKey=23ded420-f989-4a10-a980-8ed61e5599f2;" +
                                       "IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;" +
@@ -31,7 +30,30 @@ namespace ClearDashboard.Wpf.Application.Helpers
             //config.InstrumentationKey = TelemetryKey;
             config.TelemetryChannel = new Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.ServerTelemetryChannel();
             //config.TelemetryChannel = new Microsoft.ApplicationInsights.Channel.InMemoryChannel(); // Default channel
-            config.TelemetryChannel.DeveloperMode = Debugger.IsAttached;
+
+            QuickPulseTelemetryProcessor quickPulseProcessor = null;
+            config.DefaultTelemetrySink.TelemetryProcessorChainBuilder
+                .Use((next) =>
+                {
+                    quickPulseProcessor = new QuickPulseTelemetryProcessor(next);
+                    return quickPulseProcessor;
+                })
+                .Build();
+
+            var quickPulseModule = new QuickPulseTelemetryModule();
+
+            // Secure the control channel.
+            // This is optional, but recommended.
+            quickPulseModule.AuthenticationApiKey = "sprc7hfbrucextvasmd6ylkfzjqpdi8xfselbj7u";
+            quickPulseModule.Initialize(config);
+            quickPulseModule.RegisterTelemetryProcessor(quickPulseProcessor);
+
+            config.TelemetryChannel.DeveloperMode = user.IsInternal;
+
+            if (Debugger.IsAttached)
+            {
+                config.TelemetryChannel.DeveloperMode = true;
+            }
 #if DEBUG
             config.TelemetryChannel.DeveloperMode = true;
 #endif
@@ -40,7 +62,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             client.Context.Session.Id = Guid.NewGuid().ToString();
             client.Context.User.Id = (Environment.UserName + Environment.MachineName).GetHashCode().ToString();
             client.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
-
+            client.Context.User.AccountId = user.Id.ToString();
             AppRunTelemetry = client.StartOperation<RequestTelemetry>($"{client.Context.Component.Version} - {"InternalUseCount"} - {"UnlockKey.LicenseKey"}");
             AppRunTelemetry.Telemetry.Start();
 

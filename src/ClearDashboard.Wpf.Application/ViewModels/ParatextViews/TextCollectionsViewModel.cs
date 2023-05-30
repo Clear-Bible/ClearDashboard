@@ -27,6 +27,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using AvalonDock.Properties;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.Wpf.Application.Properties;
 using HtmlAgilityPack;
 using Serilog;
 
@@ -34,7 +35,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class TextCollectionsViewModel : ToolViewModel,
-        IHandle<VerseChangedMessage>
+        IHandle<VerseChangedMessage>,
+        IHandle<RefreshTextCollectionsMessage>
     {
         private readonly DashboardProjectManager? _projectManager;
 
@@ -168,7 +170,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-
+        private bool _verseByVerseEnabled;
+        public bool VerseByVerseEnabled
+        {
+            get => _verseByVerseEnabled;
+            set
+            {
+                _verseByVerseEnabled = value;
+                NotifyOfPropertyChange(() => _verseByVerseEnabled);
+            }
+        }
 
         #endregion BCV
 
@@ -190,6 +201,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             Title = "🗐 " + LocalizationService!.Get("Windows_TextCollection");
             this.ContentId = "TEXTCOLLECTION";
 
+            VerseByVerseEnabled = Settings.Default.VerseByVerseTextCollectionsEnabled;
 
             // wire up the commands
             RefreshCommand = new RelayCommand(Refresh);
@@ -241,9 +253,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _textCollectionCallInProgress = true;
 
                 var workWithUsx = true;
+                var showVerseByVerse = Settings.Default.VerseByVerseTextCollectionsEnabled;
                 try
                 {
-                    var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx), CancellationToken.None).ConfigureAwait(false);
+                    var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx, showVerseByVerse), CancellationToken.None).ConfigureAwait(false);
 
                     if (result.Success)
                     {
@@ -286,21 +299,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     Console.WriteLine(e);
                                 }
 
+                                var classSpecification = string.Empty;
+                                if (!showVerseByVerse)
+                                {
+                                    classSpecification = "class=\"vh\"";
+                                }
+
                                 collectiveBody +=
-                                "<div id='"+startPart+"'>" +
+                                    "<div id='"+startPart+"'>" +
                                     "<details open>" +
-                                        "<summary>" +
-                                            "<a href='#Home'>" +
-                                                "<i class='material-icons'>home</i>" +
-                                            "<a/>"+
-                                            startPart+":" +
-                                        "</summary>"
-                                        +"<span class=\"vh\">"
-                                            +endPart+
-                                        "</p>"+
+                                    "<summary>" +
+                                    startPart+":" +
+                                    "</summary>"
+                                    +"<span " +
+                                    classSpecification +
+                                    ">"
+                                    +endPart+
+                                    "</p>"+
                                     "</details>" +
-                                "</div>" +
-                                "<hr>";
+                                    "</div>" +
+                                    "<hr>";
                             }
 
                             string topAnchor = string.Empty;
@@ -332,6 +350,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             await CallGetTextCollections();
         }
 
+        public void ParagraphVerseToggle(bool value)
+        {
+            Settings.Default.VerseByVerseTextCollectionsEnabled = VerseByVerseEnabled;
+            Settings.Default.Save();
+
+            Refresh(null);
+        }
+
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
             LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
@@ -353,6 +379,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         #endregion // Methods
+
+        public Task HandleAsync(RefreshTextCollectionsMessage message, CancellationToken cancellationToken)
+        {
+            Refresh(null);
+            return Task.CompletedTask;
+        }
     }
 
     public class ChromiumWebBrowserHelper

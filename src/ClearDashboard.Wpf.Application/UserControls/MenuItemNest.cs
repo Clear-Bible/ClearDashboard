@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.UserControls;
 
-public class MenuItemNest : INotifyPropertyChanged
+public class ClockMenuItem : INotifyPropertyChanged
 {
     #region Member Variables      
 
@@ -32,7 +32,7 @@ public class MenuItemNest : INotifyPropertyChanged
     public TimeZoneInfo TimeZoneInfo { get; set; }
     public ClockMenuLevel MenuLevel { get; set; }
     public List<string> UtcStringList { get; set; }
-    public ObservableCollection<MenuItemNest> MenuItems { get; set; }
+    public ObservableCollection<ClockMenuItem> MenuItems { get; set; }
 
 
     #endregion //Public Properties
@@ -137,7 +137,7 @@ public class MenuItemNest : INotifyPropertyChanged
 
 
     #region Constructor
-    public MenuItemNest()
+    public ClockMenuItem()
     {
 
     }

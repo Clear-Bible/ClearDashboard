@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 using ClearDashboard.Collaboration.Builder;
-using ClearDashboard.Collaboration.Factory;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Model;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Collaboration;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using System.Text.RegularExpressions;
@@ -108,7 +108,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 commitShaToMerge,
                 snapshotLastMerged,
                 snapshotToMerge,
-                true,
+                MergeMode.RemoteOverridesLocal,
                 false,
                 progress);
             var result = await Mediator.Send(command, CancellationToken.None);

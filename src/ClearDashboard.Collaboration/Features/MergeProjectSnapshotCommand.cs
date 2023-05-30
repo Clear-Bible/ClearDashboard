@@ -1,7 +1,5 @@
-﻿using ClearDashboard.Collaboration;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.CQRS.Features;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Utils;
 using System;
@@ -16,6 +14,6 @@ public record MergeProjectSnapshotCommand(
     string CommitShaToMerge,
     ProjectSnapshot ProjectSnapshotLastMerged,
     ProjectSnapshot ProjectSnapshotToMerge,
-    bool RemoteOverridesLocal,
+    MergeMode MergeMode,
     bool UseLogOnlyMergeBehavior,
     IProgress<ProgressStatus> Progress) : ProjectRequestCommand<Unit>;

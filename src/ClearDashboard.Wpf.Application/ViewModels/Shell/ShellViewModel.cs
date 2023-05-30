@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         IHandle<GetApplicationWindowSettings>,
         IHandle<UiLanguageChangedMessage>,
         IHandle<PerformanceModeMessage>,
-        IHandle<DashboardProjectMessage>,
+        IHandle<DashboardProjectNameMessage>,
         IHandle<ProjectChangedMessage>
     {
 
@@ -579,9 +579,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             await Task.CompletedTask;
         }
 
-        public async Task HandleAsync(DashboardProjectMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(DashboardProjectNameMessage message, CancellationToken cancellationToken)
         {
-            DashboardProjectName = message.project.ProjectName;
+            DashboardProjectName = message.projectName;
             await Task.CompletedTask;
         }
 

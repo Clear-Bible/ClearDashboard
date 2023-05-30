@@ -45,15 +45,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #region Public Properties
 
-        public ObservableCollection<MenuItemNest> CheckedList { get; set; }
+        public ObservableCollection<ClockMenuItem> CheckedList { get; set; }
 
         #endregion //Public Properties
 
 
         #region Observable Properties
 
-        private ObservableCollection<MenuItemNest> _menuItems;
-        public ObservableCollection<MenuItemNest> MenuItems
+        private ObservableCollection<ClockMenuItem> _menuItems;
+        public ObservableCollection<ClockMenuItem> MenuItems
         {
             get => _menuItems;
             set
@@ -74,14 +74,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             InitializeComponent();
             DataContext = this;
 
-            //Construct MenuItemNest of TimeZones
+            //Construct ClockMenuItem of TimeZones
             foreach (var timezone in _timezones)
             {
                 utcComboList.Add(timezone.DisplayName);
             }
 
-            //Construct Individual MenuItemNests
-            ObservableCollection<MenuItemNest> SettingsMenuItemNest = new();
+            //Construct Individual ClockMenuItems
+            ObservableCollection<ClockMenuItem> SettingsClockMenuItemList = new();
 
             StringCollection SettingsStringCollection = new StringCollection();
             SettingsStringCollection = Properties.Settings.Default.TimeZones;
@@ -89,9 +89,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 foreach (var group in SettingsStringCollection)
                 {
-                    //menuItems = new ObservableCollection<MenuItemNest>
+                    //menuItems = new ObservableCollection<ClockMenuItem>
                     var groupArr = group.Split(";");
-                    ObservableCollection<MenuItemNest> groupMenuItemNest = new();
+                    ObservableCollection<ClockMenuItem> groupClockMenuItemList = new();
 
                     foreach (var individual in groupArr)
                     {
@@ -103,7 +103,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             {
                                 if (timezone.DisplayName == individualArr[2])
                                 {
-                                    groupMenuItemNest.Add(new MenuItemNest
+                                    groupClockMenuItemList.Add(new ClockMenuItem
                                     {
                                         AddButtonVisibility = Visibility.Collapsed,
                                         CheckBoxIsChecked = individualArr[0],
@@ -117,9 +117,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                         TextBlockVisibility = Visibility.Collapsed,
                                         DeleteButtonVisibility = Visibility.Visible,
                                         GroupName = individualArr[3],
-                                        MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                                        MenuLevel = ClockMenuItem.ClockMenuLevel.Individual,
                                         TimeZoneInfo = timezone,
-                                        //MenuItems = _timeZoneMenuItemNest,
+                                        //MenuItems = _timeZoneClockMenuItemList,
                                         UtcStringList = utcComboList,
                                         UtcComboVisibility = Visibility.Visible,
                                         UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
@@ -130,7 +130,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     }
 
                     var selfArr = groupArr[0].Split(",");
-                    MenuItemNest groupMenuItem = new MenuItemNest
+                    ClockMenuItem groupMenuItem = new ClockMenuItem
                     {
                         AddButtonVisibility = Visibility.Visible,
                         CheckBoxIsChecked = selfArr[0],
@@ -143,17 +143,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         TextBlockVisibility = Visibility.Collapsed,
                         DeleteButtonVisibility = Visibility.Visible,
                         GroupName = selfArr[3],
-                        MenuLevel = MenuItemNest.ClockMenuLevel.Group,
-                        MenuItems = groupMenuItemNest,
+                        MenuLevel = ClockMenuItem.ClockMenuLevel.Group,
+                        MenuItems = groupClockMenuItemList,
                         UtcComboVisibility = Visibility.Collapsed,
                     };
 
-                    SettingsMenuItemNest.Add(groupMenuItem);
+                    SettingsClockMenuItemList.Add(groupMenuItem);
                 }
 
             }
 
-            SettingsMenuItemNest.Add(new MenuItemNest
+            SettingsClockMenuItemList.Add(new ClockMenuItem
             {
                 AddButtonVisibility = Visibility.Visible,
                 CheckBoxVisibility = Visibility.Collapsed,
@@ -161,13 +161,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 NameTimeVisibility = Visibility.Collapsed,
                 DeleteButtonVisibility = Visibility.Hidden,
                 TextBlockVisibility = Visibility.Collapsed,
-                MenuLevel = MenuItemNest.ClockMenuLevel.Group,
+                MenuLevel = ClockMenuItem.ClockMenuLevel.Group,
                 UtcComboVisibility = Visibility.Collapsed,
             });
 
-            MenuItems = new ObservableCollection<MenuItemNest>
+            MenuItems = new ObservableCollection<ClockMenuItem>
             {
-                new MenuItemNest {
+                new ClockMenuItem {
 
                     AddButtonVisibility = Visibility.Collapsed,
                     CheckBoxVisibility=Visibility.Collapsed,
@@ -175,8 +175,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     NameTimeVisibility = Visibility.Visible,
                     TextBlockVisibility = Visibility.Visible,
                     DeleteButtonVisibility = Visibility.Collapsed,
-                    MenuLevel = MenuItemNest.ClockMenuLevel.Display,
-                    MenuItems = SettingsMenuItemNest,
+                    MenuLevel = ClockMenuItem.ClockMenuLevel.Display,
+                    MenuItems = SettingsClockMenuItemList,
                     UtcComboVisibility = Visibility.Collapsed,
                 }
             };
@@ -404,9 +404,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 if (button.Tag != null)//Add Individual
                 {
-                    if (button.Tag is ObservableCollection<MenuItemNest> nest)
+                    if (button.Tag is ObservableCollection<ClockMenuItem> list)
                     {
-                        nest.Insert(nest.Count, new MenuItemNest
+                        list.Insert(list.Count, new ClockMenuItem
                         {
                             AddButtonVisibility = Visibility.Collapsed,
                             CheckBoxIsChecked = "False",
@@ -418,22 +418,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             TextBlockVisibility = Visibility.Collapsed,
                             NameTimeVisibility = Visibility.Visible,
                             DeleteButtonVisibility = Visibility.Visible,
-                            MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                            MenuLevel = ClockMenuItem.ClockMenuLevel.Individual,
                             TimeZoneInfo = TimeZoneInfo.Local,
-                            //MenuItems = _timeZoneMenuItemNest,
+                            //MenuItems = _timeZoneClockMenuItemList,
                             UtcComboVisibility = Visibility.Visible,
                             UtcStringList = utcComboList,
                             UtcComboSelectedString = TimeZoneInfo.Local.DisplayName
                         });
 
-                        SortMenuItemsIndividual(nest);
+                        SortMenuItemsIndividual(list);
                         InstantClockRefresh();
                         SaveMenuToSettings();
                     }
                 }
                 else//Add Group
                 {
-                    MenuItems[0].MenuItems.Insert(MenuItems[0].MenuItems.Count - 1, new MenuItemNest
+                    MenuItems[0].MenuItems.Insert(MenuItems[0].MenuItems.Count - 1, new ClockMenuItem
                     {
                         AddButtonVisibility = Visibility.Visible,
                         CheckBoxIsChecked = "False",
@@ -444,14 +444,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         TextBlockText = "self",
                         TextBlockVisibility = Visibility.Collapsed,
                         DeleteButtonVisibility = Visibility.Visible,
-                        MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                        MenuLevel = ClockMenuItem.ClockMenuLevel.Individual,
                         TimeZoneInfo = TimeZoneInfo.Local,
                         MenuItems = new(),
                         UtcComboVisibility = Visibility.Collapsed,
                     });
 
                     //add an item to the group
-                    MenuItems[0].MenuItems[MenuItems[0].MenuItems.Count - 2].MenuItems.Add(new MenuItemNest
+                    MenuItems[0].MenuItems[MenuItems[0].MenuItems.Count - 2].MenuItems.Add(new ClockMenuItem
                     {
                         AddButtonVisibility = Visibility.Collapsed,
                         CheckBoxIsChecked = "False",
@@ -463,8 +463,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         TextBlockText = TimeZoneInfo.Local.DisplayName,
                         TextBlockVisibility = Visibility.Collapsed,
                         DeleteButtonVisibility = Visibility.Visible,
-                        //MenuItems = _timeZoneMenuItemNest,
-                        MenuLevel = MenuItemNest.ClockMenuLevel.Individual,
+                        //MenuItems = _timeZoneClockMenuItemList,
+                        MenuLevel = ClockMenuItem.ClockMenuLevel.Individual,
                         TimeZoneInfo = TimeZoneInfo.Local,
                         UtcComboVisibility = Visibility.Visible,
                         UtcStringList = utcComboList,
@@ -482,8 +482,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (sender is Button button)
             {
                 button.Visibility = Visibility.Collapsed;
-                List<MenuItemNest> removeIndividualList = new();
-                List<MenuItemNest> removeGroupList = new();
+                List<ClockMenuItem> removeIndividualList = new();
+                List<ClockMenuItem> removeGroupList = new();
 
                 foreach (var group in MenuItems[0].MenuItems)
                 {
@@ -538,16 +538,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         }
                     }
 
-                    if (comboBox.DataContext is MenuItemNest nest)
+                    if (comboBox.DataContext is ClockMenuItem item)
                     {
-                        //find the group that the nest is in
+                        //find the group that the item is in
                         foreach (var group in MenuItems[0].MenuItems)
                         {
                             if (group.MenuItems != null)
                             {
                                 foreach (var individual in group.MenuItems)
                                 {
-                                    if (individual == nest)
+                                    if (individual == item)
                                     {
                                         SortMenuItemsIndividual(group.MenuItems);
                                         break;
@@ -563,7 +563,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-        private void SortMenuItemsIndividual(ObservableCollection<MenuItemNest> collection)
+        private void SortMenuItemsIndividual(ObservableCollection<ClockMenuItem> collection)
         {
             for (int i = 0; i < collection.Count; i++)
             {
