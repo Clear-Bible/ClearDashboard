@@ -5,8 +5,10 @@ using System.Text.Json.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Models.Common
 {
-    public class GitLabProjectUsers
+    public class GitLabProjectUser
     {
+        public bool IsOwner { get; set; }
+
         [JsonPropertyName("id")]
         public int Id { get; set; }
 
@@ -18,5 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
 
         [JsonPropertyName("state")]
         public string State { get; set; }
+
+
     }
 }

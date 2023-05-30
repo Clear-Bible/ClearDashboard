@@ -449,6 +449,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<CollabProjectManagementViewModel>();
+            
 
             IWindowManager manager = new WindowManager();
             await manager.ShowDialogAsync(viewModel, null, settings);

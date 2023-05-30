@@ -6,12 +6,13 @@
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     Title="CollabProjectManagementView"
-    Width="1000"
+    Width="700"
     Height="450"
     d:DataContext="{d:DesignInstance Type=popUps:CollabProjectManagementViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -25,7 +26,7 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Grid ShowGridLines="True">
+    <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -35,7 +36,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="660" />
+            <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
 
         <!--  HEADER  -->
@@ -69,19 +70,45 @@
                 </controls:AutoCompleteComboBox.ItemTemplate>
             </controls:AutoCompleteComboBox>
 
-            <Label Margin="5" Content="Current Users:" />
+            <Label Margin="5" Content="Current Project Users:" />
 
             <ListBox
-                MinHeight="200"
+                MinHeight="260"
                 Margin="5,0,5,0"
                 VerticalContentAlignment="Stretch"
                 BorderBrush="{StaticResource PrimaryHueMidBrush}"
                 BorderThickness="1"
-                ItemsSource="{Binding ProjectUsers}">
+                ItemsSource="{Binding ProjectUsers}"
+                SelectedItem="{Binding SelectedCurrentUser}"
+                SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding UserName}" />
+                        <StackPanel Orientation="Horizontal">
+
+                            <iconPacks:PackIconRemixIcon
+                                Width="24"
+                                Height="24"
+                                VerticalAlignment="Center">
+                                <iconPacks:PackIconRemixIcon.Style>
+                                    <Style TargetType="iconPacks:PackIconRemixIcon">
+                                        <Setter Property="Kind" Value="AdminLine" />
+                                        <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                        <Setter Property="ToolTip" Value="Project Owner" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsOwner}" Value="False">
+                                                <Setter Property="Kind" Value="UserLine" />
+                                                <Setter Property="Foreground" Value="{StaticResource OrangeMidBrush}" />
+                                                <Setter Property="ToolTip" Value="Project Member" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </iconPacks:PackIconRemixIcon.Style>
+                            </iconPacks:PackIconRemixIcon>
+
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -90,18 +117,36 @@
         </StackPanel>
 
         <!--  SELECT  -->
-        <Button
-            x:Name="SelectUsers"
+        <StackPanel
             Grid.Row="1"
             Grid.RowSpan="2"
             Grid.Column="1"
-            Height="40"
-            VerticalAlignment="Center">
-            <materialDesign:PackIcon
-                Width="32"
-                Height="32"
-                Kind="ArrowLeftDropCircleOutline" />
-        </Button>
+            Margin="5,0,5,0"
+            VerticalAlignment="Center"
+            Orientation="Vertical">
+
+            <Button
+                x:Name="AddUsers"
+                Height="40"
+                Style="{StaticResource GreenMidButton}">
+                <materialDesign:PackIcon
+                    Width="32"
+                    Height="32"
+                    Kind="ArrowLeftDropCircleOutline" />
+            </Button>
+
+            <Button
+                x:Name="RemoveUser"
+                Height="40"
+                Margin="0,5,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource RedMidButton}">
+                <materialDesign:PackIcon
+                    Width="32"
+                    Height="32"
+                    Kind="ArrowRightDropCircleOutline" />
+            </Button>
+        </StackPanel>
 
         <!--  USERS  -->
         <StackPanel
@@ -111,46 +156,64 @@
             Orientation="Vertical">
 
 
-            <Label Margin="5" Content="Collaboration Users:" />
+            <Label Margin="5" Content="Available Collaboration Users:" />
 
             <Border
-                Margin="5"
+                Margin="5,0,5,0"
                 BorderBrush="{StaticResource PrimaryHueMidBrush}"
                 BorderThickness="1"
                 CornerRadius="3">
-                <StackPanel Orientation="Horizontal">
-                    <RadioButton Content="All" />
-                    <RadioButton Content="Group" />
-                </StackPanel>
+
+                <ListView
+                    MinHeight="310"
+                    Margin="5"
+                    BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                    BorderThickness="1"
+                    ItemsSource="{Binding CollabUsers}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Margin="5,0,5,0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Organization}" />
+                                <StackPanel Grid.Column="2">
+
+                                    <TextBlock
+                                        Background="{StaticResource SecondaryHueLightBrush}"
+                                        FontWeight="Bold"
+                                        Text="{Binding Name}" />
+                                    <TextBlock Text="{Binding UserName}" />
+                                    <TextBlock
+                                        Cursor="Hand"
+                                        Foreground="Blue"
+                                        Text="{Binding Email}"
+                                        TextDecorations="Underline" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Border>
 
 
-            <ListView
-                Margin="5"
-                Background="Aquamarine"
-                ItemsSource="{Binding CollabUsers}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <WrapPanel>
-                            <CheckBox IsChecked="{Binding IsSelected}" />
-                            <TextBlock Text="{Binding Organization}" />
-                            <TextBlock Text="   " />
-                            <TextBlock FontWeight="Bold" Text="{Binding Name}" />
-                            <TextBlock Text="   " />
-                            <TextBlock Text="{Binding UserName}" />
-                            <TextBlock Text=" (" />
-                            <TextBlock
-                                Cursor="Hand"
-                                Foreground="Blue"
-                                Text="{Binding Email}"
-                                TextDecorations="Underline" />
-                            <TextBlock Text=")" />
-                        </WrapPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
         </StackPanel>
 
+        <!--  PROGRESS ICON  -->
+        <ProgressBar
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ShowProgressBar}"
+            Value="35" />
+        <!--  CLOSE BUTTON  -->
         <Button
             x:Name="Close"
             Grid.Row="3"

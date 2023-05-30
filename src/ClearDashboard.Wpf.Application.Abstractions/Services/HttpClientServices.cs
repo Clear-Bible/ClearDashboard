@@ -187,9 +187,9 @@ namespace ClearDashboard.Wpf.Application.Services
             return list;
         }
 
-        public async Task<List<GitLabProjectUsers>> GetUsersForProject(CollaborationConfiguration collaborationConfiguration, int projectId)
+        public async Task<List<GitLabProjectUser>> GetUsersForProject(CollaborationConfiguration collaborationConfiguration, int projectId)
         {
-            List<GitLabProjectUsers> list = new();
+            List<GitLabProjectUser> list = new();
 
             GitAccessToken accessToken = new();
             var request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}/users");
@@ -201,9 +201,18 @@ namespace ClearDashboard.Wpf.Application.Services
                 var result = await response.Content.ReadAsStringAsync();
 
 
-                list = JsonSerializer.Deserialize<List<GitLabProjectUsers>>(result)!;
+                list = JsonSerializer.Deserialize<List<GitLabProjectUser>>(result)!;
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
+
+                foreach (var item in list)
+                {
+                    if (item.Id == collaborationConfiguration.UserId)
+                    {
+                        item.IsOwner = true;
+                    }
+                }
+
             }
             catch (Exception e)
             {
@@ -367,6 +376,8 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var result = await response.Content.ReadAsStringAsync();
 
+                var returnUser = JsonSerializer.Deserialize<GitLabAddUserToProject>(result);
+
             }
             catch (Exception e)
             {
@@ -375,6 +386,22 @@ namespace ClearDashboard.Wpf.Application.Services
             }
 
             return user;
+        }
+
+        public async Task RemoveUserFromProject(GitLabProjectUser selectedCurrentUser, GitLabProject selectedProject)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"projects/{selectedProject.Id}/members/{selectedCurrentUser.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
         }
 
         #endregion // POST Requests
