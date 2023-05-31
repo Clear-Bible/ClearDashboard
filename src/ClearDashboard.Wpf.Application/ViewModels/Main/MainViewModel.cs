@@ -368,6 +368,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             _longRunningTaskManager = longRunningTaskManager;
             _localizationService = localizationService;
             _collaborationManager = collaborationManager;
+            
 
             LifetimeScope = lifetimeScope;
             WindowManager = windowManager;
@@ -1934,7 +1935,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     case MenuIds.Settings:
                         {
-                            await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(EventAggregator), null, null);
+                            await this.WindowManager.ShowWindowAsync(
+                                new DashboardSettingsViewModel(EventAggregator, _collaborationManager), null, null);
                             break;
                         }
 

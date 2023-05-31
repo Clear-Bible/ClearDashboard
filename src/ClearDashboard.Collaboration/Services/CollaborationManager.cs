@@ -810,7 +810,8 @@ public class CollaborationManager
             RemotePersonalPassword = _configuration.RemotePersonalPassword,
             RemoteUrl = _configuration.RemoteUrl,
             RemoteUserName = _configuration.RemoteUserName,
-            UserId = _configuration.UserId
+            UserId = _configuration.UserId,
+            NamespaceId = _configuration.NamespaceId,
         };
     }
 }

@@ -243,13 +243,16 @@ namespace ClearDashboard.Wpf.Application
                 var section = c.GetSection("Collaboration");
 
                 int userId;
+                int nameSpaceId;
                 try
                 {
                     userId = Convert.ToInt16(section["userId"]);
+                    nameSpaceId = Convert.ToInt16(section["NamespaceId"]);
                 }
                 catch (Exception )
                 {
                     userId = 2;
+                    nameSpaceId = 0;
                 }
                 return new CollaborationConfiguration()
                 {
@@ -259,7 +262,8 @@ namespace ClearDashboard.Wpf.Application
                     RemotePersonalAccessToken = section["RemotePersonalAccessToken"],
                     Group  = section["Group"],
                     RemotePersonalPassword = section["RemotePersonalPassword"], 
-                    UserId = userId
+                    UserId = userId,
+                    NamespaceId = nameSpaceId
                 };
             });
 

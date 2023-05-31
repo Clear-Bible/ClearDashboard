@@ -160,7 +160,7 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
 
-        public async Task<List<GitLabProject>> GetProjectForUser(CollaborationConfiguration user)
+        public async Task<List<GitLabProject>> GetProjectsForUser(CollaborationConfiguration user)
         {
             List<GitLabProject> list = new();
 
@@ -324,9 +324,9 @@ namespace ClearDashboard.Wpf.Application.Services
             return accessToken.Token;
         }
 
-        public async Task<string> CreateNewProjectForUser(GitLabUser user, string projectName, string projectDescription)
+        public async Task<GitLabProject> CreateNewProjectForUser(GitLabUser user, string projectName, string projectDescription)
         {
-            GitAccessToken accessToken = new();
+            GitLabProject project = new();
             var request = new HttpRequestMessage(HttpMethod.Post, $"projects");
 
             var content = new MultipartFormDataContent();
@@ -345,10 +345,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 response.EnsureSuccessStatusCode();
 
                 var result = await response.Content.ReadAsStringAsync();
-
-                // todo
-
-                //accessToken = JsonSerializer.Deserialize<GitAccessToken>(result)!;
+                project = JsonSerializer.Deserialize<GitLabProject>(result)!;
             }
             catch (Exception e)
             {
@@ -356,7 +353,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 _logger?.LogError(e.Message, e);
             }
 
-            return accessToken.Token;
+            return project;
         }
 
         public async Task<object> AddUserToProject(GitUser user, GitLabProject selectedProject)

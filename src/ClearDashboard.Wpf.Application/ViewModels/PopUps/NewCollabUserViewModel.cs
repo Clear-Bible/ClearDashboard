@@ -358,7 +358,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                var _newUser = "Username: " + user.UserName + "\nPassword: " + password;
+                //var _newUser = "Username: " + user.UserName + "\nPassword: " + password;
 
                 var accessToken = await _httpClientServices.GeneratePersonalAccessToken(user);
 
@@ -371,6 +371,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     RemoteUrl = "",
                     RemoteUserName = user.UserName,
                     UserId = user.Id,
+                    NamespaceId = user.NamespaceId,
                 };
 
                 _collaborationConfiguration = CollaborationConfig;

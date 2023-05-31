@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using ClearDashboard.Wpf.Application.Messages;
+using System.Runtime.InteropServices;
+using System.Linq;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
@@ -33,8 +36,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         #region Member Variables   
 
         private readonly CollaborationManager _collaborationManager;
+        private readonly HttpClientServices _httpClientServices;
         private CancellationTokenSource _cancellationTokenSource;
         private Task? _runningTask;
+
+        private CollaborationConfiguration _userInfo;
+        private GitLabUser _gitLabUser;
         private string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
 
         #endregion //Member Variables
@@ -129,21 +136,63 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         #region Constructor
 
-        public MergeServerProjectDialogViewModel(CollaborationManager collaborationManager, DashboardProjectManager projectManager,
-            INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, ILocalizationService localizationService)
+        public MergeServerProjectDialogViewModel(CollaborationManager collaborationManager,
+            DashboardProjectManager projectManager,
+            INavigationService navigationService,
+            ILogger<ProjectSetupViewModel> logger,
+            IEventAggregator eventAggregator,
+            IMediator mediator,
+            ILifetimeScope? lifetimeScope,
+            TranslationSource translationSource,
+            HttpClientServices httpClientServices,
+            ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _collaborationManager = collaborationManager;
+            _httpClientServices = httpClientServices;
 
             //return base.OnInitializeAsync(cancellationToken);
+        }
+
+
+        protected override async void OnViewLoaded(object view)
+        {
+            _userInfo = _collaborationManager.GetConfig();
+
+            _gitLabUser = new Models.HttpClientFactory.GitLabUser
+            {
+                Id = _userInfo.UserId,
+                Email = _userInfo.RemoteEmail,
+                UserName = _userInfo.RemoteUserName,
+                NamespaceId = _userInfo.NamespaceId,
+                Organization = _userInfo.Group
+            };
+            await CreateProjectOnServerIfNotCreated();
+
+            base.OnViewLoaded(view);
         }
 
         #endregion //Constructor
 
 
         #region Methods
+
+        private async Task CreateProjectOnServerIfNotCreated()
+        {
+            var projects = await _httpClientServices.GetProjectsForUser(_userInfo);
+            var project = projects.FirstOrDefault(x => x.Name == $"Project_{ProjectId}");
+
+            if (project is null)
+            {
+
+                project =
+                    await _httpClientServices.CreateNewProjectForUser(_gitLabUser, $"Project_{ProjectId}", ProjectName);
+            }
+
+            _userInfo.RemoteUrl = project.HttpUrlToRepo;
+        }
+
 
         private bool PreAction()
         {
@@ -188,9 +237,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 }
 
                 _runningTask = Task.Run(async () => CommitSha = await _collaborationManager.InitializeProjectDatabaseAsync(
-                    ProjectId, 
-                    true, 
-                    _cancellationTokenSource.Token, 
+                    ProjectId,
+                    true,
+                    _cancellationTokenSource.Token,
                     progress));
                 await _runningTask;
             }
@@ -220,7 +269,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     return;
                 }
 
-                _runningTask = Task.Run(async () => {
+                _runningTask = Task.Run(async () =>
+                {
 
                     progress.Report(new ProgressStatus(0, "Fetching latest changes from server"));
                     _collaborationManager.FetchMergeRemote();
@@ -234,7 +284,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 });
                 await _runningTask;
 
-                if (CommitSha is not null) 
+                if (CommitSha is not null)
                 {
                     await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
                 }
@@ -264,7 +314,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     return;
                 }
 
-                _runningTask = Task.Run(async () => {
+                _runningTask = Task.Run(async () =>
+                {
 
                     if (CollaborationDialogAction == CollaborationDialogAction.Initialize)
                     {
@@ -282,9 +333,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     if (_collaborationManager.IsCurrentProjectInRepository())
                     {
                         var lastMergedCommitSha = await _collaborationManager.MergeProjectLatestChangesAsync(
-                            MergeMode.RemoteOverridesLocal, 
-                            false, 
-                            _cancellationTokenSource.Token, 
+                            MergeMode.RemoteOverridesLocal,
+                            false,
+                            _cancellationTokenSource.Token,
                             progress);
 
                         if (lastMergedCommitSha != null)
@@ -338,7 +389,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             return true;
         }
 
-        
+
 
         public dynamic DialogSettings()
         {
@@ -381,10 +432,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             if (CollaborationDialogAction == CollaborationDialogAction.Import)
             {
                 await Import();
-            } 
+            }
             else if (CollaborationDialogAction == CollaborationDialogAction.Merge)
-            { 
-                await Merge(); 
+            {
+                await Merge();
             }
             else if (CollaborationDialogAction == CollaborationDialogAction.Commit || CollaborationDialogAction == CollaborationDialogAction.Initialize)
             {

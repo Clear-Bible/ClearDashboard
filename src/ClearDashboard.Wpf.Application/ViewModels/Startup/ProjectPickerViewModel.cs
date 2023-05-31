@@ -497,7 +497,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
 
                 // get the user's projects
-                var list = await _httpClientServices.GetProjectForUser(_collaborationManager.GetConfig());
+                var list = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
             }
             else
             {

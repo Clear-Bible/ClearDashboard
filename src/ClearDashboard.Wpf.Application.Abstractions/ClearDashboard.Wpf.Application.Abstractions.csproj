@@ -49,6 +49,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Update="Views\Popups\ClosingEnhancedViewPopupView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -60,6 +65,13 @@
   <ItemGroup>
     <Folder Include="DragAndDrop\" />
     <Folder Include="Views\EnhancedView\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

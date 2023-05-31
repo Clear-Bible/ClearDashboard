@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.Collaboration.Services;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
@@ -14,6 +16,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly CollaborationManager _collaborationManager;
         private bool _isAquaEnabledOnStartup;
 
         #endregion //Member Variables
@@ -83,6 +86,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private string _gitRootUrl;
+        public string GitRootUrl
+        {
+            get => _gitRootUrl;
+            set
+            {
+                _gitRootUrl = value; 
+                NotifyOfPropertyChange(() => GitRootUrl);
+            }
+        }
+
+        private CollaborationConfiguration _collaborationConfig = new();
+        public CollaborationConfiguration CollaborationConfig
+        {
+            get => _collaborationConfig;
+            set
+            {
+                _collaborationConfig = value;
+                NotifyOfPropertyChange(() => CollaborationConfig);
+            }
+        }
+
 
         #endregion //Observable Properties
 
@@ -90,11 +115,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Constructor
 
         // ReSharper disable once EmptyConstructor
-        public DashboardSettingsViewModel(IEventAggregator eventAggregator)
+        public DashboardSettingsViewModel(IEventAggregator eventAggregator, CollaborationManager collaborationManager)
         {
             // for Caliburn Micro
             IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
+            _collaborationManager = collaborationManager;
         }
 
         protected override void OnViewReady(object view)
@@ -136,6 +162,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             _isAquaEnabledOnStartup = isEnabled;
             IsAquaEnabled = _isAquaEnabledOnStartup;
 
+
+            // load in Git URL
+            GitRootUrl = AbstractionsSettingsHelper.GetGitUrl();
+
+            // load in the collab user info
+            CollaborationConfig = _collaborationManager.GetConfig();
+
             base.OnViewReady(view);
         }
 
@@ -149,6 +182,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         {
             TryCloseAsync();
         }
+
+        public void SaveGitUrl()
+        {
+            AbstractionsSettingsHelper.SaveGitUrl(GitRootUrl);
+        }
+
 
         // ReSharper disable once UnusedMember.Global
         // ReSharper disable once UnusedParameter.Global

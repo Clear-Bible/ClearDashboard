@@ -8,6 +8,7 @@ using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Services;
+using Dapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -36,7 +37,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddHttpClient<GitLabClient>("GitLabClient", client =>
             {
                 // Other settings
-                client.BaseAddress = new Uri("https://gitlab.cleardashboard.org/api/v4/");
+                client.BaseAddress = new Uri(Settings.Default.GitRootUrl); //"https://gitlab.cleardashboard.org/api/v4/"
                 client.DefaultRequestHeaders.Add("Accept", "*/*");
                 client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
                 client.DefaultRequestHeaders.Add("Authorization", value);

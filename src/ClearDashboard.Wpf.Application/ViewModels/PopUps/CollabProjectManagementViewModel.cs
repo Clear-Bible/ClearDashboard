@@ -143,7 +143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
-            Projects = await _httpClientServices.GetProjectForUser(ProjectOwner);
+            Projects = await _httpClientServices.GetProjectsForUser(ProjectOwner);
             
 
             _gitLabUsers = await _httpClientServices.GetAllUsers();
