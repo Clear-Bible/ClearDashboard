@@ -63,8 +63,8 @@
                 <controls:AutoCompleteComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="18" Text="{Binding Name}" />
-                            <TextBlock FontSize="12" Text="{Binding Description}" />
+                            <TextBlock FontSize="18" Text="{Binding Description}" />
+                            <TextBlock FontSize="12" Text="{Binding Name}" />
                         </StackPanel>
                     </DataTemplate>
                 </controls:AutoCompleteComboBox.ItemTemplate>
