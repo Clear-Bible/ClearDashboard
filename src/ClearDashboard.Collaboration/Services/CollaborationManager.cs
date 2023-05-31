@@ -28,16 +28,16 @@ public class CollaborationManager
     private readonly IProjectProvider _projectProvider;
 
     private readonly string _repositoryBasePath =
-        FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
+        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
 
     private readonly string _backupsPath =
-        FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
 
-    private readonly string _dumpsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Dumps";
+    private readonly string _dumpsPath = FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Dumps";
 
     private CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = false;
-    private readonly string _repositoryPath = "LocalOnly";
+    private string _repositoryPath = "LocalOnly";
 
     #endregion //Member Variables
 
@@ -541,7 +541,14 @@ public class CollaborationManager
         using (var repo = new Repository(_repositoryPath))
         {
             progress.Report(new ProgressStatus(0, "Staging changes in source control"));
-            Commands.Stage(repo, projectFolderName);
+            try
+            {
+                Commands.Stage(repo, projectFolderName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 
@@ -798,8 +805,6 @@ public class CollaborationManager
         }
     }
 
-    #endregion Methods
-
     public CollaborationConfiguration GetConfig()
     {
         return new CollaborationConfiguration
@@ -814,6 +819,13 @@ public class CollaborationManager
             NamespaceId = _configuration.NamespaceId,
         };
     }
+
+    public void SetRemoteUrl(string userInfoRemoteUrl)
+    {
+        _configuration.RemoteUrl = userInfoRemoteUrl;
+    }
+
+    #endregion Methods
 }
 
 

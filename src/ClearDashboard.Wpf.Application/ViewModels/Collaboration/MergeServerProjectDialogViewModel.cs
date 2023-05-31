@@ -181,16 +181,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         private async Task CreateProjectOnServerIfNotCreated()
         {
             var projects = await _httpClientServices.GetProjectsForUser(_userInfo);
-            var project = projects.FirstOrDefault(x => x.Name == $"Project_{ProjectId}");
+            var project = projects.FirstOrDefault(x => x.Name == $"P_{ProjectId}");
 
             if (project is null)
             {
-
                 project =
-                    await _httpClientServices.CreateNewProjectForUser(_gitLabUser, $"Project_{ProjectId}", ProjectName);
+                    await _httpClientServices.CreateNewProjectForUser(_gitLabUser, $"P_{ProjectId}", ProjectName);
             }
 
-            _userInfo.RemoteUrl = project.HttpUrlToRepo;
+            _userInfo.RemoteUrl = project.HttpUrlToRepo.Replace("http:", "https:");
+            _collaborationManager.SetRemoteUrl(_userInfo.RemoteUrl);
         }
 
 
