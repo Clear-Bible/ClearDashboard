@@ -6,7 +6,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public record GetAlignmentSetTargetTokensBySourceTrainingTextQuery(
         AlignmentSetId AlignmentSetId, 
-        string SourceTrainingText, 
-        AlignmentOriginationFilterMode AlignmentOriginationFilterMode) : 
+        string SourceTrainingText,
+        AlignmentTypes AlignmentTypesToInclude) : 
         ProjectRequestQuery<IEnumerable<Token>>;
 }

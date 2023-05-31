@@ -47,7 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Where(al => al.AlignmentSetId == request.AlignmentSetId.Id)
                 .Where(al => sourceTokenIds.Contains(al.SourceTokenComponentId) || targetTokenIds.Contains(al.TargetTokenComponentId))
                 .ToList()
-                .FilterByAlignmentMode(request.AlignmentOriginationFilterMode);
+                .WhereAlignmentTypesFilter(request.AlignmentTypes);
 
             var alignments = databaseAlignments
                 .Select(a => new Alignment.Translation.Alignment(

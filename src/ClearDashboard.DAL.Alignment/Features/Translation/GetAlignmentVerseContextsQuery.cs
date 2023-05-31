@@ -4,7 +4,7 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
-    public record GetAlignmentVerseContextsQuery(AlignmentSetId AlignmentSetId, string SourceTokenTrainingText, string TargetTokenTrainingText) : 
+    public record GetAlignmentVerseContextsQuery(AlignmentSetId AlignmentSetId, string SourceTokenTrainingText, string TargetTokenTrainingText, AlignmentTypes AlignmentTypesToInclude) : 
         ProjectRequestQuery<IEnumerable<(
             Alignment.Translation.Alignment alignment,
             IEnumerable<Token> sourceVerseTokens,

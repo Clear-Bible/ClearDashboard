@@ -1,5 +1,4 @@
 ﻿using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
@@ -26,16 +25,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<IEnumerable<Token>>> GetDataAsync(GetAlignmentSetTargetTokensBySourceTrainingTextQuery request, CancellationToken cancellationToken)
         {
-            return new RequestResult<IEnumerable<Token>>
-            (
-                await ProjectDbContext.Alignments
+            var filteredAlignments = ProjectDbContext.Alignments
                     .Where(a => a.AlignmentSetId == request.AlignmentSetId.Id)
                     .Where(a => a.Deleted == null)
                     .Where(a => a.SourceTokenComponent!.TrainingText == request.SourceTrainingText)
-                    .FilterByAlignmentMode(request.AlignmentOriginationFilterMode).AsQueryable()
+                    .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude)
                     .Select(a => ModelHelper.BuildToken(a.TargetTokenComponent!))
-                    .ToListAsync()
-            );
+                    .ToList();
+
+            return await Task.FromResult(new RequestResult<IEnumerable<Token>>(filteredAlignments));
         }
     }
 

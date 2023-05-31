@@ -118,7 +118,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // with the other pre-ToList() 'where' slows the overall query down considerably
             var filteredDatabaseAlignments = databaseAlignments
                 .Where(e => e.AlignmentSetId == request.AlignmentSetId.Id) 
-                .FilterByAlignmentMode(AlignmentOriginationFilterMode.AssignedOrFromAlignmentModel);
+                .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude);
 
             var alignments = filteredDatabaseAlignments
                 .Select(e => new Alignment.Translation.Alignment(

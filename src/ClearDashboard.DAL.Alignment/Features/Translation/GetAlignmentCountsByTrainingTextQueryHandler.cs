@@ -6,6 +6,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
@@ -53,13 +54,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Where(e => e.AlignmentSetId == request.AlignmentSetId.Id)
                 .Where(e => e.Deleted == null)
                 .ToList()
-                .FilterByAlignmentMode(AlignmentOriginationFilterMode.AssignedOrFromAlignmentModel)
+                .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude)
                 .Select(e => new { 
                     SourceTrainingText = e.SourceTokenComponent!.TrainingText!, 
                     TargetTrainingText = e.TargetTokenComponent!.TrainingText!,
-                    Status = e.AlignmentOriginatedFrom == Models.AlignmentOriginatedFrom.FromAlignmentModel 
-                        ? e.AlignmentOriginatedFrom.ToString() 
-                        : e.AlignmentVerification.ToString()
+                    AlignmentTypeName = e.  ToAlignmentType(request.AlignmentTypesToInclude).ToString()
                 });
 
             IDictionary<string, IDictionary<string, IDictionary<string, uint>>>? alignmentCountsByTrainingText = default;
@@ -74,7 +73,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .GroupBy(e => e.TargetTrainingText)
                         .OrderByDescending(g2 => g2.Count())
                         .ToDictionary(g2 => g2.Key, g2 => g2
-                            .GroupBy(e => e.Status)
+                            .GroupBy(e => e.AlignmentTypeName)
                             .OrderByDescending (g3 => g3.Count())
                             .ToDictionary(g3 => g3.Key, g3 => (uint)g3.Count())
                         as IDictionary<string, uint>)
@@ -90,7 +89,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .GroupBy(e => e.SourceTrainingText)
                         .OrderByDescending(g2 => g2.Count())
                         .ToDictionary(g2 => g2.Key, g2 => g2
-                            .GroupBy(e => e.Status)
+                            .GroupBy(e => e.AlignmentTypeName)
                             .OrderByDescending(g3 => g3.Count())
                             .ToDictionary(g3 => g3.Key, g3 => (uint)g3.Count())
                         as IDictionary<string, uint>)

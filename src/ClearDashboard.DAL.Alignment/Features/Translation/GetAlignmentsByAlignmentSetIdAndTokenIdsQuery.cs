@@ -7,6 +7,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
     public record GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(
         AlignmentSetId AlignmentSetId, 
         IEnumerable<EngineParallelTextRow> EngineParallelTextRows, 
-        AlignmentOriginationFilterMode AlignmentOriginationFilterMode) : 
+        AlignmentTypes AlignmentTypes) : 
         ProjectRequestQuery<IEnumerable<Alignment.Translation.Alignment>>;
 }

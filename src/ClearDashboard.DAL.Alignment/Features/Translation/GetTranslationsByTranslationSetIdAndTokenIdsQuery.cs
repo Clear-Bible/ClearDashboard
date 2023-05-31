@@ -14,6 +14,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
     public record GetTranslationsByTranslationSetIdAndTokenIdsQuery(
         TranslationSetId TranslationSetId, 
         IEnumerable<TokenId> TokenIds, 
-        AlignmentOriginationFilterMode AlignmentOriginationFilterMode = AlignmentOriginationFilterMode.All) : 
+        AlignmentTypes AlignmentTypesToInclude) : 
         ProjectRequestQuery<IEnumerable<Alignment.Translation.Translation>>;
 }

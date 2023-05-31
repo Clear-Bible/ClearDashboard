@@ -6,12 +6,12 @@ using SIL.Machine.Utils;
 namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 {
     /// <summary>
-    /// FIXME:  perhaps AlignmentOriginationFilterMode used in denormalization
+    /// FIXME:  perhaps AlignmentTypesToInclude used in denormalization
     /// should be a dashboard setting/configuration
     /// </summary>
     /// <param name="AlignmentSetId"></param>
     /// <param name="Progress"></param>
-    /// <param name="AlignmentOriginationFilterMode"></param>
+    /// <param name="AlignmentTypesToInclude"></param>
     public record DenormalizeAlignmentTopTargetsCommand(
-        Guid AlignmentSetId, ILongRunningProgress<ProgressStatus> Progress, AlignmentOriginationFilterMode AlignmentOriginationFilterMode = AlignmentOriginationFilterMode.All) : ProjectRequestCommand<int>;
+        Guid AlignmentSetId, ILongRunningProgress<ProgressStatus> Progress, AlignmentTypes AlignmentTypesToInclude = Alignment.Translation.Alignment.AssignedAndUnverifiedNotOtherwiseIncluded) : ProjectRequestCommand<int>;
 }
