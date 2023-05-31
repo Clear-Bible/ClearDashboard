@@ -58,6 +58,10 @@ namespace ClearDashboard.Wpf.Application.Helpers
             {
                 biblicalTermsView.MainGrid.Tag = "True";
             }
+            if (mirroredView is PinsView pinsViewModel)
+            {
+                pinsViewModel.MainGrid.Tag = "True";
+            }
             // force the MirrorView to show
             mirror.Show();
             // now that it is shown, we can get it's actual size

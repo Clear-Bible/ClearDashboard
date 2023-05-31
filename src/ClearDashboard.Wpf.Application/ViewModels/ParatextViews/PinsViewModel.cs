@@ -33,6 +33,12 @@ using System.Xml;
 using ClearApplicationFoundation.Framework.Input;
 using CefSharp.DevTools.CSS;
 using System.Windows.Controls;
+using System.Text.RegularExpressions;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Drawing;
+using Brushes = System.Windows.Media.Brushes;
+using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -60,7 +66,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private readonly LongRunningTaskManager _longRunningTaskManager;
 
         private BindableCollection<PinsDataTable> GridData { get; } = new();
-
+        
         #endregion //Member Variables
 
         #region Public Properties
@@ -91,8 +97,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 NotifyOfPropertyChange(() => VerseRefDialogOpen);
             }
         }
+        
 
-        public ObservableCollection<PinsVerseList> SelectedItemVerses { get; } = new();
+        private ObservableCollection<PinsVerseList> _selectedItemVerses = new();
+        public ObservableCollection<PinsVerseList> SelectedItemVerses
+        {
+            get => _selectedItemVerses;
+            set
+            {
+                _selectedItemVerses = value;
+                NotifyOfPropertyChange(() => SelectedItemVerses);
+            }
+        }
 
         public string FontFamily { get; set; } = FontNames.DefaultFontFamily;
 
@@ -198,6 +214,59 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 CheckAndRefreshGrid();
             }
         }
+        
+
+        private string _lastSelectedPinsDataTableSource = "";
+        public string LastSelectedPinsDataTableSource
+        {
+            get => _lastSelectedPinsDataTableSource;
+            set
+            {
+                value ??= string.Empty;
+
+                _lastSelectedPinsDataTableSource = value;
+                NotifyOfPropertyChange(() => LastSelectedPinsDataTableSource);
+            }
+        }
+
+        private string _selectedItemFilterString = "";
+        public string SelectedItemFilterString
+        {
+            get => _selectedItemFilterString;
+            set
+            {
+                value ??= string.Empty;
+
+                _selectedItemFilterString = value;
+                NotifyOfPropertyChange(() => SelectedItemFilterString);
+
+                CheckAndRefreshGrid();
+            }
+        }
+
+        private string _verseFilterText;
+        public string VerseFilterText
+        {
+            get
+            {
+                return _verseFilterText;
+            }
+            set
+            {
+                _verseFilterText = value;
+                this._verseCollection.View.Refresh();
+                NotifyOfPropertyChange(() => VerseFilterText);
+            }
+        }
+
+        private CollectionViewSource _verseCollection;
+        public ICollectionView VerseCollection
+        {
+            get
+            {
+                return this._verseCollection.View;
+            }
+        }
 
         public ICollectionView GridCollectionView { get; set; }
 
@@ -232,6 +301,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _projectManager = projectManager;
             _mediator = mediator;
             _longRunningTaskManager = longRunningTaskManager;
+
+            _verseCollection = new CollectionViewSource();
+            _verseCollection.Source = SelectedItemVerses;
+            _verseCollection.Filter += VerseCollection_Filter;
 
             // wire up the commands
             ClearFilterCommand = new RelayCommand(ClearFilter);
@@ -1031,6 +1104,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> LoadVerseText(PinsDataTable dataRow)
         {
+            //UpdateSelectedTerm(null, dataRow);
+
+            LastSelectedPinsDataTableSource = dataRow.Source;
+            VerseFilterText = string.Empty;
+
             if (dataRow.VerseList.Count == 0)
             {
                 return true;
@@ -1084,6 +1162,109 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 });
             }
 
+            // create inlines of the selected word
+            foreach (var verse in _selectedItemVerses)
+            {
+                var verseText = verse.VerseText;
+
+                // create a punctuation-less version of the verse
+                var puncs = Punctuation.LoadPunctuation();
+                foreach (var punc in puncs)
+                {
+                    // we need to maintain the same verse length so we need to pad
+                    // out the replacement spaces
+                    var sBlank = "".PadLeft(punc.Length, ' ');
+
+                    verseText = verseText.Replace(punc, sBlank);
+                }
+
+                // create a list of all the matches within the verse
+                var points = new List<Point>();
+                var words = new List<string>();
+
+                // get only the distinct renderings otherwise we end up having errors
+                var renderings = dataRow.Source.Split(';').Distinct().ToList();
+                //renderings = SortByLength(renderings);
+
+                foreach (var render in renderings)
+                {
+                    // do the same for the target word that we are trying to test against
+                    var puncLessWord = render;
+                    foreach (var punc in puncs)
+                    {
+                        // we need to maintain the same verse length so we need to pad
+                        // out the replacement spaces
+                        var sBlank = "".PadLeft(punc.Length, ' ');
+
+                        puncLessWord = puncLessWord.Replace(punc, sBlank);
+                    }
+
+
+                    try
+                    {
+                        // look for full word and case sensitive
+                        var pattern = new Regex(@"\b" + puncLessWord + @"\b");
+                        var matchResults = pattern.Match(verseText);
+                        while (matchResults.Success)
+                        {
+                            // matched text: matchResults.Value
+                            // match start: matchResults.Index
+                            // match length: matchResults.Length
+                            var point = new Point(matchResults.Index, matchResults.Index + matchResults.Length);
+                            points.Add(point);
+                            words.Add(render);
+
+                            // flag that we found the word
+                            verse.Found = true;
+
+                            matchResults = matchResults.NextMatch();
+                        }
+                    }
+                    catch (ArgumentException)
+                    {
+                        // Syntax error in the regular expression
+                    }
+                }
+
+                verseText = verse.VerseText;
+
+                // organize the points in lowest to highest
+                points = points.OrderBy(o => o.X).Distinct().ToList();
+
+                // iterate through in reverse
+                for (var i = points.Count - 1; i >= 0; i--)
+                {
+                    try
+                    {
+                        var endPart = verseText.Substring((int)points[i].Y);
+                        var startPart = verseText.Substring(0, (int)points[i].X);
+
+                        //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
+                        verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+
+                        // check if this was the last one
+                        if (i == 0)
+                        {
+                            verse.Inlines.Insert(0, new Run(startPart) { FontWeight = FontWeights.Normal });
+                        }
+                        else
+                        {
+                            verseText = startPart;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogError(e, "Unexpected error occurred while updating the selected term.");
+                    }
+                }
+
+                if (points.Count == 0)
+                {
+                    verse.Inlines.Add(new Run(verseText));
+                }
+            }
+            NotifyOfPropertyChange(() => VerseCollection);
             NotifyOfPropertyChange(() => SelectedItemVerses);
             VerseRefDialogOpen = true;
             return false;
@@ -1107,6 +1288,174 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
             LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
+        }
+
+        void VerseCollection_Filter(object sender, FilterEventArgs e)
+        {
+            if (string.IsNullOrEmpty(VerseFilterText))
+            {
+                e.Accepted = true;
+                return;
+            }
+
+            PinsVerseList pinsVerse = e.Item as PinsVerseList;
+            if (pinsVerse.VerseText.ToUpper().Contains(VerseFilterText.ToUpper()) ||
+                pinsVerse.VerseIdShort.ToUpper().Contains(VerseFilterText.ToUpper()))
+            {
+                e.Accepted = true;
+            }
+            else
+            {
+                e.Accepted = false;
+            }
+        }
+
+        private void UpdateSelectedTerm(BiblicalTermsData selectedBiblicalTermsData, PinsDataTable selectedItemPinsDataTable)
+        {
+            SelectedItemVerses.Clear();
+            //Renderings.Clear();
+            //Gloss = "";
+            if (selectedBiblicalTermsData is not null)
+            {
+                //Gloss = selectedBiblicalTermsData.Gloss;
+
+                for (var i = 0; i < selectedBiblicalTermsData.ReferencesLong.Count; i++)
+                {
+                    var verseRef = selectedBiblicalTermsData.ReferencesLong[i];
+                    var verseText = "";
+                    if (i < selectedBiblicalTermsData.ReferencesListText.Count)
+                    {
+                        verseText = selectedBiblicalTermsData.ReferencesListText[i];
+                    }
+
+                    var loc = verseRef.Split(' ');
+                    var localizedString = verseRef;
+
+                    if (loc.Length > 1)
+                    {
+                        localizedString = LocalizationService!.Get(loc[0]) + $" {loc[1]}";
+                    }
+
+                    _selectedItemVerses.Add(new PinsVerseList()
+                    {
+                        VerseIdShort = localizedString,
+                        BBBCCCVVV = selectedBiblicalTermsData.References[i],
+                        VerseText = verseText
+                    });
+                }
+
+                //foreach (var render in selectedBiblicalTermsData.Renderings)
+                //{
+                //    _renderings.Add(render);
+                //}
+            }
+
+            // create inlines of the selected word
+            foreach (var verse in _selectedItemVerses)
+            {
+                var verseText = verse.VerseText;
+
+                // create a punctuation-less version of the verse
+                var puncs = Punctuation.LoadPunctuation();
+                foreach (var punc in puncs)
+                {
+                    // we need to maintain the same verse length so we need to pad
+                    // out the replacement spaces
+                    var sBlank = "".PadLeft(punc.Length, ' ');
+
+                    verseText = verseText.Replace(punc, sBlank);
+                }
+
+                // create a list of all the matches within the verse
+                var points = new List<Point>();
+                var words = new List<string>();
+
+                // get only the distinct renderings otherwise we end up having errors
+                var renderings = selectedBiblicalTermsData.Renderings.Distinct().ToList();
+                //renderings = SortByLength(renderings);
+
+                foreach (var render in renderings)
+                {
+                    // do the same for the target word that we are trying to test against
+                    var puncLessWord = render;
+                    foreach (var punc in puncs)
+                    {
+                        // we need to maintain the same verse length so we need to pad
+                        // out the replacement spaces
+                        var sBlank = "".PadLeft(punc.Length, ' ');
+
+                        puncLessWord = puncLessWord.Replace(punc, sBlank);
+                    }
+
+
+                    try
+                    {
+                        // look for full word and case sensitive
+                        var pattern = new Regex(@"\b" + puncLessWord + @"\b");
+                        var matchResults = pattern.Match(verseText);
+                        while (matchResults.Success)
+                        {
+                            // matched text: matchResults.Value
+                            // match start: matchResults.Index
+                            // match length: matchResults.Length
+                            var point = new Point(matchResults.Index, matchResults.Index + matchResults.Length);
+                            points.Add(point);
+                            words.Add(render);
+
+                            // flag that we found the word
+                            verse.Found = true;
+
+                            matchResults = matchResults.NextMatch();
+                        }
+                    }
+                    catch (ArgumentException)
+                    {
+                        // Syntax error in the regular expression
+                    }
+                }
+
+                verseText = verse.VerseText;
+
+                // organize the points in lowest to highest
+                points = points.OrderBy(o => o.X).Distinct().ToList();
+
+                // iterate through in reverse
+                for (var i = points.Count - 1; i >= 0; i--)
+                {
+                    try
+                    {
+                        var endPart = verseText.Substring((int)points[i].Y);
+                        var startPart = verseText.Substring(0, (int)points[i].X);
+
+                        //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
+                        verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+
+                        // check if this was the last one
+                        if (i == 0)
+                        {
+                            verse.Inlines.Insert(0, new Run(startPart) { FontWeight = FontWeights.Normal });
+                        }
+                        else
+                        {
+                            verseText = startPart;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogError(e, "Unexpected error occurred while updating the selected term.");
+                    }
+                }
+
+                if (points.Count == 0)
+                {
+                    verse.Inlines.Add(new Run(verseText));
+                }
+            }
+
+            NotifyOfPropertyChange(() => SelectedItemVerses);
+            //NotifyOfPropertyChange(() => Renderings);
+            //NotifyOfPropertyChange(() => RenderingsText);
         }
 
         public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)

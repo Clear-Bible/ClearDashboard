@@ -35,7 +35,10 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignPaper}">
+    <Grid
+        x:Name="MainGrid"
+        Background="{DynamicResource MaterialDesignPaper}"
+        Tag="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -509,10 +512,51 @@
                     x:Name="LowerBorder"
                     BorderThickness="2"
                     CornerRadius="3">
-                    <StackPanel Margin="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="5"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock>
+
+                                <Run
+                                    FontFamily="{Binding ElementName=PinsViewWindow, Path=DataContext.FontFamily}"
+                                    FontSize="{Binding ElementName=PinsViewWindow, Path=DataContext.FontSize}"
+                                    FontWeight="Bold"
+                                    Foreground="Orange"
+                                    Text="{Binding LastSelectedPinsDataTableSource}" />
+                                <Run Text="{helpers:Localization Pins_Occurences}" />
+                            </TextBlock>
+                            <Label
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                Content="{helpers:Localization Pins_Filter}"
+                                Style="{StaticResource MaterialDesignLabel}" />
+                            <TextBox
+                                Name="DialogFilterBox"
+                                Width="200"
+                                Height="25"
+                                Margin="15,0,0,0"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                Text="{Binding VerseFilterText, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
                         <Button
+                            Grid.Row="0"
+                            Grid.Column="1"
                             Margin="0,8,8,0"
                             Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                            Content="Close"
                             IsCancel="True"
                             Style="{StaticResource TransparentStyle}">
                             <Button.CommandParameter>
@@ -520,17 +564,18 @@
                                     False
                                 </system:Boolean>
                             </Button.CommandParameter>
-                            <materialDesign:PackIcon Kind="Close" />
                         </Button>
 
 
                         <ListView
                             x:Name="ListView"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
                             Height="520"
                             Margin="5"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            ItemsSource="{Binding SelectedItemVerses}"
+                            ItemsSource="{Binding VerseCollection}"
                             ScrollViewer.VerticalScrollBarVisibility="Visible">
                             <ListView.View>
                                 <GridView>
@@ -581,7 +626,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=ListView, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
+                                    <!--<GridViewColumn Width="{Binding Path=ActualWidth, ElementName=ListView, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock
@@ -591,11 +636,37 @@
                                                     TextWrapping="Wrap" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>-->
+                                    <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=ListView, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <helpers:BindableTextBlock
+                                                    Name="VerseTextBlock"
+                                                    Width="Auto"
+                                                    Margin="0,0,10,0"
+                                                    FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
+                                                    FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
+                                                    TextWrapping="Wrap">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="helpers:BindableTextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=Tag, ElementName=MainGrid}" Value="False">
+                                                                    <Setter Property="InlineList" Value="{Binding Path=Inlines}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=Tag, ElementName=MainGrid}" Value="True">
+                                                                    <Setter Property="Text" Value="{Binding Path=VerseText}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </helpers:BindableTextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                    </StackPanel>
+                    </Grid>
                 </Border>
             </materialDesign:DialogHost.DialogContent>
             <Border
