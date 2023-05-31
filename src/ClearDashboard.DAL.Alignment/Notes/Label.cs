@@ -71,5 +71,16 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             return result.Data!;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Label label &&
+                   EqualityComparer<LabelId?>.Default.Equals(LabelId, label.LabelId);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(LabelId);
+        }
     }
 }

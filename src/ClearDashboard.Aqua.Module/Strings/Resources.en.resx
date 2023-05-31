@@ -193,7 +193,7 @@
     <value>Add Corpus Information</value>
   </data>
   <data name="Aqua_Version_BackTranslationToVersionId" xml:space="preserve">
-    <value>Version id of corpus this corpus is a back translation to</value>
+    <value>Version id of corpus this is a back translation to</value>
   </data>
   <data name="Aqua_Version_BodyTitle" xml:space="preserve">
     <value>Corpus</value>
@@ -208,7 +208,7 @@
     <value>Delete all corpus information from AQuA and reset</value>
   </data>
   <data name="Aqua_Version_ForwardTranslationToVersionId" xml:space="preserve">
-    <value>Version id of corpus this corpus is a forward translation to</value>
+    <value>Version id of corpus this is a forward translation to</value>
   </data>
   <data name="Aqua_Version_GetVersion" xml:space="preserve">
     <value>Reload</value>
