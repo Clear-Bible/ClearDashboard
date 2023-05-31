@@ -1,25 +1,18 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DAL.Alignment.Translation;
+﻿using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
+using System;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
     public class DashboardSettingsViewModel : Screen
     {
 
-        #region Member Variables   
+        #region Member Variables
 
-        private readonly ILogger<DashboardSettingsViewModel> _logger;
         private readonly IEventAggregator _eventAggregator;
         private bool _isAquaEnabledOnStartup;
 
@@ -100,7 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         public DashboardSettingsViewModel(IEventAggregator eventAggregator)
         {
             // for Caliburn Micro
-            _logger = IoC.Get<ILogger<DashboardSettingsViewModel>>();
+            IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
         }
 
@@ -122,22 +115,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             var isEnabled = false;
             try
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\ClearDashboard\AQUA"))
+                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"Software\ClearDashboard\AQUA");
+                if (key != null)
                 {
-                    if (key != null)
+                    Object o = key.GetValue("IsEnabled")!;
+                    if (o is not null)
                     {
-                        Object o = key.GetValue("IsEnabled");
-                        if (o != null)
+                        if (o as string == "true")
                         {
-                            if (o as string == "true")
-                            {
-                                isEnabled = true;
-                            }
+                            isEnabled = true;
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _isAquaEnabledOnStartup = Settings.Default.IsAquaEnabled;
             }
@@ -153,32 +144,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         #region Methods
 
+        // ReSharper disable once UnusedMember.Global
         public void Close()
         {
             TryCloseAsync();
         }
 
+        // ReSharper disable once UnusedMember.Global
+        // ReSharper disable once UnusedParameter.Global
         public void PowerModeCheckBox(bool value)
         {
             Settings.Default.EnablePowerModes = IsPowerModesEnabled;
             Settings.Default.Save();
         }
 
+        // ReSharper disable once UnusedMember.Global
+        // ReSharper disable once UnusedParameter.Global
         public void AquaEnabledCheckBox(bool value)
         {
             Settings.Default.IsAquaEnabled = IsAquaEnabled;
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ClearDashboard\AQUA");
 
-            if (IsAquaEnabled)
-            {
-                key.SetValue("IsEnabled", "true");
-            }
-            else
-            {
-                
-                key.SetValue("IsEnabled", "false");
-            }
+            key.SetValue("IsEnabled", IsAquaEnabled ? "true" : "false");
 
             if (_isAquaEnabledOnStartup == IsAquaEnabled)
             {
@@ -194,6 +182,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
         }
 
+        // ReSharper disable once UnusedParameter.Global
         public void VerseByVerseTextCollectionsEnabledCheckBox(bool value)
         {
             Settings.Default.VerseByVerseTextCollectionsEnabled = IsVerseByVerseTextCollectionsEnabled;
