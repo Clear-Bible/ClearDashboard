@@ -14,9 +14,6 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using ModelVerificationType = ClearDashboard.DataAccessLayer.Models.AlignmentVerification;
 using ModelOriginatedType = ClearDashboard.DataAccessLayer.Models.AlignmentOriginatedFrom;
 using ClearDashboard.DAL.Alignment.Features.Events;
-using Microsoft.EntityFrameworkCore.Storage;
-using ClearDashboard.DAL.Alignment.Translation;
-using SIL.Linq;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -127,7 +124,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             {
                 // Update ("put") the first one:
                 alignmentToPut = existingAlignmentMatches.First();
-                existingAlignmentMatches.Where(e => e.Id != alignmentToPut.Id).ForEach(e => 
+                existingAlignmentMatches.Where(e => e.Id != alignmentToPut.Id).ToList().ForEach(e => 
                 {
                     e.Deleted = currentDateTime;
                     alignmentsToRemove.Add(e);
