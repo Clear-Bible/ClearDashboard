@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         }
         */
 
-        public async Task<Dictionary<string, double>?> GetTranslationModelEntryForToken(Token token, AlignmentTypes alignmentTypesToInclude = Alignment.AssignedAndUnverifiedNotOtherwiseIncluded)
+        public async Task<Dictionary<string, double>?> GetTranslationModelEntryForToken(Token token, AlignmentTypes alignmentTypesToInclude = AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded)
         {
             if (UsingTranslationModel)
             {
@@ -65,12 +65,12 @@ namespace ClearDashboard.DAL.Alignment.Translation
         }
 
         */
-        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow, AlignmentTypes alignmentTypesToInclude = Alignment.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow, AlignmentTypes alignmentTypesToInclude = AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
         {
             return await GetTranslations(engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId)), alignmentTypesToInclude, token);
         }
 
-        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds, AlignmentTypes alignmentTypesToInclude = Alignment.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds, AlignmentTypes alignmentTypesToInclude = AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
         {
             // alignmentTypesToInclude argument is used when alignment denormalization data is not available:
             var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds, alignmentTypesToInclude), token);
