@@ -16,6 +16,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
@@ -26,6 +27,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
@@ -601,28 +603,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             DashboardCollabProjects.Clear();
 
+            // get a listing of the local project's project.ids
+            List<CoupleOfStrings> projectIds = new();
+            foreach (var dashboardProject in DashboardProjects)
+            {
+                var results =
+                    await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(dashboardProject.FullFilePath), CancellationToken.None);
+
+                if (results.Success)
+                {
+                    projectIds.Add(new CoupleOfStrings
+                    {
+                         stringB = dashboardProject.FullFilePath,
+                         stringA = results.Data
+                    });
+                }
+            }
+
+            // get the list of those GitLab projects that haven't been sync'd locally
             if (_collaborationManager.IsRepositoryInitialized())
             {
-                var dashboardProjectNames = DashboardProjects?
-                    .Select(e => ProjectDbContextFactory.ConvertProjectNameToSanitizedName(e.ProjectName!))
-                    .ToList();
-
-                var projects = _collaborationManager.GetAllProjects();
-                foreach (var project in projects
-                    .OrderByDescending(e => e.created))
+                var projects = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+                projects = projects.OrderByDescending(e => e.CreatedAt).ToList();
+                foreach (var dashboardProject in DashboardProjects)
                 {
-                    if (dashboardProjectNames is null || !dashboardProjectNames
-                        .Contains(ProjectDbContextFactory.ConvertProjectNameToSanitizedName(project.projectName)))
+                    var results =
+                        await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(dashboardProject.FullFilePath), CancellationToken.None);
+
+                    if (results.Success)
                     {
-                        var dashboardCollabProject = new DashboardCollabProject
+                        var projectGuid = results.Data;
+                        var gitLabProject = projects.FirstOrDefault(x => projectGuid == x.Name.ToUpper().Replace("P_", ""));
+
+                        if (gitLabProject is not null)
                         {
-                            ProjectId = project.projectId,
-                            ProjectName = project.projectName,
-                            AppVersion = project.appVersion,
-                            Created = project.created
-                        };
-                        DashboardCollabProjects.Add(dashboardCollabProject);
+                            // remove from the available GitLab projects
+                            projects.Remove(gitLabProject);
+                        }
                     }
+                }
+
+                // create the GitLab unsync'd 
+                foreach (var gitLabProject in projects.OrderByDescending(e => e.CreatedAt))
+                {
+                    var dashboardCollabProject = new DashboardCollabProject
+                    {
+                        ProjectId = Guid.Parse(gitLabProject.Name.ToUpper().Replace("P_", "")),
+                        ProjectName = gitLabProject.Description.ToString()!,
+                        AppVersion = "unknown",
+                        Created = gitLabProject.CreatedAt
+                    };
+                    DashboardCollabProjects.Add(dashboardCollabProject);
                 }
             }
 

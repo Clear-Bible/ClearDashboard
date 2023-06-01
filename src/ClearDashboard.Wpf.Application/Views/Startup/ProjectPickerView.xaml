@@ -512,7 +512,7 @@
                 x:Name="SelectedLanguage"
                 Width="200"
                 Height="30"
-                Margin="0,15,15,10"
+                Margin="0,15,15,5"
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Top"
                 FontSize="12"
@@ -541,7 +541,7 @@
             Margin="0,0,0,0"
             Background="Beige">
 
-            <TextBlock Margin="5,10,0,0" Visibility="{Binding ShowCollabUserInfo}">
+            <!--<TextBlock Margin="5,10,0,0" Visibility="{Binding ShowCollabUserInfo}">
                 <Run FontWeight="Bold" Text="Username: " />
                 <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
                 <LineBreak />
@@ -556,7 +556,7 @@
                 <LineBreak />
                 <Run FontWeight="Bold" Text="Access Token: " />
                 <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
-            </TextBlock>
+            </TextBlock>-->
 
             <Button
                 x:Name="NewCollabUser"
