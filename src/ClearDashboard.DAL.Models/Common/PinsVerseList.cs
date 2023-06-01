@@ -1,13 +1,27 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Documents;
+using Caliburn.Micro;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class PinsVerseList
+    public class PinsVerseList: PropertyChangedBase//try inheriting from VerseViewModel or whatever that is called
     {
         public string? BBBCCCVVV { get; set; }
         public string? VerseIdShort { get; set; }
         public string? VerseText { get; set; }
+        public string? BackTranslation { get; set; } = string.Empty;
+        private bool _showBackTranslation = false;
+        public bool ShowBackTranslation
+        {
+            get => _showBackTranslation;
+
+            set
+            {
+                _showBackTranslation = value;
+
+                NotifyOfPropertyChange(() => ShowBackTranslation);
+            }
+        }
         public bool Found { get; set; }
         public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
     }

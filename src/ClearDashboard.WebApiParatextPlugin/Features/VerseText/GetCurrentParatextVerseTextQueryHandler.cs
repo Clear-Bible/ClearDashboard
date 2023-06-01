@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.WebApiParatextPlugin.Features.Project;
+using ProjectType = Paratext.PluginInterfaces.ProjectType;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
 {
@@ -37,7 +38,26 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
 
         public Task<RequestResult<AssignedUser>> Handle(GetParatextVerseTextQuery request, CancellationToken cancellationToken)
         {
-            var verseText = Helpers.VerseText.LookupVerseText(_mainWindow.Project, request.BookNum, request.ChapterNum, request.VerseNum);
+            string verseText = string.Empty;
+            if (request.ReturnBackTranslation)
+            {//we don't have access t the ID so use the name, corpus type, and type
+                var projects = _mainWindow.GetAllIProjects();
+                foreach (var project in projects)
+                {
+                    if (
+                        project.Type == ProjectType.BackTranslation &&
+                        project.BaseProject != null &&
+                        project.BaseProject.ShortName == _mainWindow.Project.ShortName)
+                    {
+                        verseText = Helpers.VerseText.LookupVerseText(project, request.BookNum, request.ChapterNum, request.VerseNum);
+                    }
+                }
+            }
+            else
+            {
+                verseText = Helpers.VerseText.LookupVerseText(_mainWindow.Project, request.BookNum, request.ChapterNum, request.VerseNum);
+            }
+            
 
             var result = new RequestResult<AssignedUser>(new AssignedUser() { Name = verseText });
 

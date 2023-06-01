@@ -268,6 +268,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
+        private bool _backTranslationFound = false;
+        public bool BackTranslationFound
+        {
+            get=>_backTranslationFound;
+            
+            set
+            {
+                _backTranslationFound = value;
+                NotifyOfPropertyChange(() => BackTranslationFound);
+            }
+        }
+
+        private bool _showBackTranslation = false;
+        public bool ShowBackTranslation
+        {
+            get=>_showBackTranslation;
+            
+            set
+            {
+                _showBackTranslation = value;
+
+                foreach (var verse in SelectedItemVerses)
+                {
+                    if (verse.BackTranslation != string.Empty)
+                    {
+                        verse.ShowBackTranslation = value;
+                    }
+                }
+
+                NotifyOfPropertyChange(() => ShowBackTranslation);
+            }
+        }
+
         public ICollectionView GridCollectionView { get; set; }
 
         #endregion //Observable Properties
@@ -1104,10 +1137,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> LoadVerseText(PinsDataTable dataRow)
         {
-            //UpdateSelectedTerm(null, dataRow);
-
             LastSelectedPinsDataTableSource = dataRow.Source;
             VerseFilterText = string.Empty;
+            _showBackTranslation = false;
+            BackTranslationFound = false;
 
             if (dataRow.VerseList.Count == 0)
             {
@@ -1143,8 +1176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
                 var verseNum = int.Parse(verse.TargetBBBCCCVV.Substring(6, 3));
 
-                var verseTextResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum),
-                    CancellationToken.None);
+                var verseTextResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum), CancellationToken.None);
                 var verseText = "";
                 if (verseTextResult.Success)
                     verseText = verseTextResult.Data.Name;
@@ -1154,18 +1186,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     _logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
+                var backTranslationResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum, true), CancellationToken.None);
+                var backTranslation = "";
+                var showBackTranslation = false;
+                if (backTranslationResult.Success)
+                {
+                    backTranslation = backTranslationResult.Data.Name;
+                    showBackTranslation = true;
+                    if(!ShowBackTranslation)
+                        ShowBackTranslation = true;
+                    BackTranslationFound = true;
+                }
+                else
+                {
+                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                }
+
                 SelectedItemVerses.Add(new PinsVerseList
                 {
                     BBBCCCVVV = verse.TargetBBBCCCVV,
                     VerseIdShort = verseIdShort,
-                    VerseText = verseText
+                    VerseText = verseText,
+                    BackTranslation = backTranslation,
+                    ShowBackTranslation = showBackTranslation
                 });
             }
 
             // create inlines of the selected word
             foreach (var verse in _selectedItemVerses)
             {
-                var verseText = verse.VerseText;
+                //attempt to get backtranslation here
+                //is it in the database
+                //try and pull that info from the database
+                //backtransation of what?
+                    //No way to tell the parent corpus, right?
+
+                    var verseText = verse.VerseText;
 
                 // create a punctuation-less version of the verse
                 var puncs = Punctuation.LoadPunctuation();
@@ -1308,154 +1364,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 e.Accepted = false;
             }
-        }
-
-        private void UpdateSelectedTerm(BiblicalTermsData selectedBiblicalTermsData, PinsDataTable selectedItemPinsDataTable)
-        {
-            SelectedItemVerses.Clear();
-            //Renderings.Clear();
-            //Gloss = "";
-            if (selectedBiblicalTermsData is not null)
-            {
-                //Gloss = selectedBiblicalTermsData.Gloss;
-
-                for (var i = 0; i < selectedBiblicalTermsData.ReferencesLong.Count; i++)
-                {
-                    var verseRef = selectedBiblicalTermsData.ReferencesLong[i];
-                    var verseText = "";
-                    if (i < selectedBiblicalTermsData.ReferencesListText.Count)
-                    {
-                        verseText = selectedBiblicalTermsData.ReferencesListText[i];
-                    }
-
-                    var loc = verseRef.Split(' ');
-                    var localizedString = verseRef;
-
-                    if (loc.Length > 1)
-                    {
-                        localizedString = LocalizationService!.Get(loc[0]) + $" {loc[1]}";
-                    }
-
-                    _selectedItemVerses.Add(new PinsVerseList()
-                    {
-                        VerseIdShort = localizedString,
-                        BBBCCCVVV = selectedBiblicalTermsData.References[i],
-                        VerseText = verseText
-                    });
-                }
-
-                //foreach (var render in selectedBiblicalTermsData.Renderings)
-                //{
-                //    _renderings.Add(render);
-                //}
-            }
-
-            // create inlines of the selected word
-            foreach (var verse in _selectedItemVerses)
-            {
-                var verseText = verse.VerseText;
-
-                // create a punctuation-less version of the verse
-                var puncs = Punctuation.LoadPunctuation();
-                foreach (var punc in puncs)
-                {
-                    // we need to maintain the same verse length so we need to pad
-                    // out the replacement spaces
-                    var sBlank = "".PadLeft(punc.Length, ' ');
-
-                    verseText = verseText.Replace(punc, sBlank);
-                }
-
-                // create a list of all the matches within the verse
-                var points = new List<Point>();
-                var words = new List<string>();
-
-                // get only the distinct renderings otherwise we end up having errors
-                var renderings = selectedBiblicalTermsData.Renderings.Distinct().ToList();
-                //renderings = SortByLength(renderings);
-
-                foreach (var render in renderings)
-                {
-                    // do the same for the target word that we are trying to test against
-                    var puncLessWord = render;
-                    foreach (var punc in puncs)
-                    {
-                        // we need to maintain the same verse length so we need to pad
-                        // out the replacement spaces
-                        var sBlank = "".PadLeft(punc.Length, ' ');
-
-                        puncLessWord = puncLessWord.Replace(punc, sBlank);
-                    }
-
-
-                    try
-                    {
-                        // look for full word and case sensitive
-                        var pattern = new Regex(@"\b" + puncLessWord + @"\b");
-                        var matchResults = pattern.Match(verseText);
-                        while (matchResults.Success)
-                        {
-                            // matched text: matchResults.Value
-                            // match start: matchResults.Index
-                            // match length: matchResults.Length
-                            var point = new Point(matchResults.Index, matchResults.Index + matchResults.Length);
-                            points.Add(point);
-                            words.Add(render);
-
-                            // flag that we found the word
-                            verse.Found = true;
-
-                            matchResults = matchResults.NextMatch();
-                        }
-                    }
-                    catch (ArgumentException)
-                    {
-                        // Syntax error in the regular expression
-                    }
-                }
-
-                verseText = verse.VerseText;
-
-                // organize the points in lowest to highest
-                points = points.OrderBy(o => o.X).Distinct().ToList();
-
-                // iterate through in reverse
-                for (var i = points.Count - 1; i >= 0; i--)
-                {
-                    try
-                    {
-                        var endPart = verseText.Substring((int)points[i].Y);
-                        var startPart = verseText.Substring(0, (int)points[i].X);
-
-                        //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
-                        verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
-
-                        // check if this was the last one
-                        if (i == 0)
-                        {
-                            verse.Inlines.Insert(0, new Run(startPart) { FontWeight = FontWeights.Normal });
-                        }
-                        else
-                        {
-                            verseText = startPart;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.LogError(e, "Unexpected error occurred while updating the selected term.");
-                    }
-                }
-
-                if (points.Count == 0)
-                {
-                    verse.Inlines.Add(new Run(verseText));
-                }
-            }
-
-            NotifyOfPropertyChange(() => SelectedItemVerses);
-            //NotifyOfPropertyChange(() => Renderings);
-            //NotifyOfPropertyChange(() => RenderingsText);
         }
 
         public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
