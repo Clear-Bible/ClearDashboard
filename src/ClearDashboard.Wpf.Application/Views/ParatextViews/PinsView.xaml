@@ -308,7 +308,8 @@
                                 FontFamily="{Binding ElementName=PinsViewWindow, Path=DataContext.FontFamily}"
                                 FontSize="{Binding ElementName=PinsViewWindow, Path=DataContext.FontSize}"
                                 Text="{Binding Path='Source'}"
-                                TextWrapping="Wrap" />
+                                TextTrimming="WordEllipsis"
+                                ToolTip="{Binding Path='Source'}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

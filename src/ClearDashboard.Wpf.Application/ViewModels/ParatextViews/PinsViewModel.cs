@@ -37,6 +37,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Drawing;
+using ClearDashboard.Wpf.Application.Properties;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 
@@ -297,6 +298,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     }
                 }
 
+                Settings.Default.PinsShowBackTranslation = value;
+
                 NotifyOfPropertyChange(() => ShowBackTranslation);
             }
         }
@@ -359,6 +362,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _selectedXmlSourceRadioDictionary.Add(XmlSource.AllBiblicalTerms, _isAbt);
             _selectedXmlSourceRadioDictionary.Add(XmlSource.TermsRenderings, _isTr);
             _selectedXmlSourceRadioDictionary.Add(XmlSource.Lexicon, _isLx);
+
+            ShowBackTranslation = Settings.Default.PinsShowBackTranslation;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -1139,7 +1144,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             LastSelectedPinsDataTableSource = dataRow.Source;
             VerseFilterText = string.Empty;
-            _showBackTranslation = false;
+            //_showBackTranslation = false;
             BackTranslationFound = false;
 
             if (dataRow.VerseList.Count == 0)
@@ -1192,9 +1197,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 if (backTranslationResult.Success)
                 {
                     backTranslation = backTranslationResult.Data.Name;
-                    showBackTranslation = true;
-                    if(!ShowBackTranslation)
-                        ShowBackTranslation = true;
+                    
+                    if (ShowBackTranslation)
+                        showBackTranslation = true;
+                    //showBackTranslation = true;
+                    //if(!ShowBackTranslation)
+                    //    ShowBackTranslation = true;
                     BackTranslationFound = true;
                 }
                 else
@@ -1241,7 +1249,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 var words = new List<string>();
 
                 // get only the distinct renderings otherwise we end up having errors
-                var renderings = dataRow.Source.Split(';').Distinct().ToList();
+                var renderings = dataRow.Source.Split("; ").Distinct().ToList();
                 //renderings = SortByLength(renderings);
 
                 foreach (var render in renderings)
