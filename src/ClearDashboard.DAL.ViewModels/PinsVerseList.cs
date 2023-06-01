@@ -1,15 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Documents;
-using Caliburn.Micro;
 
-namespace ClearDashboard.DataAccessLayer.Models
+namespace ClearDashboard.DAL.ViewModels
 {
-    public class PinsVerseList: PropertyChangedBase
+    public class PinsVerseListViewModel: VerseViewModel
     {
-        public string? BBBCCCVVV { get; set; }
+        //public string? BBBCCCVVV { get; set; }
         public string? VerseIdShort { get; set; }
-        public string? VerseText { get; set; }
+       // public string? VerseText { get; set; }
         public string? BackTranslation { get; set; } = string.Empty;
+
         private bool _showBackTranslation = false;
         public bool ShowBackTranslation
         {
@@ -22,7 +22,7 @@ namespace ClearDashboard.DataAccessLayer.Models
                 NotifyOfPropertyChange(() => ShowBackTranslation);
             }
         }
-        public bool Found { get; set; }
-        public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
+        //public bool Found { get; set; }
+        //public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
     }
 }

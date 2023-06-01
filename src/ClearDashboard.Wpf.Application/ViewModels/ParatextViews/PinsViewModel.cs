@@ -99,8 +99,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
         
 
-        private ObservableCollection<PinsVerseList> _selectedItemVerses = new();
-        public ObservableCollection<PinsVerseList> SelectedItemVerses
+        private ObservableCollection<PinsVerseListViewModel> _selectedItemVerses = new();
+        public ObservableCollection<PinsVerseListViewModel> SelectedItemVerses
         {
             get => _selectedItemVerses;
             set
@@ -1202,9 +1202,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     _logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
-                SelectedItemVerses.Add(new PinsVerseList
+                SelectedItemVerses.Add(new PinsVerseListViewModel
                 {
-                    BBBCCCVVV = verse.TargetBBBCCCVV,
+                    VerseBBCCCVVV = verse.TargetBBBCCCVV,
                     VerseIdShort = verseIdShort,
                     VerseText = verseText,
                     BackTranslation = backTranslation,
@@ -1354,7 +1354,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 return;
             }
 
-            PinsVerseList pinsVerse = e.Item as PinsVerseList;
+            PinsVerseListViewModel pinsVerse = e.Item as PinsVerseListViewModel;
             if (pinsVerse.VerseText.ToUpper().Contains(VerseFilterText.ToUpper()) ||
                 pinsVerse.VerseIdShort.ToUpper().Contains(VerseFilterText.ToUpper()))
             {
