@@ -41,13 +41,13 @@
     </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
+            <!--<Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsFocused}" Value="True">
                         <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
                     </DataTrigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
             <converters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
             <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->

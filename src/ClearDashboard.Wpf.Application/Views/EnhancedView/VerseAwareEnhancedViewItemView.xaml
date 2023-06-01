@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Application.Views.EnhancedView.VerseAwareEnhancedViewItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"><AccessText></AccessText></UserControl> <!--   x:Class="ClearDashboard.Wpf.Application.Views.EnhancedView.VerseAwareEnhancedViewItemView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
@@ -18,17 +18,12 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-
-
             <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
-            <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
-
-        <!--  Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='130'}"  -->
         <ListView
             x:Name="InnerListView"
             Width="{Binding ActualWidth, ElementName=FirstColumn, Converter={converters:WidthSubtraction}, ConverterParameter='130'}"
@@ -156,4 +151,4 @@
     </Grid>
 
 
-</UserControl>
+</UserControl>-->
