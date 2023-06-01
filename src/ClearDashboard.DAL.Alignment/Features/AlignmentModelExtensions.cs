@@ -74,7 +74,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 var whereExpression = Expression.Lambda<Func<Models.Alignment, bool>>(combinedOrExpressions, parameterExpression);
                 var compiledWhere = whereExpression.Compile();
 
-                filteredAlignments = filteredAlignments.Where(compiledWhere);
+                filteredAlignments = filteredAlignments.Where(compiledWhere).ToList();
             }
 
             if ((alignmentTypes & AlignmentTypes.FromAlignmentModel_Unverified_All) == AlignmentTypes.None &&
