@@ -40,8 +40,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
         {
             string verseText = string.Empty;
             if (request.ReturnBackTranslation)
-            {//we don't have access t the ID so use the name, corpus type, and type
-                var projects = _mainWindow.GetAllIProjects();
+            {
+                var projects = _host.GetAllProjects();
                 foreach (var project in projects)
                 {
                     if (

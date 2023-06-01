@@ -4,7 +4,7 @@ using Caliburn.Micro;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class PinsVerseList: PropertyChangedBase//try inheriting from VerseViewModel or whatever that is called
+    public class PinsVerseList: PropertyChangedBase
     {
         public string? BBBCCCVVV { get; set; }
         public string? VerseIdShort { get; set; }

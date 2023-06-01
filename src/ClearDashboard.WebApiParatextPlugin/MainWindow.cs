@@ -1270,12 +1270,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             return allProjects;
         }
 
-        public IReadOnlyList<IProject> GetAllIProjects()
-        {
-            return _host.GetAllProjects(true);
-        }
-
-
         /// <summary>
         /// takes in a project and builds a model from it
         /// </summary>

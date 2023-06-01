@@ -556,7 +556,7 @@
                             <CheckBox
                                 Name="ShowBackTranslationCheckBox"
                                 Margin="50,0,0,0"
-                                Content="Show BackTranslation"
+                                Content="{helpers:Localization Pins_ShowBackTranslation}"
                                 Foreground="Green"
                                 IsChecked="{Binding ShowBackTranslation}"
                                 IsEnabled="{Binding BackTranslationFound}" />
@@ -566,7 +566,7 @@
                             Grid.Column="1"
                             Margin="0,8,8,0"
                             Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-                            Content="Close"
+                            Content="{helpers:Localization Close}"
                             IsCancel="True"
                             Style="{StaticResource TransparentStyle}">
                             <Button.CommandParameter>

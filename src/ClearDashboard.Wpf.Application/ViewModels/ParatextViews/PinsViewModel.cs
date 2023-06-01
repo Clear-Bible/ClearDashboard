@@ -1212,16 +1212,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 });
             }
 
+            CreateInlines(dataRow);
+            NotifyOfPropertyChange(() => SelectedItemVerses);
+            VerseRefDialogOpen = true;
+            return false;
+        }
+
+        private void CreateInlines(PinsDataTable dataRow)
+        {
             // create inlines of the selected word
             foreach (var verse in _selectedItemVerses)
             {
-                //attempt to get backtranslation here
-                //is it in the database
-                //try and pull that info from the database
-                //backtransation of what?
-                    //No way to tell the parent corpus, right?
-
-                    var verseText = verse.VerseText;
+                var verseText = verse.VerseText;
 
                 // create a punctuation-less version of the verse
                 var puncs = Punctuation.LoadPunctuation();
@@ -1254,7 +1256,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                         puncLessWord = puncLessWord.Replace(punc, sBlank);
                     }
-
 
                     try
                     {
@@ -1297,7 +1298,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                         //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
                         verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+                        verse.Inlines.Insert(0,
+                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
 
                         // check if this was the last one
                         if (i == 0)
@@ -1320,10 +1322,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     verse.Inlines.Add(new Run(verseText));
                 }
             }
+
             NotifyOfPropertyChange(() => VerseCollection);
-            NotifyOfPropertyChange(() => SelectedItemVerses);
-            VerseRefDialogOpen = true;
-            return false;
         }
 
         /// <summary>
