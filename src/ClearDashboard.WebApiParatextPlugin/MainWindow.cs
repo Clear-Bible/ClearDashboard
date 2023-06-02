@@ -1270,7 +1270,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             return allProjects;
         }
 
-
         /// <summary>
         /// takes in a project and builds a model from it
         /// </summary>

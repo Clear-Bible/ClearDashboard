@@ -21,6 +21,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string Match { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
         public string SimpRefs { get; set; } = string.Empty;
+        public string LexemeType { get; set; } = string.Empty;
         public string Phrase { get; set; } = string.Empty;
         public string Word { get; set; } = string.Empty;
         public string Prefix { get; set; } = string.Empty;
