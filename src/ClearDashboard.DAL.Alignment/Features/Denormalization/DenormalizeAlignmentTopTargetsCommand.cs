@@ -13,5 +13,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
     /// <param name="Progress"></param>
     /// <param name="AlignmentTypesToInclude"></param>
     public record DenormalizeAlignmentTopTargetsCommand(
-        Guid AlignmentSetId, ILongRunningProgress<ProgressStatus> Progress, AlignmentTypes AlignmentTypesToInclude = AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded) : ProjectRequestCommand<int>;
+        Guid AlignmentSetId, ILongRunningProgress<ProgressStatus> Progress, AlignmentTypes AlignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded) : ProjectRequestCommand<int>;
 }

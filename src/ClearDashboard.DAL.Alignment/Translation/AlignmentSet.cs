@@ -16,7 +16,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public AlignmentSetId AlignmentSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
 
-        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, AlignmentTypes alignmentTypes = AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
+        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, AlignmentTypes alignmentTypes = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
         {
             var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows, alignmentTypes), token);
             result.ThrowIfCanceledOrFailed(true);
@@ -54,7 +54,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return result.Data!;
         }
 
-        public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText, AlignmentTypes alignmentTypesToInclude = AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded)
+        public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded)
         {
             var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText, alignmentTypesToInclude));
             result.ThrowIfCanceledOrFailed(true);
@@ -70,7 +70,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <param name="cancellationToken"></param>
         /// <returns>Dictionary<sourceString, Dictionary<targetString, Dictionary<statusName, count>> if 
         /// sourceToTarget == true, reverse 'sourceString' and 'targetString' if false</returns>
-        public async Task<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>> GetAlignmentCounts(bool sourceToTarget, AlignmentTypes alignmentTypesToInclude = AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+        public async Task<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>> GetAlignmentCounts(bool sourceToTarget, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
         {
             var result = await mediator_.Send(new GetAlignmentCountsByTrainingTextQuery(AlignmentSetId, sourceToTarget, alignmentTypesToInclude), cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
@@ -84,7 +84,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             uint sourceVerseTokensIndex,
             IEnumerable<Token> targetVerseTokens,
             uint targetVerseTokensIndex
-        )>> GetAlignmentVerseContexts(string sourceTokenTrainingText, string targetTokenTrainingText, AlignmentTypes alignmentTypesToInclude = AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+        )>> GetAlignmentVerseContexts(string sourceTokenTrainingText, string targetTokenTrainingText, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
         {
             var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(
                 AlignmentSetId, 

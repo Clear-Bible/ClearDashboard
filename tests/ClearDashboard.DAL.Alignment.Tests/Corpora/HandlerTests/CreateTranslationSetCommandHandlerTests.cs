@@ -139,7 +139,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 if (count++ > 10) break;
             }
 
-            var someAlignments = await alignmentSet.GetAlignments(someRows, AlignmentTypes.AllAlignmentTypes);
+            var someAlignments = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AllAlignmentTypes);
             Assert.True(someAlignments.Any());
 
             var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
@@ -151,7 +151,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             sw.Start();
 
-            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(13, alignmentTrainingTextCounts.Count);
 
             var one = alignmentTrainingTextCounts.Skip(4).First();
@@ -171,7 +171,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Output.WriteLine("");
 
-            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(12, alignmentTrainingTextCounts2.Count);
 
             var verse = alignmentTrainingTextCounts2.Skip(1).First();
@@ -291,7 +291,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSetVerseContexts = await alignmentSet.GetAlignmentVerseContexts(
                 "verse", 
                 "verse",
-                AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, 
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(12, alignmentSetVerseContexts.Count());
 
@@ -321,7 +321,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
                 "one_verse_three", 
                 "three",
-                AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded, 
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(2, alignmentSetVerseContexts2.Count());
 
@@ -701,7 +701,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 if (count++ > 10) break;
             }
 
-            var someAlignments = await alignmentSet.GetAlignments(someRows, AlignmentTypes.AllAlignmentTypes);
+            var someAlignments = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AllAlignmentTypes);
             Assert.True(someAlignments.Any());
 
             var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
@@ -716,13 +716,13 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"));
             await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified"));
 
-            var manualOnly = await alignmentSet.GetAlignments(someRows, AlignmentTypes.AssignedAlignmentTypes);
+            var manualOnly = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AssignedAlignmentTypes);
             Assert.Equal(4, manualOnly.Count());
 
             var manualVerifiedOnly = await alignmentSet.GetAlignments(someRows, AlignmentTypes.Assigned_Verified);
             Assert.Equal(2, manualVerifiedOnly.Count());
 
-            var manualOnlyNonManualAuto = await alignmentSet.GetAlignments(someRows, AlignmentTypes.AssignedAndUnverifiedNotOtherwiseIncluded);
+            var manualOnlyNonManualAuto = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded);
 
             // DeleteAlignment above reduces someAlignments count by 1 (79 -> 78), and the
             // subsequent four PutAlignments should effectively 'hide' four auto alignments

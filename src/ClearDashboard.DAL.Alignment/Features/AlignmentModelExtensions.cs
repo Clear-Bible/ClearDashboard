@@ -26,16 +26,13 @@ namespace ClearDashboard.DAL.Alignment.Features
 
             var alignmentTypeValues = Enum.GetValues(typeof(AlignmentTypes))
                 .Cast<AlignmentTypes>()
-                .Where(e => alignmentTypes.HasFlag(e))
-                .Where(e => e != AlignmentTypes.FromAlignmentModel_Unverified_All)
-                .Where(e => e != AlignmentTypes.FromAlignmentModel_Unverified_Not_Otherwise_Included)
-                .Where(e => e != AlignmentTypes.None);
+                .Where(e => alignmentTypes.HasFlag(e));
 
             foreach ( var value in alignmentTypeValues )
             {
                 var parts = value.ToString().Split('_');
                 if (parts.Length != 2)
-                    throw new NotSupportedException($"Encountered AlignmentTypes enum value {value} from which OriginatedFrom and Verification cannot be automatically extracted");
+                    continue;
 
                 var alignmentOriginatedFrom = Enum.Parse<AlignmentOriginatedFrom>(parts[0]);
                 var alignmentVerification = Enum.Parse<AlignmentVerification>(parts[1]);
