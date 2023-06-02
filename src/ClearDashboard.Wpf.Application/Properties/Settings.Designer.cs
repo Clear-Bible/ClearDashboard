@@ -345,5 +345,17 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["VerseByVerseTextCollectionsEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PinsShowBackTranslation {
+            get {
+                return ((bool)(this["PinsShowBackTranslation"]));
+            }
+            set {
+                this["PinsShowBackTranslation"] = value;
+            }
+        }
     }
 }
