@@ -6,6 +6,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
+using ClearDashboard.DAL.Alignment.Features.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -162,6 +163,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             result.ThrowIfCanceledOrFailed(true);
 
             return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache, true);
+        }
+
+        public static async Task<(IEnumerable<Token> TokenTrainingTextVerseTokens, uint TokenTrainingTextTokensIndex)> GetTokenVerseContext(ParallelCorpusId? parallelCorpusId, Token token, IMediator mediator, CancellationToken cancellationToken = default)
+        {
+            var command = new GetTokenVerseContextQuery(parallelCorpusId, token);
+
+            var result = await mediator.Send(command, cancellationToken);
+            result.ThrowIfCanceledOrFailed();
+
+            return result.Data!;
         }
 
         /// <summary>

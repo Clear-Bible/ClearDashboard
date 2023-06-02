@@ -6,6 +6,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
@@ -17,8 +18,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class GetAlignmentCountsByTrainingTextQueryHandler : ProjectDbContextQueryHandler<
         GetAlignmentCountsByTrainingTextQuery,
-        RequestResult<IDictionary<string, IDictionary<string, uint>>>,
-        IDictionary<string, IDictionary<string, uint>>>
+        RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>,
+        IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>
     {
 
         public GetAlignmentCountsByTrainingTextQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAlignmentCountsByTrainingTextQueryHandler> logger) 
@@ -26,19 +27,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         {
         }
 
-        protected override async Task<RequestResult<IDictionary<string, IDictionary<string, uint>>>> GetDataAsync(GetAlignmentCountsByTrainingTextQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>> GetDataAsync(GetAlignmentCountsByTrainingTextQuery request, CancellationToken cancellationToken)
         {
-            // need an await to get the compiler to be 'quiet'
-            await Task.CompletedTask;
-
-            var alignmentSet = ProjectDbContext!.AlignmentSets
+            var alignmentSet = await ProjectDbContext!.AlignmentSets
                 .Include(e => e.ParallelCorpus)
                     .ThenInclude(e => e!.TargetTokenizedCorpus)
-                .FirstOrDefault(ts => ts.Id == request.AlignmentSetId.Id);
+                .FirstOrDefaultAsync(ts => ts.Id == request.AlignmentSetId.Id);
 
             if (alignmentSet == null)
             {
-                return new RequestResult<IDictionary<string, IDictionary<string, uint>>>
+                return new RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>
                 (
                     success: false,
                     message: $"AlignmentSet not found for AlignmentSetId '{request.AlignmentSetId.Id}'"
@@ -50,40 +48,52 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             sw.Start();
 #endif
 
-            var alignmentsQueryable = ProjectDbContext.Alignments
+            var filteredDatabaseAlignments = ProjectDbContext.Alignments
                 .Include(e => e.SourceTokenComponent)
                 .Include(e => e.TargetTokenComponent)
                 .Where(e => e.AlignmentSetId == request.AlignmentSetId.Id)
                 .Where(e => e.Deleted == null)
-                .Select(e => new { SourceTrainingText = e.SourceTokenComponent!.TrainingText!, TargetTrainingText = e.TargetTokenComponent!.TrainingText! });
+                .ToList()
+                .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude)
+                .Select(e => new { 
+                    SourceTrainingText = e.SourceTokenComponent!.TrainingText!, 
+                    TargetTrainingText = e.TargetTokenComponent!.TrainingText!,
+                    AlignmentTypeName = e.  ToAlignmentType(request.AlignmentTypesToInclude).ToString()
+                });
 
-            IDictionary<string, IDictionary<string, uint>>? alignmentCountsByTrainingText = default;
+            IDictionary<string, IDictionary<string, IDictionary<string, uint>>>? alignmentCountsByTrainingText = default;
 
             if (request.SourceToTarget)
             {
-                alignmentCountsByTrainingText = alignmentsQueryable
+                alignmentCountsByTrainingText = filteredDatabaseAlignments
                     .GroupBy(e => e.SourceTrainingText)
                     .ToList()
                     .OrderByDescending(g => g.Count())
                     .ToDictionary(g => g.Key, g => g
                         .GroupBy(e => e.TargetTrainingText)
                         .OrderByDescending(g2 => g2.Count())
-                        .ToDictionary(g2 => g2.Key, g2 => (uint)g2.Count())
+                        .ToDictionary(g2 => g2.Key, g2 => g2
+                            .GroupBy(e => e.AlignmentTypeName)
+                            .OrderByDescending (g3 => g3.Count())
+                            .ToDictionary(g3 => g3.Key, g3 => (uint)g3.Count())
                         as IDictionary<string, uint>)
-                    as IDictionary<string, IDictionary<string, uint>>;
+                    as IDictionary<string, IDictionary<string, uint>>);
             }
             else
             {
-                alignmentCountsByTrainingText = alignmentsQueryable
+                alignmentCountsByTrainingText = filteredDatabaseAlignments
                     .GroupBy(e => e.TargetTrainingText)
                     .ToList()
                     .OrderByDescending(g => g.Count())
                     .ToDictionary(g => g.Key, g => g
                         .GroupBy(e => e.SourceTrainingText)
                         .OrderByDescending(g2 => g2.Count())
-                        .ToDictionary(g2 => g2.Key, g2 => (uint)g2.Count())
+                        .ToDictionary(g2 => g2.Key, g2 => g2
+                            .GroupBy(e => e.AlignmentTypeName)
+                            .OrderByDescending(g3 => g3.Count())
+                            .ToDictionary(g3 => g3.Key, g3 => (uint)g3.Count())
                         as IDictionary<string, uint>)
-                    as IDictionary<string, IDictionary<string, uint>>;
+                    as IDictionary<string, IDictionary<string, uint>>);
             }
 
 #if DEBUG
@@ -91,7 +101,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             Logger.LogInformation("Elapsed {0}", sw.Elapsed);
 #endif
 
-            return new RequestResult<IDictionary<string, IDictionary<string, uint>>>
+            return new RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>
             (
                 alignmentCountsByTrainingText
             );
