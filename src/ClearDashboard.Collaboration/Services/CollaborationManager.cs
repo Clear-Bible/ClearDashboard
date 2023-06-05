@@ -106,7 +106,8 @@ public class CollaborationManager
             RemotePersonalPassword = collaborationConfiguration.RemotePersonalPassword,
             RemoteUrl = "",
             RemoteUserName = collaborationConfiguration.RemoteUserName,
-            UserId = collaborationConfiguration.UserId
+            UserId = collaborationConfiguration.UserId,
+            NamespaceId = collaborationConfiguration.NamespaceId,
         };
 
         var gitCollaboration = new GitCollaboration

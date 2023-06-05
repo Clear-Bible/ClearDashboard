@@ -166,6 +166,10 @@ namespace ClearDashboard.Wpf.Application.Services
 
             GitAccessToken accessToken = new();
             var request = new HttpRequestMessage(HttpMethod.Get, $"users/{user.UserId}/projects");
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent($"true"), "membership");
+            request.Content = content;
+
 
             try
             {
