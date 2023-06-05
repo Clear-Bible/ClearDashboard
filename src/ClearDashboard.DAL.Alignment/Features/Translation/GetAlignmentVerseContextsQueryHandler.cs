@@ -22,17 +22,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         GetAlignmentVerseContextsQuery,
         RequestResult<IEnumerable<(
             Alignment.Translation.Alignment alignment,
-            IEnumerable<Token> sourceTokenTrainingTextVerseTokens,
-            uint sourceTokenTrainingTextTokensIndex,
-            IEnumerable<Token> targetTokenTrainingTextTargetVerseTokens,
-            uint targetTokenTrainingTextTokensIndex
+            IEnumerable<Token> sourceVerseTokens,
+            uint sourceVerseTokensIndex,
+            IEnumerable<Token> targetVerseTokens,
+            uint targetVerseTokensIndex
         )>>,
         IEnumerable<(
             Alignment.Translation.Alignment alignment,
-            IEnumerable<Token> sourceTokenTrainingTextVerseTokens,
-            uint sourceTokenTrainingTextTokensIndex,
-            IEnumerable<Token> targetTokenTrainingTextTargetVerseTokens,
-            uint targetTokenTrainingTextTokensIndex
+            IEnumerable<Token> sourceVerseTokens,
+            uint sourceVerseTokensIndex,
+            IEnumerable<Token> targetVerseTokens,
+            uint targetVerseTokensIndex
         )>>
     {
 
@@ -43,27 +43,25 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<IEnumerable<(
             Alignment.Translation.Alignment alignment,
-            IEnumerable<Token> sourceTokenTrainingTextVerseTokens,
-            uint sourceTokenTrainingTextTokensIndex,
-            IEnumerable<Token> targetTokenTrainingTextTargetVerseTokens,
-            uint targetTokenTrainingTextTokensIndex
+            IEnumerable<Token> sourceVerseTokens,
+            uint sourceVerseTokensIndex,
+            IEnumerable<Token> targetVerseTokens,
+            uint targetVerseTokensIndex
         )>>> GetDataAsync(GetAlignmentVerseContextsQuery request, CancellationToken cancellationToken)
         {
-            // need an await to get the compiler to be 'quiet'
-            await Task.CompletedTask;
-
 #if DEBUG
             Stopwatch sw = new();
             sw.Start();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
 #endif
 
-            var alignmentSet = ProjectDbContext!.AlignmentSets
+            var alignmentSet = await ProjectDbContext!.AlignmentSets
                 .Include(e => e.ParallelCorpus)
                     .ThenInclude(e => e!.SourceTokenizedCorpus)
                 .Include(e => e.ParallelCorpus)
                     .ThenInclude(e => e!.TargetTokenizedCorpus)
-                .First();
+                .Where(e => e.Id == request.AlignmentSetId.Id)
+                .FirstOrDefaultAsync();
 
             if (alignmentSet == null)
             {
@@ -72,10 +70,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 return new RequestResult<IEnumerable<(
                     Alignment.Translation.Alignment alignment,
-                    IEnumerable<Token> sourceTokenTrainingTextVerseTokens,
-                    uint sourceTokenTrainingTextTokensIndex,
-                    IEnumerable<Token> targetTokenTrainingTextTargetVerseTokens,
-                    uint targetTokenTrainingTextTokensIndex
+                    IEnumerable<Token> sourceVerseTokens,
+                    uint sourceVerseTokensIndex,
+                    IEnumerable<Token> targetVerseTokens,
+                    uint targetVerseTokensIndex
                 )>>
                 (
                     success: false,
@@ -99,37 +97,42 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // the query time went from 0.8s to 2.1s.  Why?!  To address, this .Where
             // clause was added to the Select statement below that converts from
             // database alignments to API alignments.
-            var matchingAlignments = ProjectDbContext.Alignments
+            var databaseAlignments = ProjectDbContext.Alignments
                 .Include(e => e.SourceTokenComponent!)
                     .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
                 .Include(e => e.TargetTokenComponent!)
                     .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
                 .Where(e => e.Deleted == null)
-                .Where(e => e.SourceTokenComponent!.TrainingText! == request.sourceTokenTrainingText)
-                .Where(e => e.TargetTokenComponent!.TrainingText! == request.targetTokenTrainingText)
+                .Where(e => e.SourceTokenComponent!.TrainingText! == request.SourceTokenTrainingText)
+                .Where(e => e.TargetTokenComponent!.TrainingText! == request.TargetTokenTrainingText)
                 .AsNoTrackingWithIdentityResolution()
                 .ToList();
 
 #if DEBUG
             sw.Stop();
-            Logger.LogInformation("Elapsed={0} - Alignments+Tokens database query [count: {1}]", sw.Elapsed, matchingAlignments.Count);
+            Logger.LogInformation("Elapsed={0} - Alignments+Tokens database query [count: {1}]", sw.Elapsed, databaseAlignments.Count);
             sw.Restart();
 #endif
 
-            var alignments = matchingAlignments
-                .Where(e => e.AlignmentSetId == request.AlignmentSetId.Id)
+            // For some reason, when lots of matches, having this AlignmentSetId 'where'
+            // with the other pre-ToList() 'where' slows the overall query down considerably
+            var filteredDatabaseAlignments = databaseAlignments
+                .Where(e => e.AlignmentSetId == request.AlignmentSetId.Id) 
+                .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude);
+
+            var alignments = filteredDatabaseAlignments
                 .Select(e => new Alignment.Translation.Alignment(
                     ModelHelper.BuildAlignmentId(
                         e,
                         alignmentSet.ParallelCorpus.SourceTokenizedCorpus,
                         alignmentSet.ParallelCorpus.TargetTokenizedCorpus,
                         e.SourceTokenComponent!),
-                        new AlignedTokenPairs(
-                            ModelHelper.BuildToken(e.SourceTokenComponent!),
-                            ModelHelper.BuildToken(e.TargetTokenComponent!),
-                            e.Score),
-                        e.AlignmentVerification.ToString(),
-                        e.AlignmentOriginatedFrom.ToString()))
+                    new AlignedTokenPairs(
+                        ModelHelper.BuildToken(e.SourceTokenComponent!),
+                        ModelHelper.BuildToken(e.TargetTokenComponent!),
+                        e.Score),
+                    e.AlignmentVerification.ToString(),
+                    e.AlignmentOriginatedFrom.ToString()))
                 .ToList();
 
 #if DEBUG
@@ -180,10 +183,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             List<(
                 Alignment.Translation.Alignment Alignment,
-                IEnumerable<Token> SourceTokenTrainingTextVerseTokens,
-                uint SourceTokenTrainingTextTokensIndex,
-                IEnumerable<Token> TargetTokenTrainingTextVerseTokens,
-                uint TargetTokenTrainingTextTokensIndex)> alignmentVerseContexts = new();
+                IEnumerable<Token> sourceVerseTokens,
+                uint sourceVerseTokensIndex,
+                IEnumerable<Token> targetVerseTokens,
+                uint targetVerseTokensIndex)> alignmentVerseContexts = new();
 
             foreach (var alignment in alignments)
             {
@@ -192,10 +195,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 {
                     alignmentVerseContexts.Add((
                         alignment,
-                        sourceVerseContext.TokenTrainingTextVerseTokens,
-                        sourceVerseContext.TokenTrainingTextTokensIndex,
-                        targetVerseContext.TokenTrainingTextVerseTokens,
-                        targetVerseContext.TokenTrainingTextTokensIndex));
+                        sourceVerseContext.VerseTokens,
+                        sourceVerseContext.VerseTokensIndex,
+                        targetVerseContext.VerseTokens,
+                        targetVerseContext.VerseTokensIndex));
                 }
                 else
                 {
@@ -216,10 +219,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 #endif
             return new RequestResult<IEnumerable<(
                     Alignment.Translation.Alignment alignment,
-                    IEnumerable<Token> sourceTokenTrainingTextVerseTokens,
-                    uint sourceTokenTrainingTextTokensIndex,
-                    IEnumerable<Token> targetTokenTrainingTextTargetVerseTokens,
-                    uint targetTokenTrainingTextTokensIndex
+                    IEnumerable<Token> sourceVerseTokens,
+                    uint sourceVerseTokensIndex,
+                    IEnumerable<Token> targetVerseTokens,
+                    uint targetVerseTokensIndex
                 )>>(alignmentVerseContexts);
         }
     }
