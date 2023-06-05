@@ -657,11 +657,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 }
             }
 
-            foreach (var project in DashboardCollabProjects)
-            {
-                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.AppVersion!).ConfigureAwait(true);
-            }
-
             if (_dashboardCollabProjectsDisplay is null)
             {
                 _dashboardCollabProjectsDisplay = new();
@@ -674,7 +669,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private void SetCollabVisibility()
         {
-//#if COLLAB_RELEASE || COLLAB_DEBUG
             if (!_collaborationManager.HasRemoteConfigured())
             {
                 CollabProjectVisibility = Visibility.Collapsed;
@@ -697,10 +691,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     InitializeCollaborationLabel = "Refresh Server Projects";
                 }
             }
-//#else
-//            CollabProjectVisibility = Visibility.Collapsed;
-//            InitializeCollaborationVisibility = Visibility.Collapsed;
-//#endif
         }
 
         private bool IsDashboardRunningAlready()

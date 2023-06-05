@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SIL.Extensions;
 using System.Windows;
+using MahApps.Metro.Controls;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -222,7 +223,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             foreach (var project in Projects)
             {
-                if (Guid.Parse(project.Id.ToString()) == ProjectManager.CurrentProject.Id) //are these the right properties to look at?
+                var guid = project.Name.Substring(2); // removed the leading "P_"
+
+                if (Guid.Parse(guid) == ProjectManager.CurrentProject.Id)
                 {
                     SelectedProject = project;
                     break;

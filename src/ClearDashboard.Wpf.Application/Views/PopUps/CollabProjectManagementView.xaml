@@ -59,7 +59,7 @@
                 ScrollViewer.CanContentScroll="False"
                 SelectedItem="{Binding SelectedProject}"
                 Style="{StaticResource MaterialDesignFilledComboBox}"
-                TextSearch.TextPath="Name">
+                TextSearch.TextPath="Description">
                 <controls:AutoCompleteComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
