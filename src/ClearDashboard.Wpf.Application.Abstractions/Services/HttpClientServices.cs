@@ -169,8 +169,6 @@ namespace ClearDashboard.Wpf.Application.Services
             var content = new MultipartFormDataContent();
             content.Add(new StringContent($"Bearer {user.RemotePersonalAccessToken}"), "Authorization");
             request.Content = content;
-
-
             try
             {
                 var response = await _gitLabClient.Client.SendAsync(request);

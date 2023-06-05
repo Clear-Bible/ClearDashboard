@@ -621,8 +621,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             // get the list of those GitLab projects that haven't been sync'd locally
-            if (_collaborationManager.IsRepositoryInitialized())
-            {
+            //if (_collaborationManager.IsRepositoryInitialized())
+            //{
                 var projects = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
                 projects = projects.OrderByDescending(e => e.CreatedAt).ToList();
                 foreach (var dashboardProject in DashboardProjects)
@@ -655,7 +655,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     };
                     DashboardCollabProjects.Add(dashboardCollabProject);
                 }
-            }
+            //}
 
             if (_dashboardCollabProjectsDisplay is null)
             {
