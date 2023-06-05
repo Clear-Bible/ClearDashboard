@@ -664,8 +664,8 @@
                 Height="231"
                 ItemsSource="{Binding DashboardCollabProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
-                ScrollViewer.VerticalScrollBarVisibility="Visible"
-                Visibility="{Binding CollabProjectVisibility}">
+                ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <!--  Visibility="{Binding CollabProjectVisibility}"  -->
                 <ListView.IsEnabled>
                     <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                         <Binding Path="Connected" />

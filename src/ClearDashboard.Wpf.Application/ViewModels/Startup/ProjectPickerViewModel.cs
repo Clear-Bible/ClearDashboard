@@ -39,6 +39,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly ParatextProxy _paratextProxy;
         private readonly IMediator _mediator;
         private readonly HttpClientServices _httpClientServices;
+        private readonly GitLabClient _gitLabClient;
         private readonly ILocalizationService _localizationService;
         private readonly TranslationSource? _translationSource;
         private readonly IWindowManager _windowManager;
@@ -354,6 +355,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ILocalizationService localizationService,
             IWindowManager windowManager,
             HttpClientServices httpClientServices,
+            GitLabClient gitLabClient,
             CollaborationManager collaborationManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
@@ -362,6 +364,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _paratextProxy = paratextProxy;
             _mediator = mediator;
             _httpClientServices = httpClientServices;
+            _gitLabClient = gitLabClient;
             _localizationService = localizationService;
             AlertVisibility = Visibility.Collapsed;
             _translationSource = translationSource;
@@ -731,7 +734,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             AlertVisibility = Visibility.Collapsed;
         }
 
-        public void NavigateToMainViewModel(DashboardProject project, MouseButtonEventArgs args)
+        public async void NavigateToMainViewModel(DashboardProject project, MouseButtonEventArgs args)
         {
 
             // Only respond to a Left button click otherwise,
@@ -761,12 +764,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
 
             ParentViewModel!.ExtraData = project;
+
+
+            var projectGuid =
+                await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(project.FullFilePath), CancellationToken.None);
+
+
+            // get the user's projects
+            var projectList = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+
+            foreach (var gitLabProject in projectList)
+            {
+                var guid = gitLabProject.Name.Substring(2).ToUpper();
+                if (guid == projectGuid.Data)
+                {
+                    _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
+                    break;
+                }
+            }
+
+
             ParentViewModel.Ok();
         }
 
         public async Task ImportServerProject(DashboardCollabProject project, MouseButtonEventArgs args)
         {
-
             // Only respond to a Left button click otherwise,
             // the context menu will not be shown on a right click.
             if (args.LeftButton != MouseButtonState.Pressed)
@@ -782,6 +804,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (project.ProjectId == Guid.Empty)
             {
                 return;
+            }
+
+            // get the user's projects
+            var projectList = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+
+            foreach (var gitLabProject in projectList)
+            {
+                var guid = gitLabProject.Name.Substring(2);
+                if (Guid.Parse(guid) == project.ProjectId)
+                {
+                    _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
+                    break;
+                }
             }
 
             var importServerProjectViewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();

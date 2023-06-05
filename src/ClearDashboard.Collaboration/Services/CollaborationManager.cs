@@ -821,9 +821,11 @@ public class CollaborationManager
         };
     }
 
-    public void SetRemoteUrl(string userInfoRemoteUrl)
+    public void SetRemoteUrl(string userInfoRemoteUrl, string guid)
     {
+        userInfoRemoteUrl = userInfoRemoteUrl.Replace("http:", "https:");
         _configuration.RemoteUrl = userInfoRemoteUrl;
+        _repositoryPath = Path.Combine(_repositoryBasePath,guid);
     }
 
     #endregion Methods

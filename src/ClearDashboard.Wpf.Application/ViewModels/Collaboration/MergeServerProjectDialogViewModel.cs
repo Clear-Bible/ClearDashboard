@@ -190,7 +190,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
 
             _userInfo.RemoteUrl = project.HttpUrlToRepo.Replace("http:", "https:");
-            _collaborationManager.SetRemoteUrl(_userInfo.RemoteUrl);
+            _collaborationManager.SetRemoteUrl(_userInfo.RemoteUrl, project.Name);
+
+            if (!_collaborationManager.IsRepositoryInitialized())
+            {
+                _collaborationManager.InitializeRepository();
+            }
+
+            try
+            {
+                _collaborationManager.FetchMergeRemote();
+            }
+            catch (Exception ex)
+            {
+                Logger!.LogError(ex, "Unable to fetch from server");
+            }
         }
 
 
