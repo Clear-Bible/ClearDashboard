@@ -166,9 +166,11 @@
 
                 <ListView
                     MinHeight="310"
+                    MaxHeight="340"
                     Margin="5"
                     BorderBrush="{StaticResource PrimaryHueMidBrush}"
                     BorderThickness="1"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
                     ItemsSource="{Binding CollabUsers}">
                     <ListView.ItemTemplate>
                         <DataTemplate>

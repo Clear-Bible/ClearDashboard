@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -61,6 +63,10 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<List<string>> GetAllProjects()
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
             var list = new List<string>();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/projects");
             var response = await _gitLabClient.Client.SendAsync(request);
@@ -83,6 +89,9 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<List<GitLabGroup>> GetAllGroups()
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
             var list = new List<GitLabGroup>();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/groups");
             try
@@ -106,6 +115,10 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<GitUser>> GetAllUsers()
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
             var list = new List<GitUser>();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/users");
             try
@@ -135,6 +148,10 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<bool> CheckForExistingUser(string userName, string email)
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
             var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/users");
             try
             {
@@ -193,6 +210,9 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<GitLabProjectUser>> GetUsersForProject(CollaborationConfiguration collaborationConfiguration, int projectId)
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
             List<GitLabProjectUser> list = new();
 
             GitAccessToken accessToken = new();
@@ -245,6 +265,9 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task<GitLabUser> CreateNewUser(string firstName, string lastName, string username, string password,
             string email, string organization)
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
             var user = new GitLabUser();
             var request = new HttpRequestMessage(HttpMethod.Post, "users");
 
@@ -300,6 +323,9 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<string> GeneratePersonalAccessToken(GitLabUser user)
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
             GitAccessToken accessToken = new();
             var request = new HttpRequestMessage(HttpMethod.Post, $"users/{user.Id}/personal_access_tokens");
 
@@ -330,6 +356,10 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<GitLabProject> CreateNewProjectForUser(GitLabUser user, string projectName, string projectDescription)
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
             GitLabProject project = new();
             var request = new HttpRequestMessage(HttpMethod.Post, $"projects");
 
@@ -370,6 +400,9 @@ namespace ClearDashboard.Wpf.Application.Services
             content.Add(new StringContent("30"), "access_level");
             request.Content = content;
 
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ",""));
+
             try
             {
                 var response = await _gitLabClient.Client.SendAsync(request);
@@ -391,6 +424,10 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task RemoveUserFromProject(GitLabProjectUser selectedCurrentUser, GitLabProject selectedProject)
         {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
             var request = new HttpRequestMessage(HttpMethod.Delete, $"projects/{selectedProject.Id}/members/{selectedCurrentUser.Id}");
 
             try
