@@ -147,7 +147,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ProjectOwner = _collaborationManager.GetConfig();
             Projects = await _httpClientServices.GetProjectsForUser(ProjectOwner);
 
-            await AttemptToSelectCurrentProject();
+            AttemptToSelectCurrentProject();
 
             _gitLabUsers = await _httpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
@@ -219,7 +219,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ShowProgressBar = Visibility.Hidden;
         }
 
-        private async Task AttemptToSelectCurrentProject()
+        private void AttemptToSelectCurrentProject()
         {
             foreach (var project in Projects)
             {
@@ -231,6 +231,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     break;
                 }
             }
+
+            return;
         }
 
         #endregion // Methods
