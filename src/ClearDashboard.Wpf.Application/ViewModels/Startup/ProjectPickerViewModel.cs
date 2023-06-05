@@ -668,6 +668,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             CopyDashboardCollabProjectsToAnother(DashboardCollabProjects, _dashboardCollabProjectsDisplay);
+
+            DashboardCollabProjectsDisplay = DashboardCollabProjects;
         }
 
         private void SetCollabVisibility()
