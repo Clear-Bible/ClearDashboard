@@ -160,6 +160,10 @@ public class CreateNotesCommandHandlerTests : TestBase
             var lgLabel2 = await labelGroup.CreateAssociateLabel(Mediator!, "baa label 2 created in label group", null);
             await labelGroup.AssociateLabel(Mediator!, label2);
 
+            var labelGroup2 = await new LabelGroup { Name = "LabelGroup2" }.CreateOrUpdate(Mediator!);
+            var lgLabel21 = await labelGroup2.CreateAssociateLabel(Mediator!, "baa label 2 created in label group 2", "Template text");
+            await labelGroup2.AssociateLabel(Mediator!, label2);
+
             var user2Id = new UserId(user2.Id, user2.FirstName);
             labelGroup.PutAsUserDefault(Mediator!, user2Id);
             Assert.Equal(labelGroup.LabelGroupId!.Id, ProjectDbContext.Users.Where(e => e.Id == user2.Id).First().DefaultLabelGroupId);
@@ -301,10 +305,10 @@ public class CreateNotesCommandHandlerTests : TestBase
             var allLabels = await Label.GetAll(Mediator!);
             var labelGroups = await LabelGroup.GetAll(Mediator!);
 
-            Assert.Equal(5, ProjectDbContext.Labels.Count());
-            Assert.Equal(5, allLabels.Count());
+            Assert.Equal(6, ProjectDbContext.Labels.Count());
+            Assert.Equal(6, allLabels.Count());
             Assert.Equal(3, allNoteLabelIds.Count);
-            Assert.Single(labelGroups);
+            Assert.Equal(2, labelGroups.Count());
 
             var labelIdsInGroup = await labelGroups.First().GetLabelIds(Mediator!);
             Assert.Equal(3, labelIdsInGroup.Count());
@@ -318,11 +322,15 @@ public class CreateNotesCommandHandlerTests : TestBase
                 Output.WriteLine($"\tLabel - Text: '{l.Text}', Template Text: '{l.TemplateText}', Id: '{l.LabelId!.Id}'");
             }
 
+            var exportedLabelGroups = await LabelGroup.Export(Mediator!);
+            Output.WriteLine("\nLabel Group Export:");
+            Output.WriteLine(exportedLabelGroups);
+
             await labelGroups.First().DetachLabel(Mediator!, lgLabel2);
             labelIdsInGroup = await labelGroups.First().GetLabelIds(Mediator!);
             Assert.Equal(2, labelIdsInGroup.Count());
 
-            labelGroups.First().Delete(Mediator!);
+            labelGroups.ToList().ForEach(e => e.Delete(Mediator!));
             Assert.Equal(0, ProjectDbContext.LabelGroups.Count());
 
             Assert.Equal(2, ProjectDbContext.Notes.Count());
@@ -344,7 +352,7 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(5, ProjectDbContext.Labels.Count());
+            Assert.Equal(6, ProjectDbContext.Labels.Count());
             Assert.Equal(2, ProjectDbContext.Notes.Count());
             Assert.Equal(3, ProjectDbContext.LabelNoteAssociations.Count());
             Assert.Equal(5, ProjectDbContext.NoteDomainEntityAssociations.Count());
@@ -357,7 +365,7 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(3, ProjectDbContext.Labels.Count());
+            Assert.Equal(4, ProjectDbContext.Labels.Count());
             Assert.Equal(2, ProjectDbContext.Notes.Count());
             Assert.Equal(1, ProjectDbContext.LabelNoteAssociations.Count());
             Assert.Equal(5, ProjectDbContext.NoteDomainEntityAssociations.Count());
@@ -371,14 +379,14 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(1, ProjectDbContext.Labels.Count());
+            Assert.Equal(2, ProjectDbContext.Labels.Count());
             Assert.False(ProjectDbContext.Notes.Any());
             Assert.False(ProjectDbContext.LabelNoteAssociations.Any());
             Assert.False(ProjectDbContext.NoteDomainEntityAssociations.Any());
 
             allLabels = await Label.GetAll(Mediator!);
-            Assert.Single(allLabels);
-            allLabels.First().Delete(Mediator!);
+            Assert.Equal(2, allLabels.Count());
+            allLabels.ToList().ForEach(e => e.Delete(Mediator!));
 
             ProjectDbContext.ChangeTracker.Clear();
 

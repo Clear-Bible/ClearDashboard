@@ -3,6 +3,10 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using MediatR;
+using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using System.Text.Unicode;
 
 namespace ClearDashboard.DAL.Alignment.Notes
 {
@@ -153,5 +157,46 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();
         }
+
+        public static async Task<string> Export(IMediator mediator, IEnumerable<string>? labelGroupNames = null, CancellationToken token = default)
+        {
+            var command = new GetLabelGroupNamesLabelsByNamesQuery(labelGroupNames);
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
+
+            var serializedLabelGroupData = JsonSerializer.Serialize(result.Data!, LabelGroupDataJsonSerializerOptions);
+            return serializedLabelGroupData;
+        }
+
+        public static IDictionary<string, IEnumerable<(string Text, string? TemplateText)>>? Extract(string serializedLabelGroupData)
+        {
+            var deserializedLabelGroupData =
+                JsonSerializer.Deserialize<IDictionary<string, IEnumerable<(string Text, string? TemplateText)>>>(
+                    serializedLabelGroupData,
+                    LabelGroupDataJsonSerializerOptions);
+
+            return deserializedLabelGroupData;
+        }
+
+        public static async Task Import(IMediator mediator, IDictionary<string, IEnumerable<(string Text, string? TemplateText)>>? labelGroupData, CancellationToken token = default)
+        {
+            var command = new CreateLabelGroupsLabelsCommand(labelGroupData);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
+        }
+
+        private static JsonSerializerOptions LabelGroupDataJsonSerializerOptions =>
+            new()
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                IncludeFields = true,
+                WriteIndented = true,
+                Converters = {
+                    new LabelGroupDataJsonConverter()
+                }
+            };
+
     }
 }
