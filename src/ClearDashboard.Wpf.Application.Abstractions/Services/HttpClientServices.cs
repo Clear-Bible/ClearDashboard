@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -166,12 +167,13 @@ namespace ClearDashboard.Wpf.Application.Services
             List<GitLabProject> list = new();
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"projects");
-            var content = new MultipartFormDataContent();
-            content.Add(new StringContent($"Bearer {user.RemotePersonalAccessToken}"), "Authorization");
-            request.Content = content;
+
+            GitLabClient newClient = _gitLabClient;
+            newClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.RemotePersonalAccessToken);
+
             try
             {
-                var response = await _gitLabClient.Client.SendAsync(request);
+                var response = await newClient.Client.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
 
