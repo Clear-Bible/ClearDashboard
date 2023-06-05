@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models.Common;
@@ -144,7 +145,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
             Projects = await _httpClientServices.GetProjectsForUser(ProjectOwner);
-            
+
+            await AttemptToSelectCurrentProject();
 
             _gitLabUsers = await _httpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
@@ -214,6 +216,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
             }
             ShowProgressBar = Visibility.Hidden;
+        }
+
+        private async Task AttemptToSelectCurrentProject()
+        {
+            foreach (var project in Projects)
+            {
+                if (Guid.Parse(project.Id.ToString()) == ProjectManager.CurrentProject.Id) //are these the right properties to look at?
+                {
+                    SelectedProject = project;
+                    break;
+                }
+            }
         }
 
         #endregion // Methods

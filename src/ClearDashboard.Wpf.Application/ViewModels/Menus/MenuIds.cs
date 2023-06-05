@@ -10,6 +10,7 @@ public static class MenuIds
     public const string Delete = "DeleteID";
     public const string EnhancedCorpus = "EnhancedCorpusID";
 
+    public const string CollaborationManageProjects = "CollaborationManageProjectsID";
     public const string CollaborationInitialize = "CollaborationInitializeID";
     public const string CollaborationGetLatest = "CollaborationGetLatestID";
     public const string CollaborationCommit = "CollaborationCommitID";

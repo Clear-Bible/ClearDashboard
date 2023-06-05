@@ -164,6 +164,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             get => _windowIdToLoad;
             set => Set(ref _windowIdToLoad, value);
         }
+
+        public async Task CollabProjectManager()
+        {
+            var localizedString = _localizationService!["MainView_About"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<CollabProjectManagementViewModel>();
+
+
+            IWindowManager manager = new WindowManager();
+            await manager.ShowDialogAsync(viewModel, null, settings);
+        }
+
         private async Task ShowCollaborationInitialize()
         {
             if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
@@ -1184,7 +1203,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             BindableCollection<MenuItemViewModel> collaborationItems = new()
             {
                 // add in the standard menu items
-
+                new MenuItemViewModel
+                {
+                    Header = "Manage Collaboration Projects", Id = MenuIds.CollaborationManageProjects,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.HasRemoteConfigured() && InternetAvailability.IsInternetAvailable()
+        },
                 // Save Current Layout
                 new MenuItemViewModel
                 {
@@ -1204,38 +1228,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
                 },
-                // separator
-                new() { Header = "---------------------------------", Id = MenuIds.Separator, ViewModel = this, },
-                new MenuItemViewModel
-                {
-                    Header = "Git Fetch + Merge", Id = MenuIds.CollaborationFetchMerge,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable()
-                },
-                new MenuItemViewModel
-                {
-                    Header = "Git Hard Reset", Id = MenuIds.CollaborationHardReset,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
-                },
-                new MenuItemViewModel
-                {
-                    Header = "Create Project Snapshot Backup", Id = MenuIds.CollaborationCreateBackup,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
-                },
-                new MenuItemViewModel
-                {
-                    Header = "Dump Differences between Last Merged and Head", Id = MenuIds.CollaborationDumpDifferencesLastMergedHead,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
-                },
-                new MenuItemViewModel
-                {
-                    Header = "Dump Differences between Head and Current Database", Id = MenuIds.CollaborationDumpDifferencesHeadCurrentDb,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
-                },
+                //// separator
+                //new() { Header = "---------------------------------", Id = MenuIds.Separator, ViewModel = this, },
+                //new MenuItemViewModel
+                //{
+                //    Header = "Git Fetch + Merge", Id = MenuIds.CollaborationFetchMerge,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable()
+                //},
+                //new MenuItemViewModel
+                //{
+                //    Header = "Git Hard Reset", Id = MenuIds.CollaborationHardReset,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                //},
+                //new MenuItemViewModel
+                //{
+                //    Header = "Create Project Snapshot Backup", Id = MenuIds.CollaborationCreateBackup,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                //},
+                //new MenuItemViewModel
+                //{
+                //    Header = "Dump Differences between Last Merged and Head", Id = MenuIds.CollaborationDumpDifferencesLastMergedHead,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                //},
+                //new MenuItemViewModel
+                //{
+                //    Header = "Dump Differences between Head and Current Database", Id = MenuIds.CollaborationDumpDifferencesHeadCurrentDb,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                //},
             };
             BindableCollection<MenuItemViewModel> layouts = new()
             {
@@ -1939,6 +1963,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 new DashboardSettingsViewModel(EventAggregator, _collaborationManager), null, null);
                             break;
                         }
+
+                    case MenuIds.CollaborationManageProjects:
+                    {
+                        await CollabProjectManager();
+                        break;
+                    }
 
                     case MenuIds.CollaborationInitialize:
                         {
