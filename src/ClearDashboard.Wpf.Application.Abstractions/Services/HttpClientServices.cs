@@ -6,6 +6,7 @@ using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using HttpClientToCurl;
 using Microsoft.Extensions.Logging;
 using Mono.Unix.Native;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -164,10 +165,9 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             List<GitLabProject> list = new();
 
-            GitAccessToken accessToken = new();
-            var request = new HttpRequestMessage(HttpMethod.Get, $"users/{user.UserId}/projects");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"projects");
             var content = new MultipartFormDataContent();
-            content.Add(new StringContent($"true"), "membership");
+            content.Add(new StringContent($"Bearer {user.RemotePersonalAccessToken}"), "Authorization");
             request.Content = content;
 
 

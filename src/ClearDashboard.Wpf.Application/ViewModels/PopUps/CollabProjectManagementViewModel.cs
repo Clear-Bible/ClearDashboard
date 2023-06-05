@@ -221,6 +221,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private void AttemptToSelectCurrentProject()
         {
+            if (ProjectManager?.CurrentProject?.Id == null)
+            {
+                return;
+            }
+
+
             foreach (var project in Projects)
             {
                 var guid = project.Name.Substring(2); // removed the leading "P_"
