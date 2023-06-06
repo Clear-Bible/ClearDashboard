@@ -619,6 +619,29 @@
                 </StackPanel>
             </Button>
 
+            <Button
+                x:Name="RefreshCollabProjectButton"
+                Width="340"
+                Height="60"
+                Margin="10,5,40,10"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Top"
+                cal:Message.Attach="[Event Click]=[Action RefreshCollabProjectList()]"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="DarkGray"
+                BorderThickness="0"
+                Style="{StaticResource TransparentStyle}"
+                Visibility="Visible">
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="19"
+                        FontWeight="Normal"
+                        Text="Refresh Collaboration Projects List" />
+                </StackPanel>
+            </Button>
+
             <!--<Button
                 x:Name="InitializeCollaboration"
                 Width="340"
