@@ -62,7 +62,7 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             sw.Start();
             #endregion
-            
+
             var user1 = new Models.User
             {
                 Id = Guid.NewGuid(),
@@ -115,7 +115,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             sw.Restart();
             #endregion
 
-            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, 
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
                 new SourceTextIdToVerseMappingsFromVerseMappings(TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
                     sourceTokenizedTextCorpus.Versification,
                     targetTokenizedTextCorpus.Versification)));
@@ -155,7 +155,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             await note.AssociateLabel(Mediator!, label);
             var label2 = await note.CreateAssociateLabel(Mediator!, "boo label created in context of boo note", null);
 
-            var labelGroup = await new LabelGroup { Name = "LabelGroup1"}.CreateOrUpdate(Mediator!);
+            var labelGroup = await new LabelGroup { Name = "LabelGroup1" }.CreateOrUpdate(Mediator!);
             var lgLabel1 = await labelGroup.CreateAssociateLabel(Mediator!, "baa label 1 created in label group", "Template text 2");
             var lgLabel2 = await labelGroup.CreateAssociateLabel(Mediator!, "baa label 2 created in label group", null);
             await labelGroup.AssociateLabel(Mediator!, label2);
@@ -391,6 +391,86 @@ public class CreateNotesCommandHandlerTests : TestBase
             ProjectDbContext.ChangeTracker.Clear();
 
             Assert.False(ProjectDbContext.Labels.Any());
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__LabelGroupExportImport()
+    {
+        try 
+        {
+            var labelGroup1 = await new LabelGroup { Name = "LabelGroup1" }.CreateOrUpdate(Mediator!);
+            var lg1Label1 = await labelGroup1.CreateAssociateLabel(Mediator!, "LabelGroup1_Label1", "LabelGroup1_Label1_TemplateText");
+            var lg1Label2 = await labelGroup1.CreateAssociateLabel(Mediator!, "LabelGroup1_Label2", null);
+
+            var labelGroup2 = await new LabelGroup { Name = "LabelGroup2" }.CreateOrUpdate(Mediator!);
+            var lg2Label1 = await labelGroup2.CreateAssociateLabel(Mediator!, "LabelGroup2_Label1", "LabelGroup2_Label1_TemplateText");
+            var lg2Label2 = await labelGroup2.CreateAssociateLabel(Mediator!, "LabelGroup2_Label2", "LabelGroup2_Label2_TemplateText");
+            var lg2Label3 = await labelGroup2.CreateAssociateLabel(Mediator!, "LabelGroup2_Label3", null);
+
+            var labelGroup3 = await new LabelGroup { Name = "LabelGroup3" }.CreateOrUpdate(Mediator!);
+            var lg3Label1 = await labelGroup3.CreateAssociateLabel(Mediator!, "LabelGroup3_Label1", null);
+
+            var serializedLabelGroups = await LabelGroup.Export(Mediator!, new List<string> { "LabelGroup2", "LabelGroup3" });
+            var extractedLabelGroups = LabelGroup.Extract(serializedLabelGroups);
+
+            Assert.NotNull(extractedLabelGroups);
+            Assert.DoesNotContain(labelGroup1.Name!, extractedLabelGroups);
+            Assert.Contains(labelGroup2.Name!, extractedLabelGroups);
+            Assert.Contains(labelGroup3.Name!, extractedLabelGroups);
+
+            Assert.Contains((Text: "LabelGroup2_Label1", TemplateText: "LabelGroup2_Label1_TemplateText"), extractedLabelGroups[labelGroup2.Name!]);
+            Assert.Contains((Text: "LabelGroup2_Label2", TemplateText: "LabelGroup2_Label2_TemplateText"), extractedLabelGroups[labelGroup2.Name!]);
+            Assert.Contains((Text: "LabelGroup2_Label3", TemplateText: null), extractedLabelGroups[labelGroup2.Name!]);
+            Assert.Contains((Text: "LabelGroup3_Label1", TemplateText: null), extractedLabelGroups[labelGroup3.Name!]);
+
+            var labelGroupsToImport = new Dictionary<string, IEnumerable<(string Text, string? TemplateText)>>
+            {
+                {
+                    "LabelGroup4",
+                    new List<(string Text, string? TemplateText)> { 
+                        ("LabelGroup4_Label1", null), 
+                        ("LabelGroup4_Label2", "LabelGroup4_Label2_TemplateText"), 
+                        ("LabelGroup1_Label1", null) }  // Should not alter existing TemplateText for this label (should ignore this TemplateText)
+                },
+                {
+                    labelGroup3.Name!,
+                    new List<(string Text, string? TemplateText)> { 
+                        ("LabelGroup3_Label1", "LabelGroup3_Label1_TemplateText"), 
+                        ("LabelGroup2_Label3", "LabelGroup2_Label3_TemplateText"),  // Should not alter existing TemplateText for this label (should ignore this TemplateText)
+                        ("LabelGroup3_Label3", "LabelGroup3_Label3_TemplateText") }
+                },
+
+            };
+
+            await LabelGroup.Import(Mediator!, labelGroupsToImport);
+            serializedLabelGroups = await LabelGroup.Export(Mediator!, null);
+            extractedLabelGroups = LabelGroup.Extract(serializedLabelGroups);
+
+            Assert.NotNull(extractedLabelGroups);
+            Assert.Contains(labelGroup1.Name!, extractedLabelGroups);
+            Assert.Contains(labelGroup2.Name!, extractedLabelGroups);
+            Assert.Contains(labelGroup3.Name!, extractedLabelGroups);
+            Assert.Contains("LabelGroup4", extractedLabelGroups);
+
+            Assert.Contains((Text: "LabelGroup4_Label1", TemplateText: null), extractedLabelGroups["LabelGroup4"]);
+            Assert.Contains((Text: "LabelGroup4_Label2", TemplateText: "LabelGroup4_Label2_TemplateText"), extractedLabelGroups["LabelGroup4"]);
+            Assert.Contains((Text: "LabelGroup1_Label1", TemplateText: "LabelGroup1_Label1_TemplateText"), extractedLabelGroups["LabelGroup4"]); // Makes sure it left TemplateText as it was originally
+            Assert.Contains((Text: "LabelGroup1_Label1", TemplateText: "LabelGroup1_Label1_TemplateText"), extractedLabelGroups[labelGroup1.Name!]); // Makes sure it left TemplateText as it was originally
+
+            Assert.Contains((Text: "LabelGroup3_Label1", TemplateText: null), extractedLabelGroups[labelGroup3.Name!]); // Makes sure it left TemplateText as it was originally
+            Assert.Contains((Text: "LabelGroup2_Label3", TemplateText: null), extractedLabelGroups[labelGroup3.Name!]);
+            Assert.Contains((Text: "LabelGroup3_Label3", TemplateText: "LabelGroup3_Label3_TemplateText"), extractedLabelGroups[labelGroup3.Name!]);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            Assert.Single(ProjectDbContext!.Labels.Where(e => e.Text == "LabelGroup1_Label1"));
+            Assert.Single(ProjectDbContext!.Labels.Where(e => e.Text == "LabelGroup2_Label3"));
         }
         finally
         {
@@ -840,6 +920,84 @@ public class CreateNotesCommandHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public async void Notes__ParatextGreekManuscriptGuid()
     {
         try

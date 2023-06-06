@@ -45,11 +45,20 @@ public class CreateLabelGroupsLabelsCommandHandler : ProjectDbContextCommandHand
             .Include(e => e.Labels)
             .Where(e => labelGroupNames.Contains(e.Name))
             .ToList();
+
+#if DEBUG
+        ProjectDbContext!.LabelGroups.Select(e => e).ToList().ForEach(e => Logger.LogInformation($"Existing LabelGroup: '{e.Name}' / '{e.Id}'"));
+#endif
+
         var existingLabels = ProjectDbContext!.Labels
             .Include(e => e.LabelGroups)
             .Where(e => labelDataPairs
                 .Select(e => e.Text).Contains(e.Text!))
             .ToList();
+
+#if DEBUG
+        ProjectDbContext!.Labels.Select(e => e).ToList().ForEach(e => Logger.LogInformation($"Existing Label: '{e.Text}' / '{e.Id}'"));
+#endif
 
         var newLabelGroups = labelGroupNames
             .Except(existingLabelGroups.Select(e => e.Name))
@@ -59,8 +68,13 @@ public class CreateLabelGroupsLabelsCommandHandler : ProjectDbContextCommandHand
                     Id = Guid.NewGuid(),
                     Name = e
                 }
-            );
+            )
+            .ToList();
         ProjectDbContext!.LabelGroups.AddRange(newLabelGroups);
+
+#if DEBUG
+        newLabelGroups.Select(e => e).ToList().ForEach(e => Logger.LogInformation($"Creating new LabelGroup:  '{e.Name}' / '{e.Id}'"));
+#endif
 
         var newLabels = labelDataPairs
             .ExceptBy(existingLabels.Select(e => e.Text), e => e.Text)
@@ -71,8 +85,13 @@ public class CreateLabelGroupsLabelsCommandHandler : ProjectDbContextCommandHand
                     Text = e.Text,
                     TemplateText = e.TemplateText
                 }
-             );
+             )
+            .ToList();
         ProjectDbContext!.Labels.AddRange(newLabels);
+
+#if DEBUG
+        newLabels.Select(e => e).ToList().ForEach(e => Logger.LogInformation($"Creating new Label:  '{e.Text}' / '{e.Id}'"));
+#endif
 
         var labelGroupsByName = existingLabelGroups
             .Union(newLabelGroups)
@@ -93,9 +112,13 @@ public class CreateLabelGroupsLabelsCommandHandler : ProjectDbContextCommandHand
                     ProjectDbContext.LabelGroupAssociations.Add(new Models.LabelGroupAssociation
                     {
                         Id = Guid.NewGuid(),
-                        Label = labelInRequest,
-                        LabelGroup = labelGroupInRequest
+                        LabelId = labelInRequest.Id,
+                        LabelGroupId = labelGroupInRequest.Id
                     });
+
+#if DEBUG
+                    Logger.LogInformation($"Creating new association between: label group '{labelGroupInRequest.Name}' / '{labelGroupInRequest.Id}' and label '{labelInRequest.Text}' / '{labelInRequest.Id}'");
+#endif
                 }
             }
         }
