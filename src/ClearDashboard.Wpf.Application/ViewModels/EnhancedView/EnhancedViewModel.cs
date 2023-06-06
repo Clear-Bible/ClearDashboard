@@ -786,7 +786,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenCreateAlignment(object sender, TokenEventArgs e)
         {
-            if (SelectionManager.SelectedSourceTokens.Count == 1 && SelectionManager.SelectedTargetTokens.Count == 1)
+            if (SelectionManager.SelectedTokens.SourceTokenCount == 1 && SelectionManager.SelectedTokens.TargetTokenCount == 1)
             {
                 if (e is { TokenDisplay.VerseDisplay: AlignmentDisplayViewModel alignmentDisplayViewModel })
                 {
@@ -881,7 +881,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void Copy(object sender, NoteEventArgs e)
         {
-            var surfaceText = e.SelectedTokens.CombinedSurfaceText.Replace(',', ' ');
+            TokenDisplayViewModelCollection sortedTokens = new TokenDisplayViewModelCollection(e.SelectedTokens.OrderBy(x => x.AlignmentToken.Position));
+            sortedTokens.Refresh();
+            var surfaceText = sortedTokens.CombinedSurfaceText.Replace(",", "");
             Clipboard.SetText(surfaceText);
         }
 

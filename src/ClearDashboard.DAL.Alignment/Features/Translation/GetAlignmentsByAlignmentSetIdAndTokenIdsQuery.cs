@@ -4,6 +4,9 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
-    public record GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId AlignmentSetId, IEnumerable<EngineParallelTextRow> EngineParallelTextRows, ManualAutoAlignmentMode Mode) : 
+    public record GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(
+        AlignmentSetId AlignmentSetId, 
+        IEnumerable<EngineParallelTextRow> EngineParallelTextRows, 
+        AlignmentTypes AlignmentTypes) : 
         ProjectRequestQuery<IEnumerable<Alignment.Translation.Alignment>>;
 }

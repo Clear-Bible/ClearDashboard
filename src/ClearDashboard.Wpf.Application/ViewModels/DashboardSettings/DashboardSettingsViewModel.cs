@@ -2,9 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using Caliburn.Micro;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 
@@ -16,6 +20,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables   
 
         private readonly ILogger<DashboardSettingsViewModel> _logger;
+        private readonly IEventAggregator _eventAggregator;
         private bool _isAquaEnabledOnStartup;
 
         #endregion //Member Variables
@@ -74,7 +79,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
-
+        private bool _isVerseByVerseTextCollectionsEnabled;
+        public bool IsVerseByVerseTextCollectionsEnabled
+        {
+            get => _isVerseByVerseTextCollectionsEnabled;
+            set
+            {
+                _isVerseByVerseTextCollectionsEnabled = value;
+                NotifyOfPropertyChange(() => IsVerseByVerseTextCollectionsEnabled);
+            }
+        }
 
 
         #endregion //Observable Properties
@@ -83,10 +97,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Constructor
 
         // ReSharper disable once EmptyConstructor
-        public DashboardSettingsViewModel()
+        public DashboardSettingsViewModel(IEventAggregator eventAggregator)
         {
             // for Caliburn Micro
             _logger = IoC.Get<ILogger<DashboardSettingsViewModel>>();
+            _eventAggregator = eventAggregator;
         }
 
         protected override void OnViewReady(object view)
@@ -102,6 +117,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             IsPowerModesEnabled = Settings.Default.EnablePowerModes;
+            IsVerseByVerseTextCollectionsEnabled = Settings.Default.VerseByVerseTextCollectionsEnabled;
 
             var isEnabled = false;
             try
@@ -176,6 +192,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             Settings.Default.Save();
+        }
+
+        public void VerseByVerseTextCollectionsEnabledCheckBox(bool value)
+        {
+            Settings.Default.VerseByVerseTextCollectionsEnabled = IsVerseByVerseTextCollectionsEnabled;
+            Settings.Default.Save();
+
+            _eventAggregator.PublishOnUIThreadAsync(new RefreshTextCollectionsMessage());
         }
 
         #endregion // Methods

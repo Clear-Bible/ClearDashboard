@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -61,6 +60,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<TokenComposite> TokenComposites => Set<TokenComposite>();
         public virtual DbSet<TokenCompositeTokenAssociation> TokenCompositeTokenAssociations => Set<TokenCompositeTokenAssociation>();
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
+        public virtual DbSet<TokenVerseAssociation> TokenVerseAssociations => Set<TokenVerseAssociation>();
         public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<Translation> Translations => Set<Translation>();
         public virtual DbSet<TranslationModelEntry> TranslationModelEntries => Set<TranslationModelEntry>();
@@ -262,6 +262,12 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .WithMany(p => p.TokenComposites)
                 .UsingEntity<TokenCompositeTokenAssociation>();
 
+            modelBuilder.Entity<VerseRow>()
+                .HasMany(e => e.TokenComponents)
+                .WithOne(e => e.VerseRow)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<VerseRow>().HasIndex(e => e.BookChapterVerse);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 
@@ -292,6 +298,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Verse>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Verse>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Verse>().HasIndex(e => e.VerseNumber);
+            modelBuilder.Entity<Verse>().HasIndex(e => e.BBBCCCVVV);
 
             modelBuilder.Entity<AlignmentTopTargetTrainingText>()
                 .HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });

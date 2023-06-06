@@ -11,6 +11,7 @@ using System.Diagnostics;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using OriginatedFromValues = ClearDashboard.DAL.Alignment.Translation.Translation.OriginatedFromValues;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -93,6 +94,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     translationSet, 
                     request.TranslationSetId.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.Language,
                     request.TranslationSetId.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language,
+                    request.AlignmentTypesToInclude,
                     cancellationToken);
 
 #if DEBUG
@@ -120,7 +122,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Select(tc => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(tc),
                             string.Empty,
-                            "FromAlignmentModel")).ToList());
+                            OriginatedFromValues.FromAlignmentModel)).ToList());
                     //                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
 
 #if DEBUG
@@ -150,6 +152,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             Models.TranslationSet translationSet,
             string? sourceLanguage,
             string? targetLanguage,
+            AlignmentTypes alignmentTypesToInclude,
             CancellationToken cancellationToken)
         {
             var combined = translations.ToList();
@@ -177,7 +180,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .Select(tmtc => new Alignment.Translation.Translation(
                         ModelHelper.BuildToken(tmtc.tc),
                         tmtc.tm.TargetTextScores.OrderByDescending(tts => tts.Score).First().Text ?? string.Empty,
-                        "FromTranslationModel"));
+                        OriginatedFromValues.FromTranslationModel));
 
                 combined.AddRange(translationModelEntries);
 
@@ -223,7 +226,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Select(t => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(t),
                             string.Join("/", li.Meanings.Select(lid => lid.Text)),
-                            "FromLexicon")
+                            OriginatedFromValues.FromLexicon)
                         )
                     ));
 
@@ -268,6 +271,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
                         .Where(a => sourceTokenTrainingTexts.Keys.Contains(a.SourceTokenComponent!.TrainingText))
                         .ToList()
+                        .WhereAlignmentTypesFilter(alignmentTypesToInclude)
                         .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
                         .ToDictionary(g => g.Key, g => g
                             .GroupBy(a => a.TargetTokenComponent!.TrainingText)
@@ -282,7 +286,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                                 new Alignment.Translation.Translation(
                                         ModelHelper.BuildToken(s),
                                         kvp.Value!,
-                                        "FromAlignmentModel"))
+                                        OriginatedFromValues.FromAlignmentModel))
                             ));
 
 #if DEBUG
@@ -300,7 +304,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Select(a => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(a.SourceTokenComponent!),
                             a.TopTargetTrainingText,
-                            "FromAlignmentModel"))
+                            OriginatedFromValues.FromAlignmentModel))
                         .ToList();
 
                     combined.AddRange(translationsFromAlignmentModel);

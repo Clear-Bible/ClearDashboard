@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Text;
 using SIL.Machine.Tokenization;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using OriginatedFromValues = ClearDashboard.DAL.Alignment.Translation.Translation.OriginatedFromValues;
 using Token = ClearBible.Engine.Corpora.Token;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -28,6 +29,7 @@ using Autofac;
 using SIL.Machine.Utils;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -105,6 +107,251 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         finally
         {
             await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    public async Task AlignmentSet_GetAlignmentTrainingTextCounts()
+    {
+        Stopwatch sw = new();
+        try
+        {
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+
+            Assert.NotNull(alignmentSet);
+
+            var count = 0;
+            List<EngineParallelTextRow> someRows = new();
+            foreach (var e in parallelCorpus)
+            {
+                someRows.Add((EngineParallelTextRow)e);
+                if (count++ > 10) break;
+            }
+
+            var someAlignments = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AllAlignmentTypes);
+            Assert.True(someAlignments.Any());
+
+            var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
+            var atp2 = someAlignments.Skip(3).Take(1).Select(a => a.AlignedTokenPair).First();
+
+            var alignment1 = new Alignment.Translation.Alignment(atp1, "Unverified");
+            await alignmentSet.PutAlignment(alignment1);
+            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp2, "Verified"));
+
+            sw.Start();
+
+            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            Assert.Equal(13, alignmentTrainingTextCounts.Count);
+
+            var one = alignmentTrainingTextCounts.Skip(4).First();
+            Assert.Equal(1, one.Value.Count);
+
+            Output.WriteLine("");
+            Output.WriteLine($"Source training text:  {one.Key}");
+            foreach (var one2 in one.Value)
+            {
+                Assert.Equal(2, one2.Value.Count);
+                Output.WriteLine($"\tTarget training text: {one2.Key}");
+                foreach (var one3 in one2.Value)
+                {
+                    Output.WriteLine($"\t\tStatus:  {one3.Key}    Count:  {one3.Value}");
+                }
+            }
+
+            Output.WriteLine("");
+
+            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            Assert.Equal(12, alignmentTrainingTextCounts2.Count);
+
+            var verse = alignmentTrainingTextCounts2.Skip(1).First();
+            Assert.Equal(3, verse.Value.Count);
+
+            Output.WriteLine("");
+            Output.WriteLine($"Target training text:  {verse.Key}");
+            foreach (var verse2 in verse.Value)
+            {
+                Output.WriteLine($"\tSource training text: {verse2.Key}");
+                foreach (var verse3 in verse2.Value)
+                {
+                    Output.WriteLine($"\t\tStatus:  {verse3.Key}    Count:  {verse3.Value}");
+                }
+            }
+
+            alignment1.Verification = "Verified";
+            await alignmentSet.PutAlignment(alignment1);
+            Output.WriteLine("");
+
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0} - Overall", sw.Elapsed);
+        }
+    }
+    
+    [Fact]
+    public async Task TokenizedCorpus_GetTokenVerseRowContext()
+    {
+        Stopwatch sw = new();
+
+        try
+        {
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            sw.Start();
+
+            var token1 = ProjectDbContext!.Tokens
+                .Skip(10)
+                .Select(e => ModelHelper.BuildToken(e))
+                .FirstOrDefault();
+            Assert.NotNull(token1);
+
+            var (tokens, index) = TokenVerseContextFinder.GetTokenVerseRowContext(token1, ProjectDbContext!, Logger);
+
+            Output.WriteLine($"Token Id: {token1.TokenId}");
+            Output.WriteLine($"Index: {index}");
+            foreach (var t in tokens)
+            {
+                Output.WriteLine($"\t{t.TokenId}");
+            }
+
+            var token2 = ProjectDbContext!.TokenComposites
+                .Include(e => e.Tokens)
+                .Select(e => ModelHelper.BuildToken(e))
+                .FirstOrDefault();
+            Assert.NotNull(token2);
+
+            var (tokens2, index2) = TokenVerseContextFinder.GetTokenVerseRowContext(token2, ProjectDbContext!, Logger);
+
+            Output.WriteLine($"Token Id: {token2.TokenId}");
+            Output.WriteLine($"Index: {index2}");
+            foreach (var t in tokens2)
+            {
+                Output.WriteLine($"\t{t.TokenId}");
+            }
+
+            var token3 = ((CompositeToken)token2).Tokens.First();
+            var (tokens3, index3) = TokenVerseContextFinder.GetTokenVerseRowContext(token3, ProjectDbContext!, Logger);
+
+            Output.WriteLine($"Token Id: {token3.TokenId}");
+            Output.WriteLine($"Index: {index3}");
+            foreach (var t in tokens3)
+            {
+                Output.WriteLine($"\t{t.TokenId}");
+            }
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0} - Overall", sw.Elapsed);
+
+        }
+    }
+
+    [Fact]
+    public async Task AlignmentSet_GetAlignmentVerseContexts()
+    {
+        Stopwatch sw = new();
+
+        try
+        { 
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+
+            Assert.NotNull(alignmentSet);
+
+            sw.Start();
+
+            var alignmentSetVerseContexts = await alignmentSet.GetAlignmentVerseContexts(
+                "verse", 
+                "verse",
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
+                CancellationToken.None);
+            Assert.Equal(12, alignmentSetVerseContexts.Count());
+
+            var one = alignmentSetVerseContexts.FirstOrDefault();
+            Assert.True(one != default);
+
+            Assert.Equal(6, one.sourceVerseTokens.Count());
+            Assert.Equal(6, one.targetVerseTokens.Count());
+            Assert.Equal((uint)3, one.sourceVerseTokensIndex);
+            Assert.Equal((uint)3, one.targetVerseTokensIndex);
+
+            Output.WriteLine($"Alignment source: {one.alignment.AlignedTokenPair.SourceToken.TokenId}");
+            Output.WriteLine($"Verse context index (source): {one.sourceVerseTokensIndex}");
+            foreach (var vc in one.sourceVerseTokens)
+            {
+                Output.WriteLine($"\t{vc.TokenId}");
+            }
+            Output.WriteLine($"Alignment target: {one.alignment.AlignedTokenPair.TargetToken.TokenId}");
+            Output.WriteLine($"Verse context index (target): {one.targetVerseTokensIndex}");
+            foreach (var vc in one.targetVerseTokens)
+            {
+                Output.WriteLine($"\t{vc.TokenId}");
+            }
+
+            Output.WriteLine("");
+
+            var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
+                "one_verse_three", 
+                "three",
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
+                CancellationToken.None);
+            Assert.Equal(2, alignmentSetVerseContexts2.Count());
+
+            var two = alignmentSetVerseContexts2.FirstOrDefault();
+            Assert.True(two != default);
+
+            Assert.Equal(4, two.sourceVerseTokens.Count());
+            Assert.Equal(6, two.targetVerseTokens.Count());
+            Assert.Equal((uint)1, two.sourceVerseTokensIndex);
+            Assert.Equal((uint)4, two.targetVerseTokensIndex);
+
+            Output.WriteLine($"Alignment source: {two.alignment.AlignedTokenPair.SourceToken.TokenId}");
+            Output.WriteLine($"Verse context index (source): {two.sourceVerseTokensIndex}");
+            foreach (var vc in two.sourceVerseTokens)
+            {
+                Output.WriteLine($"\t{vc.TokenId}");
+            }
+            Output.WriteLine($"Alignment target: {two.alignment.AlignedTokenPair.TargetToken.TokenId}");
+            Output.WriteLine($"Verse context index (target): {two.targetVerseTokensIndex}");
+            foreach (var vc in two.targetVerseTokens)
+            {
+                Output.WriteLine($"\t{vc.TokenId}");
+            }
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+
+            sw.Stop();
+            Output.WriteLine("Elapsed={0} - Overall", sw.Elapsed);
         }
     }
 
@@ -454,7 +701,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 if (count++ > 10) break;
             }
 
-            var someAlignments = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.All);
+            var someAlignments = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AllAlignmentTypes);
             Assert.True(someAlignments.Any());
 
             var atp1 = someAlignments.Skip(1).Take(1).Select(a => a.AlignedTokenPair).First();
@@ -469,13 +716,20 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"));
             await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified"));
 
-            var manualOnly = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.ManualOnly);
+            var manualOnly = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AssignedAlignmentTypes);
             Assert.Equal(4, manualOnly.Count());
 
-            // The PutAlignments above should effectively 'hide' five auto alignments (five
-            // because the last PutAlignment uses tokens from two different auto alignments)
-            // from the perspective of ManualOnlyNonManualAuto mode.
-            var manualOnlyNonManualAuto = await alignmentSet.GetAlignments(someRows, ManualAutoAlignmentMode.ManualAndOnlyNonManualAuto);
+            var manualVerifiedOnly = await alignmentSet.GetAlignments(someRows, AlignmentTypes.Assigned_Verified);
+            Assert.Equal(2, manualVerifiedOnly.Count());
+
+            var manualOnlyNonManualAuto = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded);
+
+            // DeleteAlignment above reduces someAlignments count by 1 (79 -> 78), and the
+            // subsequent four PutAlignments should effectively 'hide' four auto alignments
+            // (by including auto alignment tokens: atp1, atp2, a4 and a5 in new manual
+            // alignments).  So that takes the number of auto alignments returned when using
+            // "ManualAndOnlyNonManualAuto" from 78 -> 74.  
+
             Assert.Equal(someAlignments.Count() - 5, manualOnlyNonManualAuto.Where(a => a.OriginatedFrom == Models.AlignmentOriginatedFrom.FromAlignmentModel.ToString()).Count());
             Assert.Equal(4, manualOnlyNonManualAuto.Where(a => a.OriginatedFrom == Models.AlignmentOriginatedFrom.Assigned.ToString()).Count());
 
@@ -603,7 +857,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Output.WriteLine("");
             foreach (var translation in translations)
             {
-                if (translation.OriginatedFrom != "FromTranslationModel" && translation.OriginatedFrom != "FromAlignmentModel")
+                if (translation.OriginatedFrom != OriginatedFromValues.FromTranslationModel && translation.OriginatedFrom != OriginatedFromValues.FromAlignmentModel)
                 {
                     Assert.InRange<TokenId>(translation.SourceToken.TokenId, new TokenId("040001003001001"), new TokenId("040001005006001"), Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
                 }
@@ -674,7 +928,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translationsForNewToken = await translationSet.GetTranslations(new List<TokenId>() { newToken.TokenId });
             Assert.Single(translationsForNewToken);
             Assert.Equal(newToken.TokenId, translationsForNewToken.First().SourceToken.TokenId);
-            Assert.Equal("FromAlignmentModel", translationsForNewToken.First().OriginatedFrom);
+            Assert.Equal(OriginatedFromValues.FromAlignmentModel, translationsForNewToken.First().OriginatedFrom);
             Assert.Empty(translationsForNewToken.First().TargetTranslationText);
             Assert.Null(translationsForNewToken.First().TranslationId);  // The Translation returned should be a default 'empty' translation - not from the DB
 
@@ -818,7 +1072,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translations = await translationSet.GetTranslations(tokenIds);
             Assert.Equal(3, translations.Count());
 
-            var translationsFromLexicon = translations.Where(t => t.OriginatedFrom == "FromLexicon");
+            var translationsFromLexicon = translations.Where(t => t.OriginatedFrom == OriginatedFromValues.FromLexicon);
             Assert.Equal(2, translationsFromLexicon.Count());
 
             var translation1 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexeme1.Lemma).FirstOrDefault();

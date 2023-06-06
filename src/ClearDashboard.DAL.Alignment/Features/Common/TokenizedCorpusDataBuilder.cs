@@ -12,9 +12,9 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
-    internal static class TokenizedCorpusDataBuilder
+    public static class TokenizedCorpusDataBuilder
     {
-        public static IEnumerable<TokensTextRow> ExtractValidateBook(ITextCorpus textCorpus, string bookId, CorpusId corpusId)
+        public static IEnumerable<TokensTextRow> ExtractValidateBook(ITextCorpus textCorpus, string bookId, string? corpusName)
         {
             var tokensTextRows = textCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
 
@@ -27,7 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
             if (dups.Any())
             {
-                throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpusId.Name}' book '{bookId}'");
+                throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpusName}' book '{bookId}'");
             }
 
             var multiVerseSpanningComposites = tokensTextRows
@@ -285,7 +285,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         public static DbCommand CreateTokenizedCorpusInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "CorpusId", "DisplayName", "TokenizationFunction", "ScrVersType", "CustomVersData", "Metadata", "UserId", "Created" };
+            var columns = new string[] { "Id", "CorpusId", "DisplayName", "TokenizationFunction", "ScrVersType", "CustomVersData", "Metadata", "UserId", "Created", "LastTokenized" };
 
             DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenizedCorpus), columns);
 
@@ -307,6 +307,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             command.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenizedCorpus.Metadata);
             command.Parameters["@UserId"].Value = Guid.Empty != tokenizedCorpus.UserId ? tokenizedCorpus.UserId : userProvider!.CurrentUser!.Id;
             command.Parameters["@Created"].Value = converter.ConvertToProvider(tokenizedCorpus.Created);
+            command.Parameters["@LastTokenized"].Value = converter.ConvertToProvider(tokenizedCorpus.LastTokenized);
 
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }

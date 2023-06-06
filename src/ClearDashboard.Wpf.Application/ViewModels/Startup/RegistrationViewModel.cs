@@ -137,28 +137,92 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             try
             {
-                File.Delete(LicenseManager.LicenseFilePath);
+                if (File.Exists(LicenseManager.LicenseFilePath))
+                {
+                    File.Delete(LicenseManager.LicenseFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Deleting the LicenseFilePath failed: "+ex);
+            }
 
-                var decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(LicenseKey);
-                var decryptedLicenseUser = LicenseManager.DecryptedJsonToUser(decryptedLicenseKey);
+            string decryptedLicenseKey = string.Empty;
+            try
+            {
+                Logger.LogInformation("LicenseKey is: "+LicenseKey);
+                decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(LicenseKey);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("DecryptLicenseFromString failed: "+ex);
+            }
+            Logger.LogInformation("decryptedLicenseKey is: "+decryptedLicenseKey);
 
+            User decryptedLicenseUser = new User();
+            try
+            {
+                decryptedLicenseUser = LicenseManager.DecryptedJsonToUser(decryptedLicenseKey);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("DecryptJsonToUser failed: "+ex);
+            }
+            Logger.LogInformation("decryptedLicenseUser is: "+decryptedLicenseUser);
+
+            try
+            {
                 if (decryptedLicenseUser.Id == Guid.Empty)
                 {
+                    Logger.LogError("decryptedLicenseUser.Id is equal to Guid.Empty");
                     throw new Exception("License has empty guid.");
+                    
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Evaluating decryptedLicenseUser.Id failed: "+ex);
+            }
 
-                var givenLicenseUser = new User
+            Logger.LogInformation("FirstName is: "+FirstName);
+            Logger.LogInformation("LastName is: "+LastName);
+            User givenLicenseUser = new User();
+            try
+            {
+                givenLicenseUser = new User
                 {
                     FirstName = FirstName, //_registrationViewModel.FirstName;
                     LastName = LastName //_registrationViewModel.LastName;
                 };
                 ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
 
-                var match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
-                
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("givenLicenseUser failed to set: "+ex);
+            }
+            Logger.LogInformation("givenLicenseUser is: "+givenLicenseUser);
+
+            LicenseUserMatchType match = LicenseUserMatchType.Error;
+            try
+            {
+                match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("CompareGivenUserAndDecryptedUser failed: "+ex);
+            }
+            Logger.LogInformation("match is: "+match);
+
+            try
+            {
                 switch (match)
                 {
                     case LicenseUserMatchType.Match:
+                        if (!Directory.Exists(LicenseManager.LicenseFilePath))
+                        {
+                            Directory.CreateDirectory(LicenseManager.LicenseFolderPath);
+                        }
                         File.WriteAllText(LicenseManager.LicenseFilePath, LicenseKey);
                         await MoveForwards();
                         await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
@@ -180,11 +244,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         break;
                 }
             }
-
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show(_localizationService!.Get("RegistrationDialogViewModel_FaultyKey"));
+                Logger.LogError("LicenseUserMatchType switch statement failed: "+ex);
             }
+            Logger.LogInformation("MatchType is: "+MatchType);
         }
         #endregion  Methods
 

@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public sealed class SelectionManager : PropertyChangedBase
+    public sealed class SelectionManager : PropertyChangedBase, IHandle<TokensJoinedMessage>, IHandle<TokenUnjoinedMessage>
     {
         private IEventAggregator EventAggregator { get; }
         private ILogger<SelectionManager> Logger { get; }

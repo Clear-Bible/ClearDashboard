@@ -465,7 +465,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             set
             {
                 _progressBarVisibility = value;
-                NotifyOfPropertyChange(() => ProgressBarVisibility);
+                try
+                {
+                    NotifyOfPropertyChange(() => ProgressBarVisibility);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogWarning("Setting BiblicalTerms progress bar visibility task was cancelled.", ex);
+                }
             }
         }
 
@@ -546,16 +553,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
             SelectedDomain = drv;
 
-
-
-            // setup the collectionview that binds to the data grid
-            OnUIThread(() =>
+            try
             {
-                BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
-
-                // setup the method that we go to for filtering
-                BiblicalTermsCollectionView.Filter = FilterGridItems;
-            });
+                // setup the collectionview that binds to the data grid
+                OnUIThread(() =>
+                {
+                    BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
+                    
+                    // setup the method that we go to for filtering
+                    BiblicalTermsCollectionView.Filter = FilterGridItems;
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("Setting BiblicalTerms progress bar visibility task was cancelled.", ex);
+            }
 
 
             NotifyOfPropertyChange(() => BiblicalTermsCollectionView);

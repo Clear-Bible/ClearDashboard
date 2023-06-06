@@ -27,7 +27,7 @@ namespace ClearDashboard.Aqua.Module.Services
 {
     public class AquaManager : IAquaManager
     {
-        protected string BaseAddressString { get; set; } = "https://fxmhfbayk4.us-east-1.awsapprunner.com";
+        protected string BaseAddressString { get; set; } = "https://fxmhfbayk4.us-east-1.awsapprunner.com/v2";
         //protected string BaseAddressString { get; set; } = "https://t3gnkxpu3d.us-east-1.awsapprunner.com/";
 
         //prior endpoint

@@ -32,8 +32,8 @@ using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
-    public class NotesViewModel : 
-        ToolViewModel, 
+    public class NotesViewModel :
+        ToolViewModel,
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
         IHandle<NoteUpdatingMessage>,
@@ -347,7 +347,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private async Task<IEnumerable<NoteViewModel>> AssembleNotes(
             NoteManager noteManager,
             CancellationToken cancellationToken,
-            string taskName, 
+            string taskName,
             Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus)
         {
             HashSet<NoteId> noteIds = new HashSet<NoteId>(new IIdEqualityComparer());
@@ -374,7 +374,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             SelectedNoteLabels.Clear();
             selectedNoteViewModel?.Labels
-                .Select(l => { 
+                .Select(l => {
                     SelectedNoteLabels.Add(l);
                     return l;
                 })

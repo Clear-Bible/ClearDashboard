@@ -675,6 +675,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<bool>("IsRtl")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("LastMergedCommitSha")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ProjectName")
                         .HasColumnType("TEXT");
 
@@ -840,6 +843,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
+
+                    b.Property<long?>("LastTokenized")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Metadata")
                         .IsRequired()
@@ -1021,6 +1027,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("BBBCCCVVV")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("BookNumber")
                         .HasColumnType("INTEGER");
 
@@ -1042,9 +1051,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("VerseBBBCCCVVV")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("VerseMappingId")
                         .HasColumnType("TEXT");
 
@@ -1055,6 +1061,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BBBCCCVVV");
 
                     b.HasIndex("BookNumber");
 
@@ -1623,7 +1631,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseRow", "VerseRow")
                         .WithMany("TokenComponents")
-                        .HasForeignKey("VerseRowId");
+                        .HasForeignKey("VerseRowId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("TokenizedCorpus");
 
