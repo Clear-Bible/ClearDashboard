@@ -27,6 +27,7 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <applicationConverters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <applicationConverters:WidthSubtraction x:Key="WidthSubtraction" />
             <applicationConverters:BooleanAndConverter x:Key="BooleanAndConverter" />
@@ -575,7 +576,7 @@
                 Background="DarkGray"
                 BorderThickness="0"
                 Style="{StaticResource TransparentStyle}"
-                Visibility="{Binding CreateCollabUserVisibilityVisibility}">
+                Visibility="{Binding CreateCollabUserVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                     <iconPacks:PackIconMaterial
                         Width="32"
@@ -603,7 +604,7 @@
                 Background="DarkGray"
                 BorderThickness="0"
                 Style="{StaticResource TransparentStyle}"
-                Visibility="Visible">
+                Visibility="{Binding ManageCollabVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                     <iconPacks:PackIconBoxIcons
                         Width="32"
@@ -631,7 +632,7 @@
                 Background="DarkGray"
                 BorderThickness="0"
                 Style="{StaticResource TransparentStyle}"
-                Visibility="Visible">
+                Visibility="{Binding ManageCollabVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                     <TextBlock
                         Margin="10,0,0,0"
