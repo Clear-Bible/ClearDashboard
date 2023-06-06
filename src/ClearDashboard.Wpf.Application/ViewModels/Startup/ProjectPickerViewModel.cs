@@ -84,14 +84,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private Visibility _createCollabUserVisibility = Visibility.Collapsed;
-        public Visibility CreateCollabUserVisibilityVisibility
+        private bool _createCollabUserVisibility = false;
+        public bool CreateCollabUserVisibility
         {
             get => _createCollabUserVisibility;
             set
             {
                 _createCollabUserVisibility = value;
-                NotifyOfPropertyChange(() => CreateCollabUserVisibilityVisibility);
+                ManageCollabVisibility = !value;
+                NotifyOfPropertyChange(() => CreateCollabUserVisibility);
+            }
+        }
+
+
+        private bool _manageCollabVisibility;
+        public bool ManageCollabVisibility
+        {
+            get => _manageCollabVisibility;
+            set
+            {
+                _manageCollabVisibility = value;
+                NotifyOfPropertyChange(() => ManageCollabVisibility);
             }
         }
 
@@ -501,7 +514,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (_collaborationManager.HasRemoteConfigured())
             {
                 // collab user present
-                CreateCollabUserVisibilityVisibility = Visibility.Collapsed;
+                CreateCollabUserVisibility = false;
 
                 ShowCollabUserInfo = Visibility.Visible;
                 CollaborationConfig = _collaborationManager.GetConfig();
@@ -513,7 +526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             else
             {
                 // no user present
-                CreateCollabUserVisibilityVisibility = Visibility.Visible;
+                CreateCollabUserVisibility = true;
                 ShowCollabUserInfo = Visibility.Collapsed;
             }
         }

@@ -377,7 +377,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 _collaborationConfiguration = CollaborationConfig;
                 _collaborationManager.SaveCollaborationLicense(_collaborationConfiguration);
             }
-            
+
+            ShowGenerateUserButtonEnabled = false;
         }
 
 
