@@ -421,6 +421,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
+
+        public async Task RefreshCollabProjectList()
+        {
+            await GetCollabProjects().ConfigureAwait(false);
+        }
+
         public async Task InitializeCollaborationUser()
         {
             var localizedString = _localizationService!["MainView_About"];
@@ -665,7 +671,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 _dashboardCollabProjectsDisplay = new();
             }
 
-            CopyDashboardCollabProjectsToAnother(DashboardCollabProjects, _dashboardCollabProjectsDisplay);
+            //CopyDashboardCollabProjectsToAnother(DashboardCollabProjects, _dashboardCollabProjectsDisplay);
 
             DashboardCollabProjectsDisplay = DashboardCollabProjects;
         }
