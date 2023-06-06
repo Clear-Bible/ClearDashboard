@@ -170,6 +170,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             };
             await CreateProjectOnServerIfNotCreated();
 
+            Ok();  // run the action - do not await
+
             base.OnViewLoaded(view);
         }
 

@@ -16,8 +16,8 @@
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    mc:Ignorable="d"
-    Loaded="MergeServerProjectDialogView_OnLoaded">
+    Loaded="MergeServerProjectDialogView_OnLoaded"
+    mc:Ignorable="d">
     <UserControl.Resources>
 
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
@@ -43,15 +43,16 @@
         </Grid.RowDefinitions>
 
 
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="0,0,0,0">
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="0,0,0,0"
+            Orientation="Horizontal">
             <Image
                 Width="50"
                 Height="50"
-                HorizontalAlignment="Left"
                 Margin="20,0"
+                HorizontalAlignment="Left"
                 Source="../../Assets/ClearDashboard_logo_50.png" />
             <TextBlock
                 VerticalAlignment="Center"
@@ -60,52 +61,52 @@
 
         </StackPanel>
         <Label Grid.Row="1" Content="{Binding ProgressLabel}" />
-        <StackPanel
+
+        <ScrollViewer
             Grid.Row="2"
             Grid.Column="0"
-            Margin="10,10"
+            Margin="10,0,15,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Orientation="Vertical">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="800">
-                <ListView
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto">
+            <ListView
                 x:Name="ProgressMessages"
-                Height="400"
-                Width="2000"
+                MinHeight="390"
                 Margin="15,0,15,5"
-                VerticalAlignment="Top"
+                VerticalAlignment="Stretch"
                 ItemsSource="{Binding MergeProgressUpdates}">
-                    <ListView.Style>
-                        <Style TargetType="{x:Type ListView}">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </Style>
-                    </ListView.Style>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListViewItem}">
-                            <Setter Property="BorderBrush" Value="LightGray" />
-                            <Setter Property="BorderThickness" Value="0,0,0,1" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.View>
-                        <GridView>
-                            <GridView.ColumnHeaderContainerStyle>
-                                <Style TargetType="{x:Type GridViewColumnHeader}">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </Style>
-                            </GridView.ColumnHeaderContainerStyle>
+                <ListView.Style>
+                    <Style TargetType="{x:Type ListView}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </Style>
+                </ListView.Style>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="BorderBrush" Value="LightGray" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
 
-                            <GridViewColumn Width="2000">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </ScrollViewer>
-        </StackPanel>
+                        <GridViewColumn Width="2000">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </ScrollViewer>
+
 
         <StackPanel
             Grid.Row="3"
@@ -121,15 +122,16 @@
                 Content="{Binding CancelAction}"
                 IsEnabled="{Binding CanCancelAction}"
                 Style="{StaticResource TransparentStyle}" />
-            <Button
+            <!--<Button
                 x:Name="Ok"
                 cal:Message.Attach="Ok"
                 Content="{Binding OkAction}"
                 IsDefault="True"
                 IsEnabled="{Binding CanOkAction}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}" />-->
         </StackPanel>
-        <ProgressBar Grid.Row="2"
+        <ProgressBar
+            Grid.Row="2"
             Width="76"
             Height="75"
             HorizontalAlignment="Center"

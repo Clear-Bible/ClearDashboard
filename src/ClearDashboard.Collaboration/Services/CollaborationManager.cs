@@ -626,6 +626,8 @@ public class CollaborationManager
         using (var repo = new Repository(_repositoryPath))
         {
             RepositoryStatus status = repo.RetrieveStatus();
+
+            // TODO WATCH THESE FOR ALL CASES
             if (status.IsDirty && (!IsCurrentProjectInRepository() || status.Staged.Any() || status.Added.Any() || status.Removed.Any()))
             {
                 progress.Report(new ProgressStatus(0, "Committing changes to source control"));

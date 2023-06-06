@@ -5,6 +5,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using HttpClientToCurl;
+using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.Extensions.Logging;
 using Mono.Unix.Native;
 using Newtonsoft.Json.Linq;
@@ -215,7 +216,6 @@ namespace ClearDashboard.Wpf.Application.Services
 
             List<GitLabProjectUser> list = new();
 
-            GitAccessToken accessToken = new();
             var request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}/users");
 
             try
@@ -228,10 +228,29 @@ namespace ClearDashboard.Wpf.Application.Services
                 list = JsonSerializer.Deserialize<List<GitLabProjectUser>>(result)!;
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+
+            try
+            {
+                // find out the project owner
+                request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}");
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+                var project = JsonSerializer.Deserialize<GitLabProjectOwner>(result)!;
+
+                var owner = project.owner.id;
 
                 foreach (var item in list)
                 {
-                    if (item.Id == collaborationConfiguration.UserId)
+                    if (item.Id == owner)
                     {
                         item.IsOwner = true;
                     }
@@ -243,6 +262,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 WireUpLogger();
                 _logger?.LogError(e.Message, e);
             }
+
 
             return list;
         }

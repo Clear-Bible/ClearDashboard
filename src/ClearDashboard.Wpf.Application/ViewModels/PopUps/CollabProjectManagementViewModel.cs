@@ -25,7 +25,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Member Variables   
 
-        private List<GitUser> _gitLabUsers;
+        private List<GitUser> _gitLabUsers = new();
 
         #endregion //Member Variables
 
@@ -146,13 +146,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
             Projects = await _httpClientServices.GetProjectsForUser(ProjectOwner);
-
-            AttemptToSelectCurrentProject();
-
+            
             _gitLabUsers = await _httpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
 
             ShowProgressBar = Visibility.Hidden;
+
+            AttemptToSelectCurrentProject();
+
 
             base.OnViewLoaded(view);
         }
@@ -219,7 +220,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ShowProgressBar = Visibility.Hidden;
         }
 
-        private void AttemptToSelectCurrentProject()
+        private async void AttemptToSelectCurrentProject()
         {
             if (ProjectManager?.CurrentProject?.Id == null)
             {
@@ -237,6 +238,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     break;
                 }
             }
+
+            await GetUsersForProject();
 
             return;
         }

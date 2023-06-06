@@ -91,14 +91,14 @@
                                 VerticalAlignment="Center">
                                 <iconPacks:PackIconRemixIcon.Style>
                                     <Style TargetType="iconPacks:PackIconRemixIcon">
-                                        <Setter Property="Kind" Value="AdminLine" />
-                                        <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
-                                        <Setter Property="ToolTip" Value="Project Owner" />
+                                        <Setter Property="Kind" Value="UserLine" />
+                                        <Setter Property="Foreground" Value="{StaticResource OrangeMidBrush}" />
+                                        <Setter Property="ToolTip" Value="Project Member" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsOwner}" Value="False">
-                                                <Setter Property="Kind" Value="UserLine" />
-                                                <Setter Property="Foreground" Value="{StaticResource OrangeMidBrush}" />
-                                                <Setter Property="ToolTip" Value="Project Member" />
+                                            <DataTrigger Binding="{Binding IsOwner}" Value="True">
+                                                <Setter Property="Kind" Value="AdminLine" />
+                                                <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                <Setter Property="ToolTip" Value="Project Owner" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -170,8 +170,8 @@
                     Margin="5"
                     BorderBrush="{StaticResource PrimaryHueMidBrush}"
                     BorderThickness="1"
-                    ScrollViewer.VerticalScrollBarVisibility="Visible"
-                    ItemsSource="{Binding CollabUsers}">
+                    ItemsSource="{Binding CollabUsers}"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
