@@ -19,5 +19,6 @@ namespace ClearDashboard.Wpf.Application.Helpers
             Settings.Default.GitRootUrl = gitRootUrl;
             Settings.Default.Save();
         }
+
     }
 }

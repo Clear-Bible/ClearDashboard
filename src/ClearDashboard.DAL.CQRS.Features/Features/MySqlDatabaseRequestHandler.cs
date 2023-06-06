@@ -26,40 +26,19 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
             //string connectionString = DataAccessLayer.Models.Encryption.Decrypt(
             //    "IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
 
-            connectionString = "Server=cleardashboard.org;User ID=cleardas;Password=AmG$MsJSRb7@!R?6;Database=dashboard";
+            //connectionString = "Server=cleardashboard.org;User ID=cleardas;Password=AmG$MsJSRb7@!R?6;Database=dashboard";
             await using MySqlConnection connection = new MySqlConnection(connectionString);
             await connection.OpenAsync();
 
             await using MySqlCommand command = new MySqlCommand("SELECT * FROM gitlabusers;", connection);
             await using MySqlDataReader reader = await command.ExecuteReaderAsync();
+
             while (await reader.ReadAsync())
             {
                 object value = reader.GetValue(0);
-                // do something with 'value'
+                object value1 = reader.GetValue(1);
+                object value2 = reader.GetValue(2);
             }
-
-
-            //var connection = new SqliteConnection($"Data Source={ResourcePath};Cache=Shared");
-            //connection.CreateCollation("NOCASE", (s1, s2) => string.Compare(s1, s2, StringComparison.InvariantCultureIgnoreCase));
-            //try
-            //{
-            //    connection.Open();
-            //    var cmd = connection.CreateCommand();
-            //    cmd.CommandText = commandText;
-            //    DataReader = cmd.ExecuteReader();
-
-            //    return ProcessData();
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.LogError(ex, $"An unexpected error occurred while executing the following command: '{commandText}'");
-            //    throw;
-            //}
-            //finally
-            //{
-            //    connection.Close();
-            //    SqliteConnection.ClearPool(connection);
-            //}
 
             return ProcessData();
         }

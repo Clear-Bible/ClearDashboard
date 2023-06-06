@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Controls;
 using Autofac;
 using Caliburn.Micro;
@@ -14,6 +15,7 @@ using MailKit.Net.Smtp;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MimeKit;
+using static ClearDashboard.DataAccessLayer.Features.GitLabUser.GitLabUserSlice;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -241,6 +243,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 Groups = await _httpClientServices.GetAllGroups();
             }
+
+            PushGitLabUserToRepo();
             base.OnViewLoaded(view);
         }
 
@@ -395,6 +399,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             else
             {
                 BadEmailValidationCode = false;
+            }
+        }
+
+
+        public async void PushGitLabUserToRepo()
+        {
+            var results =
+                await ExecuteRequest(new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), ""), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                //version = results.Data;
             }
         }
 

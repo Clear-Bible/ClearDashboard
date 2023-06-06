@@ -37,7 +37,7 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
             protected override string ResourceName { get; set; } = "";
 
 
-            public override Task<RequestResult<bool>> Handle(
+            public override async Task<RequestResult<bool>> Handle(
                 PostGitLabUserQuery request, CancellationToken cancellationToken)
             {
                 _connectionString = request.ConnectionString;
@@ -56,7 +56,7 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
 
                 try
                 {
-                    queryResult.Data = ProcessData();
+                    queryResult.Data = await ExecuteMySqlCommandAndProcessData(_connectionString, _commandText);
                 }
                 catch (Exception ex)
                 {
@@ -67,7 +67,7 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
 
                 queryResult.Data= false;
 
-                return Task.FromResult(queryResult);
+                return queryResult;
             }
 
             protected override bool ProcessData()
