@@ -397,7 +397,7 @@ namespace ClearDashboard.Wpf.Application.Services
             var content = new MultipartFormDataContent();
             //content.Add(new StringContent(Uri.EscapeDataString($"{firstName} {lastName}")), "name");
             content.Add(new StringContent(user.Id.ToString()), "user_id");
-            content.Add(new StringContent("30"), "access_level");
+            content.Add(new StringContent("40"), "access_level");
             request.Content = content;
 
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");

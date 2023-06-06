@@ -1226,7 +1226,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Commit Changes to Server", Id = MenuIds.CollaborationCommit,
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
+                    // TODO FIX THIS
+                    //IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
                 },
                 //// separator
                 //new() { Header = "---------------------------------", Id = MenuIds.Separator, ViewModel = this, },
