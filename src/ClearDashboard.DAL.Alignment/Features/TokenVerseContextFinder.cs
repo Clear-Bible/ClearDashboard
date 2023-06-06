@@ -16,7 +16,7 @@ namespace ClearDashboard.DAL.Alignment.Features
 {
     public static class TokenVerseContextFinder
     {
-        public static (IEnumerable<Token> TokenTrainingTextVerseTokens, uint TokenTrainingTextTokensIndex) GetTokenVerseRowContext(Token token, ProjectDbContext projectDbContext, ILogger logger)
+        public static (IEnumerable<Token> VerseTokens, uint VerseTokensIndex) GetTokenVerseRowContext(Token token, ProjectDbContext projectDbContext, ILogger logger)
         {
             if (token is CompositeToken token1)
             {
@@ -96,7 +96,7 @@ namespace ClearDashboard.DAL.Alignment.Features
         /// <param name="projectDbContext"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public static IDictionary<IId, (IEnumerable<Token> TokenTrainingTextVerseTokens, uint TokenTrainingTextTokensIndex)> GetTokenVerseContexts(Models.ParallelCorpus parallelCorpus, IEnumerable<Token> tokens, bool isSource, ProjectDbContext projectDbContext, ILogger logger)
+        public static IDictionary<IId, (IEnumerable<Token> VerseTokens, uint VerseTokensIndex)> GetTokenVerseContexts(Models.ParallelCorpus parallelCorpus, IEnumerable<Token> tokens, bool isSource, ProjectDbContext projectDbContext, ILogger logger)
         {
 #if DEBUG
             Stopwatch sw = new();
@@ -237,32 +237,32 @@ namespace ClearDashboard.DAL.Alignment.Features
             var verseContexts = GetVerseContexts(tokens.Select(e => e.TokenId), tokenIdTVAs, tokenComponentIdToVerseMappingIds, tokensByVerseMappingId)
                 .ToDictionary(
                     e => e.Item1,
-                    e => (e.Item2.TokenTrainingTextVerseTokens.Select(t => ModelHelper.BuildToken(t)), e.Item2.TokenTrainingTextTokensIndex),
+                    e => (e.Item2.VerseTokens.Select(t => ModelHelper.BuildToken(t)), e.Item2.VerseTokensIndex),
                     new IIdEqualityComparer());
 
             return verseContexts!;
         }
 
 
-        private static IEnumerable<(TokenId, (IEnumerable<Models.TokenComponent> TokenTrainingTextVerseTokens, uint TokenTrainingTextTokensIndex))> GetVerseContexts(
+        private static IEnumerable<(TokenId, (IEnumerable<Models.TokenComponent> VerseTokens, uint VerseTokensIndex))> GetVerseContexts(
             IEnumerable<TokenId> tokenIds,
             IDictionary<Guid, IEnumerable<Models.TokenVerseAssociation>> tokenComponentIdTVAs,
             IDictionary<Guid, IEnumerable<Guid>> tokenComponentIdVerseMappingIds,
             IDictionary<Guid, List<Models.TokenComponent>> verseMappingIdTokens)
         {
-            var verseContextsByTokenComponentId = new List<(TokenId, (IEnumerable<Models.TokenComponent> TokenTrainingTextVerseTokens, uint TokenTrainingTextTokensIndex))>();
+            var verseContextsByTokenComponentId = new List<(TokenId, (IEnumerable<Models.TokenComponent> VerseTokens, uint VerseTokensIndex))>();
 
             foreach (var tokenId in tokenIds)
             {
                 if (tokenComponentIdTVAs.TryGetValue(tokenId.Id, out var tvas))
                 {
-                    if (verseMappingIdTokens.TryGetValue(tvas.First().Verse!.VerseMappingId, out var tokenTrainingTextVerseTokens))
+                    if (verseMappingIdTokens.TryGetValue(tvas.First().Verse!.VerseMappingId, out var verseTokens))
                     {
-                        tokenTrainingTextVerseTokens = tokenTrainingTextVerseTokens.OrderBy(e => e.EngineTokenId).ToList();
-                        var tokenIndex = FindTokenIndex(tokenId.Id, tokenTrainingTextVerseTokens);
+                        verseTokens = verseTokens.OrderBy(e => e.EngineTokenId).ToList();
+                        var tokenIndex = FindTokenIndex(tokenId.Id, verseTokens);
                         if (tokenIndex >= 0)
                         {
-                            verseContextsByTokenComponentId.Add((tokenId, (tokenTrainingTextVerseTokens, (uint)tokenIndex)));
+                            verseContextsByTokenComponentId.Add((tokenId, (verseTokens, (uint)tokenIndex)));
                             continue;
                         }
                     }
@@ -273,13 +273,13 @@ namespace ClearDashboard.DAL.Alignment.Features
                     // Else if BCV, find the first match in source/targetVerseMappingIdBCVPairs
                     // to get VerseMapping Id and use the source-or-target tokens from that
                     // VerseMapping
-                    if (verseMappingIdTokens.TryGetValue(verseMappingIds.First(), out var tokenTrainingTextVerseTokens))
+                    if (verseMappingIdTokens.TryGetValue(verseMappingIds.First(), out var verseTokens))
                     {
-                        tokenTrainingTextVerseTokens = tokenTrainingTextVerseTokens.OrderBy(e => e.EngineTokenId).ToList();
-                        var tokenIndex = FindTokenIndex(tokenId.Id, tokenTrainingTextVerseTokens);
+                        verseTokens = verseTokens.OrderBy(e => e.EngineTokenId).ToList();
+                        var tokenIndex = FindTokenIndex(tokenId.Id, verseTokens);
                         if (tokenIndex >= 0)
                         {
-                            verseContextsByTokenComponentId.Add((tokenId, (tokenTrainingTextVerseTokens, (uint)tokenIndex)));
+                            verseContextsByTokenComponentId.Add((tokenId, (verseTokens, (uint)tokenIndex)));
                             continue;
                         }
                     }

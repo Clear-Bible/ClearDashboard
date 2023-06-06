@@ -113,11 +113,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// <param name="eventAggregator"></param>
         /// <param name="verse"></param>
         public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseList verse, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseListViewModel verse, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             VerseViewModel verseViewModel = new VerseViewModel();
-            _verse = verseViewModel.SetVerseFromBBBCCCVVV(verse.BBBCCCVVV);
+            _verse = verseViewModel.SetVerseFromBBBCCCVVV(verse.VerseBBCCCVVV);
 
             BookChapter = verse.VerseIdShort.Substring(0, verse.VerseIdShort.IndexOf(':'));
 

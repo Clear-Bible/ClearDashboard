@@ -24,7 +24,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 await StartParatextAsync();
                 var client = CreateHttpClient();
 
-                var response = await client.PostAsJsonAsync<GetTextCollectionsQuery>("textcollections", new GetTextCollectionsQuery());
+                var response = await client.PostAsJsonAsync<GetTextCollectionsQuery>("textcollections", new GetTextCollectionsQuery(false, false));
 
                 Assert.True(response.IsSuccessStatusCode);
                 var result = await response.Content.ReadAsAsync<RequestResult<List<TextCollection>>>();

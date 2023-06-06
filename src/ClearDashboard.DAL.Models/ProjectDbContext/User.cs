@@ -24,6 +24,12 @@ namespace ClearDashboard.DataAccessLayer.Models
         [NotMapped]
         public string? ParatextUserName { get; set; }
 
+        [NotMapped] 
+        public bool? IsInternal { get; set; } = false;
+
+        [NotMapped]
+        public int? LicenseVersion { get; set; } = 0;
+
         public int? LastAlignmentLevelId { get; set; }
 
         public Guid? DefaultLabelGroupId {  get; set; }

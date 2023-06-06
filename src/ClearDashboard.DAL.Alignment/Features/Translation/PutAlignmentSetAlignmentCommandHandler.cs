@@ -14,8 +14,6 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using ModelVerificationType = ClearDashboard.DataAccessLayer.Models.AlignmentVerification;
 using ModelOriginatedType = ClearDashboard.DataAccessLayer.Models.AlignmentOriginatedFrom;
 using ClearDashboard.DAL.Alignment.Features.Events;
-using Microsoft.EntityFrameworkCore.Storage;
-using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -92,34 +90,73 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
-            var alignmentsToRemove = Enumerable.Empty<Models.Alignment>();
+            List<Models.Alignment> alignmentsToRemove = new();
+            
+            List<Models.Alignment> existingAlignmentMatches = new List<Models.Alignment>();
+            Models.Alignment? alignmentToPut = null;
 
-            var alignment = new Models.Alignment
+            if (request.Alignment.AlignmentId is not null)
             {
-                Id = Guid.NewGuid(),
-                SourceTokenComponentId = request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id,
-                TargetTokenComponentId = request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id,
-                Score = request.Alignment.AlignedTokenPair.Score,
-                AlignmentVerification = verificationType,
-                AlignmentOriginatedFrom = originatedType,
-                AlignmentSetId = alignmentSet.Id
-            };
+                // Find existing "Assigned" alignment by Id (if it exists and originated from "Assigned"):
+                var alignmentById = ProjectDbContext!.Alignments
+                    .Where(e => e.Id == request.Alignment.AlignmentId.Id)
+                    .Where(e => e.Deleted == null)
+                    .Where(e => e.AlignmentOriginatedFrom == ModelOriginatedType.Assigned)
+                    .SingleOrDefault();
 
-            ProjectDbContext!.Alignments.Add(alignment);
+                if (alignmentById is not null)
+                {
+                    existingAlignmentMatches.Add(alignmentById);
+                }
+            }
+            
+            // Add in any "Assigned" alignments that match by both source and target token ids:
+            existingAlignmentMatches.AddRange(ProjectDbContext!.Alignments
+                .Where(e => e.AlignmentSetId == alignmentSet.Id)
+                .Where(e => e.Deleted == null)
+                .Where(e => e.AlignmentOriginatedFrom == ModelOriginatedType.Assigned)
+                .Where(e =>
+                    e.SourceTokenComponent!.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id &&
+                    e.TargetTokenComponent!.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id)
+                .ToList());
+
+            if (existingAlignmentMatches.Any())
+            {
+                // Update ("put") the first one:
+                alignmentToPut = existingAlignmentMatches.First();
+                existingAlignmentMatches.Where(e => e.Id != alignmentToPut.Id).ToList().ForEach(e => 
+                {
+                    e.Deleted = currentDateTime;
+                    alignmentsToRemove.Add(e);
+                });
+            }
+
+            if (alignmentToPut is null)
+            {
+                alignmentToPut = new Models.Alignment { Id = Guid.NewGuid() };
+                ProjectDbContext!.Alignments.Add(alignmentToPut);
+            }
+
+            alignmentToPut.SourceTokenComponentId = request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id;
+            alignmentToPut.TargetTokenComponentId = request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id;
+            alignmentToPut.Score = request.Alignment.AlignedTokenPair.Score;
+            alignmentToPut.AlignmentVerification = verificationType;
+            alignmentToPut.AlignmentOriginatedFrom = originatedType;
+            alignmentToPut.AlignmentSetId = alignmentSet.Id;
 
             using (var transaction = ProjectDbContext.Database.BeginTransaction())
             {
-                alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignment, ProjectDbContext));
+                alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignmentToPut, ProjectDbContext));
                 _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
                 transaction.Commit();
             }
 
-            await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment), cancellationToken);
+            await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignmentToPut), cancellationToken);
 
             // Querying the database so we can return a fully formed AlignmentId:
             var alignmentId = ModelHelper.AddIdIncludesAlignmentsQuery(ProjectDbContext!)
-                .Where(al => al.Id == alignment.Id)
+                .Where(al => al.Id == alignmentToPut.Id)
                 .Select(a => ModelHelper.BuildAlignmentId(a))
                 .First();
 

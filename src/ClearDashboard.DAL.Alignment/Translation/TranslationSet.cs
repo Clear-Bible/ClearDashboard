@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         }
         */
 
-        public async Task<Dictionary<string, double>?> GetTranslationModelEntryForToken(Token token)
+        public async Task<Dictionary<string, double>?> GetTranslationModelEntryForToken(Token token, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded)
         {
             if (UsingTranslationModel)
             {
@@ -41,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             else
             {
                 var alignmentSet = await AlignmentSet.Get(AlignmentSetId, mediator_);
-                var matchingTargetTokens = await alignmentSet.GetTargetTokensBySourceTrainingText(token.TrainingText);
+                var matchingTargetTokens = await alignmentSet.GetTargetTokensBySourceTrainingText(token.TrainingText, alignmentTypesToInclude);
                 return matchingTargetTokens
                     .Select(t => t.TrainingText)
                     .GroupBy(t => t)
@@ -65,14 +65,15 @@ namespace ClearDashboard.DAL.Alignment.Translation
         }
 
         */
-        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow, CancellationToken token = default)
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
         {
-            return await GetTranslations(engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId)), token);
+            return await GetTranslations(engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId)), alignmentTypesToInclude, token);
         }
 
-        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds, CancellationToken token = default)
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
         {
-            var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds), token);
+            // alignmentTypesToInclude argument is used when alignment denormalization data is not available:
+            var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds, alignmentTypesToInclude), token);
             result.ThrowIfCanceledOrFailed(true);
 
             return result.Data!;
