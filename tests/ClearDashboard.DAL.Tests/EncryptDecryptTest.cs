@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,8 +15,8 @@ namespace ClearDashboard.DAL.Tests
         public void EncryptAndDecryptTest()
         {
             var original = "Text to Hide By Encryption";
-            var encrypted = DataAccessLayer.Encryption.Encrypt(original);
-            var decrypted = DataAccessLayer.Encryption.Decrypt(encrypted);
+            var encrypted = Encryption.Encrypt(original);
+            var decrypted = Encryption.Decrypt(encrypted);
 
             Assert.Equal(original, decrypted);
         }

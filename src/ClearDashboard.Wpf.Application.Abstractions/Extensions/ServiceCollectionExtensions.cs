@@ -1,22 +1,20 @@
-﻿using System;
-using System.Text.Json;
-using System.Collections.Generic;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Features;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Services;
-using Dapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 
 
 namespace ClearDashboard.Wpf.Application.Extensions
 {
-  
+
     public static class ServiceCollectionExtensions
     {
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
