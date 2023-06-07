@@ -404,6 +404,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            EventAggregator.Subscribe(this);
+
             await GetRemoteUser();
             await GetProjectsVersion().ConfigureAwait(false);
             await GetCollabProjects().ConfigureAwait(false);
