@@ -168,22 +168,25 @@
                             BorderBrush="{StaticResource PrimaryHueMidBrush}"
                             BorderThickness="1"
                             CornerRadius="3">
-                            <TextBlock Visibility="{Binding ShowCollabUserInfo}">
-                                <Run FontWeight="Bold" Text="Username: " />
-                                <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
-                                <LineBreak />
-                                <Run FontWeight="Bold" Text="Group: " />
-                                <Run Text="{Binding CollaborationConfig.Group}" />
-                                <LineBreak />
-                                <Run FontWeight="Bold" Text="Email: " />
-                                <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
-                                <LineBreak />
-                                <Run FontWeight="Bold" Text="Password: " />
-                                <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
-                                <LineBreak />
-                                <Run FontWeight="Bold" Text="Access Token: " />
-                                <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
-                            </TextBlock>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Visibility="{Binding ShowCollabUserInfo}">
+                                    <Run FontWeight="Bold" Text="Username: " />
+                                    <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Group: " />
+                                    <Run Text="{Binding CollaborationConfig.Group}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Email: " />
+                                    <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Password: " />
+                                    <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Access Token: " />
+                                    <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
+                                </TextBlock>
+                                <Button x:Name="SaveGitLabToServer" Width="250">Save GitLab User to Server</Button>
+                            </StackPanel>
                         </Border>
 
 

@@ -406,12 +406,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void PushGitLabUserToRepo()
         {
-            var results =
-                await ExecuteRequest(new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), ""), CancellationToken.None);
-            if (results.Success && results.HasData)
-            {
-                //version = results.Data;
-            }
+            //var results =
+            //    await ExecuteRequest(new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), ""), CancellationToken.None);
+            //if (results.Success && results.HasData)
+            //{
+            //    //version = results.Data;
+            //}
         }
 
         #endregion // Methods

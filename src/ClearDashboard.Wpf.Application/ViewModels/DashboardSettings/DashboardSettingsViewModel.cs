@@ -1,16 +1,21 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System;
+using System.Threading;
+using static ClearDashboard.DataAccessLayer.Features.GitLabUser.GitLabUserSlice;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
-    public class DashboardSettingsViewModel : Screen
+    public class DashboardSettingsViewModel : DashboardApplicationScreen
     {
 
         #region Member Variables
@@ -23,6 +28,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
 
         #region Public Properties
+
 
         #endregion //Public Properties
 
@@ -115,10 +121,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Constructor
 
         // ReSharper disable once EmptyConstructor
-        public DashboardSettingsViewModel(IEventAggregator eventAggregator, CollaborationManager collaborationManager)
+        public DashboardSettingsViewModel(
+            CollaborationManager collaborationManager,
+            DashboardProjectManager projectManager,
+            INavigationService navigationService,
+            ILogger<DashboardSettingsViewModel> logger,
+            IEventAggregator eventAggregator,
+            IMediator mediator,
+            ILifetimeScope? lifetimeScope,
+            ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             // for Caliburn Micro
-            IoC.Get<ILogger<DashboardSettingsViewModel>>();
+            //IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
             _collaborationManager = collaborationManager;
         }
@@ -188,6 +203,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             AbstractionsSettingsHelper.SaveGitUrl(GitRootUrl);
         }
 
+        public async void SaveGitLabToServer()
+        {
+            var userId = _collaborationConfig.UserId;
+            var remoteUserName = _collaborationConfig.RemoteUserName;
+            var remoteEmail = _collaborationConfig.RemoteEmail;
+            var remotePersonalAccessToken = _collaborationConfig.RemotePersonalAccessToken;
+            var remotePersonalPassword = _collaborationConfig.RemotePersonalPassword;
+            var group = _collaborationConfig.Group;
+            var namespaceId = _collaborationConfig.NamespaceId;
+
+
+            var results =
+                await ExecuteRequest(
+                    new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), userId, remoteUserName, remoteEmail,
+                        remotePersonalAccessToken, remotePersonalPassword, group, namespaceId), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                //version = results.Data;
+            }
+        }
 
         // ReSharper disable once UnusedMember.Global
         // ReSharper disable once UnusedParameter.Global

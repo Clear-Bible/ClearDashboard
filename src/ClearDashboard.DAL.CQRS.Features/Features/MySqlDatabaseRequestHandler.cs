@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using MySqlConnector;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.CQRS.Features.Features
 {
@@ -23,10 +24,6 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
 
         protected async Task<TData> ExecuteMySqlCommandAndProcessData(string connectionString, string commandText)
         {
-            //string connectionString = DataAccessLayer.Models.Encryption.Decrypt(
-            //    "IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
-
-            //connectionString = "Server=cleardashboard.org;User ID=cleardas;Password=AmG$MsJSRb7@!R?6;Database=dashboard";
             await using MySqlConnection connection = new MySqlConnection(connectionString);
             await connection.OpenAsync();
 
@@ -38,6 +35,44 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
                 object value = reader.GetValue(0);
                 object value1 = reader.GetValue(1);
                 object value2 = reader.GetValue(2);
+            }
+
+            return ProcessData();
+        }
+
+
+        protected async Task<TData> ExecuteMySqlCommand(string connectionString,
+            int userId,
+            string remoteUserName,
+            string remoteEmail,
+            string remotePersonalAccessToken,
+            string remotePersonalPassword,
+            string group,
+            int namespaceId)
+        {
+            try
+            {
+                await using MySqlConnection connection = new MySqlConnection(connectionString);
+                await connection.OpenAsync();
+
+                await using MySqlCommand command = new MySqlCommand("INSERT INTO gitlabusers"
+                    + " (UserId, RemoteUserName, RemoteEmail, RemotePersonalAccessToken, RemotePersonalPassword, GroupName, NamespaceId)"
+                    + $" VALUES ({userId}, \"{remoteUserName}\", \"{remoteEmail}\", \"{remotePersonalAccessToken}\",\"{remotePersonalPassword}\",\"{group}\",{namespaceId});", connection);
+                
+                var ret = await command.ExecuteNonQueryAsync();
+
+                //if (ret != 0)
+                //{
+                //    return true;
+                //}
+                //else
+                //{
+                    
+                //}
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
             }
 
             return ProcessData();

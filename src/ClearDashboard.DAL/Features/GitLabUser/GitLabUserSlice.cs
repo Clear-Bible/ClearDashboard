@@ -17,13 +17,27 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
 {
     public class GitLabUserSlice
     {
-        public record PostGitLabUserQuery(string ConnectionString, string CommandText) : IRequest<RequestResult<bool>>;
+        public record PostGitLabUserQuery(string ConnectionString,
+            int userId,
+            string remoteUserName,
+            string remoteEmail,
+            string remotePersonalAccessToken,
+            string remotePersonalPassword,
+            string group,
+            int namespaceId) : IRequest<RequestResult<bool>>;
 
         public class PostGitLabUserHandler : MySqlDatabaseRequestHandler<PostGitLabUserQuery, RequestResult<bool>, bool>
         {
             private readonly ILogger<PostGitLabUserHandler> _logger;
             private string _connectionString;
-            private string _commandText;
+            private int _userId;
+            private string _remoteUserName;
+            private string _remoteEmail;
+            private string _remotePersonalAccessToken;
+            private string _remotePersonalPassword;
+            private string _group;
+            private int _namespaceId;
+
             public PostGitLabUserHandler(ILogger<PostGitLabUserHandler> logger) :
                 base(logger)
             {
@@ -41,7 +55,13 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
                 PostGitLabUserQuery request, CancellationToken cancellationToken)
             {
                 _connectionString = request.ConnectionString;
-                _commandText = request.CommandText;
+                _userId = request.userId;
+                _remoteUserName = request.remoteUserName;
+                _remoteEmail = request.remoteEmail;
+                _remotePersonalAccessToken = request.remotePersonalAccessToken;
+                _remotePersonalPassword = request.remotePersonalPassword;
+                _group = request.group;
+                _namespaceId = request.namespaceId;
 
                 //ResourceName = Path.Combine(Environment.CurrentDirectory, @"Resources\SDBG\lemmaLU.csv");
 
@@ -56,7 +76,8 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
 
                 try
                 {
-                    queryResult.Data = await ExecuteMySqlCommandAndProcessData(_connectionString, _commandText);
+                    queryResult.Data = await ExecuteMySqlCommand(_connectionString, _userId, _remoteUserName,
+                        _remoteEmail, _remotePersonalAccessToken, _remotePersonalPassword, _group, _namespaceId);
                 }
                 catch (Exception ex)
                 {
@@ -65,15 +86,12 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
                         ex);
                 }
 
-                queryResult.Data= false;
-
                 return queryResult;
             }
 
             protected override bool ProcessData()
             {
-                
-                return false;
+                return true;
             }
 
         }

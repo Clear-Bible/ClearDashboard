@@ -387,7 +387,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             _longRunningTaskManager = longRunningTaskManager;
             _localizationService = localizationService;
             _collaborationManager = collaborationManager;
-            
+
 
             LifetimeScope = lifetimeScope;
             WindowManager = windowManager;
@@ -688,7 +688,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
                     await LoadEnhancedViewData(enhancedViews);
                 });
-              
+
 
                 sw.Stop();
                 Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
@@ -1960,16 +1960,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     case MenuIds.Settings:
                         {
-                            await this.WindowManager.ShowWindowAsync(
-                                new DashboardSettingsViewModel(EventAggregator, _collaborationManager), null, null);
+                            var viewmodel = IoC.Get<DashboardSettingsViewModel>();
+                            await this.WindowManager.ShowWindowAsync(viewmodel, null, null);
                             break;
                         }
 
                     case MenuIds.CollaborationManageProjects:
-                    {
-                        await CollabProjectManager();
-                        break;
-                    }
+                        {
+                            await CollabProjectManager();
+                            break;
+                        }
 
                     case MenuIds.CollaborationInitialize:
                         {
