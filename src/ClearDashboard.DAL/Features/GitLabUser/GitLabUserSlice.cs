@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DAL.CQRS.Features.Features;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
 {
@@ -58,21 +59,12 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
                 _userId = request.userId;
                 _remoteUserName = request.remoteUserName;
                 _remoteEmail = request.remoteEmail;
-                _remotePersonalAccessToken = request.remotePersonalAccessToken;
-                _remotePersonalPassword = request.remotePersonalPassword;
+                _remotePersonalAccessToken = Encryption.Encrypt(request.remotePersonalAccessToken);
+                _remotePersonalPassword = Encryption.Encrypt(request.remotePersonalPassword);
                 _group = request.group;
                 _namespaceId = request.namespaceId;
 
-                //ResourceName = Path.Combine(Environment.CurrentDirectory, @"Resources\SDBG\lemmaLU.csv");
-
                 RequestResult<bool> queryResult = new();
-                //queryResult = ValidateResourcePath(new List<SemanticGlossesLookup>());
-                //if (queryResult.Success == false)
-                //{
-                //    LogAndSetUnsuccessfulResult(ref queryResult,
-                //        $"An unexpected error occurred while querying the MARBLE CSV Lookup databases : '{ResourceName}'");
-                //    return Task.FromResult(queryResult);
-                //}
 
                 try
                 {
