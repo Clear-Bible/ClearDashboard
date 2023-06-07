@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using SIL.Extensions;
 using System.Windows;
 using MahApps.Metro.Controls;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -230,13 +231,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             foreach (var project in Projects)
             {
-                var guid = project.Name.Substring(2); // removed the leading "P_"
-
-                if (Guid.Parse(guid) == ProjectManager.CurrentProject.Id)
+                // check to see if this is a Dashboard project with expected naming
+                if (project.Name.StartsWith("P_") && project.Name.Length == 38)
                 {
-                    SelectedProject = project;
-                    break;
+                    var guid = project.Name.Substring(2); // removed the leading "P_"
+
+                    if (Guid.Parse(guid) == ProjectManager.CurrentProject.Id)
+                    {
+                        SelectedProject = project;
+                        break;
+                    }
                 }
+
             }
 
             await GetUsersForProject();
