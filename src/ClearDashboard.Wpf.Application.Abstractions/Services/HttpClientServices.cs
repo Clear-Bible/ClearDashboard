@@ -199,6 +199,14 @@ namespace ClearDashboard.Wpf.Application.Services
                 list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
+
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
+                    {
+                        list.RemoveAt(i);
+                    }
+                }
             }
             catch (Exception e)
             {

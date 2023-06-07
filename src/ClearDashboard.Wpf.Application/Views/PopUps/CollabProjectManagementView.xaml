@@ -165,6 +165,7 @@
                 CornerRadius="3">
 
                 <ListView
+                    IsEnabled="{Binding IsGitLabUserListEnabled}"
                     MinHeight="310"
                     MaxHeight="340"
                     Margin="5"

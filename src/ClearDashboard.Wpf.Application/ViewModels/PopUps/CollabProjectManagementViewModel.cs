@@ -60,6 +60,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 _selectedProject = value;
                 NotifyOfPropertyChange(() => SelectedProject);
 
+                if (_selectedProject.Name != "")
+                {
+                    IsGitLabUserListEnabled = true;
+                }
+                else
+                {
+                    IsGitLabUserListEnabled= false;
+                }
+
                 _ = GetUsersForProject();
             }
         }
@@ -111,6 +120,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private bool _isGitLabUserListEnabled;
+        public bool IsGitLabUserListEnabled
+        {
+            get => _isGitLabUserListEnabled;
+            set
+            {
+                _isGitLabUserListEnabled = value; 
+                NotifyOfPropertyChange(()=> IsGitLabUserListEnabled);
+            }
+        }
+
 
 
         #endregion //Observable Properties
@@ -155,6 +175,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             AttemptToSelectCurrentProject();
 
+            if (SelectedProject.Name is null || SelectedProject.Name == "")
+            {
+                IsGitLabUserListEnabled = false;
+            }
 
             base.OnViewLoaded(view);
         }
