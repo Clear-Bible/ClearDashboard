@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System;
 using System.Threading;
+using System.Windows;
 using static ClearDashboard.DataAccessLayer.Features.GitLabUser.GitLabUserSlice;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
@@ -98,7 +99,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             get => _gitRootUrl;
             set
             {
-                _gitRootUrl = value; 
+                _gitRootUrl = value;
+                SaveGitlabUrlButtonEnabled = true;
                 NotifyOfPropertyChange(() => GitRootUrl);
             }
         }
@@ -111,6 +113,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             {
                 _collaborationConfig = value;
                 NotifyOfPropertyChange(() => CollaborationConfig);
+            }
+        }
+
+        private Visibility _gitlabUserSaveVisibility = Visibility.Visible;
+        public Visibility GitlabUserSaveVisibility
+        {
+            get => _gitlabUserSaveVisibility;
+            set
+            {
+                _gitlabUserSaveVisibility = value; 
+                NotifyOfPropertyChange(() => GitlabUserSaveVisibility);
+            }
+        }
+
+        private string _saveGitLabUserMessage;
+        public string SaveGitLabUserMessage
+        {
+            get => _saveGitLabUserMessage;
+            set
+            {
+                _saveGitLabUserMessage = value; 
+                NotifyOfPropertyChange(() =>SaveGitLabUserMessage);
+            }
+        }
+
+        private bool _saveGitlabUrlButtonEnabled;
+        public bool SaveGitlabUrlButtonEnabled
+        {
+            get => _saveGitlabUrlButtonEnabled;
+            set
+            {
+                _saveGitlabUrlButtonEnabled = value; 
+                NotifyOfPropertyChange(() =>SaveGitlabUrlButtonEnabled);
             }
         }
 
@@ -180,6 +215,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
             // load in Git URL
             GitRootUrl = AbstractionsSettingsHelper.GetGitUrl();
+            SaveGitlabUrlButtonEnabled = false;
 
             // load in the collab user info
             CollaborationConfig = _collaborationManager.GetConfig();
@@ -200,7 +236,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         public void SaveGitUrl()
         {
-            AbstractionsSettingsHelper.SaveGitUrl(GitRootUrl);
+            AbstractionsSettingsHelper.SaveGitUrl(GitRootUrl.Trim());
         }
 
         public async void SaveGitLabToServer()
@@ -218,10 +254,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                 await ExecuteRequest(
                     new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), userId, remoteUserName, remoteEmail,
                         remotePersonalAccessToken, remotePersonalPassword, group, namespaceId), CancellationToken.None);
-            if (results.Success && results.HasData)
+            if (results.Success)
             {
-                //version = results.Data;
+                SaveGitLabUserMessage = "Saved to remote server";
             }
+            else
+            {
+                SaveGitLabUserMessage = "User already exists on server";
+            }
+
+            GitlabUserSaveVisibility = Visibility.Collapsed;
         }
 
         // ReSharper disable once UnusedMember.Global

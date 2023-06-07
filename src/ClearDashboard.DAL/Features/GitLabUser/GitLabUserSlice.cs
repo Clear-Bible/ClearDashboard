@@ -78,6 +78,15 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
                 {
                     queryResult.Data = await ExecuteMySqlCommand(_connectionString, _userId, _remoteUserName,
                         _remoteEmail, _remotePersonalAccessToken, _remotePersonalPassword, _group, _namespaceId);
+
+                    if (queryResult.Data == true)
+                    {
+                        queryResult.Success = true;
+                    }
+                    else
+                    {
+                        queryResult.Success = false;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -91,6 +100,11 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
 
             protected override bool ProcessData()
             {
+                if (ReturnValue == 0)
+                {
+                    return false;
+                }
+
                 return true;
             }
 

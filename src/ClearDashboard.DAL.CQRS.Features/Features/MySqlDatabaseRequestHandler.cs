@@ -15,7 +15,7 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
         MySqlDatabaseRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
         where TRequest : IRequest<TResponse>
     {
-        protected MySqlDataReader? DataReader { get; private set; }
+        protected int ReturnValue { get; private set; }
 
         protected MySqlDatabaseRequestHandler(ILogger logger) : base(logger)
         {
@@ -58,8 +58,8 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
                 await using MySqlCommand command = new MySqlCommand("INSERT INTO gitlabusers"
                     + " (UserId, RemoteUserName, RemoteEmail, RemotePersonalAccessToken, RemotePersonalPassword, GroupName, NamespaceId)"
                     + $" VALUES ({userId}, \"{remoteUserName}\", \"{remoteEmail}\", \"{remotePersonalAccessToken}\",\"{remotePersonalPassword}\",\"{group}\",{namespaceId});", connection);
-                
-                var ret = await command.ExecuteNonQueryAsync();
+
+                ReturnValue = await command.ExecuteNonQueryAsync();
 
                 //if (ret != 0)
                 //{

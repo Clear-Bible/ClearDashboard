@@ -185,7 +185,15 @@
                                     <Run FontWeight="Bold" Text="Access Token: " />
                                     <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
                                 </TextBlock>
-                                <Button x:Name="SaveGitLabToServer" Width="250">Save GitLab User to Server</Button>
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <Button
+                                        x:Name="SaveGitLabToServer"
+                                        Width="250"
+                                        Visibility="{Binding GitlabUserSaveVisibility}">
+                                        Save GitLab User to Server
+                                    </Button>
+                                    <TextBlock Foreground="{StaticResource PrimaryHueDarkBrush}" FontSize="18" Text="{Binding SaveGitLabUserMessage}" Width="250"/>
+                                </StackPanel>
                             </StackPanel>
                         </Border>
 
@@ -210,6 +218,7 @@
                         <Button
                             x:Name="SaveGitUrl"
                             Width="250"
+                            IsEnabled="{Binding SaveGitlabUrlButtonEnabled}"
                             Margin="5,30,5,0">
                             Save Settings
                         </Button>
