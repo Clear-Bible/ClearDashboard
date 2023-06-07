@@ -1206,7 +1206,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Manage Collaboration Projects", Id = MenuIds.CollaborationManageProjects,
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.HasRemoteConfigured() && InternetAvailability.IsInternetAvailable()
+                    IsEnabled = _collaborationManager.HasRemoteConfigured() && _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 // Save Current Layout
                 new MenuItemViewModel
@@ -1225,8 +1225,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Commit Changes to Server", Id = MenuIds.CollaborationCommit,
                     ViewModel = this,
-                    // TODO FIX THIS
-                    //IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
                 },
                 //// separator
                 //new() { Header = "---------------------------------", Id = MenuIds.Separator, ViewModel = this, },
