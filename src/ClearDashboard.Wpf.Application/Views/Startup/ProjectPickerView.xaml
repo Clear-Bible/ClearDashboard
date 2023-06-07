@@ -389,11 +389,11 @@
 
             <ListView
                 x:Name="ProjectListView"
-                Height="460"
+                Height="326"
                 Margin="5"
                 IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding DashboardProjectsDisplay}"
-                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.CanContentScroll="False"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                 Visibility="{Binding NoProjectVisibility}">
 
