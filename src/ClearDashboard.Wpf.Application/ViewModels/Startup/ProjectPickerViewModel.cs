@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -27,7 +28,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
@@ -45,7 +45,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
 
-        private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"ClearDashboard_Projects");
+        private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
 
         #region Observable Objects
@@ -68,8 +68,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             get => _dashboardProjects;
             set
             {
-                _dashboardProjects = value; 
-                NotifyOfPropertyChange(() => DashboardProjects);   
+                _dashboardProjects = value;
+                NotifyOfPropertyChange(() => DashboardProjects);
             }
         }
 
@@ -114,7 +114,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             get => _showCollabUserInfo;
             set
             {
-                _showCollabUserInfo = value; 
+                _showCollabUserInfo = value;
                 NotifyOfPropertyChange(() => ShowCollabUserInfo);
             }
         }
@@ -286,10 +286,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 else
                 {
                     _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
-                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ','_')));
+                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ', '_')));
                 }
 
-                if (_dashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count>0)
+                if (_dashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count > 0)
                 {
                     NoProjectVisibility = Visibility.Hidden;
                     SearchBlankVisibility = Visibility.Visible;
@@ -357,14 +357,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
-        public ProjectPickerViewModel(TranslationSource translationSource, 
-            DashboardProjectManager projectManager, 
-            ParatextProxy paratextProxy, 
-            INavigationService navigationService, 
-            ILogger<ProjectPickerViewModel> logger, 
+        public ProjectPickerViewModel(TranslationSource translationSource,
+            DashboardProjectManager projectManager,
+            ParatextProxy paratextProxy,
+            INavigationService navigationService,
+            ILogger<ProjectPickerViewModel> logger,
             IEventAggregator eventAggregator,
-            IMediator mediator, 
-            ILifetimeScope? lifetimeScope, 
+            IMediator mediator,
+            ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService,
             IWindowManager windowManager,
             HttpClientServices httpClientServices,
@@ -475,7 +475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<CollabProjectManagementViewModel>();
-            
+
 
             IWindowManager manager = new WindowManager();
             await manager.ShowDialogAsync(viewModel, null, settings);
@@ -533,7 +533,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private async Task GetProjectsVersion(bool afterMigration=false)
+        private async Task GetProjectsVersion(bool afterMigration = false)
         {
             DashboardProjects.Clear();
 
@@ -543,14 +543,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (!IsDashboardRunningAlready() && !afterMigration)
             {
                 OpenProjectManager.ClearOpenProjectList();
-           
+
                 OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
             }
 
             foreach (var directoryName in directories)
             {
                 var directoryInfo = new DirectoryInfo(directoryName);
-                
+
                 // find the Alignment JSONs
                 var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName),
                     "*.sqlite");
@@ -638,37 +638,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 {
                     projectIds.Add(new CoupleOfStrings
                     {
-                         stringB = dashboardProject.FullFilePath,
-                         stringA = results.Data
+                        stringB = dashboardProject.FullFilePath,
+                        stringA = results.Data
                     });
                 }
             }
 
             // get the list of those GitLab projects that haven't been sync'd locally
-            //if (_collaborationManager.IsRepositoryInitialized())
-            //{
-                var projects = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
-                projects = projects.OrderByDescending(e => e.CreatedAt).ToList();
-                foreach (var dashboardProject in DashboardProjects)
+            var projects = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+            projects = projects.OrderByDescending(e => e.CreatedAt).ToList();
+            foreach (var dashboardProject in DashboardProjects)
+            {
+                var results =
+                    await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(dashboardProject.FullFilePath), CancellationToken.None);
+
+                if (results.Success)
                 {
-                    var results =
-                        await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(dashboardProject.FullFilePath), CancellationToken.None);
+                    var projectGuid = results.Data;
+                    var gitLabProject = projects.FirstOrDefault(x => projectGuid == x.Name.ToUpper().Replace("P_", ""));
 
-                    if (results.Success)
+                    if (gitLabProject is not null)
                     {
-                        var projectGuid = results.Data;
-                        var gitLabProject = projects.FirstOrDefault(x => projectGuid == x.Name.ToUpper().Replace("P_", ""));
-
-                        if (gitLabProject is not null)
-                        {
-                            // remove from the available GitLab projects
-                            projects.Remove(gitLabProject);
-                        }
+                        // remove from the available GitLab projects
+                        projects.Remove(gitLabProject);
                     }
                 }
+            }
 
-                // create the GitLab unsync'd 
-                foreach (var gitLabProject in projects.OrderByDescending(e => e.CreatedAt))
+            // create the GitLab unsync'd projects
+            foreach (var gitLabProject in projects.OrderByDescending(e => e.CreatedAt))
+            {
+                // check to see if this is a Dashboard project with expected naming
+                if (gitLabProject.Name.StartsWith("P_") && gitLabProject.Name.Length == 38)
                 {
                     var dashboardCollabProject = new DashboardCollabProject
                     {
@@ -678,15 +679,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         Created = gitLabProject.CreatedAt
                     };
                     DashboardCollabProjects.Add(dashboardCollabProject);
+
                 }
-            //}
+
+            }
 
             if (_dashboardCollabProjectsDisplay is null)
             {
                 _dashboardCollabProjectsDisplay = new();
             }
-
-            //CopyDashboardCollabProjectsToAnother(DashboardCollabProjects, _dashboardCollabProjectsDisplay);
 
             DashboardCollabProjectsDisplay = DashboardCollabProjects;
         }
@@ -727,7 +728,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             while (!IsParatextRunning)
             {
-                IsParatextRunning = await Task.Run(()=>_paratextProxy.IsParatextRunning()).ConfigureAwait(false);
+                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning()).ConfigureAwait(false);
                 Thread.Sleep(1000);
             }
         }
@@ -764,12 +765,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
-      
+
             if (CheckIfConnectedToParatext() == false)
             {
                 return;
             }
-            
+
             var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
             if (currentlyOpenProjectsList.Contains(project.ProjectName))
             {
@@ -777,7 +778,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
             AlreadyOpenMessageVisibility = Visibility.Collapsed;
-            
+
 
             ProjectManager!.CurrentDashboardProject = project;
             EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
@@ -821,7 +822,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
-            
+
             if (project.ProjectId == Guid.Empty)
             {
                 return;
@@ -905,7 +906,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        
+
 
         public void SetLanguage()
         {
@@ -945,7 +946,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
         }
 
-#endregion  Methods
+        #endregion  Methods
 
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
