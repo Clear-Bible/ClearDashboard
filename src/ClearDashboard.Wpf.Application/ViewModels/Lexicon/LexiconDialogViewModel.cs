@@ -235,6 +235,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
         private LexiconTranslationViewModel? SelectedTranslation { get; set; }
+        public LexiconTranslationViewModel? NewTranslation { get; set; }
         public void OnTranslationSelected(object sender, LexiconTranslationEventArgs e)
         {
             SelectedTranslation = e.Translation;
@@ -286,7 +287,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             if (SelectedTranslation == null && TokenDisplay.TargetTranslationText != Translation.DefaultTranslationText)
             {
                 SelectedTranslation = new LexiconTranslationViewModel { Text = TokenDisplay.TargetTranslationText, IsSelected = true};
-                Concordance.Insert(0, SelectedTranslation);
+                //Concordance.Insert(0, SelectedTranslation);
+                NewTranslation = SelectedTranslation;
+                NotifyOfPropertyChange(nameof(NewTranslation));
             }
 
             ApplyEnabled = SelectedTranslation != null;

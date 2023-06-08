@@ -18,7 +18,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="25" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0"
@@ -100,6 +100,7 @@
             </b:Interaction.Triggers>
         </lexiconControls:LexemeEditor>
         <TextBlock Grid.Row="3"
+                   FontFamily="{DynamicResource MaterialDesignFont}"
                    FontSize="16"
                    FontWeight="Normal"
                    Text="Concordance: "
@@ -110,6 +111,7 @@
 
         <lexiconControls:ConcordanceDisplay x:Name="ConcordanceDisplay" Grid.Row="4"
                 Translations="{Binding Concordance}"
+                NewTranslation="{Binding NewTranslation}"
                 TranslationFontSize="12"
                 TranslationFontStyle="Normal"
                 Margin="40,0,0,0"
@@ -132,7 +134,7 @@
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <CheckBox x:Name="ApplyAllCheckbox"
-                      Margin="10,10,0,0"
+                      Margin="10,20,0,20"
                       FontSize="13"
                       IsChecked="{Binding ApplyToAll}">
                 Change all unset occurrences

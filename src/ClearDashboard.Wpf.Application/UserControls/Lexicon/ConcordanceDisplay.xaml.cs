@@ -47,6 +47,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #region Static Dependency Properties
 
         /// <summary>
+        /// Identifies the NewTranslation dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NewTranslationProperty = 
+            DependencyProperty.Register(nameof(NewTranslation), typeof(LexiconTranslationViewModel), typeof(ConcordanceDisplay));
+
+        /// <summary>
         /// Identifies the TokenDisplay dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenDisplayProperty =
@@ -173,6 +179,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             NewTranslationTextBoxIsEnabled = true;
             OnPropertyChanged(nameof(NewTranslationTextBoxIsEnabled));
             NewTranslationTextBox.Focus();
+            NewTranslationTextBox.CaretIndex = NewTranslationTextBox.Text.Length;
         }
 
         private void OnNewTranslationUnchecked(object sender, RoutedEventArgs e)
@@ -191,6 +198,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             await Task.CompletedTask;
         }
 
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (NewTranslation != null && ! string.IsNullOrWhiteSpace(NewTranslation.Text))
+            {
+                NewTranslationTextBox.Text = NewTranslation.Text;
+                NewTranslationCheckBox.IsChecked = true;
+            }
+            Loaded -= OnLoaded;
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -202,6 +219,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #region Public Properties
 
         public static IEventAggregator? EventAggregator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the translation to be displayed in the New Translation box, if any.
+        /// </summary>
+        public LexiconTranslationViewModel NewTranslation
+        {
+            get => (LexiconTranslationViewModel)GetValue(NewTranslationProperty);
+            set => SetValue(NewTranslationProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="TokenDisplayViewModel"/> that this concordance pertains to.
@@ -317,6 +343,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             InitializeComponent();
 
+            Loaded += OnLoaded;
             EventAggregator?.SubscribeOnUIThread(this);
         }
     }
