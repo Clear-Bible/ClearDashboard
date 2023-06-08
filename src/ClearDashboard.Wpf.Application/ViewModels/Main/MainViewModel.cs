@@ -1089,6 +1089,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var viewModel = IoC.Get<SlackMessageViewModel>();
             viewModel.Files = files;
             viewModel.ParatextUser = ProjectManager.CurrentUser.ParatextUserName!;
+            viewModel.DashboardUser = ProjectManager.CurrentUser;
 
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);

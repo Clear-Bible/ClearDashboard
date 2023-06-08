@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -28,6 +29,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Public Properties
 
         public string ParatextUser { get; set; } = string.Empty;
+        public User DashboardUser { get; set; }
+        public CollaborationConfiguration GitLabUser { get; set; }
         public List<string> Files { get; set; }
 
         #endregion //Public Properties
@@ -103,7 +106,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-
         #endregion //Observable Properties
 
 
@@ -124,7 +126,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             WorkingMessage = "Gathering Files for Transmission";
         }
 
-        protected async override void OnViewLoaded(object view)
+        protected override async void OnViewLoaded(object view)
         {
             var bRet = await NetworkHelper.IsConnectedToInternet();
             if (bRet == false)
@@ -197,7 +199,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             var versionNumber = $"{thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
-            string msg = $"*User:* {ParatextUser} \n*Version*: {versionNumber} \n*Message:* \n{UserMessage}";
+            string msg = $"*Dashboard User:* {DashboardUser.FullName} \n*Paratext User:* {ParatextUser} \n*Github User:* {GitLabUser.RemoteUserName} \n*Version*: {versionNumber} \n*Message:* \n{UserMessage}";
 
             var logger = LifetimeScope.Resolve<ILogger<SlackMessage>>();
             SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, logger);
