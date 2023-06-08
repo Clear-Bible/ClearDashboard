@@ -1090,6 +1090,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             viewModel.Files = files;
             viewModel.ParatextUser = ProjectManager.CurrentUser.ParatextUserName!;
             viewModel.DashboardUser = ProjectManager.CurrentUser;
+            viewModel.GitLabUser = _collaborationManager.GetConfig();
 
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
