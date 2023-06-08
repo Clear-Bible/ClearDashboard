@@ -17,11 +17,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 {
-    protected ILocalizationService LocalizationService { get; }
+    protected ILocalizationService LocalizationService => _localizationService;
 
     private Brush _borderColor = Brushes.Blue;
 
-    protected IEnhancedViewManager EnhancedViewManager { get; }
+    protected IEnhancedViewManager EnhancedViewManager => _enhancedViewManager;
+
     public Brush BorderColor
     {
         get => _borderColor;
@@ -34,6 +35,40 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
         get => _hasFocus;
         set => Set(ref _hasFocus, value);
     }
+
+    private bool _showEditButton;
+    public bool ShowEditButton
+    {
+        get => _showEditButton;
+        set => Set(ref _showEditButton, value);
+    }
+
+    private bool _enableEditMode;
+    public bool EnableEditMode
+    {
+        get => _enableEditMode;
+        set => Set(ref _enableEditMode, value);
+    }
+
+    public async void ToggleEditMode()
+    {
+        EnableEditMode = !EnableEditMode;
+        await GetEditorData();
+    }
+
+    protected virtual async Task GetEditorData()
+    {
+        await Task.CompletedTask;
+    }
+
+    private string _editModeButtonLabel;
+
+    public string EditModeButtonLabel
+    {
+        get => _editModeButtonLabel1;
+        set => Set(ref _editModeButtonLabel1, value);
+    }
+
 
     // public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
 
@@ -51,6 +86,10 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
     private bool _fetchData;
+    private readonly ILocalizationService _localizationService;
+    private readonly IEnhancedViewManager _enhancedViewManager;
+    private string _editModeButtonLabel1;
+
 
     public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
     {
@@ -72,8 +111,8 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
         INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
         IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
-        LocalizationService = localizationService;
-        EnhancedViewManager = enhancedViewManager;
+        _localizationService = localizationService;
+        _enhancedViewManager = enhancedViewManager;
 
     }       
 

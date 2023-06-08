@@ -245,6 +245,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="UserControls\AlignmentBulkReview.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\Lexicon\ConcordanceDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -462,6 +465,9 @@
   <ItemGroup>
     <Page Update="Assets\ClearLogo.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\AlignmentBulkReview.xaml">
+      <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\BcvUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

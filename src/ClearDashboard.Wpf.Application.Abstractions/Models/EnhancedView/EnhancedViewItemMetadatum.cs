@@ -6,13 +6,6 @@ using System.Linq;
 namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 
-//[JsonPolymorphic(TypeDiscriminatorPropertyName = "_t")]
-//[JsonDerivedType(typeof(AquaCorpusAnalysisEnhancedViewItemMetadatum), typeDiscriminator: nameof(AquaCorpusAnalysisEnhancedViewItemMetadatum))]
-//[JsonDerivedType(typeof(InterlinearEnhancedViewItemMetadatum), typeDiscriminator: nameof(InterlinearEnhancedViewItemMetadatum))]
-//[JsonDerivedType(typeof(ParallelCorpusEnhancedViewItemMetadatum), typeDiscriminator: nameof(ParallelCorpusEnhancedViewItemMetadatum))]
-//[JsonDerivedType(typeof(TokenizedCorpusEnhancedViewItemMetadatum), typeDiscriminator: nameof(TokenizedCorpusEnhancedViewItemMetadatum))]
-//[JsonDerivedType(typeof(VerseAwareEnhancedViewItemMetadatum), typeDiscriminator: nameof(VerseAwareEnhancedViewItemMetadatum))]
-
 public abstract class EnhancedViewItemMetadatum
 {
     public bool? IsNewWindow { get; set; }
