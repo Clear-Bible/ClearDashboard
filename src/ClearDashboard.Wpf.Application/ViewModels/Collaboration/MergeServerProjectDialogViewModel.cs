@@ -137,6 +137,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         #region Constructor
 
+        public MergeServerProjectDialogViewModel()
+        {
+            // no-op used for Caliburn Micro
+        }
+
         public MergeServerProjectDialogViewModel(CollaborationManager collaborationManager,
             DashboardProjectManager projectManager,
             INavigationService navigationService,
