@@ -1,35 +1,27 @@
-﻿using ClearDashboard.DAL.CQRS.Features;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features.Features;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DAL.CQRS.Features.Features;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
 {
     public class GitLabUserSlice
     {
         public record PostGitLabUserQuery(string ConnectionString,
-            int userId,
-            string remoteUserName,
-            string remoteEmail,
-            string remotePersonalAccessToken,
-            string remotePersonalPassword,
-            string group,
-            int namespaceId) : IRequest<RequestResult<bool>>;
+            int UserId,
+            string RemoteUserName,
+            string RemoteEmail,
+            string RemotePersonalAccessToken,
+            string RemotePersonalPassword,
+            string Group,
+            int NamespaceId) : IRequest<RequestResult<bool>>;
 
         public class PostGitLabUserHandler : MySqlDatabaseRequestHandler<PostGitLabUserQuery, RequestResult<bool>, bool>
         {
-            private readonly ILogger<PostGitLabUserHandler> _logger;
             private string _connectionString;
             private int _userId;
             private string _remoteUserName;
@@ -42,9 +34,6 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
             public PostGitLabUserHandler(ILogger<PostGitLabUserHandler> logger) :
                 base(logger)
             {
-
-
-                _logger = logger;
                 //no-op
             }
 
@@ -56,13 +45,13 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
                 PostGitLabUserQuery request, CancellationToken cancellationToken)
             {
                 _connectionString = request.ConnectionString;
-                _userId = request.userId;
-                _remoteUserName = request.remoteUserName;
-                _remoteEmail = request.remoteEmail;
-                _remotePersonalAccessToken = Encryption.Encrypt(request.remotePersonalAccessToken);
-                _remotePersonalPassword = Encryption.Encrypt(request.remotePersonalPassword);
-                _group = request.group;
-                _namespaceId = request.namespaceId;
+                _userId = request.UserId;
+                _remoteUserName = request.RemoteUserName;
+                _remoteEmail = request.RemoteEmail;
+                _remotePersonalAccessToken = Encryption.Encrypt(request.RemotePersonalAccessToken);
+                _remotePersonalPassword = Encryption.Encrypt(request.RemotePersonalPassword);
+                _group = request.Group;
+                _namespaceId = request.NamespaceId;
 
                 RequestResult<bool> queryResult = new();
 
@@ -71,7 +60,7 @@ namespace ClearDashboard.DataAccessLayer.Features.GitLabUser
                     queryResult.Data = await ExecuteMySqlCommand(_connectionString, _userId, _remoteUserName,
                         _remoteEmail, _remotePersonalAccessToken, _remotePersonalPassword, _group, _namespaceId);
 
-                    if (queryResult.Data == true)
+                    if (queryResult.Data)
                     {
                         queryResult.Success = true;
                     }

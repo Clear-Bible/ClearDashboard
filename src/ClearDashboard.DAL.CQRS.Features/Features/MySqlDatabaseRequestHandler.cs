@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MySqlConnector;
 using System.Diagnostics;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.CQRS.Features.Features
 {
@@ -16,6 +17,7 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
         where TRequest : IRequest<TResponse>
     {
         protected int ReturnValue { get; private set; }
+        protected List<CollaborationConfiguration> CollaborationConfigurations { get; set; } = new();
 
         protected MySqlDatabaseRequestHandler(ILogger logger) : base(logger)
         {
@@ -27,14 +29,32 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
             await using MySqlConnection connection = new MySqlConnection(connectionString);
             await connection.OpenAsync();
 
-            await using MySqlCommand command = new MySqlCommand("SELECT * FROM gitlabusers;", connection);
+            string sql =
+                "SELECT UserId,RemoteUserName,RemoteEmail,RemotePersonalAccessToken,RemotePersonalPassword,GroupName,NamespaceId"
+                + " FROM dashboard.gitlabusers;";
+            await using MySqlCommand command = new MySqlCommand(sql, connection);
             await using MySqlDataReader reader = await command.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {
-                object value = reader.GetValue(0);
-                object value1 = reader.GetValue(1);
-                object value2 = reader.GetValue(2);
+                var userId = (int)reader.GetValue(0);
+                var remoteUserName = reader.GetValue(1).ToString();
+                var remoteEmail = reader.GetValue(2).ToString();
+                var remotePersonalAccessToken = reader.GetValue(3).ToString();
+                var remotePersonalPassword = reader.GetValue(4).ToString();
+                var groupName = reader.GetValue(5).ToString();
+                var namespaceId = (int)reader.GetValue(6);
+
+                CollaborationConfigurations.Add(new CollaborationConfiguration
+                {
+                    UserId = userId,
+                    RemoteUserName = remoteUserName,
+                    RemoteEmail = remoteEmail,
+                    RemotePersonalAccessToken = remotePersonalAccessToken,
+                    RemotePersonalPassword = remotePersonalPassword,
+                    Group = groupName,
+                    NamespaceId = namespaceId
+                });
             }
 
             return ProcessData();
@@ -67,7 +87,7 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
                 //}
                 //else
                 //{
-                    
+
                 //}
             }
             catch (Exception e)

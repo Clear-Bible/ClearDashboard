@@ -9,6 +9,7 @@ using Autofac;
 using Caliburn.Micro;
 using CefSharp.DevTools.CSS;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;

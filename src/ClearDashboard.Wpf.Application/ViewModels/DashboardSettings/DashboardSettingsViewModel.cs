@@ -12,7 +12,9 @@ using Microsoft.Win32;
 using System;
 using System.Threading;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Models;
 using static ClearDashboard.DataAccessLayer.Features.GitLabUser.GitLabUserSlice;
+using ClearDashboard.DataAccessLayer.Features.GitLabUser;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -149,6 +151,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _gitLabUserFound;
+        public bool GitLabUserFound
+        {
+            get => _gitLabUserFound;
+            set
+            {
+                _gitLabUserFound = value;
+                NotifyOfPropertyChange(() => GitLabUserFound);
+            }
+        }
+
 
         #endregion //Observable Properties
 
@@ -221,6 +234,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             CollaborationConfig = _collaborationManager.GetConfig();
 
             base.OnViewReady(view);
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
+            var results =
+                await ExecuteRequest(
+                    new GitLabUserExistsQuery(MySqlHelper.BuildConnectionString(), CollaborationConfig.UserId,
+                        CollaborationConfig.RemoteUserName, CollaborationConfig.RemoteEmail), CancellationToken.None);
+
+            if (results.Data)
+            {
+                GitLabUserFound = true;
+                GitlabUserSaveVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                GitLabUserFound = false; 
+                GitlabUserSaveVisibility = Visibility.Visible;
+            }
+
+            base.OnViewLoaded(view);
         }
 
         #endregion //Constructor

@@ -35,7 +35,7 @@ public class CollaborationManager
 
     private readonly string _dumpsPath = FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Dumps";
 
-    private CollaborationConfiguration _configuration;
+    private Models.CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = false;
     private string _repositoryPath = "LocalOnly";
 
@@ -66,7 +66,7 @@ public class CollaborationManager
         IMediator mediator,
         IUserProvider userProvider,
         IProjectProvider projectProvider,
-        CollaborationConfiguration configuration)
+        Models.CollaborationConfiguration configuration)
     {
         _logger = logger;
         _mediator = mediator;
@@ -96,9 +96,9 @@ public class CollaborationManager
 
     #region Methods
 
-    public void SaveCollaborationLicense(CollaborationConfiguration collaborationConfiguration)
+    public void SaveCollaborationLicense(Models.CollaborationConfiguration collaborationConfiguration)
     {
-        _configuration = new CollaborationConfiguration
+        _configuration = new Models.CollaborationConfiguration
         {
             Group = collaborationConfiguration.Group,
             RemoteEmail = collaborationConfiguration.RemoteEmail,
@@ -808,9 +808,9 @@ public class CollaborationManager
         }
     }
 
-    public CollaborationConfiguration GetConfig()
+    public Models.CollaborationConfiguration GetConfig()
     {
-        return new CollaborationConfiguration
+        return new Models.CollaborationConfiguration
         {
             Group = _configuration.Group,
             RemoteEmail = _configuration.RemoteEmail,
@@ -860,5 +860,5 @@ public class CollaborationManager
 public class GitCollaboration
 {
     [JsonPropertyName("Collaboration")]
-    public CollaborationConfiguration GitAccessToken { get; set; }
+    public Models.CollaborationConfiguration GitAccessToken { get; set; }
 }

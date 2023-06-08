@@ -31,6 +31,7 @@ using System.Windows;
 using Autofac.Configuration;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
 

@@ -19,6 +19,7 @@ using System.Windows.Controls.Primitives;
 using ClearDashboard.Wpf.Application.Messages;
 using System.Runtime.InteropServices;
 using System.Linq;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration

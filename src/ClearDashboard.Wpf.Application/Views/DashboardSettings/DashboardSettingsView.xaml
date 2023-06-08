@@ -160,7 +160,10 @@
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
-                <GroupBox Margin="16" Header="Collaboration Settings">
+                <GroupBox
+                    Margin="16"
+                    Header="Collaboration Settings"
+                    IsEnabled="{Binding GitLabUserFound}">
                     <StackPanel Orientation="Vertical">
                         <Border
                             Margin="5,5,5,5"
@@ -179,20 +182,24 @@
                                     <Run FontWeight="Bold" Text="Email: " />
                                     <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
                                     <LineBreak />
-                                    <Run FontWeight="Bold" Text="Password: " />
+                                    <!--<Run FontWeight="Bold" Text="Password: " />
                                     <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
                                     <LineBreak />
                                     <Run FontWeight="Bold" Text="Access Token: " />
-                                    <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
+                                    <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />-->
                                 </TextBlock>
-                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                                     <Button
                                         x:Name="SaveGitLabToServer"
                                         Width="250"
                                         Visibility="{Binding GitlabUserSaveVisibility}">
                                         Save GitLab User to Server
                                     </Button>
-                                    <TextBlock Foreground="{StaticResource PrimaryHueDarkBrush}" FontSize="18" Text="{Binding SaveGitLabUserMessage}" Width="250"/>
+                                    <TextBlock
+                                        Width="250"
+                                        FontSize="18"
+                                        Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                        Text="{Binding SaveGitLabUserMessage}" />
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -218,8 +225,8 @@
                         <Button
                             x:Name="SaveGitUrl"
                             Width="250"
-                            IsEnabled="{Binding SaveGitlabUrlButtonEnabled}"
-                            Margin="5,30,5,0">
+                            Margin="5,30,5,0"
+                            IsEnabled="{Binding SaveGitlabUrlButtonEnabled}">
                             Save Settings
                         </Button>
                     </StackPanel>
