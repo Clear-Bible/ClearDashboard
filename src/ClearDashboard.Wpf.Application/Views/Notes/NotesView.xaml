@@ -340,13 +340,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="40">
+                <DataGridTemplateColumn MinWidth="60" MaxWidth="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image
-                                Height="24"
-                                Source="/Resources/OpenBook50.png"
-                                ToolTip="{helpers:Localization Notes_UnreadReplies}">
+                            <Image Source="/Resources/OpenBook50.png" ToolTip="{helpers:Localization Notes_UnreadReplies}">
                                 <Image.Visibility>
                                     <MultiBinding
                                         Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
