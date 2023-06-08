@@ -467,7 +467,10 @@
             Width="5"
             HorizontalAlignment="Stretch" />
 
-        <ScrollViewer Grid.Column="3" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer
+            Name="NoteEditorScrollView"
+            Grid.Column="3"
+            VerticalScrollBarVisibility="Auto">
             <StackPanel Background="{DynamicResource MaterialDesignPaper}" Orientation="Vertical">
                 <Border
                     Margin="5"

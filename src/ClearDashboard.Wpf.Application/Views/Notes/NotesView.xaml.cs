@@ -105,7 +105,6 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             {
                 await notesViewModel.UpdateNoteStatus(noteViewModel, NoteStatus.Resolved);
             }
-            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteClosedCount, 1);
         }
 
         private async void OnNoteSeen(object sender, RoutedEventArgs e)
@@ -131,8 +130,10 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             )
             {
                 await _vm.AddReplyToNote(args.NoteViewModelWithReplies, args.Text);
+                NoteEditorScrollView.ScrollToEnd();
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteReplyCount, 1);
             }
-            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteReplyCount, 1);
+            
         }
 
         public bool RepliesExpanded { get; set; } = true;

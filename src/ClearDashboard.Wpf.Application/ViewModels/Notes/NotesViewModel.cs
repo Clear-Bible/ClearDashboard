@@ -26,6 +26,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -575,6 +577,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             {
                 noteViewModel.NoteStatus = noteStatus.ToString();
                 await noteManager_!.UpdateNoteAsync(noteViewModel);
+
+                if (noteStatus == NoteStatus.Resolved)
+                {
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteClosedCount, 1);
+                }
             }
         }
         public async Task AddReplyToNote(NoteViewModel noteViewModelWithReplies, string text)

@@ -491,6 +491,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     Text = ((TextBox)e.Source).Text,
                     NoteViewModelWithReplies = NoteViewModelWithReplies
                 });
+
+                NoteReplyTextBox.Text = string.Empty;
             }
         }
 
