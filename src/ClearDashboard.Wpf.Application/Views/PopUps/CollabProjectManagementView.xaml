@@ -165,12 +165,12 @@
                 CornerRadius="3">
 
                 <ListView
-                    IsEnabled="{Binding IsGitLabUserListEnabled}"
                     MinHeight="310"
                     MaxHeight="340"
                     Margin="5"
                     BorderBrush="{StaticResource PrimaryHueMidBrush}"
                     BorderThickness="1"
+                    IsEnabled="{Binding IsGitLabUserListEnabled}"
                     ItemsSource="{Binding CollabUsers}"
                     ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListView.ItemTemplate>

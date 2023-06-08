@@ -91,7 +91,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 NotifyOfPropertyChange(() => ShowOkButton);
             }
         }
-        
+
+        private string _workingMessage = "";
+        public string WorkingMessage
+        {
+            get => _workingMessage;
+            set
+            {
+                _workingMessage = value;
+                NotifyOfPropertyChange(() => WorkingMessage);
+            }
+        }
 
 
         #endregion //Observable Properties
@@ -110,6 +120,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             _logger = logger;
+
+            WorkingMessage = "Gathering Files for Transmission";
         }
 
         protected async override void OnViewLoaded(object view)
@@ -151,6 +163,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             ShowOkButton = Visibility.Visible;
 
+            WorkingMessage = "";
+
             base.OnViewLoaded(view);
         }
 
@@ -176,6 +190,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 return;
             }
 
+            WorkingMessage = "Sending Message...";
+            await Task.Delay(200);
+
+
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             var versionNumber = $"{thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
@@ -189,12 +207,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 SendSuccessfulVisibility = Visibility.Visible;
                 SendErrorVisibility = Visibility.Collapsed;
+                WorkingMessage = "Message Sent Successfully";
             }
             else
             {
                 SendSuccessfulVisibility = Visibility.Collapsed;
                 SendErrorVisibility = Visibility.Visible;
+                WorkingMessage = "Message Sending Problem";
             }
+            
         }
 
         #endregion // Methods

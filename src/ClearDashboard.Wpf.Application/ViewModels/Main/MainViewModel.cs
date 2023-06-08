@@ -1379,6 +1379,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     //}
                 },
 
+                // COLLABORATION
+                new()
+                {
+                    Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
+                    MenuItems = collaborationItems,
+                },
+
                 // HELP
                 new()
                 {
@@ -1399,17 +1406,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // Test reloading a project.
                         //ViewModel mergenew() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
                     }
-                }
+                },
 
-//#if COLLAB_RELEASE || COLLAB_DEBUG
-                ,
-                new()
-                {
-                    // Collaboration
-                    Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
-                    MenuItems = collaborationItems,
-                }
-//#endif
             };
 
             await Task.CompletedTask;
