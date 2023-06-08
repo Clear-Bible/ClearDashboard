@@ -483,7 +483,7 @@
                             Content="{helpers:Localization Notes_Note_NoteStatus_Open}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="{Binding NoteId}"
-                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
+                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
                         <RadioButton
                             Margin="10,0,0,0"
@@ -491,7 +491,7 @@
                             Content="{helpers:Localization Notes_Note_NoteStatus_Resolved}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="{Binding NoteId}"
-                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
+                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
                     </StackPanel>
                 </Border>
