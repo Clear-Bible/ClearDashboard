@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
 using CefSharp.DevTools.CSS;
@@ -201,6 +203,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
 
+        private string _saveGitLabUserMessage;
+        public string SaveGitLabUserMessage
+        {
+            get => _saveGitLabUserMessage;
+            set
+            {
+                _saveGitLabUserMessage = value;
+                NotifyOfPropertyChange(() => SaveGitLabUserMessage);
+            }
+        }
+
+
+
+        private Brush _saveMessageForegroundColor = Brushes.Green;
+        public Brush SaveMessageForegroundColor
+        {
+            get => _saveMessageForegroundColor;
+            set
+            {
+                _saveMessageForegroundColor = value;
+                NotifyOfPropertyChange(() => SaveMessageForegroundColor);
+            }
+        }
+
+
         #endregion //Observable Properties
 
 
@@ -380,6 +407,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 _collaborationConfiguration = CollaborationConfig;
                 _collaborationManager.SaveCollaborationLicense(_collaborationConfiguration);
+
+                // save new user to MySQL server
+                var results =
+                    await ExecuteRequest(
+                        new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), CollaborationConfig.UserId, CollaborationConfig.RemoteUserName, CollaborationConfig.RemoteEmail,
+                            CollaborationConfig.RemotePersonalAccessToken, CollaborationConfig.RemotePersonalPassword, CollaborationConfig.Group, CollaborationConfig.NamespaceId), CancellationToken.None);
+                if (results.Success)
+                {
+                    SaveGitLabUserMessage = "Saved to remote server";
+                    SaveMessageForegroundColor = Brushes.Green;
+                }
+                else
+                {
+                    SaveGitLabUserMessage = "User already exists on server";
+                    SaveMessageForegroundColor = Brushes.Red;
+                }
             }
 
             ShowGenerateUserButtonEnabled = false;

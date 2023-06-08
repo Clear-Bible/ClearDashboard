@@ -226,26 +226,29 @@
             Margin="10"
             FontSize="20"
             Foreground="Red" />
-
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="1"
-            Margin="5,15,0,0">
-            <Run FontWeight="Bold" Text="Username: " />
-            <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
-            <LineBreak />
-            <Run FontWeight="Bold" Text="Group: " />
-            <Run Text="{Binding CollaborationConfig.Group}" />
-            <LineBreak />
-            <Run FontWeight="Bold" Text="Email: " />
-            <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
-            <LineBreak />
-            <Run FontWeight="Bold" Text="Password: " />
-            <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
-            <LineBreak />
-            <Run FontWeight="Bold" Text="Access Token: " />
-            <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
-        </TextBlock>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <TextBlock Margin="5,15,0,0">
+                <Run FontWeight="Bold" Text="Username: " />
+                <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
+                <LineBreak />
+                <Run FontWeight="Bold" Text="Group: " />
+                <Run Text="{Binding CollaborationConfig.Group}" />
+                <LineBreak />
+                <Run FontWeight="Bold" Text="Email: " />
+                <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
+                <LineBreak />
+                <Run FontWeight="Bold" Text="Password: " />
+                <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
+                <LineBreak />
+                <Run FontWeight="Bold" Text="Access Token: " />
+                <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
+            </TextBlock>
+            <TextBlock
+                Margin="5"
+                FontSize="18"
+                Foreground="{Binding SaveMessageForegroundColor}"
+                Text="{Binding SaveGitLabUserMessage}" />
+        </StackPanel>
 
 
         <Button
