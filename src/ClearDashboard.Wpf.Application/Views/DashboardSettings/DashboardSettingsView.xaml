@@ -13,6 +13,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
     Title="{helpers:Localization Settings_Settings}"
     Width="800"
     Height="450"
@@ -66,6 +67,7 @@
                             Kind="Gauge75" />
                         <TextBlock
                             HorizontalAlignment="Center"
+                            FontSize="12"
                             Text="{helpers:Localization Settings_PowerModes}"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -92,6 +94,7 @@
                             Kind="PowerPlugOutline" />
                         <TextBlock
                             HorizontalAlignment="Center"
+                            FontSize="12"
                             Text="{helpers:Localization Settings_Plugins}"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -127,6 +130,7 @@
                             Kind="FormatListText" />
                         <TextBlock
                             HorizontalAlignment="Center"
+                            FontSize="12"
                             Text="{helpers:Localization Settings_TextCollections}"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -140,56 +144,97 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <!--<TabItem>
-                <TabItem.Header>
-                    <StackPanel Width="auto" Height="auto">
-                        <iconPacks:PackIconUnicons
-                            Width="24"
-                            Height="24"
-                            HorizontalAlignment="Center"
-                            Kind="TrafficBarrier" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            Text="{helpers:Localization Settings_Reserved}"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
-                </TabItem.Header>
-                <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
-                    <LineBreak />
-                    <LineBreak />
-                </TextBlock>
-            </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Width="auto" Height="auto">
-                        <iconPacks:PackIconUnicons
+                        <iconPacks:PackIconMaterial
                             Width="24"
                             Height="24"
                             HorizontalAlignment="Center"
-                            Kind="TrafficBarrier" />
+                            Kind="AccountGroup" />
+
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="{helpers:Localization Settings_Reserved}"
+                            FontSize="12"
+                            Text="Collaboration Settings"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
-                <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
-                    <LineBreak />
-                    <LineBreak />
-                </TextBlock>
-            </TabItem>-->
-        </TabControl>
+                <GroupBox
+                    Margin="16"
+                    Header="Collaboration Settings"
+                    IsEnabled="{Binding GitLabUserFound}">
+                    <StackPanel Orientation="Vertical">
+                        <Border
+                            Margin="5,5,5,5"
+                            Padding="5"
+                            BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                            BorderThickness="1"
+                            CornerRadius="3">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Visibility="{Binding ShowCollabUserInfo}">
+                                    <Run FontWeight="Bold" Text="Username: " />
+                                    <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Group: " />
+                                    <Run Text="{Binding CollaborationConfig.Group}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Email: " />
+                                    <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
+                                    <LineBreak />
+                                    <!--<Run FontWeight="Bold" Text="Password: " />
+                                    <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Access Token: " />
+                                    <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />-->
+                                </TextBlock>
+                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                    <Button
+                                        x:Name="SaveGitLabToServer"
+                                        Width="250"
+                                        Visibility="{Binding GitlabUserSaveVisibility}">
+                                        Save GitLab User to Server
+                                    </Button>
+                                    <TextBlock
+                                        Width="250"
+                                        FontSize="18"
+                                        Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                        Text="{Binding SaveGitLabUserMessage}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
 
-        <!--<StackPanel Orientation="Vertical">
-            <GroupBox
-                Margin="16"
-                Header="Power Modes"
-                IsEnabled="{Binding IsPowerModesBoxEnabled}">
-                <CheckBox Content="Allow Dashboard to Change Power Modes During High Computational Events" IsChecked="{Binding IsPowerModesEnabled}" />
-            </GroupBox>
-        </StackPanel>-->
+
+                        <TextBox
+                            x:Name="GitRootUrl"
+                            Margin="5,15,5,0"
+                            materialDesign:HintAssist.Foreground="Green"
+                            materialDesign:HintAssist.Hint="URL"
+                            materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+
+                            <TextBox.Text>
+                                <Binding Path="GitRootUrl" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validators:HtmlUrlValidator />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <Button
+                            x:Name="SaveGitUrl"
+                            Width="250"
+                            Margin="5,30,5,0"
+                            IsEnabled="{Binding SaveGitlabUrlButtonEnabled}">
+                            Save Settings
+                        </Button>
+                    </StackPanel>
+                </GroupBox>
+
+
+            </TabItem>
+        </TabControl>
 
         <Button
             x:Name="Close"
@@ -197,7 +242,6 @@
             Margin="10"
             HorizontalAlignment="Right"
             Content="{helpers:Localization Close}" />
-
 
     </Grid>
 </Window>

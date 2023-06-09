@@ -51,7 +51,6 @@ using ClearDashboard.Wpf.Application.Helpers;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
-using CefSharp.DevTools.CSS;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -164,6 +163,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             get => _windowIdToLoad;
             set => Set(ref _windowIdToLoad, value);
         }
+
+        public async Task CollabProjectManager()
+        {
+            var localizedString = _localizationService!["MainView_About"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<CollabProjectManagementViewModel>();
+
+
+            IWindowManager manager = new WindowManager();
+            await manager.ShowDialogAsync(viewModel, null, settings);
+        }
+
         private async Task ShowCollaborationInitialize()
         {
             if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
@@ -368,6 +386,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             _longRunningTaskManager = longRunningTaskManager;
             _localizationService = localizationService;
             _collaborationManager = collaborationManager;
+
 
             LifetimeScope = lifetimeScope;
             WindowManager = windowManager;
@@ -668,7 +687,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     await DrawEnhancedViewTabs(enhancedViews, cancellationToken);
                     await LoadEnhancedViewData(enhancedViews);
                 });
-              
+
 
                 sw.Stop();
                 Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
@@ -1070,6 +1089,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var viewModel = IoC.Get<SlackMessageViewModel>();
             viewModel.Files = files;
             viewModel.ParatextUser = ProjectManager.CurrentUser.ParatextUserName!;
+            viewModel.DashboardUser = ProjectManager.CurrentUser;
+            viewModel.GitLabUser = _collaborationManager.GetConfig();
 
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
@@ -1183,7 +1204,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             BindableCollection<MenuItemViewModel> collaborationItems = new()
             {
                 // add in the standard menu items
-
+                new MenuItemViewModel
+                {
+                    Header = "Manage Collaboration Projects", Id = MenuIds.CollaborationManageProjects,
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.HasRemoteConfigured() && _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
+                },
                 // Save Current Layout
                 new MenuItemViewModel
                 {
@@ -1203,38 +1229,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
                 },
-                // separator
-                new() { Header = "---------------------------------", Id = MenuIds.Separator, ViewModel = this, },
-                new MenuItemViewModel
-                {
-                    Header = "Git Fetch + Merge", Id = MenuIds.CollaborationFetchMerge,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable()
-                },
-                new MenuItemViewModel
-                {
-                    Header = "Git Hard Reset", Id = MenuIds.CollaborationHardReset,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
-                },
-                new MenuItemViewModel
-                {
-                    Header = "Create Project Snapshot Backup", Id = MenuIds.CollaborationCreateBackup,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
-                },
-                new MenuItemViewModel
-                {
-                    Header = "Dump Differences between Last Merged and Head", Id = MenuIds.CollaborationDumpDifferencesLastMergedHead,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
-                },
-                new MenuItemViewModel
-                {
-                    Header = "Dump Differences between Head and Current Database", Id = MenuIds.CollaborationDumpDifferencesHeadCurrentDb,
-                    ViewModel = this,
-                    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
-                },
+                //// separator
+                //new() { Header = "---------------------------------", Id = MenuIds.Separator, ViewModel = this, },
+                //new MenuItemViewModel
+                //{
+                //    Header = "Git Fetch + Merge", Id = MenuIds.CollaborationFetchMerge,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable()
+                //},
+                //new MenuItemViewModel
+                //{
+                //    Header = "Git Hard Reset", Id = MenuIds.CollaborationHardReset,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                //},
+                //new MenuItemViewModel
+                //{
+                //    Header = "Create Project Snapshot Backup", Id = MenuIds.CollaborationCreateBackup,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                //},
+                //new MenuItemViewModel
+                //{
+                //    Header = "Dump Differences between Last Merged and Head", Id = MenuIds.CollaborationDumpDifferencesLastMergedHead,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                //},
+                //new MenuItemViewModel
+                //{
+                //    Header = "Dump Differences between Head and Current Database", Id = MenuIds.CollaborationDumpDifferencesHeadCurrentDb,
+                //    ViewModel = this,
+                //    IsEnabled = _collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository()
+                //},
             };
             BindableCollection<MenuItemViewModel> layouts = new()
             {
@@ -1355,6 +1381,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     //}
                 },
 
+                // COLLABORATION
+                new()
+                {
+                    Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
+                    MenuItems = collaborationItems,
+                },
+
                 // HELP
                 new()
                 {
@@ -1375,17 +1408,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // Test reloading a project.
                         //ViewModel mergenew() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
                     }
-                }
+                },
 
-#if COLLAB_RELEASE || COLLAB_DEBUG
-                ,
-                new()
-                {
-                    // Collaboration
-                    Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
-                    MenuItems = collaborationItems,
-                }
-#endif
             };
 
             await Task.CompletedTask;
@@ -1871,6 +1895,119 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
         {
+            switch (menuItem.Id)
+            {
+                case MenuIds.Settings:
+                    {
+                        var viewmodel = IoC.Get<DashboardSettingsViewModel>();
+                        await this.WindowManager.ShowWindowAsync(viewmodel, null, null);
+                        break;
+                    }
+
+                case MenuIds.CollaborationManageProjects:
+                    {
+                        await CollabProjectManager();
+                        break;
+                    }
+
+                case MenuIds.CollaborationInitialize:
+                    {
+                        await ShowCollaborationInitialize();
+                        break;
+                    }
+
+                case MenuIds.CollaborationGetLatest:
+                    {
+                        await ShowCollaborationGetLatest();
+                        break;
+                    }
+
+                case MenuIds.CollaborationCommit:
+                    {
+                        await ShowCollaborationCommit();
+                        break;
+                    }
+
+                case MenuIds.CollaborationFetchMerge:
+                    {
+                        if (_collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable())
+                        {
+                            _collaborationManager.FetchMergeRemote();
+                            await RebuildMainMenu();
+                        }
+                        break;
+                    }
+
+                case MenuIds.CollaborationHardReset:
+                    {
+                        if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                        {
+                            _collaborationManager.HardResetChanges();
+                            await RebuildMainMenu();
+                        }
+                        break;
+                    }
+
+                case MenuIds.CollaborationCreateBackup:
+                    {
+                        if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                        {
+                            await _collaborationManager.CreateProjectBackupAsync(CancellationToken.None);
+                            await RebuildMainMenu();
+                        }
+                        break;
+                    }
+
+                case MenuIds.CollaborationDumpDifferencesLastMergedHead:
+                    {
+                        if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                        {
+                            _collaborationManager.DumpDifferencesBetweenLastMergedCommitAndHead();
+                            await RebuildMainMenu();
+                        }
+                        break;
+                    }
+
+                case MenuIds.CollaborationDumpDifferencesHeadCurrentDb:
+                    {
+                        if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
+                        {
+                            await _collaborationManager.DumpDifferencesBetweenHeadAndCurrentDatabaseAsync();
+                            await RebuildMainMenu();
+                        }
+                        break;
+                    }
+
+                case MenuIds.About:
+                    {
+                        ShowAboutWindow();
+                        break;
+                    }
+
+                case MenuIds.GettingStartedGuide:
+                    {
+                        LaunchGettingStartedGuide();
+                        break;
+                    }
+
+                case MenuIds.ShowLog:
+                    {
+                        ShowLogs();
+                        break;
+                    }
+
+                case MenuIds.GatherLogs:
+                    {
+                        GatherLogs();
+                        break;
+                    }
+
+                default:
+                    {
+                        UnhideWindow(menuItem.Id);
+                        break;
+                    }
+            }
 
             if (!_longRunningTaskManager!.HasTasks())
             {
@@ -1913,128 +2050,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             await AddNewEnhancedView();
                             break;
                         }
-
-                    case MenuIds.GettingStartedGuide:
-                        {
-                            LaunchGettingStartedGuide();
-                            break;
-                        }
-
-                    case MenuIds.ShowLog:
-                        {
-                            ShowLogs();
-                            break;
-                        }
-
-                    case MenuIds.GatherLogs:
-                        {
-                            GatherLogs();
-                            break;
-                        }
-
-                    case MenuIds.Settings:
-                        {
-                            await this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(EventAggregator), null, null);
-                            break;
-                        }
-
-                    case MenuIds.CollaborationInitialize:
-                        {
-                            await ShowCollaborationInitialize();
-                            break;
-                        }
-
-                    case MenuIds.CollaborationGetLatest:
-                        {
-                            await ShowCollaborationGetLatest();
-                            break;
-                        }
-
-                    case MenuIds.CollaborationCommit:
-                        {
-                            await ShowCollaborationCommit();
-                            break;
-                        }
-
-                    case MenuIds.CollaborationFetchMerge:
-                        {
-                            if (_collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable())
-                            {
-                                _collaborationManager.FetchMergeRemote();
-                                await RebuildMainMenu();
-                            }
-                            break;
-                        }
-
-                    case MenuIds.CollaborationHardReset:
-                        {
-                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
-                            {
-                                _collaborationManager.HardResetChanges();
-                                await RebuildMainMenu();
-                            }
-                            break;
-                        }
-
-                    case MenuIds.CollaborationCreateBackup:
-                        {
-                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
-                            {
-                                await _collaborationManager.CreateProjectBackupAsync(CancellationToken.None);
-                                await RebuildMainMenu();
-                            }
-                            break;
-                        }
-
-                    case MenuIds.CollaborationDumpDifferencesLastMergedHead:
-                        {
-                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
-                            {
-                                _collaborationManager.DumpDifferencesBetweenLastMergedCommitAndHead();
-                                await RebuildMainMenu();
-                            }
-                            break;
-                        }
-
-                    case MenuIds.CollaborationDumpDifferencesHeadCurrentDb:
-                        {
-                            if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
-                            {
-                                await _collaborationManager.DumpDifferencesBetweenHeadAndCurrentDatabaseAsync();
-                                await RebuildMainMenu();
-                            }
-                            break;
-                        }
-
-                    case MenuIds.About:
-                        {
-                            ShowAboutWindow();
-                            break;
-                        }
-
-                    case MenuIds.FileNew:
-                        {
-                            await ShowStartupDialog(menuItem);
-                            break;
-                        }
-                    case MenuIds.FileOpen:
-                        {
-                            await ShowStartupDialog(menuItem);
-                            break;
-                        }
-
-                    case MenuIds.ReloadProject:
-                        {
-                            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
-                            break;
-
-                        }
-                    case MenuIds.Layout:
-                        {
-                            //no-op
-                            break;
-                        }
-
                     case MenuIds.BiblicalTerms:
                         {
                             UnhideWindow(WindowIds.BiblicalTerms);
@@ -2077,6 +2092,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             break;
                         }
 
+                    case MenuIds.FileNew:
+                        {
+                            await ShowStartupDialog(menuItem);
+                            break;
+                        }
+                    case MenuIds.FileOpen:
+                        {
+                            await ShowStartupDialog(menuItem);
+                            break;
+                        }
+
+                    case MenuIds.ReloadProject:
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                            break;
+
+                        }
+                    case MenuIds.Layout:
+                        {
+                            //no-op
+                            break;
+                        }
                     default:
                         {
                             UnhideWindow(menuItem.Id);
@@ -2212,10 +2249,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
             foreach (var item in MenuItems)
             {
-                if (item.Id == "FileID")
+                if (item.Id == MenuIds.File)
                 {
                     item.IsEnabled = enable;
-                    break;
+                }
+                if (item.Id == MenuIds.Layout)
+                {
+                    item.IsEnabled = enable;
+                }
+                if (item.Id == MenuIds.Window)
+                {
+                    item.IsEnabled = enable;
                 }
             }
             return Task.CompletedTask;
