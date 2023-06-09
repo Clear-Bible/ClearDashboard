@@ -12,7 +12,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Services;
@@ -388,7 +387,7 @@ public class CollaborationManager
             }
         }
 
-        Console.WriteLine(logMessage);
+        _logger.LogInformation(logMessage);
     }
 
     public void PullRemoteCommits()
@@ -548,7 +547,7 @@ public class CollaborationManager
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e.ToString());
             }
         }
     }
@@ -718,8 +717,9 @@ public class CollaborationManager
 
                         projectIds.Add((Guid)projectModelSnapshot.GetId());
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        _logger.LogError(ex.ToString());
                     }
                 }
             }
@@ -855,10 +855,3 @@ public class CollaborationManager
 //                .ToList();
 //        }
 //    }
-
-
-public class GitCollaboration
-{
-    [JsonPropertyName("Collaboration")]
-    public Models.CollaborationConfiguration GitAccessToken { get; set; }
-}

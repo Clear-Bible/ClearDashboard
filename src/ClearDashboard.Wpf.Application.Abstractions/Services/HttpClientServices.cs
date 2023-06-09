@@ -252,7 +252,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var project = JsonSerializer.Deserialize<GitLabProjectOwner>(result)!;
 
-                var owner = project.owner.id;
+                var owner = project.Owner.Id;
 
                 foreach (var item in list)
                 {

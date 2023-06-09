@@ -234,26 +234,6 @@
 
 
             </TabItem>
-            <!--<TabItem>
-                <TabItem.Header>
-                    <StackPanel Width="auto" Height="auto">
-                        <iconPacks:PackIconUnicons
-                            Width="24"
-                            Height="24"
-                            HorizontalAlignment="Center"
-                            Kind="TrafficBarrier" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            Text="{helpers:Localization Settings_Reserved}"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
-                </TabItem.Header>
-                <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
-                    <LineBreak />
-                    <LineBreak />
-                </TextBlock>
-            </TabItem>-->
         </TabControl>
 
         <Button

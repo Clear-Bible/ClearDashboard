@@ -123,13 +123,6 @@
                 Content="{Binding CancelAction}"
                 IsEnabled="{Binding CanCancelAction}"
                 Style="{StaticResource TransparentStyle}" />
-            <!--<Button
-                x:Name="Ok"
-                cal:Message.Attach="Ok"
-                Content="{Binding OkAction}"
-                IsDefault="True"
-                IsEnabled="{Binding CanOkAction}"
-                Style="{StaticResource TransparentStyle}" />-->
         </StackPanel>
         <ProgressBar
             Grid.Row="2"

@@ -5,22 +5,22 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
     public class GitLabAddUserToProject
     {
         [JsonPropertyName("id")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [JsonPropertyName("username")]
-        public string username { get; set; }
+        public string Username { get; set; }
 
         [JsonPropertyName("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonPropertyName("state")]
-        public string state { get; set; }
+        public string State { get; set; }
 
         [JsonPropertyName("web_url")]
-        public string web_url { get; set; }
+        public string WebUrl { get; set; }
 
         [JsonPropertyName("access_level")]
-        public int access_level { get; set; }
+        public int AccessLevel { get; set; }
 
     }
 }

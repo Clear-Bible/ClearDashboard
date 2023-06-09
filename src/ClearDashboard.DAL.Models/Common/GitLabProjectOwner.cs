@@ -11,66 +11,66 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
         public int Id { get; set; }
 
         [JsonPropertyName("description")]
-        public string description { get; set; }
+        public string Description { get; set; }
 
         [JsonPropertyName("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonPropertyName("http_url_to_repo")]
-        public string http_url_to_repo { get; set; }
+        public string HttpUrlToRepo { get; set; }
 
         [JsonPropertyName("namespace")]
-        public Namespace @namespace { get; set; }
+        public Namespace Namespace { get; set; }
 
         [JsonPropertyName("owner")]
-        public Owner owner { get; set; }
+        public Owner Owner { get; set; }
     }
 
     public class Owner
     {
         [JsonPropertyName("id")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [JsonPropertyName("username")]
-        public string username { get; set; }
+        public string Username { get; set; }
 
         [JsonPropertyName("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonPropertyName("state")]
-        public string state { get; set; }
+        public string State { get; set; }
 
         [JsonPropertyName("avatar_url")]
-        public string avatar_url { get; set; }
+        public string AvatarUrl { get; set; }
 
         [JsonPropertyName("web_url")]
-        public string web_url { get; set; }
+        public string WebUrl { get; set; }
     }
 
     public class Namespace
     {
         [JsonPropertyName("id")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [JsonPropertyName("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonPropertyName("path")]
-        public string path { get; set; }
+        public string Path { get; set; }
 
         [JsonPropertyName("kind")]
-        public string kind { get; set; }
+        public string Kind { get; set; }
 
         [JsonPropertyName("full_path")]
-        public string full_path { get; set; }
+        public string FullPath { get; set; }
 
         [JsonPropertyName("parent_id")]
-        public object parent_id { get; set; }
+        public object ParentId { get; set; }
 
         [JsonPropertyName("avatar_url")]
-        public string avatar_url { get; set; }
+        public string AvatarUrl { get; set; }
 
         [JsonPropertyName("web_url")]
-        public string web_url { get; set; }
+        public string WebUrl { get; set; }
     }
 }
