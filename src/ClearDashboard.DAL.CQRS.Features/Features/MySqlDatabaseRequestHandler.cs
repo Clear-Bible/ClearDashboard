@@ -16,11 +16,13 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
         MySqlDatabaseRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
         where TRequest : IRequest<TResponse>
     {
+        private readonly ILogger _logger;
         protected int ReturnValue { get; private set; }
         protected List<CollaborationConfiguration> CollaborationConfigurations { get; set; } = new();
 
         protected MySqlDatabaseRequestHandler(ILogger logger) : base(logger)
         {
+            _logger = logger;
             //no-op
         }
 
@@ -80,19 +82,10 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
                     + $" VALUES ({userId}, \"{remoteUserName}\", \"{remoteEmail}\", \"{remotePersonalAccessToken}\",\"{remotePersonalPassword}\",\"{group}\",{namespaceId});", connection);
 
                 ReturnValue = await command.ExecuteNonQueryAsync();
-
-                //if (ret != 0)
-                //{
-                //    return true;
-                //}
-                //else
-                //{
-
-                //}
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                _logger.LogError(e.Message, e);
             }
 
             return ProcessData();
