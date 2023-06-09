@@ -343,17 +343,19 @@
                 <DataGridTemplateColumn MinWidth="60" MaxWidth="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="/Resources/OpenBook50.png" ToolTip="{helpers:Localization Notes_UnreadReplies}">
-                                <Image.Visibility>
-                                    <MultiBinding
-                                        Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
-                                        ConverterParameter="{StaticResource True}"
-                                        Mode="OneWay">
-                                        <Binding Path="UserIdsSeenAllReplies" />
-                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
+                            <materialDesign:PackIcon
+                                Width="30"
+                                Height="30"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="BookOutline">
+                                <materialDesign:PackIcon.Visibility>
+                                    <MultiBinding Converter="{StaticResource GuidInGuidsToVisibilityConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
+                                        <Binding Path="UserIdsSeenAllReplies"/>
+                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
                                     </MultiBinding>
-                                </Image.Visibility>
-                            </Image>
+                                </materialDesign:PackIcon.Visibility>
+                            </materialDesign:PackIcon>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -617,7 +619,9 @@
                             TimestampColor="DarkGray"
                             TimestampFontStyle="Normal"
                             TimestampMargin="-2,0,10,0"
-                            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}" />
+                            CurrentUser="{Binding CurrentUser}"
+                            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}"
+                        />
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

@@ -96,6 +96,12 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return result.Data!;
         }
 
+        public async Task PutAlignments(IEnumerable<Alignment> alignments, CancellationToken token = default)
+        {
+            var result = await mediator_.Send(new PutAlignmentSetAlignmentsCommand(AlignmentSetId, alignments), token);
+            result.ThrowIfCanceledOrFailed();
+        }
+
         public async Task Update(CancellationToken token = default)
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
