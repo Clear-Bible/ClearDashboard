@@ -358,6 +358,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
 
                 EmailSent = true;
+                ErrorMessage = "";
             }
             else
             {

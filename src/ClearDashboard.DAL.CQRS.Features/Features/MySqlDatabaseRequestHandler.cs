@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using MySqlConnector;
 using System.Diagnostics;
 using ClearDashboard.DataAccessLayer.Models;
+using System.Data;
 
 namespace ClearDashboard.DAL.CQRS.Features.Features
 {
@@ -77,9 +78,19 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
                 await using MySqlConnection connection = new MySqlConnection(connectionString);
                 await connection.OpenAsync();
 
-                await using MySqlCommand command = new MySqlCommand("INSERT INTO gitlabusers"
-                    + " (UserId, RemoteUserName, RemoteEmail, RemotePersonalAccessToken, RemotePersonalPassword, GroupName, NamespaceId)"
-                    + $" VALUES ({userId}, \"{remoteUserName}\", \"{remoteEmail}\", \"{remotePersonalAccessToken}\",\"{remotePersonalPassword}\",\"{group}\",{namespaceId});", connection);
+                string sql = "INSERT INTO gitlabusers"
+                             + " (UserId, RemoteUserName, RemoteEmail, RemotePersonalAccessToken, RemotePersonalPassword, GroupName, NamespaceId)"
+                             + $" VALUES (@userId, @remoteUserName, @remoteEmail, @remotePersonalAccessToken,"
+                            + "@remotePersonalPassword,@group,@namespaceId);";
+                await using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.Clear();
+                command.Parameters.Add("@userId", MySqlDbType.Int16).Value = userId;
+                command.Parameters.Add("@remoteUserName", MySqlDbType.VarString, 255 ).Value = remoteUserName;
+                command.Parameters.Add("@remoteEmail", MySqlDbType.VarString, 255).Value = remoteEmail;
+                command.Parameters.Add("@remotePersonalAccessToken", MySqlDbType.VarString, 255).Value = remotePersonalAccessToken;
+                command.Parameters.Add("@remotePersonalPassword", MySqlDbType.VarString, 255).Value = remotePersonalPassword;
+                command.Parameters.Add("@group", MySqlDbType.VarString, 255).Value = group;
+                command.Parameters.Add("@namespaceId", MySqlDbType.Int16, 255).Value = namespaceId;
 
                 ReturnValue = await command.ExecuteNonQueryAsync();
             }
