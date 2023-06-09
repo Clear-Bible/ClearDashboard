@@ -1,8 +1,11 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using MediatR;
@@ -11,16 +14,12 @@ using SIL.Machine.Utils;
 using System;
 using System.Collections.ObjectModel;
 using System.Dynamic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
-using ClearDashboard.Wpf.Application.Messages;
-using System.Runtime.InteropServices;
-using System.Linq;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
@@ -476,7 +475,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 string.Format(message, status.PercentCompleted) :
                 message;
 
-            System.Windows.Application.Current.Dispatcher.Invoke(() => MergeProgressUpdates.Add(description));
+            OnUIThread(() =>
+                {
+                    MergeProgressUpdates.Add(description);
+                    NotifyOfPropertyChange(nameof(MergeProgressUpdates));
+                }
+            );
+
         }
 
         #endregion // Methods

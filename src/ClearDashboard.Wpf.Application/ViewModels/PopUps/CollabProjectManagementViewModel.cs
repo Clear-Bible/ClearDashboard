@@ -220,7 +220,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var user = CollabUsers[i];
                 if (user.IsSelected)
                 {
-                    _ = await _httpClientServices.AddUserToProject(user, SelectedProject);
+                    _ = await _httpClientServices.AddUserToProject(user, SelectedProject, PermissionLevel.ReadWrite);
                     CollabUsers.RemoveAt(i);
                     await Task.Delay(500);
                     await GetUsersForProject();

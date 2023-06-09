@@ -9,18 +9,37 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
     {
         public bool IsOwner { get; set; }
 
-        [JsonPropertyName("id")]
+        [JsonPropertyName("id")] 
         public int Id { get; set; }
 
-        [JsonPropertyName("username")]
+        [JsonPropertyName("username")] 
         public string UserName { get; set; }
 
-        [JsonPropertyName("name")]
+        
+        [JsonPropertyName("name")] 
         public string Name { get; set; }
 
-        [JsonPropertyName("state")]
+
+        [JsonPropertyName("state")] 
         public string State { get; set; }
 
+        
+        [JsonPropertyName("access_level")] 
+        public int AccessLevel { get; set; }
+
+        public PermissionLevel GetPermissionLevel
+        {
+            get {
+                switch (AccessLevel)
+                {
+                    case 30:
+                        return PermissionLevel.ReadOnly;
+                    case 40:
+                        return PermissionLevel.ReadWrite;
+                }
+                return PermissionLevel.ReadWrite;
+            }
+        }
 
     }
 }

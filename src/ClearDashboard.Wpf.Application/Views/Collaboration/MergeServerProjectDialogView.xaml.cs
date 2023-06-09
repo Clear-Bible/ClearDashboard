@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,18 +12,19 @@ namespace ClearDashboard.Wpf.Application.Views.Collaboration
         public MergeServerProjectDialogView()
         {
             InitializeComponent();
+
         }
 
         private void MergeServerProjectDialogView_OnLoaded(object sender, RoutedEventArgs e)
         {
             ProgressMessages.Focus();
 
-            // listen for changes to the lower listview to make it scroll back 
-            // to the top
+            //// listen for changes to the lower listview to make it scroll back 
+            //// to the top
             INotifyPropertyChanged viewModel = (INotifyPropertyChanged)this.DataContext;
             viewModel.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName.Equals("ProgressMessages"))
+                if (args.PropertyName.Equals("MergeProgressUpdates"))
                 {
                     if (ProgressMessages.Items.Count > 0)
                     {
@@ -33,11 +33,12 @@ namespace ClearDashboard.Wpf.Application.Views.Collaboration
                     }
 
                     return;
-                    // execute code here.
                 }
 
             };
 
         }
+
+        
     }
 }
