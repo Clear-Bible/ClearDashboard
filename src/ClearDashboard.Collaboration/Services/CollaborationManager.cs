@@ -43,7 +43,7 @@ public class CollaborationManager
 
     #region Public Properties
 
-    public const string BranchName = "master";
+    public const string BranchName = "main";
     public const string RemoteOrigin = "origin";
     public string RepositoryPath => _repositoryPath;
 
@@ -561,10 +561,10 @@ public class CollaborationManager
 
         using (var repo = new Repository(_repositoryPath))
         {
-            Branch originMaster = repo.Branches["origin/master"];
-            if (originMaster is not null)
+            Branch originMain = repo.Branches["origin/main"];
+            if (originMain is not null)
             {
-                repo.Reset(ResetMode.Hard, originMaster.Tip);
+                repo.Reset(ResetMode.Hard, originMain.Tip);
             }
         }
     }
@@ -650,7 +650,7 @@ public class CollaborationManager
             options.CredentialsProvider = (_url, _user, _cred) =>
                 new UsernamePasswordCredentials
                 { Username = _configuration.RemoteUserName, Password = _configuration.RemotePersonalAccessToken };
-            repo.Network.Push(remote, @"refs/heads/master", options);
+            repo.Network.Push(remote, @"refs/heads/main", options);
         }
 
     }
