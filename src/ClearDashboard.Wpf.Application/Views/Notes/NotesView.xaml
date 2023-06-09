@@ -316,7 +316,7 @@
             <DataGrid.Columns>
 
 
-                <DataGridTemplateColumn MinWidth="60">
+                <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_OpenClosed}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <materialDesign:PackIcon
@@ -340,7 +340,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="60" MaxWidth="60">
+                <DataGridTemplateColumn MinWidth="90" Header="{helpers:Localization Notes_UnreadReplies}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <materialDesign:PackIcon
@@ -508,7 +508,7 @@
 
                     <TextBlock
                         Margin="10,0,5,5"
-                        Foreground="{StaticResource SecondaryHueMidBrush}"
+                        FontWeight="Bold"
                         Text="{Binding SelectedNoteText}"
                         TextWrapping="Wrap" />
                 </GroupBox>
