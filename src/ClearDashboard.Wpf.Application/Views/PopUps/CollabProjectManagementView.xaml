@@ -104,11 +104,17 @@
                                     </Style>
                                 </iconPacks:PackIconRemixIcon.Style>
                             </iconPacks:PackIconRemixIcon>
-
-                            <TextBlock
-                                Margin="5,0,0,0"
-                                VerticalAlignment="Center"
-                                Text="{Binding Name}" />
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Name}" />
+                                <TextBlock
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontStyle="Italic"
+                                    Text="{Binding GetPermissionLevel}" />
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
