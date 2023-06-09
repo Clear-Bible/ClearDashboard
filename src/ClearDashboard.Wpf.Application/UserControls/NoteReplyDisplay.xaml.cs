@@ -2,11 +2,16 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using Mono.Unix.Native;
 using TimeZoneNames;
@@ -18,7 +23,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control that displays the details of a single note reply.
     /// </summary>
-    public partial class NoteReplyDisplay : INotifyPropertyChanged
+    public partial class NoteReplyDisplay : INotifyPropertyChanged, IHandle<NoteUpdatedMessage>
     {
         #region Static Routed Events
 
@@ -30,6 +35,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion Static Routed Events
         #region Static Dependency Properties
+
+        /// <summary>
+        /// Identifies the CurrentUser dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CurrentUserProperty = DependencyProperty.Register(nameof(CurrentUser), typeof(User), typeof(NoteReplyDisplay));
 
         /// <summary>
         /// Identifies the ParentNote dependency property.
@@ -175,6 +185,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             });
         }
 
+        private void OnSeenCheckBoxClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseReplySeenEvent(SeenCheckBox.IsChecked.Value);
+        }
+
         private void OnSeenCheckBoxChecked(object sender, RoutedEventArgs e)
         {
             RaiseReplySeenEvent(true);
@@ -193,6 +208,20 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion Private Event Handlers
         #region Public Properties
 
+        /// <summary>
+        /// Gets or sets the <see cref="EventAggregator"/> to be used for participating in the Caliburn Micro eventing system.
+        /// </summary>
+        public static IEventAggregator? EventAggregator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current user for determining the value of the Seen flags.
+        /// </summary>
+        public User CurrentUser
+        {
+            get => (User)GetValue(CurrentUserProperty);
+            set => SetValue(CurrentUserProperty, value);
+        }
+        
         /// <summary>
         /// Gets or sets the parent <see cref="NoteViewModel"/> for the reply.
         /// </summary>
@@ -430,6 +459,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public NoteReplyDisplay()
         {
             InitializeComponent();
+
+            EventAggregator?.SubscribeOnUIThread(this);
+        }
+
+        public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.NoteId == Reply?.NoteId)
+            {
+                //Reply.NoteSeenChanged();
+            }
+            await Task.CompletedTask;
+        }
+
+        ~NoteReplyDisplay()
+        {
+            EventAggregator?.Unsubscribe(this);
         }
     }
 }

@@ -340,20 +340,22 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="40">
+                <DataGridTemplateColumn MinWidth="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Height="24" 
-                                   Source="/Resources/OpenBook50.png"
-                                   ToolTip="{helpers:Localization Notes_UnreadReplies}"
-                                   >
-                                <Image.Visibility>
+                            <materialDesign:PackIcon
+                                Width="30"
+                                Height="30"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="BookOutline">
+                                <materialDesign:PackIcon.Visibility>
                                     <MultiBinding Converter="{StaticResource GuidInGuidsToVisibilityConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
                                         <Binding Path="UserIdsSeenAllReplies"/>
                                         <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
                                     </MultiBinding>
-                                </Image.Visibility>
-                            </Image>
+                                </materialDesign:PackIcon.Visibility>
+                            </materialDesign:PackIcon>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -614,6 +616,7 @@
                             TimestampFontStyle="Normal"
                             TimestampColor="DarkGray"
                             TimestampMargin="-2,0,10,0"
+                            CurrentUser="{Binding CurrentUser}"
                             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}"
                         />
                     </StackPanel>
