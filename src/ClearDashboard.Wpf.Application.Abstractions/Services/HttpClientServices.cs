@@ -1,23 +1,15 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.Collaboration.Services;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
-using HttpClientToCurl;
-using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.Extensions.Logging;
-using Mono.Unix.Native;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using StringContent = System.Net.Http.StringContent;
 
@@ -31,6 +23,12 @@ namespace ClearDashboard.Wpf.Application.Services
         private ILogger? _logger;
 
         #endregion //Member Variables
+
+        #region Public Properties
+
+
+
+        #endregion //Public Properties
 
 
         #region Constructor
@@ -224,7 +222,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             List<GitLabProjectUser> list = new();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}/users");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}/members");
 
             try
             {
@@ -418,14 +416,26 @@ namespace ClearDashboard.Wpf.Application.Services
             return project;
         }
 
-        public async Task<object> AddUserToProject(GitUser user, GitLabProject selectedProject)
+        public async Task<object> AddUserToProject(GitUser user, GitLabProject selectedProject, PermissionLevel permissionLevel)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"projects/{selectedProject.Id}/members");
 
             var content = new MultipartFormDataContent();
             //content.Add(new StringContent(Uri.EscapeDataString($"{firstName} {lastName}")), "name");
             content.Add(new StringContent(user.Id.ToString()), "user_id");
-            content.Add(new StringContent("40"), "access_level");
+            switch (permissionLevel)
+            {
+                case PermissionLevel.ReadOnly:
+                    content.Add(new StringContent("30"), "access_level");
+                    break;
+                case PermissionLevel.ReadWrite:
+                    content.Add(new StringContent("40"), "access_level");
+                    break;
+                default:
+                    content.Add(new StringContent("40"), "access_level");
+                    break;
+            }
+            
             request.Content = content;
 
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");

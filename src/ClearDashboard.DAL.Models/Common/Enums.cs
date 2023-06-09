@@ -5,4 +5,10 @@
         Target,
         Lemma
     }
+
+    public enum PermissionLevel
+    {
+        ReadOnly,
+        ReadWrite
+    }
 }
