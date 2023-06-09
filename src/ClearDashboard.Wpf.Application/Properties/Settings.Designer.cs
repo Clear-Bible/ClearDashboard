@@ -357,5 +357,29 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["PinsShowBackTranslation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("y9wlMv6K7uJo4S5lqj6e+izocSU9ls4QGhz2vk4qSus=")]
+        public string EmailUser {
+            get {
+                return ((string)(this["EmailUser"]));
+            }
+            set {
+                this["EmailUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("xtoD/SxgDM+2D9A/rOD/EX9vr9TsoDj0iMnJbgun+tk=")]
+        public string EmailPass {
+            get {
+                return ((string)(this["EmailPass"]));
+            }
+            set {
+                this["EmailPass"] = value;
+            }
+        }
     }
 }

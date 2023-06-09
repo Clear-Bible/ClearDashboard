@@ -84,7 +84,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private bool _createCollabUserVisibility = false;
+        private bool _createCollabUserVisibility;
         public bool CreateCollabUserVisibility
         {
             get => _createCollabUserVisibility;
@@ -615,7 +615,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             viewModel.ProjectPickerViewModel = this;
 
             IWindowManager manager = new WindowManager();
-            manager.ShowDialogAsync(viewModel, null, settings);
+            await manager.ShowDialogAsync(viewModel, null, settings);
         }
 
         public async Task RefreshProjectList()

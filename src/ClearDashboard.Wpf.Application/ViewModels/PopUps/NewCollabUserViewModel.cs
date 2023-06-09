@@ -13,6 +13,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
+using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using MailKit.Net.Smtp;
 using MediatR;
@@ -272,7 +273,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 Groups = await _httpClientServices.GetAllGroups();
             }
 
-            PushGitLabUserToRepo();
             base.OnViewLoaded(view);
         }
 
@@ -345,7 +345,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 {
                     using var smtpClient = new SmtpClient();
                     await smtpClient.ConnectAsync("mail.cleardashboard.org", 465, true);
-                    await smtpClient.AuthenticateAsync("cleardas@cleardashboard.org", "SP$s74g7h5@o_OZiPrU9");
+
+                    var userName = Encryption.Decrypt(Settings.Default.EmailUser);
+                    var pass = Encryption.Decrypt(Settings.Default.EmailPass);
+
+                    await smtpClient.AuthenticateAsync(userName, pass);
                     await smtpClient.SendAsync(mailMessage);
                     await smtpClient.DisconnectAsync(true);
 
@@ -368,10 +372,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         }
 
-        public void GroupSelected()
-        {
-            // no-op
-        }
 
         /// <summary>
         /// Creates the User on the GitLab Server
@@ -448,16 +448,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-
-        public async void PushGitLabUserToRepo()
-        {
-            //var results =
-            //    await ExecuteRequest(new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), ""), CancellationToken.None);
-            //if (results.Success && results.HasData)
-            //{
-            //    //version = results.Data;
-            //}
-        }
 
         #endregion // Methods
 
