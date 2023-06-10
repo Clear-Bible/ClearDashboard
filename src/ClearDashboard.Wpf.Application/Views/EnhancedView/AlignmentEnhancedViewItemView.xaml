@@ -138,7 +138,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <userControls:AlignmentBulkReview Visibility="{Binding EnableEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" DataContext="{Binding .}"/>
+            <userControls:AlignmentBulkReview x:Name="AlignmentBulkReview" Visibility="{Binding EnableEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" DataContext="{Binding .}"/>
                                
         </StackPanel>
 
