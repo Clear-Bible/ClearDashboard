@@ -97,6 +97,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             mirror.MirrorViewRoot.LayoutTransform = transform;
 
             Settings.Default.MirrorViewScaleValue = widthZoom;
+            Settings.Default.Save();
         }
     }
 }

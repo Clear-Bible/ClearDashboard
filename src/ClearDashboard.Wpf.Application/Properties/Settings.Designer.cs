@@ -12,7 +12,7 @@ namespace ClearDashboard.Wpf.Application.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -355,6 +355,30 @@ namespace ClearDashboard.Wpf.Application.Properties {
             }
             set {
                 this["PinsShowBackTranslation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("y9wlMv6K7uJo4S5lqj6e+izocSU9ls4QGhz2vk4qSus=")]
+        public string EmailUser {
+            get {
+                return ((string)(this["EmailUser"]));
+            }
+            set {
+                this["EmailUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("xtoD/SxgDM+2D9A/rOD/EX9vr9TsoDj0iMnJbgun+tk=")]
+        public string EmailPass {
+            get {
+                return ((string)(this["EmailPass"]));
+            }
+            set {
+                this["EmailPass"] = value;
             }
         }
     }

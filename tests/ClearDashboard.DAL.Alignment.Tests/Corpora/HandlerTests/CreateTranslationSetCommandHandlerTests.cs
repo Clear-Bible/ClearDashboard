@@ -711,10 +711,24 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var a5 = someAlignments.Skip(8).Take(1).First();
 
             await alignmentSet.DeleteAlignment(a3.AlignmentId!);
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp1, "Verified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Verified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified"));
+
+            var alignmentToUpdateById = new Alignment.Translation.Alignment(atp1, "Unverified");
+            var alignmentToUpdateBySourceTargetToken = new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Unverified");
+            await alignmentSet.PutAlignment(alignmentToUpdateById);
+            await alignmentSet.PutAlignment(alignmentToUpdateBySourceTargetToken);
+
+            alignmentToUpdateById.Verification = "Verified";
+            alignmentToUpdateBySourceTargetToken = new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Verified");
+
+            var alignmentsToPut = new List<Alignment.Translation.Alignment>
+            {
+                alignmentToUpdateById,
+                alignmentToUpdateBySourceTargetToken,
+                new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"),
+                new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified")
+            };
+
+            await alignmentSet.PutAlignments(alignmentsToPut);
 
             var manualOnly = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AssignedAlignmentTypes);
             Assert.Equal(4, manualOnly.Count());

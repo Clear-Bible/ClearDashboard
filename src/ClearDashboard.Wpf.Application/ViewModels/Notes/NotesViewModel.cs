@@ -26,6 +26,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.UserControls;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -48,7 +51,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private readonly NoteManager? noteManager_;
         private NotesView view_;
         private LongRunningTask? currentLongRunningTask_;
-        private DataAccessLayer.Models.User? currentUser_;
 
         public enum FilterNoteStatusEnum
         {
@@ -68,8 +70,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        public Guid UserId => currentUser_?.Id
-            ?? throw new InvalidStateEngineException(name: "currentUser_", value: "null");
+        private DataAccessLayer.Models.User? _currentUser;
+
+        public DataAccessLayer.Models.User? CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                NotifyOfPropertyChange(nameof(CurrentUser));
+            }
+        }
+
+        public Guid UserId => _currentUser?.Id 
+                              ?? throw new InvalidStateEngineException(name: "currentUser_", value: "null");
 
         private FilterNoteStatusEnum filterStatus_;
         public FilterNoteStatusEnum FilterStatus
@@ -255,7 +269,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             longRunningTaskManager_ = longRunningTaskManager;
             noteManager_ = noteManager;
-            currentUser_ = userProvider.CurrentUser;
+            _currentUser = userProvider.CurrentUser;
 
             //FIXME: why is this here and in MainViewModel line 1113??
             Title = "⌺ " + LocalizationService!.Get("MainView_WindowsNotes");
@@ -266,6 +280,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             NotesCollectionView.Filter = FilterNotesCollectionView;
             NotesCollectionView.SortDescriptions.Clear();
             NotesCollectionView.SortDescriptions.Add(new SortDescription("Created", ListSortDirection.Ascending));
+
+            NoteReplyDisplay.EventAggregator = eventAggregator;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -556,17 +572,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             bool seenByUserIdsChanged = false;
             if (seen && !noteViewModel.SeenByUserIds.Contains(UserId))
             {
-                noteViewModel.SeenByUserIds.Add(UserId);
+                noteViewModel.AddSeenByUserId(UserId);
                 seenByUserIdsChanged = true;
             }
             else if (!seen && noteViewModel.SeenByUserIds.Contains(UserId))
             {
-                noteViewModel.SeenByUserIds.Remove(UserId);
+                noteViewModel.RemoveSeenByUserId(UserId);
                 seenByUserIdsChanged = true;
             }
 
             if (seenByUserIdsChanged)
                 await noteManager_!.UpdateNoteAsync(noteViewModel);
+            NotesCollectionView.Refresh();
         }
 
         public async Task UpdateNoteStatus(NoteViewModel noteViewModel, DataAccessLayer.Models.NoteStatus noteStatus)
@@ -575,6 +592,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             {
                 noteViewModel.NoteStatus = noteStatus.ToString();
                 await noteManager_!.UpdateNoteAsync(noteViewModel);
+
+                if (noteStatus == NoteStatus.Resolved)
+                {
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteClosedCount, 1);
+                }
             }
         }
         public async Task AddReplyToNote(NoteViewModel noteViewModelWithReplies, string text)
