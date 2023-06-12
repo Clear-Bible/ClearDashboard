@@ -8,8 +8,19 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
         public int Count { get; set; }
     }
 
+    public class AlignedWord
+    {
+        public int Count { get; set; }
+
+        public string? Source { get; set; }
+
+        public string? Target { get; set; }
+    }
+
     public static class BulkAlignmentReviewTags
     {
+        public const string CountsByTrainingText = "CountByTrainingText";
+        public const string CountBySurfaceText = "CountBySurfaceText";
         public const string Source = "Source";
         public const string Target = "Target";
         public const string Machine = "Machine";
