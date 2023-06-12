@@ -162,6 +162,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _restoreButtonEnabled;
+        public bool RestoreButtonEnabled
+        {
+            get => _restoreButtonEnabled;
+            set
+            {
+                _restoreButtonEnabled = value;
+                NotifyOfPropertyChange(() => RestoreButtonEnabled);
+            }
+        }
+
+        private bool _showValidateEmailButtonEnabled;
+        public bool ShowValidateEmailButtonEnabled
+        {
+            get => _showValidateEmailButtonEnabled;
+            set
+            {
+                _showValidateEmailButtonEnabled = value;
+                NotifyOfPropertyChange(() => ShowValidateEmailButtonEnabled);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -247,11 +268,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             {
                 GitLabUserFound = true;
                 GitlabUserSaveVisibility = Visibility.Collapsed;
+                RestoreButtonEnabled = false;
             }
             else
             {
                 GitLabUserFound = false; 
                 GitlabUserSaveVisibility = Visibility.Visible;
+                RestoreButtonEnabled = true;
             }
 
             base.OnViewLoaded(view);
