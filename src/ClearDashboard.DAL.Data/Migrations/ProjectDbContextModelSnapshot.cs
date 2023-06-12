@@ -740,6 +740,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("ExtendedProperties")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SurfaceText")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("TokenizedCorpusId")
                         .HasColumnType("TEXT");
 
@@ -1220,9 +1223,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("SurfaceText")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("VerseNumber")
                         .HasColumnType("INTEGER");

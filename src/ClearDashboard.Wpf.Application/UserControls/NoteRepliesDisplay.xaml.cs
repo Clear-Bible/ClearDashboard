@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -33,6 +34,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion Static Routed Events
         #region Static Dependency Properties
+
+        /// <summary>
+        /// Identifies the CurrentUser dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CurrentUserProperty = DependencyProperty.Register(nameof(CurrentUser), typeof(User), typeof(NoteRepliesDisplay));
         
         /// <summary>
         /// Identifies the ReplyColor dependency property.
@@ -206,6 +212,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion Private Event Handlers
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the current user for determining the value of the Seen flags.
+        /// </summary>
+        public User CurrentUser
+        {
+            get => (User)GetValue(CurrentUserProperty);
+            set => SetValue(CurrentUserProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets the foreground color for the reply.
@@ -491,6 +506,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     Text = ((TextBox)e.Source).Text,
                     NoteViewModelWithReplies = NoteViewModelWithReplies
                 });
+
+                NoteReplyTextBox.Text = string.Empty;
             }
         }
 

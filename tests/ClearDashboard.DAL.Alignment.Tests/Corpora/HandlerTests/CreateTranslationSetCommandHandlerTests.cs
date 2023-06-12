@@ -151,7 +151,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             sw.Start();
 
-            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(13, alignmentTrainingTextCounts.Count);
 
             var one = alignmentTrainingTextCounts.Skip(4).First();
@@ -171,7 +171,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Output.WriteLine("");
 
-            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(12, alignmentTrainingTextCounts2.Count);
 
             var verse = alignmentTrainingTextCounts2.Skip(1).First();
@@ -291,6 +291,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSetVerseContexts = await alignmentSet.GetAlignmentVerseContexts(
                 "verse", 
                 "verse",
+                true,
                 AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(12, alignmentSetVerseContexts.Count());
@@ -321,6 +322,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
                 "one_verse_three", 
                 "three",
+                true,
                 AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(2, alignmentSetVerseContexts2.Count());
@@ -711,10 +713,24 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var a5 = someAlignments.Skip(8).Take(1).First();
 
             await alignmentSet.DeleteAlignment(a3.AlignmentId!);
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp1, "Verified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Verified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified"));
+
+            var alignmentToUpdateById = new Alignment.Translation.Alignment(atp1, "Unverified");
+            var alignmentToUpdateBySourceTargetToken = new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Unverified");
+            await alignmentSet.PutAlignment(alignmentToUpdateById);
+            await alignmentSet.PutAlignment(alignmentToUpdateBySourceTargetToken);
+
+            alignmentToUpdateById.Verification = "Verified";
+            alignmentToUpdateBySourceTargetToken = new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Verified");
+
+            var alignmentsToPut = new List<Alignment.Translation.Alignment>
+            {
+                alignmentToUpdateById,
+                alignmentToUpdateBySourceTargetToken,
+                new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"),
+                new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified")
+            };
+
+            await alignmentSet.PutAlignments(alignmentsToPut);
 
             var manualOnly = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AssignedAlignmentTypes);
             Assert.Equal(4, manualOnly.Count());

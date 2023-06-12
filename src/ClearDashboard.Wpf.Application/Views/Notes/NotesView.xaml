@@ -316,7 +316,7 @@
             <DataGrid.Columns>
 
 
-                <DataGridTemplateColumn MinWidth="60">
+                <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_OpenClosed}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <materialDesign:PackIcon
@@ -340,20 +340,22 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="40">
+                <DataGridTemplateColumn MinWidth="90" Header="{helpers:Localization Notes_UnreadReplies}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Height="24" 
-                                   Source="/Resources/OpenBook50.png"
-                                   ToolTip="{helpers:Localization Notes_UnreadReplies}"
-                                   >
-                                <Image.Visibility>
+                            <materialDesign:PackIcon
+                                Width="30"
+                                Height="30"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="BookOutline">
+                                <materialDesign:PackIcon.Visibility>
                                     <MultiBinding Converter="{StaticResource GuidInGuidsToVisibilityConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
                                         <Binding Path="UserIdsSeenAllReplies"/>
                                         <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
                                     </MultiBinding>
-                                </Image.Visibility>
-                            </Image>
+                                </materialDesign:PackIcon.Visibility>
+                            </materialDesign:PackIcon>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -467,7 +469,10 @@
             Width="5"
             HorizontalAlignment="Stretch" />
 
-        <ScrollViewer Grid.Column="3" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer
+            Name="NoteEditorScrollView"
+            Grid.Column="3"
+            VerticalScrollBarVisibility="Auto">
             <StackPanel Background="{DynamicResource MaterialDesignPaper}" Orientation="Vertical">
                 <Border
                     Margin="5"
@@ -483,7 +488,7 @@
                             Content="{helpers:Localization Notes_Note_NoteStatus_Open}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="{Binding NoteId}"
-                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
+                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
                         <RadioButton
                             Margin="10,0,0,0"
@@ -491,7 +496,7 @@
                             Content="{helpers:Localization Notes_Note_NoteStatus_Resolved}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="{Binding NoteId}"
-                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
+                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
                     </StackPanel>
                 </Border>
@@ -503,7 +508,7 @@
 
                     <TextBlock
                         Margin="10,0,5,5"
-                        Foreground="{StaticResource SecondaryHueMidBrush}"
+                        FontWeight="Bold"
                         Text="{Binding SelectedNoteText}"
                         TextWrapping="Wrap" />
                 </GroupBox>
@@ -607,13 +612,14 @@
                             </Button>
                         </StackPanel>
                         <userControls:NoteRepliesDisplay
-                            NoteViewModelWithReplies="{Binding Path=SelectedNoteViewModel}"
+                            Margin="20,0"
                             NoteReplyAdded="OnNoteReplyAdd"
                             NoteSeen="OnNoteSeen"
-                            Margin="20,0"
-                            TimestampFontStyle="Normal"
+                            NoteViewModelWithReplies="{Binding Path=SelectedNoteViewModel}"
                             TimestampColor="DarkGray"
+                            TimestampFontStyle="Normal"
                             TimestampMargin="-2,0,10,0"
+                            CurrentUser="{Binding CurrentUser}"
                             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}"
                         />
                     </StackPanel>

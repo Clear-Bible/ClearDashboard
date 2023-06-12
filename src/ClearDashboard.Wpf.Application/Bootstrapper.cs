@@ -31,6 +31,7 @@ using System.Windows;
 using Autofac.Configuration;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
 
@@ -241,12 +242,29 @@ namespace ClearDashboard.Wpf.Application
             {
                 var c = sp.GetService<IConfiguration>();
                 var section = c.GetSection("Collaboration");
+
+                int userId;
+                int nameSpaceId;
+                try
+                {
+                    userId = Convert.ToInt16(section["userId"]);
+                    nameSpaceId = Convert.ToInt16(section["NamespaceId"]);
+                }
+                catch (Exception )
+                {
+                    userId = 2;
+                    nameSpaceId = 0;
+                }
                 return new CollaborationConfiguration()
                 {
                     RemoteUrl = section["RemoteUrl"],
                     RemoteEmail = section["RemoteEmail"],
                     RemoteUserName = section["RemoteUserName"],
-                    RemotePassword = section["RemotePassword"]
+                    RemotePersonalAccessToken = section["RemotePersonalAccessToken"],
+                    Group  = section["Group"],
+                    RemotePersonalPassword = section["RemotePersonalPassword"], 
+                    UserId = userId,
+                    NamespaceId = nameSpaceId
                 };
             });
 

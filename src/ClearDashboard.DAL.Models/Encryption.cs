@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace ClearDashboard.DataAccessLayer
+namespace ClearDashboard.DataAccessLayer.Models
 {
     public static class Encryption
     {
