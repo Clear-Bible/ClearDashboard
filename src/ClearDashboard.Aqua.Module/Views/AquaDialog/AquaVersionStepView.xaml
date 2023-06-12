@@ -46,7 +46,7 @@
         </Grid.ColumnDefinitions>
 
         <materialDesign:Card Grid.Row="0" Grid.Column="0" Style="{StaticResource LeftCardStyle}" >
-            <Grid Margin="0" Name="StepGrid" Width="Auto" IsEnabled="{Binding ParentViewModel.IsBusy;Converter={StaticResource BooleanInversionConverter}}">
+            <Grid Margin="0" Name="StepGrid" Width="Auto" IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
