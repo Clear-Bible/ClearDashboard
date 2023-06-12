@@ -592,6 +592,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             {
                 noteViewModel.NoteStatus = noteStatus.ToString();
                 await noteManager_!.UpdateNoteAsync(noteViewModel);
+
+                if (noteStatus == NoteStatus.Resolved)
+                {
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteClosedCount, 1);
+                }
             }
         }
         public async Task AddReplyToNote(NoteViewModel noteViewModelWithReplies, string text)

@@ -119,6 +119,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>-->
             <TextBox
+                Name="NoteReplyTextBox"
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.FloatingScale="0.60"

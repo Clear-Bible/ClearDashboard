@@ -2,7 +2,10 @@
     x:Class="ClearDashboard.Wpf.Application.Views.Collaboration.MergeServerProjectDialogView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:behaviors="clr-namespace:ClearDashboard.Wpf.Application.Behaviors"
     xmlns:cal="http://www.caliburnproject.org"
+    xmlns:collaboration="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Collaboration"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -10,14 +13,16 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     Width="1010"
     Height="635"
+    d:DataContext="{d:DesignInstance Type=collaboration:MergeServerProjectDialogViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    mc:Ignorable="d"
-    Loaded="MergeServerProjectDialogView_OnLoaded">
+    Loaded="MergeServerProjectDialogView_OnLoaded"
+    mc:Ignorable="d">
     <UserControl.Resources>
 
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
@@ -43,15 +48,16 @@
         </Grid.RowDefinitions>
 
 
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="0,0,0,0">
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="0,0,0,0"
+            Orientation="Horizontal">
             <Image
                 Width="50"
                 Height="50"
-                HorizontalAlignment="Left"
                 Margin="20,0"
+                HorizontalAlignment="Left"
                 Source="../../Assets/ClearDashboard_logo_50.png" />
             <TextBlock
                 VerticalAlignment="Center"
@@ -60,52 +66,48 @@
 
         </StackPanel>
         <Label Grid.Row="1" Content="{Binding ProgressLabel}" />
-        <StackPanel
+
+        <ListView
+            x:Name="ProgressMessages"
             Grid.Row="2"
             Grid.Column="0"
-            Margin="10,10"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Orientation="Vertical">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="800">
-                <ListView
-                x:Name="ProgressMessages"
-                Height="400"
-                Width="2000"
-                Margin="15,0,15,5"
-                VerticalAlignment="Top"
-                ItemsSource="{Binding MergeProgressUpdates}">
-                    <ListView.Style>
-                        <Style TargetType="{x:Type ListView}">
-                            <Setter Property="Visibility" Value="Visible" />
+            MinHeight="390"
+            Margin="15,0,15,5"
+            VerticalAlignment="Stretch"
+            ItemsSource="{Binding MergeProgressUpdates}">
+            <b:Interaction.Behaviors>
+                <behaviors:AutoScrollToLastItemBehavior />
+            </b:Interaction.Behaviors>
+            <ListView.Style>
+                <Style TargetType="{x:Type ListView}">
+                    <Setter Property="Visibility" Value="Visible" />
+                </Style>
+            </ListView.Style>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="BorderBrush" Value="LightGray" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed" />
                         </Style>
-                    </ListView.Style>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListViewItem}">
-                            <Setter Property="BorderBrush" Value="LightGray" />
-                            <Setter Property="BorderThickness" Value="0,0,0,1" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.View>
-                        <GridView>
-                            <GridView.ColumnHeaderContainerStyle>
-                                <Style TargetType="{x:Type GridViewColumnHeader}">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </Style>
-                            </GridView.ColumnHeaderContainerStyle>
+                    </GridView.ColumnHeaderContainerStyle>
 
-                            <GridViewColumn Width="2000">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </ScrollViewer>
-        </StackPanel>
+                    <GridViewColumn Width="2000">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
 
         <StackPanel
             Grid.Row="3"
@@ -121,15 +123,9 @@
                 Content="{Binding CancelAction}"
                 IsEnabled="{Binding CanCancelAction}"
                 Style="{StaticResource TransparentStyle}" />
-            <Button
-                x:Name="Ok"
-                cal:Message.Attach="Ok"
-                Content="{Binding OkAction}"
-                IsDefault="True"
-                IsEnabled="{Binding CanOkAction}"
-                Style="{StaticResource TransparentStyle}" />
         </StackPanel>
-        <ProgressBar Grid.Row="2"
+        <ProgressBar
+            Grid.Row="2"
             Width="76"
             Height="75"
             HorizontalAlignment="Center"

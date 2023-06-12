@@ -86,5 +86,11 @@
     <Setting Name="PinsShowBackTranslation" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="EmailUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">y9wlMv6K7uJo4S5lqj6e+izocSU9ls4QGhz2vk4qSus=</Value>
+    </Setting>
+    <Setting Name="EmailPass" Type="System.String" Scope="User">
+      <Value Profile="(Default)">xtoD/SxgDM+2D9A/rOD/EX9vr9TsoDj0iMnJbgun+tk=</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
