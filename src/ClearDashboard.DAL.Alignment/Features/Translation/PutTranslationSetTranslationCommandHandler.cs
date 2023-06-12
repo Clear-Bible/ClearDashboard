@@ -91,6 +91,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         ? Models.TranslationOriginatedFrom.Assigned
                         : Models.TranslationOriginatedFrom.FromOther;
                     tr.Modified = currentDateTime;
+                    tr.LexiconTranslationId = requestTranslation.LexiconTranslationId?.Id;
                 }
 
                 tokenGuidsUpdated.Add(tr.SourceTokenComponent!.Id);
@@ -111,7 +112,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         TargetText = requestTranslation.TargetTranslationText,
                         TranslationState = exactMatch
                             ? Models.TranslationOriginatedFrom.Assigned
-                            : Models.TranslationOriginatedFrom.FromOther
+                            : Models.TranslationOriginatedFrom.FromOther,
+                        LexiconTranslationId = requestTranslation.LexiconTranslationId?.Id
                     });
 
                     if (exactMatch) exactMatchFound = true;
@@ -139,6 +141,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 translation.TargetText = requestTranslation.TargetTranslationText;
                 translation.TranslationState = Models.TranslationOriginatedFrom.Assigned;
                 translation.Modified = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
+                translation.LexiconTranslationId = requestTranslation.LexiconTranslationId?.Id;
             }
             else
             {
@@ -157,7 +160,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     {
                         SourceTokenComponent = tokenComponent,
                         TargetText = requestTranslation.TargetTranslationText,
-                        TranslationState = Models.TranslationOriginatedFrom.Assigned
+                        TranslationState = Models.TranslationOriginatedFrom.Assigned,
+                        LexiconTranslationId = requestTranslation.LexiconTranslationId?.Id
                     });
                 }
                 else

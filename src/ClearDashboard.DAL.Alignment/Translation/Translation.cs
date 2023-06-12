@@ -2,6 +2,7 @@
 using System.Text;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Lexicon;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Translation;
@@ -23,6 +24,7 @@ public class Translation
     public TranslationId? TranslationId { get; private set; }
     public Token SourceToken { get; private set; }
     public string TargetTranslationText { get; set; }
+    public Lexicon.TranslationId? LexiconTranslationId { get; set; }
     
     public string SourceTokenSurfaceText => SourceToken is CompositeToken token ? string.Join(" ", token.Tokens.Select(t => t.SurfaceText)) : SourceToken.SurfaceText;
 
@@ -56,18 +58,20 @@ public class Translation
     /// <param name="sourceToken"></param>
     /// <param name="targetTranslationText"></param>
     /// <param name="originatedFrom">Valid values are:  "FromOther", "Assigned" only</param>
-    public Translation(Token sourceToken, string targetTranslationText, string originatedFrom)
+    public Translation(Token sourceToken, string targetTranslationText, string originatedFrom, Lexicon.TranslationId? lexiconTranslationId = null)
     {
         SourceToken = sourceToken;
         TargetTranslationText = targetTranslationText;
         OriginatedFrom = originatedFrom;
+        LexiconTranslationId = lexiconTranslationId;
     }
 
-    internal Translation(TranslationId translationId, Token sourceToken, string targetTranslationText, string translationOriginatedFrom)
+    internal Translation(TranslationId translationId, Token sourceToken, string targetTranslationText, string translationOriginatedFrom, Lexicon.TranslationId? lexiconTranslationId)
     {
         TranslationId = translationId;
         SourceToken = sourceToken;
         TargetTranslationText = targetTranslationText;
         OriginatedFrom = translationOriginatedFrom;
+        LexiconTranslationId = lexiconTranslationId;
     }
 }

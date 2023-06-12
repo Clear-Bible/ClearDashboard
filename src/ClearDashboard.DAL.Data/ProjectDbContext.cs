@@ -291,6 +291,10 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<TranslationModelEntry>().HasIndex(e => new { e.TranslationSetId, e.SourceText }).IsUnique();
             modelBuilder.Entity<TranslationModelTargetTextScore>().HasIndex(e => new { e.TranslationModelEntryId, e.Text}).IsUnique();
 
+            modelBuilder.Entity<Label>()
+                .HasIndex(e => e.Text)
+                .IsUnique();
+
             modelBuilder.Entity<LabelGroup>()
                 .HasIndex(e => e.Name)
                 .IsUnique();

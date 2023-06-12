@@ -436,6 +436,12 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Assert.NotNull(translationSet);
 
+            var exampleLexiconLexeme = await new Lexeme { Lemma = "booboo", Language = "baby language", Type = "some type" }.Create(Mediator!);
+            var exampleLexiconMeaning = new Meaning { Text = "booboo meaning", Language = "adult language" };
+            var exampleLexiconTranslation = new Lexicon.Translation { Text = "booboo meaning translation 1" };
+            await exampleLexiconLexeme.PutMeaning(Mediator!, exampleLexiconMeaning);
+            await exampleLexiconMeaning.PutTranslation(Mediator!, exampleLexiconTranslation);
+
             var bookId = parallelCorpus.SourceCorpus.Texts.Select(t => t.Id).ToList().First();
             var sourceTokens = parallelCorpus.SourceCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().First().Tokens;
 
@@ -500,7 +506,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 exampleTranslations[1].SourceToken!.TrainingText);
 
             await translationSet.PutTranslation(
-                    new Alignment.Translation.Translation(to, $"shoobedoo", Alignment.Translation.Translation.OriginatedFromValues.Assigned),
+                    new Alignment.Translation.Translation(to, $"shoobedoo", OriginatedFromValues.Assigned),
                     TranslationActionTypes.PutPropagate);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -514,8 +520,12 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .Count());
 
             await translationSet.PutTranslation(
-                    new Alignment.Translation.Translation(to, $"hoobedoo", "Assigned"),
+                    new Alignment.Translation.Translation(to, $"hoobedoo", OriginatedFromValues.Assigned, exampleLexiconTranslation.TranslationId),
                     TranslationActionTypes.PutPropagate);
+
+            var toTranslations = await translationSet.GetTranslations(new List<TokenId> { to.TokenId });
+            Assert.Single(toTranslations);
+            Assert.Equal(exampleLexiconTranslation.TranslationId, toTranslations.First().LexiconTranslationId);
 
             ProjectDbContext!.ChangeTracker.Clear();
 
@@ -524,7 +534,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .Where(t => t.TargetText == "shoobedoo")
                 .Count());
             Assert.Equal(10, ProjectDbContext.Translations
-                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther)
+                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther && t.LexiconTranslationId == exampleLexiconTranslation.TranslationId!.Id)
                 .Count());
             Assert.Equal(1, ProjectDbContext.Translations
                 .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.Assigned)

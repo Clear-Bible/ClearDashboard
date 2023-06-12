@@ -15,6 +15,10 @@ public class Translation : SynchronizableTimestampedEntity
     [ForeignKey(nameof(SourceTokenComponentId))]
     public virtual TokenComponent? SourceTokenComponent { get; set; }
 
+    [ForeignKey(nameof(LexiconTranslationId))]
+    public Guid? LexiconTranslationId { get; set; }
+    public virtual Lexicon_Translation? LexiconTranslation { get; set; }
+
     public DateTimeOffset? Modified { get; set; }
     public DateTimeOffset? Deleted { get; set; }
 }
