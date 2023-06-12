@@ -16,18 +16,18 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
-    public class GetAlignmentCountsByTrainingTextQueryHandler : ProjectDbContextQueryHandler<
-        GetAlignmentCountsByTrainingTextQuery,
+    public class GetAlignmentCountsByTrainingOrSurfaceTextQueryHandler : ProjectDbContextQueryHandler<
+        GetAlignmentCountsByTrainingOrSurfaceTextQuery,
         RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>,
         IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>
     {
 
-        public GetAlignmentCountsByTrainingTextQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAlignmentCountsByTrainingTextQueryHandler> logger) 
+        public GetAlignmentCountsByTrainingOrSurfaceTextQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAlignmentCountsByTrainingOrSurfaceTextQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override async Task<RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>> GetDataAsync(GetAlignmentCountsByTrainingTextQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>> GetDataAsync(GetAlignmentCountsByTrainingOrSurfaceTextQuery request, CancellationToken cancellationToken)
         {
             var alignmentSet = await ProjectDbContext!.AlignmentSets
                 .Include(e => e.ParallelCorpus)
@@ -55,22 +55,39 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Where(e => e.Deleted == null)
                 .ToList()
                 .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude)
-                .Select(e => new { 
-                    SourceTrainingText = e.SourceTokenComponent!.TrainingText!, 
-                    TargetTrainingText = e.TargetTokenComponent!.TrainingText!,
-                    AlignmentTypeName = e.  ToAlignmentType(request.AlignmentTypesToInclude).ToString()
+                .Select(e =>
+                {
+                    string? sourceText = null;
+                    string? targetText = null;
+                    if (request.totalsByTraining)
+                    {
+                        sourceText = e.SourceTokenComponent!.TrainingText;
+                        targetText = e.TargetTokenComponent!.TrainingText;
+                    }
+                    else
+                    {
+                        sourceText = e.SourceTokenComponent!.SurfaceText;
+                        targetText = e.TargetTokenComponent!.SurfaceText;
+                    }
+
+                    return new
+                    {
+                        SourceText = sourceText ?? string.Empty,
+                        TargetText = targetText ?? string.Empty,
+                        AlignmentTypeName = e.ToAlignmentType(request.AlignmentTypesToInclude).ToString()
+                    };
                 });
 
-            IDictionary<string, IDictionary<string, IDictionary<string, uint>>>? alignmentCountsByTrainingText = default;
+            IDictionary<string, IDictionary<string, IDictionary<string, uint>>>? alignmentCountsByTrainingOrSurfaceText = default;
 
             if (request.SourceToTarget)
             {
-                alignmentCountsByTrainingText = filteredDatabaseAlignments
-                    .GroupBy(e => e.SourceTrainingText)
+                alignmentCountsByTrainingOrSurfaceText = filteredDatabaseAlignments
+                    .GroupBy(e => e.SourceText)
                     .ToList()
                     .OrderByDescending(g => g.Count())
                     .ToDictionary(g => g.Key, g => g
-                        .GroupBy(e => e.TargetTrainingText)
+                        .GroupBy(e => e.TargetText)
                         .OrderByDescending(g2 => g2.Count())
                         .ToDictionary(g2 => g2.Key, g2 => g2
                             .GroupBy(e => e.AlignmentTypeName)
@@ -81,12 +98,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
             else
             {
-                alignmentCountsByTrainingText = filteredDatabaseAlignments
-                    .GroupBy(e => e.TargetTrainingText)
+                alignmentCountsByTrainingOrSurfaceText = filteredDatabaseAlignments
+                    .GroupBy(e => e.TargetText)
                     .ToList()
                     .OrderByDescending(g => g.Count())
                     .ToDictionary(g => g.Key, g => g
-                        .GroupBy(e => e.SourceTrainingText)
+                        .GroupBy(e => e.SourceText)
                         .OrderByDescending(g2 => g2.Count())
                         .ToDictionary(g2 => g2.Key, g2 => g2
                             .GroupBy(e => e.AlignmentTypeName)
@@ -103,7 +120,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             return new RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>
             (
-                alignmentCountsByTrainingText
+                alignmentCountsByTrainingOrSurfaceText
             );
         }
     }

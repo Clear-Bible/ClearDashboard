@@ -89,21 +89,22 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
         private async void RadioButton_Open_Checked(object sender, RoutedEventArgs e)
         {
             var radioButton = e.Source as RadioButton;
-            var noteViewModel = radioButton?.DataContext as NoteViewModel;
-            if (_vm != null && noteViewModel != null)
+            var notesViewModel = radioButton?.DataContext as NotesViewModel;
+            var noteViewModel = notesViewModel.SelectedNoteViewModel;
+            if (notesViewModel != null && noteViewModel != null)
             {
-                await _vm.UpdateNoteStatus(noteViewModel, NoteStatus.Open);
+                await notesViewModel.UpdateNoteStatus(noteViewModel, NoteStatus.Open);
             }
         }
         private async void RadioButton_Resolved_Checked(object sender, RoutedEventArgs e)
         {
             var radioButton = e.Source as RadioButton;
-            var noteViewModel = radioButton?.DataContext as NoteViewModel;
-            if (_vm != null && noteViewModel != null)
+            var notesViewModel = radioButton?.DataContext as NotesViewModel;
+            var noteViewModel = notesViewModel.SelectedNoteViewModel;
+            if (notesViewModel != null && noteViewModel != null)
             {
-                await _vm.UpdateNoteStatus(noteViewModel, NoteStatus.Resolved);
+                await notesViewModel.UpdateNoteStatus(noteViewModel, NoteStatus.Resolved);
             }
-            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteClosedCount, 1);
         }
 
         private async void OnNoteSeen(object sender, RoutedEventArgs e)
@@ -129,8 +130,10 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             )
             {
                 await _vm.AddReplyToNote(args.NoteViewModelWithReplies, args.Text);
+                NoteEditorScrollView.ScrollToEnd();
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteReplyCount, 1);
             }
-            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteReplyCount, 1);
+            
         }
 
         public bool RepliesExpanded { get; set; } = true;

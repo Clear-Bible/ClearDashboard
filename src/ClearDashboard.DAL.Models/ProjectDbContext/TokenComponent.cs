@@ -16,6 +16,8 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? EngineTokenId { get; set; }
         public string? TrainingText { get; set; }
+        public string? SurfaceText { get; set; }
+
         public string? ExtendedProperties { get; set; }
 
         [ForeignKey(nameof(VerseRowId))]

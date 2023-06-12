@@ -89,8 +89,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
-
-            List<Models.Alignment> alignmentsToRemove = new();
+            var sourceTokenIdsForDenormalization = new List<Guid>();
             
             List<Models.Alignment> existingAlignmentMatches = new List<Models.Alignment>();
             Models.Alignment? alignmentToPut = null;
@@ -127,7 +126,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 existingAlignmentMatches.Where(e => e.Id != alignmentToPut.Id).ToList().ForEach(e => 
                 {
                     e.Deleted = currentDateTime;
-                    alignmentsToRemove.Add(e);
+                    sourceTokenIdsForDenormalization.Add(e.SourceTokenComponentId);
                 });
             }
 
@@ -136,6 +135,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 alignmentToPut = new Models.Alignment { Id = Guid.NewGuid() };
                 ProjectDbContext!.Alignments.Add(alignmentToPut);
             }
+            else
+            {
+                sourceTokenIdsForDenormalization.Add(alignmentToPut.SourceTokenComponentId);
+            }
+
+            sourceTokenIdsForDenormalization.Add(request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id);
 
             alignmentToPut.SourceTokenComponentId = request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id;
             alignmentToPut.TargetTokenComponentId = request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id;
@@ -146,13 +151,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             using (var transaction = ProjectDbContext.Database.BeginTransaction())
             {
-                alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignmentToPut, ProjectDbContext));
+                alignmentSet.AddDomainEvent(new AlignmentSetSourceTokenIdsUpdatingEvent(request.AlignmentSetId.Id, sourceTokenIdsForDenormalization, ProjectDbContext));
                 _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
                 transaction.Commit();
             }
 
-            await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignmentToPut), cancellationToken);
+            await _mediator.Publish(new AlignmentSetSourceTokenIdsUpdatedEvent(request.AlignmentSetId.Id, sourceTokenIdsForDenormalization), cancellationToken);
 
             // Querying the database so we can return a fully formed AlignmentId:
             var alignmentId = ModelHelper.AddIdIncludesAlignmentsQuery(ProjectDbContext!)

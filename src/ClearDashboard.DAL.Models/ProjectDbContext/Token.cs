@@ -18,7 +18,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int WordNumber { get; set; }
         public int SubwordNumber { get; set; }
 
-        public string? SurfaceText { get; set; }
 
         public virtual Adornment? Adornment { get; set; }
         public ICollection<TokenComposite> TokenComposites { get; set; }

@@ -76,16 +76,16 @@
                     VerticalContentAlignment="Center"
                     />
                 <CheckBox Grid.Column="1"
+                          x:Name="SeenCheckBox"
                           Margin="5,0,0,0"
                           VerticalAlignment="Center"
                           FontSize="8"
                           Foreground="Gray"
-                          Checked="OnSeenCheckBoxChecked" 
-                          Unchecked="OnSeenCheckBoxUnchecked">
+                          Click="OnSeenCheckBoxClicked">
                     <CheckBox.IsChecked>
                         <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay">
                             <Binding Path="SeenByUserIds"/>
-                            <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                            <Binding Path="CurrentUser.Id" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>
