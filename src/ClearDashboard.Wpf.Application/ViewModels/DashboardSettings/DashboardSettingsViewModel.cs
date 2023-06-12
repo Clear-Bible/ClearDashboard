@@ -531,8 +531,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                 {
                     Group = collaborationConfiguration.Group,
                     RemoteEmail = Email,
-                    RemotePersonalAccessToken = collaborationConfiguration.RemotePersonalAccessToken,
-                    RemotePersonalPassword = collaborationConfiguration.RemotePersonalPassword,
+                    RemotePersonalAccessToken = Encryption.Decrypt(collaborationConfiguration.RemotePersonalAccessToken),
+                    RemotePersonalPassword = Encryption.Decrypt(collaborationConfiguration.RemotePersonalPassword),
                     RemoteUrl = "",
                     RemoteUserName = collaborationConfiguration.RemoteUserName,
                     UserId = collaborationConfiguration.UserId,
