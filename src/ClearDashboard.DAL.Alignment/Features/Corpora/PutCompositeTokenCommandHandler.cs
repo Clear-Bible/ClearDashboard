@@ -210,6 +210,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             existingTokenComposite.TokenizedCorpusId = compositeCandidatesDb.Values.First().TokenizedCorpusId;
             existingTokenComposite.ParallelCorpusId = request.ParallelCorpusId?.Id;
             existingTokenComposite.TrainingText = request.CompositeToken.TrainingText;
+            existingTokenComposite.SurfaceText = request.CompositeToken.SurfaceText;
             existingTokenComposite.ExtendedProperties = request.CompositeToken.ExtendedProperties;
             existingTokenComposite.EngineTokenId = request.CompositeToken.TokenId.ToString();
             existingTokenComposite.Deleted = null;
