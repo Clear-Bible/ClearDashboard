@@ -612,6 +612,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     }
     protected override ValidationResult? Validate()
     {
-        return Validator!.Validate(this);
+        var result = Validator!.Validate(this);
+        return result;
     }
 }
