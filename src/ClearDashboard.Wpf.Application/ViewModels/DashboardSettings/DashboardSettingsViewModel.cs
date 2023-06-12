@@ -11,10 +11,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Models;
 using static ClearDashboard.DataAccessLayer.Features.GitLabUser.GitLabUserSlice;
 using ClearDashboard.DataAccessLayer.Features.GitLabUser;
+using MailKit.Net.Smtp;
+using MimeKit;
+using Mono.Unix.Native;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -25,7 +29,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         private readonly IEventAggregator _eventAggregator;
         private readonly CollaborationManager _collaborationManager;
+        private readonly ILogger<DashboardSettingsViewModel> _logger;
         private bool _isAquaEnabledOnStartup;
+        private string _emailValidationString = "";
 
         #endregion //Member Variables
 
@@ -184,6 +190,85 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private string _email = string.Empty;
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value.Trim();
+                NotifyOfPropertyChange(() => Email);
+            }
+        }
+
+        private bool _emailSendError = false;
+        public bool EmailSendError
+        {
+            get => _emailSendError;
+            set
+            {
+                _emailSendError = value;
+                NotifyOfPropertyChange(() => EmailSendError);
+            }
+        }
+
+        private bool _emailSent;
+        public bool EmailSent
+        {
+            get => _emailSent;
+            set
+            {
+                _emailSent = value;
+                NotifyOfPropertyChange(() => EmailSent);
+            }
+        }
+
+
+        private Visibility _showExistingCollabUser;
+        public Visibility ShowExistingCollabUser
+        {
+            get => _showExistingCollabUser;
+            set
+            {
+                _showExistingCollabUser = value;
+                NotifyOfPropertyChange(() => ShowExistingCollabUser);
+            }
+        }
+
+        private Visibility _hideExistingCollabUser;
+        public Visibility HideExistingCollabUser
+        {
+            get => _hideExistingCollabUser;
+            set
+            {
+                _hideExistingCollabUser = value;
+                NotifyOfPropertyChange(() => HideExistingCollabUser);
+            }
+        }
+
+        private string _emailMessage;
+        public string EmailMessage
+        {
+            get => _emailMessage;
+            set
+            {
+                _emailMessage = value; 
+                NotifyOfPropertyChange(() => EmailMessage);
+            }
+        }
+
+        private string _emailCode = "";
+        public string EmailCode
+        {
+            get => _emailCode;
+            set
+            {
+                _emailCode = value.Trim();
+                NotifyOfPropertyChange(() => EmailCode);
+            }
+        }
+
+
         #endregion //Observable Properties
 
 
@@ -205,6 +290,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             //IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
             _collaborationManager = collaborationManager;
+            _logger = logger;
         }
 
         protected override void OnViewReady(object view)
@@ -269,12 +355,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                 GitLabUserFound = true;
                 GitlabUserSaveVisibility = Visibility.Collapsed;
                 RestoreButtonEnabled = false;
+
+                ShowExistingCollabUser = Visibility.Visible;
+                HideExistingCollabUser = Visibility.Collapsed;
             }
             else
             {
                 GitLabUserFound = false; 
                 GitlabUserSaveVisibility = Visibility.Visible;
                 RestoreButtonEnabled = true;
+                
+                ShowExistingCollabUser = Visibility.Collapsed;
+                HideExistingCollabUser = Visibility.Visible;
             }
 
             base.OnViewLoaded(view);
@@ -362,6 +454,97 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
 
             _eventAggregator.PublishOnUIThreadAsync(new RefreshTextCollectionsMessage());
+        }
+
+        public async void SendValidationEmail()
+        {
+            var results =
+                await ExecuteRequest(
+                    new GitLabEmailExistsQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
+
+            if (results.Data == false)
+            {
+                EmailMessage = "Not Found on System!";
+                ShowValidateEmailButtonEnabled = false;
+
+                return;
+            }
+
+            EmailMessage = "Email Sent";
+
+
+            _emailValidationString = GenerateRandomPassword.RandomNumber(1000, 9999).ToString();
+
+
+            var mailMessage = new MimeMessage();
+            mailMessage.From.Add(new MailboxAddress("cleardas@cleardashboard.org", "cleardas@cleardashboard.org"));
+            mailMessage.To.Add(new MailboxAddress(Email, Email));
+            mailMessage.Subject = "ClearDashboard Email Validation Code";
+            mailMessage.Body = new TextPart("plain")
+            {
+                Text = "Email Verification Code: " + _emailValidationString
+            };
+
+            try
+            {
+                using var smtpClient = new SmtpClient();
+                await smtpClient.ConnectAsync("mail.cleardashboard.org", 465, true);
+
+                var userName = Encryption.Decrypt(Settings.Default.EmailUser);
+                var pass = Encryption.Decrypt(Settings.Default.EmailPass);
+
+                await smtpClient.AuthenticateAsync(userName, pass);
+                await smtpClient.SendAsync(mailMessage);
+                await smtpClient.DisconnectAsync(true);
+
+                ShowValidateEmailButtonEnabled = true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Email Sending Error", e);
+                EmailSendError = true;
+            }
+
+            EmailSent = true;
+            ShowValidateEmailButtonEnabled = true;
+
+        }
+
+
+        public async void ValidateEmailCode()
+        {
+            if (EmailCode == _emailValidationString)
+            {
+                var results =
+                    await ExecuteRequest(
+                        new GetUserFromEmailQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
+
+                if (results.Data is null)
+                {
+                    return;
+                }
+                
+                var collaborationConfiguration = results.Data as CollaborationConfiguration;
+
+                // recreate the json in the user secrets
+                CollaborationConfig = new CollaborationConfiguration
+                {
+                    Group = collaborationConfiguration.Group,
+                    RemoteEmail = Email,
+                    RemotePersonalAccessToken = collaborationConfiguration.RemotePersonalAccessToken,
+                    RemotePersonalPassword = collaborationConfiguration.RemotePersonalPassword,
+                    RemoteUrl = "",
+                    RemoteUserName = collaborationConfiguration.RemoteUserName,
+                    UserId = collaborationConfiguration.UserId,
+                    NamespaceId = collaborationConfiguration.NamespaceId,
+                };
+
+                _collaborationManager.SaveCollaborationLicense(CollaborationConfig);
+
+
+                HideExistingCollabUser = Visibility.Collapsed;
+                ShowExistingCollabUser = Visibility.Visible;
+            }
         }
 
         #endregion // Methods
