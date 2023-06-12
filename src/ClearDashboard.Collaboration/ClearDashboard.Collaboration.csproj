@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearBible.Engine" Version="2.0.12" />
+    <PackageReference Include="ClearBible.Engine" Version="2.0.13" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
