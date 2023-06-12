@@ -118,7 +118,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
                         var merger = new Merger(new MergeContext(projectContext.UserProvider, _logger, mergeBehavior, MergeMode.RemoteOverridesLocal));
                         await merger.MergeAsync(projectDifferences, projectSnapshotLastMerged, projectSnapshotToMerge, cancellationToken);
 
-                        request.Progress.Report(new ProgressStatus(0, "Merge complete!"));
+                        request.Progress.Report(new ProgressStatus(0, "Merge complete! - Continuing Initialization"));
 
                         project.LastMergedCommitSha = request.CommitSha;
                     }
