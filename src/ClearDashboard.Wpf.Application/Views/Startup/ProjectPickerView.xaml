@@ -635,8 +635,8 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="Auto" />
+                                        <!--<RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />-->
                                     </Grid.RowDefinitions>
 
                                     <Image
@@ -649,12 +649,13 @@
                                         Source="../../Assets/ClearDashboard_logo_50.png" />
 
                                     <TextBlock
+                                        VerticalAlignment="Center"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         FontSize="14"
                                         FontWeight="DemiBold"><Run Text="{Binding ProjectName}" /></TextBlock>
 
-                                    <TextBlock
+                                    <!--<TextBlock
                                         Grid.Row="0"
                                         Grid.Column="2"
                                         Width="145"
@@ -674,7 +675,8 @@
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </TextBlock.Style><Run FontSize="11" Text="Version: " /><Run Text=" " /><Run FontSize="11" Text="{Binding AppVersion}" /></TextBlock>
+                                        </TextBlock.Style><Run FontSize="11" Text="Version: " /><Run Text=" " /><Run FontSize="11" Text="{Binding AppVersion}" />
+                                    </TextBlock>-->
                                 </Grid>
                             </StackPanel>
                         </Border>
