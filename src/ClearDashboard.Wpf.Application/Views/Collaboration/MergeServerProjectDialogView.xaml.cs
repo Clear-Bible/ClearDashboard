@@ -39,6 +39,13 @@ namespace ClearDashboard.Wpf.Application.Views.Collaboration
 
         }
 
-        
+
+        private void Copy_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                Clipboard.SetText(item.DataContext.ToString());
+            }
+        }
     }
 }
