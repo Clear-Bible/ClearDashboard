@@ -32,7 +32,7 @@
             <ControlTemplate x:Key="ComboBoxValidationPlaceholder">
                 <StackPanel Orientation="Vertical">
                 <AdornedElementPlaceholder />
-                <Separator Foreground="Red" BorderBrush="Red" BorderThickness="1"></Separator>
+                <Separator BorderBrush="Red" BorderThickness="1"></Separator>
                 <Label>Error</Label>
                 </StackPanel>
             </ControlTemplate>
