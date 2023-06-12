@@ -40,6 +40,8 @@ namespace ClearDashboard.Wpf.Application
     internal class Bootstrapper : FoundationBootstrapper
     {
         private IHost _host;
+        private bool _restoredMainWindowState = false;
+
         public Bootstrapper()
         {
             _host = CreateDenormalizationHost();
@@ -305,8 +307,10 @@ namespace ClearDashboard.Wpf.Application
                 mainWindow.Width = applicationWindowState.WindowWidth;
                 mainWindow.Top = applicationWindowState.WindowTop;
                 mainWindow.Left = applicationWindowState.WindowLeft;
+                mainWindow.WindowState = applicationWindowState.WindowState;
             }
             base.RestoreMainWindowState();
+            _restoredMainWindowState = true;
         }
 
         protected override IEnumerable<Assembly> SelectAssemblies()
@@ -321,7 +325,7 @@ namespace ClearDashboard.Wpf.Application
         protected override void SaveMainWindowState()
         {
             var mainWindow = DashboardApplication.Current.MainWindow;
-            if (mainWindow != null)
+            if (mainWindow != null && _restoredMainWindowState)
             {
                 var applicationWindowState = new ApplicationWindowState
                 {
