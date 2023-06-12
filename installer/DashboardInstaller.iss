@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Clear Dashboard"
-#define MyAppVersion "1.0.5.10"
+#define MyAppVersion "1.0.5.12"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -39,6 +39,7 @@ Uninstallable=yes
 UninstallIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_Icon.ico
 DisableDirPage=yes
 ArchitecturesInstallIn64BitMode=x64
+PrivilegesRequired=admin
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -175,7 +176,7 @@ Name: "{autoprograms}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsNam
 Name: "{autodesktop}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 
 [InstallDelete]
 Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"

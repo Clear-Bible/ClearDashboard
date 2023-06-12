@@ -635,8 +635,8 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
-                                        <!--<RowDefinition Height="*" />
-                                        <RowDefinition Height="Auto" />-->
+                                        <!--<RowDefinition Height="*" />-->
+                                        <!--<RowDefinition Height="Auto" />-->
                                     </Grid.RowDefinitions>
 
                                     <Image
@@ -649,21 +649,22 @@
                                         Source="../../Assets/ClearDashboard_logo_50.png" />
 
                                     <TextBlock
-                                        VerticalAlignment="Center"
                                         Grid.Row="0"
                                         Grid.Column="1"
+                                        VerticalAlignment="Center"
                                         FontSize="14"
                                         FontWeight="DemiBold"><Run Text="{Binding ProjectName}" /></TextBlock>
 
-                                    <!--<TextBlock
+                                    <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="2"
                                         Width="145"
                                         HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
                                         FontSize="12"
                                         Text="{Binding Created}" />
 
-                                    <TextBlock
+                                    <!--<TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2">
