@@ -10,6 +10,7 @@
         Opacity="0.25"
         Color="LightBlue" />
     <converters:BooleanAndConverter x:Key="BooleanAndConverter" />
+    <converters:BooleanAndVisibilityConverter x:Key="BooleanAndVisibilityConverter" />
     <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
         <Setter Property="Margin" Value="0,8" />
         <Setter Property="VerticalAlignment" Value="Center" />
