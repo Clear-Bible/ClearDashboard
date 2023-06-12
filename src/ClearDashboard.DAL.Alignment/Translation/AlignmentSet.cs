@@ -70,9 +70,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <param name="cancellationToken"></param>
         /// <returns>Dictionary<sourceString, Dictionary<targetString, Dictionary<statusName, count>> if 
         /// sourceToTarget == true, reverse 'sourceString' and 'targetString' if false</returns>
-        public async Task<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>> GetAlignmentCounts(bool sourceToTarget, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+        public async Task<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>> GetAlignmentCounts(bool sourceToTarget, bool totalsByTraining = true, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
         {
-            var result = await mediator_.Send(new GetAlignmentCountsByTrainingTextQuery(AlignmentSetId, sourceToTarget, alignmentTypesToInclude), cancellationToken);
+            var result = await mediator_.Send(new GetAlignmentCountsByTrainingOrSurfaceTextQuery(AlignmentSetId, sourceToTarget, totalsByTraining, alignmentTypesToInclude), cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
 
             return result.Data!;
@@ -84,12 +84,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             uint sourceVerseTokensIndex,
             IEnumerable<Token> targetVerseTokens,
             uint targetVerseTokensIndex
-        )>> GetAlignmentVerseContexts(string sourceTokenTrainingText, string targetTokenTrainingText, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+        )>> GetAlignmentVerseContexts(string sourceString, string targetString, bool stringsAreTraining = true, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
         {
             var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(
                 AlignmentSetId, 
-                sourceTokenTrainingText, 
-                targetTokenTrainingText, 
+                sourceString, 
+                targetString,
+                stringsAreTraining,
                 alignmentTypesToInclude), cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
 

@@ -81,6 +81,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                         VerseRowId = verseRowId,
                                         TokenizedCorpusId = tokenizedCorpusId,
                                         TrainingText = compositeToken.TrainingText,
+                                        SurfaceText = compositeToken.SurfaceText,
                                         ExtendedProperties = compositeToken.ExtendedProperties,
                                         EngineTokenId = compositeToken.TokenId.ToString(),
                                         Tokens = compositeToken.GetPositionalSortedBaseTokens()
@@ -267,7 +268,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@VerseNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@WordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SubwordNumber"].Value = DBNull.Value;
-            componentCmd.Parameters["@SurfaceText"].Value = DBNull.Value;
+            componentCmd.Parameters["@SurfaceText"].Value = tokenComposite.SurfaceText;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
         public static async Task<Guid> InsertTokenCompositeTokenAssociationAsync(Guid tokenId, Guid tokenCompositeId, DbCommand assocCmd, CancellationToken cancellationToken)
