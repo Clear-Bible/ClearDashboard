@@ -372,6 +372,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         }
 
+        public void GroupSelected()
+        {
+            // for caliburn
+        }
+
 
         /// <summary>
         /// Creates the User on the GitLab Server
