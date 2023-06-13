@@ -1,32 +1,29 @@
-﻿using ClearDashboard.DAL.Alignment.Features.Corpora;
+﻿using Autofac;
+using Autofac.Configuration;
+using Autofac.Extensions.DependencyInjection;
+using Caliburn.Micro;
+using ClearDashboard.Collaboration.Features;
+using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Tests.Mocks;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using System;
 using System.IO;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using Serilog.Events;
-using Serilog;
-using Microsoft.Extensions.Logging;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
-using Microsoft.EntityFrameworkCore;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Caliburn.Micro;
-using Autofac.Configuration;
-using System.Configuration;
-using ClearDashboard.Collaboration.Services;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.Collaboration.Features;
-using System.Threading;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
@@ -81,7 +78,8 @@ namespace ClearDashboard.DAL.Alignment.Tests
                     RemoteUrl = section["RemoteUrl"],
                     RemoteEmail = section["RemoteEmail"],
                     RemoteUserName = section["RemoteUserName"],
-                    RemotePassword = section["RemotePassword"]
+                    RemotePersonalAccessToken = section["RemotePersonalAccessToken"],
+                    RemotePersonalPassword = section["RemotePersonalPassword"]
                 };
             });
 

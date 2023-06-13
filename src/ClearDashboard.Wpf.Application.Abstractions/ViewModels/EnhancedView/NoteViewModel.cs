@@ -101,9 +101,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _replies;
             set => Set(ref _replies, value);
         }
+
         public ICollection<Guid> SeenByUserIds
         {
             get => Entity.SeenByUserIds;
+        }
+
+        public void AddSeenByUserId(Guid userId)
+        {
+            Entity.SeenByUserIds.Add(userId);
+            NotifyOfPropertyChange(nameof(SeenByUserIds));
+        }
+
+        public void RemoveSeenByUserId(Guid userId)
+        {
+            Entity.SeenByUserIds.Remove(userId);
+            NotifyOfPropertyChange(nameof(SeenByUserIds));
         }
 
         /// <summary>
@@ -165,6 +178,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// 3) All of the tokens must be contiguous in the corpus.
         /// </remarks>
         public ParatextSendNoteInformation? ParatextSendNoteInformation { get; set; }
+
+        public void NoteSeenChanged()
+        {
+            NotifyOfPropertyChange(nameof(SeenByUserIds));
+        }
 
         public NoteViewModel() : this(new Note())
         {

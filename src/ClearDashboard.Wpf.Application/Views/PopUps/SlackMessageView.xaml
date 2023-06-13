@@ -42,12 +42,21 @@
         </StackPanel>
 
         <!--  Row 1  -->
-        <TextBlock
-            Grid.Row="1"
-            Margin="10,0,0,5"
-            VerticalAlignment="Bottom"
-            FontSize="18"
-            Text="{helpers:Localization SlackMessageView_Message}" />
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <TextBlock
+                Height="45"
+                Margin="10,0,0,5"
+                VerticalAlignment="Bottom"
+                FontSize="18"
+                Foreground="{StaticResource SecondaryHueMidBrush}"
+                Text="{Binding WorkingMessage}" />
+
+            <TextBlock
+                Margin="10,0,0,5"
+                VerticalAlignment="Bottom"
+                FontSize="18"
+                Text="{helpers:Localization SlackMessageView_Message}" />
+        </StackPanel>
 
         <!--  Row 2  -->
         <TextBox

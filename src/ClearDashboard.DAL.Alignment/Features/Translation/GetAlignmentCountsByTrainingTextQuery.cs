@@ -4,9 +4,10 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
-    public record GetAlignmentCountsByTrainingTextQuery(
+    public record GetAlignmentCountsByTrainingOrSurfaceTextQuery(
         AlignmentSetId AlignmentSetId, 
         bool SourceToTarget,
+        bool totalsByTraining,
         AlignmentTypes AlignmentTypesToInclude) : 
         ProjectRequestQuery<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>;
 }

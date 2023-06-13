@@ -13,6 +13,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
     Title="{helpers:Localization Settings_Settings}"
     Width="800"
     Height="450"
@@ -66,6 +67,7 @@
                             Kind="Gauge75" />
                         <TextBlock
                             HorizontalAlignment="Center"
+                            FontSize="12"
                             Text="{helpers:Localization Settings_PowerModes}"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -92,6 +94,7 @@
                             Kind="PowerPlugOutline" />
                         <TextBlock
                             HorizontalAlignment="Center"
+                            FontSize="12"
                             Text="{helpers:Localization Settings_Plugins}"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -127,6 +130,7 @@
                             Kind="FormatListText" />
                         <TextBlock
                             HorizontalAlignment="Center"
+                            FontSize="12"
                             Text="{helpers:Localization Settings_TextCollections}"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -140,56 +144,174 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <!--<TabItem>
-                <TabItem.Header>
-                    <StackPanel Width="auto" Height="auto">
-                        <iconPacks:PackIconUnicons
-                            Width="24"
-                            Height="24"
-                            HorizontalAlignment="Center"
-                            Kind="TrafficBarrier" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            Text="{helpers:Localization Settings_Reserved}"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
-                </TabItem.Header>
-                <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
-                    <LineBreak />
-                    <LineBreak />
-                </TextBlock>
-            </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Width="auto" Height="auto">
-                        <iconPacks:PackIconUnicons
+                        <iconPacks:PackIconMaterial
                             Width="24"
                             Height="24"
                             HorizontalAlignment="Center"
-                            Kind="TrafficBarrier" />
+                            Kind="AccountGroup" />
+
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="{helpers:Localization Settings_Reserved}"
+                            FontSize="12"
+                            Text="Collaboration Settings"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
-                <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
-                    <LineBreak />
-                    <LineBreak />
-                </TextBlock>
-            </TabItem>-->
-        </TabControl>
+                <GroupBox
+                    Margin="16"
+                    Header="Collaboration Settings"
+                    IsEnabled="{Binding GitLabUserFound}">
+                    <StackPanel Orientation="Vertical">
+                        <Border
+                            Margin="5,5,5,5"
+                            Padding="5"
+                            BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                            BorderThickness="1"
+                            CornerRadius="3">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Visibility="{Binding ShowCollabUserInfo}">
+                                    <Run FontWeight="Bold" Text="Username: " />
+                                    <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Group: " />
+                                    <Run Text="{Binding CollaborationConfig.Group}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Email: " />
+                                    <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
+                                    <LineBreak />
+                                    <!--<Run FontWeight="Bold" Text="Password: " />
+                                    <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
+                                    <LineBreak />
+                                    <Run FontWeight="Bold" Text="Access Token: " />
+                                    <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />-->
+                                </TextBlock>
+                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                    <Button
+                                        x:Name="SaveGitLabToServer"
+                                        Width="200"
+                                        Visibility="{Binding GitlabUserSaveVisibility}">
+                                        Save GitLab User to Server
+                                    </Button>
+                                    <TextBlock
+                                        Width="250"
+                                        FontSize="18"
+                                        Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                        Text="{Binding SaveGitLabUserMessage}" />
+                                    <Button
+                                        x:Name="RestoreGitLabUser"
+                                        Width="200"
+                                        Margin="10,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        IsEnabled="{Binding RestoreButtonEnabled}"
+                                        Visibility="{Binding GitlabUserSaveVisibility}">
+                                        Restore GitLabUser
+                                    </Button>
+                                </StackPanel>
 
-        <!--<StackPanel Orientation="Vertical">
-            <GroupBox
-                Margin="16"
-                Header="Power Modes"
-                IsEnabled="{Binding IsPowerModesBoxEnabled}">
-                <CheckBox Content="Allow Dashboard to Change Power Modes During High Computational Events" IsChecked="{Binding IsPowerModesEnabled}" />
-            </GroupBox>
-        </StackPanel>-->
+
+
+                                <GroupBox
+                                    Margin="16"
+                                    materialDesign:ColorZoneAssist.Mode="PrimaryMid"
+                                    Header="Validate Email Code"
+                                    IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
+                                    Style="{DynamicResource MaterialDesignGroupBox}">
+                                    <StackPanel Orientation="Vertical">
+                                        <!--  Email  -->
+                                        <TextBox
+                                            x:Name="Email"
+                                            Margin="10,5,10,5"
+                                            materialDesign:HintAssist.Foreground="Green"
+                                            materialDesign:HintAssist.Hint="Email Address"
+                                            materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                            <TextBox.Text>
+                                                <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
+                                                    <Binding.ValidationRules>
+                                                        <validators:EmailValidator />
+                                                    </Binding.ValidationRules>
+                                                </Binding>
+                                            </TextBox.Text>
+                                        </TextBox>
+
+                                        <Label Content="Check your email and enter in the validation code:" />
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <TextBox
+                                                x:Name="EmailCode"
+                                                Width="85"
+                                                Height="45"
+                                                Style="{StaticResource MaterialDesignFilledTextBox}" />
+                                            <Button
+                                                x:Name="ValidateEmailCode"
+                                                Height="45"
+                                                Margin="10,0,0,0"
+                                                IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
+                                                Style="{StaticResource TransparentStyle}">
+                                                Validate Email Code
+                                            </Button>
+                                            <iconPacks:PackIconMaterial
+                                                Width="40"
+                                                Height="40"
+                                                Margin="5"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Kind="EmailCheckOutline">
+                                                <iconPacks:PackIconMaterial.Style>
+                                                    <Style TargetType="iconPacks:PackIconMaterial">
+                                                        <Setter Property="Foreground" Value="DimGray" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Path=BadEmailValidationCode}" Value="True">
+                                                                <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </iconPacks:PackIconMaterial.Style>
+                                            </iconPacks:PackIconMaterial>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
+                            </StackPanel>
+                        </Border>
+
+
+                        <TextBox
+                            x:Name="GitRootUrl"
+                            Margin="5,15,5,0"
+                            materialDesign:HintAssist.Foreground="Green"
+                            materialDesign:HintAssist.Hint="URL"
+                            materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+
+                            <TextBox.Text>
+                                <Binding Path="GitRootUrl" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validators:HtmlUrlValidator />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <Button
+                            x:Name="SaveGitUrl"
+                            Width="250"
+                            Margin="5,10,5,0"
+                            IsEnabled="{Binding SaveGitlabUrlButtonEnabled}">
+                            Save Settings
+                        </Button>
+
+                    </StackPanel>
+
+
+
+                </GroupBox>
+
+
+            </TabItem>
+        </TabControl>
 
         <Button
             x:Name="Close"
@@ -197,7 +319,6 @@
             Margin="10"
             HorizontalAlignment="Right"
             Content="{helpers:Localization Close}" />
-
 
     </Grid>
 </Window>

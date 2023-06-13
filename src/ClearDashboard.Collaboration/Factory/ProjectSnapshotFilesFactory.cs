@@ -43,6 +43,11 @@ public class ProjectSnapshotFilesFactory
 
     public void SaveSnapshot(ProjectSnapshot projectSnapshot, CancellationToken cancellationToken = default)
     {
+        if (Directory.Exists(_path))
+        {
+            Directory.Delete(_path, true);
+        }
+        
         Directory.CreateDirectory(_path);
 
         var serializedProject = JsonSerializer.Serialize(projectSnapshot.GetGeneralModelProject(), _jsonSerializerOptions);

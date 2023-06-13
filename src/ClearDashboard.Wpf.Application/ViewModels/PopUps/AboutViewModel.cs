@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;

@@ -21,6 +21,7 @@
                     x:Name="NoteDisplay"
                     NoteSeen="OnNoteSeen"
                     ParentNote="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext}"
+                    CurrentUser="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentUser}"
                     ReplyColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyColor}"
                     ReplyFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontFamily}"
                     ReplyFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"
@@ -118,6 +119,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>-->
             <TextBox
+                Name="NoteReplyTextBox"
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.FloatingScale="0.60"

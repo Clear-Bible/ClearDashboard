@@ -151,7 +151,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             sw.Start();
 
-            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(13, alignmentTrainingTextCounts.Count);
 
             var one = alignmentTrainingTextCounts.Skip(4).First();
@@ -171,7 +171,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Output.WriteLine("");
 
-            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(12, alignmentTrainingTextCounts2.Count);
 
             var verse = alignmentTrainingTextCounts2.Skip(1).First();
@@ -291,6 +291,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSetVerseContexts = await alignmentSet.GetAlignmentVerseContexts(
                 "verse", 
                 "verse",
+                true,
                 AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(12, alignmentSetVerseContexts.Count());
@@ -321,6 +322,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
                 "one_verse_three", 
                 "three",
+                true,
                 AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(2, alignmentSetVerseContexts2.Count());
@@ -436,6 +438,12 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Assert.NotNull(translationSet);
 
+            var exampleLexiconLexeme = await new Lexeme { Lemma = "booboo", Language = "baby language", Type = "some type" }.Create(Mediator!);
+            var exampleLexiconMeaning = new Meaning { Text = "booboo meaning", Language = "adult language" };
+            var exampleLexiconTranslation = new Lexicon.Translation { Text = "booboo meaning translation 1" };
+            await exampleLexiconLexeme.PutMeaning(Mediator!, exampleLexiconMeaning);
+            await exampleLexiconMeaning.PutTranslation(Mediator!, exampleLexiconTranslation);
+
             var bookId = parallelCorpus.SourceCorpus.Texts.Select(t => t.Id).ToList().First();
             var sourceTokens = parallelCorpus.SourceCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().First().Tokens;
 
@@ -500,7 +508,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 exampleTranslations[1].SourceToken!.TrainingText);
 
             await translationSet.PutTranslation(
-                    new Alignment.Translation.Translation(to, $"shoobedoo", Alignment.Translation.Translation.OriginatedFromValues.Assigned),
+                    new Alignment.Translation.Translation(to, $"shoobedoo", OriginatedFromValues.Assigned),
                     TranslationActionTypes.PutPropagate);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -514,8 +522,12 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .Count());
 
             await translationSet.PutTranslation(
-                    new Alignment.Translation.Translation(to, $"hoobedoo", "Assigned"),
+                    new Alignment.Translation.Translation(to, $"hoobedoo", OriginatedFromValues.Assigned, exampleLexiconTranslation.TranslationId),
                     TranslationActionTypes.PutPropagate);
+
+            var toTranslations = await translationSet.GetTranslations(new List<TokenId> { to.TokenId });
+            Assert.Single(toTranslations);
+            Assert.Equal(exampleLexiconTranslation.TranslationId, toTranslations.First().LexiconTranslationId);
 
             ProjectDbContext!.ChangeTracker.Clear();
 
@@ -524,7 +536,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .Where(t => t.TargetText == "shoobedoo")
                 .Count());
             Assert.Equal(10, ProjectDbContext.Translations
-                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther)
+                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther && t.LexiconTranslationId == exampleLexiconTranslation.TranslationId!.Id)
                 .Count());
             Assert.Equal(1, ProjectDbContext.Translations
                 .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.Assigned)
@@ -711,10 +723,24 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var a5 = someAlignments.Skip(8).Take(1).First();
 
             await alignmentSet.DeleteAlignment(a3.AlignmentId!);
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(atp1, "Verified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Verified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"));
-            await alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified"));
+
+            var alignmentToUpdateById = new Alignment.Translation.Alignment(atp1, "Unverified");
+            var alignmentToUpdateBySourceTargetToken = new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Unverified");
+            await alignmentSet.PutAlignment(alignmentToUpdateById);
+            await alignmentSet.PutAlignment(alignmentToUpdateBySourceTargetToken);
+
+            alignmentToUpdateById.Verification = "Verified";
+            alignmentToUpdateBySourceTargetToken = new Alignment.Translation.Alignment(new AlignedTokenPairs(atp2.SourceToken, a3.AlignedTokenPair.TargetToken, 101), "Verified");
+
+            var alignmentsToPut = new List<Alignment.Translation.Alignment>
+            {
+                alignmentToUpdateById,
+                alignmentToUpdateBySourceTargetToken,
+                new Alignment.Translation.Alignment(new AlignedTokenPairs(a3.AlignedTokenPair.SourceToken, atp2.TargetToken, 102), "Unverified"),
+                new Alignment.Translation.Alignment(new AlignedTokenPairs(a4.AlignedTokenPair.SourceToken, a5.AlignedTokenPair.TargetToken, 102), "Unverified")
+            };
+
+            await alignmentSet.PutAlignments(alignmentsToPut);
 
             var manualOnly = await alignmentSet.GetAlignments(someRows, AlignmentTypeGroups.AssignedAlignmentTypes);
             Assert.Equal(4, manualOnly.Count());
@@ -986,6 +1012,13 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             await lexeme1.PutForm(Mediator!, new Form { Text = tokensToQuery[0].TrainingText + "_form1" });
             await lexeme1.PutForm(Mediator!, new Form { Text = tokensToQuery[0].TrainingText + "_form2" });
 
+            var lexeme1AndAHalf = await new Lexeme
+            {
+                Lemma = tokensToQuery[0].TrainingText + "_form1",
+                Language = parallelCorpus.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.Language,
+                Type = "some type"
+            }.Create(Mediator!);
+
             var lexeme1Meaning1 = new Meaning
             {
                 Text = "l1_meaning1",
@@ -1015,9 +1048,15 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            Assert.Null(await Lexeme.Get(Mediator!, "bogusLemma", null, null));
+            Assert.Empty(await Lexeme.GetByLemmaOrForm(Mediator!, "bogusLemma", null, null));
+            var matchingLexemes = await Lexeme.GetByLemmaOrForm(
+                Mediator!, 
+                tokensToQuery[0].TrainingText + "_form1", 
+                parallelCorpus.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.Language,
+                "french",
+                CancellationToken.None);
 
-            var l1Db1 = await Lexeme.Get(Mediator!, lexeme1.Lemma!, lexeme1.Language!, null);
+            var l1Db1 = (await Lexeme.GetByLemmaOrForm(Mediator!, lexeme1.Lemma!, lexeme1.Language!, null)).FirstOrDefault();
             Assert.NotNull(l1Db1);
             Assert.Equal(2, l1Db1.Forms.Count);
             Assert.Equal(2, l1Db1.Meanings.Count);
@@ -1029,16 +1068,16 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var l1Db2 = await Lexeme.Get(
+            var l1Db2 = (await Lexeme.GetByLemmaOrForm(
                 Mediator!,
                 lexeme1.Lemma!,
                 lexeme1.Language!,
-                parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language);
+                parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language)).FirstOrDefault();
             Assert.NotNull(l1Db2);
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var l2Db1 = await Lexeme.Get(Mediator!, lexeme2.Lemma!, null, null);
+            var l2Db1 = (await Lexeme.GetByLemmaOrForm(Mediator!, lexeme2.Lemma!, null, null)).FirstOrDefault();
 
             Assert.NotNull(l2Db1);
             Assert.Equal(3, l2Db1.Meanings.Count);
@@ -1055,11 +1094,11 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 Language = l1Db1!.Language
             }.Create(Mediator!));
 
-            var l3Db1 = await Lexeme.Get(
+            var l3Db1 = (await Lexeme.GetByLemmaOrForm(
                 Mediator!,
                 lexeme3.Lemma!,
                 null,
-                null);
+                null)).FirstOrDefault();
 
             Assert.NotNull(l3Db1);
             Assert.Single(l3Db1.Meanings);
@@ -1090,7 +1129,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             ProjectDbContext!.ChangeTracker.Clear();
 
             await l2Db1!.Delete(Mediator!);
-            Assert.Null(await Lexeme.Get(Mediator!, lexeme2.Lemma!, null, null));
+            Assert.Empty(await Lexeme.GetByLemmaOrForm(Mediator!, lexeme2.Lemma!, null, null));
 
             await lexeme3.Meanings.First().DetachSemanticDomain(Mediator!, s2);
             Assert.Empty(lexeme3.Meanings.First().SemanticDomains);

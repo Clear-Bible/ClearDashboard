@@ -42,12 +42,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 }
 
                 label.Text = request.Text;
+                label.TemplateText = request.TemplateText;
             }
             else
             {
                 label = new Models.Label
                 {
                     Text = request.Text,
+                    TemplateText = request.TemplateText
                 };
 
                 ProjectDbContext.Labels.Add(label);

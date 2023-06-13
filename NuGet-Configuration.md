@@ -19,7 +19,7 @@ you will need to add a `nuget.config` file to the same directory as `ClearDashbo
         <package pattern="*" />
     </packageSource>
     <packageSource key="ClearBible">
-        <package pattern="Clear*" />
+        <package pattern="*" />
     </packageSource>
     </packageSourceMapping>
         <packageSourceCredentials>

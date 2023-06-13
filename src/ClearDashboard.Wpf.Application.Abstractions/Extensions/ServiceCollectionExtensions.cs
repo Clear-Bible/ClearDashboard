@@ -1,21 +1,20 @@
-﻿using System;
-using System.Text.Json;
-using System.Collections.Generic;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Features;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 
 
 namespace ClearDashboard.Wpf.Application.Extensions
 {
-  
+
     public static class ServiceCollectionExtensions
     {
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
@@ -31,12 +30,12 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddSingleton<GitLabClient>();
             serviceCollection.AddSingleton<HttpClientServices>();
 
-            var value = Encryption.Decrypt("s8stjAZFhWZUd8pzck0Q7qK+RK1GnnqcmUZ8tRVuE89OmJ3sa+CaTuc8cgARuQwE");
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             // add in a service for the GitLab repository
             serviceCollection.AddHttpClient<GitLabClient>("GitLabClient", client =>
             {
                 // Other settings
-                client.BaseAddress = new Uri("https://gitlab.cleardashboard.org/api/v4/");
+                client.BaseAddress = new Uri(Settings.Default.GitRootUrl); //"https://gitlab.cleardashboard.org/api/v4/"
                 client.DefaultRequestHeaders.Add("Accept", "*/*");
                 client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
                 client.DefaultRequestHeaders.Add("Authorization", value);

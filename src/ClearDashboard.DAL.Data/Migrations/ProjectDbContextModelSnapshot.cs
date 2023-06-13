@@ -283,12 +283,57 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TemplateText")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Text")
+                        .IsUnique();
+
                     b.ToTable("Label");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("LabelGroup");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelGroupAssociation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("LabelGroupId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("LabelId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LabelGroupId");
+
+                    b.HasIndex("LabelId");
+
+                    b.ToTable("LabelGroupAssociation");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelNoteAssociation", b =>
@@ -740,6 +785,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("ExtendedProperties")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SurfaceText")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("TokenizedCorpusId")
                         .HasColumnType("TEXT");
 
@@ -883,6 +931,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long?>("Deleted")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("LexiconTranslationId")
+                        .HasColumnType("TEXT");
+
                     b.Property<long?>("Modified")
                         .HasColumnType("INTEGER");
 
@@ -902,6 +953,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LexiconTranslationId");
 
                     b.HasIndex("SourceTokenComponentId");
 
@@ -1005,6 +1058,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("DefaultLabelGroupId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
@@ -1221,9 +1277,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("SurfaceText")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("VerseNumber")
                         .HasColumnType("INTEGER");
 
@@ -1382,6 +1435,25 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelGroupAssociation", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.LabelGroup", "LabelGroup")
+                        .WithMany("LabelGroupAssociations")
+                        .HasForeignKey("LabelGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Label", "Label")
+                        .WithMany("LabelGroupAssociations")
+                        .HasForeignKey("LabelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Label");
+
+                    b.Navigation("LabelGroup");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelNoteAssociation", b =>
@@ -1712,6 +1784,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Translation", b =>
                 {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Lexicon_Translation", "LexiconTranslation")
+                        .WithMany()
+                        .HasForeignKey("LexiconTranslationId");
+
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "SourceTokenComponent")
                         .WithMany("Translations")
                         .HasForeignKey("SourceTokenComponentId")
@@ -1729,6 +1805,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("LexiconTranslation");
 
                     b.Navigation("SourceTokenComponent");
 
@@ -1903,7 +1981,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Label", b =>
                 {
+                    b.Navigation("LabelGroupAssociations");
+
                     b.Navigation("LabelNoteAssociations");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelGroup", b =>
+                {
+                    b.Navigation("LabelGroupAssociations");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme", b =>

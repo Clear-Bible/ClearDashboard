@@ -57,19 +57,6 @@ namespace ClearDashboard.Collaboration;
  *              \NoteModelRefs
  *                      
  *       \Labels [Folder]
- *       
- *       Did a review of composites functionality with Andy. Came up with a list of, what, 5 or 6 issues?
- *       long review/brainstorm sync design with Russell
- *       
- *       worked out git commands needed for loading snapshot by commit id
- *       snapshot entity lookup
- *       
- *       Current:
- *       - merge changes between last merged commit and HEAD into current database (strategy pattern)
- *       - apply merge results to db (dress rehearsal and for real.  Database stuff needs to happen in transaction)
- *       
- *       update tokenized corpus - metadata deserialization
- *       
  */
 
 public class ProjectSnapshot

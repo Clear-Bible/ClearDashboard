@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -28,6 +29,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Public Properties
 
         public string ParatextUser { get; set; } = string.Empty;
+        public User DashboardUser { get; set; }
+        public CollaborationConfiguration GitLabUser { get; set; }
         public List<string> Files { get; set; }
 
         #endregion //Public Properties
@@ -91,8 +94,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 NotifyOfPropertyChange(() => ShowOkButton);
             }
         }
-        
 
+        private string _workingMessage = "";
+        public string WorkingMessage
+        {
+            get => _workingMessage;
+            set
+            {
+                _workingMessage = value;
+                NotifyOfPropertyChange(() => WorkingMessage);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -110,9 +122,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             _logger = logger;
+
+            WorkingMessage = "Gathering Files for Transmission";
         }
 
-        protected async override void OnViewLoaded(object view)
+        protected override async void OnViewLoaded(object view)
         {
             var bRet = await NetworkHelper.IsConnectedToInternet();
             if (bRet == false)
@@ -151,6 +165,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             ShowOkButton = Visibility.Visible;
 
+            WorkingMessage = "";
+
             base.OnViewLoaded(view);
         }
 
@@ -176,10 +192,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 return;
             }
 
+            WorkingMessage = "Sending Message...";
+            await Task.Delay(200);
+
+
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             var versionNumber = $"{thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
-            string msg = $"*User:* {ParatextUser} \n*Version*: {versionNumber} \n*Message:* \n{UserMessage}";
+            string msg = $"*Dashboard User:* {DashboardUser.FullName} \n*Paratext User:* {ParatextUser} \n*Github User:* {GitLabUser.RemoteUserName} \n*Version*: {versionNumber} \n*Message:* \n{UserMessage}";
 
             var logger = LifetimeScope.Resolve<ILogger<SlackMessage>>();
             SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, logger);
@@ -189,12 +209,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 SendSuccessfulVisibility = Visibility.Visible;
                 SendErrorVisibility = Visibility.Collapsed;
+                WorkingMessage = "Message Sent Successfully";
             }
             else
             {
                 SendSuccessfulVisibility = Visibility.Collapsed;
                 SendErrorVisibility = Visibility.Visible;
+                WorkingMessage = "Message Sending Problem";
             }
+            
         }
 
         #endregion // Methods

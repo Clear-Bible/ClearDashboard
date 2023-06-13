@@ -143,6 +143,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             result.ThrowIfCanceledOrFailed();
         }
 
+        [Obsolete("This method is deprecated, use GetByLemmaOrForm instead.")]
         public static async Task<Lexeme?> Get(
             IMediator mediator,
             string lemma,
@@ -151,6 +152,21 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             CancellationToken token = default)
         {
             var command = new GetLexemeByTextQuery(lemma, language, meaningLanguage);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
+
+            return result.Data!;
+        }
+
+        public static async Task<IEnumerable<Lexeme>> GetByLemmaOrForm(
+            IMediator mediator,
+            string lemmaOrForm,
+            string? language,
+            string? meaningLanguage,
+            CancellationToken token = default)
+        {
+            var command = new GetLexemesByLemmaOrFormQuery(lemmaOrForm, language, meaningLanguage);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();
