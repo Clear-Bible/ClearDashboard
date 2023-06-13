@@ -407,6 +407,25 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Source="../../Assets/ClearDashboard_logo_50.png" />
+                                    <iconPacks:PackIconBoxIcons
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Width="16"
+                                        Height="16"
+                                        Foreground="{StaticResource OrangeDarkBrush}"
+                                        Kind="LogosGitlab">
+                                        <iconPacks:PackIconBoxIcons.Style>
+                                            <Style TargetType="{x:Type iconPacks:PackIconBoxIcons}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCollabProject}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </iconPacks:PackIconBoxIcons.Style>
+                                    </iconPacks:PackIconBoxIcons>
 
                                     <TextBlock
                                         Grid.Row="0"
