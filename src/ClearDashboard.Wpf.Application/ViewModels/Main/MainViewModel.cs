@@ -1406,7 +1406,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_About"), Id = MenuIds.About, ViewModel = this, },
 
                         // Test reloading a project.
-                        //ViewModel mergenew() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
+                        //ViewModel merge
+                        //new() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
                     }
                 },
 
@@ -2267,7 +2268,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
         {
-            await Initialize(cancellationToken);
+            //await Initialize(cancellationToken);
+
+            await OnDeactivateAsync(false, CancellationToken.None);
+            //NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+            await OnInitializeAsync(CancellationToken.None);
+            await OnActivateAsync(CancellationToken.None);
+            //await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
         }
 
 
