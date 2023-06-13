@@ -135,6 +135,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                 _selectedNoteViewModel = value;
                 NotifyOfPropertyChange(() => SelectedNoteViewModel);
                 UpdateSelectedNote(SelectedNoteViewModel);
+
+                if (value != null)
+                {
+                    IsNoteSelected = true;
+                }
+                else
+                {
+                    IsNoteSelected = false;
+                }
+            }
+        }
+
+        private bool _isNoteSelected;
+        public bool IsNoteSelected
+        {
+            get => _isNoteSelected;
+            set
+            {
+                _isNoteSelected = value;
+                NotifyOfPropertyChange(() => IsNoteSelected);
             }
         }
 
