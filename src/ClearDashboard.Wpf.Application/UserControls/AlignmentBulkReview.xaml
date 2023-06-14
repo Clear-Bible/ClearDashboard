@@ -55,13 +55,7 @@
                                                    Margin="4" Style="{StaticResource MaterialDesignToolToggleListBox}"
                                                    SelectionMode="Extended"
                                                    cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignedWordOptionsChanged($eventArgs)]"
-                                                   
                                                    IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
-                    <!--ItemsSource="{Binding AlignedWordsOptions}"-->
-                    <!--"BulkAlignmentReview_Machine"),
-                    "BulkAlignmentReview_NeedsReview"),
-                    "BulkAlignmentReview_Disapprove"),
-                    "BulkAlignmentReview_Approve")-->
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Machine}" 
                                  Tag="{x:Static a:BulkAlignmentReviewTags.Machine}" 
                                  IsSelected="{Binding 
@@ -128,7 +122,8 @@
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
                           IsReadOnly="True"
-                          cm:Message.Attach="[Event SelectionChanged] = [Action OnPivotWordRowSelectionChanged($eventArgs)] ">
+                          cm:Message.Attach="[Event SelectionChanged] = [Action OnPivotWordRowSelectionChanged($eventArgs)]"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="100"/>
 						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Part}"  Binding="{Binding Word}"  Width="100" />
@@ -164,7 +159,9 @@
                           SelectionUnit="FullRow"
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
-                          IsReadOnly="True">
+                          cm:Message.Attach="[Event SelectionChanged] = [Action OnSourceTargetCountRowSelectionChanged($eventArgs)]"
+                          IsReadOnly="True"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
 					<DataGrid.Columns>
                         <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="100"/>
                         <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourcePart}"  Binding="{Binding Source}" Width="200"/>
@@ -189,7 +186,7 @@
 				</Grid>
 				<DataGrid Grid.Row="1" 
                           Name="ApprovalDataGrid" 
-                          ItemsSource="{Binding PivotedWords}" 
+                          ItemsSource="{Binding BulkAlignments}" 
                           AutoGenerateColumns="False" 
                           Margin="4"
                           VirtualizingPanel.IsVirtualizingWhenGrouping="True"
@@ -199,7 +196,8 @@
                           SelectionUnit="FullRow"
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
-                          IsReadOnly="True">
+                          IsReadOnly="True"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
 					<DataGrid.Columns>
 						<DataGridTemplateColumn>
 							<DataGridTemplateColumn.HeaderTemplate>
@@ -218,10 +216,19 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Type}"  />
-						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourceRef}"  />
-						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}"  />
-					</DataGrid.Columns>
+						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Type}"  Binding="{Binding Type}"/>
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourceRef}" Binding="{Binding SourceRef}"/>
+                        <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}"> 
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="{Binding AlignedTokenPair.SourceToken.SurfaceText}"></Label>
+                                        <Label Content="{Binding AlignedTokenPair.TargetToken.SurfaceText}"></Label>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
 				</DataGrid>
 			</Grid>
 		</materialDesign:Card>

@@ -1,7 +1,26 @@
 ﻿
+using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Wpf.Application.Models.EnhancedView
 {
+
+
+    public class BulkAlignment
+    {
+        public bool IsSelected { get; set; }
+        public Alignment? Alignment { get; set; }
+
+        public string? Type { get; set; }
+
+        public string? SourceRef =>
+            $"{Alignment.AlignmentId.SourceTokenId.BookNumber} {Alignment.AlignmentId.SourceTokenId.ChapterNumber}:{Alignment.AlignmentId.SourceTokenId.VerseNumber}";
+
+        public string? Text { get; set; }
+
+        public AlignedTokenPairs? AlignedTokenPair { get; set; }
+
+    }
     public class PivotWord
     {
         public string? Word { get; set; }
@@ -10,11 +29,15 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
 
     public class AlignedWord
     {
-        public int Count { get; set; }
-
         public string? Source { get; set; }
 
         public string? Target { get; set; }
+    }
+
+    public class CountedAlignedWord : AlignedWord
+    {
+        public int Count { get; set; }
+
     }
 
     public static class BulkAlignmentReviewTags
