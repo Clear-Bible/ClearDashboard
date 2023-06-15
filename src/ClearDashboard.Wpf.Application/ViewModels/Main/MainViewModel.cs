@@ -952,6 +952,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 Logger?.LogInformation(message);
             }
         }
+
+        public void LaunchGettingStartedVideos()
+        {
+            var videosUrl = new Uri("https://cleardashboard.org/");
+
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = videosUrl.AbsoluteUri,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
+        }
+
         private void ShowLogs()
         {
             var tailBlazerProxy = LifetimeScope.Resolve<TailBlazerProxy>();
@@ -1397,6 +1417,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         // launch Getting Started Guide
                         new() { Header = _localizationService!.Get("MainView_GettingStartedGuide"), Id = MenuIds.GettingStartedGuide, ViewModel = this, },
+                        
+                        // launch Getting Started Guide
+                        new() { Header = "Getting Started Videos", Id = MenuIds.GettingStartedVideos, ViewModel = this, },
 
                         // Gather Logs
                         new() { Header = _localizationService!.Get("MainView_ShowLog"), Id = MenuIds.ShowLog, ViewModel = this, },
@@ -1989,6 +2012,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 case MenuIds.GettingStartedGuide:
                     {
                         LaunchGettingStartedGuide();
+                        break;
+                    }
+
+                case MenuIds.GettingStartedVideos:
+                    {
+                        LaunchGettingStartedVideos();
                         break;
                     }
 
