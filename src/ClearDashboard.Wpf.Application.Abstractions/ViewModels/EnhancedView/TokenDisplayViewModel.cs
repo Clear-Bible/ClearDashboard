@@ -21,7 +21,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public Token TokenForTranslation => IsCompositeTokenMember ? CompositeToken! : Token;
 
-        public Token AlignmentToken=> IsCompositeTokenMember ? CompositeToken! : Token;
+        public Token AlignmentToken => IsCompositeTokenMember ? CompositeToken! : Token;
 
         /// <summary>
         /// The <see cref="VerseDisplayViewModel"/> that this token is part of.
@@ -148,6 +148,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public string TranslationState => Translation?.OriginatedFrom ?? string.Empty;
 
+        private Token? _alignedToken;
+
+        /// <summary>
+        /// The <see cref="Token"/> that is aligned to the token.
+        /// </summary>
+        public Token? AlignedToken
+        {
+            get => _alignedToken;
+            set
+            {
+                if (Set(ref _alignedToken, value))
+                {
+                    NotifyOfPropertyChange(nameof(AlignedTokenSurfaceText));
+                }
+            }
+        }
+
+        /// <summary>
+        /// The text of the token aligned with this token.
+        /// </summary>
+        public string AlignedTokenSurfaceText => AlignedToken?.SurfaceText ?? string.Empty;
+
         /// <summary>
         /// A list of <see cref="NoteViewModel"/>s for the token.
         /// </summary>
@@ -173,6 +195,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get => _isTranslationSelected;
             set => Set(ref _isTranslationSelected, value);
+        }
+
+        private bool _isAlignmentSelected;
+        /// <summary>
+        /// Gets or sets whether the alignment for this token is selected.
+        /// </summary>
+        public bool IsAlignmentSelected
+        {
+            get => _isAlignmentSelected;
+            set => Set(ref _isAlignmentSelected, value);
         }
 
         private bool _isHighlighted;
