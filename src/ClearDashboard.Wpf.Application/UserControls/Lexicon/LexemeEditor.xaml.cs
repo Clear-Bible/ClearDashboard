@@ -486,9 +486,23 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             CommitEdit();
         }
 
+        private string? GetSourceLanguage()
+        {
+            return TokenDisplay.VerseDisplay is InterlinearDisplayViewModel verseDisplay ? verseDisplay.SourceLanguage : string.Empty;
+        }
+
+        private string? GetTargetLanguage()
+        {
+            return TokenDisplay.VerseDisplay is InterlinearDisplayViewModel verseDisplay ? verseDisplay.TargetLanguage : string.Empty;
+        }
+
         private void OnAddLexemeClicked(object sender, RoutedEventArgs e)
         {
-            RaiseLexemeEvent(LexemeAddedEvent, new LexemeViewModel { Lemma = TokenDisplay.SurfaceText });
+            RaiseLexemeEvent(LexemeAddedEvent, new LexemeViewModel
+            {
+                Lemma = TokenDisplay.SurfaceText,
+                Language = GetSourceLanguage()
+            });
             
             OnPropertyChanged(nameof(AddLexemeVisibility));
             OnPropertyChanged(nameof(LexemeControlsVisibility));
