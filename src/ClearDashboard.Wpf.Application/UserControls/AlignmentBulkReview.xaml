@@ -246,10 +246,10 @@
                         <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                   <userControls:VerseDisplay 
+                                   <!--<userControls:VerseDisplay 
                                        
                                        
-                                       />
+                                       />-->
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

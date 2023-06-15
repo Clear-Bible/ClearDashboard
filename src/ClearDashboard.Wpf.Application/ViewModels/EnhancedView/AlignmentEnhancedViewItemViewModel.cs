@@ -22,6 +22,23 @@ using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 // ReSharper disable InconsistentNaming
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+
+    public static class LinqExtensions {
+    public static async Task<TResult[]> SelectAsync<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        if (selector == null)
+        {
+            throw new ArgumentNullException(nameof(selector));
+        }
+
+        return await Task.WhenAll(source.Select(selector));
+    }
+}
     public class AlignmentEnhancedViewItemViewModel : VerseAwareEnhancedViewItemViewModel
     {
         public AlignmentEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager, INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService)
@@ -79,8 +96,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public bool HasBulkAlignments => BulkAlignments is { Count: > 0 };
 
         public string BulkAlignmentsCountMessage => $"{(BulkAlignments is { Count: > 0 } ? BulkAlignments.Count : 0)} records.";
-        private BindableCollection<BulkAlignment>? _bulkAlignments;
-        public BindableCollection<BulkAlignment>? BulkAlignments
+        private BindableCollection<BulkAlignmentVerseRow>? _bulkAlignments;
+        public BindableCollection<BulkAlignmentVerseRow>? BulkAlignments
         {
             get => _bulkAlignments;
             set
@@ -191,17 +208,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         ProgressBarVisibility = Visibility.Visible;
                         _verseContexts = await _alignmentSet.GetAlignmentVerseContexts(alignedWord.Source,
                             alignedWord.Target, _countsByTrainingText, AlignmentTypes);
-                        BulkAlignments = new BindableCollection<BulkAlignment>(_verseContexts.Select(verseContext =>
-                            new BulkAlignment
+                        var verseRows = await _verseContexts.SelectAsync(async verseContext =>
+                            new BulkAlignmentVerseRow
                             {
-                                Alignment = verseContext.alignment, IsSelected = false,
+                                Alignment = verseContext.alignment,
+                                IsSelected = false,
                                 Type = verseContext.alignment.Verification,
-                                SourceVerseTokens = verseContext.sourceVerseTokens,
-                                SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
-                                TargetVerseTokens = verseContext.targetVerseTokens,
-                                TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
-                                
-                            }));
+                                BulkAlignmentDisplayViewModel = await BulkAlignmentDisplayViewModel.CreateAsync(
+                                    LifetimeScope,
+                                    new BulkAlignment
+                                    {
+                                        SourceVerseTokens = verseContext.sourceVerseTokens,
+                                        SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
+                                        TargetVerseTokens = verseContext.targetVerseTokens,
+                                        TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
+                                    },
+                                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
+                                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl
+                                )
+                            });
+                        BulkAlignments = new BindableCollection<BulkAlignmentVerseRow>(verseRows);
                     }
                 }
                 finally

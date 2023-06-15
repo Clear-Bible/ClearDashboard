@@ -11,46 +11,12 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 namespace ClearDashboard.Wpf.Application.Models.EnhancedView
 {
 
-
     public class BulkAlignment : PropertyChangedBase
     {
-        private bool _isSelected;
-      
-
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set => Set(ref _isSelected, value);
-        }
-
-        private Alignment? _alignment;
-        private string? _type;
-
- 
-
         private IEnumerable<Token> _sourceVerseTokens;
         private uint sourceVerseTokensIndex;
         private IEnumerable<Token> _targetVerseTokens;
         private uint _targetVerseTokensIndex;
-
-        public Alignment? Alignment
-        {
-            get => _alignment;
-            set
-            {
-                Set(ref _alignment, value);
-                NotifyOfPropertyChange(nameof(SourceRef));
-            }
-        }
-
-        public string? Type
-        {
-            get => _type;
-            set => Set(ref _type, value);
-        }
-
-        public string? SourceRef => (Alignment != null && Alignment.AlignmentId != null && Alignment.AlignmentId.SourceTokenId != null) ?
-            $"{VerseHelper.BookNames[Alignment.AlignmentId.SourceTokenId.BookNumber].code} {Alignment.AlignmentId.SourceTokenId.ChapterNumber}:{Alignment.AlignmentId.SourceTokenId.VerseNumber}" : "*** Alignment not set!";
 
 
         public IEnumerable<Token> SourceVerseTokens
@@ -76,6 +42,51 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
             get => _targetVerseTokensIndex;
             set => Set(ref _targetVerseTokensIndex, value);
         }
+
+    }
+    public class BulkAlignmentVerseRow : PropertyChangedBase
+    {
+        private bool _isSelected;
+      
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => Set(ref _isSelected, value);
+        }
+
+        private Alignment? _alignment;
+        private string? _type;
+        private BulkAlignmentDisplayViewModel _bulkAlignmentDisplayViewModel;
+
+
+        public BulkAlignmentDisplayViewModel BulkAlignmentDisplayViewModel
+        {
+            get => _bulkAlignmentDisplayViewModel;
+            set => Set(ref _bulkAlignmentDisplayViewModel, value);
+        }
+
+
+        public Alignment? Alignment
+        {
+            get => _alignment;
+            set
+            {
+                Set(ref _alignment, value);
+                NotifyOfPropertyChange(nameof(SourceRef));
+            }
+        }
+
+        public string? Type
+        {
+            get => _type;
+            set => Set(ref _type, value);
+        }
+
+        public string? SourceRef => (Alignment != null && Alignment.AlignmentId != null && Alignment.AlignmentId.SourceTokenId != null) ?
+            $"{VerseHelper.BookNames[Alignment.AlignmentId.SourceTokenId.BookNumber].code} {Alignment.AlignmentId.SourceTokenId.ChapterNumber}:{Alignment.AlignmentId.SourceTokenId.VerseNumber}" : "*** Alignment not set!";
+
+
     }
     public class PivotWord
     {
