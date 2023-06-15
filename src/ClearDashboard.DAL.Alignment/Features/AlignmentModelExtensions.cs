@@ -9,7 +9,6 @@ using ClearDashboard.DAL.Alignment.Translation;
 using System.Collections;
 using ClearDashboard.DataAccessLayer.Models;
 using System.Linq.Expressions;
-using SIL.Machine.SequenceAlignment;
 
 namespace ClearDashboard.DAL.Alignment.Features
 {
