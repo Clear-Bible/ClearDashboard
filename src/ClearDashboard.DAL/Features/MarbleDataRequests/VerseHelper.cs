@@ -147,7 +147,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
         };
 
 
-        private static Dictionary<int, ParatextBookNames> BookNames = new Dictionary<int, ParatextBookNames>
+        public static Dictionary<int, ParatextBookNames> BookNames = new Dictionary<int, ParatextBookNames>
         {
             {01, new ParatextBookNames{code="GEN", abbr = "Gen", shortname ="Genesis", longname ="Genesis", fileID="01", BBB="01"}},
             {02, new ParatextBookNames{code="EXO", abbr = "Exod", shortname ="Exodus", longname ="Exodus", fileID="02", BBB="02"}},

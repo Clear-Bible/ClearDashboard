@@ -1,25 +1,81 @@
 ﻿
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Models.EnhancedView
 {
 
 
-    public class BulkAlignment
+    public class BulkAlignment : PropertyChangedBase
     {
-        public bool IsSelected { get; set; }
-        public Alignment? Alignment { get; set; }
+        private bool _isSelected;
+      
 
-        public string? Type { get; set; }
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => Set(ref _isSelected, value);
+        }
 
-        public string? SourceRef =>
-            $"{Alignment.AlignmentId.SourceTokenId.BookNumber} {Alignment.AlignmentId.SourceTokenId.ChapterNumber}:{Alignment.AlignmentId.SourceTokenId.VerseNumber}";
+        private Alignment? _alignment;
+        private string? _type;
 
-        public string? Text { get; set; }
+ 
 
-        public AlignedTokenPairs? AlignedTokenPair { get; set; }
+        private IEnumerable<Token> _sourceVerseTokens;
+        private uint sourceVerseTokensIndex;
+        private IEnumerable<Token> _targetVerseTokens;
+        private uint _targetVerseTokensIndex;
 
+        public Alignment? Alignment
+        {
+            get => _alignment;
+            set
+            {
+                Set(ref _alignment, value);
+                NotifyOfPropertyChange(nameof(SourceRef));
+            }
+        }
+
+        public string? Type
+        {
+            get => _type;
+            set => Set(ref _type, value);
+        }
+
+        public string? SourceRef => (Alignment != null && Alignment.AlignmentId != null && Alignment.AlignmentId.SourceTokenId != null) ?
+            $"{VerseHelper.BookNames[Alignment.AlignmentId.SourceTokenId.BookNumber].code} {Alignment.AlignmentId.SourceTokenId.ChapterNumber}:{Alignment.AlignmentId.SourceTokenId.VerseNumber}" : "*** Alignment not set!";
+
+
+        public IEnumerable<Token> SourceVerseTokens
+        {
+            get => _sourceVerseTokens;
+            set => Set(ref _sourceVerseTokens, value);
+        }
+
+        public uint SourceVerseTokensIndex
+        {
+            get => sourceVerseTokensIndex;
+            set => Set(ref sourceVerseTokensIndex, value);
+        }
+
+        public IEnumerable<Token> TargetVerseTokens
+        {
+            get => _targetVerseTokens;
+            set => Set(ref _targetVerseTokens, value);
+        }
+
+        public uint TargetVerseTokensIndex
+        {
+            get => _targetVerseTokensIndex;
+            set => Set(ref _targetVerseTokensIndex, value);
+        }
     }
     public class PivotWord
     {
@@ -27,16 +83,22 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
         public int Count { get; set; }
     }
 
-    public class AlignedWord
+    //public class AlignedWord
+    //{
+    //    public string? Source { get; set; }
+
+    //    public string? Target { get; set; }
+    //}
+
+    public class AlignedWord 
     {
+        public long Count { get; set; }
+
+        public PivotWord? PivotWord { get; set; }
+
         public string? Source { get; set; }
 
         public string? Target { get; set; }
-    }
-
-    public class CountedAlignedWord : AlignedWord
-    {
-        public int Count { get; set; }
 
     }
 

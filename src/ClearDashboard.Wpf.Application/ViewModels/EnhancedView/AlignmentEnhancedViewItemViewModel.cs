@@ -1,22 +1,23 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.Wpf.Application.Controls;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Threading;
-using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.Views.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DataAccessLayer.Threading;
+using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
+
+// ReSharper disable UnusedMember.Global
 
 // ReSharper disable InconsistentNaming
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -31,24 +32,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EditModeButtonLabel = LocalizationService.Get("BulkAlignmentReview_BulkAlignmentReview");
             _sourceToTarget = true;
 
-
-
-            AlignedWordsOptions = new BindableCollection<string>
-            {
-                LocalizationService.Get("BulkAlignmentReview_Machine"),
-                LocalizationService.Get("BulkAlignmentReview_NeedsReview"),
-                LocalizationService.Get("BulkAlignmentReview_Disapprove"),
-                LocalizationService.Get("BulkAlignmentReview_Approve")
-            };
-
-            //SelectedAlignedWordsOptions = new BindableCollection<string>()
-            //{
-            //    LocalizationService.Get("BulkAlignmentReview_Machine"),
-            //    LocalizationService.Get("BulkAlignmentReview_NeedsReview"),
-            //    LocalizationService.Get("BulkAlignmentReview_Disapprove"),
-            //    LocalizationService.Get("BulkAlignmentReview_Approve")
-            //};
-
             AlignmentTypes = AlignmentTypes.Assigned_Invalid | 
                              AlignmentTypes.Assigned_Unverified |
                              AlignmentTypes.Assigned_Verified |
@@ -60,30 +43,52 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
 
 
-        private readonly DebounceDispatcher _debounceTimer = new DebounceDispatcher();
+        private readonly DebounceDispatcher _debounceTimer = new ();
+
+        public bool HasPivotWords => PivotWords is { Count: > 0 };
+
+        public string PivotWordsCountMessage => $"{(PivotWords is { Count: > 0 } ? PivotWords.Count : 0)} records.";
+
         private BindableCollection<PivotWord>? _pivotWords;
         public BindableCollection<PivotWord>? PivotWords
         {
             get => _pivotWords;
-            set => Set(ref _pivotWords, value);
+            set
+            {
+                Set(ref _pivotWords, value);
+                NotifyOfPropertyChange(nameof(HasPivotWords));
+                NotifyOfPropertyChange(nameof(PivotWordsCountMessage));
+            }
         }
 
-        private BindableCollection<CountedAlignedWord>? _alignedWords;
-        public BindableCollection<CountedAlignedWord>? AlignedWords
+        public bool HasAlignedWords => AlignedWords is { Count: > 0 };
+
+        public string AlignedWordsCountMessage => $"{(AlignedWords is { Count: > 0 } ? AlignedWords.Count : 0)} records.";
+        private BindableCollection<AlignedWord>? _alignedWords;
+        public BindableCollection<AlignedWord>? AlignedWords
         {
             get => _alignedWords;
-            set => Set(ref _alignedWords, value);
+            set
+            {
+                Set(ref _alignedWords, value);
+                NotifyOfPropertyChange(nameof(HasAlignedWords));
+                NotifyOfPropertyChange(nameof(AlignedWordsCountMessage));
+            }
         }
 
-        protected override void OnViewAttached(object view, object context)
+        public bool HasBulkAlignments => BulkAlignments is { Count: > 0 };
+
+        public string BulkAlignmentsCountMessage => $"{(BulkAlignments is { Count: > 0 } ? BulkAlignments.Count : 0)} records.";
+        private BindableCollection<BulkAlignment>? _bulkAlignments;
+        public BindableCollection<BulkAlignment>? BulkAlignments
         {
-            //var v = (AlignmentEnhancedViewItemView)view;
-            //var abr = (AlignmentBulkReview)v.FindName("AlignmentBulkReview");
-            //var lb = (MultipleSelectionListBox)abr.FindName("AlignedWordsOptionListBox");
-
-            //lb.SetSelected(SelectedAlignedWordsOptions);
-
-            base.OnViewAttached(view, context);
+            get => _bulkAlignments;
+            set
+            {
+                Set(ref _bulkAlignments, value);
+                NotifyOfPropertyChange(nameof(HasBulkAlignments));
+                NotifyOfPropertyChange(nameof(BulkAlignmentsCountMessage));
+            }
         }
 
         private bool _sourceToTarget;
@@ -95,104 +100,109 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        public async void OnPivotWordSourceChanged(SelectionChangedEventArgs e)
+        public void OnToggleAlignmentsChecked(CheckBox? checkBox)
+        {
+            if (checkBox != null && BulkAlignments is { Count: > 0 })
+            {
+                foreach (var bulkAlignment in BulkAlignments)
+                {
+                    bulkAlignment.IsSelected = checkBox.IsChecked ?? false ;
+                }
+            }
+        }
+
+        public void OnPivotWordSourceChanged(SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
             {
                 _sourceToTarget = (item.Tag as string) == BulkAlignmentReviewTags.Source;
-                _debounceTimer.Debounce(1000, async param => await GetPivotWords());
+                _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords());
             }
         }
 
         private bool _countsByTrainingText;
-        public async void OnCountByTextTypeChanged(SelectionChangedEventArgs e)
+        public void OnCountByTextTypeChanged(SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
             {
                 _countsByTrainingText = (item.Tag as string) == BulkAlignmentReviewTags.CountsByTrainingText;
-                _debounceTimer.Debounce(1000, async param => await GetPivotWords());
+                _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords());
             }
         }
 
 
         public void OnAlignedWordOptionsChanged(SelectionChangedEventArgs e)
         {
-            _debounceTimer.Debounce(1000, async param => await GetPivotWords());
+            _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords());
         }
 
 
         public async void OnSourceTargetCountRowSelectionChanged(SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0 && e.AddedItems[0] is CountedAlignedWord item)
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is AlignedWord alignedWord)
             {
-                await GetAlignmentVerseContexts(item);
+                await GetAlignmentVerseContexts(alignedWord);
             }
-
-            await Task.CompletedTask;
         }
-
-      
-
-        public async void OnPivotWordRowSelectionChanged(SelectionChangedEventArgs e)
+        
+        public void OnPivotWordRowSelectionChanged(SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0 && e.AddedItems[0] is PivotWord item)
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is PivotWord pivotWord)
             {
-                var success = AlignmentCounts.TryGetValue(item.Word, out IDictionary<string, IDictionary<string, uint>> alignedWordDictionary);
-
-                if (success)
+                if (AlignmentCounts != null && pivotWord.Word != null)
                 {
-                    AlignedWords = new BindableCollection<CountedAlignedWord>(alignedWordDictionary.Select(kvp =>
-                        new CountedAlignedWord { Source = item.Word, Target = kvp.Key, Count = kvp.Value.Count }).OrderByDescending(kvp => kvp.Count));
+                    var success = AlignmentCounts.TryGetValue(pivotWord.Word, out IDictionary<string, IDictionary<string, uint>>? alignedWordDictionary);
+
+                    if (success && alignedWordDictionary != null)
+                    {
+                        AlignedWords = new BindableCollection<AlignedWord>(alignedWordDictionary.Select(kvp =>
+                                new AlignedWord
+                                {
+                                    Source = _sourceToTarget ? pivotWord.Word : kvp.Key, 
+                                    Target = _sourceToTarget ? kvp.Key : pivotWord.Word, 
+                                    Count = kvp.Value.Sum(k=>k.Value),
+                                    PivotWord = pivotWord
+                                })
+                            .OrderByDescending(kvp => kvp.Count));
+                    }
                 }
-                await Task.CompletedTask;
             }
         }
 
-        //private BindableCollection<string> _selectedAlignedWordsOptions;
-        //public BindableCollection<string> SelectedAlignedWordsOptions
-        //{
-        //    get => _selectedAlignedWordsOptions;
-        //    set => Set(ref _selectedAlignedWordsOptions, value);
-        //}
+        private IDictionary<string, IDictionary<string, IDictionary<string, uint>>>? AlignmentCounts { get; set; }
 
-  
-
-        private BindableCollection<string> _alignedWordsOptions;
         private AlignmentTypes _alignmentTypes;
-
-        public BindableCollection<string> AlignedWordsOptions
-        {
-            get => _alignedWordsOptions;
-            set => Set(ref _alignedWordsOptions, value);
-        }
-
-        private IDictionary<string, IDictionary<string, IDictionary<string, uint>>> AlignmentCounts { get; set; }
         public AlignmentTypes AlignmentTypes
         {
             get => _alignmentTypes;
             set => Set(ref _alignmentTypes, value);
         }
 
-        private BindableCollection<BulkAlignment> _bulkAlignments;
-        public BindableCollection<BulkAlignment> BulkAlignments
-        {
-            get => _bulkAlignments;
-            set => Set(ref _bulkAlignments, value);
-        }
-
-
-        private IEnumerable<(Alignment alignment, IEnumerable<Token> sourceVerseTokens, uint sourceVerseTokensIndex, IEnumerable<Token> targetVerseTokens, uint targetVerseTokensIndex)> _verseContexts;
-        private async Task GetAlignmentVerseContexts(CountedAlignedWord item)
+        private IEnumerable<(Alignment alignment, IEnumerable<Token> sourceVerseTokens, uint sourceVerseTokensIndex, IEnumerable<Token> targetVerseTokens, uint targetVerseTokensIndex)>? _verseContexts;
+        private async Task GetAlignmentVerseContexts(AlignedWord alignedWord)
         {
             _ = await Task.Factory.StartNew(async () =>
             {
                 try
                 {
-                    FetchingData = true;
-                    ProgressBarVisibility = Visibility.Visible;
-                    _verseContexts = await _alignmentSet.GetAlignmentVerseContexts(item.Source, item.Target, _countsByTrainingText, AlignmentTypes);
-                    BulkAlignments = new BindableCollection<BulkAlignment>(_verseContexts.Select(verseContext =>
-                        new BulkAlignment { Alignment = verseContext.alignment, IsSelected = false, Type = verseContext.alignment.Verification, AlignedTokenPair = verseContext.alignment.AlignedTokenPair}));
+                    if (alignedWord is { Source: { }, Target: { } } && _alignmentSet != null)
+                    {
+                        FetchingData = true;
+                        ProgressBarVisibility = Visibility.Visible;
+                        _verseContexts = await _alignmentSet.GetAlignmentVerseContexts(alignedWord.Source,
+                            alignedWord.Target, _countsByTrainingText, AlignmentTypes);
+                        BulkAlignments = new BindableCollection<BulkAlignment>(_verseContexts.Select(verseContext =>
+                            new BulkAlignment
+                            {
+                                Alignment = verseContext.alignment, IsSelected = false,
+                                Type = verseContext.alignment.Verification,
+                                SourceVerseTokens = verseContext.sourceVerseTokens,
+                                SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
+                                TargetVerseTokens = verseContext.targetVerseTokens,
+                                TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
+                                
+                            }));
+                    }
                 }
                 finally
                 {
@@ -201,34 +211,52 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             });
         }
-
-
+        
         private AlignmentSet? _alignmentSet;
         private async Task GetPivotWords()
         {
             _ = await Task.Factory.StartNew(async () =>
             {
+                var taskName = "GetPivotWords";
+                var cancellationToken = new CancellationTokenSource().Token;
                 try
                 {
+
+                    //await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                    //    description: $"Fetching Pivot Words", cancellationToken: cancellationToken);
+
+
                     AlignedWords = null;
+                    BulkAlignments = null;
+                    AlignmentCounts = null;
                     FetchingData = true;
                     ProgressBarVisibility = Visibility.Visible;
 
-                    if (_alignmentSet == null)
+                    if (_alignmentSet == null && EnhancedViewItemMetadatum is AlignmentEnhancedViewItemMetadatum)
                     {
-                        AlignmentSetId = Guid.Parse((EnhancedViewItemMetadatum as AlignmentEnhancedViewItemMetadatum).AlignmentSetId);
+                        AlignmentSetId = Guid.Parse(((AlignmentEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)
+                            .AlignmentSetId!);
                         _alignmentSet = await AlignmentSet.Get(new AlignmentSetId(AlignmentSetId), Mediator!);
                     }
 
                     if (_alignmentSet != null)
                     {
-                        AlignmentCounts = await _alignmentSet.GetAlignmentCounts(_sourceToTarget, _countsByTrainingText, AlignmentTypes);
+                        AlignmentCounts = await _alignmentSet.GetAlignmentCounts(_sourceToTarget, _countsByTrainingText,
+                            AlignmentTypes);
                         PivotWords = new BindableCollection<PivotWord>(AlignmentCounts.Select(kvp =>
-                            new PivotWord { Word = kvp.Key, Count = kvp.Value.Count }).OrderByDescending(kvp => kvp.Count));
+                                new PivotWord { Word = kvp.Key, Count = kvp.Value.Count })
+                            .OrderByDescending(kvp => kvp.Count));
                     }
+                }
+                catch (Exception ex)
+                {
+                    //await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
+                    //    exception: ex, cancellationToken: cancellationToken,
+                    //    backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
                 }
                 finally
                 {
+                    
                     FetchingData = false;
                     ProgressBarVisibility = Visibility.Hidden;
                 }

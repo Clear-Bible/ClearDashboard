@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Threading;
+// ReSharper disable UnusedParameter.Local
 
 namespace ClearDashboard.Wpf.Application.Threading
 {
@@ -13,13 +15,13 @@ namespace ClearDashboard.Wpf.Application.Threading
         public void Debounce(int interval, Action<object?> action,
             object? param = null,
             DispatcherPriority priority = DispatcherPriority.ApplicationIdle,
-            Dispatcher? disp = null)
+            Dispatcher? dispatcher = null)
         {
             // kill pending timer and pending ticks
             _timer?.Stop();
             _timer = null;
 
-            disp ??= Dispatcher.CurrentDispatcher;
+            dispatcher ??= Dispatcher.CurrentDispatcher;
 
             // timer is recreated for each event and effectively
             // resets the timeout. Action only fires after timeout has fully
@@ -32,7 +34,34 @@ namespace ClearDashboard.Wpf.Application.Threading
                 _timer?.Stop();
                 _timer = null;
                 action.Invoke(param);
-            }, disp);
+            }, dispatcher);
+
+            _timer.Start();
+        }
+
+        public void DebounceAsync(int interval, Func<Task> action,
+            DispatcherPriority priority = DispatcherPriority.ApplicationIdle,
+            Dispatcher? dispatcher = null)
+        {
+            // kill pending timer and pending ticks
+            _timer?.Stop();
+            _timer = null;
+
+            dispatcher ??= Dispatcher.CurrentDispatcher;
+
+            // timer is recreated for each event and effectively
+            // resets the timeout. Action only fires after timeout has fully
+            // elapsed without other events firing in between
+            _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), priority, (s, e) =>
+            {
+                if (_timer == null)
+                {
+                    return;
+                }
+                _timer?.Stop();
+                _timer = null;
+                action.DynamicInvoke();
+            }, dispatcher);
 
             _timer.Start();
         }
@@ -40,13 +69,13 @@ namespace ClearDashboard.Wpf.Application.Threading
         public void Throttle(int interval, Action<object?> action,
             object? param = null,
             DispatcherPriority priority = DispatcherPriority.ApplicationIdle,
-            Dispatcher? disp = null)
+            Dispatcher? dispatcher = null)
         {
             // kill pending timer and pending ticks
             _timer?.Stop();
             _timer = null;
 
-            disp ??= Dispatcher.CurrentDispatcher;
+            dispatcher ??= Dispatcher.CurrentDispatcher;
 
             var curTime = DateTime.UtcNow;
 
@@ -63,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.Threading
                 _timer?.Stop();
                 _timer = null;
                 action.Invoke(param);
-            }, disp);
+            }, dispatcher);
 
             _timer.Start();
             TimerStarted = curTime;
