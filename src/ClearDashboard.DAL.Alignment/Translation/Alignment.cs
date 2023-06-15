@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
+using SIL.Machine.SequenceAlignment;
 
 namespace ClearDashboard.DAL.Alignment.Translation;
 
