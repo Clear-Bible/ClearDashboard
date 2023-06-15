@@ -308,6 +308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 if (CommitSha is not null)
                 {
                     await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                    progress.Report(new ProgressStatus(0, "UI Reload Complete"));
                 }
             }
             catch (OperationCanceledException)

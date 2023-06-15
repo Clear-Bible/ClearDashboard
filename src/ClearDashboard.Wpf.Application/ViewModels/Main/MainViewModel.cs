@@ -660,6 +660,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (Parameter.IsNew)
                 {
                     await ProjectManager.CreateNewProject(Parameter.ProjectName);
+                    Parameter.IsNew = false;
                 }
                 else
                 {
