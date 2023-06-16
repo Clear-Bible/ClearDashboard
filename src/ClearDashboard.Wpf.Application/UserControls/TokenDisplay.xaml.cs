@@ -17,12 +17,104 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control for displaying a single <see cref="Token"/> alongside a possible <see cref="Translation"/>
-    /// and possible note indicator.
+    /// A control for displaying a single <see cref="Token"/> alongside a possible note indicator, <see cref="Translation"/>, and aligned token.
     /// </summary>
     public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>, IHandle<AlignmentAddedMessage>, IHandle<AlignmentDeletedMessage>
     {
         #region Static DependencyProperties
+
+        /// <summary>
+        /// Identifies the AlignmentAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenAlignmentProperty = DependencyProperty.Register(
+            nameof(AlignedTokenAlignment), typeof(HorizontalAlignment), typeof(TokenDisplay),
+            new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the AlignedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenBackgroundProperty = DependencyProperty.Register(
+            nameof(AlignedTokenBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Transparent));
+
+        /// <summary>
+        /// Identifies the AlignedTokenColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenColorProperty =
+            DependencyProperty.Register(nameof(AlignedTokenColor), typeof(Brush), typeof(TokenDisplay), 
+                new PropertyMetadata(Brushes.Black));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFlowDirection dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFlowDirectionProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFlowDirection), typeof(FlowDirection), typeof(TokenDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFontFamilyProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFontFamily), typeof(FontFamily), typeof(TokenDisplay),
+            new PropertyMetadata(new FontFamily(
+                new Uri(
+                    "pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"),
+                ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFontSizeProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFontSize), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(16d));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFontStyleProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFontStyle), typeof(FontStyle), typeof(TokenDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFontWeightProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFontWeight), typeof(FontWeight), typeof(TokenDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the AlignedTokenMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenMarginProperty = DependencyProperty.Register(
+            nameof(AlignedTokenMargin), typeof(Thickness), typeof(TokenDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the AlignedTokenPadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenPaddingProperty = DependencyProperty.Register(
+            nameof(AlignedTokenPadding), typeof(Thickness), typeof(TokenDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the AlignedTokenText dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenTextProperty =
+            DependencyProperty.Register(nameof(AlignedTokenText), typeof(string), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenVerticalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenVerticalSpacingProperty = DependencyProperty.Register(
+            nameof(AlignedTokenVerticalSpacing), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(10d, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the AlignedTokenVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenVisibilityProperty = DependencyProperty.Register(
+            nameof(AlignedTokenVisibility), typeof(Visibility), typeof(TokenDisplay),
+            new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// Identifies the CompositeIndicatorComputedColor dependency property.
@@ -127,6 +219,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty SelectedTokenBackgroundProperty = DependencyProperty.Register(
             nameof(SelectedTokenBackground), typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.LightSteelBlue));
+
+        /// <summary>
+        /// Identifies the ShowAlignedText dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowAlignedTokenProperty = DependencyProperty.Register(
+            nameof(ShowAlignedToken), typeof(bool), typeof(TokenDisplay),
+            new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the ShowNoteIndicator dependency property.
@@ -323,6 +422,60 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion Static DependencyProperties
 
         #region Static RoutedEvents
+
+        /// <summary>
+        /// Identifies the TokenClickedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenClickedEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenDoubleClickedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenDoubleClickedEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenLeftButtonDownEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenLeftButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenLeftButtonUpEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenLeftButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenRightButtonDownEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenRightButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenRightButtonUpEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenRightButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenMouseEnterEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenMouseEnterEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenMouseLeaveEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenMouseWheelEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenMouseWheelEvent = EventManager.RegisterRoutedEvent
+            ("AlignedTokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -538,6 +691,87 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion Static RoutedEvents
 
         #region Public Events
+
+        /// <summary>
+        /// Occurs when an alignment is clicked.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenClicked
+        {
+            add => AddHandler(AlignedTokenClickedEvent, value);
+            remove => RemoveHandler(AlignedTokenClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an alignment is clicked two or more times.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenDoubleClicked
+        {
+            add => AddHandler(AlignedTokenDoubleClickedEvent, value);
+            remove => RemoveHandler(AlignedTokenDoubleClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is pressed while the mouse pointer is over an alignment.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenLeftButtonDown
+        {
+            add => AddHandler(AlignedTokenLeftButtonDownEvent, value);
+            remove => RemoveHandler(AlignedTokenLeftButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is released while the mouse pointer is over an alignment.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenLeftButtonUp
+        {
+            add => AddHandler(AlignedTokenLeftButtonUpEvent, value);
+            remove => RemoveHandler(AlignedTokenLeftButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is pressed while the mouse pointer is over an alignment.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenRightButtonDown
+        {
+            add => AddHandler(AlignedTokenRightButtonDownEvent, value);
+            remove => RemoveHandler(AlignedTokenRightButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is released while the mouse pointer is over an alignment.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenRightButtonUp
+        {
+            add => AddHandler(AlignedTokenRightButtonUpEvent, value);
+            remove => RemoveHandler(AlignedTokenRightButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of an alignment.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenMouseEnter
+        {
+            add => AddHandler(AlignedTokenMouseEnterEvent, value);
+            remove => RemoveHandler(AlignedTokenMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer leaves the bounds of an alignment.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenMouseLeave
+        {
+            add => AddHandler(AlignedTokenMouseLeaveEvent, value);
+            remove => RemoveHandler(AlignedTokenMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user rotates the mouse wheel while the mouse pointer is over an alignment.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenMouseWheel
+        {
+            add => AddHandler(AlignedTokenMouseWheelEvent, value);
+            remove => RemoveHandler(AlignedTokenMouseWheelEvent, value);
+        }
 
         /// <summary>
         /// Occurs when an individual token is clicked.
@@ -999,6 +1233,51 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenMouseWheelEvent, e);
         }
 
+        private void OnAlignedTokenClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenClickedEvent, e);
+        }
+
+        private void OnAlignedTokenDoubleClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenDoubleClickedEvent, e);
+        }
+
+        private void OnAlignedTokenLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenLeftButtonDownEvent, e);
+        }
+
+        private void OnAlignedTokenLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenRightButtonUpEvent, e);
+        }
+
+        private void OnAlignedTokenRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenRightButtonDownEvent, e);
+        }
+
+        private void OnAlignedTokenRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenRightButtonUpEvent, e);
+        }
+
+        private void OnAlignedTokenMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenMouseEnterEvent, e);
+        }
+
+        private void OnAlignedTokenMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenMouseLeaveEvent, e);
+        }
+
+        private void OnAlignedTokenMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenMouseWheelEvent, e);
+        }
+
         private void OnToolTipOpening(object sender, ToolTipEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(ExtendedProperties))
@@ -1191,6 +1470,133 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private TokenDisplayViewModelCollection AllSelectedTokens { get; set; }
 
         /// <summary>
+        /// Gets or sets the <see cref="HorizontalAlignment"/> for the aligned text.
+        /// </summary>
+        public HorizontalAlignment AlignedTokenAlignment
+        {
+            get => (HorizontalAlignment)GetValue(AlignedTokenAlignmentProperty);
+            set => SetValue(AlignedTokenAlignmentProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the background of the aligned text.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token's selection status.
+        /// </remarks>
+        public Brush AlignedTokenBackground
+        {
+            get => (Brush)GetValue(AlignedTokenBackgroundProperty);
+            private set => SetValue(AlignedTokenBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> to use for displaying the aligned text.
+        /// </summary>
+        public Brush AlignedTokenColor
+        {
+            get => (Brush)GetValue(AlignedTokenColorProperty);
+            set => SetValue(AlignedTokenColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the aligned text.
+        /// </summary>
+        public FlowDirection AlignedTokenFlowDirection
+        {
+            get => (FlowDirection)GetValue(AlignedTokenFlowDirectionProperty);
+            set => SetValue(AlignedTokenFlowDirectionProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the aligned text.
+        /// </summary>
+        public FontFamily AlignedTokenFontFamily
+        {
+            get => (FontFamily)GetValue(AlignedTokenFontFamilyProperty);
+            set => SetValue(AlignedTokenFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the aligned text.
+        /// </summary>
+        public double AlignedTokenFontSize
+        {
+            get => (double)GetValue(AlignedTokenFontSizeProperty);
+            set => SetValue(AlignedTokenFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for the aligned text.
+        /// </summary>
+        public FontStyle AlignedTokenFontStyle
+        {
+            get => (FontStyle)GetValue(AlignedTokenFontStyleProperty);
+            set => SetValue(AlignedTokenFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for the aligned text.
+        /// </summary>
+        public FontWeight AlignedTokenFontWeight
+        {
+            get => (FontWeight)GetValue(AlignedTokenFontWeightProperty);
+            set => SetValue(AlignedTokenFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the horizontal spacing between the aligned text.
+        /// </summary>
+        /// <remarks>
+        /// This property should not be set explicitly; it is computed from the translation horizontal and vertical spacing.
+        /// </remarks>
+        public Thickness AlignedTokenMargin
+        {
+            get => (Thickness)GetValue(AlignedTokenMarginProperty);
+            private set => SetValue(AlignedTokenMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding for the aligned text.
+        /// </summary>
+        public Thickness AlignedTokenPadding
+        {
+            get => (Thickness)GetValue(AlignedTokenPaddingProperty);
+            set => SetValue(AlignedTokenPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing below the aligned token.
+        /// </summary>
+        public double AlignedTokenVerticalSpacing
+        {
+            get => (double)GetValue(AlignedTokenVerticalSpacingProperty);
+            set => SetValue(AlignedTokenVerticalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Visibility"/> of the aligned.
+        /// </summary>
+        /// <remarks>This should not be set explicitly; it is computed based on the <see cref="ShowAlignedToken"/> value.</remarks>
+        public Visibility AlignedTokenVisibility
+        {
+            get => (Visibility)GetValue(AlignedTokenVisibilityProperty);
+            private set => SetValue(AlignedTokenVisibilityProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the aligned token text to be displayed.
+        /// </summary>
+        /// <remarks>
+        /// This should normally not be called directly; it is computed based on the display properties.
+        /// </remarks>
+        public string AlignedTokenText
+        {
+            get => (string)GetValue(AlignedTokenTextProperty);
+            private set => SetValue(AlignedTokenTextProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the composite token indicator.
         /// </summary>
         /// <remarks>
@@ -1349,6 +1755,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the whether to show the aligned text.
+        /// </summary>
+        public bool ShowAlignedToken
+        {
+            get => (bool)GetValue(ShowAlignedTokenProperty);
+            set => SetValue(ShowAlignedTokenProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the whether to show the note indicator.
         /// </summary>
         public bool ShowNoteIndicator
@@ -1358,7 +1773,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the whether to showTranslation the translation.
+        /// Gets or sets the whether to show the translation.
         /// </summary>
         public bool ShowTranslation
         {
@@ -1635,6 +2050,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             var tokenRightMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingAfter.Length * HorizontalSpacing : 0;
             var translationLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
             var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
+            var alignedTokenLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
+            var alignedTokenRightMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
 
             CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, 1);
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeTokenMember ? Visibility.Visible : Visibility.Hidden;
@@ -1666,6 +2083,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 Translation.OriginatedFromValues.FromOther => Brushes.Blue,
                 _ => Brushes.Black
             };
+
+            AlignedTokenMargin = new Thickness(alignedTokenLeftMargin, 0, alignedTokenRightMargin, AlignedTokenVerticalSpacing);
+            AlignedTokenVisibility = (ShowAlignedToken && TokenDisplayViewModel.AlignedToken != null) ? Visibility.Visible : Visibility.Collapsed;
+            AlignedTokenBackground = TokenDisplayViewModel.IsAlignmentSelected ? SelectedTokenBackground : Brushes.Transparent;
+            AlignedTokenText = TokenDisplayViewModel.AlignedTokenSurfaceText;
         }
 
         public TokenDisplay()

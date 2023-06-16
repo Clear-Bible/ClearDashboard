@@ -194,7 +194,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public Guid Id { get; set; } = Guid.NewGuid();
 
-      /// <summary>
+        /// <summary>
         /// Get the <see cref="Translation"/> for a specified token.
         /// </summary>
         /// <remarks>
@@ -204,6 +204,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <param name="compositeToken">An optional <see cref="CompositeToken"/> that <paramref name="token"/> is a constituent of.</param>
         /// <returns>A <see cref="Translation"/> for the token if a valid <see cref="TranslationSet"/> is known; null otherwise.</returns>
         protected virtual Translation? GetTranslationForToken(Token token, CompositeToken? compositeToken)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Get the aligned token for a specified token.
+        /// </summary>
+        /// <remarks>
+        /// This will be null unless called from an <see cref="BulkAlignmentDisplayViewModel"/> instance.
+        /// </remarks>
+        /// <param name="token">The <see cref="Token"/> for which to obtain the aligned token.</param>
+        /// <param name="compositeToken">An optional <see cref="CompositeToken"/> that <paramref name="token"/> is a constituent of.</param>
+        /// <returns>A <see cref="Token"/> for the aligned token if known; null otherwise.</returns>
+        protected virtual Token? GetAlignedToken(Token token, CompositeToken? compositeToken)
         {
             return null;
         }
@@ -237,6 +251,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     PaddingBefore = paddingBefore,
                     PaddingAfter = paddingAfter,
                     Translation = GetTranslationForToken(token, compositeToken),
+                    AlignedToken = GetAlignedToken(token, compositeToken),
                     NoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
                     IsSource = isSource,
                 });
