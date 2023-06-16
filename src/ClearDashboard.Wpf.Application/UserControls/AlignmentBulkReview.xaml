@@ -9,20 +9,26 @@
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
              xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
+             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:translation="clr-namespace:ClearDashboard.DAL.Alignment.Translation;assembly=ClearDashboard.DAL.Alignment"
+             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:AlignmentTypesEnumToBooleanConverter x:Key="AlignmentTypesEnumToBooleanConverter"/>
+    </UserControl.Resources>
 
-	<Grid  VerticalAlignment="Top">
+    <Grid  VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".4*" ></ColumnDefinition>
-			<ColumnDefinition Width=".6*" ></ColumnDefinition>
-			<ColumnDefinition Width="*" ></ColumnDefinition>
-		</Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".6*" ></ColumnDefinition>
+            <ColumnDefinition Width="*" ></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         <materialDesign:Card Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Height="40" Margin="5">
             <Grid >
                 <Grid.ColumnDefinitions>
@@ -33,7 +39,7 @@
                 <ListBox Grid.Column="0" 
                          Style="{StaticResource MaterialDesignToolToggleListBox}" 
                          Margin="4"  SelectedIndex="0" SelectionMode="Single" 
-                         cm:Message.Attach="[Event SelectionChanged] = [Action OnByTextTypeChanged($eventArgs)]"
+                         cm:Message.Attach="[Event SelectionChanged] = [Action OnCountByTextTypeChanged($eventArgs)]"
                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_CountByTrainingText}" Tag="{x:Static a:BulkAlignmentReviewTags.CountsByTrainingText}"></ListBoxItem>
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_CountBySurfaceText}" Tag="{x:Static a:BulkAlignmentReviewTags.CountBySurfaceText}"></ListBoxItem>
@@ -46,11 +52,41 @@
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Source}" Tag="{x:Static a:BulkAlignmentReviewTags.Source}"></ListBoxItem>
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Target}" Tag="{x:Static a:BulkAlignmentReviewTags.Target}"></ListBoxItem>
                 </ListBox>
-                <controls:MultipleSelectionListBox Grid.Column="2"  x:Name="AlignedWordsOptionListBox"
+                <!--<controls:MultipleSelectionListBox Grid.Column="2"  x:Name="AlignedWordsOptionListBox"
                                                    Margin="4" Style="{StaticResource MaterialDesignToolToggleListBox}"
                                                    SelectionMode="Extended"
-                                                   ItemsSource="{Binding AlignedWordsOptions}"
-                                                   IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"/>
+                                                   cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignedWordOptionsChanged($eventArgs)]"
+                                                   IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">-->
+                <ListBox Grid.Column="2"  x:Name="AlignedWordsOptionListBox"
+                                                       Margin="4" Style="{StaticResource MaterialDesignToolToggleListBox}"
+                                                       SelectionMode="Extended"
+                                                       cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignedWordOptionsChanged($eventArgs)]"
+                                                       IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                    <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Machine}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.Machine}" 
+                                 IsSelected="{Binding 
+                                 Path=AlignmentTypes,
+                                 Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
+                                 ConverterParameter={x:Static translation:AlignmentTypes.FromAlignmentModel_Unverified_Not_Otherwise_Included}, Mode=TwoWay}"></ListBoxItem>
+                    <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_NeedsReview}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.NeedsReview}"
+                                 IsSelected="{Binding 
+                                 Path=AlignmentTypes,
+                                 Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
+                                 ConverterParameter={x:Static translation:AlignmentTypes.Assigned_Unverified}, Mode=TwoWay}"></ListBoxItem>
+                    <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Disapprove}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.Disapproved}"
+                                 IsSelected="{Binding 
+                                 Path=AlignmentTypes,
+                                 Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
+                                 ConverterParameter={x:Static translation:AlignmentTypes.Assigned_Invalid}, Mode=TwoWay}"></ListBoxItem>
+                    <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Approve}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.Approved}"
+                                 IsSelected="{Binding 
+                                 Path=AlignmentTypes,
+                                 Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
+                                 ConverterParameter={x:Static translation:AlignmentTypes.Assigned_Verified}, Mode=TwoWay}"></ListBoxItem>
+                </ListBox>
             </Grid>
         </materialDesign:Card>
 
@@ -60,26 +96,26 @@
                             Style="{StaticResource MaterialDesignToolToggleListBox}"
                             Margin="4"
                             IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
-                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_ApproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.ApproveSelected}"></ListBoxItem>
-                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_DisapproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.DisapproveSelected}"></ListBoxItem>
-                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_MarkSelectedAsNeedsReview}" Tag="{x:Static a:BulkAlignmentReviewTags.MarkSelectedAsNeedsReview}"></ListBoxItem>
-            </ListBox>
+                    <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_ApproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.ApproveSelected}"></ListBoxItem>
+                    <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_DisapproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.DisapproveSelected}"></ListBoxItem>
+                    <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_MarkSelectedAsNeedsReview}" Tag="{x:Static a:BulkAlignmentReviewTags.MarkSelectedAsNeedsReview}"></ListBoxItem>
+                </ListBox>
             </Grid>
         </materialDesign:Card>
-		<materialDesign:Card Grid.Row="1" Grid.Column="0" Height="300" Margin="5">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" ></RowDefinition>
-					<RowDefinition Height="*"></RowDefinition>
-				</Grid.RowDefinitions>
-				<Grid Grid.Row="0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"></RowDefinition>
-						<RowDefinition Height="*"></RowDefinition>
-					</Grid.RowDefinitions>
-					<Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_PivotedWords}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
-
-				</Grid>
+        <materialDesign:Card Grid.Row="1" Grid.Column="0" Height="300" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" ></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="{Binding PivotWordsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasPivotWords, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
+                    <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_PivotedWords}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
+                </Grid>
                 <DataGrid Grid.Row="1" Name="PivotedWordsDataGrid"
                           ItemsSource="{Binding PivotWords}"
                           AutoGenerateColumns="False"
@@ -92,32 +128,30 @@
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
                           IsReadOnly="True"
-                          cm:Message.Attach="[Event SelectionChanged] = [Action OnPivotWordRowSelectionChanged($eventArgs)] ">
-					<DataGrid.Columns>
-						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="100"/>
-						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Part}"  Binding="{Binding Word}"  Width="100" />
-					</DataGrid.Columns>
-				</DataGrid>
-			</Grid>
-		</materialDesign:Card>
-		<materialDesign:Card Grid.Row="1" Grid.Column="1" Height="300" Margin="5">
+                          cm:Message.Attach="[Event SelectionChanged] = [Action OnPivotWordRowSelectionChanged($eventArgs)]"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="100"/>
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Part}"  Binding="{Binding Word}"  Width="100" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+        <materialDesign:Card Grid.Row="1" Grid.Column="1" Height="300" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" ></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="14"></RowDefinition>
-						<RowDefinition Height="*"></RowDefinition>
-					</Grid.RowDefinitions>
-
-					<Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_AlignedWords}" FontSize="10" Margin="0, 2, 4 ,0" Padding="0" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Right" ></Label>
-					
-
-
-				</Grid>
-				<DataGrid Grid.Row="1" Name="SourceTargetCountDataGrid" 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="14"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="{Binding AlignedWordsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasAlignedWords, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
+                    <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_AlignedWords}" FontSize="10" Margin="0, 2, 4 ,0" Padding="0" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Right" ></Label>
+                </Grid>
+                <DataGrid Grid.Row="1" Name="SourceTargetCountDataGrid" 
                           ItemsSource="{Binding AlignedWords}" 
                           AutoGenerateColumns="False" 
                           Margin="4"
@@ -128,15 +162,17 @@
                           SelectionUnit="FullRow"
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
-                          IsReadOnly="True">
-					<DataGrid.Columns>
+                          cm:Message.Attach="[Event SelectionChanged] = [Action OnSourceTargetCountRowSelectionChanged($eventArgs)]"
+                          IsReadOnly="True"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                    <DataGrid.Columns>
                         <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="100"/>
                         <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourcePart}"  Binding="{Binding Source}" Width="200"/>
                         <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_TargetPart}" Binding="{Binding Target}" Width="200" />
-					</DataGrid.Columns>
-				</DataGrid>
-			</Grid>
-		</materialDesign:Card>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
         <materialDesign:Card Grid.Column="2" Grid.Row="1" Height="300" Margin="5" >
             <Grid>
                 <Grid.RowDefinitions>
@@ -148,12 +184,12 @@
                         <RowDefinition Height="14"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                 
-					<Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_Alignments}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
-				</Grid>
-				<DataGrid Grid.Row="1" 
+                    <Label Grid.Row="0" Content="{Binding BulkAlignmentsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
+                    <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_Alignments}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
+                </Grid>
+                <DataGrid Grid.Row="1" 
                           Name="ApprovalDataGrid" 
-                          ItemsSource="{Binding PivotedWords}" 
+                          ItemsSource="{Binding BulkAlignments}" 
                           AutoGenerateColumns="False" 
                           Margin="4"
                           VirtualizingPanel.IsVirtualizingWhenGrouping="True"
@@ -163,32 +199,64 @@
                           SelectionUnit="FullRow"
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
-                          IsReadOnly="True">
-					<DataGrid.Columns>
-						<DataGridTemplateColumn>
-							<DataGridTemplateColumn.HeaderTemplate>
-								<DataTemplate>
-									<CheckBox  />
-									<!--IsChecked="{Binding
+                          IsReadOnly="True"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                    <!--<DataGrid.Style>
+                        <Style TargetType="DataGrid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="DataGrid">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    --><!--<DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter"  Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>--><!--
+                                                    <TextBlock Text="No data..." Grid.Row="1" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Style>-->
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <CheckBox cm:Message.Attach="[Event Checked] = [Action OnToggleAlignmentsChecked($source)];[Event Unchecked] = [Action OnToggleAlignmentsChecked($source)]" />
+                                    <!--IsChecked="{Binding
                                             RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},
                                             Path=DataContext.AllItemsAreChecked}"-->
-								</DataTemplate>
-							</DataGridTemplateColumn.HeaderTemplate>
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<!--DataType="{x:Type local:SomeType}"-->
-									<CheckBox Focusable="False" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <!--DataType="{x:Type local:SomeType}"-->
+                                    <CheckBox Focusable="False" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Type}"  />
-						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourceRef}"  />
-						<DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}"  />
-					</DataGrid.Columns>
-				</DataGrid>
-			</Grid>
-		</materialDesign:Card>
-	</Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Type}"  Binding="{Binding Type}" Width="100"/>
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourceRef}" Binding="{Binding SourceRef}" Width="100"/>
+                        <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                   <!--<userControls:VerseDisplay 
+                                       
+                                       
+                                       />-->
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
 
 </UserControl>
