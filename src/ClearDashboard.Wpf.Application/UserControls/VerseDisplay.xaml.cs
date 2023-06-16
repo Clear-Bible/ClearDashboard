@@ -19,230 +19,344 @@ using ClearApplicationFoundation.Framework.Input;
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
+    /// A control for displaying a verse, as represented by <see cref="VerseDisplayViewModel"/> instance containing
+    /// an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
     /// </summary>
     public partial class VerseDisplay : INotifyPropertyChanged,
         IHandle<SelectionUpdatedMessage>,
         IHandle<TokensUpdatedMessage>
     {
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         #region Static RoutedEvents
+        /// <summary>
+        /// Identifies the AlignedTokenClickedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenClickedEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenDoubleClickedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenDoubleClickedEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenDoubleClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenLeftButtonDownEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenLeftButtonDownEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenLeftButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenLeftButtonUpEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenLeftButtonUpEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenLeftButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenRightButtonDownEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenRightButtonDownEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenRightButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenRightButtonUpEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenRightButtonUpEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenRightButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenMouseEnterEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenMouseEnterEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenMouseLeaveEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the AlignedTokenMouseWheelEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AlignedTokenMouseWheelEvent = EventManager.RegisterRoutedEvent
+            (nameof(AlignedTokenMouseWheel), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenClickedEvent = EventManager.RegisterRoutedEvent
-            ("TokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenDoubleClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenDoubleClickedEvent = EventManager.RegisterRoutedEvent
-            ("TokenDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenDoubleClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TokenLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenLeftButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TokenLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenLeftButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TokenRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenRightButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TokenRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenRightButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenMouseWheel), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenJoinEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenJoinEvent = EventManager.RegisterRoutedEvent
-            ("TokenJoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenJoin), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenJoinEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenJoinLanguagePairEvent = EventManager.RegisterRoutedEvent
-            ("TokenJoinLanguagePair", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenJoinLanguagePair), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenUnjoinEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
-            ("TokenUnjoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenUnjoin), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the TokenClickedEvent routed event.
+        /// Identifies the TranslationClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationClickedEvent = EventManager.RegisterRoutedEvent
-            ("TranslationClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslationDoubleClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationDoubleClickedEvent = EventManager.RegisterRoutedEvent
-            ("TranslationDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationDoubleClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslationLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TranslationLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationLeftButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslationLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TranslationLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationLeftButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslationRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("TranslationRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationRightButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslationRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("TranslationRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationRightButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslationMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslationMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslationMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("TranslationMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslationMouseWheel), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteIndicatorLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteIndicatorLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(NoteLeftButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteIndicatorLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteIndicatorLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(NoteLeftButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteIndicatorRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteIndicatorRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(NoteRightButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteIndicatorRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteIndicatorRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(NoteRightButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteIndicatorMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("NoteIndicatorMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(NoteMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteIndicatorMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("NoteIndicatorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(NoteMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteIndicatorMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("NoteIndicatorMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(NoteMouseWheel), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteCreateEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteCreateEvent = EventManager.RegisterRoutedEvent
-            ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(NoteCreate), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the FilterPinsEvent routed event.
         /// </summary>
         public static readonly RoutedEvent FilterPinsEvent = EventManager.RegisterRoutedEvent
-            ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(FilterPins), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the FilterPinsByBiblicalTermsEvent routed event.
         /// </summary>
         public static readonly RoutedEvent FilterPinsByBiblicalTermsEvent = EventManager.RegisterRoutedEvent
-            ("FilterPinsByBiblicalTerms", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(FilterPinsByBiblicalTerms), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the CopyEvent routed event.
+        /// Identifies the Copy routed event.
         /// </summary>
         public static readonly RoutedEvent CopyEvent = EventManager.RegisterRoutedEvent
-            ("Copy", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(Copy), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenCreateAlignment routed event.
         /// </summary>
         public static readonly RoutedEvent TokenCreateAlignmentEvent = EventManager.RegisterRoutedEvent
-            ("TokenCreateAlignment", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenCreateAlignment), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenDeleteAlignment routed event.
         /// </summary>
         public static readonly RoutedEvent TokenDeleteAlignmentEvent = EventManager.RegisterRoutedEvent
-            ("TokenDeleteAlignment", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TokenDeleteAlignment), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TranslateQuickEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslateQuickEvent = EventManager.RegisterRoutedEvent
-            ("TranslateQuick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            (nameof(TranslateQuick), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
         #endregion
-
         #region Static DependencyProperties
+
+        /// <summary>
+        /// Identifies the AlignmentAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenAlignmentProperty = DependencyProperty.Register(
+            nameof(AlignedTokenAlignment), typeof(HorizontalAlignment), typeof(VerseDisplay),
+            new PropertyMetadata(HorizontalAlignment.Center));
+
+        /// <summary>
+        /// Identifies the AlignedTokenColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenColorProperty = DependencyProperty.Register(nameof(AlignedTokenColor), typeof(Brush), typeof(VerseDisplay),
+                new PropertyMetadata(Brushes.Black));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFlowDirection dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFlowDirectionProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFlowDirection), typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFontFamilyProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFontFamily), typeof(FontFamily), typeof(VerseDisplay),
+            new PropertyMetadata(new FontFamily(
+                new Uri(
+                    "pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"),
+                ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFontSizeProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFontSize), typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(16d));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFontStyleProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFontStyle), typeof(FontStyle), typeof(VerseDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the AlignedTokenFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenFontWeightProperty = DependencyProperty.Register(
+            nameof(AlignedTokenFontWeight), typeof(FontWeight), typeof(VerseDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the AlignedTokenPadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenPaddingProperty = DependencyProperty.Register(
+            nameof(AlignedTokenPadding), typeof(Thickness), typeof(VerseDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the AlignedTokenVerticalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlignedTokenVerticalSpacingProperty = DependencyProperty.Register(
+            nameof(AlignedTokenVerticalSpacing), typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(10d));
 
         /// <summary>
         /// Identifies the HighlightedTokenBackground dependency property.
@@ -278,6 +392,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty SelectedTokenBackgroundProperty = DependencyProperty.Register(nameof(SelectedTokenBackground), typeof(Brush), typeof(VerseDisplay),
             new PropertyMetadata(Brushes.LightSteelBlue));
+
+        /// <summary>
+        /// Identifies the ShowAlignedTokens dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowAlignedTokensProperty = DependencyProperty.Register(nameof(ShowAlignedTokens), typeof(bool), typeof(VerseDisplay),
+            new PropertyMetadata(true));
 
         /// <summary>
         /// Identifies the ShowNoteIndicators dependency property.
@@ -467,9 +587,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty WrapProperty = DependencyProperty.Register(nameof(Wrap), typeof(bool), typeof(VerseDisplay),
             new PropertyMetadata(true, OnWrapChanged));
 
- 
+
         #endregion Static DependencyProperties
         #region Private event handlers
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         /// <summary>
         /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="SourceItemsPanelTemplate"/>.
@@ -595,6 +720,50 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             OnPropertyChanged(nameof(SourceTokens));
             await Task.CompletedTask;
+        }
+
+        private void OnAlignedTokenClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenClickedEvent, e);
+        }
+
+        private void OnAlignedTokenDoubleClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenDoubleClickedEvent, e);
+        }
+
+        private void OnAlignedTokenLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenLeftButtonDownEvent, e);
+        }
+
+        private void OnAlignedTokenLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenRightButtonUpEvent, e);
+        }
+        private void OnAlignedTokenRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenRightButtonDownEvent, e);
+        }
+
+        private void OnAlignedTokenRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenRightButtonUpEvent, e);
+        }
+
+        private void OnAlignedTokenMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenMouseEnterEvent, e);
+        }
+
+        private void OnAlignedTokenMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenMouseLeaveEvent, e);
+        }
+
+        private void OnAlignedTokenMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(AlignedTokenMouseWheelEvent, e);
         }
 
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
@@ -816,6 +985,87 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Public events
 
         // ReSharper disable UnusedMember.Global
+
+        /// <summary>
+        /// Occurs when an aligned token is clicked.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenClicked
+        {
+            add => AddHandler(AlignedTokenClickedEvent, value);
+            remove => RemoveHandler(AlignedTokenClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an aligned token is clicked two or more times.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenDoubleClicked
+        {
+            add => AddHandler(AlignedTokenDoubleClickedEvent, value);
+            remove => RemoveHandler(AlignedTokenDoubleClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is pressed while the mouse pointer is over an aligned token.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenLeftButtonDown
+        {
+            add => AddHandler(AlignedTokenLeftButtonDownEvent, value);
+            remove => RemoveHandler(AlignedTokenLeftButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is released while the mouse pointer is over an aligned token.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenLeftButtonUp
+        {
+            add => AddHandler(AlignedTokenLeftButtonUpEvent, value);
+            remove => RemoveHandler(AlignedTokenLeftButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is pressed while the mouse pointer is over an aligned token.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenRightButtonDown
+        {
+            add => AddHandler(AlignedTokenRightButtonDownEvent, value);
+            remove => RemoveHandler(AlignedTokenRightButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is released while the mouse pointer is over an aligned token.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenRightButtonUp
+        {
+            add => AddHandler(AlignedTokenRightButtonUpEvent, value);
+            remove => RemoveHandler(AlignedTokenRightButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of an aligned token.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenMouseEnter
+        {
+            add => AddHandler(AlignedTokenMouseEnterEvent, value);
+            remove => RemoveHandler(AlignedTokenMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer leaves the bounds of an aligned token.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenMouseLeave
+        {
+            add => AddHandler(AlignedTokenMouseLeaveEvent, value);
+            remove => RemoveHandler(AlignedTokenMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user rotates the mouse wheel while the mouse pointer is over an aligned token.
+        /// </summary>
+        public event RoutedEventHandler AlignedTokenMouseWheel
+        {
+            add => AddHandler(AlignedTokenMouseWheelEvent, value);
+            remove => RemoveHandler(AlignedTokenMouseWheelEvent, value);
+        }
 
         /// <summary>
         /// Occurs when a property is changed.
@@ -1145,7 +1395,90 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public TokenDisplayViewModelCollection AllSelectedTokens { get; set; } = new();
 
+        /// <summary>
+        /// Gets or sets the <see cref="HorizontalAlignment"/> for the aligned text.
+        /// </summary>
+        public HorizontalAlignment AlignedTokenAlignment
+        {
+            get => (HorizontalAlignment)GetValue(AlignedTokenAlignmentProperty);
+            set => SetValue(AlignedTokenAlignmentProperty, value);
+        }
 
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> to use for displaying the aligned text.
+        /// </summary>
+        public Brush AlignedTokenColor
+        {
+            get => (Brush)GetValue(AlignedTokenColorProperty);
+            set => SetValue(AlignedTokenColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the aligned text.
+        /// </summary>
+        public FlowDirection AlignedTokenFlowDirection
+        {
+            get => (FlowDirection)GetValue(AlignedTokenFlowDirectionProperty);
+            set => SetValue(AlignedTokenFlowDirectionProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the aligned text.
+        /// </summary>
+        public FontFamily AlignedTokenFontFamily
+        {
+            get => (FontFamily)GetValue(AlignedTokenFontFamilyProperty);
+            set => SetValue(AlignedTokenFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the aligned text.
+        /// </summary>
+        public double AlignedTokenFontSize
+        {
+            get => (double)GetValue(AlignedTokenFontSizeProperty);
+            set => SetValue(AlignedTokenFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for the aligned text.
+        /// </summary>
+        public FontStyle AlignedTokenFontStyle
+        {
+            get => (FontStyle)GetValue(AlignedTokenFontStyleProperty);
+            set => SetValue(AlignedTokenFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for the aligned text.
+        /// </summary>
+        public FontWeight AlignedTokenFontWeight
+        {
+            get => (FontWeight)GetValue(AlignedTokenFontWeightProperty);
+            set => SetValue(AlignedTokenFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding for the aligned text.
+        /// </summary>
+        public Thickness AlignedTokenPadding
+        {
+            get => (Thickness)GetValue(AlignedTokenPaddingProperty);
+            set => SetValue(AlignedTokenPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical spacing below the aligned token.
+        /// </summary>
+        public double AlignedTokenVerticalSpacing
+        {
+            get => (double)GetValue(AlignedTokenVerticalSpacingProperty);
+            set => SetValue(AlignedTokenVerticalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IEventAggregator"/> that this control instance can use to listen for events.
+        /// </summary>
         public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
@@ -1206,6 +1539,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Brush)GetValue(SelectedTokenBackgroundProperty);
             set => SetValue(SelectedTokenBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets whether to display aligned tokens.
+        /// </summary>
+        public bool ShowAlignedTokens
+        {
+            get => (bool)GetValue(ShowAlignedTokensProperty);
+            set => SetValue(ShowAlignedTokensProperty, value);
         }
 
         /// <summary>
