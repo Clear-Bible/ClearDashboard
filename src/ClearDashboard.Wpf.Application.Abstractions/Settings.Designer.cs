@@ -34,5 +34,17 @@ namespace ClearDashboard.Wpf.Application {
                 this["GitRootUrl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://mysqluser.cleardashboard.org")]
+        public string MySqlRootUrl {
+            get {
+                return ((string)(this["MySqlRootUrl"]));
+            }
+            set {
+                this["MySqlRootUrl"] = value;
+            }
+        }
     }
 }

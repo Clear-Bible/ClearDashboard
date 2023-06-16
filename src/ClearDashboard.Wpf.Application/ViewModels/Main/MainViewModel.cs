@@ -559,6 +559,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         title = windowsDockable.Title;
                         enhancedViewModel.EnhancedViewLayout.Title = title;
+                        enhancedViewModel.EnhancedViewLayout.BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV;
                     }
 
                     enhancedViewLayouts.Add(enhancedViewModel.EnhancedViewLayout);
@@ -757,11 +758,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
                         AddNewEnhancedViewTab(enhancedViewLayoutDocument);
-
-
+                        await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
+                    }
+                    else
+                    {
+                        await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
+                        // first one - reset the title from the default
+                        enhancedViewModel.DisplayName = enhancedViewLayout.Title;
+                        //if (enhancedViewLayout.ParatextSync)
+                        //{
+                        //    // paratext sync is enabled so use whatever the current verse in paratext is
+                        //    enhancedViewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                        //}
                     }
 
-                    await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
                     await Task.Delay(100, cancellationToken);
                 }
 

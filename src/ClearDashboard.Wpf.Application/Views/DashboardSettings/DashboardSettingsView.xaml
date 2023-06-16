@@ -233,8 +233,8 @@
                             Margin="5"
                             materialDesign:ColorZoneAssist.Mode="PrimaryMid"
                             Header="Restore Collaboration User"
-                            Visibility="{Binding HideExistingCollabUser}"
-                            Style="{DynamicResource MaterialDesignGroupBox}">
+                            Style="{DynamicResource MaterialDesignGroupBox}"
+                            Visibility="{Binding HideExistingCollabUser}">
                             <StackPanel Orientation="Vertical">
                                 <!--  Email  -->
                                 <TextBox
@@ -293,8 +293,8 @@
                                     <TextBlock
                                         x:Name="EmailMessage"
                                         Height="45"
-                                        VerticalAlignment="Center"
-                                        Margin="20,30,0,0" />
+                                        Margin="20,30,0,0"
+                                        VerticalAlignment="Center" />
                                 </StackPanel>
 
 

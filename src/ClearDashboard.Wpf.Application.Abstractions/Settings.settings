@@ -5,5 +5,8 @@
     <Setting Name="GitRootUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://gitlab.cleardashboard.org/api/v4/</Value>
     </Setting>
+    <Setting Name="MySqlRootUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://mysqluser.cleardashboard.org</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
