@@ -16,6 +16,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.DataAccessLayer.Threading;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
+using ClearDashboard.Wpf.Application.Messages;
 
 // ReSharper disable UnusedMember.Global
 
@@ -39,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         return await Task.WhenAll(source.Select(selector));
     }
 }
-    public class AlignmentEnhancedViewItemViewModel : VerseAwareEnhancedViewItemViewModel
+    public class AlignmentEnhancedViewItemViewModel : VerseAwareEnhancedViewItemViewModel, IHandle<UiLanguageChangedMessage>
     {
         public AlignmentEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager, INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService)
             : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService)
@@ -56,6 +57,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             // TODO:  this should be a user setting.
             _countsByTrainingText = true;
+
+            CreateAlignmentTypesMap();
+
         }
 
 
@@ -213,19 +217,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             {
                                 Alignment = verseContext.alignment,
                                 IsSelected = false,
-                                Type = verseContext.alignment.Verification,
-                                BulkAlignmentDisplayViewModel = await BulkAlignmentDisplayViewModel.CreateAsync(
-                                    LifetimeScope,
-                                    new BulkAlignment
-                                    {
-                                        SourceVerseTokens = verseContext.sourceVerseTokens,
-                                        SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
-                                        TargetVerseTokens = verseContext.targetVerseTokens,
-                                        TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
-                                    },
-                                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl
-                                )
+                                Type = AlignmentTypesMap[verseContext.alignment.ToAlignmentType(AlignmentTypes)],
+                                //BulkAlignmentDisplayViewModel = await BulkAlignmentDisplayViewModel.CreateAsync(
+                                //    LifetimeScope,
+                                //    new BulkAlignment
+                                //    {
+                                //        SourceVerseTokens = verseContext.sourceVerseTokens,
+                                //        SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
+                                //        TargetVerseTokens = verseContext.targetVerseTokens,
+                                //        TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
+                                //    },
+                                //    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
+                                //    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl
+                                //)
                             });
                         BulkAlignments = new BindableCollection<BulkAlignmentVerseRow>(verseRows);
                     }
@@ -287,6 +291,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     ProgressBarVisibility = Visibility.Hidden;
                 }
             });
+        }
+
+        private Dictionary<AlignmentTypes, string> AlignmentTypesMap = new Dictionary<AlignmentTypes, string>();
+
+        public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            CreateAlignmentTypesMap();
+            await Task.CompletedTask;
+        }
+
+        private void CreateAlignmentTypesMap()
+        {
+            AlignmentTypesMap = new Dictionary<AlignmentTypes, string>
+            {
+                { AlignmentTypes.FromAlignmentModel_Unverified_Not_Otherwise_Included, LocalizationService.Get("BulkAlignmentReview_Machine") },
+                { AlignmentTypes.Assigned_Verified, LocalizationService.Get("BulkAlignmentReview_Approved") },
+                { AlignmentTypes.Assigned_Invalid, LocalizationService.Get("BulkAlignmentReview_Disapproved") },
+                { AlignmentTypes.Assigned_Unverified, LocalizationService.Get("BulkAlignmentReview_NeedsApproval") },
+            };
         }
     }
 }
