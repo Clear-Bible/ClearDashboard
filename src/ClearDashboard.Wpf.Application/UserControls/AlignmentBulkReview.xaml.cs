@@ -24,5 +24,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             InitializeComponent();
         }
+
+      
     }
 }

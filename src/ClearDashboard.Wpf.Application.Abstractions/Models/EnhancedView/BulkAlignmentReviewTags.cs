@@ -18,6 +18,13 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
         private IEnumerable<Token> _targetVerseTokens;
         private uint _targetVerseTokensIndex;
 
+        public Alignment? _alignment;
+        public Alignment? Alignment
+        {
+            get => _alignment;
+            set => Set(ref _alignment, value);
+        }
+
 
         public IEnumerable<Token> SourceVerseTokens
         {

@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
@@ -14,9 +13,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Events;
+using Alignment = ClearDashboard.DAL.Alignment.Translation.Alignment;
+using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
+using Token = ClearBible.Engine.Corpora.Token;
+
 
 // ReSharper disable UnusedMember.Global
 
@@ -157,6 +162,71 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords());
         }
 
+        public void OnAlignmentApprovalChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+                var approvalType = (item.Tag as string);
+                _debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
+
+            }
+        }
+
+        private async Task UpdateAlignmentStatuses(string? approvalType)
+        {
+            _ = await Task.Factory.StartNew(async () =>
+            {
+                var taskName = "UpdateAlignmentStatuses";
+                var cancellationToken = new CancellationTokenSource().Token;
+                try
+                {
+                   
+                    FetchingData = true;
+                    ProgressBarVisibility = Visibility.Visible;
+
+                    if (_alignmentSet == null && EnhancedViewItemMetadatum is AlignmentEnhancedViewItemMetadatum)
+                    {
+                        AlignmentSetId = Guid.Parse(((AlignmentEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)
+                            .AlignmentSetId!);
+                        _alignmentSet = await AlignmentSet.Get(new AlignmentSetId(AlignmentSetId), Mediator!);
+                    }
+
+                    var alignmentsToUpdate = BulkAlignments.Where(ba=>ba.IsSelected).Select(ba=>ba.Alignment).ToList();
+                    var alignmentsToSave = new List<Alignment>();
+                    if (alignmentsToUpdate.Any())
+                    {
+                        var verification = DetermineVerification(approvalType);
+                        alignmentsToSave.AddRange(alignmentsToUpdate.Select(alignment => new Alignment(alignment.AlignedTokenPair, verification)));
+                        await _alignmentSet.PutAlignments(alignmentsToSave, CancellationToken.None);
+                    }
+                }
+                finally
+                {
+                    FetchingData = false;
+                    ProgressBarVisibility = Visibility.Hidden;
+                }
+            });
+        }
+
+        private string DetermineVerification(string? approvalType)
+        {
+            switch (approvalType)
+            {
+                case BulkAlignmentReviewTags.ApproveSelected:
+                    return "Verified";
+                case BulkAlignmentReviewTags.DisapproveSelected:
+                    return "Invalid";
+                case BulkAlignmentReviewTags.MarkSelectedAsNeedsReview:
+                default:
+                    return "Unverified";
+            }
+        }
+
+        public void OnTokenClicked(TokenEventArgs e)
+        {
+            var source = e;
+        }
+
 
         public async void OnSourceTargetCountRowSelectionChanged(SelectionChangedEventArgs e)
         {
@@ -212,24 +282,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         ProgressBarVisibility = Visibility.Visible;
                         _verseContexts = await _alignmentSet.GetAlignmentVerseContexts(alignedWord.Source,
                             alignedWord.Target, _countsByTrainingText, AlignmentTypes);
-                        var verseRows = await _verseContexts.SelectAsync(async verseContext =>
+                        var verseRows = await _verseContexts.Take(10).SelectAsync(async verseContext =>
                             new BulkAlignmentVerseRow
                             {
+                                
                                 Alignment = verseContext.alignment,
                                 IsSelected = false,
                                 Type = AlignmentTypesMap[verseContext.alignment.ToAlignmentType(AlignmentTypes)],
-                                //BulkAlignmentDisplayViewModel = await BulkAlignmentDisplayViewModel.CreateAsync(
-                                //    LifetimeScope,
-                                //    new BulkAlignment
-                                //    {
-                                //        SourceVerseTokens = verseContext.sourceVerseTokens,
-                                //        SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
-                                //        TargetVerseTokens = verseContext.targetVerseTokens,
-                                //        TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
-                                //    },
-                                //    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                                //    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl
-                                //)
+                                BulkAlignmentDisplayViewModel = await BulkAlignmentDisplayViewModel.CreateAsync(
+                                    LifetimeScope,
+                                    new BulkAlignment
+                                    {
+                                        Alignment = verseContext.alignment,
+                                        SourceVerseTokens = verseContext.sourceVerseTokens,
+                                        SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
+                                        TargetVerseTokens = verseContext.targetVerseTokens,
+                                        TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
+                                    },
+                                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
+                                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl,
+                                    _alignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
+                                    _alignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.IsRtl
+                                )
                             });
                         BulkAlignments = new BindableCollection<BulkAlignmentVerseRow>(verseRows);
                     }
