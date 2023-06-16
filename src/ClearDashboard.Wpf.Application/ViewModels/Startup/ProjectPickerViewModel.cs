@@ -741,8 +741,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             while (!IsParatextRunning)
             {
-                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning()).ConfigureAwait(false);
                 Thread.Sleep(1000);
+                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning()).ConfigureAwait(false);
             }
         }
 
@@ -964,7 +964,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
             Connected = message.Connected;
-            IsParatextRunning = true;
+
+            if (!Connected)
+            {
+                IsParatextRunning=false;
+                ListenForParatextStart();
+            }
 
             await Task.CompletedTask;
         }
