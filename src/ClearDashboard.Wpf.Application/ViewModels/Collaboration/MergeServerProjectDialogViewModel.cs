@@ -180,6 +180,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             base.OnViewLoaded(view);
         }
 
+
+        protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (_runningTask is not null)
+            {
+                CanCancelAction = false;
+                try
+                {
+                    _cancellationTokenSource.Cancel();
+                    await Task.WhenAny(tasks: new Task[] { _runningTask, Task.Delay(30000) });
+                }
+                finally
+                {
+                    CanCancelAction = true;
+                }
+            }
+
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
         #endregion //Constructor
 
 
