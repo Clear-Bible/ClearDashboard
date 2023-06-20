@@ -180,7 +180,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             base.OnViewLoaded(view);
         }
 
-
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             if (_runningTask is not null)

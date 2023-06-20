@@ -42,21 +42,17 @@ namespace ClearDashboard.Wpf.Application.Extensions
             });
 
 
+
+            serviceCollection.AddSingleton<MySqlHttpClientServices>();
+
             var bearerTokenEncrypted =
-                "Gjg4AdLk5TVU02iIdOPZFgbNqsXxSZJXKxGuGPhoCZuZ/Jgd/nQs8Zlx9ni+TBFXmnJXzyQkdqXBJtEFX6fj3wPCU97E5sCsSX4OYz8Hzhyj8" 
-                + "/WQYXjSw3V6nmJ6Rweg6M4e+HCyPj3varHGUGBW+WH2jMCeKUOsiVnhqkfXTHYzx0Min4wmnY2FR4M+1rNkNx4cbyO3yD5RkCQ+ZcviX2kq"
-                + "mNgSQfRVLeVfknE/N87jI5C7q/5No3bHyDdOqcFSXo5XTeuP5Vu2hAPorDWlAbd2gDgpftt15wx4MFprzsS1v/XsB8QQnXQ3X+u6sSYeNRy" 
-                + "/kFdYOJxY36wYsWwbvC+h7JZV9GerY49zcWVlpKtF6R8YPOogZuFv6g3N2GOYHRhspip+kJALMclAEBan7hqIb9a8u097eR11NJ1B062c" 
-                + "/arYfRqob7sdGuM4QR7AYKAeg0i1EjMtFNA3a8FUmJwi4+mpUS8Ak2x5I662jW3CJknbuOFV4piA6gwMmiP0DBf0c8Z2bL+/Dpvpf4clLkl" 
-                + "0DM066fmGnzWv7NlzQwTO2JNb2Ed0T9Hu+Ong91Z81Q84NXFGw2BTOlpFUagNjwFCmk+6XUmA+NG5J41bO87m+pfuCvmETCY31v4HI/a7As" 
-                + "VUcmbGC9e9MkaWxYmyMBmLZBCaD4CzlUFQzmn0JzCxWuTdeq/mDVQlXOXcrepOZgDr6D2OX6NYgZJvTko3Znj6bjx7mr3wdTnKs89O37Gt6" 
-                + "HIcu+FeOIUz7rhDqnqR";
+                "Gjg4AdLk5TVU02iIdOPZFgbNqsXxSZJXKxGuGPhoCZuZ/Jgd/nQs8Zlx9ni+TBFXZEnwUjB4TQT085Oxnwq7rhdII2mUFS28DhCJUkF36mQI7RBRzJOwSPF42QA1iQCqH9A235Li4nzLdtu/VEfNQ63dW40bA/TWM5IbSL426aBvJeg30iJzFWP4XR/poqSrAaCWZya5F6d7Cvcwx+5/Pq6G+jfdk9bNp6vQwtVdpgStFRY1uS6dLX1hXn73sdZjHsS4+587e5MnROMT0LUWeiDjzvWMJ1Mm/dWBGl040tdOr2VngGpuHqWULb1V4KcS+KqNPqZY4Ugqayr7Noo4KzOrdelFpTci7euVtyG5z2SbxXDmqe8Xgbj2TLMVkjEjt68wKdq6pfsgCaZFJeTwhV2jO7/uKOZOImUlwBpGmqm/18KuLJK/NH03ApsyFU2fplxczyfDO/y3WV3o1G6RqugTKdjLU/GJgDjwhyYYsxaIKDBd0Ie+wm6QKDBZ+OLMa9jvat0AfvqXDI7qkmgq8HGalEMNWPfY+RrV7BvIDnJ0wMP5kUWbtgqwP5CIsS0++cLHOyV1dsFh/QwBoFDYHmO5Qvv4D4DeocUmfPVbjpO2hKKGl7BP+7+ctFRozrWmjVTRXkkLGT5cf+K7CRbdv+gBMZaYTGlsxzKr24GuiMNJlCYkrj9dfXMBomkG8DG4NwJGx+v110W7FaOHkcmc1qlwqMd882i8HRnvE+TPw9wPUXkEmvxnkyksjLqkI+Rd";
             value = Encryption.Decrypt(bearerTokenEncrypted);
             // add in a service for the MySQL API
             serviceCollection.AddHttpClient<MySqlClient>("MySqlClient", client =>
             {
                 // Other settings
-                client.BaseAddress = new Uri(Settings.Default.MySqlRootUrl); //"https://mysqluser.cleardashboard.org"
+                client.BaseAddress = new Uri(Settings.Default.MySqlRootUrl); //"https://mysqlapi.cleardashboard.org"
                 client.DefaultRequestHeaders.Add("Accept", "*/*");
                 client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + value);

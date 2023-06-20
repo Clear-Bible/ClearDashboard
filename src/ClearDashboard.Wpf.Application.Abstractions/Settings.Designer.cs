@@ -37,7 +37,7 @@ namespace ClearDashboard.Wpf.Application {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://mysqluser.cleardashboard.org")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://mysqlapi.cleardashboard.org")]
         public string MySqlRootUrl {
             get {
                 return ((string)(this["MySqlRootUrl"]));

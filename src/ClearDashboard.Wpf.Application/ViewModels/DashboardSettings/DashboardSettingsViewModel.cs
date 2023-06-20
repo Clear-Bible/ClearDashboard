@@ -1,24 +1,20 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using MailKit.Net.Smtp;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using ClearDashboard.DataAccessLayer.Models;
-using static ClearDashboard.DataAccessLayer.Features.GitLabUser.GitLabUserSlice;
-using ClearDashboard.DataAccessLayer.Features.GitLabUser;
-using MailKit.Net.Smtp;
 using MimeKit;
-using Mono.Unix.Native;
+using System;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -28,6 +24,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly MySqlHttpClientServices _mySqlHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private readonly ILogger<DashboardSettingsViewModel> _logger;
         private bool _isAquaEnabledOnStartup;
@@ -283,12 +280,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
+            MySqlHttpClientServices mySqlHttpClientServices,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             // for Caliburn Micro
             //IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
+            _mySqlHttpClientServices = mySqlHttpClientServices;
             _collaborationManager = collaborationManager;
             _logger = logger;
         }
@@ -345,13 +344,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         protected override async void OnViewLoaded(object view)
         {
-            var results =
-                await ExecuteRequest(
-                    new GitLabUserExistsQuery(MySqlHelper.BuildConnectionString(), CollaborationConfig.UserId,
-                        CollaborationConfig.RemoteUserName, CollaborationConfig.RemoteEmail), CancellationToken.None);
+            var user = await _mySqlHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
 
-            if (results.Data)
+            if (user.UserId > 0)
             {
+                // found user
                 GitLabUserFound = true;
                 GitlabUserSaveVisibility = Visibility.Collapsed;
                 RestoreButtonEnabled = false;
@@ -361,12 +358,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
             else
             {
-                GitLabUserFound = false; 
-                GitlabUserSaveVisibility = Visibility.Visible;
-                RestoreButtonEnabled = true;
-                
-                ShowExistingCollabUser = Visibility.Collapsed;
-                HideExistingCollabUser = Visibility.Visible;
+                if (CollaborationConfig.UserId > 0)
+                {
+                    ShowExistingCollabUser = Visibility.Visible;
+                    HideExistingCollabUser = Visibility.Collapsed;
+                    GitLabUserFound = true;
+                }
+                else
+                {
+                    // no user on the server
+                    GitLabUserFound = false;
+                    GitlabUserSaveVisibility = Visibility.Visible;
+                    RestoreButtonEnabled = true;
+
+                    ShowExistingCollabUser = Visibility.Collapsed;
+                    HideExistingCollabUser = Visibility.Visible;
+                }
+
             }
 
             base.OnViewLoaded(view);
@@ -390,20 +398,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         public async void SaveGitLabToServer()
         {
-            var userId = _collaborationConfig.UserId;
-            var remoteUserName = _collaborationConfig.RemoteUserName;
-            var remoteEmail = _collaborationConfig.RemoteEmail;
-            var remotePersonalAccessToken = _collaborationConfig.RemotePersonalAccessToken;
-            var remotePersonalPassword = _collaborationConfig.RemotePersonalPassword;
-            var group = _collaborationConfig.Group;
-            var namespaceId = _collaborationConfig.NamespaceId;
+#pragma warning disable CA1416
+            var user = new GitLabUser
+            {
+                Id = _collaborationConfig.UserId,
+                UserName = _collaborationConfig.RemoteUserName!,
+                Email = _collaborationConfig.RemoteEmail!,
+                Password = _collaborationConfig.RemotePersonalPassword!,
+                Organization = _collaborationConfig.Group!,
+                NamespaceId = _collaborationConfig.NamespaceId
+            };
+#pragma warning restore CA1416
 
+            var results = await _mySqlHttpClientServices.CreateNewUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
 
-            var results =
-                await ExecuteRequest(
-                    new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), userId, remoteUserName, remoteEmail,
-                        remotePersonalAccessToken, remotePersonalPassword, group, namespaceId), CancellationToken.None);
-            if (results.Success)
+            if (results)
             {
                 SaveGitLabUserMessage = "Saved to remote server";
             }
@@ -458,17 +467,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         public async void SendValidationEmail()
         {
-            var results =
-                await ExecuteRequest(
-                    new GitLabEmailExistsQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
+            var user = await _mySqlHttpClientServices.GetUserExistsByEmail(Email);
 
-            if (results.Data == false)
+            if (user.UserId <= 0)
             {
                 EmailMessage = "Not Found on System!";
                 ShowValidateEmailButtonEnabled = false;
 
                 return;
             }
+
+            //var results =
+            //    await ExecuteRequest(
+            //        new GitLabEmailExistsQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
+
+            //if (results.Data == false)
+            //{
+            //    EmailMessage = "Not Found on System!";
+            //    ShowValidateEmailButtonEnabled = false;
+
+            //    return;
+            //}
 
             EmailMessage = "Email Sent";
 
@@ -515,28 +534,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         {
             if (EmailCode == _emailValidationString)
             {
-                var results =
-                    await ExecuteRequest(
-                        new GetUserFromEmailQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
+                var user = await _mySqlHttpClientServices.GetUserExistsByEmail(Email);
 
-                if (results.Data is null)
+                if (user.UserId <= 0)
                 {
+                    EmailMessage = "Not Found on System!";
+                    ShowValidateEmailButtonEnabled = false;
+
                     return;
                 }
+
+
+                //var results =
+                //    await ExecuteRequest(
+                //        new GetUserFromEmailQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
+
+                //if (results.Data is null)
+                //{
+                //    return;
+                //}
                 
-                var collaborationConfiguration = results.Data as CollaborationConfiguration;
+                //var collaborationConfiguration = results.Data as CollaborationConfiguration;
 
                 // recreate the json in the user secrets
                 CollaborationConfig = new CollaborationConfiguration
                 {
-                    Group = collaborationConfiguration.Group,
+                    Group = user.GroupName,
                     RemoteEmail = Email,
-                    RemotePersonalAccessToken = Encryption.Decrypt(collaborationConfiguration.RemotePersonalAccessToken),
-                    RemotePersonalPassword = Encryption.Decrypt(collaborationConfiguration.RemotePersonalPassword),
+                    RemotePersonalAccessToken = Encryption.Decrypt(user.RemotePersonalAccessToken),
+                    RemotePersonalPassword = Encryption.Decrypt(user.RemotePersonalPassword),
                     RemoteUrl = "",
-                    RemoteUserName = collaborationConfiguration.RemoteUserName,
-                    UserId = collaborationConfiguration.UserId,
-                    NamespaceId = collaborationConfiguration.NamespaceId,
+                    RemoteUserName = user.RemoteUserName,
+                    UserId = user.UserId,
+                    NamespaceId = user.NamespaceId,
                 };
 
                 _collaborationManager.SaveCollaborationLicense(CollaborationConfig);
