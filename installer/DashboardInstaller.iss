@@ -135,7 +135,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "windowsdesktop-runtime-7.0.5-win-x64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
-//Source: "UninsIS.dll"; Flags: dontcopy
 
 ; Install PluginManager
 Source: "..\tools\PluginManager\bin\Release\net7.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -145,6 +144,15 @@ Source: "..\tools\PluginManager\bin\Release\net7.0-windows\*"; DestDir: "{app}";
 Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\ClearDashboard.Wpf.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencryption
+
+
+; AQUA Files
+Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ClearDashboard.Aqua.Module.deps.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ClearDashboard.Aqua.Module.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ClearDashboard.Aqua.Module.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ClearDashboard.Aqua.Module.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\en\ClearDashboard.Aqua.Module.resources.dll"; DestDir: "{app}/en"
+Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\Services\vref.txt"; DestDir: "{app}/Services"
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -158,6 +166,7 @@ Source: "..\src\ClearDashboard.Wpf.Application\Resources\NotoSerif-VariableFont_
 ; Install Paratext Plugin
 Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 
 [Registry]
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
