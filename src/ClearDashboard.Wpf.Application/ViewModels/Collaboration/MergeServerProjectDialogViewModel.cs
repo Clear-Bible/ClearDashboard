@@ -282,15 +282,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     _cancellationTokenSource.Token,
                     progress));
                 await _runningTask;
+
+                progress.Report(new ProgressStatus(0, "Operation Finished!"));
+                PlaySound.PlaySoundFromResource();
             }
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             catch (Exception ex)
             {
                 progress.Report(new ProgressStatus(0, $"Exception thrown attempting to initialize project database: {ex.Message}"));
                 CanOkAction = true;
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             finally
             {
@@ -329,14 +334,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
                     progress.Report(new ProgressStatus(0, "UI Reload Complete"));
                 }
+
+                progress.Report(new ProgressStatus(0, "Operation Finished!"));
+                PlaySound.PlaySoundFromResource();
             }
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             catch (Exception ex)
             {
                 progress.Report(new ProgressStatus(0, $"Exception thrown attempting to merge latest project changes: {ex.Message}"));
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             finally
             {
@@ -395,6 +405,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     }
 
                     progress.Report(new ProgressStatus(0, "Commit Complete!"));
+
+                    progress.Report(new ProgressStatus(0, "Operation Finished!"));
+                    PlaySound.PlaySoundFromResource();
                 });
 
                 await _runningTask;
@@ -402,6 +415,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             catch (Exception ex)
             {
@@ -413,6 +427,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 {
                     progress.Report(new ProgressStatus(0, $"Exception thrown attempting to stage and commit project changes: {ex.Message}"));
                 }
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             finally
             {
