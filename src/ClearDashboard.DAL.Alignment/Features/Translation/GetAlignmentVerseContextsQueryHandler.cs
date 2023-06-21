@@ -117,6 +117,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .Where(e => e.TargetTokenComponent!.SurfaceText == request.TargetString);
             }
 
+            if (request.BookNumber is not null)
+            {
+                databaseAlignmentsQueryable = databaseAlignmentsQueryable
+                    .Where(e => e.SourceTokenComponent!.GetType() != typeof(Models.Token) || ((Models.Token)e.SourceTokenComponent!).BookNumber == request.BookNumber)
+                    .Where(e => e.SourceTokenComponent!.GetType() != typeof(Models.TokenComposite) || ((Models.TokenComposite)e.SourceTokenComponent!).Tokens.Any(t => t.BookNumber == request.BookNumber));
+            }
+
             var databaseAlignments = databaseAlignmentsQueryable
                 .AsNoTrackingWithIdentityResolution()
                 .ToList();
