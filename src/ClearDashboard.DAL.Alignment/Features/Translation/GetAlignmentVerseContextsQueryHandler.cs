@@ -102,6 +102,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
                 .Include(e => e.TargetTokenComponent!)
                     .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
+                .Where(e => e.SourceTokenComponent!.TokenizedCorpusId == alignmentSet.ParallelCorpus.SourceTokenizedCorpusId)
+                .Where(e => e.TargetTokenComponent!.TokenizedCorpusId == alignmentSet.ParallelCorpus.TargetTokenizedCorpusId)
                 .Where(e => e.Deleted == null);
             
             if (request.StringsAreTraining)
@@ -138,7 +140,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // For some reason, when lots of matches, having this AlignmentSetId 'where'
             // with the other pre-ToList() 'where' slows the overall query down considerably
             var filteredDatabaseAlignments = databaseAlignments
-                .Where(e => e.AlignmentSetId == request.AlignmentSetId.Id) 
+                .Where(e => e.AlignmentSetId == alignmentSet.Id) 
                 .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude);
 
             var alignments = filteredDatabaseAlignments
