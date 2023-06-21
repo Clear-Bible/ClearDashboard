@@ -125,6 +125,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             var databaseAlignments = databaseAlignmentsQueryable
+                .OrderBy(e => e.SourceTokenComponent!.EngineTokenId)
                 .AsNoTrackingWithIdentityResolution()
                 .ToList();
 
