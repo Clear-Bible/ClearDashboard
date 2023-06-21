@@ -178,7 +178,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private bool _showGenerateUserButtonEnabled = true;
+        private bool _showGenerateUserButtonEnabled;
         public bool ShowGenerateUserButtonEnabled
         {
             get => _showGenerateUserButtonEnabled;
