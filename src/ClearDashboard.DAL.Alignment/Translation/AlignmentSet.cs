@@ -84,13 +84,14 @@ namespace ClearDashboard.DAL.Alignment.Translation
             uint sourceVerseTokensIndex,
             IEnumerable<Token> targetVerseTokens,
             uint targetVerseTokensIndex
-        )>> GetAlignmentVerseContexts(string sourceString, string targetString, bool stringsAreTraining = true, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+        )>> GetAlignmentVerseContexts(string sourceString, string targetString, bool stringsAreTraining = true, int? bookNumber = null, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
         {
             var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(
                 AlignmentSetId, 
                 sourceString, 
                 targetString,
                 stringsAreTraining,
+                bookNumber,
                 alignmentTypesToInclude), cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
 

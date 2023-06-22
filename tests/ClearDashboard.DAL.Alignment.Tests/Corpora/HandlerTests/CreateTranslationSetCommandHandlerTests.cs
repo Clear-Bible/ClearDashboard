@@ -292,9 +292,19 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 "verse", 
                 "verse",
                 true,
+                null,
                 AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(12, alignmentSetVerseContexts.Count());
+
+            var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
+                "verse",
+                "verse",
+                true,
+                40,
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded,
+                CancellationToken.None);
+            Assert.Equal(9, alignmentSetVerseContexts2.Count());
 
             var one = alignmentSetVerseContexts.FirstOrDefault();
             Assert.True(one != default);
@@ -319,15 +329,25 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Output.WriteLine("");
 
-            var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
+            var alignmentSetVerseContexts3 = await alignmentSet.GetAlignmentVerseContexts(
                 "one_verse_three", 
                 "three",
                 true,
+                null,
                 AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
-            Assert.Equal(2, alignmentSetVerseContexts2.Count());
+            Assert.Equal(2, alignmentSetVerseContexts3.Count());
 
-            var two = alignmentSetVerseContexts2.FirstOrDefault();
+            var alignmentSetVerseContexts4 = await alignmentSet.GetAlignmentVerseContexts(
+                "one_verse_three",
+                "three",
+                true,
+                40,
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded,
+                CancellationToken.None);
+            Assert.Single(alignmentSetVerseContexts4);
+
+            var two = alignmentSetVerseContexts3.FirstOrDefault();
             Assert.True(two != default);
 
             Assert.Equal(4, two.sourceVerseTokens.Count());
