@@ -79,15 +79,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public static readonly DependencyProperty CurrentBcvProperty =
             DependencyProperty.Register(nameof(CurrentBcv), typeof(BookChapterVerseViewModel), typeof(BcvUserControl),
-                new PropertyMetadata(new BookChapterVerseViewModel(), new PropertyChangedCallback(OnCurrentBcvPropteryChanged)));
+                new PropertyMetadata(new BookChapterVerseViewModel(), new PropertyChangedCallback(OnCurrentBcvPropertyChanged)));
 
-        private static void OnCurrentBcvPropteryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnCurrentBcvPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            BcvUserControl? userControl = d as BcvUserControl;
-            userControl?.OnCurrentBcvPropteryChanged(e);
+            var userControl = d as BcvUserControl;
+            userControl?.OnCurrentBcvPropertyChanged(e);
         }
 
-        private void OnCurrentBcvPropteryChanged(DependencyPropertyChangedEventArgs e)
+        private void OnCurrentBcvPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             CurrentBcv = (BookChapterVerseViewModel)e.NewValue;
         }

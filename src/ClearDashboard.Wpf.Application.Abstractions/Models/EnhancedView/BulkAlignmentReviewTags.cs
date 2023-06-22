@@ -93,7 +93,7 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
         public string? SourceRef => (Alignment != null && Alignment.AlignmentId != null && Alignment.AlignmentId.SourceTokenId != null) ?
             $"{VerseHelper.BookNames[Alignment.AlignmentId.SourceTokenId.BookNumber].code} {Alignment.AlignmentId.SourceTokenId.ChapterNumber}:{Alignment.AlignmentId.SourceTokenId.VerseNumber}" : "*** Alignment not set!";
 
-
+        public string BookCode => VerseHelper.BookNames[Alignment.AlignmentId.SourceTokenId.BookNumber].code;
     }
     public class PivotWord
     {

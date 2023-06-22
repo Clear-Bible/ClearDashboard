@@ -53,7 +53,12 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
     public async void ToggleEditMode()
     {
         EnableEditMode = !EnableEditMode;
-        await GetEditorData();
+
+        if (EnableEditMode)
+        {
+            await GetEditorData();
+        }
+        
     }
 
     protected virtual async Task GetEditorData()

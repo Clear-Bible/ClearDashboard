@@ -129,8 +129,8 @@
                           cm:Message.Attach="[Event SelectionChanged] = [Action OnPivotWordRowSelectionChanged($eventArgs)]"
                           IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="70"/>
-                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Part}"  Binding="{Binding Word}"  Width="70" />
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="80"/>
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Part}"  Binding="{Binding Word}"  Width="80" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
@@ -164,7 +164,7 @@
                           IsReadOnly="True"
                           IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="70"/>
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="80"/>
                         <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourcePart}"  Binding="{Binding Source}" Width="130"/>
                         <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_TargetPart}" Binding="{Binding Target}" Width="130" />
                     </DataGrid.Columns>
@@ -179,13 +179,19 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="14"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="{Binding BulkAlignmentsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
-                    <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_Alignments}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="{Binding BulkAlignmentsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
+                    <userControls:BookSelector Grid.Row="0" Grid.Column="1" Books="{Binding RelevantBooks}" CurrentBook="{Binding CurrentBook}" ></userControls:BookSelector>
+                    <Label Grid.Row="0" Grid.Column="2" Content="{helpers:Localization BulkAlignmentReview_Alignments}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
                 </Grid>
-                <DataGrid Grid.Row="1" 
+                <DataGrid Grid.Row="1" Grid.Column="0" 
                           Name="ApprovalDataGrid" 
                           ItemsSource="{Binding BulkAlignments}" 
                           AutoGenerateColumns="False" 

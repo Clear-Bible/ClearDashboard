@@ -51,8 +51,8 @@ public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
     {
         await base.InitializeAsync();
 
-        var sourceToken = _bulkAlignment.SourceVerseTokens.ToList()[(int)_bulkAlignment.SourceVerseTokensIndex];
-        var targetToken = _bulkAlignment.TargetVerseTokens.ToList()[(int)_bulkAlignment.TargetVerseTokensIndex];
+        var sourceToken = _bulkAlignment.SourceVerseTokens.ToArray()[(int)_bulkAlignment.SourceVerseTokensIndex];
+        var targetToken = _bulkAlignment.TargetVerseTokens.ToArray()[(int)_bulkAlignment.TargetVerseTokensIndex];
 
         var sourceTokenDisplayViewModel =
             SourceTokenDisplayViewModels.FirstOrDefault(t => t.Token.TokenId.Equals(sourceToken.TokenId));
