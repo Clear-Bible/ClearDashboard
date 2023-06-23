@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 
 namespace ClearDashboard.DAL.Alignment.Features
 {
-    public static class AlignmentModelExtensions
+    internal static class AlignmentModelExtensions
     {
         public static IEnumerable<Models.Alignment> WhereAlignmentTypesFilter(this IEnumerable<Models.Alignment> alignments, AlignmentTypes alignmentTypes)
         {
@@ -83,25 +83,29 @@ namespace ClearDashboard.DAL.Alignment.Features
             return filteredAlignments;
         }
 
-        public static AlignmentTypes ToAlignmentType(this Models.Alignment alignment, AlignmentTypes alignmentTypesUsedInQuery)
+        internal static AlignmentTypes ToAlignmentType(this Models.Alignment alignment, AlignmentTypes alignmentTypesUsedInQuery)
         {
-            if (alignment.AlignmentOriginatedFrom == AlignmentOriginatedFrom.FromAlignmentModel && alignment.AlignmentVerification == AlignmentVerification.Unverified)
+            return ToAlignmentType(alignment.AlignmentOriginatedFrom.ToString(), alignment.AlignmentVerification.ToString(), alignmentTypesUsedInQuery);
+        }
+
+        internal static AlignmentTypes ToAlignmentType(string originatedFrom, string verification, AlignmentTypes alignmentTypesUsedInQuery)
+        {
+            if (originatedFrom == AlignmentOriginatedFrom.FromAlignmentModel.ToString() && verification == AlignmentVerification.Unverified.ToString())
             {
                 return ((alignmentTypesUsedInQuery & AlignmentTypes.FromAlignmentModel_Unverified_All) != AlignmentTypes.None)
                     ? AlignmentTypes.FromAlignmentModel_Unverified_All
                     : AlignmentTypes.FromAlignmentModel_Unverified_Not_Otherwise_Included;
             }
 
-            string originatedFromAndVerification = alignment.AlignmentOriginatedFrom.ToString() + "_" + alignment.AlignmentVerification.ToString();
+            string originatedFromAndVerification = originatedFrom.ToString() + "_" + verification.ToString();
             if (Enum.TryParse(originatedFromAndVerification, true, out AlignmentTypes alignmentType))
             {
                 return alignmentType;
             }
-
-            throw new NotImplementedException($"No AlignmentTypes value available for OriginatedFrom: {alignment.AlignmentOriginatedFrom} and Verification: {alignment.AlignmentVerification} combination");
+            throw new NotImplementedException($"No AlignmentTypes value available for OriginatedFrom: {originatedFrom} and Verification: {verification} combination");
         }
 
-        public static IEnumerable<Models.Alignment> WhereAssignedOrFromAlignmentModel(this IEnumerable<Models.Alignment> alignments)
+        internal static IEnumerable<Models.Alignment> WhereAssignedOrFromAlignmentModel(this IEnumerable<Models.Alignment> alignments)
         {
             var filteredAlignments = alignments
                     .Where(al => al.AlignmentOriginatedFrom == Models.AlignmentOriginatedFrom.Assigned);

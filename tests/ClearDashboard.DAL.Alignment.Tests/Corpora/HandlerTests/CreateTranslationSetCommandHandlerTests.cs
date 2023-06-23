@@ -151,7 +151,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             sw.Start();
 
-            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(13, alignmentTrainingTextCounts.Count);
 
             var one = alignmentTrainingTextCounts.Skip(4).First();
@@ -171,7 +171,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Output.WriteLine("");
 
-            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(12, alignmentTrainingTextCounts2.Count);
 
             var verse = alignmentTrainingTextCounts2.Skip(1).First();
@@ -291,6 +291,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSetVerseContexts = await alignmentSet.GetAlignmentVerseContexts(
                 "verse", 
                 "verse",
+                true,
                 AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(12, alignmentSetVerseContexts.Count());
@@ -321,6 +322,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
                 "one_verse_three", 
                 "three",
+                true,
                 AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
                 CancellationToken.None);
             Assert.Equal(2, alignmentSetVerseContexts2.Count());

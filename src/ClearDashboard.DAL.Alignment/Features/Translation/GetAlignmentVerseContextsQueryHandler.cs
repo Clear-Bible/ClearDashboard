@@ -97,14 +97,27 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // the query time went from 0.8s to 2.1s.  Why?!  To address, this .Where
             // clause was added to the Select statement below that converts from
             // database alignments to API alignments.
-            var databaseAlignments = ProjectDbContext.Alignments
+            var databaseAlignmentsQueryable = ProjectDbContext.Alignments
                 .Include(e => e.SourceTokenComponent!)
                     .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
                 .Include(e => e.TargetTokenComponent!)
                     .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
-                .Where(e => e.Deleted == null)
-                .Where(e => e.SourceTokenComponent!.TrainingText! == request.SourceTokenTrainingText)
-                .Where(e => e.TargetTokenComponent!.TrainingText! == request.TargetTokenTrainingText)
+                .Where(e => e.Deleted == null);
+            
+            if (request.StringsAreTraining)
+            {
+                databaseAlignmentsQueryable = databaseAlignmentsQueryable
+                    .Where(e => e.SourceTokenComponent!.TrainingText == request.SourceString)
+                    .Where(e => e.TargetTokenComponent!.TrainingText == request.TargetString);
+            }
+            else
+            {
+                databaseAlignmentsQueryable = databaseAlignmentsQueryable
+                    .Where(e => e.SourceTokenComponent!.SurfaceText == request.SourceString)
+                    .Where(e => e.TargetTokenComponent!.SurfaceText == request.TargetString);
+            }
+
+            var databaseAlignments = databaseAlignmentsQueryable
                 .AsNoTrackingWithIdentityResolution()
                 .ToList();
 
