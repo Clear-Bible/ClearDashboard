@@ -10,36 +10,36 @@ rem get the absolute path to the relative key file
 CALL :NORMALIZEPATH "..\code_signing_key\ClearBible.pfx"
 
 
-echo ========== PUBLISH 64-Bit Version of PluginManager ==============
-cd ..\tools\PluginManager
-dotnet clean --configuration Release
-dotnet publish -r win-x64 -c Release
+rem echo ========== PUBLISH 64-Bit Version of PluginManager ==============
+rem cd ..\tools\PluginManager
+rem dotnet clean --configuration Release
+rem dotnet publish -r win-x64 -c Release
 
-cd ..\..\installer
+rem cd ..\..\installer
 
 echo code sign the WPF exe	
  ..\code_signing_key\signing_tool\signtool.exe ^
  	sign /v /f %RETVAL% ^
  	/p "%PASSWORD%" ^
  	/t http://timestamp.comodoca.com/authenticode ^
-"%CURRENTPATH%\..\tools\PluginManager\bin\Release\net7.0-windows\publish\PluginManager.dll"
+"%CURRENTPATH%\..\tools\PluginManager\bin\Release\net7.0-windows\publish\win-x64\PluginManager.dll"
 
-pause
+rem pause
 
 
-echo ========== PUBLISH 64-Bit Version of Dashboard ==============
+rem echo ========== PUBLISH 64-Bit Version of Dashboard ==============
 
-cd ..\src\ClearDashboard.Wpf.Application
-dir
+rem cd ..\src\ClearDashboard.Wpf.Application
+rem dir
 
-pause
-dotnet clean --configuration Release
-dotnet publish -r win-x64 -c Release
+rem pause
+rem dotnet clean --configuration Release
+rem dotnet publish -r win-x64 -c Release
 
 pause
 
 echo ========== BUILD 64-Bit Version of Plugin ==============
-cd ..\ClearDashboard.WebApiParatextPlugin
+cd ..\src\ClearDashboard.WebApiParatextPlugin
 dotnet clean --configuration Release
 dotnet build  --configuration Release
 

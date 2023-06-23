@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Clear Dashboard"
-#define MyAppVersion "1.0.6.5"
+#define MyAppVersion "1.0.6.7"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -137,22 +137,11 @@ Source: "windowsdesktop-runtime-7.0.5-win-x64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
 
 ; Install PluginManager
-Source: "..\tools\PluginManager\bin\Release\net7.0-windows\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\tools\PluginManager\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
-
-;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+; Install Dashboard
 Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\ClearDashboard.Wpf.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencryption
-
-
-; AQUA Files
-;Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ClearDashboard.Aqua.Module.deps.json"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ClearDashboard.Aqua.Module.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ClearDashboard.Aqua.Module.pdb"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ClearDashboard.Aqua.Module.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\en\ClearDashboard.Aqua.Module.resources.dll"; DestDir: "{app}/en"
-;Source: "..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\Services\vref.txt"; DestDir: "{app}/Services"
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
