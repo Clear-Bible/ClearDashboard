@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CompressTreeXML": {
+      "commandName": "Project",
+      "commandLineArgs": "--directory-path=\"D:\\Projects-GBI\\ClearEngine3\\test\\TestSandbox1\\Resources\\treebank\\Clear3Dev\" --decompress=true"
+    }
+  }
+}
