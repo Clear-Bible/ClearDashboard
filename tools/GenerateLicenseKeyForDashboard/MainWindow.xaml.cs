@@ -55,7 +55,7 @@ namespace GenerateLicenseKeyForDashboard
         private void DecryptLicenseKey_OnClick(object sender, RoutedEventArgs e)
         {
             var json = LicenseManager.DecryptLicenseFromString(LicenseKeyDecryptionBox.Text);
-            var licenseUser = LicenseManager.DecryptedJsonToUser(json);
+            var licenseUser = LicenseManager.DecryptedJsonToUser(json, isGenerator:true);
 
             DecryptedFirstNameBox.Text = licenseUser.FirstName;
             DecryptedLastNameBox.Text = licenseUser.LastName;
