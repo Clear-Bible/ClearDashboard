@@ -24,14 +24,15 @@ Steps 9-10 are necessary to rebuild the Paratext Plugin (since codesign_exe.bat 
 
 
 13. Publish ClearDashboard.Wpf.Application
-14. Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
-15. Run the codesign_exe.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
+14. Publish PluginManager
+15. Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
+16. Run the codesign_exe.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
 
 
-16. Install locally to test out that it works
+17. Install locally to test out that it works
 
 
-17. Upload the installer to google drive
-18. Upload the installer to CLEAR_External_Releases/Files
-19. Update pico-composer/content/index.md to point to the new installer in CLEAR_External_Releases/Files
-20. Create the Version Notes json file.  Call it ClearDashboard.json and place it in CLEAR_External_Releases/VersionHistory
+18. Upload the installer to google drive
+19. Upload the installer to CLEAR_External_Releases/Files
+20. Update pico-composer/content/index.md to point to the new installer in CLEAR_External_Releases/Files
+21. Create the Version Notes json file.  Call it ClearDashboard.json and place it in CLEAR_External_Releases/VersionHistory

@@ -64,7 +64,7 @@ echo code sign the WPF exe
  	sign /v /f %RETVAL% ^
  	/p "%PASSWORD%" ^
  	/t http://timestamp.comodoca.com/authenticode ^
-"%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\ClearDashboard.Wpf.Application.dll"
+"%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\ClearDashboard.Wpf.Application.dll"
 
 pause
 
