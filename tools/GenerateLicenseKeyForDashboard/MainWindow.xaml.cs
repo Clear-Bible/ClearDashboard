@@ -60,6 +60,7 @@ namespace GenerateLicenseKeyForDashboard
             DecryptedFirstNameBox.Text = licenseUser.FirstName;
             DecryptedLastNameBox.Text = licenseUser.LastName;
             DecryptedGuidBox.Text = licenseUser.Id.ToString();
+            DecryptedInternalCheckBox.IsChecked = licenseUser.IsInternal;
         }
 
         private void Copy_OnClick(object sender, RoutedEventArgs e)
