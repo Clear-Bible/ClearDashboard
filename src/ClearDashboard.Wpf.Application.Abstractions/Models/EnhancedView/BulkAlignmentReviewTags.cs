@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
+
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Models.EnhancedView
@@ -83,6 +84,8 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
                 NotifyOfPropertyChange(nameof(SourceRef));
             }
         }
+
+       public string BBBCCCVVV => Alignment.AlignmentId.SourceTokenId.BookNumber.ToString().PadLeft(3, '0') + Alignment.AlignmentId.SourceTokenId.ChapterNumber.ToString().PadLeft(3, '0') + Alignment.AlignmentId.SourceTokenId.VerseNumber.ToString().PadLeft(3, '0');
 
         public string? Type
         {

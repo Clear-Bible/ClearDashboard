@@ -51,8 +51,9 @@
             Grid.Column="1"
             MinWidth="60"
             Margin="5,0,5,3"
-            ItemsSource="{Binding Books, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedItem="{Binding CurrentBook}"
+            ItemsSource="{Binding  RelevantBooks, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            SelectedItem="{Binding CurrentBook, Mode=TwoWay}"
+            DisplayMemberPath="Code"
             SelectionChanged="BookCombobox_SelectionChanged" />
 
       

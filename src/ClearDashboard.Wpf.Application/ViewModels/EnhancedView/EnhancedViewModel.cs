@@ -614,7 +614,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return;
             }
 
-            if (ParatextSync == false)
+            if (ParatextSync == false && message.OverrideParatextSync == false)
             {
                 return;
             }

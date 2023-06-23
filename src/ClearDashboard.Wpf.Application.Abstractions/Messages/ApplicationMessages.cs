@@ -16,7 +16,7 @@ namespace ClearDashboard.Wpf.Application.Messages
 
     public record UiLanguageChangedMessage(string LanguageCode);
 
-    public record VerseChangedMessage(string Verse);
+    public record VerseChangedMessage(string Verse, bool OverrideParatextSync = false);
     public record BcvArrowMessage(BcvArrow Arrow);
     public record ProjectLoadCompleteMessage(bool Loaded);
 

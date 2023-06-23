@@ -140,6 +140,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public async void OnSyncButtonClicked(BulkAlignmentVerseRow row)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(row.BBBCCCVVV, true));
+        }
+
         public void OnPivotWordSourceChanged(SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
