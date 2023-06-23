@@ -13,7 +13,8 @@ namespace CompressXML
         static void Main(string DirectoryPath = @"D:\Projects-GBI\ClearEngine3\test\TestSandbox1\Resources\treebank\Clear3Dev", bool Decompress = false)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
-            DirectoryPath = Path.Combine(currentDirectory, "..", "..", "..", "..", "..", "..", @"src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\Resources");
+
+            DirectoryPath = Path.Combine(currentDirectory, "..", @"src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\Resources");
 
             if (Decompress)
             {
