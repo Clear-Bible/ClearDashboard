@@ -296,7 +296,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         FetchingData = true;
                         ProgressBarVisibility = Visibility.Visible;
                         _verseContexts = await _alignmentSet.GetAlignmentVerseContexts(alignedWord.Source,
-                            alignedWord.Target, _countsByTrainingText, AlignmentTypes);
+                            alignedWord.Target, _countsByTrainingText, 1, AlignmentTypes);
 
                         //await Execute.OnUIThreadAsync(async () =>
                         //{
