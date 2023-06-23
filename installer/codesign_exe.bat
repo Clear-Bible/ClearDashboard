@@ -68,7 +68,10 @@ echo code sign the WPF exe
 
 pause
 
+echo CompressXMLs in Resources folder
+..\tools\CompressXML\CompressXML\bin\Release\net5.0\CompressTreeXML.exe
 
+pause
 ::===================INNO Dashboard=====================
 echo run the Inno Setup Compliler on Dashboard
 "%driveInno%:\Program Files (x86)\Inno Setup 6\ISCC.exe" "%CURRENTPATH%\DashboardInstaller.iss"

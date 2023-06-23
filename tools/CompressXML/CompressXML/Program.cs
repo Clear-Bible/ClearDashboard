@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
 
 namespace CompressXML
 {
@@ -16,6 +12,9 @@ namespace CompressXML
         /// <param name="DirectoryPath"></param>
         static void Main(string DirectoryPath = @"D:\Projects-GBI\ClearEngine3\test\TestSandbox1\Resources\treebank\Clear3Dev", bool Decompress = false)
         {
+            var currentDirectory = Directory.GetCurrentDirectory();
+            DirectoryPath = Path.Combine(currentDirectory, "..", "..", "..", "..", "..", "..", @"src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\Resources");
+
             if (Decompress)
             {
                 string sNewDirectoryPath = Path.Combine(DirectoryPath, "compressed");
@@ -42,37 +41,41 @@ namespace CompressXML
                     Console.WriteLine("Directory Path does not exist: " + DirectoryPath);
                     return;
                 }
-
-                string[] sFiles = Directory.GetFiles(DirectoryPath, "*.xml");
+                
+                var searchOptions = SearchOption.AllDirectories;
+                string[] sFiles = Directory.GetFiles(DirectoryPath, "*.xml", searchOptions);
 
                 // strip out the extra verbose whitespace
                 foreach (var sFile in sFiles)
                 {
-                    CompressXML(sFile);
+                    var newFile = CompressXML(sFile);
+
+                    File.Delete(sFile);
+                    File.Move(newFile, sFile);
                 }
 
-                // prepare for gzipping all of these
-                string sNewDirectoryPath = Path.Combine(DirectoryPath, "compressed");
-
-                List<FileInfo> fiFiles = new List<FileInfo>();
-                sFiles = Directory.GetFiles(sNewDirectoryPath, "*.xml");
-                foreach (var sFile in sFiles)
+                string[] compressedDirectories = Directory.GetDirectories(DirectoryPath, "compressed", searchOptions);
+                foreach (var directory in compressedDirectories)
                 {
-                    fiFiles.Add(new FileInfo(sFile));
+                    Directory.Delete(directory);
                 }
-
-                // compress all the files into one gzip
-                GZipMultiLib.GZipFiles.Compress(Path.Combine(sNewDirectoryPath, "gzipped", "trees.gzip"), fiFiles);
             }
         }
 
 
-        public static void CompressXML(string sFilePath)
+        public static string CompressXML(string sFilePath)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(sFilePath);
 
             FileInfo fi = new FileInfo(sFilePath);
+
+            string sNewDirectoryPath = Path.Combine(fi.Directory.FullName, "compressed");
+            if (!Directory.Exists(sNewDirectoryPath))
+            {
+                Directory.CreateDirectory(sNewDirectoryPath);
+            }
+
             string newPath = Path.Combine(fi.DirectoryName, "compressed", fi.Name);
 
             File.WriteAllText(newPath, doc.OuterXml);
@@ -83,6 +86,8 @@ namespace CompressXML
             Console.WriteLine($"{fi.Name} {fi.Length}");
             Console.WriteLine($"{fiNew.Name} {fiNew.Length}");
             Console.WriteLine("-------");
+
+            return newPath;
         }
     }
 }
