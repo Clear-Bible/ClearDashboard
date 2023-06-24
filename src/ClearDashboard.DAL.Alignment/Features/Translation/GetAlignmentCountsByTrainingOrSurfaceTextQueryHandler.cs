@@ -10,8 +10,6 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SIL.Extensions;
-using SIL.Linq;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -20,8 +18,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class GetAlignmentCountsByTrainingOrSurfaceTextQueryHandler : ProjectDbContextQueryHandler<
         GetAlignmentCountsByTrainingOrSurfaceTextQuery,
-        RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>,
-        IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>
+        RequestResult<IDictionary<string, IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)>>>,
+        IDictionary<string, IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)>>>
     {
 
         public class AlignmentWithText : Models.Alignment
@@ -29,6 +27,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             public string SourceText { get; set; } = string.Empty;
             public string TargetText { get; set; } = string.Empty;
             public string AlignmentTypeName { get; set; } = string.Empty;
+            public int? TokenBookNumber { get; set; }
+            public IEnumerable<int>? CompositeBookNumbers { get; set; } = null;
         }
 
         public GetAlignmentCountsByTrainingOrSurfaceTextQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetAlignmentCountsByTrainingOrSurfaceTextQueryHandler> logger) 
@@ -36,14 +36,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         {
         }
 
-        protected override async Task<RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>> GetDataAsync(GetAlignmentCountsByTrainingOrSurfaceTextQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IDictionary<string, IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)>>>> GetDataAsync(GetAlignmentCountsByTrainingOrSurfaceTextQuery request, CancellationToken cancellationToken)
         {
             var alignmentSet = await ProjectDbContext!.AlignmentSets
                 .FirstOrDefaultAsync(ts => ts.Id == request.AlignmentSetId.Id);
 
             if (alignmentSet == null)
             {
-                return new RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>
+                return new RequestResult<IDictionary<string, IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)>>>
                 (
                     success: false,
                     message: $"AlignmentSet not found for AlignmentSetId '{request.AlignmentSetId.Id}'"
@@ -55,9 +55,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             sw.Start();
 #endif
 
-            var databaseAlignmentsQueryable = ProjectDbContext.Alignments
-                .Include(e => e.SourceTokenComponent)
-                .Include(e => e.TargetTokenComponent)
+            IQueryable<Models.Alignment> databaseAlignmentsQueryable = request.includeBookNumbers
+                ? ProjectDbContext.Alignments
+                    .Include(e => e.SourceTokenComponent!)
+                        .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
+                : ProjectDbContext.Alignments
+                    .Include(e => e.SourceTokenComponent);
+
+            databaseAlignmentsQueryable = databaseAlignmentsQueryable
+                .Include(e => e.TargetTokenComponent!)
                 .Where(e => e.AlignmentSetId == request.AlignmentSetId.Id)
                 .Where(e => e.Deleted == null);
 
@@ -73,7 +79,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
                         AlignmentVerification = e.AlignmentVerification,
                         SourceText = e.SourceTokenComponent!.TrainingText ?? string.Empty,
-                        TargetText = e.TargetTokenComponent!.TrainingText ?? string.Empty
+                        TargetText = e.TargetTokenComponent!.TrainingText ?? string.Empty,
+                        TokenBookNumber = request.includeBookNumbers ? ((Models.Token)e.SourceTokenComponent!).BookNumber : null,
+                        CompositeBookNumbers = request.includeBookNumbers ? ((Models.TokenComposite)e.SourceTokenComponent!).Tokens.Select(t => t.BookNumber) : null
                     })
                     .ToList();
             }
@@ -88,7 +96,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
                         AlignmentVerification = e.AlignmentVerification,
                         SourceText = e.SourceTokenComponent!.SurfaceText ?? string.Empty,
-                        TargetText = e.TargetTokenComponent!.SurfaceText ?? string.Empty
+                        TargetText = e.TargetTokenComponent!.SurfaceText ?? string.Empty,
+                        TokenBookNumber = request.includeBookNumbers ? ((Models.Token)e.SourceTokenComponent!).BookNumber : null,
+                        CompositeBookNumbers = request.includeBookNumbers ? ((Models.TokenComposite)e.SourceTokenComponent!).Tokens.Select(t => t.BookNumber) : null
                     })
                     .ToList();
             }
@@ -110,7 +120,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             sw.Restart();
 #endif
 
-            IDictionary<string, IDictionary<string, IDictionary<string, uint>>>? alignmentCountsByTrainingOrSurfaceText = default;
+            IDictionary<string, IDictionary<string, (IDictionary<string, uint>, string)>>? alignmentCountsByTrainingOrSurfaceText = default;
 
             if (request.SourceToTarget)
             {
@@ -121,12 +131,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .ToDictionary(g => g.Key, g => g
                         .GroupBy(e => e.TargetText)
                         .OrderByDescending(g2 => g2.Count())
-                        .ToDictionary(g2 => g2.Key, g2 => g2
+                        .ToDictionary(g2 => g2.Key, g2 => (g2
                             .GroupBy(e => e.AlignmentTypeName)
-                            .OrderByDescending (g3 => g3.Count())
-                            .ToDictionary(g3 => g3.Key, g3 => (uint)g3.Count())
-                        as IDictionary<string, uint>)
-                    as IDictionary<string, IDictionary<string, uint>>);
+                            .OrderByDescending(g3 => g3.Count())
+                            .ToDictionary(g3 => g3.Key, g3 => (uint)g3.Count()) as IDictionary<string, uint>, GetBookNumbersAsDelimitedString(g2.AsEnumerable())))
+                    as IDictionary<string, (IDictionary<string, uint>, string)>);
             }
             else
             {
@@ -137,12 +146,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .ToDictionary(g => g.Key, g => g
                         .GroupBy(e => e.SourceText)
                         .OrderByDescending(g2 => g2.Count())
-                        .ToDictionary(g2 => g2.Key, g2 => g2
+                        .ToDictionary(g2 => g2.Key, g2 => (g2
                             .GroupBy(e => e.AlignmentTypeName)
                             .OrderByDescending(g3 => g3.Count())
-                            .ToDictionary(g3 => g3.Key, g3 => (uint)g3.Count())
-                        as IDictionary<string, uint>)
-                    as IDictionary<string, IDictionary<string, uint>>);
+                            .ToDictionary(g3 => g3.Key, g3 => (uint)g3.Count()) as IDictionary<string, uint>, GetBookNumbersAsDelimitedString(g2.AsEnumerable())))
+                    as IDictionary<string, (IDictionary<string, uint>, string)>);
             }
 
 #if DEBUG
@@ -150,10 +158,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             Logger.LogInformation("Elapsed {0}", sw.Elapsed);
 #endif
 
-            return new RequestResult<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>>
+            return new RequestResult<IDictionary<string, IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)>>>
             (
                 alignmentCountsByTrainingOrSurfaceText
             );
+        }
+
+        private static string GetBookNumbersAsDelimitedString(IEnumerable<AlignmentWithText> alignmentsWithText)
+        {
+            var bookNumbers = new List<int>();
+            foreach (var alignmentWithText in alignmentsWithText)
+            {
+                if (alignmentWithText.TokenBookNumber is not null && alignmentWithText.TokenBookNumber.HasValue)
+                    bookNumbers.Add(alignmentWithText.TokenBookNumber.Value);
+
+                if (alignmentWithText.CompositeBookNumbers is not null && alignmentWithText.CompositeBookNumbers.Any())
+                    bookNumbers.AddRange(alignmentWithText.CompositeBookNumbers);
+            }
+            return string.Join(',', bookNumbers.Distinct().OrderBy(e => e));
         }
     }
 }
