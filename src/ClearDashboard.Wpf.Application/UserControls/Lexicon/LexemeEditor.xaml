@@ -8,6 +8,7 @@
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;assembly=ClearDashboard.Wpf.Application.Abstractions"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -16,7 +17,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="MeaningDisplayTemplate">
             <lexiconControls:MeaningEditor
-                Lexeme="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Lexeme}"
+                Lexeme="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme}"
                 Margin="20,5,0,0"
                 Meaning="{Binding}"
                 MeaningTextFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=MeaningTextFontFamily}"
@@ -59,6 +60,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -70,94 +73,120 @@
                 FontSize="11" 
                 HorizontalAlignment="Left"
                 Background="Transparent"
-
+                FontFamily="{DynamicResource MaterialDesignFont}"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AddLexemeVisibility}">Add Lexeme</Button>
         <Grid Grid.Row="1"
-              Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}"
-              >
+              Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
-                       FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontFamily}"
-                       FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontSize}"
-                       FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontStyle}"
-                       FontWeight="Normal"
-                       Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaMargin}"
+                       FontFamily="{DynamicResource MaterialDesignFont}"
+                       FontSize="16"
+                       FontStyle="Normal"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,0"
                        Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
-                       Text="Lemma: "
-                       TextDecorations="Underline"
+                       Text="Lexeme"
                        VerticalAlignment="Center"
-                       ></TextBlock>
-            <TextBlock x:Name="LemmaTextBlock"
-                Grid.Column="1"
-                MouseLeftButtonDown="OnLemmaLabelClick"
-                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontFamily}"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontSize}"
-                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontStyle}"
-                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontWeight}"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaMargin}"
-                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
-                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Lexeme.Lemma}"
-                VerticalAlignment="Center"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaTextBlockVisibility}" 
-                />
-            <TextBox x:Name="LemmaTextBox"
-                Grid.Column="1"
-                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontFamily}"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontSize}"
-                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontStyle}"
-                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontWeight}"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaMargin}"
-                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
-                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Lexeme.Lemma}"
-                VerticalAlignment="Center"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaTextBoxVisibility}" 
-                KeyUp="OnLemmaTextBoxKeyUp"
-                LostFocus="OnLemmaTextBoxLostFocus"
-                />
-            <StackPanel
-                Grid.Column="2"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Orientation="Horizontal"
-                Margin="20,0,0,0">
-                <lexiconControls:LexemeFormDisplay
-                    FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormFontFamily}"
-                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormFontSize}"
-                    FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormFontWeight}"
-                    Lexeme="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Lexeme}"
-                    LexemeForms="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Lexeme.Forms}"
-                    LexemeFormBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormBackground}"
-                    LexemeFormCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormCornerRadius}"
-                    LexemeFormMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormMargin}"
-                    LexemeFormPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormPadding}"
-                    LexemeFormRemoved="OnLexemeFormRemoved"
-                    Orientation="Horizontal" />
-                <lexiconControls:LexemeFormSelector
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    LexemeFormAdded="OnLexemeFormAdded"
-                    />
+            ></TextBlock>
+            <ComboBox x:Name="LexemeComboBox" Grid.Column="1" 
+                      d:DataContext="{d:DesignInstance lexiconControls:LexemeEditor}"
+                      ItemsSource="{Binding Lexemes}" 
+                      HorizontalAlignment="Left"
+                      Margin="20,0,10,0"
+                      Padding="5"
+                      SelectedItem="{Binding CurrentLexeme, Mode=TwoWay}" 
+                      Width="250"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="16" Text="{Binding Lemma}" />
+                            <TextBlock FontSize="12" Margin="10,3,0,0">
+                                <Run>(</Run>
+                                <Run Text="{Binding Language}"/>
+                                <Run>)</Run>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button Name="AddLexemePopupButton"
+                        Margin="9,-5,0,0"
+                        Padding="0,0,0,0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="ConfirmLexemeAdd"
+                        ToolTip="{helpers:Localization Lexicon_AddLexeme}"
+                        FontSize="12"
+                        FontWeight="SemiBold">
+                    <Image Height="18" Source="/Resources/add24.png" />
+                </Button>            
+                <Button Name="DeleteLexemeButton"
+                        Margin="9,-5,0,0"
+                        Padding="0,0,0,0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="ConfirmLexemeDeletion"
+                        ToolTip="{helpers:Localization Lexicon_DeleteLexeme}"
+                        FontSize="12"
+                        FontWeight="SemiBold">
+                    <Image Height="18" Source="/Resources/close24.png" />
+                </Button>
             </StackPanel>
-            <Button Grid.Column="3"
-                    Name="DeleteLexemeButton"
-                    Margin="9,-5,0,0"
-                    Padding="0,0,0,0"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Click="ConfirmLexemeDeletion"
-                    ToolTip="{helpers:Localization Lexicon_DeleteLexeme}"
-                    FontSize="12"
-                    FontWeight="SemiBold">
-                X
-            </Button>
-            <Popup Grid.Column="3"
+            <Popup Grid.Column="2"
+                   Name="AddLexemePopup"
+                   Width="300"
+                   Placement="Left"
+                   PlacementTarget="{Binding ElementName=AddLexemePopupButton}"
+                   PreviewKeyDown="CloseAddPopupOnEscape"
+                   StaysOpen="False"
+                   VerticalOffset="30">
+                <Border BorderThickness="2" Background="WhiteSmoke" Padding="5"
+                >
+                    <StackPanel Background="WhiteSmoke" Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock
+                            Padding="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="14" Text="{helpers:Localization Lexicon_LemmaForNewLexeme}" />
+                        <TextBox x:Name="NewLemmaTextBox"
+                                 TextChanged="OnNewLemmaTextChanged"
+                                 HorizontalAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 Margin="20,0,20,5"
+                                 Width="100"
+                                 Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewLexemeLemma}" />
+                        <TextBlock FontSize="14" 
+                                   Foreground="Red" 
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="{helpers:Localization Lexicon_LexemeExists}"
+                                   Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewLexemeErrorVisibility}" />
+                        <TextBlock FontSize="14" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="Red" 
+                                   HorizontalAlignment="Center"
+                                   Margin="0,3,0,5"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewLexemeErrorVisibility}">
+                            <Run Text="'"/>
+                            <Run Text="{Binding ElementName=NewLemmaTextBox, Path=Text}"/>
+                            <Run Text="'"/>
+                        </TextBlock>
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Button Margin="5" Click="AddLexemeConfirmed" IsDefault="True" Content="{helpers:Localization Lexicon_AddLexeme}"/>
+                            <Button Margin="5" Click="AddLexemeCancelled" Content="{helpers:Localization Cancel}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Popup>
+            <Popup Grid.Column="2"
                    Name="ConfirmDeletePopup"
                    Width="200"
                    Placement="Left"
@@ -170,26 +199,138 @@
                             Padding="10"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            FontWeight="Bold">
-                            Delete this lexeme?
+                            FontWeight="Bold"
+                            Text="{helpers:Localization Lexicon_DeleteLexemePrompt}">
                         </TextBlock>
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <Button Margin="5" Click="DeleteLexemeConfirmed">Yes</Button>
-                            <Button Margin="5" Click="DeleteLexemeCancelled">No</Button>
+                            <Button Margin="5" Click="DeleteLexemeConfirmed" Content="{helpers:Localization Yes}"/>
+                            <Button Margin="5" Click="DeleteLexemeCancelled" Content="{helpers:Localization No}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
             </Popup>
 
         </Grid>
-        <ItemsControl Grid.Row="2" 
+
+        <Grid Grid.Row="2"
+              Margin="10,20,0,0"
+              Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}"
+            >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       FontFamily="{DynamicResource MaterialDesignFont}"
+                       FontSize="14"
+                       FontStyle="Normal"
+                       FontWeight="Normal"
+                       Margin="0,0,20,0"
+                       Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
+                       Text="{helpers:Localization Lexicon_LemmaForms}"
+                       TextDecorations="Underline"
+                       VerticalAlignment="Center" />
+            <TextBlock x:Name="LemmaTextBlock"
+                Grid.Column="1"
+                MouseLeftButtonDown="OnLemmaLabelClick"
+                FontFamily="{DynamicResource MaterialDesignFont}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontSize}"
+                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontStyle}"
+                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontWeight}"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
+                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme.Lemma}"
+                VerticalAlignment="Center"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaTextBlockVisibility}" 
+                />
+            <TextBox x:Name="LemmaTextBox"
+                Grid.Column="1"
+                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontFamily}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontSize}"
+                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontStyle}"
+                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontWeight}"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
+                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme.Lemma}"
+                VerticalAlignment="Center"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaTextBoxVisibility}" 
+                KeyUp="OnLemmaTextBoxKeyUp"
+                LostFocus="OnLemmaTextBoxLostFocus"
+                />
+            <StackPanel
+                Grid.Column="2"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                Margin="20,0,0,0">
+                <lexiconControls:LexemeFormDisplay
+                    Lexeme="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme}"
+                    LexemeForms="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme.Forms}"
+                    LexemeFormBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormBackground}"
+                    LexemeFormCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormCornerRadius}"
+                    LexemeFormFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormFontFamily}"
+                    LexemeFormFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormFontSize}"
+                    LexemeFormFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormFontStyle}"
+                    LexemeFormFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormFontWeight}"
+                    LexemeFormMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormMargin}"
+                    LexemeFormPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeFormPadding}"
+                    LexemeFormRemoved="OnLexemeFormRemoved"
+                    Orientation="Horizontal" />
+                <lexiconControls:LexemeFormSelector
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    LexemeFormAdded="OnLexemeFormAdded"
+                    />
+            </StackPanel>
+        </Grid>
+        
+        <Grid Grid.Row="3"
+              Margin="10,10,0,0"
+              Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}"
+        >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                   FontFamily="{DynamicResource MaterialDesignFont}"
+                   FontSize="14"
+                   FontStyle="Normal"
+                   FontWeight="Normal"
+                   Margin="0,0,0,0"
+                   Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
+                   Text="{helpers:Localization Lexicon_Meanings}"
+                   TextDecorations="Underline"
+                   VerticalAlignment="Center" />
+
+            <Button Grid.Column="2" Margin="9,-5,0,0"
+                    Padding="0,0,0,0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="AddMeaningClicked"
+                    ToolTip="{helpers:Localization Lexicon_AddMeaningTooltip}"
+                    FontSize="12"
+                    FontWeight="SemiBold">
+                <Image Height="18" Source="/Resources/add24.png" />
+            </Button>
+
+        </Grid>
+        
+        <ItemsControl Grid.Row="4" 
                       Focusable="False"
                       Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}" 
                       ItemTemplate="{StaticResource MeaningDisplayTemplate}"
                       ItemsPanel="{StaticResource MeaningPanelTemplate}"
-                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Lexeme.Meanings}" />
-        <Button x:Name="AddMeaningButton" 
-                Grid.Row="3" 
+                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme.Meanings}" />
+        
+        <!--<Button x:Name="AddMeaningButton" 
+                Grid.Row="5" 
                 Width="110" 
                 Height="23" 
                 FontSize="11" 
@@ -197,6 +338,7 @@
                 Margin="20,20,0,0"
                 Background="Transparent"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}" 
-                Click="AddMeaningClicked">Add Meaning</Button>
+                Click="AddMeaningClicked"
+                Content="{helpers:Localization Lexicon_AddMeaning}" />-->
     </Grid>
 </UserControl>

@@ -50,10 +50,18 @@
     <None Remove="Assets\ClearDashboard_logo_50.png" />
     <None Remove="Assets\newproject.png" />
     <None Remove="Assets\splash_screen.png" />
+    <None Remove="Resources\add16.png" />
+    <None Remove="Resources\add24.png" />
+    <None Remove="Resources\add32.png" />
+    <None Remove="Resources\add512.png" />
     <None Remove="Resources\BiblicalTerms_logo_32.png" />
     <None Remove="Resources\block_16.png" />
     <None Remove="Resources\CautionTape.bmp" />
     <None Remove="Resources\ClearDashboard_logo_128.png" />
+    <None Remove="Resources\close16.png" />
+    <None Remove="Resources\close24.png" />
+    <None Remove="Resources\close32.png" />
+    <None Remove="Resources\close512.png" />
     <None Remove="Resources\Crystal Click 2.wav" />
     <None Remove="Resources\DashboardFailure.wav" />
     <None Remove="Resources\donut_icon.ico" />
@@ -158,6 +166,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\add16.png" />
+    <Resource Include="Resources\add24.png" />
+    <Resource Include="Resources\add32.png" />
+    <Resource Include="Resources\add512.png" />
     <Resource Include="Resources\BiblicalTerms_logo_32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -168,6 +180,10 @@
     <Resource Include="Resources\ClearDashboard_logo_128.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\close16.png" />
+    <Resource Include="Resources\close24.png" />
+    <Resource Include="Resources\close32.png" />
+    <Resource Include="Resources\close512.png" />
     <Resource Include="Resources\donut_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

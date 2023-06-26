@@ -7,6 +7,7 @@ using Caliburn.Micro;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System;
+using System.Linq;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
@@ -59,6 +60,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        [Obsolete("This method is deprecated; use GetLexemesAsync instead.")]
         public async Task<LexemeViewModel?> GetLexemeAsync(string lemma = "", string? language = null, string? meaningLanguage = null)
         {
             try
@@ -80,6 +82,61 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger.LogInformation($"Retrieved lexeme for {lemma} in {stopwatch.ElapsedMilliseconds} ms");
 
                 return new LexemeViewModel(result);
+            }
+            catch (Exception e)
+            {
+                Logger.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public async Task<LexemeViewModelCollection> GetLexemesAsync(string lemma = "", string? language = null, string? meaningLanguage = null)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#if !DEMO
+                var results = (await Lexeme.GetByLemmaOrForm(Mediator, lemma, language, meaningLanguage)).ToList();
+#else
+                var results = new List<Lexeme>(new Lexeme { Lemma = lemma, Language = language });
+#endif
+                stopwatch.Stop();
+
+                Logger.LogInformation(results.Any() ? $"Retrieved {results.Count} lexeme(s) for {lemma} in {stopwatch.ElapsedMilliseconds} ms"
+                                                    : $"Could not find lexeme for {lemma} in {stopwatch.ElapsedMilliseconds} ms");
+                return new LexemeViewModelCollection(results);
+            }
+            catch (Exception e)
+            {
+                Logger.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public bool LexemeExists(string lemma = "", string? language = null, string? meaningLanguage = null)
+        {
+            var result = Task.Run(() => LexemeExistsAsync(lemma, language, meaningLanguage)).GetAwaiter().GetResult();
+            return result;
+        }
+
+        public async Task<bool> LexemeExistsAsync(string lemma = "", string? language = null, string? meaningLanguage = null)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#if !DEMO
+                var results = (await Lexeme.GetByLemmaOrForm(Mediator, lemma, language, meaningLanguage)).ToList();
+#else
+                var results = new List<Lexeme>(new Lexeme { Lemma = lemma, Language = language });
+#endif
+                stopwatch.Stop();
+
+                Logger.LogInformation(results.Any() ? $"Retrieved {results.Count} lexeme(s) for {lemma} in {stopwatch.ElapsedMilliseconds} ms"
+                                                    : $"Could not find lexeme for {lemma} in {stopwatch.ElapsedMilliseconds} ms");
+                
+                return results.Any(l => l.Lemma == lemma);
             }
             catch (Exception e)
             {
