@@ -189,7 +189,7 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Content="{Binding BulkAlignmentsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
-                    <userControls:BookSelector Grid.Row="0" Grid.Column="1" Books="{Binding RelevantBooks}" CurrentBook="{Binding CurrentBook}" ></userControls:BookSelector>
+                    <userControls:BookSelector Grid.Row="0" Grid.Column="1" Books="{Binding RelevantBooks}" CurrentBook="{Binding CurrentBook}" cm:Message.Attach="[Event SelectionChanged] = [Action OnBookChanged($eventArgs)];" HorizontalAlignment="Left" ></userControls:BookSelector>
                     <Label Grid.Row="0" Grid.Column="2" Content="{helpers:Localization BulkAlignmentReview_Alignments}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
                 </Grid>
                 <DataGrid Grid.Row="1" Grid.Column="0" 
@@ -244,7 +244,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Sync" Width="75">
+                        <DataGridTemplateColumn Header="{helpers:Localization Bcv_Sync}" Width="75">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 

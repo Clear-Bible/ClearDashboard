@@ -76,6 +76,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool HasPivotWords => PivotWords is { Count: > 0 };
 
+        private AlignedWord? CurrentAlignedWord { get; set; }
+
         public string PivotWordsCountMessage => $"{(PivotWords is { Count: > 0 } ? PivotWords.Count : 0)} records.";
 
         private BindableCollection<PivotWord>? _pivotWords;
@@ -170,6 +172,62 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords());
         }
 
+        public async void OnBookChanged(SelectionChangedEventArgs e)
+        {
+            if (CurrentAlignedWord != null && e.AddedItems.Count > 0 && e.AddedItems[0] is Book item )
+            {
+
+                _ = await Task.Factory.StartNew(async () =>
+                {
+                    try
+                    {
+
+                        FetchingData = true;
+                        ProgressBarVisibility = Visibility.Visible;
+                        _verseContexts = await _alignmentSet.GetAlignmentVerseContexts(CurrentAlignedWord.Source,
+                            CurrentAlignedWord.Target, _countsByTrainingText, CurrentBook.Number, AlignmentTypes);
+
+                        //await Execute.OnUIThreadAsync(async () =>
+                        //{
+
+                        var verseRows = await _verseContexts.Where(vc => vc.alignment.AlignmentId.SourceTokenId.BookNumber == CurrentBook.Number).SelectAsync(async verseContext =>
+                            new BulkAlignmentVerseRow
+                            {
+
+                                Alignment = verseContext.alignment,
+                                IsSelected = false,
+                                Type = AlignmentTypesMap[verseContext.alignment.ToAlignmentType(AlignmentTypes)],
+                                BulkAlignmentDisplayViewModel = await BulkAlignmentDisplayViewModel.CreateAsync(
+                                    LifetimeScope,
+                                    new BulkAlignment
+                                    {
+                                        Alignment = verseContext.alignment,
+                                        SourceVerseTokens = verseContext.sourceVerseTokens,
+                                        SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
+                                        TargetVerseTokens = verseContext.targetVerseTokens,
+                                        TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
+                                    },
+                                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
+                                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl,
+                                    _alignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
+                                    _alignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.IsRtl
+                                )
+                            });
+
+                        BulkAlignments = new BindableCollection<BulkAlignmentVerseRow>(verseRows.OrderBy(vr => vr.SourceRef));
+                        //});
+
+                    }
+                    finally
+                    {
+                        FetchingData = false;
+                        ProgressBarVisibility = Visibility.Hidden;
+                    }
+                });
+
+            }
+        }
+
         public void OnAlignmentApprovalChanged(SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
@@ -236,11 +294,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        public async void OnSourceTargetCountRowSelectionChanged(SelectionChangedEventArgs e)
+        public void OnSourceTargetCountRowSelectionChanged(SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is AlignedWord alignedWord)
             {
-                await GetAlignmentVerseContexts(alignedWord);
+                GetAlignmentVerseContexts(alignedWord);
             }
         }
         
@@ -250,7 +308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 if (AlignmentCounts != null && pivotWord.Word != null)
                 {
-                    var success = AlignmentCounts.TryGetValue(pivotWord.Word, out IDictionary<string, IDictionary<string, uint>>? alignedWordDictionary);
+                    var success = AlignmentCounts.TryGetValue(pivotWord.Word, out IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)> alignedWordDictionary);
 
                     if (success && alignedWordDictionary != null)
                     {
@@ -259,8 +317,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                 {
                                     Source = _sourceToTarget ? pivotWord.Word : kvp.Key, 
                                     Target = _sourceToTarget ? kvp.Key : pivotWord.Word, 
-                                    Count = kvp.Value.Sum(k=>k.Value),
-                                    PivotWord = pivotWord
+                                    Count = kvp.Value.StatusCounts.Sum(k=>k.Value),
+                                    PivotWord = pivotWord,
+                                    RelevantBooks = CreateRelevantBooks(kvp.Value.BookNumbers)
                                 })
                             .OrderByDescending(kvp => kvp.Count));
                     }
@@ -268,7 +327,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private IDictionary<string, IDictionary<string, IDictionary<string, uint>>>? AlignmentCounts { get; set; }
+        private List<Book> CreateRelevantBooks(string bookNumbers)
+        {
+            var numbers = bookNumbers.Split(',');
+            return numbers.Select(number => Convert.ToInt32(number)).Select(index => new Book { Number = index, Code = VerseHelper.BookNames[index].code }).ToList();
+        }
+
+        private IDictionary<string, IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)>>? AlignmentCounts { get; set; }
 
         private AlignmentTypes _alignmentTypes;
         public AlignmentTypes AlignmentTypes
@@ -290,58 +355,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private IEnumerable<(Alignment alignment, IEnumerable<Token> sourceVerseTokens, uint sourceVerseTokensIndex, IEnumerable<Token> targetVerseTokens, uint targetVerseTokensIndex)>? _verseContexts;
-        private async Task GetAlignmentVerseContexts(AlignedWord alignedWord)
+        private void GetAlignmentVerseContexts(AlignedWord alignedWord)
         {
-            _ = await Task.Factory.StartNew(async () =>
+            if (alignedWord is { Source: { }, Target: { } } && _alignmentSet != null)
             {
-                try
-                {
-                    if (alignedWord is { Source: { }, Target: { } } && _alignmentSet != null)
-                    {
-                        FetchingData = true;
-                        ProgressBarVisibility = Visibility.Visible;
-                        _verseContexts = await _alignmentSet.GetAlignmentVerseContexts(alignedWord.Source,
-                            alignedWord.Target, _countsByTrainingText, 1, AlignmentTypes);
-
-                        //await Execute.OnUIThreadAsync(async () =>
-                        //{
-                            RelevantBooks = _verseContexts.Select(vr=> new  Book {Number = vr.alignment.AlignmentId.SourceTokenId.BookNumber, Code=VerseHelper.BookNames[vr.alignment.AlignmentId.SourceTokenId.BookNumber].code}).ToList().Distinct(new BookComparer()).OrderBy(bookCode => bookCode.Number).ToList();
-                            CurrentBook = RelevantBooks[0];
-                            var verseRows = await _verseContexts.Where(vc=>vc.alignment.AlignmentId.SourceTokenId.BookNumber == CurrentBook.Number).SelectAsync(async verseContext =>
-                                new BulkAlignmentVerseRow
-                                {
-
-                                    Alignment = verseContext.alignment,
-                                    IsSelected = false,
-                                    Type = AlignmentTypesMap[verseContext.alignment.ToAlignmentType(AlignmentTypes)],
-                                    BulkAlignmentDisplayViewModel = await BulkAlignmentDisplayViewModel.CreateAsync(
-                                        LifetimeScope,
-                                        new BulkAlignment
-                                        {
-                                            Alignment = verseContext.alignment,
-                                            SourceVerseTokens = verseContext.sourceVerseTokens,
-                                            SourceVerseTokensIndex = verseContext.sourceVerseTokensIndex,
-                                            TargetVerseTokens = verseContext.targetVerseTokens,
-                                            TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
-                                        },
-                                        _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                                        _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl,
-                                        _alignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
-                                        _alignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.IsRtl
-                                    )
-                                });
-                            
-                            BulkAlignments = new BindableCollection<BulkAlignmentVerseRow>(verseRows.OrderBy(vr => vr.SourceRef));
-                        //});
-                       
-                    }
-                }
-                finally
-                {
-                    FetchingData = false;
-                    ProgressBarVisibility = Visibility.Hidden;
-                }
-            });
+                CurrentAlignedWord = alignedWord;
+                RelevantBooks = alignedWord.RelevantBooks;
+                CurrentBook = RelevantBooks[0];
+            }
         }
         
         private AlignmentSet? _alignmentSet;
@@ -373,13 +394,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     if (_alignmentSet != null)
                     {
-                        AlignmentCounts = await _alignmentSet.GetAlignmentCounts(_sourceToTarget, _countsByTrainingText,
+                        AlignmentCounts = await _alignmentSet.GetAlignmentCounts(_sourceToTarget, _countsByTrainingText, true,
                             AlignmentTypes);
 
                         await Execute.OnUIThreadAsync(async () =>
                         {
                             PivotWords = new BindableCollection<PivotWord>(AlignmentCounts.Select(kvp =>
-                                    new PivotWord { Word = kvp.Key, Count = kvp.Value.Sum(k => k.Value.Sum(k2 => (int)k2.Value)) })
+                                    new PivotWord { Word = kvp.Key, Count = kvp.Value.Sum(k => k.Value.StatusCounts.Sum(k2 => (int)k2.Value)) })
                                 .OrderByDescending(kvp => kvp.Count));
                             await Task.CompletedTask;
                         });

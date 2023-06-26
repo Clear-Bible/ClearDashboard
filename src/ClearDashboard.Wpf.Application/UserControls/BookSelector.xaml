@@ -20,24 +20,31 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="6"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
+        <TextBlock
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="12"
+            Text="{helpers:Localization Bcv_Book}" />
+
         <!--  BOOK LEFT ARROW  -->
         <Button
             x:Name="LeftButton"
-            Grid.Column="0"
+            Grid.Column="2"
             Width="15"
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
             Padding="-1,-2,0,0"
             HorizontalAlignment="Right"
-            VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="LeftButton_Click"
-            IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
             ToolTip="{helpers:Localization Bcv_PreviousBook}">
             <TextBlock
@@ -48,7 +55,7 @@
         </Button>
         <ComboBox
             x:Name="BookCombobox"
-            Grid.Column="1"
+            Grid.Column="3"
             MinWidth="60"
             Margin="5,0,5,3"
             ItemsSource="{Binding  RelevantBooks, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
@@ -60,25 +67,21 @@
         <!--  BOOK RIGHT ARROW  -->
         <Button
             x:Name="RightButton"
-            Grid.Column="2"
+            Grid.Column="4"
             Width="15"
             Height="18"
             MinWidth="20"
             Margin="0,0,0,2"
             Padding="-1,-2,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="RightButton_Click"
-            IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
             ToolTip="{helpers:Localization Bcv_NextBook}">
-
             <TextBlock
                 Name="NextBookArrow"
                 FontWeight="ExtraBold"
                 Text="►" />
-
         </Button>
     </Grid>
 </UserControl>

@@ -5,32 +5,33 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
 
-    public class Book
-    {
-        public int Number { get; set; }
-        public string? Code { get; set; }
-    }
+    //public class Book
+    //{
+    //    public int Number { get; set; }
+    //    public string? Code { get; set; }
+    //}
 
-    public class BookComparer : IEqualityComparer<Book>
-    {
-        public bool Equals(Book x, Book y)
-        {
-            if (ReferenceEquals(x, y)) return true;
-            if (ReferenceEquals(x, null)) return false;
-            if (ReferenceEquals(y, null)) return false;
-            if (x.GetType() != y.GetType()) return false;
-            return x.Number == y.Number && x.Code == y.Code;
-        }
+    //public class BookComparer : IEqualityComparer<Book>
+    //{
+    //    public bool Equals(Book x, Book y)
+    //    {
+    //        if (ReferenceEquals(x, y)) return true;
+    //        if (ReferenceEquals(x, null)) return false;
+    //        if (ReferenceEquals(y, null)) return false;
+    //        if (x.GetType() != y.GetType()) return false;
+    //        return x.Number == y.Number && x.Code == y.Code;
+    //    }
 
-        public int GetHashCode(Book obj)
-        {
-            return HashCode.Combine(obj.Number, obj.Code);
-        }
-    }
+    //    public int GetHashCode(Book obj)
+    //    {
+    //        return HashCode.Combine(obj.Number, obj.Code);
+    //    }
+    //}
     /// <summary>
     /// Interaction logic for BookSelector.xaml
     /// </summary>

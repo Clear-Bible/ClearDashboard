@@ -30,12 +30,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private string _currentProjectName;
 
         #endregion
-
-
-
+        
         #region Observable Properties
-
-
+        
         #region ParatextSync
 
         public static readonly DependencyProperty ParatextSyncProperty =
@@ -113,8 +110,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion CurrentBcv
-
-
         
         #region VerseChange
 
@@ -139,8 +134,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion VerseChange
-
-
+        
         #region IsControlEnabled
 
         public static readonly DependencyProperty IsControlEnabledProperty =
@@ -153,8 +147,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion IsControlEnabled
-
-
+        
         #region IsControlMinimal
         
         public static readonly DependencyProperty IsControlMinimalProperty =
@@ -167,8 +160,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion IsControlMinimal
-
-
+        
         #region ShowOffsetControl
 
         public static readonly DependencyProperty ShowOffsetControlProperty =
@@ -181,9 +173,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion ShowOffsetControl
-
-
-
+        
         #region ShowHeader
 
         public static readonly DependencyProperty ShowHeaderProperty =
@@ -208,9 +198,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion ShowHeader
-
-
-
+        
         #region VerseOffsetRange
 
         public static readonly DependencyProperty VerseOffsetRangeProperty =
@@ -236,9 +224,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         # endregion VerseRange
-
         
-
         #region BcvDictionary
 
         public static readonly DependencyProperty BcvDictionaryProperty = DependencyProperty.Register(
@@ -269,8 +255,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion BcvDictionary
 
         #endregion Observable Properties
-
-
         
         #region Constructor
         public BcvUserControl()
@@ -607,7 +591,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
 
         #endregion
-
-
+        
     }
 }

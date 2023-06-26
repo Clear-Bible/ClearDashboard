@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -52,6 +53,30 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
         }
 
     }
+
+    public class Book
+    {
+        public int Number { get; set; }
+        public string? Code { get; set; }
+    }
+
+    public class BookComparer : IEqualityComparer<Book>
+    {
+        public bool Equals(Book x, Book y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (ReferenceEquals(x, null)) return false;
+            if (ReferenceEquals(y, null)) return false;
+            if (x.GetType() != y.GetType()) return false;
+            return x.Number == y.Number && x.Code == y.Code;
+        }
+
+        public int GetHashCode(Book obj)
+        {
+            return HashCode.Combine(obj.Number, obj.Code);
+        }
+    }
+
     public class BulkAlignmentVerseRow : PropertyChangedBase
     {
         private bool _isSelected;
@@ -100,8 +125,10 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
     }
     public class PivotWord
     {
+       
         public string? Word { get; set; }
         public int Count { get; set; }
+       
     }
 
     //public class AlignedWord
@@ -113,6 +140,10 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
 
     public class AlignedWord 
     {
+        public AlignedWord()
+        {
+            RelevantBooks = new List<Book>();
+        }
         public long Count { get; set; }
 
         public PivotWord? PivotWord { get; set; }
@@ -120,6 +151,8 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
         public string? Source { get; set; }
 
         public string? Target { get; set; }
+
+        public List<Book> RelevantBooks = new List<Book>();
 
     }
 
