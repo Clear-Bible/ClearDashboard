@@ -66,7 +66,7 @@
                                       SemanticDomainSuggestions="{Binding SemanticDomainSuggestions}"
                                       TokenDisplay="{Binding TokenDisplay}" 
                                       TranslationFontFamily="{Binding TargetFontFamily}"
-                                      TranslationFontSize="12"
+                                      TranslationFontSize="15"
                                       TranslationFontStyle="Normal"
                                       TranslationMargin="0,0,0,0"
         >
@@ -127,7 +127,7 @@
         <lexiconControls:ConcordanceDisplay x:Name="ConcordanceDisplay" Grid.Row="4"
                 Translations="{Binding Concordance}"
                 NewTranslation="{Binding NewTranslation}"
-                TranslationFontSize="12"
+                TranslationFontSize="16"
                 TranslationFontStyle="Normal"
                 Margin="40,0,0,0"
                 TranslationFontFamily="{Binding TargetFontFamily}"
