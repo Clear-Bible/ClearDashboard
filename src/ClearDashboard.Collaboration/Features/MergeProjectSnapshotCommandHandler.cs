@@ -88,7 +88,7 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
                 // FIXME:  temporary, for testing:
                 //await MergeContext.MergeBehavior.MergeErrorAsync(cancellationToken);
 
-                request.Progress.Report(new ProgressStatus(0, "Merge complete!"));
+                request.Progress.Report(new ProgressStatus(0, "Merge complete...Reloading Interface"));
 
                 if (mergeContext.FireAlignmentDenormalizationEvent)
                 {

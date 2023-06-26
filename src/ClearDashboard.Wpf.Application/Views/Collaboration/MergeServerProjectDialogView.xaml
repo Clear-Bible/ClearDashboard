@@ -100,7 +100,15 @@
                     <GridViewColumn Width="2000">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding}" />
+                                <Border>
+                                    <TextBlock Text="{Binding}" />
+                                    <Border.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Click="Copy_OnClick" Header="{helpers:Localization Copy}" />
+                                        </ContextMenu>
+
+                                    </Border.ContextMenu>
+                                </Border>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

@@ -568,6 +568,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         version = results.Data;
                     }
 
+
+                    bool shaPresent = false;
+                    results =
+                        await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
+                    if (results.Success && results.HasData)
+                    {
+                        if (results.Data.ToString() != "")
+                        {
+                            shaPresent = true;
+                        }
+                    }
+
                     // add as ListItem
                     var dashboardProject = new DashboardProject
                     {
@@ -576,6 +588,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         ShortFilePath = fileInfo.Name,
                         FullFilePath = fileInfo.FullName,
                         Version = version,
+                        IsCollabProject = shaPresent,
                     };
 
                     DashboardProjects.Add(dashboardProject);
@@ -728,8 +741,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             while (!IsParatextRunning)
             {
-                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning()).ConfigureAwait(false);
                 Thread.Sleep(1000);
+                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning()).ConfigureAwait(false);
             }
         }
 
@@ -951,7 +964,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
             Connected = message.Connected;
-            IsParatextRunning = true;
+
+            if (!Connected)
+            {
+                IsParatextRunning=false;
+                ListenForParatextStart();
+            }
 
             await Task.CompletedTask;
         }
