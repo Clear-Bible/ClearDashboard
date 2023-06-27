@@ -1,7 +1,9 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Translation
@@ -31,5 +33,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
         {
             return await AlignmentSet.Create(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, isSymmetrized, metadata, parallelCorpusId, mediator, token);
         }
+
+        public static AlignmentTypes ToAlignmentType(this Alignment alignment, AlignmentTypes alignmentTypesUsedInQuery)
+        {
+            return AlignmentModelExtensions.ToAlignmentType(alignment.OriginatedFrom, alignment.Verification, alignmentTypesUsedInQuery);
+        }
+
     }
 }

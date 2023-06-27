@@ -186,6 +186,13 @@
                 IsReadOnly="True"
                 Style="{StaticResource TextBoxAsLabel}"
                 Text="Your guid will appear here." />
+            <CheckBox
+                Name="DecryptedInternalCheckBox"
+                Margin="10"
+                Content="User is Internal"
+                FontSize="20"
+                Foreground="Gray"
+                IsEnabled="False" />
         </StackPanel>
 
 
