@@ -67,8 +67,8 @@
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Проверьте доступность пользователя</value>
   </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>Настройки ClearDashboard</value>
+  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Иов</value>
@@ -193,6 +193,9 @@
   <data name="ProperCase_Matthew" xml:space="preserve">
     <value>Ев. от Матфея</value>
   </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>Доступные пользователи сотрудничества:</value>
+  </data>
   <data name="ProperCase_1_John" xml:space="preserve">
     <value>1 Иоанна</value>
   </data>
@@ -307,11 +310,17 @@
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Консультанты</value>
   </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>Импортный сервер проект</value>
+  </data>
   <data name="JOL" xml:space="preserve">
     <value>Иоил.</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
     <value>Определение короткого: короткое:</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>Проекты</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -469,6 +478,9 @@
   <data name="3JN" xml:space="preserve">
     <value>3Ин.</value>
   </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>Настройки ClearDashboard</value>
+  </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>Есфирь (евр.)</value>
   </data>
@@ -486,6 +498,9 @@
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Иисус Навин</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_Add" xml:space="preserve">
     <value>Добавлять</value>
@@ -1024,6 +1039,9 @@
   <data name="Pds_SourceLanguage" xml:space="preserve">
     <value>Исходный язык</value>
   </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>Список проектов обновления</value>
+  </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
     <value>Считать по поверхностному тексту</value>
   </data>
@@ -1131,6 +1149,9 @@
   </data>
   <data name="Pds_CreateNewInterlinear" xml:space="preserve">
     <value>Создайте новый интерлинеар</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>Текущие пользователи проекта:</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>Примечания</value>
@@ -1276,6 +1297,9 @@
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
     <value>Отменить перевод</value>
   </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>Выберите проект</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Обновлять</value>
   </data>
@@ -1326,6 +1350,9 @@
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
     <value>Пропавшие визуализации</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>Член проекта</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1513,6 +1540,9 @@
   <data name="BiblicalTermsForm_Category" xml:space="preserve">
     <value>Категория</value>
   </data>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>Владелец проекта</value>
+  </data>
   <data name="ShellView_ShowNotes" xml:space="preserve">
     <value>Выпуск заметок</value>
   </data>
@@ -1533,6 +1563,9 @@
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Источник</value>
+  </data>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="1CO" xml:space="preserve">
     <value>1Кор.</value>

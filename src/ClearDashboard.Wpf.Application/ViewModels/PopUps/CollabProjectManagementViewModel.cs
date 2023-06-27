@@ -1,20 +1,20 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using SIL.Extensions;
 using System.Windows;
-using MahApps.Metro.Controls;
-using ClearDashboard.DataAccessLayer.Models;
+#pragma warning disable CA1416
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -271,7 +271,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             await GetUsersForProject();
 
-            return;
         }
 
         #endregion // Methods

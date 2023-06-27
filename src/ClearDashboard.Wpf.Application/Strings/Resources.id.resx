@@ -67,8 +67,8 @@
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Periksa ketersediaan pengguna</value>
   </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>Pengaturan ClearDashboard</value>
+  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Pekerjaan</value>
@@ -193,6 +193,9 @@
   <data name="ProperCase_Matthew" xml:space="preserve">
     <value>Matius</value>
   </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>Pengguna kolaborasi yang tersedia:</value>
+  </data>
   <data name="ProperCase_1_John" xml:space="preserve">
     <value>1 John</value>
   </data>
@@ -307,11 +310,17 @@
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>ConsultantNotes</value>
   </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>Proyek Server Impor</value>
+  </data>
   <data name="JOL" xml:space="preserve">
     <value>JOL</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
     <value>Definisi pendek:</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>Proyek</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -469,6 +478,9 @@
   <data name="3JN" xml:space="preserve">
     <value>3JN</value>
   </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>Pengaturan ClearDashboard</value>
+  </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>Esther</value>
   </data>
@@ -486,6 +498,9 @@
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_Add" xml:space="preserve">
     <value>Menambahkan</value>
@@ -1024,6 +1039,9 @@
   <data name="Pds_SourceLanguage" xml:space="preserve">
     <value>Bahasa sumber</value>
   </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>Daftar Proyek Kolaborasi Refresh</value>
+  </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
     <value>Hitung dengan teks permukaan</value>
   </data>
@@ -1131,6 +1149,9 @@
   </data>
   <data name="Pds_CreateNewInterlinear" xml:space="preserve">
     <value>Buat interlinear baru</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>Pengguna proyek saat ini:</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>Catatan</value>
@@ -1276,6 +1297,9 @@
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
     <value>Batalkan terjemahan</value>
   </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>Pilih Proyek</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Menyegarkan</value>
   </data>
@@ -1326,6 +1350,9 @@
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
     <value>Rendering yang hilang</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>Anggota proyek</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Perkecil dari konten</value>
@@ -1513,6 +1540,9 @@
   <data name="BiblicalTermsForm_Category" xml:space="preserve">
     <value>Kategori</value>
   </data>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>Pemilik proyek</value>
+  </data>
   <data name="ShellView_ShowNotes" xml:space="preserve">
     <value>Catatan Rilis</value>
   </data>
@@ -1533,6 +1563,9 @@
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Asal</value>
+  </data>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="1CO" xml:space="preserve">
     <value>1CO</value>

@@ -67,8 +67,8 @@
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Check User Availability</value>
   </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>ClearDashboard Settings</value>
+  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
+    <value>Manage Collaboration Projects</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Job</value>
@@ -193,6 +193,9 @@
   <data name="ProperCase_Matthew" xml:space="preserve">
     <value>Matthew</value>
   </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>Available Collaboration Users:</value>
+  </data>
   <data name="ProperCase_1_John" xml:space="preserve">
     <value>1 John</value>
   </data>
@@ -307,11 +310,17 @@
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>ConsultantNotes</value>
   </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>Import Server Project</value>
+  </data>
   <data name="JOL" xml:space="preserve">
     <value>JOL</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
     <value>Definition Short:</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>Projects</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -469,6 +478,9 @@
   <data name="3JN" xml:space="preserve">
     <value>3JN</value>
   </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>ClearDashboard Settings</value>
+  </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>Esther</value>
   </data>
@@ -486,6 +498,9 @@
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>Collaboration Management</value>
   </data>
   <data name="ClockUserControl_Add" xml:space="preserve">
     <value>Add</value>
@@ -1024,6 +1039,9 @@
   <data name="Pds_SourceLanguage" xml:space="preserve">
     <value>SourceLanguage</value>
   </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>Refresh Collaboration Projects List</value>
+  </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
     <value>Count By Surface Text</value>
   </data>
@@ -1131,6 +1149,9 @@
   </data>
   <data name="Pds_CreateNewInterlinear" xml:space="preserve">
     <value>Create New Interlinear</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>Current Project Users:</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>Notes</value>
@@ -1276,6 +1297,9 @@
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
     <value>Cancel Translation</value>
   </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>Select Project</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
@@ -1326,6 +1350,9 @@
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
     <value>Missing Renderings</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>Project Member</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Zoom out from the content</value>
@@ -1513,6 +1540,9 @@
   <data name="BiblicalTermsForm_Category" xml:space="preserve">
     <value>Category</value>
   </data>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>Project Owner</value>
+  </data>
   <data name="ShellView_ShowNotes" xml:space="preserve">
     <value>Release Notes</value>
   </data>
@@ -1533,6 +1563,9 @@
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Origin</value>
+  </data>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>Description</value>
   </data>
   <data name="1CO" xml:space="preserve">
     <value>1CO</value>
