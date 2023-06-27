@@ -11,16 +11,15 @@ using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Aqua.Module.Services;
-using FluentValidation.Results;
 using FluentValidation;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearBible.Engine.Exceptions;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 using System.Collections.Generic;
-using ClearDashboard.Aqua.Module.Models;
 using System.Windows;
 using System.Linq;
 using Autofac.Features.AttributeFilters;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
@@ -90,6 +89,17 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
             ValidationResult = Validate();
         }
     }
+
+    private Visibility isoLanguageErrorVisibility_;
+    public Visibility IsoLanguageErrorVisibility
+    {
+        get => isoLanguageErrorVisibility_;
+        set
+        {
+            Set(ref isoLanguageErrorVisibility_, value);
+        }
+    }
+
     private Script? isoScript_;
     public Script? IsoScript
     {
@@ -98,6 +108,16 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         {
             Set(ref isoScript_, value);
             ValidationResult = Validate();
+        }
+    }
+
+    private Visibility isoScriptErrorVisibility_;
+    public Visibility IsoScriptErrorVisibility
+    {
+        get => isoScriptErrorVisibility_;
+        set
+        {
+            Set(ref isoScriptErrorVisibility_, value);
         }
     }
     private string? abbreviation_;
@@ -246,6 +266,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 ParentViewModel!.Message = ex.Message ?? ex.ToString();
             });
         }
+
+        ValidationResult = Validate();
     }
 
     private void ClearIdData()
@@ -612,6 +634,11 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     }
     protected override ValidationResult? Validate()
     {
-        return Validator!.Validate(this);
+        var result = Validator!.Validate(this);
+
+        IsoLanguageErrorVisibility = result.Errors.Any(e => e.PropertyName == "IsoLanguage") ? Visibility.Visible : Visibility.Hidden;
+        IsoScriptErrorVisibility = result.Errors.Any(e => e.PropertyName == "IsoScript") ? Visibility.Visible : Visibility.Hidden;
+        
+        return result;
     }
 }
