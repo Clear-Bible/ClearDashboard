@@ -20,5 +20,22 @@ namespace ClearDashboard.Wpf.Application.Collections.Lexicon
         public LexemeViewModelCollection(IEnumerable<LexemeViewModel> lexemeViewModels) : base(lexemeViewModels)
         {
         }
+
+        public LexemeViewModel? GetLexemeWithTranslation(TranslationId translationId)
+        {
+            foreach (var lexeme in this)
+            {
+                foreach (var meaning in lexeme.Meanings)
+                {
+                    var match = meaning.Translations.FirstOrDefault(t => t.TranslationId == translationId);
+                    if (match != null)
+                    {
+                        return lexeme;
+                    }
+                }
+            }
+
+            return null;
+        }
     }
 }

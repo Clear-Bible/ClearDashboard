@@ -138,7 +138,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 {
                     if (SelectedTranslation != null && !string.IsNullOrWhiteSpace(SelectedTranslation.Text))
                     {
-                        await InterlinearDisplay.PutTranslationAsync(new Translation(TokenDisplay.TokenForTranslation, SelectedTranslation.Text, Translation.OriginatedFromValues.Assigned),
+                        await InterlinearDisplay.PutTranslationAsync(new Translation(TokenDisplay.TokenForTranslation, SelectedTranslation.Text, Translation.OriginatedFromValues.Assigned, SelectedTranslation.TranslationId),
                                                                      ApplyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate);
                     }
                 }
@@ -328,8 +328,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             await base.OnInitializeAsync(cancellationToken);
             
             Lexemes = await LexiconManager.GetLexemesAsync(TokenDisplay.TranslationSurfaceText, GetSourceLanguage(), GetTargetLanguage());
-            //if (TokenDisplay.Translation.LexiconTranslationId)
-            CurrentLexeme = Lexemes.FirstOrDefault();
+
+            if (TokenDisplay?.Translation?.LexiconTranslationId != null)
+            {
+                CurrentLexeme = Lexemes.GetLexemeWithTranslation(TokenDisplay.Translation.LexiconTranslationId);
+            }
+            CurrentLexeme ??= Lexemes.FirstOrDefault();
 
             if (Concordance.Count == 0)
             {
