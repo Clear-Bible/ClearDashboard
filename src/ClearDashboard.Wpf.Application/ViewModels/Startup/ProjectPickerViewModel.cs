@@ -726,7 +726,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async void ListenForParatextStart()
         {
-            while (!IsParatextRunning)
+            while (!IsParatextRunning || !Connected)
             {
                 IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning()).ConfigureAwait(false);
                 Thread.Sleep(1000);
