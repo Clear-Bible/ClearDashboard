@@ -259,8 +259,8 @@
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>Keberpihakan</value>
   </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>Validasi kode email</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>Preferensi</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Tunjukkan kontrol tampilan yang ditingkatkan</value>
@@ -1066,8 +1066,8 @@
   <data name="ExpandView" xml:space="preserve">
     <value>Perluas tampilan</value>
   </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>Preferensi</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>Tambahkan pengguna kolaborasi baru</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
     <value>Permukaan Desain Proyek</value>
@@ -1278,6 +1278,9 @@
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Menyegarkan</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>Validasi kode email</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>DASBOR</value>
@@ -1740,6 +1743,9 @@
   </data>
   <data name="HAG" xml:space="preserve">
     <value>HAG</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>Proyek Kolaborasi</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Status</value>

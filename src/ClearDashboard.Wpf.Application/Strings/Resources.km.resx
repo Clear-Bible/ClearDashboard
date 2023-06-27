@@ -259,8 +259,8 @@
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>ការអរងេចុល</value>
   </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>ធ្វើឱ្យលេខកូដអ៊ីម៉ែលមានសុពលភាព</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>ចំណូលចិត្ត</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>បង្ហាញការត្រួតពិនិត្យទិដ្ឋភាពដែលបានធ្វើឱ្យប្រសើរឡើង</value>
@@ -1066,8 +1066,8 @@
   <data name="ExpandView" xml:space="preserve">
     <value>ពង្រីកទិដ្ឋភាព</value>
   </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>ចំណូលចិត្ត</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>បន្ថែមអ្នកប្រើប្រាស់សហការថ្មី</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
     <value>ផ្ទៃរចនាគម្រោង</value>
@@ -1278,6 +1278,9 @@
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>ធ្វើ​ឱ្យ​ស្រស់</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>ធ្វើឱ្យលេខកូដអ៊ីម៉ែលមានសុពលភាព</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>របដាប់ខ</value>
@@ -1740,6 +1743,9 @@
   </data>
   <data name="HAG" xml:space="preserve">
     <value>HAG</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>គម្រោងសហការ</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>ច្បាប់</value>

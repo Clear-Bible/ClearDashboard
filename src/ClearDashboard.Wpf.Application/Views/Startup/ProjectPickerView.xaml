@@ -542,7 +542,7 @@
                 Margin="40,0,0,0"
                 FontSize="19"
                 FontWeight="Medium"
-                Text="Collaboration Projects" />
+                Text="{helpers:Localization ProjectPicker_CollabProjects}" />
 
             <Button
                 x:Name="NewCollabUser"
@@ -568,7 +568,7 @@
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Add New Collab User" />
+                        Text="{helpers:Localization ProjectPicker_AddNewCollabUser}" />
                 </StackPanel>
             </Button>
 

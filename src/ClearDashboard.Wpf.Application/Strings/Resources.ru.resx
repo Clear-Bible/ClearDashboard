@@ -259,8 +259,8 @@
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>Выравнивания</value>
   </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>Проверить код электронной почты</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>Предпочтения</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Покажите усиленные элементы управления видом</value>
@@ -1066,8 +1066,8 @@
   <data name="ExpandView" xml:space="preserve">
     <value>Расширить представление</value>
   </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>Предпочтения</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>Добавить нового пользователя сотрудничества</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
     <value>Проект проекта поверхность</value>
@@ -1278,6 +1278,9 @@
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Обновлять</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>Проверить код электронной почты</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>ПАНЕЛЬ ПРИБОРОВ</value>
@@ -1740,6 +1743,9 @@
   </data>
   <data name="HAG" xml:space="preserve">
     <value>Агг.</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>Совместные проекты</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Положение дел</value>

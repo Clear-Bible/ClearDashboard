@@ -259,8 +259,8 @@
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>Sắp xếp</value>
   </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>Xác thực mã email</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>Sở thích</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Hiển thị các điều khiển chế độ xem nâng cao</value>
@@ -1066,8 +1066,8 @@
   <data name="ExpandView" xml:space="preserve">
     <value>Mở rộng chế độ xem</value>
   </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>Sở thích</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>Thêm người dùng cộng tác mới</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
     <value>Bề mặt thiết kế dự án</value>
@@ -1278,6 +1278,9 @@
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Làm cho khỏe lại</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>Xác thực mã email</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>BẢNG ĐIỀU KHIỂN</value>
@@ -1740,6 +1743,9 @@
   </data>
   <data name="HAG" xml:space="preserve">
     <value>HAG</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>Các dự án hợp tác</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Trạng thái</value>

@@ -259,8 +259,8 @@
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>对齐</value>
   </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>验证电子邮件代码</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>优先</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>显示增强的视图控件</value>
@@ -1066,8 +1066,8 @@
   <data name="ExpandView" xml:space="preserve">
     <value>展开视图</value>
   </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>优先</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>添加新的协作用户</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
     <value>项目设计表面</value>
@@ -1278,6 +1278,9 @@
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>刷新</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>验证电子邮件代码</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>仪表板</value>
@@ -1740,6 +1743,9 @@
   </data>
   <data name="HAG" xml:space="preserve">
     <value>HAG</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>协作项目</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>地位</value>

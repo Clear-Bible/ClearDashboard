@@ -259,8 +259,8 @@
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>Ausrichtung</value>
   </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>Validieren Sie den E -Mail -Code</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>Vorlieben</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Zeigen Sie die verbesserten Ansichtensteuerungen</value>
@@ -1066,8 +1066,8 @@
   <data name="ExpandView" xml:space="preserve">
     <value>Ansicht erweitern</value>
   </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>Vorlieben</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>Fügen Sie einen neuen Benutzer der Zusammenarbeit hinzu</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
     <value>Projektdesignoberfläche</value>
@@ -1278,6 +1278,9 @@
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Aktualisierung</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>ARMATURENBRETT</value>
@@ -1740,6 +1743,9 @@
   </data>
   <data name="HAG" xml:space="preserve">
     <value>HAG</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>Zusammenarbeitsprojekte</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Status</value>

@@ -259,8 +259,8 @@
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>संरेखण</value>
   </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>मान्य ईमेल कोड</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>पसंद</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>एन्हांस्ड व्यू कंट्रोल दिखाएं</value>
@@ -1066,8 +1066,8 @@
   <data name="ExpandView" xml:space="preserve">
     <value>विस्तार दृश्य</value>
   </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>पसंद</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>नया सहयोग उपयोगकर्ता जोड़ें</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
     <value>परियोजना डिजाइन सतह</value>
@@ -1278,6 +1278,9 @@
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>ताज़ा करना</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>मान्य ईमेल कोड</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>चकरानेवाला</value>
@@ -1740,6 +1743,9 @@
   </data>
   <data name="HAG" xml:space="preserve">
     <value>HAG</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>दर्जा</value>

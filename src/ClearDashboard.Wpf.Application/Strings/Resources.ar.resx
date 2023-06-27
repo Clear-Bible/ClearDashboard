@@ -259,8 +259,8 @@
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>محاذاة</value>
   </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>التحقق من صحة رمز البريد الإلكتروني</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>التفضيلات</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>إظهار عناصر التحكم في العرض المحسنة</value>
@@ -1066,8 +1066,8 @@
   <data name="ExpandView" xml:space="preserve">
     <value>توسيع العرض</value>
   </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>التفضيلات</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>أضف مستخدم تعاون جديد</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
     <value>سطح تصميم المشروع</value>
@@ -1278,6 +1278,9 @@
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>ينعش</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>التحقق من صحة رمز البريد الإلكتروني</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>لوحة القيادة</value>
@@ -1740,6 +1743,9 @@
   </data>
   <data name="HAG" xml:space="preserve">
     <value>HAG</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>مشاريع التعاون</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>حالة</value>
