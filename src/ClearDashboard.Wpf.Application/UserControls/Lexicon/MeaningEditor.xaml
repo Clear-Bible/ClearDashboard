@@ -148,10 +148,6 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <!--<RadioButton Grid.Column="0" 
-                         VerticalAlignment="Center" 
-                         Margin="-3,0,0,0"
-                         Checked="OnNewTranslationChecked" Unchecked="OnNewTranslationUnchecked" GroupName="SelectedTransaction"/>-->
             <TextBox x:Name="NewTranslationTextBox"
                      Grid.Column="1"
                      FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
@@ -163,7 +159,6 @@
                      VerticalAlignment="Center"
                      HorizontalAlignment="Left"
                      KeyUp="OnNewTranslationTextBoxKeyUp"
-                     TextChanged="OnNewTranslationChanged"
                      Width="250"
             />
             <TextBlock
