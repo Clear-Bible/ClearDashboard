@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Features.AttributeFilters;
 using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.Models;
@@ -19,6 +20,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MimeKit;
 using SIL.Scripture;
 using SkiaSharp;
 using System;
@@ -213,13 +215,15 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             IMediator? mediator,
             ILifetimeScope? lifetimeScope,
             IWindowManager windowManager,
-            ILocalizationService localizationService,
+            [KeyFilter("Aqua")] ILocalizationService localizationService,
             IAquaManager aquaManager,
             LongRunningTaskManager longRunningTaskManager)
             : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService)
         {
             aquaManager_ = aquaManager;
             longRunningTaskManager_ = longRunningTaskManager;
+
+            var s = LocalizationService.Get("Pds_AquaDialogMenuId");
         }
 
         //public override Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)

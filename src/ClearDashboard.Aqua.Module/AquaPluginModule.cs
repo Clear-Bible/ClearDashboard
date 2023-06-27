@@ -6,6 +6,7 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Aqua.Module.Menu;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Aqua.Module.Validators;
+using ClearDashboard.Aqua.Module.ViewModels;
 using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 using ClearDashboard.Aqua.Module.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -51,6 +52,10 @@ namespace ClearDashboard.Aqua.Module
             builder.RegisterType<AquaDesignSurfaceMenuBuilder>().As<IDesignSurfaceMenuBuilder>().WithAttributeFiltering();
             builder.RegisterType<AquaLocalizationService>().AsSelf().Keyed<ILocalizationService>("Aqua");
             builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf().WithAttributeFiltering();
+
+            // Enhanced View
+
+            builder.RegisterType<AquaCorpusAnalysisEnhancedViewItemViewModel>().AsSelf().WithAttributeFiltering();
 
             //AquaDialog
 
