@@ -68,6 +68,13 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         set => Set(ref _dialogMode, value);
     }
 
+    private string? _versionId;
+    public string? VersionId
+    {
+        get => _versionId;
+        set => Set(ref _versionId, value);
+    }
+
     private string? name_;
     public string? Name
     {
@@ -340,15 +347,16 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 cancellationToken),
             async (version) =>
             {
-                Name = version.name;
+                VersionId = version?.id?.ToString();
+                Name = version?.name;
                 IsoLanguage = IsoLanguages
-                    .Where(l => l.iso639 == version.isoLanguage)
+                    .Where(l => l.iso639 == version?.isoLanguage)
                     .FirstOrDefault();
                 IsoScript = IsoScripts
                     .Where(s => s.iso15924 == ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript)
                     .FirstOrDefault();
-                Abbreviation = version.abbreviation;
-                Rights = version.rights;
+                Abbreviation = version?.abbreviation;
+                Rights = version?.rights;
                 ForwardTranslationToVersionId = ParentViewModel!.AquaTokenizedTextCorpusMetadata.forwardTranslationToVersionId?.ToString();
                 BackTranslationToVersionId = ParentViewModel!.AquaTokenizedTextCorpusMetadata.backTranslationToVersionId?.ToString();
                 MachineTranslation = ParentViewModel!.AquaTokenizedTextCorpusMetadata.machineTranslation;

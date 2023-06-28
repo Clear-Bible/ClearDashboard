@@ -36,6 +36,7 @@
                 <Label>Error</Label>
                 </StackPanel>
             </ControlTemplate>
+            <converters:AquaBoolToColorConverter x:Key="AquaBoolToColorConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel Orientation="Vertical">
@@ -45,7 +46,8 @@
             <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
 
-        <materialDesign:Card Grid.Row="0" Grid.Column="0" Style="{StaticResource LeftCardStyle}" >
+        <materialDesign:Card Grid.Row="0" Grid.Column="0" Style="{StaticResource LeftCardStyle}"
+                             Background="{Binding HasId, Converter={StaticResource AquaBoolToColorConverter}, ConverterParameter='false,#ffffff'}">
             <Grid Margin="0" Name="StepGrid" Width="Auto" IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -61,9 +63,27 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Content="{helpers:Localization Aqua_Version_CorpusInformation}" FontSize="20" Margin="-5,7,0,0"></Label>
-
-                <TextBox Grid.Row="1" x:Name="Name"
+                <StackPanel Grid.Row="0" Orientation="Vertical">
+                        <TextBlock Margin="-5,7,0,0">
+                            <TextBlock.Inlines>
+                                <Run FontSize="20" Text="{helpers:Localization Aqua_Version_CorpusInformation}" />
+                                <Run Text="  "/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
+                        <TextBlock Margin="-5,7,0,0">
+                            <TextBlock.Visibility>
+                                <MultiBinding Converter="{StaticResource BooleanAndVisibilityConverter}">
+                                    <Binding Path="HasId"/>
+                                    <Binding Path="ParentViewModel.IsBusy" Converter="{StaticResource BooleanInversionConverter}"/>
+                                </MultiBinding>
+                            </TextBlock.Visibility>
+                            <TextBlock.Inlines>
+                                <Run Text="{helpers:Localization Aqua_Version_VersionId}" />
+                                <Run Text="{Binding Path=VersionId}"/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
+                </StackPanel>
+                    <TextBox Grid.Row="1" x:Name="Name"
                          Margin="0,0,0,5"
                          materialDesign:HintAssist.FloatingScale="0.60"
                          materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
@@ -92,7 +112,7 @@
                         SelectedItem="{Binding IsoLanguage}"
                         materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_Language}"
                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                        IsReadOnly="{Binding DataLoaded}"
+                        IsEnabled="{Binding DataLoaded, Converter={StaticResource BooleanInversionConverter}}"
                         Style="{StaticResource MaterialDesignFilledComboBox}"
                         Validation.ErrorTemplate="{StaticResource ComboBoxValidationPlaceholder}"
                         TextSearch.TextPath="name">
@@ -115,12 +135,11 @@
                         Height="40"
                         Padding="5,0,5,0"
                         Margin="0,5,0,  0"
-                        IsEnabled="{Binding IsEnabledSelectedProject}"
+                        IsEnabled="{Binding DataLoaded, Converter={StaticResource BooleanInversionConverter}}"
                         ItemsSource="{Binding IsoScripts}"
                         SelectedItem="{Binding IsoScript}"
                         Style="{StaticResource MaterialDesignFilledComboBox}"
                         materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_Script}"
-                        IsReadOnly="{Binding DataLoaded}"
                         Validation.ErrorTemplate="{StaticResource ComboBoxValidationPlaceholder}"
                         TextSearch.TextPath="name">
                         <comboBox:AutoCompleteComboBox.ItemTemplate>
@@ -212,9 +231,9 @@
                             Name="MachineTranslation"
                             Margin="0,12,0,10"
                             VerticalAlignment="Center"
-                            IsEnabled="{Binding DataLoaded}"
+                            IsEnabled="{Binding DataLoaded, Converter={StaticResource BooleanInversionConverter}}"
                             IsChecked="false">
-                        Is this a machine translation?
+                        <TextBlock FontSize="14" Text="{helpers:Localization Aqua_Version_IsMachineTranslation}"></TextBlock>
                 </CheckBox>
 
                 <Button Grid.Row="9" x:Name="AddVersion"
@@ -248,7 +267,8 @@
             </Grid>
         </materialDesign:Card>
 
-        <materialDesign:Card  Grid.Column="1"  Style="{StaticResource RightCardStyle}">
+        <materialDesign:Card  Grid.Column="1"  Style="{StaticResource RightCardStyle}"
+            Background="{Binding HasId, Converter={StaticResource AquaBoolToColorConverter}, ConverterParameter='true,#ffffff'}">
             
             <Grid  Margin="0" Width="Auto"  >
                 <Grid.IsEnabled>
@@ -263,13 +283,10 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="{helpers:Localization Aqua_Version_Revisions}" FontSize="20"></Label>
-                <StackPanel
-                    VerticalAlignment="Top"
-                    Orientation="Vertical" Grid.Row="1">
-
-                    <DataGrid
+                <DataGrid
                         x:Name="gridRevisions"
                         Margin="0, 5"
+                        Grid.Row="1"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         AutoGenerateColumns="False"
@@ -293,64 +310,75 @@
                         </DataGrid.ColumnHeaderStyle>
 
                         <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Version_Revisions_Name_Column}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Grid.Column="0"
-                                    Margin="4,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                    FontWeight="Bold"
-                                    Text="{Binding name}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Version_Revisions_Date_Column}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Grid.Column="0"
-                                    Margin="4,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                    FontWeight="Bold"
-                                    Text="{Binding date}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="{helpers:Localization Aqua_Version_RevisionId_Column}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Grid.Column="0"
+                                            Margin="4,0,0,0"
+                                            VerticalAlignment="Center"
+                                            FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                            FontWeight="Bold"
+                                            Text="{Binding id}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Version_Revisions_Name_Column}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Grid.Column="0"
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                        FontWeight="Bold"
+                                        Text="{Binding name}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Version_Revisions_Date_Column}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Grid.Column="0"
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                        FontWeight="Bold"
+                                        Text="{Binding date}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn Width="90" Header="{helpers:Localization Aqua_Version_Revisions_Add_Column}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                        <Button 
-                                    cm:Message.Attach="ViewRevision($dataContext)"
-                                    Style="{StaticResource SmallTransparentStyle}"  >
-                                            <materialDesign:PackIcon
-                                                Width="30"
-                                                Height="30"
-                                                Foreground="{StaticResource BlueMidBrush}"
-                                                Kind="AddCircleOutline" />
-                                        </Button>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="90">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                        <Button 
-                                    cm:Message.Attach="DeleteItem($dataContext)"
-                                    Style="{StaticResource SmallTransparentStyle}"  >
-                                            <materialDesign:PackIcon
-                                                Width="30"
-                                                Height="30"
-                                                Foreground="{StaticResource BlueMidBrush}"
-                                                Kind="CloseCircleOutline" />
-                                        </Button>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
+                            <DataGridTemplateColumn Width="90" Header="{helpers:Localization Aqua_Version_Revisions_Add_Column}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                            <Button 
+                                        cm:Message.Attach="ViewRevision($dataContext)"
+                                        Style="{StaticResource SmallTransparentStyle}"  >
+                                                <materialDesign:PackIcon
+                                                    Width="30"
+                                                    Height="30"
+                                                    Foreground="{StaticResource BlueMidBrush}"
+                                                    Kind="AddCircleOutline" />
+                                            </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="90">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                            <Button 
+                                        cm:Message.Attach="DeleteItem($dataContext)"
+                                        Style="{StaticResource SmallTransparentStyle}"  >
+                                                <materialDesign:PackIcon
+                                                    Width="30"
+                                                    Height="30"
+                                                    Foreground="{StaticResource BlueMidBrush}"
+                                                    Kind="CloseCircleOutline" />
+                                            </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
                 <StackPanel
                     Grid.Row="2"
                     Margin="5"

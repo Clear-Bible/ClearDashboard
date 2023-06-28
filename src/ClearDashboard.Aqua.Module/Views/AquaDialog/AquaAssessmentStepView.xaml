@@ -97,7 +97,7 @@
                     FontSize="16"
                     Margin="0,5,0,0"
                     ItemsSource="{Binding Revisions}"
-                    materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Assessment_RevisionId}"
+                    materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Assessment_Revision_To_Compare_With}"
                     SelectedItem="{Binding Revision}"
                     Style="{StaticResource MaterialDesignFilledComboBox}">
                     <controls1:AutoCompleteComboBox.IsEnabled>
@@ -108,9 +108,21 @@
                     </controls1:AutoCompleteComboBox.IsEnabled>
                     <controls1:AutoCompleteComboBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock FontSize="24" Text="{Binding name}" />
-                                <TextBlock FontSize="10" Text="{Binding id}" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>
+                                    <TextBlock.Inlines>
+                                        <Run FontWeight="Bold" Text="{helpers:Localization Aqua_Assessment_Version}" />
+                                        <Run Text="{Binding version_id}" />
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+                                <TextBlock Margin="10,0,0,0">
+                                    <TextBlock.Inlines>
+                                        <Run FontWeight="Bold" Text="{helpers:Localization Aqua_Assessment_Revision}" />
+                                        <Run Text="{Binding id}" />
+                                        <Run Text=": " />
+                                        <Run Text="{Binding name}" />
+                                    </TextBlock.Inlines>
+                                </TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </controls1:AutoCompleteComboBox.ItemTemplate>
