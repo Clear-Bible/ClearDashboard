@@ -64,6 +64,9 @@
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>រ៉ូម</value>
   </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>អាស័យ​ដ្ឋាន​អ៊ី​ម៉េ​ល</value>
+  </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>ពិនិត្យមើលភាពអាចរកបានរបស់អ្នកប្រើ</value>
   </data>
@@ -106,8 +109,8 @@
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ក្តារបន្ទះ</value>
   </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>អាស័យ​ដ្ឋាន​អ៊ី​ម៉េ​ល</value>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>លេខកូដផ្ទៀងផ្ទាត់អ៊ីមែល</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>របអប់</value>
@@ -156,6 +159,9 @@
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>ស្តារអ្នកប្រើប្រាស់សហការគ្នា</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>ាំងលោអៀងខាងលិច</value>
@@ -408,6 +414,9 @@
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>ការអាេយអត្ថន័យ</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>ពិនិត្យអ៊ីមែលរបស់អ្នកហើយបញ្ចូលលេខកូដសុពលភាព:</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
     <value>វត្ថុបតេយ្យ</value>
@@ -694,6 +703,12 @@
   <data name="ROM" xml:space="preserve">
     <value>ROM</value>
   </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>រកុម</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>លេខកូដសុពលភាពអ៊ីម៉ែលដែលត្រូវបានលុបចោល</value>
+  </data>
   <data name="NewCollabUserView_AccessToken" xml:space="preserve">
     <value>ចូលប្រើនិមិត្តសញ្ញា:</value>
   </data>
@@ -735,6 +750,9 @@
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
     <value>ឧបករណ៍; ទំងន់; ហនិច្ជកម្ផ</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>អ្នកប្រើមានរួចហើយនៅលើម៉ាស៊ីនមេ</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
     <value>ប្លង់គម្រោង</value>
@@ -814,6 +832,9 @@
   <data name="Bcv_PreviousVerse" xml:space="preserve">
     <value>ខមុន</value>
   </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>អ៊ីមែលផ្ញើកំហុស</value>
+  </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>ដែនរង:</value>
   </data>
@@ -843,6 +864,9 @@
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>លុបអត្ថន័យនេះ</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>អនុម័តបានជ្រើសរើស</value>
   </data>
   <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
     <value>រលោង:</value>
@@ -950,7 +974,7 @@
     <value>*</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
-    <value />
+    <value>ការប្រមូលអត្ថបទ</value>
   </data>
   <data name="LAM" xml:space="preserve">
     <value>LAM</value>
@@ -1102,8 +1126,8 @@
   <data name="Copy" xml:space="preserve">
     <value>ការចម្លង</value>
   </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>ចេក</value>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>បានរក្សាទុកទៅម៉ាស៊ីនមេពីចម្ងាយ</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>ToperBaleadditions</value>
@@ -1294,14 +1318,17 @@
   <data name="COL" xml:space="preserve">
     <value>COL</value>
   </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>បោះបង់ការបកប្រែ</value>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>ផ្ញើអ៊ីមែលសុពលភាព</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>ជ្រើសរើសគំរោង</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>ធ្វើ​ឱ្យ​ស្រស់</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>ការបកប្រែ:</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>ធ្វើឱ្យលេខកូដអ៊ីម៉ែលមានសុពលភាព</value>
@@ -1360,8 +1387,8 @@
   <data name="Marble_Chapter" xml:space="preserve">
     <value>ចមបុក</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>និយមន័យមិនអាចប្រើប្រាស់បាន</value>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>រក្សាទុកការកំណត់</value>
   </data>
   <data name="EnhancedView_AddAlignment" xml:space="preserve">
     <value>បន្ថែមការតម្រឹម?</value>
@@ -1432,6 +1459,9 @@
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះសម្រាប់គម្រោងរបស់អ្នក។</value>
   </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>ឈ្មោះ​អ្នកប្រើប្រាស់</value>
+  </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
     <value>គ្មានទិន្នន័យខនៅក្នុងជួរខនេះ។</value>
   </data>
@@ -1446,6 +1476,9 @@
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>ដោយអត្ថបទចំណាំ</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>ធ្វើឱ្យលេខកូដអ៊ីម៉ែលមានសុពលភាព</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
     <value>ស្លាករេសសចើង</value>
@@ -1516,8 +1549,8 @@
   <data name="NewCollabUserView_FirstName" xml:space="preserve">
     <value>ឈ្មោះដំបូង</value>
   </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>ការបកប្រែ:</value>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>បោះបង់ការបកប្រែ</value>
   </data>
   <data name="Notes_UnreadReplies" xml:space="preserve">
     <value>ការឆ្លើយតបមិនទាន់អាន</value>
@@ -1573,8 +1606,8 @@
   <data name="Error" xml:space="preserve">
     <value>កមហុស</value>
   </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>អនុម័តបានជ្រើសរើស</value>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>រកមិនឃើញនៅលើប្រព័ន្ធ!</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
     <value>អត្ថន័យពាក្យ</value>
@@ -1602,6 +1635,9 @@
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមលើការផ្តោតអារម្មណ៍ដែលផ្តោតអារម្មណ៍</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>និយមន័យមិនអាចប្រើប្រាស់បាន</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>សាការី</value>
@@ -1634,7 +1670,7 @@
     <value>បង្កើតគម្រោងថ្មី</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value />
+    <value>បើកដំណើរការបង្ហាញអត្ថបទខគម្ពីរមួយកែវ</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>ទាមទារកូនសោអាជ្ញាប័ណ្ណ</value>
@@ -1675,8 +1711,8 @@
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>របផប</value>
   </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>បន្ថែមដែន semantic ទៅនឹងអត្ថន័យនេះ</value>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>ការកំណត់សហការ</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>ថូខឹនខនធែន</value>
@@ -1689,6 +1725,9 @@
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
     <value>បង្ហាញការបម្រុងទុក</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>អាស័យ​ដ្ឋាន​អ៊ី​ម៉េ​ល</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
     <value>បានបើកដំណើរការរបៀបថាមពល</value>
@@ -1756,6 +1795,9 @@
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>តាមងអស់</value>
   </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>ចេក</value>
+  </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>បង្កើតការតម្រឹមពាក្យថ្មី</value>
   </data>
@@ -1785,6 +1827,9 @@
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
     <value>លុបការតែងតាំង</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>អ៊ីមែល</value>
   </data>
   <data name="1KI" xml:space="preserve">
     <value>1KI</value>
@@ -1837,6 +1882,9 @@
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
     <value>បង្ហាញការចេញផ្សាយមុន</value>
   </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>បន្ថែមដែន semantic ទៅនឹងអត្ថន័យនេះ</value>
+  </data>
   <data name="1TH" xml:space="preserve">
     <value>1TH</value>
   </data>
@@ -1878,6 +1926,9 @@
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>ដេលចមហរ</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>រក្សាទុកអ្នកប្រើ gitlab ទៅម៉ាស៊ីនមេ</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមទិដ្ឋភាពខដើម្បីផ្តោតអារម្មណ៍ដែលផ្តោតអារម្មណ៍</value>

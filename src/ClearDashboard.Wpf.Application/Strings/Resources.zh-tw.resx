@@ -64,6 +64,9 @@
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>羅馬書</value>
   </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>電子郵件地址</value>
+  </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>檢查用戶可用性</value>
   </data>
@@ -106,8 +109,8 @@
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>Cleardashboard</value>
   </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>電子郵件地址</value>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>電子郵件驗證代碼</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>文件</value>
@@ -156,6 +159,9 @@
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>還原協作用戶</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>創世紀</value>
@@ -408,6 +414,9 @@
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>定義</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>檢查您的電子郵件並輸入驗證代碼：</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
     <value>發生</value>
@@ -694,6 +703,12 @@
   <data name="ROM" xml:space="preserve">
     <value>ROM</value>
   </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>團體</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>ClearDashboard電子郵件驗證代碼</value>
+  </data>
   <data name="NewCollabUserView_AccessToken" xml:space="preserve">
     <value>訪問令牌：</value>
   </data>
@@ -735,6 +750,9 @@
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
     <value>工具;重量;商業</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>用戶已經存在於服務器上</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
     <value>項目佈局</value>
@@ -814,6 +832,9 @@
   <data name="Bcv_PreviousVerse" xml:space="preserve">
     <value>以前的經文</value>
   </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>電子郵件發送錯誤</value>
+  </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>子域：</value>
   </data>
@@ -843,6 +864,9 @@
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>刪除此含義</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>批准選擇</value>
   </data>
   <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
     <value>光澤：</value>
@@ -950,7 +974,7 @@
     <value>*</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
-    <value />
+    <value>文字收集</value>
   </data>
   <data name="LAM" xml:space="preserve">
     <value>LAM</value>
@@ -1102,8 +1126,8 @@
   <data name="Copy" xml:space="preserve">
     <value>複製</value>
   </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>部分</value>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>保存到遠程服務器</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>studybibleadditions</value>
@@ -1294,14 +1318,17 @@
   <data name="COL" xml:space="preserve">
     <value>COL</value>
   </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>取消翻譯</value>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>發送驗證電子郵件</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>選擇項目</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>刷新</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>翻譯：</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>驗證電子郵件代碼</value>
@@ -1360,8 +1387,8 @@
   <data name="Marble_Chapter" xml:space="preserve">
     <value>章節</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>定義不可用</value>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>保存設置</value>
   </data>
   <data name="EnhancedView_AddAlignment" xml:space="preserve">
     <value>添加對齊方式？</value>
@@ -1432,6 +1459,9 @@
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>請輸入您的項目的名稱。</value>
   </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>用戶名</value>
+  </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
     <value>在此經文範圍內沒有經文數據。</value>
   </data>
@@ -1446,6 +1476,9 @@
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通過注意文本</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>驗證電子郵件代碼</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
     <value>標籤</value>
@@ -1516,8 +1549,8 @@
   <data name="NewCollabUserView_FirstName" xml:space="preserve">
     <value>名</value>
   </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>翻譯：</value>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>取消翻譯</value>
   </data>
   <data name="Notes_UnreadReplies" xml:space="preserve">
     <value>未讀的答复</value>
@@ -1573,8 +1606,8 @@
   <data name="Error" xml:space="preserve">
     <value>錯誤</value>
   </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>批准選擇</value>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>在系統上找不到！</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
     <value>單詞含義</value>
@@ -1602,6 +1635,9 @@
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>添加到集中的增強視圖</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>定義不可用</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>撒迦利亞書</value>
@@ -1634,7 +1670,7 @@
     <value>創建新項目</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value />
+    <value>啟用逐一文字集合顯示</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>需要許可密鑰</value>
@@ -1675,8 +1711,8 @@
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
   </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>為此含義添加語義域</value>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>協作設置</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>語料庫令牌</value>
@@ -1689,6 +1725,9 @@
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
     <value>展示反向翻譯</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>電子郵件地址</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
     <value>啟用了電源模式</value>
@@ -1756,6 +1795,9 @@
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>全部</value>
   </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>部分</value>
+  </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
   </data>
@@ -1785,6 +1827,9 @@
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
     <value>刪除對齊</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>電子郵件</value>
   </data>
   <data name="1KI" xml:space="preserve">
     <value>1KI</value>
@@ -1837,6 +1882,9 @@
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
     <value>顯示預發行</value>
   </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>為此含義添加語義域</value>
+  </data>
   <data name="1TH" xml:space="preserve">
     <value>1TH</value>
   </data>
@@ -1878,6 +1926,9 @@
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>打開</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>將gitlab用戶保存到服務器</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>添加詩歌視圖中的重點增強視圖</value>

@@ -64,6 +64,9 @@
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>Romanos</value>
   </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>Dirección de correo electrónico</value>
+  </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique la disponibilidad del usuario</value>
   </data>
@@ -106,8 +109,8 @@
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
   </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>Dirección de correo electrónico</value>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>Código de verificación de correo electrónico</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>Archivo</value>
@@ -156,6 +159,9 @@
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>Xml</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>Restaurar Usuario de colaboración</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
@@ -408,6 +414,9 @@
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>Definición</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>Consulte su correo electrónico e ingrese el código de validación:</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
     <value>Ocurrencias</value>
@@ -694,6 +703,12 @@
   <data name="ROM" xml:space="preserve">
     <value>ROM</value>
   </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>Grupo</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Código de validación de correo electrónico de ClearDashboard</value>
+  </data>
   <data name="NewCollabUserView_AccessToken" xml:space="preserve">
     <value>Token de acceso:</value>
   </data>
@@ -735,6 +750,9 @@
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
     <value>herramientas; peso; comercio</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>El usuario ya existe en el servidor</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
     <value>Diseños del proyecto</value>
@@ -814,6 +832,9 @@
   <data name="Bcv_PreviousVerse" xml:space="preserve">
     <value>Verso anterior</value>
   </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>Error de envío de correo electrónico</value>
+  </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Sub dominios:</value>
   </data>
@@ -843,6 +864,9 @@
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>Eliminar este significado</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>Aprobar seleccionado</value>
   </data>
   <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
     <value>Brillo:</value>
@@ -950,7 +974,7 @@
     <value>*</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
-    <value />
+    <value>Colección de texto</value>
   </data>
   <data name="LAM" xml:space="preserve">
     <value>LAM</value>
@@ -1102,8 +1126,8 @@
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
   </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>Parte</value>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>Guardado en servidor remoto</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBIBLeadDitions</value>
@@ -1294,14 +1318,17 @@
   <data name="COL" xml:space="preserve">
     <value>COL</value>
   </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Cancelar traducción</value>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>Enviar correo electrónico de validación</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>Seleccionar proyecto</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Actualizar</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>Traducciones:</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Validar el código de correo electrónico</value>
@@ -1360,8 +1387,8 @@
   <data name="Marble_Chapter" xml:space="preserve">
     <value>Capítulo</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Definición no disponible</value>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>Guardar ajustes</value>
   </data>
   <data name="EnhancedView_AddAlignment" xml:space="preserve">
     <value>¿Agregar alineación?</value>
@@ -1432,6 +1459,9 @@
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>Ingrese un nombre para su proyecto.</value>
   </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>Nombre de usuario</value>
+  </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
     <value>No hay datos de versos en este rango de versos.</value>
   </data>
@@ -1446,6 +1476,9 @@
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>Por nota texto</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>Validar el código de correo electrónico</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
     <value>Etiquetas</value>
@@ -1516,8 +1549,8 @@
   <data name="NewCollabUserView_FirstName" xml:space="preserve">
     <value>Nombre de pila</value>
   </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>Traducciones:</value>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>Cancelar traducción</value>
   </data>
   <data name="Notes_UnreadReplies" xml:space="preserve">
     <value>Respuestas no leídas</value>
@@ -1573,8 +1606,8 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>Aprobar seleccionado</value>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>¡No se encuentra en el sistema!</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
     <value>Significados de palabras</value>
@@ -1602,6 +1635,9 @@
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Agregar a la vista mejorada enfocada</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>Definición no disponible</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>Zacarías</value>
@@ -1634,7 +1670,7 @@
     <value>Crear nuevo proyecto</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value />
+    <value>Habilitar visualización de colecciones de texto verso a versiones</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>Se requiere la clave de licencia</value>
@@ -1675,8 +1711,8 @@
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>Fuente</value>
   </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Agregue un dominio semántico a este significado</value>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>Configuración de colaboración</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>Tokens de corpus</value>
@@ -1689,6 +1725,9 @@
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
     <value>Mostrar la traducción</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>Dirección de correo electrónico</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
     <value>Modo de encendido habilitado</value>
@@ -1756,6 +1795,9 @@
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Todo</value>
   </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>Parte</value>
+  </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>Crear una nueva alineación de palabras</value>
   </data>
@@ -1785,6 +1827,9 @@
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
     <value>Eliminar la alineación</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>Correo electrónico</value>
   </data>
   <data name="1KI" xml:space="preserve">
     <value>1KI</value>
@@ -1837,6 +1882,9 @@
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
     <value>Mostrar preleboseos</value>
   </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>Agregue un dominio semántico a este significado</value>
+  </data>
   <data name="1TH" xml:space="preserve">
     <value>1TH</value>
   </data>
@@ -1878,6 +1926,9 @@
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Abierto</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>Guardar el usuario de GitLab en el servidor</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Agregar vista de verso a la vista mejorada enfocada</value>

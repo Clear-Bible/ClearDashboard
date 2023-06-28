@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -414,11 +415,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
             if (results)
             {
-                SaveGitLabUserMessage = "Saved to remote server";
+                SaveGitLabUserMessage = LocalizationStrings.Get("Settings_SavedToRemoteServer", _logger); //"Saved to remote server";
             }
             else
             {
-                SaveGitLabUserMessage = "User already exists on server";
+                SaveGitLabUserMessage = LocalizationStrings.Get("Settings_UserAlreadyExists", _logger); //"User already exists on server";
             }
 
             GitlabUserSaveVisibility = Visibility.Collapsed;
@@ -471,7 +472,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
             if (user.UserId <= 0)
             {
-                EmailMessage = "Not Found on System!";
+                EmailMessage = LocalizationStrings.Get("Settings_NotFoundOnSystem", _logger); //"Not Found on System!";
                 ShowValidateEmailButtonEnabled = false;
 
                 return;
@@ -498,11 +499,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             var mailMessage = new MimeMessage();
             mailMessage.From.Add(new MailboxAddress("cleardas@cleardashboard.org", "cleardas@cleardashboard.org"));
             mailMessage.To.Add(new MailboxAddress(Email, Email));
-            mailMessage.Subject = "ClearDashboard Email Validation Code";
+            mailMessage.Subject = LocalizationStrings.Get("Settings_DashboardEmailValidationCode", _logger); //"ClearDashboard Email Validation Code";
             mailMessage.Body = new TextPart("plain")
             {
-                Text = "Email Verification Code: " + _emailValidationString
-            };
+                Text = LocalizationStrings.Get("Settings_EmailVerificationCode", _logger) + ": " + _emailValidationString
+        };
 
             try
             {
@@ -520,7 +521,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
             catch (Exception e)
             {
-                _logger.LogError("Email Sending Error", e);
+                _logger.LogError(LocalizationStrings.Get("Settings_EmailSendingError", _logger), e);
                 EmailSendError = true;
             }
 
@@ -538,7 +539,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
                 if (user.UserId <= 0)
                 {
-                    EmailMessage = "Not Found on System!";
+                    EmailMessage = LocalizationStrings.Get("Settings_NotFoundOnSystem", _logger); //"Not Found on System!";
                     ShowValidateEmailButtonEnabled = false;
 
                     return;

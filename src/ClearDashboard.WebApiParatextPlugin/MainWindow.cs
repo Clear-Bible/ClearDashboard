@@ -1655,6 +1655,18 @@ namespace ClearDashboard.WebApiParatextPlugin
                             sb.AppendLine();
                         }
 
+                        if (lastVerseZero)
+                        {
+                            var usfm = new UsfmVerse
+                            {
+                                Chapter = chapter,
+                                Verse = "0",
+                                Text = verseText
+                            };
+                            verses.Add(usfm);
+                            verseText = "";
+                        }
+
                         // this includes single verses (\v 1) and multiline (\v 1-3)
                         sb.Append($@"\v {marker.Data.Trim()} ");
 
@@ -1697,6 +1709,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                         }
                         chapter = marker.Data.Trim();
                         verse = string.Empty;
+
+                        //if (chapter == "90")
+                        //{
+                        //    Console.WriteLine();
+                        //}
 
                         lastTokenChapter = true;
                     }
@@ -1774,6 +1791,8 @@ namespace ClearDashboard.WebApiParatextPlugin
             //{
             //    Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
             //}
+
+            var verseOut = verses.FirstOrDefault( v => v.Chapter == "90" && v.Verse == "0");
 
             return verses;
 

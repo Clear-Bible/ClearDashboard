@@ -64,6 +64,9 @@
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>Римлянам</value>
   </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>Адрес электронной почты</value>
+  </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Проверьте доступность пользователя</value>
   </data>
@@ -106,8 +109,8 @@
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
   </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>Адрес электронной почты</value>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>Код проверки электронной почты</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>Файл</value>
@@ -156,6 +159,9 @@
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>Восстановить пользователь сотрудничества</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Бытие</value>
@@ -408,6 +414,9 @@
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>Определение</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
     <value>Случаи</value>
@@ -694,6 +703,12 @@
   <data name="ROM" xml:space="preserve">
     <value>Рим.</value>
   </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>Группа</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>ClearDashboard Email Code Code</value>
+  </data>
   <data name="NewCollabUserView_AccessToken" xml:space="preserve">
     <value>Токен доступа:</value>
   </data>
@@ -735,6 +750,9 @@
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
     <value>инструменты; масса; коммерция</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>Пользователь уже существует на сервере</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
     <value>Макеты проекта</value>
@@ -814,6 +832,9 @@
   <data name="Bcv_PreviousVerse" xml:space="preserve">
     <value>Предыдущий стих</value>
   </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>По электронной почте ошибка</value>
+  </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Подпагнические домены:</value>
   </data>
@@ -843,6 +864,9 @@
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>Удалить это значение</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>Утвердить выбранный</value>
   </data>
   <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
     <value>Глянец:</value>
@@ -950,7 +974,7 @@
     <value>1 Фессалоникийцам</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
-    <value />
+    <value>Текстовая коллекция</value>
   </data>
   <data name="LAM" xml:space="preserve">
     <value>Плач.</value>
@@ -1102,8 +1126,8 @@
   <data name="Copy" xml:space="preserve">
     <value>Копия</value>
   </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>Часть</value>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>Сохраняется на удаленном сервере</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>Исследование</value>
@@ -1294,14 +1318,17 @@
   <data name="COL" xml:space="preserve">
     <value>Кол.</value>
   </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Отменить перевод</value>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>Отправить валидацию по электронной почте</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>Выберите проект</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Обновлять</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>Переводы:</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Проверить код электронной почты</value>
@@ -1360,8 +1387,8 @@
   <data name="Marble_Chapter" xml:space="preserve">
     <value>Глава</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Определение недоступно</value>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>Сохранить настройки</value>
   </data>
   <data name="EnhancedView_AddAlignment" xml:space="preserve">
     <value>Добавить выравнивание?</value>
@@ -1432,6 +1459,9 @@
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>Пожалуйста, введите имя для вашего проекта.</value>
   </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
     <value>Нет данных стихов в этом диапазоне стихов.</value>
   </data>
@@ -1446,6 +1476,9 @@
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>По записку текст</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>Проверить код электронной почты</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
     <value>Ярлыки</value>
@@ -1516,8 +1549,8 @@
   <data name="NewCollabUserView_FirstName" xml:space="preserve">
     <value>Имя</value>
   </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>Переводы:</value>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>Отменить перевод</value>
   </data>
   <data name="Notes_UnreadReplies" xml:space="preserve">
     <value>Непрочитанные ответы</value>
@@ -1573,8 +1606,8 @@
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>Утвердить выбранный</value>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>Не найдено в системе!</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
     <value>Значения слова</value>
@@ -1602,6 +1635,9 @@
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Добавить к целенаправленному расширенному представлению</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>Определение недоступно</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>Захария</value>
@@ -1634,7 +1670,7 @@
     <value>Создать новый проект</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value />
+    <value>Включить стихотворенные текстовые коллекции.</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>Лицензионный ключ требуется</value>
@@ -1675,8 +1711,8 @@
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>Источник</value>
   </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Добавить семантический домен в это значение</value>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>Настройки сотрудничества</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>Корпус токены</value>
@@ -1689,6 +1725,9 @@
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
     <value>Покажите Backtranslation</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>Адрес электронной почты</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
     <value>Режим питания включен</value>
@@ -1756,6 +1795,9 @@
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Все</value>
   </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>Часть</value>
+  </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>Создать новое выравнивание слов</value>
   </data>
@@ -1785,6 +1827,9 @@
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
     <value>Удалить выравнивание</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>Электронная почта</value>
   </data>
   <data name="1KI" xml:space="preserve">
     <value>3Цар.</value>
@@ -1837,6 +1882,9 @@
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
     <value>Показать предварительные перерасти</value>
   </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>Добавить семантический домен в это значение</value>
+  </data>
   <data name="1TH" xml:space="preserve">
     <value>1Фес.</value>
   </data>
@@ -1878,6 +1926,9 @@
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Открыть</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>Сохранить пользователя Gitlab на сервер</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Добавить вид стиха в целенаправленное расширенное представление</value>

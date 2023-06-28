@@ -64,6 +64,9 @@
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>Rô -ma</value>
   </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>Địa chỉ email</value>
+  </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Kiểm tra tính khả dụng của người dùng</value>
   </data>
@@ -106,8 +109,8 @@
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>Bảng điều khiển</value>
   </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>Địa chỉ email</value>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>Mã xác minh email</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>Tài liệu</value>
@@ -156,6 +159,9 @@
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>Khôi phục người dùng cộng tác</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Genesis</value>
@@ -408,6 +414,9 @@
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>Sự định nghĩa</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>Kiểm tra email của bạn và nhập mã xác thực:</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
     <value>Xảy ra</value>
@@ -694,6 +703,12 @@
   <data name="ROM" xml:space="preserve">
     <value>ROM</value>
   </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Mã xác thực email ClearDashboard</value>
+  </data>
   <data name="NewCollabUserView_AccessToken" xml:space="preserve">
     <value>Truy cập thẻ:</value>
   </data>
@@ -735,6 +750,9 @@
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
     <value>công cụ; cân nặng; thương mại</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>Người dùng đã tồn tại trên máy chủ</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
     <value>Bố cục dự án</value>
@@ -814,6 +832,9 @@
   <data name="Bcv_PreviousVerse" xml:space="preserve">
     <value>Câu trước</value>
   </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>Email gửi lỗi</value>
+  </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Miền phụ:</value>
   </data>
@@ -843,6 +864,9 @@
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>Xóa ý nghĩa này</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>Phê duyệt đã chọn</value>
   </data>
   <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
     <value>Bóng:</value>
@@ -950,7 +974,7 @@
     <value>*</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
-    <value />
+    <value>Bộ sưu tập văn bản</value>
   </data>
   <data name="LAM" xml:space="preserve">
     <value>LAM</value>
@@ -1102,8 +1126,8 @@
   <data name="Copy" xml:space="preserve">
     <value>Sao chép</value>
   </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>Phần</value>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>Được lưu vào máy chủ từ xa</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>Nghiên cứu</value>
@@ -1294,14 +1318,17 @@
   <data name="COL" xml:space="preserve">
     <value>COL</value>
   </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Hủy dịch</value>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>Gửi email xác thực</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>Chọn Dự án</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Làm cho khỏe lại</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>Bản dịch:</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Xác thực mã email</value>
@@ -1360,8 +1387,8 @@
   <data name="Marble_Chapter" xml:space="preserve">
     <value>Chương</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Định nghĩa không có sẵn</value>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>Lưu các thiết lập</value>
   </data>
   <data name="EnhancedView_AddAlignment" xml:space="preserve">
     <value>Thêm căn chỉnh?</value>
@@ -1432,6 +1459,9 @@
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>Vui lòng nhập tên cho dự án của bạn.</value>
   </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>tên tài khoản</value>
+  </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
     <value>Không có dữ liệu câu trong phạm vi câu này.</value>
   </data>
@@ -1446,6 +1476,9 @@
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>Theo ghi chú văn bản</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>Xác thực mã email</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
     <value>Nhãn</value>
@@ -1516,8 +1549,8 @@
   <data name="NewCollabUserView_FirstName" xml:space="preserve">
     <value>Tên đầu tiên</value>
   </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>Bản dịch:</value>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>Hủy dịch</value>
   </data>
   <data name="Notes_UnreadReplies" xml:space="preserve">
     <value>Trả lời chưa đọc</value>
@@ -1573,8 +1606,8 @@
   <data name="Error" xml:space="preserve">
     <value>Lỗi</value>
   </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>Phê duyệt đã chọn</value>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>Không tìm thấy trên hệ thống!</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
     <value>Ý nghĩa từ</value>
@@ -1602,6 +1635,9 @@
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Thêm vào chế độ xem nâng cao tập trung</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>Định nghĩa không có sẵn</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>Zechariah</value>
@@ -1634,7 +1670,7 @@
     <value>Tạo dự án mới</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value />
+    <value>Bật hiển thị bộ sưu tập văn bản từng câu</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>Cần có khóa cấp phép</value>
@@ -1675,8 +1711,8 @@
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>Nguồn</value>
   </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>Cài đặt cộng tác</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>Mã thông báo Corpus</value>
@@ -1689,6 +1725,9 @@
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
     <value>Hiển thị backtranslation</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>Địa chỉ email</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
     <value>Chế độ nguồn được bật</value>
@@ -1756,6 +1795,9 @@
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Tất cả</value>
   </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>Phần</value>
+  </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>Tạo căn chỉnh từ mới</value>
   </data>
@@ -1785,6 +1827,9 @@
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
     <value>Xóa căn chỉnh</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>E-mail</value>
   </data>
   <data name="1KI" xml:space="preserve">
     <value>1KI</value>
@@ -1837,6 +1882,9 @@
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
     <value>Hiển thị trước khi phát hành</value>
   </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
+  </data>
   <data name="1TH" xml:space="preserve">
     <value>1TH</value>
   </data>
@@ -1878,6 +1926,9 @@
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Mở</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>Lưu người dùng Gitlab vào máy chủ</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Thêm chế độ xem câu vào chế độ xem nâng cao tập trung</value>

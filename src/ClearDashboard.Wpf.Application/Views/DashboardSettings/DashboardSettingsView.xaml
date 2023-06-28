@@ -154,11 +154,11 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontSize="12"
-                            Text="Collaboration Settings"
+                            Text="{helpers:Localization Settings_CollaborationSettings}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
-                <GroupBox Margin="16" Header="Collaboration Settings">
+                <GroupBox Margin="16" Header="{helpers:Localization Settings_CollaborationSettings}">
                     <StackPanel Orientation="Vertical">
                         <Border
                             Margin="5,5,5,5"
@@ -169,13 +169,16 @@
                             Visibility="{Binding ShowExistingCollabUser}">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Visibility="{Binding ShowCollabUserInfo}">
-                                    <Run FontWeight="Bold" Text="Username: " />
+                                    <Run FontWeight="Bold" Text="{helpers:Localization Settings_UserName}" />
+                                    <Run FontWeight="Bold" Text=": " />
                                     <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
                                     <LineBreak />
-                                    <Run FontWeight="Bold" Text="Group: " />
+                                    <Run FontWeight="Bold" Text="{helpers:Localization Settings_Group}" />
+                                    <Run FontWeight="Bold" Text=": " />
                                     <Run Text="{Binding CollaborationConfig.Group}" />
                                     <LineBreak />
-                                    <Run FontWeight="Bold" Text="Email: " />
+                                    <Run FontWeight="Bold" Text="{helpers:Localization Settings_Email}" />
+                                    <Run FontWeight="Bold" Text=": " />
                                     <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
                                     <LineBreak />
                                     <!--<Run FontWeight="Bold" Text="Password: " />
@@ -188,10 +191,9 @@
                                     <Button
                                         x:Name="SaveGitLabToServer"
                                         Width="200"
+                                        Content="{helpers:Localization Settings_SaveGitLabUserToServer}"
                                         IsEnabled="{Binding GitLabUserFound}"
-                                        Visibility="{Binding GitlabUserSaveVisibility}">
-                                        Save GitLab User to Server
-                                    </Button>
+                                        Visibility="{Binding GitlabUserSaveVisibility}" />
                                     <TextBlock
                                         Width="250"
                                         FontSize="18"
@@ -221,9 +223,8 @@
                                     x:Name="SaveGitUrl"
                                     Width="250"
                                     Margin="5,10,5,0"
-                                    IsEnabled="{Binding SaveGitlabUrlButtonEnabled}">
-                                    Save Settings
-                                </Button>
+                                    Content="{helpers:Localization Settings_SaveSettings}"
+                                    IsEnabled="{Binding SaveGitlabUrlButtonEnabled}" />
 
 
                             </StackPanel>
@@ -232,7 +233,7 @@
                         <GroupBox
                             Margin="5"
                             materialDesign:ColorZoneAssist.Mode="PrimaryMid"
-                            Header="Restore Collaboration User"
+                            Header="{helpers:Localization Settings_RestoreCollaborationUser}"
                             Style="{DynamicResource MaterialDesignGroupBox}"
                             Visibility="{Binding HideExistingCollabUser}">
                             <StackPanel Orientation="Vertical">
@@ -241,7 +242,7 @@
                                     x:Name="Email"
                                     Margin="10,5,10,5"
                                     materialDesign:HintAssist.Foreground="Green"
-                                    materialDesign:HintAssist.Hint="Email Address"
+                                    materialDesign:HintAssist.Hint="{helpers:Localization Settings_EmailAddress}"
                                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                                     <TextBox.Text>
@@ -257,7 +258,8 @@
                                         x:Name="SendValidationEmail"
                                         Width="200"
                                         Margin="10,12,0,0"
-                                        HorizontalAlignment="Left">
+                                        HorizontalAlignment="Left"
+                                        Content="{helpers:Localization Settings_SendValidationEmail}">
                                         <Button.Style>
                                             <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="{x:Type Button}">
                                                 <Setter Property="IsEnabled" Value="false" />
@@ -268,7 +270,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Button.Style>
-                                        Send Validation Email
+
                                     </Button>
 
                                     <materialDesign:PackIcon
@@ -298,7 +300,7 @@
                                 </StackPanel>
 
 
-                                <Label Content="Check your email and enter in the validation code:" />
+                                <Label Content="{helpers:Localization Settings_CheckEmail}" />
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <TextBox
                                         x:Name="EmailCode"
@@ -309,9 +311,8 @@
                                         x:Name="ValidateEmailCode"
                                         Height="45"
                                         Margin="10,0,0,0"
-                                        IsEnabled="{Binding ShowValidateEmailButtonEnabled}">
-                                        Validate Email Code
-                                    </Button>
+                                        Content="{helpers:Localization Settings_ValidateEmailCode}"
+                                        IsEnabled="{Binding ShowValidateEmailButtonEnabled}" />
                                     <iconPacks:PackIconMaterial
                                         Width="40"
                                         Height="40"
@@ -334,11 +335,7 @@
                             </StackPanel>
                         </GroupBox>
 
-
-
                     </StackPanel>
-
-
 
                 </GroupBox>
 

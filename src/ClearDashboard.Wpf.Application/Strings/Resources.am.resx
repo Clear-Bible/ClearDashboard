@@ -64,6 +64,9 @@
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>ሮማውያን</value>
   </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>የ ኢሜል አድራሻ</value>
+  </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>የተጠቃሚ ተገኝነትን ያረጋግጡ</value>
   </data>
@@ -106,8 +109,8 @@
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>Cleardashardboard</value>
   </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>የ ኢሜል አድራሻ</value>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>የኢሜል ማረጋገጫ ኮድ</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>ፋይል</value>
@@ -156,6 +159,9 @@
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>የመገናኛ ተጠቃሚን መልሶ መመለስ</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>ዘፍጥረት</value>
@@ -408,6 +414,9 @@
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>ፍቺ</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>ኢሜልዎን ይመልከቱ እና በማረጋገጫ ኮድ ውስጥ ያስገቡ</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
     <value>የተከሰሱ ናቸው</value>
@@ -694,6 +703,12 @@
   <data name="ROM" xml:space="preserve">
     <value>ROM</value>
   </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>ቡድን</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Cleardashሽርቦርድ ኢሜል የማረጋገጫ ኮድ</value>
+  </data>
   <data name="NewCollabUserView_AccessToken" xml:space="preserve">
     <value>መድረሻ ማስነሻ</value>
   </data>
@@ -735,6 +750,9 @@
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
     <value>መሣሪያዎች; ክብደት; ንግድ</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>ተጠቃሚው በአገልጋይ ላይ ቀድሞውኑ አለ</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
     <value>የፕሮጀክት አቀማመጥ</value>
@@ -814,6 +832,9 @@
   <data name="Bcv_PreviousVerse" xml:space="preserve">
     <value>ቀዳሚው ጥቅስ</value>
   </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>ኢሜል ተልኳል ስህተት</value>
+  </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>ንዑስ ጎራዎች:</value>
   </data>
@@ -843,6 +864,9 @@
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>ይህንን ትርጉም ይሰርዙ</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>ተመርጠዋል</value>
   </data>
   <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
     <value>ግንድ</value>
@@ -950,7 +974,7 @@
     <value>*</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
-    <value />
+    <value>የጽሑፍ ስብስብ</value>
   </data>
   <data name="LAM" xml:space="preserve">
     <value>LAM</value>
@@ -1102,8 +1126,8 @@
   <data name="Copy" xml:space="preserve">
     <value>ቅጂ</value>
   </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>ክፍል</value>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>በርቀት አገልጋይ የተቀመጠ</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>ጥናት ሊተገበር</value>
@@ -1294,14 +1318,17 @@
   <data name="COL" xml:space="preserve">
     <value>COL</value>
   </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>ትርጉም ሰርዝ</value>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>የማረጋገጫ ኢሜል ይላኩ</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>ፕሮጀክት ይምረጡ</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>አድስ</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>ትርጉሞች</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>የኢሜል ኮድ ያረጋግጡ</value>
@@ -1360,8 +1387,8 @@
   <data name="Marble_Chapter" xml:space="preserve">
     <value>ምዕራፍ</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>ትርጓሜ አይገኝም</value>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>ቅንብሮችን ያስቀምጡ</value>
   </data>
   <data name="EnhancedView_AddAlignment" xml:space="preserve">
     <value>አሰላለፍ ይጨምሩ?</value>
@@ -1432,6 +1459,9 @@
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>እባክዎ ለፕሮጄክትዎ ስም ያስገቡ.</value>
   </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>የተጠቃሚ ስም</value>
+  </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
     <value>በዚህ ቁጥር ውስጥ ምንም ቁጥር የለም.</value>
   </data>
@@ -1446,6 +1476,9 @@
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>በማስታወሻ ጽሑፍ</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>የኢሜል ኮድ ያረጋግጡ</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
     <value>መለያዎች</value>
@@ -1516,8 +1549,8 @@
   <data name="NewCollabUserView_FirstName" xml:space="preserve">
     <value>የመጀመሪያ ስም</value>
   </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>ትርጉሞች</value>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>ትርጉም ሰርዝ</value>
   </data>
   <data name="Notes_UnreadReplies" xml:space="preserve">
     <value>ያልተነበቡ ምላሾች</value>
@@ -1573,8 +1606,8 @@
   <data name="Error" xml:space="preserve">
     <value>ስህተት</value>
   </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>ተመርጠዋል</value>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>በስርዓት ላይ አልተገኘም!</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
     <value>የቃላት ትርጉም</value>
@@ -1602,6 +1635,9 @@
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>ትኩረት የተሻሻለ የእይታ እይታ ያክሉ</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>ትርጓሜ አይገኝም</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>ዘካርያስ</value>
@@ -1634,7 +1670,7 @@
     <value>አዲስ ፕሮጀክት ይፍጠሩ</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value />
+    <value>በቁጥር በቁጥር የጽሑፍ ስብስቦች ማሳያዎችን ያንቁ</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>የፍቃድ ቁልፍ ያስፈልጋል</value>
@@ -1675,8 +1711,8 @@
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>ምንጭ</value>
   </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>ወደዚህ ትርጉም አንድ ትሬዚክ ጎራ ያክሉ</value>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>የትብብር ቅንብሮች</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>CRPOPOS ማስኬዶች</value>
@@ -1689,6 +1725,9 @@
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
     <value>የኋላ መመለሻን አሳይ</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>የ ኢሜል አድራሻ</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
     <value>የኃይል ሞድ ነቅቷል</value>
@@ -1756,6 +1795,9 @@
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>ሁሉም</value>
   </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>ክፍል</value>
+  </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>አዲስ የቃል አሰላለፍ ይፍጠሩ</value>
   </data>
@@ -1785,6 +1827,9 @@
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
     <value>አሰላለፍ ሰርዝ</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>ኢሜል</value>
   </data>
   <data name="1KI" xml:space="preserve">
     <value>1KI</value>
@@ -1837,6 +1882,9 @@
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
     <value>ቅድመ-ቅናሾችን አሳይ</value>
   </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>ወደዚህ ትርጉም አንድ ትሬዚክ ጎራ ያክሉ</value>
+  </data>
   <data name="1TH" xml:space="preserve">
     <value>1TH</value>
   </data>
@@ -1878,6 +1926,9 @@
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>ክፈት</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>Gitlab ተጠቃሚን ለአገልጋይ ያኑሩ</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>የተሻሻለ እይታን ለማተኮር ቁጥር እይታን ያክሉ</value>
