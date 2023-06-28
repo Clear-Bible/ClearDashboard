@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -81,7 +82,7 @@ namespace ClearDashboard.Wpf.Application.Services
             return new MySqlUser { UserId = -1 };
         }
 
-
+       
         public async Task<MySqlUser> GetUserExistsByEmail(string email)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
@@ -118,7 +119,110 @@ namespace ClearDashboard.Wpf.Application.Services
             return new MySqlUser { UserId = -1 };
         }
 
+        public async Task<DashboardUser> GetDashboardUserExistsById(Guid userId)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers/{userId}");
+
+            try
+            {
+                var response = await _mySqlClient.Client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+
+                var user = JsonSerializer.Deserialize<DashboardUser>(result);
+                if (user is null)
+                {
+                    return new DashboardUser { Id = Guid.Empty };
+                }
+                return user;
+
+            }
+            catch (Exception e)
+            {
+                return new DashboardUser { Id = Guid.Empty };
+            }
+        }
+
+        public async Task<DashboardUser> GetDashboardUserExistsByEmail(string email)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers/search/{email}");
+
+            try
+            {
+                var response = await _mySqlClient.Client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+
+                var user = JsonSerializer.Deserialize<DashboardUser>(result);
+                if (user is null)
+                {
+                    return new DashboardUser { Id = Guid.Empty };
+                }
+
+                return user;
+
+            }
+            catch (Exception e)
+            {
+                return new DashboardUser { Id = Guid.Empty };
+            }
+        }
+
+        public async Task<List<DashboardUser>> GetAllDashboardUsers()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers");
+
+            try
+            {
+                var response = await _mySqlClient.Client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+
+                var users = JsonSerializer.Deserialize<List<DashboardUser>>(result);
+                if (users is null)
+                {
+                    return new List<DashboardUser>();
+                }
+                return users;
+
+            }
+            catch (Exception e)
+            {
+                return new List<DashboardUser>();
+            }
+        }
+
+
+
         #endregion // GET Requests
+
+        #region DELETE Requests
+
+        public async Task<bool> DeleteDashboardUserExistsById(Guid userId)
+        {
+            try
+            {
+                var response = await _mySqlClient.Client.DeleteAsync($"/api/dashboardusers/{userId}");
+                response.EnsureSuccessStatusCode();
+
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+
+
+        #endregion // DELETE Requests
 
 
         #region POST Requests
@@ -165,9 +269,24 @@ namespace ClearDashboard.Wpf.Application.Services
             return false;
         }
 
+        public async Task<bool> CreateNewDashboardUser(DashboardUser user)
+        {
+            string jsonUser = JsonSerializer.Serialize(user);
+            var content = new System.Net.Http.StringContent(jsonUser, Encoding.UTF8, "application/json");
 
+            try
+            {
+                var response = await _mySqlClient.Client.PostAsync("/api/dashboardusers", content);
+                response.EnsureSuccessStatusCode();
 
+                return true;
 
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
         #endregion // POST Requests
 
         #endregion // Methods

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
@@ -12,21 +13,25 @@ namespace ClearDashboard.DataAccessLayer.Models
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
+        [JsonPropertyName("firstName")]
         public string? FirstName { get; set; }
+
+        [JsonPropertyName("lastName")]
         public string? LastName { get; set; }
 
-        [NotMapped]
-        public string? LicenseKey { get; set; }
-
+        [JsonPropertyName("fullName")]
         [NotMapped] 
         public string? FullName => $"{FirstName} {LastName}";
 
+        [JsonPropertyName("paratextUserName")]
         [NotMapped]
         public string? ParatextUserName { get; set; }
 
+        [JsonPropertyName("isInternal")]
         [NotMapped] 
         public bool? IsInternal { get; set; } = false;
 
+        [JsonPropertyName("licenseVersion")]
         [NotMapped]
         public int? LicenseVersion { get; set; } = 0;
 
