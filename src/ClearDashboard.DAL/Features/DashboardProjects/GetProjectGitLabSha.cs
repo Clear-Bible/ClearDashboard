@@ -14,9 +14,9 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
 {
     public record GetProjectGitLabShaQuery(string DatabasePath) : IRequest<RequestResult<string>>;
 
-    public class GetProjectGitLabShaQueryHandler : SqliteDatabaseRequestHandler<GetProjectGitLabShaQuery, RequestResult<string>, string>
+    public class LastMergedCommitShaQueryHandler : SqliteDatabaseRequestHandler<GetProjectGitLabShaQuery, RequestResult<string>, string>
     {
-        public GetProjectGitLabShaQueryHandler(ILogger<GetProjectGitLabShaQueryHandler> logger) : base(logger)
+        public LastMergedCommitShaQueryHandler(ILogger<LastMergedCommitShaQueryHandler> logger) : base(logger)
         {
             //no-op
         }

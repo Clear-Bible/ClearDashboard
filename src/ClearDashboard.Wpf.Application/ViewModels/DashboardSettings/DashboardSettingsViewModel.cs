@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         private readonly CollaborationManager _collaborationManager;
         private readonly ILogger<DashboardSettingsViewModel> _logger;
         private bool _isAquaEnabledOnStartup;
-        private string _emailValidationString = "";
+        private string _emailValidationString = string.Empty;
 
         #endregion //Member Variables
 
