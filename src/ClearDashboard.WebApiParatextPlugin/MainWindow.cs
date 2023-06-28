@@ -11,6 +11,7 @@ using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using Serilog;
+using SIL.EventsAndDelegates;
 using SIL.Linq;
 using SIL.Scripture;
 using System;
@@ -30,6 +31,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 
 namespace ClearDashboard.WebApiParatextPlugin
@@ -509,28 +511,53 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// </summary>
         private void UpdateProjectList()
         {
+            // snag a list of all the projects
+            var allProjectsList = _host.GetAllProjects();
+
             _projectList.Clear();
+            ProjectListBox.Items.Clear();   
+
             var windows = _host.AllOpenWindows;
-            //ProjectsListBox.Items.Clear();
             foreach (var window in windows)
             {
                 if (window is ITextCollectionChildState tc)
                 {
-                    var projects = tc.AllProjects;
-                    foreach (var proj in projects)
+
+                }
+                else if (window is IParatextChildState win)
+                {
+                    try
                     {
-                        _projectList.Add(proj);
-                        //ProjectsListBox.Items.Add(proj.ShortName);
+                        // add only those projects for which the window is open
+                        var shortName = win.Project.ShortName;
+                        var project = allProjectsList.FirstOrDefault(x => x.ShortName == shortName);
+                        if (project != null)
+                        {
+                            _projectList.Add(project);
+                        }
                     }
-                    _verseRef = tc.VerseRef;
-                    break;
+                    catch (Exception)
+                    {
+                        // no-op
+                    }
+                }
+
+            }
+
+            foreach (var proj in _projectList)
+            {
+                if (proj is not null)
+                {
+                    ProjectListBox.Items.Add(proj.ShortName);
                 }
             }
-            //if (ProjectsListBox.Items.Count > 0)
-            //{
-            //    ProjectsListBox.SelectedIndex = 0;
-            //    ProjectListBox_SelectedIndexChanged(null, null);
-            //}
+
+
+            if (ProjectListBox.Items.Count > 0)
+            {
+                ProjectListBox.SelectedIndex = 0;
+                ProjectListBox_SelectedIndexChanged(null, null);
+            }
         }
 
 
@@ -1864,22 +1891,30 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         #endregion
 
+
+        private void btnSwitchProject_Click(object sender, EventArgs e)
+        {
+            UpdateProjectList();
+            rtb.Visible = false;
+        }
+
         private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //var found = false;
-            //if (ProjectsListBox.SelectedItem != null)
+            string name = ProjectListBox.SelectedItem.ToString();
+            bool found = false;
+            //foreach (var proj in m_ProjectList)
             //{
-            //    var name = ProjectsListBox.SelectedItem.ToString();
-            //    foreach (var proj in _projectList.Where(proj => name == proj.ShortName))
+            //    if (name == proj.ShortName)
             //    {
-            //        ShowScripture(proj);
+            //        m_Project = proj;
+            //        ShowScripture();
             //        found = true;
             //        break;
             //    }
             //}
             //if (!found)
             //{
-            //    textBox.Text = "Cannot find project.";
+            //    textBox.Text = $"Cannot find project named {name}";
             //}
 
         }
