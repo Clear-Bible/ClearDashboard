@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly ILogger<AboutViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
         private readonly HttpClientServices _httpClientServices;
-        private readonly MySqlHttpClientServices _mySqlHttpClientServices;
+        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private CollaborationConfiguration _collaborationConfiguration;
 
@@ -247,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ILifetimeScope? lifetimeScope, 
             ILocalizationService localizationService,
             HttpClientServices httpClientServices,
-            MySqlHttpClientServices mySqlHttpClientServices,
+            CollaborationHttpClientServices collaborationHttpClientServices,
             CollaborationManager collaborationManager,
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
@@ -255,7 +255,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _logger = logger;
             _projectManager = projectManager;
             _httpClientServices = httpClientServices;
-            _mySqlHttpClientServices = mySqlHttpClientServices;
+            _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
         }
@@ -415,7 +415,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 user.Password = password;
 
-                var results = await _mySqlHttpClientServices.CreateNewUser(user, accessToken).ConfigureAwait(false);
+                var results = await _collaborationHttpClientServices.CreateNewUser(user, accessToken).ConfigureAwait(false);
 
                 if (results)
                 {

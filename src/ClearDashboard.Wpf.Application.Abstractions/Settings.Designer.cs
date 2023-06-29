@@ -12,7 +12,7 @@ namespace ClearDashboard.Wpf.Application {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -37,13 +37,13 @@ namespace ClearDashboard.Wpf.Application {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://mysqlapi.cleardashboard.org")]
-        public string MySqlRootUrl {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://collaborationapi.cleardashboard.org")]
+        public string CollaborationRootUrl {
             get {
-                return ((string)(this["MySqlRootUrl"]));
+                return ((string)(this["CollaborationRootUrl"]));
             }
             set {
-                this["MySqlRootUrl"] = value;
+                this["CollaborationRootUrl"] = value;
             }
         }
         
