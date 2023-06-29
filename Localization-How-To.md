@@ -55,5 +55,5 @@ Example:
 
 ## To get the localized string from your code, call the following function
 ```
-    var localizedString = LocalizationStrings.Get("loc_code", _logger);
+    var localizedString = _localizationService["NewCollabUserView_SavedToRemoteServer"];
 ```

@@ -179,7 +179,7 @@
                         x:Name="ValidateEmailCode"
                         Height="45"
                         Margin="10,0,0,0"
-                        Content="NewCollabUserView_ValidateEmailCode"
+                        Content="{helpers:Localization NewCollabUserView_ValidateEmailCode}"
                         IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
                         Style="{StaticResource TransparentStyle}" />
                     <iconPacks:PackIconMaterial
