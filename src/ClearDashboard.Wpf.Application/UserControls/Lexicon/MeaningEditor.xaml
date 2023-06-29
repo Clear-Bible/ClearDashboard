@@ -17,6 +17,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="TranslationDisplayTemplate">
             <lexiconControls:LexiconTranslationDisplay
+                CountVisibility="Collapsed"
                 FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
