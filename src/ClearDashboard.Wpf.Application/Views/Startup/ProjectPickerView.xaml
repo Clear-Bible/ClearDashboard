@@ -399,14 +399,38 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
+                                    <!--<StackPanel
+                                        Grid.RowSpan="4"
+                                        Grid.Column="0"
+                                        Orientation="Vertical">
+                                        <Image
+                                            Height="30"
+                                            Margin="5,0,5,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Source="../../Assets/ClearDashboard_logo_50.png" />-->
                                     <Image
-                                        Grid.RowSpan="2"
+                                        Grid.RowSpan="4"
                                         Grid.Column="0"
                                         Height="30"
                                         Margin="5"
                                         HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Source="../../Assets/ClearDashboard_logo_50.png" />
+                                        VerticalAlignment="Center">
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Setter Property="Source" Value="../../Assets/ClearDashboard_logo_50.png" />
+                                                <Setter Property="Height" Value="30" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCollabProject}" Value="True">
+                                                        <Setter Property="Source" Value="../../Assets/ClearCollabIcon.png" />
+                                                        <Setter Property="Width" Value="30" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <!--</StackPanel>-->
+
 
                                     <TextBlock
                                         Grid.Row="0"
@@ -518,7 +542,7 @@
                 Margin="40,0,0,0"
                 FontSize="19"
                 FontWeight="Medium"
-                Text="Collaboration Projects" />
+                Text="{helpers:Localization ProjectPicker_CollabProjects}" />
 
             <Button
                 x:Name="NewCollabUser"
@@ -544,7 +568,7 @@
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Add New Collab User" />
+                        Text="{helpers:Localization ProjectPicker_AddNewCollabUser}" />
                 </StackPanel>
             </Button>
 
@@ -562,17 +586,18 @@
                 Style="{StaticResource TransparentStyle}"
                 Visibility="{Binding ManageCollabVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <iconPacks:PackIconBoxIcons
-                        Width="32"
-                        Height="32"
-                        Foreground="{StaticResource OrangeDarkBrush}"
-                        Kind="LogosGitlab" />
+                    <Image
+                        Height="24"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Source="../../Assets/ClearCollabIcon.png" />
                     <TextBlock
                         Margin="10,0,0,0"
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Manage Collaboration Projects" />
+                        Text="{helpers:Localization ProjectPicker_ManageCollaborationProjects}" />
                 </StackPanel>
             </Button>
 
@@ -595,13 +620,13 @@
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Refresh Collaboration Projects List" />
+                        Text="{helpers:Localization ProjectPicker_RefreshCollaborationProjects}" />
                 </StackPanel>
             </Button>
 
             <Label
                 Margin="7,0"
-                Content="Import Server Project"
+                Content="{helpers:Localization ProjectPicker_ImportServerProject}"
                 FontSize="19"
                 Visibility="{Binding CollabProjectVisibility}" />
             <ListView
@@ -635,22 +660,31 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="Auto" />
+                                        <!--<RowDefinition Height="*" />-->
+                                        <!--<RowDefinition Height="Auto" />-->
                                     </Grid.RowDefinitions>
 
+
                                     <Image
+                                        Width="30"
+                                        Margin="5"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Source="../../Assets/ClearCollabIcon.png" />
+
+                                    <!--<Image
                                         Grid.RowSpan="2"
                                         Grid.Column="0"
                                         Height="30"
                                         Margin="5"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Source="../../Assets/ClearDashboard_logo_50.png" />
+                                        Source="../../Assets/ClearDashboard_logo_50.png" />-->
 
                                     <TextBlock
                                         Grid.Row="0"
                                         Grid.Column="1"
+                                        VerticalAlignment="Center"
                                         FontSize="14"
                                         FontWeight="DemiBold"><Run Text="{Binding ProjectName}" /></TextBlock>
 
@@ -659,10 +693,11 @@
                                         Grid.Column="2"
                                         Width="145"
                                         HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
                                         FontSize="12"
                                         Text="{Binding Created}" />
 
-                                    <TextBlock
+                                    <!--<TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2">
@@ -674,7 +709,8 @@
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </TextBlock.Style><Run FontSize="11" Text="Version: " /><Run Text=" " /><Run FontSize="11" Text="{Binding AppVersion}" /></TextBlock>
+                                        </TextBlock.Style><Run FontSize="11" Text="Version: " /><Run Text=" " /><Run FontSize="11" Text="{Binding AppVersion}" />
+                                    </TextBlock>-->
                                 </Grid>
                             </StackPanel>
                         </Border>

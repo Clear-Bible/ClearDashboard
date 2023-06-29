@@ -1655,6 +1655,18 @@ namespace ClearDashboard.WebApiParatextPlugin
                             sb.AppendLine();
                         }
 
+                        if (lastVerseZero)
+                        {
+                            var usfm = new UsfmVerse
+                            {
+                                Chapter = chapter,
+                                Verse = "0",
+                                Text = verseText
+                            };
+                            verses.Add(usfm);
+                            verseText = "";
+                        }
+
                         // this includes single verses (\v 1) and multiline (\v 1-3)
                         sb.Append($@"\v {marker.Data.Trim()} ");
 

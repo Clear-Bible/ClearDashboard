@@ -170,7 +170,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         bool lastTokenText = false;
                         bool lastVerseZero = false;
                         string lastVerseRef = "";
-                        
+                       
                         foreach (var token in tokens)
                         {
                             if (token is IUSFMMarkerToken marker)

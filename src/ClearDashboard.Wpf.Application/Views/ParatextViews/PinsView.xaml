@@ -693,7 +693,6 @@
             </materialDesign:DialogHost.DialogContent>
             <Border
                 MinWidth="256"
-                MinHeight="256"
                 BorderBrush="{StaticResource PrimaryHueMidBrush}"
                 BorderThickness="0"
                 ClipToBounds="True" />

@@ -126,17 +126,50 @@
   <data name="Aqua_Assessment_BodyTitle" xml:space="preserve">
     <value>Assessment</value>
   </data>
-  <data name="Aqua_Assessment_RevisionId" xml:space="preserve">
-    <value>Revision Id to compare to</value>
+  <data name="Aqua_Assessment_Revision" xml:space="preserve">
+    <value>Revision:</value>
+  </data>
+  <data name="Aqua_Assessment_Revision_To_Compare_With" xml:space="preserve">
+    <value>Compare to Revision</value>
   </data>
   <data name="Aqua_Assessment_Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Assessment Type</value>
+  </data>
+  <data name="Aqua_Assessment_Version" xml:space="preserve">
+    <value>Version Id:</value>
   </data>
   <data name="Aqua_DialogTitle" xml:space="preserve">
     <value>AQuA</value>
   </data>
+  <data name="Aqua_EnhancedView_Assessment_Id" xml:space="preserve">
+    <value>Assessment Id:</value>
+  </data>
+  <data name="Aqua_EnhancedView_Assessment_Type" xml:space="preserve">
+    <value>Assessment Type:</value>
+  </data>
+  <data name="Aqua_EnhancedView_Fifth" xml:space="preserve">
+    <value>Spanish RVR1960</value>
+  </data>
+  <data name="Aqua_EnhancedView_First" xml:space="preserve">
+    <value>English NASB</value>
+  </data>
+  <data name="Aqua_EnhancedView_Forth" xml:space="preserve">
+    <value>Korean RNKSV</value>
+  </data>
   <data name="Aqua_EnhancedView_GetResult" xml:space="preserve">
     <value>Reload</value>
+  </data>
+  <data name="Aqua_EnhancedView_Revision" xml:space="preserve">
+    <value>Revision:</value>
+  </data>
+  <data name="Aqua_EnhancedView_Revision_Compared_With" xml:space="preserve">
+    <value>Compared to Revision:</value>
+  </data>
+  <data name="Aqua_EnhancedView_Second" xml:space="preserve">
+    <value>French LBS21</value>
+  </data>
+  <data name="Aqua_EnhancedView_Third" xml:space="preserve">
+    <value>Swahil Neno</value>
   </data>
   <data name="Aqua_EnhancedView_VisualizationSelection_BarChart" xml:space="preserve">
     <value>Bars</value>
@@ -150,6 +183,21 @@
   <data name="Aqua_EnhancedView_VisualizationSelection_MissingWords" xml:space="preserve">
     <value>Missing Words</value>
   </data>
+  <data name="Aqua_EnhancedView_Zoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="Aqua_EnhancedView_Zoom_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Aqua_EnhancedView_Zoom_Book" xml:space="preserve">
+    <value>Book</value>
+  </data>
+  <data name="Aqua_EnhancedView_Zoom_Chapter" xml:space="preserve">
+    <value>Chapter</value>
+  </data>
+  <data name="Aqua_EnhancedView_Zoom_Verse" xml:space="preserve">
+    <value>Verse</value>
+  </data>
   <data name="Aqua_Revision_AddAssessment" xml:space="preserve">
     <value>New Assessment</value>
   </data>
@@ -157,10 +205,13 @@
     <value>Add Revision of Corpus</value>
   </data>
   <data name="Aqua_Revision_Assessments_Add_Column" xml:space="preserve">
-    <value>View</value>
+    <value>View Results</value>
+  </data>
+  <data name="Aqua_Revision_Assessments_AssessmentId_Column" xml:space="preserve">
+    <value>Assessment Id</value>
   </data>
   <data name="Aqua_Revision_Assessments_RequestedTime_Column" xml:space="preserve">
-    <value>Assessment submitted</value>
+    <value>Submitted</value>
   </data>
   <data name="Aqua_Revision_Assessments_Status_Column" xml:space="preserve">
     <value>Status</value>
@@ -199,7 +250,7 @@
     <value>Corpus</value>
   </data>
   <data name="Aqua_Version_CorpusInformation" xml:space="preserve">
-    <value>Corpus Information</value>
+    <value>Corpus Info</value>
   </data>
   <data name="Aqua_Version_DeleteVersion" xml:space="preserve">
     <value>Delete all corpus information from AQuA and reset</value>
@@ -213,6 +264,9 @@
   <data name="Aqua_Version_GetVersion" xml:space="preserve">
     <value>Reload</value>
   </data>
+  <data name="Aqua_Version_IsMachineTranslation" xml:space="preserve">
+    <value>Is this a machine translation?</value>
+  </data>
   <data name="Aqua_Version_Language" xml:space="preserve">
     <value>Language</value>
   </data>
@@ -222,11 +276,14 @@
   <data name="Aqua_Version_ReloadRevisions" xml:space="preserve">
     <value>Refresh</value>
   </data>
+  <data name="Aqua_Version_RevisionId_Column" xml:space="preserve">
+    <value>Revision Id</value>
+  </data>
   <data name="Aqua_Version_Revisions" xml:space="preserve">
     <value>Revisions</value>
   </data>
   <data name="Aqua_Version_Revisions_Add_Column" xml:space="preserve">
-    <value>Assessments</value>
+    <value>View</value>
   </data>
   <data name="Aqua_Version_Revisions_Date_Column" xml:space="preserve">
     <value>Submitted</value>
@@ -239,6 +296,9 @@
   </data>
   <data name="Aqua_Version_Script" xml:space="preserve">
     <value>Script</value>
+  </data>
+  <data name="Aqua_Version_VersionId" xml:space="preserve">
+    <value>Version Id</value>
   </data>
   <data name="NumericTextValidationMessage" xml:space="preserve">
     <value>{0} must be empty or an integer greater than 0</value>

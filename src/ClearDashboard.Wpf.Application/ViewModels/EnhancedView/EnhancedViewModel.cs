@@ -394,12 +394,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EnableBcvControl = true;
             EnhancedViewLayout = enhancedViewLayout;
 
+            DisplayName = enhancedViewLayout.Title;
             Title = enhancedViewLayout.Title;
             VerseOffsetRange = enhancedViewLayout.VerseOffset;
             BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
             ParatextSync = enhancedViewLayout.ParatextSync;
-            CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-            VerseChange = ProjectManager.CurrentVerse;
+            if (ParatextSync)
+            {
+                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                VerseChange = ProjectManager.CurrentVerse;
+            }
+            else
+            {
+                CurrentBcv.SetVerseFromId(enhancedViewLayout.BBBCCCVVV);
+                VerseChange = enhancedViewLayout.BBBCCCVVV!;
+            }
+
+
 
             if (metadatum != null) {
 

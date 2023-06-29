@@ -559,6 +559,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         title = windowsDockable.Title;
                         enhancedViewModel.EnhancedViewLayout.Title = title;
+                        enhancedViewModel.EnhancedViewLayout.BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV;
                     }
 
                     enhancedViewLayouts.Add(enhancedViewModel.EnhancedViewLayout);
@@ -660,6 +661,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (Parameter.IsNew)
                 {
                     await ProjectManager.CreateNewProject(Parameter.ProjectName);
+                    Parameter.IsNew = false;
                 }
                 else
                 {
@@ -756,11 +758,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
                         AddNewEnhancedViewTab(enhancedViewLayoutDocument);
-
-
+                        await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
+                    }
+                    else
+                    {
+                        await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
+                        // first one - reset the title from the default
+                        enhancedViewModel.DisplayName = enhancedViewLayout.Title;
+                        //if (enhancedViewLayout.ParatextSync)
+                        //{
+                        //    // paratext sync is enabled so use whatever the current verse in paratext is
+                        //    enhancedViewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                        //}
                     }
 
-                    await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
                     await Task.Delay(100, cancellationToken);
                 }
 
@@ -951,6 +962,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 Logger?.LogInformation(message);
             }
         }
+
+        public void LaunchGettingStartedVideos()
+        {
+            var videosUrl = new Uri("https://cleardashboard.org/");
+
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = videosUrl.AbsoluteUri,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
+        }
+
         private void ShowLogs()
         {
             var tailBlazerProxy = LifetimeScope.Resolve<TailBlazerProxy>();
@@ -1396,6 +1427,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         // launch Getting Started Guide
                         new() { Header = _localizationService!.Get("MainView_GettingStartedGuide"), Id = MenuIds.GettingStartedGuide, ViewModel = this, },
+                        
+                        // launch Getting Started Guide
+                        new() { Header = "Getting Started Videos", Id = MenuIds.GettingStartedVideos, ViewModel = this, },
 
                         // Gather Logs
                         new() { Header = _localizationService!.Get("MainView_ShowLog"), Id = MenuIds.ShowLog, ViewModel = this, },
@@ -1406,7 +1440,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_About"), Id = MenuIds.About, ViewModel = this, },
 
                         // Test reloading a project.
-                        //ViewModel mergenew() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
+                        //ViewModel merge
+                        //new() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
                     }
                 },
 
@@ -1990,6 +2025,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         break;
                     }
 
+                case MenuIds.GettingStartedVideos:
+                    {
+                        LaunchGettingStartedVideos();
+                        break;
+                    }
+
                 case MenuIds.ShowLog:
                     {
                         ShowLogs();
@@ -2267,7 +2308,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
         {
-            await Initialize(cancellationToken);
+            //await Initialize(cancellationToken);
+
+            await OnDeactivateAsync(false, CancellationToken.None);
+            //NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+            await OnInitializeAsync(CancellationToken.None);
+            await OnActivateAsync(CancellationToken.None);
+            //await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
         }
 
 

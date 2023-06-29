@@ -18,6 +18,11 @@ namespace ClearDashboard.Wpf.Application.Validators
                 return new ValidationResult(false, "Value cannot be empty.");
             }
 
+            if (string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                return new ValidationResult(false, "Value cannot be empty.");
+            }
+
             try
             {
                 // from https://uibakery.io/regex-library/email-regex-csharp
