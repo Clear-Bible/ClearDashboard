@@ -963,13 +963,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
-            Connected = message.Connected;
-
-            if (!Connected)
+            if (message.Connected ==false && Connected==true)
             {
                 IsParatextRunning=false;
                 ListenForParatextStart();
             }
+
+            Connected = message.Connected;
 
             await Task.CompletedTask;
         }

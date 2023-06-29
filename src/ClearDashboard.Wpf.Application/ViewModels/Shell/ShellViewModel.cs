@@ -526,12 +526,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #region EventAggregator message handling
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
-            Connected = message.Connected;
-
-            if (message.Connected == false)
+            if (message.Connected == false && Connected !=false)
             {
                 PlaySound.PlaySoundFromResource(SoundType.Disconnected);
             }
+
+            Connected = message.Connected;
 
             await Task.CompletedTask;
         }

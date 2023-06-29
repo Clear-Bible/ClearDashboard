@@ -83,6 +83,7 @@ public class DashboardProjectManager : ProjectManager
         catch (HttpRequestException)
         {
             Logger.LogError("Paratext is not running, cannot connect to SignalR.");
+            await PublishSignalRConnected(false);
             await Task.Delay(10);
             await ConfigureSignalRClient();
         }
