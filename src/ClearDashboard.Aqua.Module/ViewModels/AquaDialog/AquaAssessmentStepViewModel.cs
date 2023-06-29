@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -259,16 +260,16 @@ public class AquaAssessmentStepViewModel :
     {
         Execute.OnUIThread(() =>
         {
+            Revisions.Clear();
             if (revisions != null)
                 foreach (var revision in revisions)
                     if (revision.id != ParentViewModel!.ActiveRevision?.id)
                         Revisions.Add(revision);
         });
     }
-    public async Task GetAllProjectRevisions()
-    {        
-        Revisions.Clear();
 
+    private async Task<IEnumerable<Revision>> GetAllProjectRevisions(CancellationToken cancellationToken)
+    {
         var allCorpus = await Corpus.GetAllCorpusIds(Mediator!);
         List<TokenizedTextCorpusId> tokenizedCorpusIds = new();
         foreach (var corpusId in allCorpus)
@@ -279,9 +280,7 @@ public class AquaAssessmentStepViewModel :
             ));
         }
 
-        ParentViewModel!.IsBusy = true;
-        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
-
+        BlockingCollection<Revision> revisionsInProject = new();
         await Parallel.ForEachAsync(tokenizedCorpusIds, new ParallelOptions(), async (tokenizedCorpusId, cancellationToken) =>
         {
             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
@@ -294,18 +293,27 @@ public class AquaAssessmentStepViewModel :
             var versionId = aquaTokenizedTextCorpusMetadata?.id ?? null;
 
             if (versionId != null)
-                await GetRevisions((int) versionId);
+            {
+                var versionRevisions = await aquaManager_!.ListRevisions(
+                    versionId,
+                    cancellationToken);
+                if (versionRevisions != null)
+                {
+                    foreach(var revision in versionRevisions)
+                    {
+                        revisionsInProject.Add(revision);
+                    }
+                }
+            }
         });
-        ParentViewModel!.IsBusy = false;
-        //ParentViewModel!.StatusBarVisibility = Visibility.Visible;
+        return revisionsInProject;
     }
-    public async Task GetRevisions(int versionId)
+
+    public async Task GetAllProjectRevisions()
     {
         var processStatus = await ParentViewModel!.RunLongRunningTask(
-            "AQuA-Assessments-Get_Revisions",
-            (cancellationToken) => aquaManager_!.ListRevisions(
-                versionId,
-                cancellationToken),
+            "AQuA-Assessments-Get_All_Project_Revisions",
+            GetAllProjectRevisions,
             SetRevisionsList,
             () => { },
             () => { });

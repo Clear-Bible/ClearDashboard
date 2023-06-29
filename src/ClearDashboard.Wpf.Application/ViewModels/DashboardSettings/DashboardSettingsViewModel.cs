@@ -1,20 +1,21 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using MailKit.Net.Smtp;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
+using MimeKit;
 using System;
-using System.Threading;
 using System.Windows;
-using ClearDashboard.DataAccessLayer.Models;
-using static ClearDashboard.DataAccessLayer.Features.GitLabUser.GitLabUserSlice;
-using ClearDashboard.DataAccessLayer.Features.GitLabUser;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -24,8 +25,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
+        private readonly ILogger<DashboardSettingsViewModel> _logger;
         private bool _isAquaEnabledOnStartup;
+        private string _emailValidationString = string.Empty;
 
         #endregion //Member Variables
 
@@ -184,6 +188,85 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private string _email = string.Empty;
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value.Trim();
+                NotifyOfPropertyChange(() => Email);
+            }
+        }
+
+        private bool _emailSendError = false;
+        public bool EmailSendError
+        {
+            get => _emailSendError;
+            set
+            {
+                _emailSendError = value;
+                NotifyOfPropertyChange(() => EmailSendError);
+            }
+        }
+
+        private bool _emailSent;
+        public bool EmailSent
+        {
+            get => _emailSent;
+            set
+            {
+                _emailSent = value;
+                NotifyOfPropertyChange(() => EmailSent);
+            }
+        }
+
+
+        private Visibility _showExistingCollabUser;
+        public Visibility ShowExistingCollabUser
+        {
+            get => _showExistingCollabUser;
+            set
+            {
+                _showExistingCollabUser = value;
+                NotifyOfPropertyChange(() => ShowExistingCollabUser);
+            }
+        }
+
+        private Visibility _hideExistingCollabUser;
+        public Visibility HideExistingCollabUser
+        {
+            get => _hideExistingCollabUser;
+            set
+            {
+                _hideExistingCollabUser = value;
+                NotifyOfPropertyChange(() => HideExistingCollabUser);
+            }
+        }
+
+        private string _emailMessage;
+        public string EmailMessage
+        {
+            get => _emailMessage;
+            set
+            {
+                _emailMessage = value; 
+                NotifyOfPropertyChange(() => EmailMessage);
+            }
+        }
+
+        private string _emailCode = "";
+        public string EmailCode
+        {
+            get => _emailCode;
+            set
+            {
+                _emailCode = value.Trim();
+                NotifyOfPropertyChange(() => EmailCode);
+            }
+        }
+
+
         #endregion //Observable Properties
 
 
@@ -198,13 +281,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
+            CollaborationHttpClientServices collaborationHttpClientServices,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             // for Caliburn Micro
             //IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
+            _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
+            _logger = logger;
         }
 
         protected override void OnViewReady(object view)
@@ -259,22 +345,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         protected override async void OnViewLoaded(object view)
         {
-            var results =
-                await ExecuteRequest(
-                    new GitLabUserExistsQuery(MySqlHelper.BuildConnectionString(), CollaborationConfig.UserId,
-                        CollaborationConfig.RemoteUserName, CollaborationConfig.RemoteEmail), CancellationToken.None);
+            var user = await _collaborationHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
 
-            if (results.Data)
+            if (user.UserId > 0)
             {
+                // found user
                 GitLabUserFound = true;
                 GitlabUserSaveVisibility = Visibility.Collapsed;
                 RestoreButtonEnabled = false;
+
+                ShowExistingCollabUser = Visibility.Visible;
+                HideExistingCollabUser = Visibility.Collapsed;
             }
             else
             {
-                GitLabUserFound = false; 
-                GitlabUserSaveVisibility = Visibility.Visible;
-                RestoreButtonEnabled = true;
+                if (CollaborationConfig.UserId > 0)
+                {
+                    ShowExistingCollabUser = Visibility.Visible;
+                    HideExistingCollabUser = Visibility.Collapsed;
+                    GitLabUserFound = true;
+                }
+                else
+                {
+                    // no user on the server
+                    GitLabUserFound = false;
+                    GitlabUserSaveVisibility = Visibility.Visible;
+                    RestoreButtonEnabled = true;
+
+                    ShowExistingCollabUser = Visibility.Collapsed;
+                    HideExistingCollabUser = Visibility.Visible;
+                }
+
             }
 
             base.OnViewLoaded(view);
@@ -298,26 +399,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         public async void SaveGitLabToServer()
         {
-            var userId = _collaborationConfig.UserId;
-            var remoteUserName = _collaborationConfig.RemoteUserName;
-            var remoteEmail = _collaborationConfig.RemoteEmail;
-            var remotePersonalAccessToken = _collaborationConfig.RemotePersonalAccessToken;
-            var remotePersonalPassword = _collaborationConfig.RemotePersonalPassword;
-            var group = _collaborationConfig.Group;
-            var namespaceId = _collaborationConfig.NamespaceId;
-
-
-            var results =
-                await ExecuteRequest(
-                    new PostGitLabUserQuery(MySqlHelper.BuildConnectionString(), userId, remoteUserName, remoteEmail,
-                        remotePersonalAccessToken, remotePersonalPassword, group, namespaceId), CancellationToken.None);
-            if (results.Success)
+#pragma warning disable CA1416
+            var user = new GitLabUser
             {
-                SaveGitLabUserMessage = "Saved to remote server";
+                Id = _collaborationConfig.UserId,
+                UserName = _collaborationConfig.RemoteUserName!,
+                Email = _collaborationConfig.RemoteEmail!,
+                Password = _collaborationConfig.RemotePersonalPassword!,
+                Organization = _collaborationConfig.Group!,
+                NamespaceId = _collaborationConfig.NamespaceId
+            };
+#pragma warning restore CA1416
+
+            var results = await _collaborationHttpClientServices.CreateNewUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
+
+            if (results)
+            {
+                SaveGitLabUserMessage = LocalizationStrings.Get("Settings_SavedToRemoteServer", _logger); //"Saved to remote server";
             }
             else
             {
-                SaveGitLabUserMessage = "User already exists on server";
+                SaveGitLabUserMessage = LocalizationStrings.Get("Settings_UserAlreadyExists", _logger); //"User already exists on server";
             }
 
             GitlabUserSaveVisibility = Visibility.Collapsed;
@@ -362,6 +464,94 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
 
             _eventAggregator.PublishOnUIThreadAsync(new RefreshTextCollectionsMessage());
+        }
+
+        public async void SendValidationEmail()
+        {
+            var user = await _collaborationHttpClientServices.GetUserExistsByEmail(Email);
+
+            if (user.UserId <= 0)
+            {
+                EmailMessage = LocalizationStrings.Get("Settings_NotFoundOnSystem", _logger); //"Not Found on System!";
+                ShowValidateEmailButtonEnabled = false;
+
+                return;
+            }
+
+            EmailMessage = "Email Sent";
+
+
+            _emailValidationString = GenerateRandomPassword.RandomNumber(1000, 9999).ToString();
+
+
+            var mailMessage = new MimeMessage();
+            mailMessage.From.Add(new MailboxAddress("cleardas@cleardashboard.org", "cleardas@cleardashboard.org"));
+            mailMessage.To.Add(new MailboxAddress(Email, Email));
+            mailMessage.Subject = LocalizationStrings.Get("Settings_DashboardEmailValidationCode", _logger); //"ClearDashboard Email Validation Code";
+            mailMessage.Body = new TextPart("plain")
+            {
+                Text = LocalizationStrings.Get("Settings_EmailVerificationCode", _logger) + ": " + _emailValidationString
+        };
+
+            try
+            {
+                using var smtpClient = new SmtpClient();
+                await smtpClient.ConnectAsync("mail.cleardashboard.org", 465, true);
+
+                var userName = Encryption.Decrypt(Settings.Default.EmailUser);
+                var pass = Encryption.Decrypt(Settings.Default.EmailPass);
+
+                await smtpClient.AuthenticateAsync(userName, pass);
+                await smtpClient.SendAsync(mailMessage);
+                await smtpClient.DisconnectAsync(true);
+
+                ShowValidateEmailButtonEnabled = true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(LocalizationStrings.Get("Settings_EmailSendingError", _logger), e);
+                EmailSendError = true;
+            }
+
+            EmailSent = true;
+            ShowValidateEmailButtonEnabled = true;
+
+        }
+
+
+        public async void ValidateEmailCode()
+        {
+            if (EmailCode == _emailValidationString)
+            {
+                var user = await _collaborationHttpClientServices.GetUserExistsByEmail(Email);
+
+                if (user.UserId <= 0)
+                {
+                    EmailMessage = LocalizationStrings.Get("Settings_NotFoundOnSystem", _logger); //"Not Found on System!";
+                    ShowValidateEmailButtonEnabled = false;
+
+                    return;
+                }
+
+                // recreate the json in the user secrets
+                CollaborationConfig = new CollaborationConfiguration
+                {
+                    Group = user.GroupName,
+                    RemoteEmail = Email,
+                    RemotePersonalAccessToken = Encryption.Decrypt(user.RemotePersonalAccessToken),
+                    RemotePersonalPassword = Encryption.Decrypt(user.RemotePersonalPassword),
+                    RemoteUrl = "",
+                    RemoteUserName = user.RemoteUserName,
+                    UserId = user.UserId,
+                    NamespaceId = user.NamespaceId,
+                };
+
+                _collaborationManager.SaveCollaborationLicense(CollaborationConfig);
+
+
+                HideExistingCollabUser = Visibility.Collapsed;
+                ShowExistingCollabUser = Visibility.Visible;
+            }
         }
 
         #endregion // Methods
