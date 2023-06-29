@@ -273,7 +273,7 @@ namespace ClearDashboard.Aqua.Module.Services
 
             return assessments?
                 .Where(a => a.revision_id == revisionId)
-                ?? throw new InvalidDataEngineException(name: "assessments", value: "null", message: $"ListAssessments returned a list that didn't contain {revisionId}");
+                ?? throw new InvalidDataEngineException(name: "assessments", value: "null", message: $"AQuA doesn't have any assessments for Dashboard.");
         }
         public async Task<Assessment?> GetAssessment(
             int assessmentId,
@@ -288,7 +288,7 @@ namespace ClearDashboard.Aqua.Module.Services
             return assessments?
                 .Where(a => a.id == assessmentId)
                 .FirstOrDefault()
-                ?? throw new InvalidDataEngineException(name: "assessments", value: "null", message: $"ListAssessments returned a list that didn't contain {assessmentId}");
+                ?? throw new InvalidDataEngineException(name: "assessments", value: "null", message: $"AQuA doesn't have Assessment Id {assessmentId}. Was it deleted?");
         }
         public async Task DeleteAssessment(
             int assessmentId,

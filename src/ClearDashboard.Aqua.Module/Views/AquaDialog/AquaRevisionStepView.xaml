@@ -143,123 +143,132 @@
         </Grid>
         </materialDesign:Card>
         <materialDesign:Card Grid.Row="1" Style="{StaticResource BottomCardStyle}">
-            <Grid Width="Auto" Grid.Row="1">
+            <Grid>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel
-                VerticalAlignment="Top"
-                Orientation="Vertical" Grid.Row="0">
-                <DataGrid
-                    x:Name="gridRevisions"
-                    Margin="5, 5"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    AutoGenerateColumns="False"
-                    CanUserResizeColumns="True"
-                    GridLinesVisibility="All"
-                    HorizontalGridLinesBrush="{StaticResource GridBrush}"
-                    BorderThickness="1"
-                    IsReadOnly="True"
-                    ItemsSource="{Binding Items}"
-                    ScrollViewer.CanContentScroll="True"
-                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    VerticalGridLinesBrush="{StaticResource GridBrush}">
-                    <DataGrid.IsEnabled>
-                        <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                            <Binding Path="HasId"/>
-                            <Binding Path="ParentViewModel.IsBusy" Converter="{StaticResource BooleanInversionConverter}"/>
-                        </MultiBinding>
-                    </DataGrid.IsEnabled>
-                    <DataGrid.ColumnHeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
-                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
-                        </Style>
-                    </DataGrid.ColumnHeaderStyle>
+            <DataGrid
+                Grid.Row="0"
+                x:Name="gridRevisionAssessments"
+                Margin="5, 5"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                GridLinesVisibility="All"
+                HorizontalGridLinesBrush="{StaticResource GridBrush}"
+                BorderThickness="1"
+                IsReadOnly="True"
+                ItemsSource="{Binding Items}"
+                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                VerticalGridLinesBrush="{StaticResource GridBrush}">
+                <DataGrid.IsEnabled>
+                    <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                        <Binding Path="HasId"/>
+                        <Binding Path="ParentViewModel.IsBusy" Converter="{StaticResource BooleanInversionConverter}"/>
+                    </MultiBinding>
+                </DataGrid.IsEnabled>
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
 
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="250" Header="{helpers:Localization Aqua_Revision_Assessments_RequestedTime_Column}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Grid.Column="0"
-                                        Margin="4,0,0,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        FontWeight="Bold"
-                                        Text="{Binding requested_time}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Type_Column}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Grid.Column="0"
-                                        Margin="4,0,0,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        FontWeight="Bold"
-                                        Text="{Binding type}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Status_Column}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Grid.Column="0"
-                                        Margin="4,0,0,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        FontWeight="Bold"
-                                        Text="{Binding status}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="{helpers:Localization Aqua_Revision_Assessments_AssessmentId_Column}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Grid.Column="0"
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                FontWeight="Bold"
+                                Text="{Binding id}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Add_Column}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                        <Button Width="40"
-                                                cm:Message.Attach="AddItemToEnhancedView($dataContext)"
-                                                Style="{StaticResource SmallTransparentStyle}"
-                                                IsEnabled="{Binding status, Converter={StaticResource AquaAssessmentStatusToBooleanConverter}}">
-                                            <materialDesign:PackIcon
-                                        Width="30"
-                                        Height="30"
-                                        Foreground="{StaticResource BlueMidBrush}"
-                                        Kind="AddCircleOutline" />
-                                        </Button>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                        <Button Width="40" 
-                                                cm:Message.Attach="DeleteItem($dataContext)"
-                                                Style="{StaticResource SmallTransparentStyle}"  >
-                                        <materialDesign:PackIcon
-                                            Width="30"
-                                            Height="30"
-                                            Foreground="{StaticResource BlueMidBrush}"
-                                            Kind="CloseCircleOutline" />
-                                        </Button>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </StackPanel>
+                    <DataGridTemplateColumn Width="250" Header="{helpers:Localization Aqua_Revision_Assessments_RequestedTime_Column}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Grid.Column="0"
+                                    Margin="4,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    FontWeight="Bold"
+                                    Text="{Binding requested_time}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Type_Column}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Grid.Column="0"
+                                    Margin="4,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    FontWeight="Bold"
+                                    Text="{Binding type}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Status_Column}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Grid.Column="0"
+                                    Margin="4,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    FontWeight="Bold"
+                                    Text="{Binding status}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Add_Column}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="40"
+                                        cm:Message.Attach="AddItemToEnhancedView($dataContext)"
+                                        Style="{StaticResource SmallTransparentStyle}"
+                                        IsEnabled="{Binding status, Converter={StaticResource AquaAssessmentStatusToBooleanConverter}}">
+                                    <materialDesign:PackIcon
+                                Width="30"
+                                Height="30"
+                                Foreground="{StaticResource BlueMidBrush}"
+                                Kind="AddCircleOutline" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="40" 
+                                        cm:Message.Attach="DeleteItem($dataContext)"
+                                        Style="{StaticResource SmallTransparentStyle}"  >
+                                <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    Foreground="{StaticResource BlueMidBrush}"
+                                    Kind="CloseCircleOutline" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
             <StackPanel
                 Grid.Row="1"
                 Margin="5"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
                 Orientation="Horizontal">
                 <Button
                     x:Name="AddAssessment"

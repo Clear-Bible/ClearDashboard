@@ -3,12 +3,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     xmlns:resx="clr-namespace:ClearDashboard.Aqua.Module.Strings"
-             
-             
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:viewModel="clr-namespace:ClearDashboard.Aqua.Module.ViewModels"
     xmlns:converters="clr-namespace:ClearDashboard.Aqua.Module.Converters"
@@ -31,12 +30,54 @@
 
     <Grid>
         <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-            <Label Content="{Binding Verse}"/>
-            <Label Content="{Binding Assessment.type}"/>
-            <Label Content="{Binding Revision.name }"/>
-            <Label Content="{Binding ReferenceRevision.name }"/>
-            </StackPanel>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Visibility>
+                        <Binding Path="IsBusy" Converter="{StaticResource BoolTrueToVisibilityCollapsedConverter}"/>
+                    </StackPanel.Visibility>
+                    <!--<TextBlock>
+                        <TextBlock.Inlines>
+                            <Run Text="{Binding Verse}" FontSize="14" FontWeight="Bold"/>
+                            <Run Text=" +/- " />
+                            <Run Text="{Binding OffsetString}" />
+                        </TextBlock.Inlines>
+                    </TextBlock>-->
+                    <TextBlock Margin="10,0,0,0">
+                        <TextBlock.Inlines>
+                            <Run FontWeight="Bold" Text="{helpers:Localization Aqua_EnhancedView_Zoom}" />
+                            <Run Text="{Binding Path=ZoomString, Mode=OneWay}" />
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                    <TextBlock Margin="10,0,0,0">
+                        <TextBlock.Inlines>
+                            <Run FontWeight="Bold" Text="{helpers:Localization Aqua_EnhancedView_Assessment_Id}" />
+                            <Run Text="{Binding Assessment.id}" />
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                    <!--<TextBlock Margin="10,0,0,0">
+                        <TextBlock.Inlines>
+                            <Run FontWeight="Bold" Text="{helpers:Localization Aqua_EnhancedView_Assessment_Type}" />
+                            <Run Text="{Binding Assessment.type}" />
+                        </TextBlock.Inlines>
+                    </TextBlock>-->
+                    <TextBlock Margin="10,0,0,0">
+                        <TextBlock.Inlines>
+                            <Run FontWeight="Bold" Text="{helpers:Localization Aqua_EnhancedView_Revision}" />
+                            <Run Text="{Binding Revision.id}" />
+                            <Run Text=": " />
+                            <Run Text="{Binding Revision.name}" />
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                    <TextBlock Margin="10,0,0,0">
+                        <TextBlock.Inlines>
+                            <Run FontWeight="Bold" Text="{helpers:Localization Aqua_EnhancedView_Revision_Compared_With}" />
+                            <Run Text="{Binding ReferenceRevision.id}" />
+                            <Run Text=": " />
+                            <Run Text="{Binding ReferenceRevision.name}" />
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                </StackPanel>
+            </ScrollViewer>
             <!--<Label Content="{Binding BodyText}"/>-->
             <StackPanel
                 Margin="5,0,0,5"
@@ -92,30 +133,56 @@
                     </MultiBinding>
                 </lvc:CartesianChart.Visibility>
             </lvc:CartesianChart>
-            <!--<lvc:CartesianChart
-                x:Name="Bar"
-                Height="200"
-                Width="1000"
-                Series="{Binding SeriesCollection}"
-                TooltipPosition="Hidden"
-                ZoomMode="X">
-                <lvc:CartesianChart.Visibility>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" MaxHeight="300">
+            <!--<Label Content="{Binding BodyText}">
+                <Label.Visibility>
                     <MultiBinding Converter="{StaticResource AquaVisibilityAndFalseCollapsedConverter}">
                         <Binding Path="IsBusy" Converter="{StaticResource BoolTrueToVisibilityCollapsedConverter}"/>
-                        <Binding Path="Visualization" Converter="{StaticResource AquaVisualizationToVisibilityConverter}" ConverterParameter="BarChart"/>
+                        <Binding Path="Visualization" Converter="{StaticResource AquaVisualizationToVisibilityConverter}" ConverterParameter="MissingWords"/>
                     </MultiBinding>
-                </lvc:CartesianChart.Visibility>
-            </lvc:CartesianChart>-->
-            <Label Content="{Binding Message}"/>
-            <Button
-                x:Name="GetResults"
-                Content="{helpers:Localization Aqua_EnhancedView_GetResult}"
-                IsDefault="True"
-                Style="{StaticResource TransparentStyle}"
-                Visibility="Collapsed"
-                IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}">
-            </Button>
-
+                </Label.Visibility>
+            </Label>-->
+                <TreeView ItemsSource="{Binding MissingWordsResultCollection}">
+                    <TreeView.Visibility>
+                        <MultiBinding Converter="{StaticResource AquaVisibilityAndFalseCollapsedConverter}">
+                            <Binding Path="IsBusy" Converter="{StaticResource BoolTrueToVisibilityCollapsedConverter}"/>
+                            <Binding Path="Visualization" Converter="{StaticResource AquaVisualizationToVisibilityConverter}" ConverterParameter="MissingWords"/>
+                        </MultiBinding>
+                    </TreeView.Visibility>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Path=Targets}">
+                            <TextBlock FontSize="16" FontWeight="Bold" Text="{Binding Source}">
+                            </TextBlock>
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Inlines>
+                                            <Run Text="{Binding name}" FontWeight="Bold"/>
+                                            <Run Text=": "></Run>
+                                            <Run Text="{Binding value}" />
+                                        </TextBlock.Inlines>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </ScrollViewer>
+            <StackPanel Orientation="Horizontal">
+                <Button 
+                    cm:Message.Attach="GetResults()"
+                    BorderBrush="Transparent"
+                    Foreground="Transparent"
+                    Background="Transparent">
+                    <materialDesign:PackIcon
+                        Width="30"
+                        Height="30"
+                        Foreground="{StaticResource BlueMidBrush}"
+                        Background="Transparent"
+                        Kind="Refresh" />
+                </Button>
+                <TextBlock VerticalAlignment="Bottom" Text="{Binding Message}"></TextBlock>
+            </StackPanel>
         </StackPanel>
         <ProgressBar
             Width="76"
