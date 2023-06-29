@@ -42,6 +42,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private CollaborationConfiguration _userInfo;
         private GitLabUser _gitLabUser;
+
+        private ILocalizationService _localizationService;
         private string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
 
         #endregion //Member Variables
@@ -153,6 +155,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
+            _localizationService = localizationService;
             _cancellationTokenSource = new CancellationTokenSource();
             _collaborationManager = collaborationManager;
             _httpClientServices = httpClientServices;
@@ -509,6 +512,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             var description = Regex.IsMatch(message, "{0(:.*)?}") ?
                 string.Format(message, status.PercentCompleted) :
                 message;
+
+            if (message.StartsWith("MergeDialog_"))
+            {
+                description = _localizationService.Get(message);
+            }
 
             OnUIThread(() =>
                 {

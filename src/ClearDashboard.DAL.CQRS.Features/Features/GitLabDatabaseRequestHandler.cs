@@ -1,9 +1,7 @@
-﻿using MediatR;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using MySqlConnector;
-using System.Diagnostics;
-using ClearDashboard.DataAccessLayer.Models;
-using System.Data;
 
 namespace ClearDashboard.DAL.CQRS.Features.Features
 {
@@ -14,14 +12,14 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
     /// <typeparam name="TResponse"></typeparam>
     /// <typeparam name="TData"></typeparam>
     public abstract class
-        MySqlDatabaseRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
+        GitLabDatabaseRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
         where TRequest : IRequest<TResponse>
     {
         private readonly ILogger _logger;
         protected int ReturnValue { get; private set; }
         protected List<CollaborationConfiguration> CollaborationConfigurations { get; set; } = new();
 
-        protected MySqlDatabaseRequestHandler(ILogger logger) : base(logger)
+        protected GitLabDatabaseRequestHandler(ILogger logger) : base(logger)
         {
             _logger = logger;
             //no-op

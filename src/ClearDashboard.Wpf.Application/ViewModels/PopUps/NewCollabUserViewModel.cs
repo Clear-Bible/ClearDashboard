@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -11,6 +12,7 @@ using MailKit.Net.Smtp;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MimeKit;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -25,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly ILogger<AboutViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
         private readonly HttpClientServices _httpClientServices;
-        private readonly MySqlHttpClientServices _mySqlHttpClientServices;
+        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private CollaborationConfiguration _collaborationConfiguration;
 
@@ -245,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ILifetimeScope? lifetimeScope, 
             ILocalizationService localizationService,
             HttpClientServices httpClientServices,
-            MySqlHttpClientServices mySqlHttpClientServices,
+            CollaborationHttpClientServices collaborationHttpClientServices,
             CollaborationManager collaborationManager,
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
@@ -253,7 +255,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _logger = logger;
             _projectManager = projectManager;
             _httpClientServices = httpClientServices;
-            _mySqlHttpClientServices = mySqlHttpClientServices;
+            _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
         }
@@ -333,10 +335,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var mailMessage = new MimeMessage();
                 mailMessage.From.Add(new MailboxAddress("cleardas@cleardashboard.org", "cleardas@cleardashboard.org"));
                 mailMessage.To.Add(new MailboxAddress(FirstName + " " + LastName, Email));
-                mailMessage.Subject = "ClearDashboard Email Validation Code";
+                mailMessage.Subject = LocalizationStrings.Get("NewCollabUserView_DashboardEmailValidationCode", _logger); //"ClearDashboard Email Validation Code";
                 mailMessage.Body = new TextPart("plain")
                 {
-                    Text = "Email Verification Code: " + _emailValidationString
+                    Text = LocalizationStrings.Get("NewCollabUserView_EmailValidationCode", _logger) + " " + _emailValidationString //Email Verification Code: 
                 };
 
                 try
@@ -364,7 +366,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                ErrorMessage = "User is already on the system!";
+                ErrorMessage = LocalizationStrings.Get("NewCollabUserView_UserOnSystem", _logger); //"User is already on the system!";
             }
 
 
@@ -388,7 +390,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             if (user.Id == 0)
             {
-                ErrorMessage = "Error Creating user on Server";
+                ErrorMessage = LocalizationStrings.Get("NewCollabUserView_ErrorCreatingUser", _logger); //"Error Creating user on Server";
 
                 CollaborationConfig = new();
             }
@@ -413,16 +415,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 user.Password = password;
 
-                var results = await _mySqlHttpClientServices.CreateNewUser(user, accessToken).ConfigureAwait(false);
+                var results = await _collaborationHttpClientServices.CreateNewUser(user, accessToken).ConfigureAwait(false);
 
                 if (results)
                 {
-                    SaveGitLabUserMessage = "Saved to remote server";
+                    SaveGitLabUserMessage = LocalizationStrings.Get("NewCollabUserView_SavedToRemoteServer", _logger); //Saved to remote server
                     SaveMessageForegroundColor = Brushes.Green;
                 }
                 else
                 {
-                    SaveGitLabUserMessage = "User already exists on server";
+                    SaveGitLabUserMessage = LocalizationStrings.Get("NewCollabUserView_UserAlreadyExists", _logger); //User already exists on server
                     SaveMessageForegroundColor = Brushes.Red;
                 }
             }

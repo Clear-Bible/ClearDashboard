@@ -2,7 +2,7 @@
 
 namespace ClearDashboard.DataAccessLayer.Models.Common
 {
-    public class MySqlUser
+    public class CollaborationUser
     {
         [JsonPropertyName("userId")]
         public int UserId { get; set; }

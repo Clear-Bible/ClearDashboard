@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -24,11 +25,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables
 
         private readonly IEventAggregator _eventAggregator;
-        private readonly MySqlHttpClientServices _mySqlHttpClientServices;
+        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private readonly ILogger<DashboardSettingsViewModel> _logger;
         private bool _isAquaEnabledOnStartup;
-        private string _emailValidationString = "";
+        private string _emailValidationString = string.Empty;
 
         #endregion //Member Variables
 
@@ -280,14 +281,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
-            MySqlHttpClientServices mySqlHttpClientServices,
+            CollaborationHttpClientServices collaborationHttpClientServices,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             // for Caliburn Micro
             //IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
-            _mySqlHttpClientServices = mySqlHttpClientServices;
+            _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
             _logger = logger;
         }
@@ -344,7 +345,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         protected override async void OnViewLoaded(object view)
         {
-            var user = await _mySqlHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
+            var user = await _collaborationHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
 
             if (user.UserId > 0)
             {
@@ -410,15 +411,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             };
 #pragma warning restore CA1416
 
-            var results = await _mySqlHttpClientServices.CreateNewUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
+            var results = await _collaborationHttpClientServices.CreateNewUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
 
             if (results)
             {
-                SaveGitLabUserMessage = "Saved to remote server";
+                SaveGitLabUserMessage = LocalizationStrings.Get("Settings_SavedToRemoteServer", _logger); //"Saved to remote server";
             }
             else
             {
-                SaveGitLabUserMessage = "User already exists on server";
+                SaveGitLabUserMessage = LocalizationStrings.Get("Settings_UserAlreadyExists", _logger); //"User already exists on server";
             }
 
             GitlabUserSaveVisibility = Visibility.Collapsed;
@@ -467,27 +468,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         public async void SendValidationEmail()
         {
-            var user = await _mySqlHttpClientServices.GetUserExistsByEmail(Email);
+            var user = await _collaborationHttpClientServices.GetUserExistsByEmail(Email);
 
             if (user.UserId <= 0)
             {
-                EmailMessage = "Not Found on System!";
+                EmailMessage = LocalizationStrings.Get("Settings_NotFoundOnSystem", _logger); //"Not Found on System!";
                 ShowValidateEmailButtonEnabled = false;
 
                 return;
             }
-
-            //var results =
-            //    await ExecuteRequest(
-            //        new GitLabEmailExistsQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
-
-            //if (results.Data == false)
-            //{
-            //    EmailMessage = "Not Found on System!";
-            //    ShowValidateEmailButtonEnabled = false;
-
-            //    return;
-            //}
 
             EmailMessage = "Email Sent";
 
@@ -498,11 +487,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             var mailMessage = new MimeMessage();
             mailMessage.From.Add(new MailboxAddress("cleardas@cleardashboard.org", "cleardas@cleardashboard.org"));
             mailMessage.To.Add(new MailboxAddress(Email, Email));
-            mailMessage.Subject = "ClearDashboard Email Validation Code";
+            mailMessage.Subject = LocalizationStrings.Get("Settings_DashboardEmailValidationCode", _logger); //"ClearDashboard Email Validation Code";
             mailMessage.Body = new TextPart("plain")
             {
-                Text = "Email Verification Code: " + _emailValidationString
-            };
+                Text = LocalizationStrings.Get("Settings_EmailVerificationCode", _logger) + ": " + _emailValidationString
+        };
 
             try
             {
@@ -520,7 +509,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
             catch (Exception e)
             {
-                _logger.LogError("Email Sending Error", e);
+                _logger.LogError(LocalizationStrings.Get("Settings_EmailSendingError", _logger), e);
                 EmailSendError = true;
             }
 
@@ -534,27 +523,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         {
             if (EmailCode == _emailValidationString)
             {
-                var user = await _mySqlHttpClientServices.GetUserExistsByEmail(Email);
+                var user = await _collaborationHttpClientServices.GetUserExistsByEmail(Email);
 
                 if (user.UserId <= 0)
                 {
-                    EmailMessage = "Not Found on System!";
+                    EmailMessage = LocalizationStrings.Get("Settings_NotFoundOnSystem", _logger); //"Not Found on System!";
                     ShowValidateEmailButtonEnabled = false;
 
                     return;
                 }
-
-
-                //var results =
-                //    await ExecuteRequest(
-                //        new GetUserFromEmailQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
-
-                //if (results.Data is null)
-                //{
-                //    return;
-                //}
-                
-                //var collaborationConfiguration = results.Data as CollaborationConfiguration;
 
                 // recreate the json in the user secrets
                 CollaborationConfig = new CollaborationConfiguration

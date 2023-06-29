@@ -542,7 +542,7 @@
                 Margin="40,0,0,0"
                 FontSize="19"
                 FontWeight="Medium"
-                Text="Collaboration Projects" />
+                Text="{helpers:Localization ProjectPicker_CollabProjects}" />
 
             <Button
                 x:Name="NewCollabUser"
@@ -568,7 +568,7 @@
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Add New Collab User" />
+                        Text="{helpers:Localization ProjectPicker_AddNewCollabUser}" />
                 </StackPanel>
             </Button>
 
@@ -597,7 +597,7 @@
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Manage Collaboration Projects" />
+                        Text="{helpers:Localization ProjectPicker_ManageCollaborationProjects}" />
                 </StackPanel>
             </Button>
 
@@ -620,13 +620,13 @@
                         VerticalAlignment="Center"
                         FontSize="19"
                         FontWeight="Normal"
-                        Text="Refresh Collaboration Projects List" />
+                        Text="{helpers:Localization ProjectPicker_RefreshCollaborationProjects}" />
                 </StackPanel>
             </Button>
 
             <Label
                 Margin="7,0"
-                Content="Import Server Project"
+                Content="{helpers:Localization ProjectPicker_ImportServerProject}"
                 FontSize="19"
                 Visibility="{Binding CollabProjectVisibility}" />
             <ListView
