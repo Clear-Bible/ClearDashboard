@@ -171,12 +171,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         bool lastVerseZero = false;
                         string lastVerseRef = "";
                        
-
-                        if (bookNum == 19)
-                        {
-                            Console.WriteLine();
-                        }
-
                         foreach (var token in tokens)
                         {
                             if (token is IUSFMMarkerToken marker)
@@ -280,11 +274,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                     sb.AppendLine();
                                     sb.AppendLine(@"\c " + marker.Data);
                                     lastChapter = marker.Data;
-
-                                    //if (lastChapter == "90")
-                                    //{
-                                    //    Console.WriteLine();
-                                    //}
 
                                     lastTokenChapter = true;
                                 }

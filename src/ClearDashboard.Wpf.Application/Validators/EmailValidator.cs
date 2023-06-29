@@ -18,7 +18,7 @@ namespace ClearDashboard.Wpf.Application.Validators
                 return new ValidationResult(false, "Value cannot be empty.");
             }
 
-            if (value.ToString() == "")
+            if (string.IsNullOrWhiteSpace(value.ToString()))
             {
                 return new ValidationResult(false, "Value cannot be empty.");
             }

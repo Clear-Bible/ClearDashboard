@@ -201,6 +201,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             currentLongRunningTasks_.Add(longRunningTask);
             var cancellationToken = longRunningTask!.CancellationTokenSource?.Token
                 ?? throw new Exception("Cancellation source is not set.");
+
+            LongRunningTaskStatus returnStatus;
             try
             {
                 if (dontStartNewTask)
@@ -287,13 +289,14 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             }
             finally
             {
+                returnStatus = longRunningTask.Status;
                 longRunningTaskManager_.TaskComplete(taskName);
                 currentLongRunningTasks_.Remove(longRunningTask);
 
                 if (AfterEnd == null)
                     AfterEndDefault();
             }
-            return longRunningTask.Status;
+            return returnStatus;
         }
     }
 }

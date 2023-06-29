@@ -1737,11 +1737,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                         chapter = marker.Data.Trim();
                         verse = string.Empty;
 
-                        //if (chapter == "90")
-                        //{
-                        //    Console.WriteLine();
-                        //}
-
                         lastTokenChapter = true;
                     }
 
@@ -1818,8 +1813,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             //{
             //    Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
             //}
-
-            var verseOut = verses.FirstOrDefault( v => v.Chapter == "90" && v.Verse == "0");
 
             return verses;
 

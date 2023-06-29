@@ -25,11 +25,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables
 
         private readonly IEventAggregator _eventAggregator;
-        private readonly MySqlHttpClientServices _mySqlHttpClientServices;
+        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private readonly ILogger<DashboardSettingsViewModel> _logger;
         private bool _isAquaEnabledOnStartup;
-        private string _emailValidationString = "";
+        private string _emailValidationString = string.Empty;
 
         #endregion //Member Variables
 
@@ -281,14 +281,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
-            MySqlHttpClientServices mySqlHttpClientServices,
+            CollaborationHttpClientServices collaborationHttpClientServices,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             // for Caliburn Micro
             //IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
-            _mySqlHttpClientServices = mySqlHttpClientServices;
+            _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
             _logger = logger;
         }
@@ -345,7 +345,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         protected override async void OnViewLoaded(object view)
         {
-            var user = await _mySqlHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
+            var user = await _collaborationHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
 
             if (user.UserId > 0)
             {
@@ -411,7 +411,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             };
 #pragma warning restore CA1416
 
-            var results = await _mySqlHttpClientServices.CreateNewUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
+            var results = await _collaborationHttpClientServices.CreateNewUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
 
             if (results)
             {
@@ -468,7 +468,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         public async void SendValidationEmail()
         {
-            var user = await _mySqlHttpClientServices.GetUserExistsByEmail(Email);
+            var user = await _collaborationHttpClientServices.GetUserExistsByEmail(Email);
 
             if (user.UserId <= 0)
             {
@@ -477,18 +477,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
                 return;
             }
-
-            //var results =
-            //    await ExecuteRequest(
-            //        new GitLabEmailExistsQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
-
-            //if (results.Data == false)
-            //{
-            //    EmailMessage = "Not Found on System!";
-            //    ShowValidateEmailButtonEnabled = false;
-
-            //    return;
-            //}
 
             EmailMessage = "Email Sent";
 
@@ -535,7 +523,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         {
             if (EmailCode == _emailValidationString)
             {
-                var user = await _mySqlHttpClientServices.GetUserExistsByEmail(Email);
+                var user = await _collaborationHttpClientServices.GetUserExistsByEmail(Email);
 
                 if (user.UserId <= 0)
                 {
@@ -544,18 +532,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
                     return;
                 }
-
-
-                //var results =
-                //    await ExecuteRequest(
-                //        new GetUserFromEmailQuery(MySqlHelper.BuildConnectionString(), Email), CancellationToken.None);
-
-                //if (results.Data is null)
-                //{
-                //    return;
-                //}
-                
-                //var collaborationConfiguration = results.Data as CollaborationConfiguration;
 
                 // recreate the json in the user secrets
                 CollaborationConfig = new CollaborationConfiguration
