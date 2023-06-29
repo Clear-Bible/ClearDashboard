@@ -92,14 +92,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var firstChild = compositeToken.Tokens.FirstOrDefault();
             if (firstChild != null)
             {
-                var firstChildIndex = Tokens.IndexOf(firstChild);
-                Tokens.Insert(firstChildIndex, compositeToken);
-                foreach (var childToken in compositeToken.Tokens)
+                var matchingToken = Tokens.FirstOrDefault(t => t.TokenId.IdEquals(firstChild.TokenId));
+                if (matchingToken != null)
                 {
-                    Tokens.Remove(childToken);
-                }
+                    var matchingTokenIndex = Tokens.IndexOf(matchingToken);
+                    Tokens.Insert(matchingTokenIndex, compositeToken);
+                    foreach (var childToken in compositeToken.Tokens)
+                    {
+                        Tokens.Remove(childToken);
+                    }
 
-                RebuildPaddedTokens();
+                    RebuildPaddedTokens();
+                }
             }
         }
 
