@@ -26,6 +26,7 @@ public static class MenuIds
     public const string FileOpen = "OpenID";
     public const string GatherLogs = "GatherLogsID";
     public const string GettingStartedGuide = "GettingStartedGuideID";
+    public const string GettingStartedVideos = "GettingStartedVideosID";
     public const string Help = "HelpID";
     public const string Layout = "LayoutID";
     public const string Marble = "MARBLEID";

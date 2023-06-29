@@ -42,6 +42,22 @@ namespace ClearDashboard.Wpf.Application.Extensions
             });
 
 
+
+            serviceCollection.AddSingleton<CollaborationHttpClientServices>();
+
+            var bearerTokenEncrypted = Settings.Default.BearerTokenEncrypted;
+            value = Encryption.Decrypt(bearerTokenEncrypted);
+            // add in a service for the MySQL Collaboration API
+            serviceCollection.AddHttpClient<CollaborationClient>("CollaborationClient", client =>
+            {
+                // Other settings
+                client.BaseAddress = new Uri(Settings.Default.CollaborationRootUrl); //"https://collaborationapi.cleardashboard.org"
+                client.DefaultRequestHeaders.Add("Accept", "*/*");
+                client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + value);
+            });
+
+
             serviceCollection.AddScoped<ParatextProxy>();
             
             // QUESTION:  Can we run the HostedService as a scoped service?

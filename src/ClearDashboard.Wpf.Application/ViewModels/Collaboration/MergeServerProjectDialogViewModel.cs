@@ -42,6 +42,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private CollaborationConfiguration _userInfo;
         private GitLabUser _gitLabUser;
+
+        private ILocalizationService _localizationService;
         private string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
 
         #endregion //Member Variables
@@ -153,6 +155,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
+            _localizationService = localizationService;
             _cancellationTokenSource = new CancellationTokenSource();
             _collaborationManager = collaborationManager;
             _httpClientServices = httpClientServices;
@@ -178,6 +181,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             Ok();  // run the action - do not await
 
             base.OnViewLoaded(view);
+        }
+
+        protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (_runningTask is not null)
+            {
+                CanCancelAction = false;
+                try
+                {
+                    _cancellationTokenSource.Cancel();
+                    await Task.WhenAny(tasks: new Task[] { _runningTask, Task.Delay(30000) });
+                }
+                finally
+                {
+                    CanCancelAction = true;
+                }
+            }
+
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         #endregion //Constructor
@@ -263,15 +285,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     _cancellationTokenSource.Token,
                     progress));
                 await _runningTask;
+
+                progress.Report(new ProgressStatus(0, "Operation Finished!"));
+                PlaySound.PlaySoundFromResource();
             }
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             catch (Exception ex)
             {
                 progress.Report(new ProgressStatus(0, $"Exception thrown attempting to initialize project database: {ex.Message}"));
                 CanOkAction = true;
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             finally
             {
@@ -308,15 +335,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 if (CommitSha is not null)
                 {
                     await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+                    progress.Report(new ProgressStatus(0, "UI Reload Complete"));
                 }
+
+                progress.Report(new ProgressStatus(0, "Operation Finished!"));
+                PlaySound.PlaySoundFromResource();
             }
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             catch (Exception ex)
             {
                 progress.Report(new ProgressStatus(0, $"Exception thrown attempting to merge latest project changes: {ex.Message}"));
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             finally
             {
@@ -375,6 +408,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     }
 
                     progress.Report(new ProgressStatus(0, "Commit Complete!"));
+
+                    progress.Report(new ProgressStatus(0, "Operation Finished!"));
+                    PlaySound.PlaySoundFromResource();
                 });
 
                 await _runningTask;
@@ -382,6 +418,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             catch (Exception ex)
             {
@@ -393,6 +430,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 {
                     progress.Report(new ProgressStatus(0, $"Exception thrown attempting to stage and commit project changes: {ex.Message}"));
                 }
+                PlaySound.PlaySoundFromResource(SoundType.Error);
             }
             finally
             {
@@ -474,6 +512,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             var description = Regex.IsMatch(message, "{0(:.*)?}") ?
                 string.Format(message, status.PercentCompleted) :
                 message;
+
+            if (message.StartsWith("MergeDialog_"))
+            {
+                description = _localizationService.Get(message);
+            }
 
             OnUIThread(() =>
                 {

@@ -113,7 +113,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
         }
         private void WriteLockReleaseRequested(IWriteLock obj)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            _logger.LogError("WriteLockReleaseRequested Hit", obj);
         }
     }
 }
