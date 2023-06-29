@@ -32,6 +32,8 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public int? LastAlignmentLevelId { get; set; }
 
+        public Guid? DefaultLabelGroupId {  get; set; }
+
         public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
         public virtual ICollection<TranslationSet> TranslationSets { get; set; }
     }

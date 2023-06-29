@@ -9,51 +9,67 @@
     xmlns:lexiconViews="clr-namespace:ClearDashboard.Wpf.Application.Views.Lexicon"
     xmlns:lexiconViewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
     mc:Ignorable="d"
     >
-    <Grid>
+    <Grid MinWidth="500">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="35" />
             <RowDefinition Height="40" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="25" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
+
         <Label Grid.Row="0"
+               Content="{helpers:Localization Lexicon_SetTranslation}" 
+               FontFamily="{DynamicResource MaterialDesignFont}"
+               FontSize="16"
                HorizontalContentAlignment="Center"
-               Content="Set a translation for" />
+               Margin="0,10,0,0"
+               />
+
         <Label Grid.Row="1"
                FontFamily="{Binding SourceFontFamily}"
+               FontSize="22"
+               FontWeight="Bold" 
                HorizontalContentAlignment="Center"
                Content="{Binding TokenDisplay.TranslationSurfaceText}"
-               FontSize="18"
-               FontWeight="Bold" />
-        <lexiconControls:LexemeEditor x:Name="LexemeEditor" Grid.Row="2" 
-                Margin="20,0,20,20"
-                Lexeme="{Binding Lexeme}" 
-                TokenDisplay="{Binding TokenDisplay}" 
-                LemmaFontFamily="{Binding SourceFontFamily}"
-                LexemeFormFontFamily="{Binding SourceFontFamily}"
-                MeaningTextFontFamily="{Binding SourceFontFamily}"
-                SemanticDomainFontFamily="{Binding SourceFontFamily}"
-                TranslationFontFamily="{Binding SourceFontFamily}"
-                FontFamily="{Binding SourceFontFamily}"
-                LemmaFontSize="16"
-                LemmaFontWeight="Bold"
-                LexemeFormBackground="LightGray"
-                LexemeFormCornerRadius="4"
-                LexemeFormPadding="4"
-                MeaningTextFontSize="14"
-                SemanticDomainBackground="AliceBlue"
-                SemanticDomainCornerRadius="4"
-                SemanticDomainPadding="4"
-                SemanticDomainFontStyle="Normal"
-                SemanticDomainSuggestions="{Binding SemanticDomainSuggestions}"
-                TranslationFontSize="12"
-                TranslationFontStyle="Normal"
-                >
+               />
+
+        <lexiconControls:LexemeEditor Grid.Row="2" x:Name="LexemeEditor" 
+                                      CurrentLexeme="{Binding CurrentLexeme}" 
+                                      FontFamily="{DynamicResource MaterialDesignFont}"
+                                      Lexemes="{Binding Lexemes}" 
+                                      Margin="20,0,20,20"
+                                      LemmaFontFamily="{Binding SourceFontFamily}"
+                                      LemmaFontSize="16"
+                                      LemmaFontWeight="Bold"
+                                      LexemeFormBackground="LightGray"
+                                      LexemeFormCornerRadius="4"
+                                      LexemeFormFontFamily="{Binding SourceFontFamily}"
+                                      LexemeFormFontSize="16"
+                                      LexemeFormPadding="3"
+                                      MeaningTextFontFamily="{Binding TargetFontFamily}"
+                                      MeaningTextFontSize="14"
+                                      SemanticDomainBackground="AliceBlue"
+                                      SemanticDomainCornerRadius="4"
+                                      SemanticDomainFontFamily="{DynamicResource MaterialDesignFont}"
+                                      SemanticDomainFontSize="12"
+                                      SemanticDomainPadding="2"
+                                      SemanticDomainMargin="4"
+                                      SemanticDomainFontStyle="Normal"
+                                      SemanticDomainSuggestions="{Binding SemanticDomainSuggestions}"
+                                      TokenDisplay="{Binding TokenDisplay}" 
+                                      TranslationFontFamily="{Binding TargetFontFamily}"
+                                      TranslationFontSize="15"
+                                      TranslationFontStyle="Normal"
+                                      TranslationMargin="0,0,0,0"
+        >
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="LexemeAdded">
                     <b:CallMethodAction MethodName="OnLexemeAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
@@ -100,17 +116,18 @@
             </b:Interaction.Triggers>
         </lexiconControls:LexemeEditor>
         <TextBlock Grid.Row="3"
+                   FontFamily="{DynamicResource MaterialDesignFont}"
                    FontSize="16"
-                   FontWeight="Normal"
-                   Text="Concordance: "
-                   TextDecorations="Underline"
+                   FontWeight="SemiBold"
+                   Text="{helpers:Localization Lexicon_Concordance}"
                    VerticalAlignment="Center"
-                   Margin="20,0,0,0"
+                   Margin="20,10,0,0"
         ></TextBlock>
 
         <lexiconControls:ConcordanceDisplay x:Name="ConcordanceDisplay" Grid.Row="4"
                 Translations="{Binding Concordance}"
-                TranslationFontSize="12"
+                NewTranslation="{Binding NewTranslation}"
+                TranslationFontSize="16"
                 TranslationFontStyle="Normal"
                 Margin="40,0,0,0"
                 TranslationFontFamily="{Binding TargetFontFamily}"
@@ -128,13 +145,15 @@
                 </b:EventTrigger>
             </b:Interaction.Triggers>
         </lexiconControls:ConcordanceDisplay>
+
         <StackPanel Grid.Row="5"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <CheckBox x:Name="ApplyAllCheckbox"
-                      Margin="10,10,0,0"
+                      Margin="10,20,0,20"
                       FontSize="13"
                       IsChecked="{Binding ApplyToAll}">
+
                 Change all unset occurrences
                 <CheckBox.ToolTip>If checked, this will change all unset occurrences of this word</CheckBox.ToolTip>
             </CheckBox>
@@ -143,16 +162,20 @@
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <Button x:Name="ApplyTranslation" 
+                    Content="{helpers:Localization Lexicon_ApplyTranslation}"
+                    FontFamily="{DynamicResource MaterialDesignFont}"
+                    FontSize="14"
                     Margin="10"
                     IsEnabled="{Binding ApplyEnabled}"
-                    Style="{StaticResource TransparentStyle}">
-                Apply Translation
-            </Button>
+                    Style="{StaticResource TransparentStyle}"
+                    />
             <Button x:Name="CancelTranslation" 
+                    Content="{helpers:Localization Lexicon_CancelTranslation}"
+                    FontFamily="{DynamicResource MaterialDesignFont}"
+                    FontSize="14"
                     Margin="10"
-                    Style="{StaticResource TransparentStyle}">
-                Cancel Translation
-            </Button>
+                    Style="{StaticResource TransparentStyle}"
+                    />
         </StackPanel>
         <ProgressBar Grid.Row="3"
             Width="76"

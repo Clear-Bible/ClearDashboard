@@ -34,7 +34,7 @@ If there are no duplicates, click on the Populate Resources button which will it
 Add the following lines to each XAML header:
 
 ```
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
 ```

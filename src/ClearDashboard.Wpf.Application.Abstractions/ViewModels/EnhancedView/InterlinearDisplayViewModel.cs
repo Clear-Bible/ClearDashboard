@@ -25,6 +25,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public IWindowManager WindowManager { get; }
         private TranslationManager? TranslationManager { get; set; }
 
+        public string? SourceLanguage => TranslationManager?.SourceLanguage;
+        public string? TargetLanguage => TranslationManager?.TargetLanguage;
+
         /// <summary>
         /// Get the <see cref="Translation"/> for a specified token.
         /// </summary>
