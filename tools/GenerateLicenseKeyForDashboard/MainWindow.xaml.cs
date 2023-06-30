@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,7 +23,7 @@ namespace GenerateLicenseKeyForDashboard
         private int _licenseVersion = 1;
 
         //private readonly HttpClientServices _httpClientServices;
-        private readonly MySqlHttpClientServices _mySqlHttpClientServices;
+        private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
 
         public MainWindow()
         {
@@ -173,6 +174,21 @@ namespace GenerateLicenseKeyForDashboard
                 case "CopyDeletedLicense":
                     Clipboard.SetText(DeletedLicenseBox.Text);
                     break;
+            }
+        }
+
+        private void CheckGenerateLicenseBoxes(object sender, TextChangedEventArgs e)
+        {
+            
+            if (!Validation.GetHasError(FirstNameBox) && 
+                !Validation.GetHasError(LastNameBox) &&
+                !Validation.GetHasError(EmailBox))
+            {
+                GenerateLicenseButton.IsEnabled = true;
+            }
+            else
+            {
+                GenerateLicenseButton.IsEnabled = false;
             }
         }
     }

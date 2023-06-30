@@ -69,20 +69,20 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddScoped<IClearEngineProcessingService, ClearEngineProcessingService>();
         }
 
-        public static MySqlHttpClientServices GetSqlHttpClientServices()
+        public static CollaborationHttpClientServices GetSqlHttpClientServices()
         {
             var bearerTokenEncrypted = Settings.Default.BearerTokenEncrypted;
             var value = Encryption.Decrypt(bearerTokenEncrypted);
 
             var client = new HttpClient();
 
-            client.BaseAddress = new Uri(Settings.Default.MySqlRootUrl); //"https://mysqlapi.cleardashboard.org"
+            client.BaseAddress = new Uri(Settings.Default.CollaborationRootUrl); //"https://mysqlapi.cleardashboard.org"
             client.DefaultRequestHeaders.Add("Accept", "*/*");
             client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + value);
 
-            var mySqlClient = new MySqlClient(client);
-            var mySqlHttpClientServices = new MySqlHttpClientServices(mySqlClient);
+            var mySqlClient = new CollaborationClient(client);
+            var mySqlHttpClientServices = new CollaborationHttpClientServices(mySqlClient);
 
             return mySqlHttpClientServices;
         }

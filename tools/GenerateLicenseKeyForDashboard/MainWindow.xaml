@@ -7,6 +7,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
+    xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
     x:Name="TheWindow"
     Title="License Key Manager"
     Width="1400"
@@ -19,6 +20,9 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
     <Window.Resources>
         <Style x:Key="TextBoxAsLabel" TargetType="{x:Type TextBox}">
             <Setter Property="BorderBrush" Value="Transparent" />
@@ -81,7 +85,16 @@
             <TextBox
                 Name="FirstNameBox"
                 Margin="10"
-                materialDesign:HintAssist.Hint="Enter first name here." />
+                materialDesign:HintAssist.Hint="Enter first name here."
+                TextChanged="CheckGenerateLicenseBoxes">
+                <TextBox.Text>
+                    <Binding Path="FirstNameBox" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validators:NameValidator />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
 
             <TextBlock
                 Name="LastNameBlock"
@@ -90,7 +103,16 @@
             <TextBox
                 Name="LastNameBox"
                 Margin="10"
-                materialDesign:HintAssist.Hint="Enter last name here." />
+                materialDesign:HintAssist.Hint="Enter last name here."
+                TextChanged="CheckGenerateLicenseBoxes">
+                <TextBox.Text>
+                    <Binding Path="LastNameBox" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validators:NameValidator />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
 
             <TextBlock
                 Name="EmailBlock"
@@ -98,14 +120,26 @@
                 Text="Email" />
             <TextBox
                 Name="EmailBox"
-                Margin="10"
-                materialDesign:HintAssist.Hint="Enter email here." />
+                Margin="10,10,10,20"
+                materialDesign:HintAssist.Hint="Enter email here."
+                TextChanged="CheckGenerateLicenseBoxes">
+                <TextBox.Text>
+                    <Binding Path="EmailBox" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validators:EmailValidator />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <CheckBox Name="IsInternalCheckBox" Content="User is Internal to Clear.  Reflect this in usage metrics." />
 
             <Button
+                Name="GenerateLicenseButton"
                 Margin="10"
                 Click="GenerateLicense_OnClick"
-                Content="Generate license!" />
+                Content="Generate license!"
+                IsEnabled="False" />
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock
