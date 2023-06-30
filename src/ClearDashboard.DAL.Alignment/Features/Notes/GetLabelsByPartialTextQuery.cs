@@ -3,5 +3,5 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
-    public record GetLabelsByPartialTextQuery(string PartialText) : ProjectRequestQuery<IEnumerable<Label>>;
+    public record GetLabelsByPartialTextQuery(string? PartialText, LabelGroupId? LabelGroupId) : ProjectRequestQuery<IEnumerable<Label>>;
 }

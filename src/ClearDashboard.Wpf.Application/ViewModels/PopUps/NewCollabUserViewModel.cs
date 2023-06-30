@@ -26,6 +26,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private readonly ILogger<AboutViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
+        private readonly ILocalizationService _localizationService;
         private readonly HttpClientServices _httpClientServices;
         private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
@@ -254,6 +255,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             _logger = logger;
             _projectManager = projectManager;
+            _localizationService = localizationService;
             _httpClientServices = httpClientServices;
             _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
@@ -335,10 +337,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var mailMessage = new MimeMessage();
                 mailMessage.From.Add(new MailboxAddress("cleardas@cleardashboard.org", "cleardas@cleardashboard.org"));
                 mailMessage.To.Add(new MailboxAddress(FirstName + " " + LastName, Email));
-                mailMessage.Subject = LocalizationStrings.Get("NewCollabUserView_DashboardEmailValidationCode", _logger); //"ClearDashboard Email Validation Code";
+                mailMessage.Subject = _localizationService["NewCollabUserView_DashboardEmailValidationCode"]; //"ClearDashboard Email Validation Code";
                 mailMessage.Body = new TextPart("plain")
                 {
-                    Text = LocalizationStrings.Get("NewCollabUserView_EmailValidationCode", _logger) + " " + _emailValidationString //Email Verification Code: 
+                    Text = _localizationService["NewCollabUserView_EmailValidationCode"] + " " + _emailValidationString //Email Verification Code: 
                 };
 
                 try
@@ -366,7 +368,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                ErrorMessage = LocalizationStrings.Get("NewCollabUserView_UserOnSystem", _logger); //"User is already on the system!";
+                ErrorMessage = _localizationService["NewCollabUserView_EmailValidationCode"]; //"User is already on the system!";
             }
 
 
@@ -390,7 +392,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             if (user.Id == 0)
             {
-                ErrorMessage = LocalizationStrings.Get("NewCollabUserView_ErrorCreatingUser", _logger); //"Error Creating user on Server";
+                ErrorMessage = _localizationService["NewCollabUserView_ErrorCreatingUser"]; //"Error Creating user on Server";
 
                 CollaborationConfig = new();
             }
@@ -419,12 +421,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 if (results)
                 {
-                    SaveGitLabUserMessage = LocalizationStrings.Get("NewCollabUserView_SavedToRemoteServer", _logger); //Saved to remote server
+                    SaveGitLabUserMessage = _localizationService["NewCollabUserView_SavedToRemoteServer"]; //Saved to remote server
                     SaveMessageForegroundColor = Brushes.Green;
                 }
                 else
                 {
-                    SaveGitLabUserMessage = LocalizationStrings.Get("NewCollabUserView_UserAlreadyExists", _logger); //User already exists on server
+                    SaveGitLabUserMessage = _localizationService["NewCollabUserView_UserAlreadyExists"]; //User already exists on server
                     SaveMessageForegroundColor = Brushes.Red;
                 }
             }
