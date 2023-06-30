@@ -22,29 +22,8 @@ namespace ClearDashboard.DataAccessLayer.Models.LicenseGenerator
             Email = email;
         }
 
-        //[JsonPropertyName("id")]
-        //public Guid Id { get; set; }
-
-        //[JsonPropertyName("firstName")]
-        //public string? FirstName { get; set; }
-
-        //[JsonPropertyName("lastName")]
-        //public string? LastName { get; set; }
-
         [JsonPropertyName("licenseKey")]
         public string? LicenseKey { get; set; }
-
-        //[JsonPropertyName("fullName")]
-        //public string? FullName => $"{FirstName} {LastName}";
-
-        //[JsonPropertyName("paratextUserName")]
-        //public string? ParatextUserName { get; set; }
-
-        //[JsonPropertyName("isInternal")]
-        //public bool? IsInternal { get; set; }
-
-        //[JsonPropertyName("licenseVersion")]
-        //public int? LicenseVersion { get; set; }
 
         [JsonPropertyName("email")]
         public string? Email { get; set; }

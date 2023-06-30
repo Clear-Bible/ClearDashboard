@@ -13,7 +13,7 @@
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
-    xmlns:validators1="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:validatorsAbstracted="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{helpers:Localization NewCollabUserView_CreateACollabUser}"
     Width="800"
     Height="650"
@@ -117,7 +117,7 @@
                     <TextBox.Text>
                         <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <validators1:EmailValidator />
+                                <validatorsAbstracted:EmailValidator />
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>

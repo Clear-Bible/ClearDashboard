@@ -217,24 +217,6 @@
                 Style="{StaticResource TextBoxAsLabel}"
                 Text="Your last name will appear here." />
 
-            <!--<StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Name="DecryptedEmailBlock"
-                    Margin="10"
-                    Text="Decrypted Email" />
-                <Button Name="CopyDecryptedEmail" Click="Copy_OnClick">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
-            <TextBox
-                Name="DecryptedEmailBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your email will appear here." />-->
-
             <StackPanel Orientation="Horizontal">
                 <TextBlock
                     Name="DecryptedGuidBlock"

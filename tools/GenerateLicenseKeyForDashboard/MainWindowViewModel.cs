@@ -6,11 +6,6 @@ namespace GenerateLicenseKeyForDashboard
 {
     public class MainWindowViewModel: ApplicationScreen
     {
-
-        public MainWindowViewModel()
-        {
-        }
-
         private string _emailBox;
         public string EmailBox
         {
@@ -19,7 +14,6 @@ namespace GenerateLicenseKeyForDashboard
             {
                 _emailBox = value.Trim();
                 NotifyOfPropertyChange(() => EmailBox);
-                //CheckEntryFields();
             }
         }
 
@@ -31,7 +25,6 @@ namespace GenerateLicenseKeyForDashboard
             {
                 _firstNameBox = value.Trim();
                 NotifyOfPropertyChange(() => FirstNameBox);
-                //CheckEntryFields();
             }
         }
 
@@ -43,7 +36,6 @@ namespace GenerateLicenseKeyForDashboard
             {
                 _lastNameBox = value.Trim();
                 NotifyOfPropertyChange(() => LastNameBox);
-                //CheckEntryFields();
             }
         }
     }

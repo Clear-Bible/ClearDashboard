@@ -21,8 +21,7 @@ namespace GenerateLicenseKeyForDashboard
     public partial class MainWindow : Window
     {
         private int _licenseVersion = 1;
-
-        //private readonly HttpClientServices _httpClientServices;
+        
         private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
 
         public MainWindow()
@@ -162,9 +161,6 @@ namespace GenerateLicenseKeyForDashboard
                 case "CopyDecryptedLastName":
                     Clipboard.SetText(DecryptedLastNameBox.Text);
                     break;
-                //case "CopyDecryptedEmail":
-                //    Clipboard.SetText(DecryptedEmailBox.Text);
-                //    break;
                 case "CopyDecryptedGuid":
                     Clipboard.SetText(DecryptedGuidBox.Text);
                     break;
@@ -182,7 +178,10 @@ namespace GenerateLicenseKeyForDashboard
             
             if (!Validation.GetHasError(FirstNameBox) && 
                 !Validation.GetHasError(LastNameBox) &&
-                !Validation.GetHasError(EmailBox))
+                !Validation.GetHasError(EmailBox) &&
+                FirstNameBox.Text.Length>0 &&
+                LastNameBox.Text.Length>0 &&
+                EmailBox.Text.Length>0)
             {
                 GenerateLicenseButton.IsEnabled = true;
             }
