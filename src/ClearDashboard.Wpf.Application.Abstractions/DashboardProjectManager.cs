@@ -84,14 +84,12 @@ public class DashboardProjectManager : ProjectManager
         {
             Logger.LogError("Paratext is not running, cannot connect to SignalR.");
             await PublishSignalRConnected(false);
-            //await Task.Delay(10);
             await ConfigureSignalRClient();
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "An unexpected error occurred while trying to connect to Paratext.");
             await PublishSignalRConnected(false);
-            //await Task.Delay(10);
             await ConfigureSignalRClient();
         }
     }

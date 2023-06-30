@@ -526,7 +526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #region EventAggregator message handling
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
-            if (message.Connected == false && Connected !=false)
+            if (!message.Connected && Connected) //play sound only when going from connected to not connected
             {
                 PlaySound.PlaySoundFromResource(SoundType.Disconnected);
             }
