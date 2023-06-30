@@ -38,7 +38,7 @@ public class DashboardProjectManager : ProjectManager
 
     private bool _licenseCleared = false;
     private bool UpdatingCurrentVerse { get; set; }
-
+    
     public List<ParatextProjectMetadata> ProjectMetadata = new();
 
     public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
@@ -72,7 +72,7 @@ public class DashboardProjectManager : ProjectManager
             if (HubConnection.State == ConnectionState.Connected)
             {
                 Logger.LogInformation("Connected to SignalR.");
-                HubConnection.Closed += HandleSignalRConnectionClosed;
+                HubConnection.Reconnecting += HandleSignalRConnectionReconnecting;
                 HubConnection.Error += HandleSignalRConnectionError;
                 await PublishSignalRConnected(true);
 
@@ -84,13 +84,14 @@ public class DashboardProjectManager : ProjectManager
         {
             Logger.LogError("Paratext is not running, cannot connect to SignalR.");
             await PublishSignalRConnected(false);
-            await Task.Delay(10);
+            //await Task.Delay(10);
             await ConfigureSignalRClient();
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "An unexpected error occurred while trying to connect to Paratext.");
-            await Task.Delay(10);
+            await PublishSignalRConnected(false);
+            //await Task.Delay(10);
             await ConfigureSignalRClient();
         }
     }
@@ -112,9 +113,10 @@ public class DashboardProjectManager : ProjectManager
         await Task.CompletedTask;
     }
 
-    private async void HandleSignalRConnectionClosed()
+    private async void HandleSignalRConnectionReconnecting()
     {
-
+        HubConnection.Dispose();
+       
         var retryTimestamp = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
 
         while (DateTime.UtcNow < retryTimestamp)
@@ -130,7 +132,7 @@ public class DashboardProjectManager : ProjectManager
         Logger.LogInformation("SignalR Connection is closed.");
     }
 
-
+    
     protected async Task PublishSignalRConnected(bool connected)
     {
         await EventAggregator.PublishOnUIThreadAsync(new ParatextConnectedMessage(connected));
