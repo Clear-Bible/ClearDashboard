@@ -703,6 +703,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             DashboardCollabProjectsDisplay = DashboardCollabProjects;
+
+            if (DashboardCollabProjectsDisplay.Count() > 0)
+            {
+                CollabButtonsEnabled = true;
+            }
+
         }
 
         private void SetCollabVisibility()
