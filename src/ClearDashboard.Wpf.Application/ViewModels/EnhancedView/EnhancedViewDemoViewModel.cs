@@ -403,7 +403,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (dialogViewModel != null)
             {
                 dialogViewModel.TokenDisplay = tokenDisplay;
-                dialogViewModel.Lexeme = DemoLexeme;
+                dialogViewModel.CurrentLexeme = DemoLexeme;
                 dialogViewModel.SemanticDomainSuggestions = SemanticDomainSuggestions;
                 dialogViewModel.Concordance = Concordance;
 

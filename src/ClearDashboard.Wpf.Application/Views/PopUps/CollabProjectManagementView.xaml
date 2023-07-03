@@ -5,18 +5,18 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    Title="CollabProjectManagementView"
+    Title="{helpers:Localization CollabProjectManagementView_CollaborationManagement}"
     Width="700"
     Height="450"
     d:DataContext="{d:DesignInstance Type=popUps:CollabProjectManagementViewModel,
                                      IsDesignTimeCreatable=True}"
-    helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -40,7 +40,7 @@
         </Grid.ColumnDefinitions>
 
         <!--  HEADER  -->
-        <Label Margin="5">Projects:</Label>
+        <Label Margin="5" Content="{helpers:Localization CollabProjectManagementView_Projects}" />
 
         <!--  PROJECTS  -->
         <StackPanel
@@ -52,14 +52,14 @@
                 Height="Auto"
                 Margin="5"
                 VerticalAlignment="Top"
-                materialDesign:HintAssist.Hint="Select Project"
+                materialDesign:HintAssist.Hint="{helpers:Localization CollabProjectManagementView_SelectProject}"
                 FontSize="16"
                 IsEnabled="True"
                 ItemsSource="{Binding Projects}"
                 ScrollViewer.CanContentScroll="False"
                 SelectedItem="{Binding SelectedProject}"
                 Style="{StaticResource MaterialDesignFilledComboBox}"
-                TextSearch.TextPath="Description">
+                TextSearch.TextPath="{helpers:Localization CollabProjectManagementView_Description}">
                 <controls:AutoCompleteComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
@@ -70,7 +70,7 @@
                 </controls:AutoCompleteComboBox.ItemTemplate>
             </controls:AutoCompleteComboBox>
 
-            <Label Margin="5" Content="Current Project Users:" />
+            <Label Margin="5" Content="{helpers:Localization CollabProjectManagementView_CurrentProjectUsers}" />
 
             <ListBox
                 MinHeight="260"
@@ -93,12 +93,12 @@
                                     <Style TargetType="iconPacks:PackIconRemixIcon">
                                         <Setter Property="Kind" Value="UserLine" />
                                         <Setter Property="Foreground" Value="{StaticResource OrangeMidBrush}" />
-                                        <Setter Property="ToolTip" Value="Project Member" />
+                                        <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectMember}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsOwner}" Value="True">
                                                 <Setter Property="Kind" Value="AdminLine" />
                                                 <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
-                                                <Setter Property="ToolTip" Value="Project Owner" />
+                                                <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectOwner}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -162,7 +162,7 @@
             Orientation="Vertical">
 
 
-            <Label Margin="5" Content="Available Collaboration Users:" />
+            <Label Margin="5" Content="{helpers:Localization CollabProjectManagementView_AvailableCollaborationUsers}" />
 
             <Border
                 Margin="5,0,5,0"
@@ -229,8 +229,7 @@
             Grid.Column="2"
             Width="200"
             Margin="5"
-            HorizontalAlignment="Right">
-            Close
-        </Button>
+            HorizontalAlignment="Right"
+            Content="{helpers:Localization Close}" />
     </Grid>
 </Window>

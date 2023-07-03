@@ -444,14 +444,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task InitializeCollaborationUser()
         {
-            var localizedString = _localizationService!["MainView_About"];
+            //var localizedString = _localizationService!["MainView_About"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.NoResize;
             settings.MinWidth = 500;
             settings.MinHeight = 500;
-            settings.Title = $"{localizedString}";
+            //settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<NewCollabUserViewModel>();
 
@@ -703,6 +703,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             DashboardCollabProjectsDisplay = DashboardCollabProjects;
+
+            if (DashboardCollabProjectsDisplay.Count() > 0)
+            {
+                CollabButtonsEnabled = true;
+            }
+
         }
 
         private void SetCollabVisibility()

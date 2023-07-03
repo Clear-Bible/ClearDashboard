@@ -84,11 +84,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public string DialogTitle => $"Translation/Lexeme: {TokenDisplay.TranslationSurfaceText}";
 
-        private LexemeViewModel? _lexeme;
-        public LexemeViewModel? Lexeme
+        private LexemeViewModel? _currentLexeme;
+        public LexemeViewModel? CurrentLexeme
         {
-            get => _lexeme;
-            set => Set(ref _lexeme, value);
+            get => _currentLexeme;
+            set => Set(ref _currentLexeme, value);
+        }
+
+        private LexemeViewModelCollection _lexemes = new();
+        public LexemeViewModelCollection Lexemes
+        {
+            get => _lexemes;
+            set => Set(ref _lexemes, value);
         }
 
         private SemanticDomainCollection _semanticDomainSuggestions = new();
@@ -131,7 +138,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 {
                     if (SelectedTranslation != null && !string.IsNullOrWhiteSpace(SelectedTranslation.Text))
                     {
-                        await InterlinearDisplay.PutTranslationAsync(new Translation(TokenDisplay.TokenForTranslation, SelectedTranslation.Text, Translation.OriginatedFromValues.Assigned),
+                        await InterlinearDisplay.PutTranslationAsync(new Translation(TokenDisplay.TokenForTranslation, SelectedTranslation.Text, Translation.OriginatedFromValues.Assigned, SelectedTranslation.TranslationId),
                                                                      ApplyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate);
                     }
                 }
@@ -157,7 +164,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 if (!string.IsNullOrWhiteSpace(e.Lexeme.Lemma))
                 {
-                    Lexeme = await LexiconManager.CreateLexemeAsync(e.Lexeme.Lemma, e.Lexeme.Language, e.Lexeme.Type);
+                    CurrentLexeme = await LexiconManager.CreateLexemeAsync(e.Lexeme.Lemma, e.Lexeme.Language, e.Lexeme.Type);
                 }
             }
             else
@@ -235,6 +242,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
         private LexiconTranslationViewModel? SelectedTranslation { get; set; }
+        public LexiconTranslationViewModel? NewTranslation { get; set; }
         public void OnTranslationSelected(object sender, LexiconTranslationEventArgs e)
         {
             SelectedTranslation = e.Translation;
@@ -265,7 +273,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             var translationOptions = await InterlinearDisplay.GetTranslationOptionsAsync(TokenDisplay.Token);
             foreach (var translationOption in translationOptions)
             {
-                if (Lexeme == null || !Lexeme.ContainsTranslationText(translationOption.Word))
+                if (CurrentLexeme == null || !CurrentLexeme.ContainsTranslationText(translationOption.Word))
                 {
                     Concordance.Add(new LexiconTranslationViewModel(translationOption.Word, Convert.ToInt32(translationOption.Count)));
                 }
@@ -274,19 +282,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         private bool ContainsTranslationText(string translationText)
         {
-            return (Lexeme != null && Lexeme.ContainsTranslationText(translationText)) || Concordance.ContainsText(translationText);
+            return (CurrentLexeme != null && CurrentLexeme.ContainsTranslationText(translationText)) || Concordance.ContainsText(translationText);
         }
 
         private void SelectCurrentTranslation()
         {
-            SelectedTranslation = Lexeme?.SelectTranslationText(TokenDisplay.TargetTranslationText);
+            SelectedTranslation = CurrentLexeme?.SelectTranslationText(TokenDisplay.TargetTranslationText);
             var concordanceSelection = Concordance.SelectIfContainsText(TokenDisplay.TargetTranslationText);
             SelectedTranslation ??= concordanceSelection;
 
             if (SelectedTranslation == null && TokenDisplay.TargetTranslationText != Translation.DefaultTranslationText)
             {
                 SelectedTranslation = new LexiconTranslationViewModel { Text = TokenDisplay.TargetTranslationText, IsSelected = true};
-                Concordance.Insert(0, SelectedTranslation);
+                //Concordance.Insert(0, SelectedTranslation);
+                NewTranslation = SelectedTranslation;
+                NotifyOfPropertyChange(nameof(NewTranslation));
             }
 
             ApplyEnabled = SelectedTranslation != null;
@@ -303,10 +313,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             return FontNames.DefaultFontFamily;
         }
 
+        private string? GetSourceLanguage()
+        {
+            return TokenDisplay.VerseDisplay is InterlinearDisplayViewModel verseDisplay ? verseDisplay.SourceLanguage : string.Empty;
+        }
+
+        private string? GetTargetLanguage()
+        {
+            return TokenDisplay.VerseDisplay is InterlinearDisplayViewModel verseDisplay ? verseDisplay.TargetLanguage : string.Empty;
+        }
+
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             await base.OnInitializeAsync(cancellationToken);
-            Lexeme ??= await LexiconManager.GetLexemeAsync(TokenDisplay.TranslationSurfaceText);
+            
+            Lexemes = await LexiconManager.GetLexemesAsync(TokenDisplay.TranslationSurfaceText, GetSourceLanguage(), GetTargetLanguage());
+
+            if (TokenDisplay?.Translation?.LexiconTranslationId != null)
+            {
+                CurrentLexeme = Lexemes.GetLexemeWithTranslation(TokenDisplay.Translation.LexiconTranslationId);
+            }
+            CurrentLexeme ??= Lexemes.FirstOrDefault();
+
             if (Concordance.Count == 0)
             {
                 await BuildConcordance();
@@ -356,6 +384,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _lexiconManager = lexiconManager;
+            LexemeEditor.LexiconManager = lexiconManager;
 
             LexemeEditor.EventAggregator = eventAggregator;
             ConcordanceDisplay.EventAggregator = eventAggregator;

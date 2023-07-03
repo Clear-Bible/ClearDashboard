@@ -2,9 +2,9 @@
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public class MySqlClient
+    public class CollaborationClient
     {
-        public MySqlClient(HttpClient client)
+        public CollaborationClient(HttpClient client)
         {
             Client = client;
         }

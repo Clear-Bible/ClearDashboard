@@ -34,7 +34,7 @@
                FontSize="20"
                FontWeight="Bold" />
         <lexiconControls:LexemeEditor Grid.Row="2"
-                Lexeme="{Binding Lexeme}" 
+                CurrentLexeme="{Binding Lexeme}" 
                 LemmaFontSize="16"
                 LemmaFontWeight="Bold"
                 LexemeFormBackground="LightGray"

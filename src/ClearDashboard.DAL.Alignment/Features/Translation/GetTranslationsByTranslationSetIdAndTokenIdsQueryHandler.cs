@@ -68,6 +68,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var tokenIdGuids = request.TokenIds.Select(t => t.Id).ToList();
 
             var translations = ModelHelper.AddIdIncludesTranslationsQuery(ProjectDbContext!)
+                .Include(tr => tr.LexiconTranslation)
+                    .ThenInclude(lt => lt.User)
                 .Where(tr => tr.Deleted == null)
                 .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
                 .Where(tr => tokenIdGuids.Contains(tr.SourceTokenComponentId))
@@ -75,7 +77,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     ModelHelper.BuildTranslationId(t),
                     ModelHelper.BuildToken(t.SourceTokenComponent!),
                     t.TargetText ?? string.Empty,
-                    t.TranslationState.ToString()))
+                    t.TranslationState.ToString(),
+                    t.LexiconTranslation != null ? ModelHelper.BuildTranslationId(t.LexiconTranslation) : null))
                 .ToList();
 
             var tokenGuidsNotFound = tokenIdGuids.Except(translations.Select(t => t.SourceToken.TokenId.Id));
@@ -122,7 +125,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Select(tc => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(tc),
                             string.Empty,
-                            OriginatedFromValues.FromAlignmentModel)).ToList());
+                            OriginatedFromValues.FromAlignmentModel,
+                            null)).ToList());
                     //                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
 
 #if DEBUG
@@ -180,7 +184,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .Select(tmtc => new Alignment.Translation.Translation(
                         ModelHelper.BuildToken(tmtc.tc),
                         tmtc.tm.TargetTextScores.OrderByDescending(tts => tts.Score).First().Text ?? string.Empty,
-                        OriginatedFromValues.FromTranslationModel));
+                        OriginatedFromValues.FromTranslationModel,
+                        null));
 
                 combined.AddRange(translationModelEntries);
 
@@ -304,7 +309,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Select(a => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(a.SourceTokenComponent!),
                             a.TopTargetTrainingText,
-                            OriginatedFromValues.FromAlignmentModel))
+                            OriginatedFromValues.FromAlignmentModel,
+                            null))
                         .ToList();
 
                     combined.AddRange(translationsFromAlignmentModel);

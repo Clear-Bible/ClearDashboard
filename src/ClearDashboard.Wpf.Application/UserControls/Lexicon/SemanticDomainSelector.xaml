@@ -16,13 +16,18 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label
-            Margin="0,-5,0,0"
+        <Button Grid.Column="0"
+            Margin="0,-1,0,0"
             VerticalAlignment="Center"
             VerticalContentAlignment="Center"
-            Content="+"
-            MouseLeftButtonDown="AddButtonClicked"
-            ToolTip="{helpers:Localization Lexicon_AddDomain}" />
+            Click="AddButtonClicked"
+            Background="Transparent"
+            BorderThickness="0"
+            FontSize="12"
+            FontWeight="SemiBold"
+            ToolTip="{helpers:Localization Lexicon_AddDomain}">
+            <Image Height="18" Source="/Resources/add24.png" />
+        </Button>
         <Grid
             x:Name="SemanticDomainStackPanel"
             Grid.Column="1"

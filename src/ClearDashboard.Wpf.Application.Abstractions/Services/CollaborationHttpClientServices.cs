@@ -13,11 +13,11 @@ using System.Text.Json;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public class MySqlHttpClientServices
+    public class CollaborationHttpClientServices
     {
         #region Member Variables   
 
-        private readonly MySqlClient _mySqlClient;
+        private readonly CollaborationClient _collaborationClient;
         private ILogger? _logger;
 
         #endregion //Member Variables
@@ -25,9 +25,9 @@ namespace ClearDashboard.Wpf.Application.Services
 
         #region Constructor
 
-        public MySqlHttpClientServices(MySqlClient mySqlClient)
+        public CollaborationHttpClientServices(CollaborationClient collaborationClient)
         {
-            _mySqlClient = mySqlClient;
+            _collaborationClient = collaborationClient;
         }
 
         #endregion //Constructor
@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             if (_logger is null)
             {
-                _logger = IoC.Get<ILogger<MySqlHttpClientServices>>();
+                _logger = IoC.Get<ILogger<CollaborationHttpClientServices>>();
             }
         }
 
@@ -52,22 +52,22 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Gets a list of all the GitLab projects
         /// </summary>
         /// <returns></returns>
-        public async Task<MySqlUser> GetUserExistsById(int userId)
+        public async Task<CollaborationUser> GetUserExistsById(int userId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/{userId}");
 
             try
             {
-                var response = await _mySqlClient.Client.SendAsync(request);
+                var response = await _collaborationClient.Client.SendAsync(request);
 
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
 
 
-                var user = JsonSerializer.Deserialize<MySqlUser>(result);
+                var user = JsonSerializer.Deserialize<CollaborationUser>(result);
                 if (user is null)
                 {
-                    return new MySqlUser { UserId = -1 };
+                    return new CollaborationUser { UserId = -1 };
                 }
                 return user;
 
@@ -78,32 +78,32 @@ namespace ClearDashboard.Wpf.Application.Services
                 _logger?.LogError(e.Message, e);
             }
 
-            return new MySqlUser { UserId = -1 };
+            return new CollaborationUser { UserId = -1 };
         }
 
 
-        public async Task<MySqlUser> GetUserExistsByEmail(string email)
+        public async Task<CollaborationUser> GetUserExistsByEmail(string email)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
 
             try
             {
-                var response = await _mySqlClient.Client.SendAsync(request);
+                var response = await _collaborationClient.Client.SendAsync(request);
 
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
 
 
-                var users = JsonSerializer.Deserialize<List<MySqlUser>>(result);
+                var users = JsonSerializer.Deserialize<List<CollaborationUser>>(result);
                 if (users is null)
                 {
-                    return new MySqlUser { UserId = -1 };
+                    return new CollaborationUser { UserId = -1 };
                 }
 
                 var user = users.FirstOrDefault(u => u.RemoteEmail == email);
                 if (user is null)
                 {
-                    return new MySqlUser { UserId = -1 };
+                    return new CollaborationUser { UserId = -1 };
                 }
 
                 return user;
@@ -115,7 +115,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 _logger?.LogError(e.Message, e);
             }
 
-            return new MySqlUser { UserId = -1 };
+            return new CollaborationUser { UserId = -1 };
         }
 
         #endregion // GET Requests
@@ -134,7 +134,7 @@ namespace ClearDashboard.Wpf.Application.Services
             var encryptedPassword = Encryption.Encrypt(user.Password);
             var encryptedPersonalAccessToken = Encryption.Encrypt(accessToken);
 
-            var mySqlUser = new MySqlUser
+            var collaborationUser = new CollaborationUser
             {
                 UserId = user.Id,
                 RemoteUserName = user.UserName,
@@ -145,12 +145,12 @@ namespace ClearDashboard.Wpf.Application.Services
                 RemotePersonalPassword = encryptedPassword,
             };
 
-            string jsonUser = JsonSerializer.Serialize(mySqlUser);
+            string jsonUser = JsonSerializer.Serialize(collaborationUser);
             var content = new System.Net.Http.StringContent(jsonUser, Encoding.UTF8, "application/json");
 
             try
             {
-                var response = await _mySqlClient.Client.PostAsync("/api/users", content);
+                var response = await _collaborationClient.Client.PostAsync("/api/users", content);
                 response.EnsureSuccessStatusCode();
 
                 return true;
