@@ -1,38 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
-using CefSharp.DevTools.CSS;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
-using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
-using MailKit.Net.Smtp;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using MimeKit;
-//using static ClearDashboard.DataAccessLayer.Features.GitLabUser.GitLabUserSlice;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class SendEmailViewModel : DashboardApplicationScreen
     {
         #region Member Variables
-
-        private readonly ILogger<AboutViewModel> _logger;
+        
         private readonly DashboardProjectManager? _projectManager;
         private readonly HttpClientServices _httpClientServices;
-        private readonly CollaborationManager _collaborationManager;
-        private CollaborationConfiguration _collaborationConfiguration;
 
 
         #endregion //Member Variables
@@ -127,11 +114,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
-            _logger = logger;
             _projectManager = projectManager;
             _httpClientServices = httpClientServices;
-            _collaborationManager = collaborationManager;
-            _collaborationConfiguration = collaborationConfiguration;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -154,19 +138,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         #region Methods
-
-        /// <summary>
-        /// Function to generate a user name from first & lastnames
-        /// </summary>
-        /// <returns></returns>
-        private string GetUserName() => (FirstName + "." + LastName).ToLower();
-
-
-
-        public async void close()
-        {
-            await TryCloseAsync();
-        }
 
 
         private void CheckEntryFields()
