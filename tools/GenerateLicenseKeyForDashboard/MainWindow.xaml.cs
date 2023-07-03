@@ -125,7 +125,8 @@ namespace GenerateLicenseKeyForDashboard
             }
             else
             {
-                dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsById(Guid.Parse(FetchByIdBox.Text));
+                Guid.TryParse(FetchByIdBox.Text, out var guid);
+                dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsById(guid);
             }
 
             FetchedEmailBox.Text = dashboardUser.Email;
@@ -163,6 +164,9 @@ namespace GenerateLicenseKeyForDashboard
                     break;
                 case "CopyDecryptedGuid":
                     Clipboard.SetText(DecryptedGuidBox.Text);
+                    break;
+                case "CopyFetchedEmail":
+                    Clipboard.SetText(FetchedEmailBox.Text);
                     break;
                 case "CopyFetchedLicense":
                     Clipboard.SetText(FetchedLicenseBox.Text);

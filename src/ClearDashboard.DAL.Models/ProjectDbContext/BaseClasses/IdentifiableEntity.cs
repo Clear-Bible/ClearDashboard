@@ -6,7 +6,6 @@ namespace ClearDashboard.DataAccessLayer.Models;
 
 public abstract class IdentifiableEntity 
 {
-    [JsonPropertyName("id")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 

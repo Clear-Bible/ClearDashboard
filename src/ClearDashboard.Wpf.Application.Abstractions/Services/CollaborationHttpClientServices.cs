@@ -121,7 +121,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<DashboardUser> GetDashboardUserExistsById(Guid userId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers/{userId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers/{userId.ToString()}");
 
             try
             {

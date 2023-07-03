@@ -12,26 +12,20 @@ namespace ClearDashboard.DataAccessLayer.Models
             TranslationSets = new HashSet<TranslationSet>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
-
-        [JsonPropertyName("firstName")]
+        
         public string? FirstName { get; set; }
 
-        [JsonPropertyName("lastName")]
         public string? LastName { get; set; }
 
-        [JsonPropertyName("fullName")]
         [NotMapped] 
         public string? FullName => $"{FirstName} {LastName}";
 
-        [JsonPropertyName("paratextUserName")]
         [NotMapped]
         public string? ParatextUserName { get; set; }
 
-        [JsonPropertyName("isInternal")]
         [NotMapped] 
         public bool? IsInternal { get; set; } = false;
 
-        [JsonPropertyName("licenseVersion")]
         [NotMapped]
         public int? LicenseVersion { get; set; } = 0;
 

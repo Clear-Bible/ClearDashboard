@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Models.LicenseGenerator
 {
-    public class DashboardUser:User
+    public class DashboardUser
     {
         public DashboardUser()
         {
@@ -21,6 +22,29 @@ namespace ClearDashboard.DataAccessLayer.Models.LicenseGenerator
             LicenseKey = licenseKey;
             Email = email;
         }
+
+        [JsonPropertyName("id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
+
+        [JsonPropertyName("firstName")]
+        public string? FirstName { get; set; }
+
+        [JsonPropertyName("lastName")]
+        public string? LastName { get; set; }
+
+        [JsonPropertyName("fullName")]
+        public string? FullName => $"{FirstName} {LastName}";
+
+        [JsonPropertyName("paratextUserName")]
+        public string? ParatextUserName { get; set; }
+
+        [JsonPropertyName("isInternal")]
+        public bool? IsInternal { get; set; } = false;
+
+        [JsonPropertyName("licenseVersion")]
+        public int? LicenseVersion { get; set; } = 0;
+
 
         [JsonPropertyName("licenseKey")]
         public string? LicenseKey { get; set; }
