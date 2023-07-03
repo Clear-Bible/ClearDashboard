@@ -5,6 +5,7 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,10 +13,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Services;
-using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -83,12 +82,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _matchType, value);
         }
 
-        //private Button _emailClearButton;
-        //public Button EmailClearButton
-        //{
-        //    get { return _emailClearButton; }
-        //    set => Set(ref _emailClearButton, value);
-        //}
+        
         #endregion
 
         #region Constructor
@@ -252,10 +246,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         break;
                 }
 
-                //if (match != LicenseUserMatchType.Match)
-                //{
-                //    EmailClearButton.Visibility = Visibility.Visible;
-                //}
+                
             }
             catch (Exception ex)
             {
