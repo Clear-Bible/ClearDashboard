@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
@@ -14,7 +13,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         }
         
         public string? FirstName { get; set; }
-
         public string? LastName { get; set; }
 
         [NotMapped] 
