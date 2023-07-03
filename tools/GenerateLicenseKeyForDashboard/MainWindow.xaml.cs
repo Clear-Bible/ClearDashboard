@@ -20,7 +20,7 @@ namespace GenerateLicenseKeyForDashboard
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int _licenseVersion = 1;
+        private int _licenseVersion = 2;
         
         private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
 
