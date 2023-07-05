@@ -66,6 +66,8 @@ jobs:
     steps:
     #- name: Always Fail # For testing the CI notifier.
     #  uses: cutenode/action-always-fail@v1.0.1
+    
+    - run: Get-PSDrive
   
     - name: Checkout
       uses: actions/checkout@v2
