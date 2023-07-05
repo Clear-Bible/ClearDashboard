@@ -75,17 +75,17 @@ jobs:
         git clone https://github.com/Clear-Bible/ClearDashboard.git C:/ClearDashboard.git --depth 1
 
     - name: Install .NET Core
-      working-directory: C:/ClearDashboard.git
+      #working-directory: C:/ClearDashboard.git
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 7.0.x
 
     - name: Setup MSBuild.exe
-      working-directory: C:/ClearDashboard.git
+      #working-directory: C:/ClearDashboard.git
       uses: microsoft/setup-msbuild@v1.1
       
     - name: Setup NuGet
-      working-directory: C:/ClearDashboard.git
+      #working-directory: C:/ClearDashboard.git
       uses: Nuget/setup-nuget@v1.0.5
       
     - name: Configure ClearBible GitHub NuGet package source
@@ -139,7 +139,7 @@ jobs:
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
-      working-directory: C:/ClearDashboard.git
+      #working-directory: C:/ClearDashboard.git
       uses: actions/upload-artifact@v2
       with:
         name: MSIX Package
@@ -147,7 +147,7 @@ jobs:
 
 # Report results
     - name: Post success to a Slack channel
-      working-directory: C:/ClearDashboard.git
+      #working-directory: C:/ClearDashboard.git
       id: slack-success
       uses: slackapi/slack-github-action@v1.18.0
       if: "contains(job.status, 'success')"
@@ -158,7 +158,7 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     
     - name: Post fail to a Slack channel
-      working-directory: C:/ClearDashboard.git
+      #working-directory: C:/ClearDashboard.git
       id: slack-fail
       uses: slackapi/slack-github-action@v1.18.0
       if: "!contains(job.status, 'success')"
