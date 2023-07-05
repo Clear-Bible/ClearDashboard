@@ -101,9 +101,13 @@ jobs:
     #    Configuration: ${{ matrix.configuration }}
 
     #Fix for running out of disk space found here https://github.com/actions/runner-images/issues/2840
-    - name: Delete Unnecessary Files
+    - name: Delete dotnet
       run: sudo rm -rf /usr/share/dotnet
+
+    - name: Delete hc
       run: sudo rm -rf /opt/ghc
+
+    - name: Delete boost
       run: sudo rm -rf "/usr/local/share/boost"
       #run: sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
