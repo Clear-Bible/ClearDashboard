@@ -100,6 +100,14 @@ jobs:
     #  env:
     #    Configuration: ${{ matrix.configuration }}
 
+    #Fix for running out of disk space found here https://github.com/actions/runner-images/issues/2840
+    - name: Delete Unnecessary Files
+      run: sudo rm -rf /usr/share/dotnet
+      run: sudo rm -rf /opt/ghc
+      run: sudo rm -rf "/usr/local/share/boost"
+      #run: sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+
     - name: Build
       run: dotnet build $env:Solution_Path --no-restore
 
