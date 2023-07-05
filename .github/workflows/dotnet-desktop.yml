@@ -102,13 +102,13 @@ jobs:
 
     #Fix for running out of disk space found here https://github.com/actions/runner-images/issues/2840
     - name: Delete dotnet
-      run: sudo rm -rf /usr/share/dotnet
+      run: rmdir /usr/share/dotnet
 
     - name: Delete hc
-      run: sudo rm -rf /opt/ghc
+      run: rmdir /opt/ghc
 
     - name: Delete boost
-      run: sudo rm -rf "/usr/local/share/boost"
+      run: rmdir /usr/local/share/boost
       #run: sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
 
