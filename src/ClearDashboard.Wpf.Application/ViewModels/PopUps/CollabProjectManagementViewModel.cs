@@ -11,9 +11,11 @@ using SIL.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 // https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1416
 #pragma warning disable CA1416
 
@@ -28,6 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
 
         private List<GitUser> _gitLabUsers = new();
+        
 
         #endregion //Member Variables
 
@@ -85,6 +88,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private ObservableCollection<string> _organization;
+        public ObservableCollection<string> Organization
+        {
+            get => _organization;
+            set
+            {
+                _organization = value;
+                NotifyOfPropertyChange(() => Organization);
+            }
+        }
+
+
+
+
         private GitLabProjectUser? _selectedCurrentUser;
         public GitLabProjectUser? SelectedCurrentUser
         {
@@ -132,7 +149,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private string _filterText = string.Empty;
+        public string FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value;
+                CollabeUserCollectionView.Refresh();
+                NotifyOfPropertyChange(() => FilterText);
 
+                if (value is null)
+                {
+                    SelectedOrganization = null;
+                    NotifyOfPropertyChange(nameof(SelectedOrganization));
+                }
+            }
+        }
+
+
+        private string _selectedOrganization;
+        public string SelectedOrganization
+        {
+            get => _selectedOrganization;
+            set
+            {
+                _selectedOrganization = value;
+                NotifyOfPropertyChange(() => SelectedOrganization);
+
+                if (value is not null)
+                {
+                    FilterText = value;
+                }
+            }
+        }
+
+        private ICollectionView _collabeUserCollectionView;
+        public ICollectionView CollabeUserCollectionView
+        {
+            get => _collabeUserCollectionView;
+            set
+            {
+                _collabeUserCollectionView = value;
+                NotifyOfPropertyChange(() => CollabeUserCollectionView);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -167,10 +228,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
-            Projects = await _httpClientServices.GetProjectsForUser(ProjectOwner);
+            Projects = await _httpClientServices.GetProjectsForUserWhereOwner(ProjectOwner);
             
             _gitLabUsers = await _httpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
+
+            CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
+
+            // get the various orgs
+            var org = _gitLabUsers.Select(x => x.Organization).Distinct().ToList();
+            Organization = new ObservableCollection<string>(org);
+
 
             ShowProgressBar = Visibility.Hidden;
 
@@ -184,10 +253,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             base.OnViewLoaded(view);
         }
 
+
+
         #endregion //Constructor
 
 
         #region Methods
+
+        private bool CollabUsersCollectionFilter(object obj)
+        {
+            if (string.IsNullOrEmpty(FilterText))
+            {
+                return true;
+            }
+
+            if (obj is GitUser user)
+            {
+                if (user.Name!.ToUpper().Contains(FilterText.ToUpper()) || user.Organization.ToUpper().Contains(FilterText.ToUpper()))
+                { 
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public async void Close()
         {
@@ -209,11 +297,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _collabUsers.RemoveAll(x => ids.Contains(x.Id));
             NotifyOfPropertyChange(() =>  CollabUsers);
 
+            CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabeUserCollectionView.Refresh();
+
             ShowProgressBar = Visibility.Hidden;
         }
 
 
-        public async void AddUsers()
+        public async void AddUsers(PermissionLevel permissionLevel = PermissionLevel.ReadOnly)
         {
             ShowProgressBar = Visibility.Visible;
             for (int i = CollabUsers.Count - 1; i >= 0; i--)
@@ -221,14 +312,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var user = CollabUsers[i];
                 if (user.IsSelected)
                 {
-                    _ = await _httpClientServices.AddUserToProject(user, SelectedProject, PermissionLevel.ReadWrite);
+                    _ = await _httpClientServices.AddUserToProject(user, SelectedProject, permissionLevel);
                     CollabUsers.RemoveAt(i);
                     await Task.Delay(500);
                     await GetUsersForProject();
+
+                    CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+                    CollabeUserCollectionView.Refresh();
                 }
             }
             ShowProgressBar = Visibility.Hidden;
         }
+
+        public void AddUsersReadWrite()
+        {
+            AddUsers(PermissionLevel.ReadWrite);
+        }
+
 
         public async void RemoveUser()
         {
@@ -243,6 +343,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     await GetUsersForProject();
                 }
             }
+
+            CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabeUserCollectionView.Refresh();
+
             ShowProgressBar = Visibility.Hidden;
         }
 

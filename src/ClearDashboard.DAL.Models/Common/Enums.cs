@@ -9,6 +9,7 @@
     public enum PermissionLevel
     {
         ReadOnly,
-        ReadWrite
+        ReadWrite,
+        Owner
     }
 }
