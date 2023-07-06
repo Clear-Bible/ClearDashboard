@@ -1,10 +1,17 @@
-﻿using System;
+﻿using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Extensions;
+using ClearDashboard.Wpf.Application.Services;
+using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace GenerateLicenseKeyForDashboard
 {
@@ -13,48 +20,80 @@ namespace GenerateLicenseKeyForDashboard
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int _licenseVersion = 1;
+        private int _licenseVersion = 2;
+        
+        private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
 
         public MainWindow()
         {
+            _mySqlHttpClientServices = ServiceCollectionExtensions.GetSqlHttpClientServices();
             InitializeComponent();
 
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             TheWindow.Title +=  $" - {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+            ByEmailRadio.IsChecked = true;
         }
 
         
 
-        private void GenerateLicenseKey_OnClick(object sender, RoutedEventArgs e)
+        private async void GenerateLicense_OnClick(object sender, RoutedEventArgs e)
         {
-            var licenseKey = GenerateLicense(FirstNameBox.Text, LastNameBox.Text, Guid.NewGuid(), Guid.NewGuid());
-            GeneratedLicenseKeyBox.Text = licenseKey;
+            var emailAlreadyExists = await CheckForPreExistingEmail(EmailBox.Text);
+
+            if (emailAlreadyExists)
+            {
+                GeneratedLicenseBox.Text = "Email already exists";
+            }
+            else
+            {
+                var licenseKey = await GenerateLicense(FirstNameBox.Text, LastNameBox.Text, Guid.NewGuid(),EmailBox.Text);
+                GeneratedLicenseBox.Text = licenseKey;
+            }
         }
 
-        private string GenerateLicense(string firstName, string lastName, Guid id, Guid licenseKey)
+        private async Task<bool> CheckForPreExistingEmail(string email)
         {
-            var folderPath = Path.Combine(LicenseManager.LicenseFolderPath, $"{firstName + lastName}");
+            var results = await _mySqlHttpClientServices.GetAllDashboardUsers();
 
+            var dashboardUser = results.FirstOrDefault(du => du.Email == email);
+
+            if (dashboardUser is null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<string> GenerateLicense(string firstName, string lastName, Guid id, string email)
+        {
             var licenseUser = new User
             {
                 FirstName = firstName,
                 LastName = lastName,
                 Id = id,
-                LicenseKey = licenseKey.ToString("N"),
                 IsInternal = IsInternalCheckBox.IsChecked,
                 LicenseVersion = _licenseVersion
             };
 
-            LicenseManager.EncryptToFile(licenseUser, folderPath);
-            var encryptedLicenseKey = LicenseManager.EncryptToString(licenseUser, folderPath);
+            var encryptedLicense = LicenseManager.EncryptToString(licenseUser);
 
-            return encryptedLicenseKey;
+            var dashboardUser = new DashboardUser(licenseUser, email, encryptedLicense);
+
+            var results = await _mySqlHttpClientServices.CreateNewDashboardUser(dashboardUser);
+            
+            if(!results)
+            {
+                encryptedLicense = "User failed to be added to the remote server";
+            }
+
+            return encryptedLicense;
         }
 
-        private void DecryptLicenseKey_OnClick(object sender, RoutedEventArgs e)
+        private void DecryptLicense_OnClick(object sender, RoutedEventArgs e)
         {
-            var json = LicenseManager.DecryptLicenseFromString(LicenseKeyDecryptionBox.Text);
+            var json = LicenseManager.DecryptLicenseFromString(LicenseDecryptionBox.Text, isGenerator: true);
             var licenseUser = LicenseManager.DecryptedJsonToUser(json, isGenerator:true);
 
             DecryptedFirstNameBox.Text = licenseUser.FirstName;
@@ -63,23 +102,96 @@ namespace GenerateLicenseKeyForDashboard
             DecryptedInternalCheckBox.IsChecked = licenseUser.IsInternal;
         }
 
+        private void ByIdRadio_OnCheck(object sender, RoutedEventArgs e)
+        {
+            FetchByEmailInput.Visibility = Visibility.Collapsed;
+            FetchByIdInput.Visibility = Visibility.Visible;
+        }
+
+        private void ByEmailRadio_OnCheck(object sender, RoutedEventArgs e)
+        {
+            FetchByEmailInput.Visibility = Visibility.Visible;
+            FetchByIdInput.Visibility = Visibility.Collapsed;
+        }
+
+        private async void FetchLicenseById_OnClick(object sender, RoutedEventArgs e)
+        {
+            var fetchByEmail = FetchByEmailInput.IsVisible;
+
+            DashboardUser dashboardUser;
+            if (fetchByEmail)
+            {
+                dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsByEmail(FetchByEmailBox.Text);
+            }
+            else
+            {
+                Guid.TryParse(FetchByIdBox.Text, out var guid);
+                dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsById(guid);
+            }
+
+            FetchedEmailBox.Text = dashboardUser.Email;
+            FetchedLicenseBox.Text = dashboardUser.LicenseKey;
+        }
+
+        private async void DeleteLicenseById_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            var deleted = await _mySqlHttpClientServices.DeleteDashboardUserExistsById(Guid.Parse(DeleteByIdBox.Text));
+
+            if (deleted)
+            {
+                DeletedLicenseBox.Text = DeleteByIdBox.Text;
+            }
+            else
+            {
+                DeletedLicenseBox.Text = "Delete failed.";
+            }
+        }
+
         private void Copy_OnClick(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            switch (button.Content)
+            switch (button.Name)
             {
-                case "Copy license key to clipboard.":
-                    Clipboard.SetText(GeneratedLicenseKeyBox.Text);
+                case "CopyGeneratedLicense":
+                    Clipboard.SetText(GeneratedLicenseBox.Text);
                     break;
-                case "Copy first name to clipboard.":
+                case "CopyDecryptedFirstName":
                     Clipboard.SetText(DecryptedFirstNameBox.Text);
                     break;
-                case "Copy last name to clipboard.":
+                case "CopyDecryptedLastName":
                     Clipboard.SetText(DecryptedLastNameBox.Text);
                     break;
-                case "Copy guid to clipboard.":
+                case "CopyDecryptedGuid":
                     Clipboard.SetText(DecryptedGuidBox.Text);
                     break;
+                case "CopyFetchedEmail":
+                    Clipboard.SetText(FetchedEmailBox.Text);
+                    break;
+                case "CopyFetchedLicense":
+                    Clipboard.SetText(FetchedLicenseBox.Text);
+                    break;
+                case "CopyDeletedLicense":
+                    Clipboard.SetText(DeletedLicenseBox.Text);
+                    break;
+            }
+        }
+
+        private void CheckGenerateLicenseBoxes(object sender, TextChangedEventArgs e)
+        {
+            
+            if (!Validation.GetHasError(FirstNameBox) && 
+                !Validation.GetHasError(LastNameBox) &&
+                !Validation.GetHasError(EmailBox) &&
+                FirstNameBox.Text.Length>0 &&
+                LastNameBox.Text.Length>0 &&
+                EmailBox.Text.Length>0)
+            {
+                GenerateLicenseButton.IsEnabled = true;
+            }
+            else
+            {
+                GenerateLicenseButton.IsEnabled = false;
             }
         }
     }

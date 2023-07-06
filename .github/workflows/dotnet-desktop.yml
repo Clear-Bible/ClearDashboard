@@ -66,31 +66,39 @@ jobs:
     steps:
     #- name: Always Fail # For testing the CI notifier.
     #  uses: cutenode/action-always-fail@v1.0.1
+    
+    - run: Get-PSDrive
   
     - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      run: |
+        mkdir C:/ClearDashboard.git
+        git clone https://${{secrets.GH_PACKAGES_USER}}:${{ secrets.GH_PACKAGES_PAT}}@github.com/Clear-Bible/ClearDashboard.git C:/ClearDashboard.git --depth 1
 
     - name: Install .NET Core
+      #working-directory: C:/ClearDashboard.git
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 7.0.x
 
     - name: Setup MSBuild.exe
+      #working-directory: C:/ClearDashboard.git
       uses: microsoft/setup-msbuild@v1.1
       
     - name: Setup NuGet
+      #working-directory: C:/ClearDashboard.git
       uses: Nuget/setup-nuget@v1.0.5
       
     - name: Configure ClearBible GitHub NuGet package source
+      working-directory: C:/ClearDashboard.git
       run:  dotnet nuget add source --username ${{secrets.GH_PACKAGES_USER}} --password ${{ secrets.GH_PACKAGES_PAT }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/clear-bible/index.json"
       #run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name ClearBible "https://nuget.pkg.github.com/OWNER/index.json"   
       
     - name: Configure Caliburn.Micro NuGet package source
+      working-directory: C:/ClearDashboard.git
       run: dotnet nuget add source --name myget-caliburn-micro "https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json"
 
     - name: Restore NuGet packages
+      working-directory: C:/ClearDashboard.git
       run: nuget restore $env:Solution_Path
       
     # Restore the application to populate the obj folder with RuntimeIdentifiers
@@ -101,9 +109,11 @@ jobs:
     #    Configuration: ${{ matrix.configuration }}
 
     - name: Build
+      working-directory: C:/ClearDashboard.git
       run: dotnet build $env:Solution_Path --no-restore
 
     - name: Execute unit tests
+      working-directory: C:/ClearDashboard.git
       run: dotnet test $env:Test_Project_Path --no-build --verbosity normal
 
     # Decode the base 64 encoded pfx and save the Signing_Certificate
@@ -129,6 +139,7 @@ jobs:
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
+      #working-directory: C:/ClearDashboard.git
       uses: actions/upload-artifact@v2
       with:
         name: MSIX Package
@@ -136,6 +147,7 @@ jobs:
 
 # Report results
     - name: Post success to a Slack channel
+      #working-directory: C:/ClearDashboard.git
       id: slack-success
       uses: slackapi/slack-github-action@v1.18.0
       if: "contains(job.status, 'success')"
@@ -146,6 +158,7 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
     
     - name: Post fail to a Slack channel
+      #working-directory: C:/ClearDashboard.git
       id: slack-fail
       uses: slackapi/slack-github-action@v1.18.0
       if: "!contains(job.status, 'success')"

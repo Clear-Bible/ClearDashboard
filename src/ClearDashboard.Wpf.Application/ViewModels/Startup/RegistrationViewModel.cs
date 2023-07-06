@@ -13,12 +13,13 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<User>
+    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<DashboardUser>
     {
         private readonly DashboardProjectManager _dashboardProjectManager;
         private readonly ILocalizationService _localizationService;
@@ -28,8 +29,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Observable Objects
-        private User _licenseUser;
-        public User LicenseUser
+        private DashboardUser _licenseUser;
+        public DashboardUser LicenseUser
         {
             get { return _licenseUser; }
             set { _licenseUser = value; }
@@ -92,13 +93,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IEventAggregator? eventAggregator,
             IMediator? mediator,
             ILifetimeScope? lifetimeScope,
-            IValidator<User> licenseValidator,
+            IValidator<DashboardUser> licenseValidator,
             ILocalizationService localizationService)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
             _dashboardProjectManager = dashboardProjectManager;
             _localizationService = localizationService;
-            LicenseUser = new User();
+            LicenseUser = new DashboardUser();
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
