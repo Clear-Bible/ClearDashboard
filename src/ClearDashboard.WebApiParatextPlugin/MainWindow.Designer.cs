@@ -79,7 +79,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnTest.TabIndex = 23;
             this.btnTest.Text = "Send Message";
             this.btnTest.UseVisualStyleBackColor = true;
-            this.btnTest.Visible = false;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
             // btnExportUSFM
@@ -104,16 +103,16 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnVersificationTest.UseVisualStyleBackColor = true;
             this.btnVersificationTest.Visible = false;
             this.btnVersificationTest.Click += new System.EventHandler(this.btnVersificationTest_Click);
-            // 
             // btnSwitchProject
             // 
             this.btnSwitchProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSwitchProject.Location = new System.Drawing.Point(127, 7);
+            this.btnSwitchProject.Location = new System.Drawing.Point(183, 7);
             this.btnSwitchProject.Name = "btnSwitchProject";
             this.btnSwitchProject.Size = new System.Drawing.Size(116, 23);
             this.btnSwitchProject.TabIndex = 27;
             this.btnSwitchProject.Text = "Switch Project";
             this.btnSwitchProject.UseVisualStyleBackColor = true;
+            this.btnSwitchProject.Visible = false;
             this.btnSwitchProject.Click += new System.EventHandler(this.btnSwitchProject_Click);
             // 
             // ProjectListBox
@@ -126,6 +125,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.ProjectListBox.Name = "ProjectListBox";
             this.ProjectListBox.Size = new System.Drawing.Size(119, 329);
             this.ProjectListBox.TabIndex = 28;
+            this.ProjectListBox.Visible = false;
             this.ProjectListBox.SelectedIndexChanged += new System.EventHandler(this.ProjectListBox_SelectedIndexChanged);
             // 
             // MainWindow

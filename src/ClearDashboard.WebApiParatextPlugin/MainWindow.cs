@@ -11,7 +11,6 @@ using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using Serilog;
-using SIL.EventsAndDelegates;
 using SIL.Linq;
 using SIL.Scripture;
 using System;
@@ -31,7 +30,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 
 namespace ClearDashboard.WebApiParatextPlugin
@@ -165,6 +163,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             base.OnLeave(e);
         }
 
+
         #endregion
 
 
@@ -176,6 +175,78 @@ namespace ClearDashboard.WebApiParatextPlugin
             return null;
         }
 
+
+        /// <summary>
+        /// Paratext has a verse change
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="oldReference"></param>
+        /// <param name="newReference"></param>
+        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
+        {
+            // send the new verse & text collections
+            try
+            {
+                if (newReference != _verseRef)
+                {
+                    //SetVerseRef(newReference, reloadWebHost: true);
+
+                    _verseRef = newReference;
+
+                    WebHostStartup.ChangeVerse(newReference);
+
+                    try
+                    {
+                        AppendText(Color.DarkOrange, $"Sending verse - {_verseRef.BBBCCCVVV.ToString()}");
+                        await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
+
+                    }
+                    catch (Exception ex)
+                    {
+                        AppendText(Color.Red,
+                            $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
+            }
+
+        }
+
+        /// <summary>
+        /// Called when the user selects a different project in Paratext from the drop down list
+        /// We are unable to switch the project via the plugin API.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="newProject"></param>
+        private async void ProjectChanged(IPluginChildWindow sender, IProject newProject)
+        {
+            ProjectListBox.Visible = false;
+            
+            SetProject(newProject, reloadWebHost: false);
+
+            WebHostStartup.ChangeProject(newProject);
+
+            var hubProxy = GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
+            if (hubProxy == null)
+            {
+                AppendText(Color.Red, "HubContext is null");
+                return;
+            }
+
+
+            await hubProxy.Clients.All.SendCurrentProject();
+
+            AppendText(Color.DarkOrange, $"Sending new project reference - {_project.ShortName}");
+
+        }
+
+        #endregion Paratext overrides - standard functions
+
+
+        #region WebServer Related
 
         private List<string> ExpectedFailedToLoadAssemblies = new List<string> { "Microsoft.Owin", "Microsoft.Extensions.DependencyInjection.Abstractions" };
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
@@ -340,6 +411,29 @@ namespace ClearDashboard.WebApiParatextPlugin
             _ = await hubProxy.Invoke<string>("ping", "Message", 0);
         }
 
+        /// <summary>
+        /// Method to check if a port is in use or not
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private bool PortInUse(int port)
+        {
+            bool inUse = false;
+
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
+
+            foreach (IPEndPoint endPoint in ipEndPoints)
+            {
+                if (endPoint.Port == port)
+                {
+                    inUse = true;
+                    break;
+                }
+            }
+            return inUse;
+        }
+
         private void PortInUseMethod()
         {
             ClearTextWindow();
@@ -358,17 +452,15 @@ namespace ClearDashboard.WebApiParatextPlugin
             PlaySound.PlaySoundFromResource(SoundType.Error);
         }
 
-        /// <summary>
-        /// Called when the user selects a different project in Paratext from the drop down list
-        /// We are unable to switch the project via the plugin API.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="newProject"></param>
-        private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
+        private void OnExceptionOccurred(Exception exception)
         {
-            SetProject(newProject, reloadWebHost: true);
+            Log.Error($"OnLoad {exception.Message}");
+            AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
 
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Standard Paratext verse reference has been changed
@@ -396,79 +488,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 StartWebHost();
             }
-        }
-
-        /// <summary>
-        /// Paratext has a verse change
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="oldReference"></param>
-        /// <param name="newReference"></param>
-        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
-        {
-            // send the new verse & text collections
-            try
-            {
-                if (newReference != _verseRef)
-                {
-                    //SetVerseRef(newReference, reloadWebHost: true);
-
-                    _verseRef = newReference;
-
-                    WebHostStartup.ChangeVerse(newReference);
-
-                    try
-                    {
-                        AppendText(Color.DarkOrange, $"Sending verse - {_verseRef.BBBCCCVVV.ToString()}");
-                        await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
-
-                    }
-                    catch (Exception ex)
-                    {
-                        AppendText(Color.Red,
-                            $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
-            }
-
-        }
-
-        #endregion Paratext overrides - standard functions
-
-
-        #region Methods
-
-        /// <summary>
-        /// Method to check if a port is in use or not
-        /// </summary>
-        /// <param name="port"></param>
-        /// <returns></returns>
-        private bool PortInUse(int port)
-        {
-            bool inUse = false;
-
-            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
-            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
-
-            foreach (IPEndPoint endPoint in ipEndPoints)
-            {
-                if (endPoint.Port == port)
-                {
-                    inUse = true;
-                    break;
-                }
-            }
-            return inUse;
-        }
-
-        private void OnExceptionOccurred(Exception exception)
-        {
-            Log.Error($"OnLoad {exception.Message}");
-            AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
 
         private void DisplayPluginVersion()
@@ -1883,8 +1902,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
 
         #endregion
-
-
         private void btnSwitchProject_Click(object sender, EventArgs e)
         {
             UpdateProjectList();
@@ -1911,6 +1928,8 @@ namespace ClearDashboard.WebApiParatextPlugin
             //}
 
         }
+
+
 
         //private void ShowScripture(IProject project)
         //{

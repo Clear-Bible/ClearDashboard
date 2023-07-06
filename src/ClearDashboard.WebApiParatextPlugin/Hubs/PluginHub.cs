@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
-using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
-using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {
@@ -32,9 +31,26 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
             Clients.All.addMessage(name, message);
         }
 
-        public void SendProject(ParatextProject project)
+        public async void SendProject(ParatextProject project)
         {
             Clients.All.addMessage(project);
+        }
+
+        public async void SendCurrentProject()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCurrentProjectQuery());
+                if (result.Success)
+                {
+                    _logger.AppendText(Color.DarkOrange, $"Sending project - {result.Data?.ShortName}");
+                    Clients.All.SendProject(result.Data);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.AppendText(Color.Red, e.Message);
+            }
         }
 
         public void SendVerse(string verse)
