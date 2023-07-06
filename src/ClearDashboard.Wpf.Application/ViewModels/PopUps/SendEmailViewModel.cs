@@ -160,7 +160,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var firstName = FirstName;
             var lastName = LastName;
 
-            var body = $"Hello, my name is {firstName} {lastName} from {SelectedGroup?.CombinedStrings}.  I'd like to use ClearDashboard but I don't have a license.  Thank you for your help!";
+            var body = $"Hello, my name is {firstName} {lastName} from {SelectedGroup?.CombinedStrings.Trim()}.  I'd like to use ClearDashboard but I don't have a license.  Thank you for your help!";
 
             string message = string.Format("mailto:{0}?Subject={1}&Body={2}", toAddress, subject, body);
 

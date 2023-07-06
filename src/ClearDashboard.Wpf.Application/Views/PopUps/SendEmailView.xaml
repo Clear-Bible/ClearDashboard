@@ -90,7 +90,7 @@
                 HorizontalAlignment="Center"
                 Style="{StaticResource TransparentStyle}"
                 Visibility="{Binding ShowCheckUserButton, Converter={StaticResource BoolToVisibilityConverter}}">
-                Draft Email to Clear in Outlook
+                Draft Email to Clear Bible
             </Button>
         </StackPanel>
     </Grid>
