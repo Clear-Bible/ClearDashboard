@@ -46,9 +46,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
+            Grid.ColumnSpan="2"
             Margin="0,0,0,0"
             Orientation="Horizontal">
             <Image
@@ -65,12 +70,14 @@
         </StackPanel>
         <Label
             Grid.Row="1"
-            Margin="20,5"
+            Grid.ColumnSpan="2"
+            Margin="15,5"
             Content="{helpers:Localization RegistrationDialogViewModel_Welcome}"
             FontSize="24" />
         <StackPanel
             Grid.Row="2"
             Grid.Column="0"
+            Grid.ColumnSpan="2"
             Margin="20,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
@@ -178,6 +185,7 @@
         <TextBlock
             x:Name="MatchType"
             Grid.Row="3"
+            Grid.ColumnSpan="2"
             Width="500"
             MaxWidth="350"
             Margin="20,10"
@@ -191,25 +199,33 @@
             Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
             TextWrapping="Wrap" />
 
-        <StackPanel
+        <Button
+            Name="SendLicenseEmailButton"
             Grid.Row="3"
             Grid.Column="0"
-            Margin="0,20"
-            HorizontalAlignment="Right"
+            Margin="20,20"
+            HorizontalAlignment="left"
             VerticalAlignment="Bottom"
-            Orientation="Horizontal">
-            <!--<Button
+            Click="SendLicenseEmailButton_OnClick"
+            Content="Ask Clear for a license"
+            Style="{StaticResource TransparentStyle}"
+            Visibility="Visible" />
+
+        <!--<Button
                 x:Name="Cancel"
                 Margin="5,5,5,5"
                 Content="{helpers:Localization RegistrationDialogView_CloseApplication}"
                 Style="{StaticResource TransparentStyle}" />-->
-            <Button
-                x:Name="Register"
-                Margin="5,5,5,5"
-                Content="{helpers:Localization RegistrationDialogView_Register}"
-                Style="{StaticResource TransparentStyle}" />
+        <Button
+            x:Name="Register"
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="20,20"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Content="{helpers:Localization RegistrationDialogView_Register}"
+            Style="{StaticResource TransparentStyle}" />
 
-        </StackPanel>
 
     </Grid>
 </UserControl>

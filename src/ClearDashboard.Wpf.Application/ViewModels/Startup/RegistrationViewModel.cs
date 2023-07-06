@@ -82,6 +82,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             get { return _matchType; }
             set => Set(ref _matchType, value);
         }
+
+        
         #endregion
 
         #region Constructor
@@ -244,6 +246,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         MatchType = "License key comparison is null.";
                         break;
                 }
+
+                
             }
             catch (Exception ex)
             {
