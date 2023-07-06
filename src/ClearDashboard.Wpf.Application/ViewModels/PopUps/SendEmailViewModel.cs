@@ -17,7 +17,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
     public class SendEmailViewModel : DashboardApplicationScreen
     {
         #region Member Variables
-        
+
+        private readonly ILogger<AboutViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
         private readonly HttpClientServices _httpClientServices;
 
@@ -114,13 +115,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
+            _logger = logger;
             _projectManager = projectManager;
             _httpClientServices = httpClientServices;
         }
 
         protected override async void OnViewLoaded(object view)
         {
-            if (_projectManager.CurrentUser is not null)
+            if (_projectManager!.CurrentUser is not null)
             {
                 FirstName = _projectManager.CurrentUser.FirstName ?? string.Empty;
                 LastName = _projectManager.CurrentUser.LastName ?? string.Empty;
@@ -170,7 +172,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                _logger.LogError(ex.ToString());
             }
         }
 
