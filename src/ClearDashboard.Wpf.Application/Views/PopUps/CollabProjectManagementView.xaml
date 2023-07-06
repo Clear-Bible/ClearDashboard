@@ -121,7 +121,7 @@
                                 <iconPacks:PackIconRemixIcon.Style>
                                     <Style TargetType="iconPacks:PackIconRemixIcon">
                                         <Setter Property="Kind" Value="UserLine" />
-                                        <Setter Property="Foreground" Value="{StaticResource OrangeMidBrush}" />
+                                        <Setter Property="Foreground" Value="{StaticResource BlueLightBrush}" />
                                         <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectMember}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsOwner}" Value="True">
@@ -145,12 +145,13 @@
                                     Text="{Binding GetPermissionLevel}">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectMember}" />
+                                            <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsOwner}" Value="True">
-                                                    <Setter Property="Kind" Value="AdminLine" />
+                                                <DataTrigger Binding="{Binding GetPermissionLevel}" Value="Owner">
                                                     <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
-                                                    <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectOwner}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding GetPermissionLevel}" Value="ReadWrite">
+                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
