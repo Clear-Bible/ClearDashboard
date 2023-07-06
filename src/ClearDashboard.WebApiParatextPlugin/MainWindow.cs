@@ -158,7 +158,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="e"></param>
         protected override async void OnLeave(EventArgs e)
         {
-            //WebAppProxy?.Dispose();
 
             base.OnLeave(e);
         }
