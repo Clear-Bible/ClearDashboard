@@ -579,7 +579,6 @@
                             x:Name="ListView"
                             Grid.Row="1"
                             Grid.ColumnSpan="2"
-                            Height="520"
                             Margin="5"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
