@@ -35,6 +35,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -69,6 +70,20 @@
                 TextChanged="OnNoteTextBoxChanged"
                 TextWrapping="Wrap"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextBoxVisibility}" />
+            <Button
+                Name="DeleteNoteButton"
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="9,-5,0,0"
+                Padding="0,0,0,0"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="ConfirmNoteDeletion"
+                FontSize="12"
+                FontWeight="SemiBold"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampRowVisibility}">
+                X
+            </Button>
             <TextBlock
                 Grid.Row="0"
                 Margin="4,0,0,0"
@@ -90,6 +105,7 @@
             </TextBlock>
             <WrapPanel
                 Grid.Row="1"
+                Grid.ColumnSpan="2"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Orientation="Horizontal"
@@ -111,26 +127,14 @@
                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}"
                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}" />
-                <Button
-                    Name="DeleteNoteButton"
-                    Margin="9,-5,0,0"
-                    Padding="0,0,0,0"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Click="ConfirmNoteDeletion"
-                    FontSize="12"
-                    FontWeight="SemiBold">
-                    X
-                </Button>
                 <Popup
                     Name="ConfirmDeletePopup"
-                    Width="200"
                     Placement="Left"
                     PlacementTarget="{Binding ElementName=DeleteNoteButton}"
                     StaysOpen="False"
                     VerticalOffset="30">
                     <Border BorderThickness="2">
-                        <StackPanel Background="LightGoldenrodYellow" Orientation="Vertical">
+                        <StackPanel Background="{StaticResource SecondaryHueMidBrush}" Orientation="Vertical">
                             <TextBlock
                                 Padding="10"
                                 HorizontalAlignment="Center"
@@ -140,11 +144,13 @@
                                 <Button
                                     Margin="5"
                                     Click="DeleteNoteConfirmed"
-                                    Content="{helpers:Localization Yes}" />
+                                    Content="{helpers:Localization Yes}"
+                                    Style="{StaticResource TransparentStyle}" />
                                 <Button
                                     Margin="5"
                                     Click="DeleteNoteCancelled"
-                                    Content="{helpers:Localization No}" />
+                                    Content="{helpers:Localization No}"
+                                    Style="{StaticResource TransparentStyle}" />
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -152,6 +158,7 @@
             </WrapPanel>
             <StackPanel
                 Grid.Row="1"
+                Grid.ColumnSpan="2"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ButtonVisibility}">
@@ -172,7 +179,10 @@
                     Foreground="{DynamicResource MaterialDesignBody}"
                     Style="{StaticResource TransparentStyle}" />
             </StackPanel>
-            <Grid Grid.Row="2" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
+            <Grid
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />

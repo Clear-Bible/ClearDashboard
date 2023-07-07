@@ -90,8 +90,8 @@
         </StackPanel>
         <TextBox
             x:Name="TimerBox"
-            Width="77"
-            Margin="34,0,17,0"
+            Width="84"
+            Margin="44,0,17,0"
             VerticalAlignment="Center"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
