@@ -298,6 +298,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             NotifyOfPropertyChange(() =>  CollabUsers);
 
             CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
             CollabeUserCollectionView.Refresh();
 
             ShowProgressBar = Visibility.Hidden;
@@ -318,6 +319,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     await GetUsersForProject();
 
                     CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+                    CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
                     CollabeUserCollectionView.Refresh();
                 }
             }
@@ -345,6 +347,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
             CollabeUserCollectionView.Refresh();
 
             ShowProgressBar = Visibility.Hidden;
