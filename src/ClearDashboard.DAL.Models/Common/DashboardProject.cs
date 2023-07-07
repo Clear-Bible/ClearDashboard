@@ -126,5 +126,8 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public bool NeedsMigrationUpgrade { get; set; } = false;
         public bool IsCollabProject { get; set; }
+
+        public string CollabOwner { get; set; }
+        public PermissionLevel PermissionLevel { get; set; } = PermissionLevel.Owner;
     }
 }

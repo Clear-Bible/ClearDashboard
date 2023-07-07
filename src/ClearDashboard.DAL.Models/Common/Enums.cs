@@ -8,8 +8,8 @@
 
     public enum PermissionLevel
     {
-        ReadOnly,
-        ReadWrite,
-        Owner
+        ReadOnly, // developer 30
+        ReadWrite, // maintainer 40
+        Owner // owner 50
     }
 }

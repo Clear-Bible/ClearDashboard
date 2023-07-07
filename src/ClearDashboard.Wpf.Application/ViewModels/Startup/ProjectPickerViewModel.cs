@@ -533,7 +533,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private async Task GetProjectsVersion(bool afterMigration = false)
+        private async Task GetProjectsVersion(PermissionLevel? projectPermissionLevel = PermissionLevel.Owner, bool afterMigration = false)
         {
             DashboardProjects.Clear();
 
@@ -589,6 +589,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         FullFilePath = fileInfo.FullName,
                         Version = version,
                         IsCollabProject = shaPresent,
+                        PermissionLevel = projectPermissionLevel.Value,
                     };
 
                     DashboardProjects.Add(dashboardProject);
@@ -633,7 +634,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task RefreshProjectList()
         {
-            await GetProjectsVersion(true);
+            await GetProjectsVersion(afterMigration:true);
         }
 
         private async Task GetCollabProjects()
@@ -672,6 +673,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     if (gitLabProject is not null)
                     {
+                        dashboardProject.CollabOwner = gitLabProject.RemoteOwner.Name;
+                        dashboardProject.PermissionLevel = gitLabProject.RemotePermissionLevel;
+
                         // remove from the available GitLab projects
                         projects.Remove(gitLabProject);
                     }
@@ -689,7 +693,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         ProjectId = Guid.Parse(gitLabProject.Name.ToUpper().Replace("P_", "")),
                         ProjectName = gitLabProject.Description.ToString()!,
                         AppVersion = "unknown",
-                        Created = gitLabProject.CreatedAt
+                        Created = gitLabProject.CreatedAt,
+                        RemoteOwner = gitLabProject.RemoteOwner.Name,
+                        PermissionLevel = gitLabProject.RemotePermissionLevel,
                     };
                     DashboardCollabProjects.Add(dashboardCollabProject);
 
@@ -868,7 +874,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 importServerProjectViewModel.CollaborationDialogAction = CollaborationDialogAction.Import;
                 var result = await _windowManager.ShowDialogAsync(importServerProjectViewModel, null, importServerProjectViewModel.DialogSettings());
 
-                await GetProjectsVersion().ConfigureAwait(false);
+                await GetProjectsVersion(project.PermissionLevel).ConfigureAwait(false);
                 await GetCollabProjects().ConfigureAwait(false);
             }
         }
