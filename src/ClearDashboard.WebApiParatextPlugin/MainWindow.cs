@@ -142,7 +142,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             try
             {
-                HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
+                HubContext.Clients.All.SendPluginClosing(new PluginClosing
+                    { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
                 await Task.Delay(500);
             }
             catch (Exception ex)
@@ -150,16 +151,10 @@ namespace ClearDashboard.WebApiParatextPlugin
                 AppendText(Color.Red,
                     $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
             }
-        }
-
-        /// <summary>
-        /// Called when window loses focus
-        /// </summary>
-        /// <param name="e"></param>
-        protected override async void OnLeave(EventArgs e)
-        {
-
-            base.OnLeave(e);
+            finally
+            {
+                WebAppProxy?.Dispose();
+            }
         }
 
         #endregion
