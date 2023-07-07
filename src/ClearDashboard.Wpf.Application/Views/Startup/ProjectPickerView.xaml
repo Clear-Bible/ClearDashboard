@@ -703,7 +703,7 @@
                             Background="Transparent"
                             Tag="{Binding DataContext, ElementName=GridLayout}">
                             <StackPanel Margin="0" Orientation="Horizontal">
-                                <Grid Width="450" Height="45">
+                                <Grid Width="450" Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />

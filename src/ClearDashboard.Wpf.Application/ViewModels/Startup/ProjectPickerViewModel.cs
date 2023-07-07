@@ -533,7 +533,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private async Task GetProjectsVersion(PermissionLevel? projectPermissionLevel = PermissionLevel.Owner, bool afterMigration = false)
+        private async Task GetProjectsVersion(bool afterMigration = false)
         {
             DashboardProjects.Clear();
 
@@ -589,7 +589,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         FullFilePath = fileInfo.FullName,
                         Version = version,
                         IsCollabProject = shaPresent,
-                        PermissionLevel = projectPermissionLevel.Value,
                     };
 
                     DashboardProjects.Add(dashboardProject);
@@ -715,6 +714,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CollabButtonsEnabled = true;
             }
 
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+
+            NotifyOfPropertyChange(nameof(DashboardProjectsDisplay));
         }
 
         private void SetCollabVisibility()
@@ -874,7 +876,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 importServerProjectViewModel.CollaborationDialogAction = CollaborationDialogAction.Import;
                 var result = await _windowManager.ShowDialogAsync(importServerProjectViewModel, null, importServerProjectViewModel.DialogSettings());
 
-                await GetProjectsVersion(project.PermissionLevel).ConfigureAwait(false);
+                await GetProjectsVersion().ConfigureAwait(false);
                 await GetCollabProjects().ConfigureAwait(false);
             }
         }
