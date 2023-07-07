@@ -153,12 +153,11 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
 
         /// <summary>
-        /// Called when window is closed
+        /// Called when window loses focus
         /// </summary>
         /// <param name="e"></param>
         protected override async void OnLeave(EventArgs e)
         {
-            WebAppProxy?.Dispose();
 
             base.OnLeave(e);
         }
