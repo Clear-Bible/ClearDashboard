@@ -55,8 +55,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var testUserId1 = Guid.NewGuid();
             var testUserId2 = Guid.NewGuid();
             Users.Clear();
-            Users.Add(new Models.User() { Id = testUserId1, FirstName = "tester", LastName = "one", LicenseKey = "12345" });
-            Users.Add(new Models.User() { Id = testUserId2, FirstName = "tester", LastName = "two", LicenseKey = "67890" });
+            Users.Add(new Models.User() { Id = testUserId1, FirstName = "tester", LastName = "one"});
+            Users.Add(new Models.User() { Id = testUserId2, FirstName = "tester", LastName = "two"});
 
             var testCorpus1 = BuildTestCorpus(Guid.NewGuid(), "test corpus 1", "language one", Models.CorpusType.Standard, testUserId1);
             Corpora.Clear();

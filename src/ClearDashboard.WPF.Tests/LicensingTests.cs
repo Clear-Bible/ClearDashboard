@@ -79,7 +79,6 @@ namespace ClearDashboard.WPF.Tests
                 var user = new User
                 {
                     Id = Guid.NewGuid(),
-                    LicenseKey = Guid.NewGuid().ToString(),
                     FirstName = "Bob",
                     LastName = "Smith"
                 };

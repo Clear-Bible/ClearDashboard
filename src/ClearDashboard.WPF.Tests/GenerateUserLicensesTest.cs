@@ -45,8 +45,7 @@ namespace ClearDashboard.WPF.Tests
             {
                 FirstName = firstName,
                 LastName = lastName,
-                Id = id,
-                LicenseKey = id.ToString("N"),
+                Id = id
             };
 
             LicenseManager.EncryptToFile(licenseUser, folderPath);
