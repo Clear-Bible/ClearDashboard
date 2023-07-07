@@ -1167,6 +1167,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             AddNewEnhancedViewTab(windowDockable);
             
             await SaveAvalonDockLayout();
+            await SaveProjectData();
         }
 
         private BindableCollection<LayoutFile> GetFileLayouts()
@@ -1922,6 +1923,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
             }
             await SaveAvalonDockLayout();
+            await SaveProjectData();
         }
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
