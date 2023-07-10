@@ -16,7 +16,7 @@
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Name="UserControl"
     Width="Auto"
-    Height="Auto"
+    Height="800"
     MinWidth="886"
     MinHeight="594"
     d:DesignHeight="450"
