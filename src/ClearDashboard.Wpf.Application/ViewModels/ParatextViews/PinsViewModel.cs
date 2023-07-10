@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -67,7 +68,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private readonly LongRunningTaskManager _longRunningTaskManager;
 
         private BindableCollection<PinsDataTable> GridData { get; } = new();
-        
+        private Stopwatch _watch = new Stopwatch();
+
         #endregion //Member Variables
 
         #region Public Properties
@@ -368,6 +370,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            _watch.Start();
 #pragma warning disable CS4014
             // Do not await this....let it run in the background otherwise
             // it freezes the UI
@@ -881,6 +884,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _generateDataRunning = false;
 
                 _longRunningTaskManager.TaskComplete(_taskName);
+
+                var time = _watch.Elapsed.Seconds;
             }
             return false;
         }
