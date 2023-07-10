@@ -384,24 +384,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             }
         }
 
-        private void OnNewTranslationChanged(object sender, RoutedEventArgs e)
-        {
-            //RaiseTranslationEntryEvent(NewTranslationChangedEvent, new LexiconTranslationViewModel { Text = NewTranslationTextBox.Text });
-        }
-
-        private void OnNewTranslationChecked(object sender, RoutedEventArgs e)
-        {
-            NewTranslationTextBoxIsEnabled = true;
-            OnPropertyChanged(nameof(NewTranslationTextBoxIsEnabled));
-            NewTranslationTextBox.Focus();
-        }
-
-        private void OnNewTranslationUnchecked(object sender, RoutedEventArgs e)
-        {
-            NewTranslationTextBoxIsEnabled = false;
-            OnPropertyChanged(nameof(NewTranslationTextBoxIsEnabled));
-        }
-
         private void ConfirmMeaningDeletion(object sender, RoutedEventArgs e)
         {
             ConfirmDeletePopup.IsOpen = true;
@@ -506,9 +488,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         #endregion Private event handlers
         #region Private Properties
-
-        public bool NewTranslationTextBoxIsEnabled { get; set; }
-
 
         #endregion
         #region Public Properties

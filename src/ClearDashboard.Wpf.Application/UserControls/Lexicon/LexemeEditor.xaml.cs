@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
@@ -13,6 +15,7 @@ using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.Messages.Lexicon;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using Brushes = System.Windows.Media.Brushes;
@@ -122,9 +125,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #region Static Dependency Properties
 
         /// <summary>
-        /// Identifies the Lexeme dependency property.
+        /// Identifies the CurrentLexeme dependency property.
         /// </summary>
-        public static readonly DependencyProperty LexemeProperty = DependencyProperty.Register(nameof(Lexeme), typeof(LexemeViewModel), typeof(LexemeEditor));
+        public static readonly DependencyProperty CurrentLexemeProperty = DependencyProperty.Register(nameof(CurrentLexeme), typeof(LexemeViewModel), typeof(LexemeEditor));
+
+        /// <summary>
+        /// Identifies the Lexemes dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LexemesProperty = DependencyProperty.Register(nameof(Lexemes), typeof(LexemeViewModelCollection), typeof(LexemeEditor));
 
         /// <summary>
         /// Identifies the LemmaFontFamily dependency property.
@@ -346,6 +354,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         private string? OriginalLemmaText { get; set; } = string.Empty;
 
         private bool _isEditing;
+        private string _newLexemeLemma = string.Empty;
+
         private bool IsEditing
         {
             get => _isEditing;
@@ -357,8 +367,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             }
         }
 
-        public Visibility AddLexemeVisibility => Lexeme != null ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility LexemeControlsVisibility => Lexeme != null ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility AddLexemeVisibility => Lexemes != null && Lexemes.Any() ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility LexemeControlsVisibility => Lexemes != null && Lexemes.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         public Visibility LemmaTextBlockVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility LemmaTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
@@ -373,14 +383,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             LemmaTextBox.SelectAll();
             LemmaTextBox.Focus();
 
-            OriginalLemmaText = Lexeme?.Lemma;
+            OriginalLemmaText = CurrentLexeme?.Lemma;
         }
 
         private void CommitEdit()
         {
-            if (LemmaTextBox.Text != OriginalLemmaText && Lexeme != null)
+            if (LemmaTextBox.Text != OriginalLemmaText && CurrentLexeme != null)
             {
-                Lexeme.Lemma = LemmaTextBox.Text;
+                CurrentLexeme.Lemma = LemmaTextBox.Text;
                 RaiseLemmaEvent(LemmaUpdatedEvent);
             }
 
@@ -397,7 +407,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             RaiseEvent(new LexemeEventArgs
             {
                 RoutedEvent = routedEvent,
-                Lexeme = Lexeme!,
+                Lexeme = CurrentLexeme!,
             });
         }        
         
@@ -415,7 +425,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             RaiseEvent(new LemmaEventArgs
             {
                 RoutedEvent = routedEvent,
-                Lexeme = Lexeme!,
+                Lexeme = CurrentLexeme!,
             });
         }
 
@@ -424,7 +434,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             RaiseEvent(new LexemeFormEventArgs
             {
                 RoutedEvent = routedEvent,
-                Lexeme = Lexeme!,
+                Lexeme = CurrentLexeme!,
                 Form = lexemeForm
             });
         }
@@ -434,7 +444,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             RaiseEvent(new MeaningEventArgs
             {
                 RoutedEvent = routedEvent,
-                Lexeme = Lexeme!,
+                Lexeme = CurrentLexeme!,
                 Meaning = meaning
             });
         }
@@ -486,9 +496,23 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             CommitEdit();
         }
 
+        private string? GetSourceLanguage()
+        {
+            return TokenDisplay.VerseDisplay is InterlinearDisplayViewModel verseDisplay ? verseDisplay.SourceLanguage : string.Empty;
+        }
+
+        private string? GetMeaningLanguage()
+        {
+            return TokenDisplay.VerseDisplay is InterlinearDisplayViewModel verseDisplay ? verseDisplay.TargetLanguage : string.Empty;
+        }
+
         private void OnAddLexemeClicked(object sender, RoutedEventArgs e)
         {
-            RaiseLexemeEvent(LexemeAddedEvent, new LexemeViewModel { Lemma = TokenDisplay.SurfaceText });
+            RaiseLexemeEvent(LexemeAddedEvent, new LexemeViewModel
+            {
+                Lemma = TokenDisplay.SurfaceText,
+                Language = GetSourceLanguage()
+            });
             
             OnPropertyChanged(nameof(AddLexemeVisibility));
             OnPropertyChanged(nameof(LexemeControlsVisibility));
@@ -498,13 +522,76 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         public async Task HandleAsync(LexemeAddedMessage message, CancellationToken cancellationToken)
         {
-            Lexeme = message.Lexeme;
+            Lexemes.Add(message.Lexeme);
+            CurrentLexeme = message.Lexeme;
+
+            if (CurrentLexeme.Lemma != TokenDisplay.SurfaceText && CurrentLexeme.Forms.All(f => f.Text != TokenDisplay.SurfaceText))
+            {
+                var form = new Form{Text = TokenDisplay.SurfaceText};
+                CurrentLexeme.Forms.Add(form);
+                RaiseLexemeFormEvent(LexemeFormAddedEvent, form);
+            }
+
             OnPropertyChanged(nameof(AddLexemeVisibility));
             OnPropertyChanged(nameof(LexemeControlsVisibility));
 
             await Task.CompletedTask;
         }
 
+        private void ConfirmLexemeAdd(object sender, RoutedEventArgs e)
+        {
+            AddLexemePopup.IsOpen = true;
+
+            NewLexemeLemma = string.Empty;
+            NewLemmaTextBox.Focusable = true;
+            NewLemmaTextBox.Focus();
+            
+            Keyboard.Focus(NewLemmaTextBox);
+        }
+
+        private void CloseAddPopupOnEscape(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                AddLexemeCancelled(sender, e);
+            }
+        }
+
+        private void OnNewLemmaTextChanged(object sender, TextChangedEventArgs e)
+        {
+            NewLexemeErrorVisibility = Visibility.Hidden;
+        }
+
+        private void AddLexemeConfirmed(object sender, RoutedEventArgs e)
+        {
+            if (! LexiconManager!.LexemeExists(NewLemmaTextBox.Text, GetSourceLanguage(), GetMeaningLanguage()))
+            {
+                var newLexeme = new LexemeViewModel
+                {
+                    Lemma = NewLemmaTextBox.Text,
+                    Language = GetSourceLanguage()
+                };
+                RaiseLexemeEvent(LexemeAddedEvent, newLexeme);
+
+                OnPropertyChanged(nameof(AddLexemeVisibility));
+                OnPropertyChanged(nameof(LexemeControlsVisibility));
+
+                NewLexemeLemma = string.Empty;
+                AddLexemePopup.IsOpen = false;
+            }
+            else
+            {
+                NewLexemeErrorVisibility = Visibility.Visible;
+                AddLexemePopup.IsOpen = true;
+            }
+        }        
+        
+        private void AddLexemeCancelled(object sender, RoutedEventArgs e)
+        {
+            NewLexemeLemma = string.Empty;
+            AddLexemePopup.IsOpen = false;
+        }
+        
         private void ConfirmLexemeDeletion(object sender, RoutedEventArgs e)
         {
             ConfirmDeletePopup.IsOpen = true;
@@ -514,7 +601,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             RaiseLexemeEvent(LexemeDeletedEvent);
 
-            Lexeme = null;
+            Lexemes.Remove(CurrentLexeme);
+            CurrentLexeme = Lexemes.Any() ? Lexemes.First() : null;
+            if (Lexemes.Any())
+            {
+                LexemeComboBox.SelectedIndex = 0;
+            }
+
+            OnPropertyChanged(nameof(Lexemes));
+            OnPropertyChanged(nameof(CurrentLexeme));
             OnPropertyChanged(nameof(AddLexemeVisibility));
             OnPropertyChanged(nameof(LexemeControlsVisibility));
 
@@ -528,18 +623,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         private void OnLexemeFormAdded(object sender, RoutedEventArgs e)
         {
-            if (Lexeme != null && e is LexemeFormEventArgs args)
+            if (CurrentLexeme != null && e is LexemeFormEventArgs args)
             {
                 RaiseLexemeFormEvent(LexemeFormAddedEvent, args.Form);
-                Lexeme.Forms.Add(args.Form);
+                CurrentLexeme.Forms.Add(args.Form);
             }
         }
 
         private void OnLexemeFormRemoved(object sender, RoutedEventArgs e)
         {
-            if (Lexeme != null && e is LexemeFormEventArgs args)
+            if (CurrentLexeme != null && e is LexemeFormEventArgs args)
             {
-                Lexeme.Forms.Remove(args.Form);
+                CurrentLexeme.Forms.Remove(args.Form);
                 RaiseLexemeFormEvent(LexemeFormRemovedEvent, args.Form);
             }
         }
@@ -548,7 +643,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             if (e is MeaningEventArgs args)
             {
-                Lexeme?.Meanings.Remove(args.Meaning);
+                CurrentLexeme?.Meanings.Remove(args.Meaning);
                 RaiseMeaningEvent(MeaningDeletedEvent, args.Meaning);
             }
         }
@@ -586,14 +681,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
         private void AddMeaningClicked(object sender, RoutedEventArgs e)
         {
-            var meaning = new MeaningViewModel { Text = "New Meaning" };
-            Lexeme!.Meanings.Add(meaning);
+            var meaning = new MeaningViewModel { Text = "New Meaning", Language = GetMeaningLanguage() };
+            CurrentLexeme!.Meanings.Add(meaning);
             RaiseMeaningEvent(MeaningAddedEvent, meaning);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (Lexeme?.Lemma == "Lemma")
+            if (CurrentLexeme?.Lemma == "Lemma")
             {
                 BeginEdit();
                 LemmaTextBox.SelectAll();
@@ -605,6 +700,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             OnPropertyChanged(nameof(LexemeControlsVisibility));
             
             Loaded -= OnLoaded;
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            EventAggregator?.Unsubscribe(this);
+
+            Unloaded -= OnUnloaded;
         }
 
         private void OnTranslationAdded(object sender, RoutedEventArgs e)
@@ -645,15 +747,25 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #endregion Private event handlers
         #region Public Properties
 
+        public static LexiconManager? LexiconManager { get; set; }
         public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
-        /// Gets or sets the lexeme associated with the editor.
+        /// Gets or sets the currently-selected lexeme.
         /// </summary>
-        public LexemeViewModel? Lexeme
+        public LexemeViewModel? CurrentLexeme
         {
-            get => (LexemeViewModel)GetValue(LexemeProperty);
-            set => SetValue(LexemeProperty, value);
+            get => (LexemeViewModel)GetValue(CurrentLexemeProperty);
+            set => SetValue(CurrentLexemeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the lexeme collection associated with the editor.
+        /// </summary>
+        public LexemeViewModelCollection Lexemes
+        {
+            get => (LexemeViewModelCollection)GetValue(LexemesProperty);
+            set => SetValue(LexemesProperty, value);
         }
 
         /// <summary>
@@ -835,6 +947,34 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             set => SetValue(MeaningTextPaddingProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets the lemma for a new lexeme.
+        /// </summary>
+        public string NewLexemeLemma
+        {
+            get => _newLexemeLemma;
+            set
+            {
+                if (value == _newLexemeLemma) return;
+                _newLexemeLemma = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Visibility _newLexemeErrorVisibility = Visibility.Hidden;
+        /// <summary>
+        /// Gets or sets the visibility of the new lexeme validation message.
+        /// </summary>
+        public Visibility NewLexemeErrorVisibility
+        {
+            get => _newLexemeErrorVisibility;
+            set
+            {
+                if (value == _newLexemeErrorVisibility) return;
+                _newLexemeErrorVisibility = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the background brush for individual semantic domain boxes.
@@ -1002,7 +1142,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
-        /// Occurs when a lemma is updatd.
+        /// Occurs when a lemma is updated.
         /// </summary>
         public event RoutedEventHandler LemmaUpdated
         {
@@ -1127,12 +1267,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         public LexemeEditor()
         {
+            Lexemes = new LexemeViewModelCollection();
+
             InitializeComponent();
 
             Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
 
             EventAggregator?.SubscribeOnUIThread(this);
         }
-
     }
 }

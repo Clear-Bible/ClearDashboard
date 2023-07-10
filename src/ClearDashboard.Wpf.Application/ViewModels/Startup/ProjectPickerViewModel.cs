@@ -703,6 +703,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             DashboardCollabProjectsDisplay = DashboardCollabProjects;
+
+            if (DashboardCollabProjectsDisplay.Count() > 0)
+            {
+                CollabButtonsEnabled = true;
+            }
+
         }
 
         private void SetCollabVisibility()
@@ -739,10 +745,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async void ListenForParatextStart()
         {
-            while (!IsParatextRunning)
+            while (!IsParatextRunning || !Connected)
             {
-                Thread.Sleep(1000);
-                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning()).ConfigureAwait(false);
+                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning());
             }
         }
 
@@ -963,13 +968,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
-            Connected = message.Connected;
-
-            if (!Connected)
+            if (!message.Connected && Connected) //only run when going from connected to not connected
             {
                 IsParatextRunning=false;
                 ListenForParatextStart();
             }
+
+            Connected = message.Connected;
 
             await Task.CompletedTask;
         }
