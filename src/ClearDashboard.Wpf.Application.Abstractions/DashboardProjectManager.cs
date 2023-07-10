@@ -16,9 +16,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
-using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.Application;
 
