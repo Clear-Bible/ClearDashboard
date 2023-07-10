@@ -35,6 +35,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 
@@ -776,13 +777,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 await GenerateLexiconDataCalculations(cancellationToken).ConfigureAwait(false);
                 return true;
             }).ConfigureAwait(true);
-            
+
             return false;
         }
 
         private async Task<bool> ConnectDataToUi(CancellationToken cancellationToken)
         {
-            
+
             // bind the data grid to the collection view
             GridCollectionView = CollectionViewSource.GetDefaultView(_gridData);
             // setup the filtering routine to determine what gets displayed
@@ -855,46 +856,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     foreach (var senseEntry in entry.Entry.Sense)
                     {
                         string vl = string.Empty;
-                        var pndx = 0;
-                        var simrefs = "";
-                        var simprefsString = "0";
+                        var numRefCount = "0";
                         List<string> verseList = new List<string>();
 
                         try
                         {
                             if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
                             {
-                                var rs = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
-                                SortRefs(ref rs); // sort the List  
-                                vl = string.Join(", ", rs); // change List back to comma delimited string
-
-                                if (!vl.Contains("missing"))
+                                var verseReferences = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
+                                
+                                //SortRefs(ref rs); // sort the List  
+                                List<CoupleOfStrings> bothReferences = new();
+                                foreach (var verseReference in verseReferences)
                                 {
-                                    if (vl != "")
+                                    var tmp = verseReference.Trim();
+                                    if (tmp.Length >= 3 && !verseReference.Contains("missing") && verseReference != "")
                                     {
-                                        //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
-                                        var longrefs = vl.Split(',').ToList();
-                                        var simprefs = new List<string>();
-
-                                        foreach (var longref in longrefs)
+                                        var book = tmp.Substring(0, 3);//the issue is we are assuming the string is a certian length etc.  do more checking
+                                        var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
+                                        if (bookNum.Length > 0)
                                         {
-                                            var booksplit = longref.Trim().Split(' ').ToList();
-                                            var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(booksplit[0]);
-                                            var chapterVerseSplit = booksplit[1].Split(':').ToList();
-                                            var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
-                                            var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
-                                            simprefs.Add(bookNum + chapterNum + verseNum);
-                                        }
+                                            if (tmp.Length >= 4)
+                                            {
+                                                tmp = tmp.Substring(3).Trim();
+                                                var parts = tmp.Split(':');
+                                                if (parts.Length > 1)
+                                                {
+                                                    string chapter = parts[0].Trim();
+                                                    string verse = parts[1].Trim();
+                                                    if (verse.IndexOf("-") > 0)
+                                                    {
+                                                        verse = verse.Substring(0, verse.IndexOf("-"));
+                                                    }
 
-                                        verseList.AddRange(simprefs);
-                                        simprefsString = verseList.Count.ToString();
-                                    }
-                                    else
-                                    {
-                                        simprefsString = "0";
-                                        verseList = null;
+                                                    if (verse.IndexOf(".") > 0)
+                                                    {
+                                                        verse = verse.Substring(0, verse.IndexOf("."));
+                                                    }
+
+                                                    var numRef = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}";
+
+                                                    bothReferences.Add(new CoupleOfStrings
+                                                    {
+                                                        stringA = numRef,
+                                                        stringB = verseReference
+                                                    });
+                                                }
+                                            }
+                                        }
                                     }
                                 }
+                                var orderedList = bothReferences.OrderBy(x => x.stringA).ToList();
+                                orderedList = orderedList.DistinctBy(x => x.stringA).ToList();
+
+                                verseReferences.Clear();
+                                foreach (var orderedReference in orderedList)
+                                {
+                                    verseReferences.Add(orderedReference.stringB);
+                                    verseList.Add(orderedReference.stringA);
+
+                                }
+
+                                vl = string.Join(", ", verseReferences);
+                                numRefCount = verseList.Count.ToString();
                             }
                         }
                         catch (Exception ex)
@@ -920,7 +944,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             //Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
                             //Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
                             Refs = vl,
-                            SimpRefs = simprefsString,
+                            SimpRefs = numRefCount,
                             Source = entry.Lexeme.Form,
                             //Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
                             //Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
