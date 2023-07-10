@@ -633,7 +633,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task RefreshProjectList()
         {
-            await GetProjectsVersion(true);
+            await GetProjectsVersion(afterMigration:true);
         }
 
         private async Task GetCollabProjects()
@@ -672,6 +672,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     if (gitLabProject is not null)
                     {
+                        dashboardProject.CollabOwner = gitLabProject.RemoteOwner.Name;
+                        dashboardProject.PermissionLevel = gitLabProject.RemotePermissionLevel;
+
                         // remove from the available GitLab projects
                         projects.Remove(gitLabProject);
                     }
@@ -689,7 +692,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         ProjectId = Guid.Parse(gitLabProject.Name.ToUpper().Replace("P_", "")),
                         ProjectName = gitLabProject.Description.ToString()!,
                         AppVersion = "unknown",
-                        Created = gitLabProject.CreatedAt
+                        Created = gitLabProject.CreatedAt,
+                        RemoteOwner = gitLabProject.RemoteOwner.Name,
+                        PermissionLevel = gitLabProject.RemotePermissionLevel,
                     };
                     DashboardCollabProjects.Add(dashboardCollabProject);
 
@@ -709,6 +714,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CollabButtonsEnabled = true;
             }
 
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+
+            NotifyOfPropertyChange(nameof(DashboardProjectsDisplay));
         }
 
         private void SetCollabVisibility()
