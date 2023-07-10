@@ -440,15 +440,15 @@
                     Content="{helpers:Localization Pds_AddCorpora}"
                     FontSize="16"
                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
-                <Label
+                <TextBlock
                     Name="ProjectNameWide"
                     Grid.Row="0"
                     Grid.Column="1"
                     Margin="0,0,35,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}"
-                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                    Text="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}" />
 
 
                 <!--</WrapPanel>-->

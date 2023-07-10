@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.PINS;
@@ -10,6 +11,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
@@ -24,21 +26,15 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
-using ClearApplicationFoundation.Framework.Input;
-using CefSharp.DevTools.CSS;
-using System.Windows.Controls;
-using System.Text.RegularExpressions;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Drawing;
-using ClearDashboard.Wpf.Application.Properties;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 
@@ -67,8 +63,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private readonly IMediator _mediator;
         private readonly LongRunningTaskManager _longRunningTaskManager;
 
-        private BindableCollection<PinsDataTable> GridData { get; } = new();
         private Stopwatch _watch = new Stopwatch();
+
+        private Collection<PinsDataTable> _gridData { get; } = new();
 
         #endregion //Member Variables
 
@@ -100,7 +97,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 NotifyOfPropertyChange(() => VerseRefDialogOpen);
             }
         }
-        
+
 
         private ObservableCollection<PinsVerseListViewModel> _selectedItemVerses = new();
         public ObservableCollection<PinsVerseListViewModel> SelectedItemVerses
@@ -217,7 +214,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 CheckAndRefreshGrid();
             }
         }
-        
+
 
         private string _lastSelectedPinsDataTableSource = "";
         public string LastSelectedPinsDataTableSource
@@ -274,8 +271,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private bool _backTranslationFound = false;
         public bool BackTranslationFound
         {
-            get=>_backTranslationFound;
-            
+            get => _backTranslationFound;
+
             set
             {
                 _backTranslationFound = value;
@@ -286,8 +283,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private bool _showBackTranslation = false;
         public bool ShowBackTranslation
         {
-            get=>_showBackTranslation;
-            
+            get => _showBackTranslation;
+
             set
             {
                 _showBackTranslation = value;
@@ -384,11 +381,65 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
             }), cancellationToken);
 
-            // ReSharper disable once MethodSupportsCancellation
-            _ = Task.Run(async () =>
+            try
             {
-                await GenerateData().ConfigureAwait(false);
-            }).ConfigureAwait(true);
+                _generateDataRunning = true;
+                var longRunningTask = _longRunningTaskManager.Create(_taskName, LongRunningTaskStatus.Running);
+                var cancellationToken2 = longRunningTask.CancellationTokenSource.Token;
+
+
+                var isDataGenerated = await GenerateInitialData(cancellationToken2);//.ConfigureAwait(false);
+                if (!isDataGenerated)
+                {
+                    // send to the task started event aggregator for everyone else to hear about a task error
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = _taskName,
+                            EndTime = DateTime.Now,
+                            ErrorMessage = "Paratext is not installed",
+                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
+                        }), cancellationToken);
+
+                    _logger!.LogError("Paratext Not Installed in PINS viewmodel");
+
+                    // turn off the progress bar
+                    ProgressBarVisibility = Visibility.Collapsed;
+                }
+
+                await GenerateData(cancellationToken2);//.ConfigureAwait(false);
+
+                await GenerateLexiconData(cancellationToken2);//.ConfigureAwait(false);
+
+                await ConnectDataToUi(cancellationToken2).ConfigureAwait(true);
+            }
+            catch (OperationCanceledException ex)
+            {
+                _logger!.LogInformation(
+                    "PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
+            }
+            catch (Exception ex)
+            {
+                _logger!.LogError(ex, "An unpected error occurred while generating the PINS data.");
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = _taskName,
+                            EndTime = DateTime.Now,
+                            ErrorMessage = $"{ex}",
+                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
+                        }), cancellationToken);
+                }
+            }
+            finally
+            {
+                _generateDataRunning = false;
+                _longRunningTaskManager.TaskComplete(_taskName);
+                var time = _watch.Elapsed.Seconds;
+            }
+
 #pragma warning restore CS4014
 
             _ = base.OnActivateAsync(cancellationToken);
@@ -421,14 +472,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         /// Main logic for building the data
         /// </summary>
         /// <returns></returns>
-        private async Task<bool> GenerateData()
+        private async Task<bool> GenerateInitialData(CancellationToken cancellationToken)
         {
-            _generateDataRunning = true;
-
-            var longRunningTask = _longRunningTaskManager.Create(_taskName, LongRunningTaskStatus.Running);
-            var cancellationToken = longRunningTask.CancellationTokenSource.Token;
-
-            try
+            //ReSharper disable once MethodSupportsCancellation
+            _ = await Task.Run(async () =>
             {
                 var logger = LifetimeScope.Resolve<ILogger<ParatextProxy>>();
                 ParatextProxy paratextUtils = new ParatextProxy(logger);
@@ -446,23 +493,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 }
                 else
                 {
-                    // send to the task started event aggregator for everyone else to hear about a task error
-                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                        new BackgroundTaskStatus
-                        {
-                            Name = _taskName,
-                            EndTime = DateTime.Now,
-                            ErrorMessage = "Paratext is not installed",
-                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
-                        }), cancellationToken);
-
-                    _logger!.LogError("Paratext Not Installed in PINS viewmodel");
-
-                    // turn off the progress bar
-                    ProgressBarVisibility = Visibility.Collapsed;
                     return false;
                 }
 
+                return true;
+            }).ConfigureAwait(true);
+
+
+            return true;
+        }
+
+        private async Task<bool> GenerateData(CancellationToken cancellationToken)
+        {
+            //ReSharper disable once MethodSupportsCancellation
+            _ = await Task.Run(async () =>
+            {
                 // fix the greek renderings which are inconsistent
                 for (var i = _termRenderingsList.TermRendering.Count - 1; i >= 0; i--)
                 {
@@ -474,7 +519,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     else
                     {
                         _termRenderingsList.TermRendering[i].Id =
-                            CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
+                                    CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
@@ -487,7 +532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         if (_biblicalTermsList.Term[i].Id != "")
                         {
                             _biblicalTermsList.Term[i].Id =
-                                CorrectUnicode(_biblicalTermsList.Term[i].Id);
+                                        CorrectUnicode(_biblicalTermsList.Term[i].Id);
                         }
 
                         cancellationToken.ThrowIfCancellationRequested();
@@ -501,7 +546,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         if (_allBiblicalTermsList.Term[i].Id != "")
                         {
                             _allBiblicalTermsList.Term[i].Id =
-                                CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
+                                        CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
                         }
 
                         cancellationToken.ThrowIfCancellationRequested();
@@ -524,12 +569,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
                         // place Sense in braces  
                         biblicalTermsSense = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)] + " {" +
-                                             sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
-                                             "}";
+                                                     sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
+                                                     "}";
 
                         // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
                         biblicalTermsSpelling =
-                            sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
+                                    sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
                     }
                     else if (sourceWord.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
                     {
@@ -549,7 +594,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     try
                     {
                         spellingRecords = _spellingStatus.Status?.FindAll(s => string.Equals(s.Word,
-                             biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
+                                    biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
                     }
                     catch (Exception e)
                     {
@@ -612,7 +657,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                         var xmlSource = XmlSource.BiblicalTerms;
 
-                        GridData.Add(new PinsDataTable
+                        _gridData.Add(new PinsDataTable
                         {
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
@@ -653,7 +698,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                             var xmlSource = XmlSource.AllBiblicalTerms;
 
-                            GridData.Add(new PinsDataTable
+                            _gridData.Add(new PinsDataTable
                             {
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
@@ -684,210 +729,210 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                             var xmlSource = XmlSource.TermsRenderings;
 
-                            Dispatcher.CurrentDispatcher.Invoke(() =>
+                            //Dispatcher.CurrentDispatcher.Invoke(() =>
+                            //{
+                            _gridData.Add(new PinsDataTable
                             {
-                                GridData.Add(new PinsDataTable
-                                {
-                                    Id = Guid.NewGuid(),
-                                    XmlSource = xmlSource,
-                                    XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                    XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath, "TermRenderings.xml"),
-                                    Code = "KeyTerm",
-                                    OriginID = terms.Id,
-                                    Gloss = gloss,
-                                    Lang = "",
-                                    Lform = "",
-                                    Match = "KeyTerm" + targetRendering,
-                                    Notes = noteList,
-                                    Phrase = "",
-                                    Prefix = "",
-                                    Refs = "",
-                                    SimpRefs = "0",
-                                    Source = targetRendering + biblicalTermsSpelling,
-                                    Stem = "",
-                                    Suffix = "",
-                                    Word = "",
-                                });
+                                Id = Guid.NewGuid(),
+                                XmlSource = xmlSource,
+                                XmlSourceAbbreviation = xmlSource.GetDescription(),
+                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,
+                                    "TermRenderings.xml"),
+                                Code = "KeyTerm",
+                                OriginID = terms.Id,
+                                Gloss = gloss,
+                                Lang = "",
+                                Lform = "",
+                                Match = "KeyTerm" + targetRendering,
+                                Notes = noteList,
+                                Phrase = "",
+                                Prefix = "",
+                                Refs = "",
+                                SimpRefs = "0",
+                                Source = targetRendering + biblicalTermsSpelling,
+                                Stem = "",
+                                Suffix = "",
+                                Word = "",
                             });
+                            //});
 
                         }
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
                 }
+                return true;
+            }).ConfigureAwait(true);
 
-                var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
-                ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
-                var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories)
-                    .ToList();
-                string tref, lx, lt, li;
-                var bcnt = 0;
-                var lexlang = ProjectManager.CurrentParatextProject.Name;
-                var bookfilesfiltered = bookfiles.Where(s => s.ToString().Contains("\\" + lexlang)).ToList();
 
-                foreach (var f in bookfilesfiltered) // loop through books f
+            return true;
+        }
+
+
+        private async Task<bool> GenerateLexiconData(CancellationToken cancellationToken)
+        {
+            _ = await Task.Run(async () =>
+            {
+                await GenerateLexiconDataCalculations(cancellationToken).ConfigureAwait(false);
+                return true;
+            }).ConfigureAwait(true);
+            
+            return false;
+        }
+
+        private async Task<bool> ConnectDataToUi(CancellationToken cancellationToken)
+        {
+            
+            // bind the data grid to the collection view
+            GridCollectionView = CollectionViewSource.GetDefaultView(_gridData);
+            // setup the filtering routine to determine what gets displayed
+            GridCollectionView.Filter = new Predicate<object>(FilterTerms);
+            NotifyOfPropertyChange(() => GridCollectionView);
+
+            // turn off the progress bar
+            ProgressBarVisibility = Visibility.Collapsed;
+
+            // send to the task started event aggregator for everyone else to hear about a task completion
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                new BackgroundTaskStatus
                 {
-                    projectBookFileData = File.ReadAllLines(f); // read file and check
-                    for (var k = 0; k < projectBookFileData.Count(); k++)
+                    Name = _taskName,
+                    EndTime = DateTime.Now,
+                    Description = "Loading PINS data...Complete",
+                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
+                }), cancellationToken);
+
+            return false;
+        }
+
+        private async Task<bool> GenerateLexiconDataCalculations(CancellationToken cancellationToken)
+        {
+
+            var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
+            ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
+            var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories)
+                .ToList();
+            string tref, lx, lt, li;
+            var bcnt = 0;
+            var lexlang = ProjectManager.CurrentParatextProject.Name;
+            var bookfilesfiltered = bookfiles.Where(s => s.ToString().Contains("\\" + lexlang)).ToList();
+
+            foreach (var f in bookfilesfiltered) // loop through books f
+            {
+                projectBookFileData = File.ReadAllLines(f); // read file and check
+                for (var k = 0; k < projectBookFileData.Count(); k++)
+                {
+                    if (projectBookFileData[k].Contains("<item>"))
                     {
-                        if (projectBookFileData[k].Contains("<item>"))
+                        if (projectBookFileData[++k].Contains("<string>"))
                         {
-                            if (projectBookFileData[++k].Contains("<string>"))
+                            tref = GetTagValue(projectBookFileData[k]);
+                            do
                             {
-                                tref = GetTagValue(projectBookFileData[k]);
-                                do
+                                if (projectBookFileData[++k]
+                                    .Contains(
+                                        "<Lexeme")) // build a dictionary where key = lexeme+gloss, and where value = references
                                 {
-                                    if (projectBookFileData[++k]
-                                        .Contains(
-                                            "<Lexeme")) // build a dictionary where key = lexeme+gloss, and where value = references
-                                    {
-                                        lx = lt = li = "";
-                                        Lexparse(projectBookFileData[k], ref lx, ref lt, ref li);
-                                        if (LexMatRef.ContainsKey(li +
-                                                                  lx)) // key already exists so add references to previous value
-                                            LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
-                                        else // this is a new key so create a new key, value pair
-                                            LexMatRef.Add(li + lx, tref);
-                                    }
-                                } while (!projectBookFileData[k].Contains("</item>"));
-                            }
+                                    lx = lt = li = "";
+                                    Lexparse(projectBookFileData[k], ref lx, ref lt, ref li);
+                                    if (LexMatRef.ContainsKey(li +
+                                                              lx)) // key already exists so add references to previous value
+                                        LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
+                                    else // this is a new key so create a new key, value pair
+                                        LexMatRef.Add(li + lx, tref);
+                                }
+                            } while (!projectBookFileData[k].Contains("</item>"));
                         }
                     }
                 }
+            }
 
-                if (_lexicon.Entries != null)
+            if (_lexicon.Entries != null)
+            {
+                // populate the data grid
+                foreach (var entry in _lexicon.Entries.Item)
                 {
-                    // populate the data grid
-                    foreach (var entry in _lexicon.Entries.Item)
+                    foreach (var senseEntry in entry.Entry.Sense)
                     {
-                        foreach (var senseEntry in entry.Entry.Sense)
+                        string vl = string.Empty;
+                        var pndx = 0;
+                        var simrefs = "";
+                        var simprefsString = "0";
+                        List<string> verseList = new List<string>();
+
+                        try
                         {
-                            string vl = string.Empty;
-                            var pndx = 0;
-                            var simrefs = "";
-                            var simprefsString = "0";
-                            List<string> verseList = new List<string>();
-
-                            try
+                            if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
                             {
-                                if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
+                                var rs = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
+                                SortRefs(ref rs); // sort the List  
+                                vl = string.Join(", ", rs); // change List back to comma delimited string
+
+                                if (!vl.Contains("missing"))
                                 {
-                                    var rs = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
-                                    SortRefs(ref rs); // sort the List  
-                                    vl = string.Join(", ", rs); // change List back to comma delimited string
-
-                                    if (!vl.Contains("missing"))
+                                    if (vl != "")
                                     {
-                                        if (vl != "")
-                                        {
-                                            //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
-                                            var longrefs = vl.Split(',').ToList();
-                                            var simprefs = new List<string>();
+                                        //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
+                                        var longrefs = vl.Split(',').ToList();
+                                        var simprefs = new List<string>();
 
-                                            foreach (var longref in longrefs)
-                                            {
-                                                var booksplit = longref.Trim().Split(' ').ToList();
-                                                var bookNum =
-                                                    BookChapterVerseViewModel.GetBookNumFromBookName(booksplit[0]);
-                                                var chapterVerseSplit = booksplit[1].Split(':').ToList();
-                                                var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
-                                                var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
-                                                simprefs.Add(bookNum + chapterNum + verseNum);
-                                            }
-
-                                            verseList.AddRange(simprefs);
-                                            simprefsString = verseList.Count.ToString();
-                                        }
-                                        else
+                                        foreach (var longref in longrefs)
                                         {
-                                            simprefsString = "0";
-                                            verseList = null;
+                                            var booksplit = longref.Trim().Split(' ').ToList();
+                                            var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(booksplit[0]);
+                                            var chapterVerseSplit = booksplit[1].Split(':').ToList();
+                                            var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
+                                            var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
+                                            simprefs.Add(bookNum + chapterNum + verseNum);
                                         }
+
+                                        verseList.AddRange(simprefs);
+                                        simprefsString = verseList.Count.ToString();
+                                    }
+                                    else
+                                    {
+                                        simprefsString = "0";
+                                        verseList = null;
                                     }
                                 }
                             }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
-                            }
-
-                            var xmlSource = XmlSource.Lexicon;
-
-                            GridData.Add(new PinsDataTable
-                            {
-                                Id = Guid.NewGuid(),
-                                XmlSource = xmlSource,
-                                XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
-                                Code = senseEntry.Id,
-                                Gloss = senseEntry.Gloss.Text,
-                                Lang = senseEntry.Gloss.Language,
-                                Lform = entry.Lexeme.Type,
-                                Match = senseEntry.Id + entry.Lexeme.Form,
-                                Notes = "",
-                                LexemeType = entry.Lexeme.Type,
-                                //Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
-                                //Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
-                                Refs = vl,
-                                SimpRefs = simprefsString,
-                                Source = entry.Lexeme.Form,
-                                //Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
-                                //Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
-                                VerseList = verseList,
-                                //Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
-                            });
-                            cancellationToken.ThrowIfCancellationRequested();
                         }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
+                        }
+
+                        var xmlSource = XmlSource.Lexicon;
+
+                        _gridData.Add(new PinsDataTable
+                        {
+                            Id = Guid.NewGuid(),
+                            XmlSource = xmlSource,
+                            XmlSourceAbbreviation = xmlSource.GetDescription(),
+                            XmlPath = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
+                            Code = senseEntry.Id,
+                            Gloss = senseEntry.Gloss.Text,
+                            Lang = senseEntry.Gloss.Language,
+                            Lform = entry.Lexeme.Type,
+                            Match = senseEntry.Id + entry.Lexeme.Form,
+                            Notes = "",
+                            LexemeType = entry.Lexeme.Type,
+                            //Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
+                            //Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
+                            Refs = vl,
+                            SimpRefs = simprefsString,
+                            Source = entry.Lexeme.Form,
+                            //Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
+                            //Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
+                            VerseList = verseList,
+                            //Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
+                        });
+                        cancellationToken.ThrowIfCancellationRequested();
                     }
                 }
-
-                // bind the data grid to the collection view
-                GridCollectionView = CollectionViewSource.GetDefaultView(GridData);
-                // setup the filtering routine to determine what gets displayed
-                GridCollectionView.Filter = new Predicate<object>(FilterTerms);
-                NotifyOfPropertyChange(() => GridCollectionView);
-
-                // turn off the progress bar
-                ProgressBarVisibility = Visibility.Collapsed;
-
-                // send to the task started event aggregator for everyone else to hear about a task completion
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    new BackgroundTaskStatus
-                    {
-                        Name = _taskName,
-                        EndTime = DateTime.Now,
-                        Description = "Loading PINS data...Complete",
-                        TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-                    }), cancellationToken);
             }
-            catch (OperationCanceledException ex)
-            {
-                _logger!.LogInformation("PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
-            }
-            catch (Exception ex)
-            {
-                _logger!.LogError(ex, "An unpected error occurred while generating the PINS data.");
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                        new BackgroundTaskStatus
-                        {
-                            Name = _taskName,
-                            EndTime = DateTime.Now,
-                            ErrorMessage = $"{ex}",
-                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
-                        }), cancellationToken);
-                }
-            }
-            finally
-            {
-                _generateDataRunning = false;
 
-                _longRunningTaskManager.TaskComplete(_taskName);
-
-                var time = _watch.Elapsed.Seconds;
-            }
-            return false;
+            return true;
         }
 
         private string GetTagValue(string t)
@@ -1078,7 +1123,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private void CheckAndRefreshGrid()
         {
-            if (GridData != null && GridCollectionView is not null)
+            if (_gridData != null && GridCollectionView is not null)
             {
                 GridCollectionView.Refresh();
             }
@@ -1202,7 +1247,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 if (backTranslationResult.Success)
                 {
                     backTranslation = backTranslationResult.Data.Name;
-                    
+
                     if (ShowBackTranslation)
                         showBackTranslation = true;
                     //showBackTranslation = true;
