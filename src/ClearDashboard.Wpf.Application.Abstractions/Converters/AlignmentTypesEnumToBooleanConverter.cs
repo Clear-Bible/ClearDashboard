@@ -15,15 +15,15 @@ namespace ClearDashboard.Wpf.Application.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            AlignmentTypes mask = (AlignmentTypes)parameter;
-            this._target = (AlignmentTypes)value;
-            return ((mask & this._target) != 0);
+            var mask = (AlignmentTypes)parameter;
+            _target = (AlignmentTypes)value;
+            return ((mask & _target) != 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            this._target ^= (AlignmentTypes)parameter;
-            return this._target;
+            _target ^= (AlignmentTypes)parameter;
+            return _target;
         }
     }
 }

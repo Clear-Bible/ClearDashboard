@@ -7,6 +7,7 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
@@ -69,5 +70,10 @@ public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
             targetTokenDisplayViewModel.IsHighlighted = true;
         }
 
+    }
+
+    protected override async Task<NoteIdCollection> GetNoteIdsForToken(TokenId tokenId)
+    {
+        return await Task.FromResult(new NoteIdCollection());
     }
 }

@@ -32,6 +32,7 @@ using Token = ClearBible.Engine.Corpora.Token;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using SIL.Machine.Corpora;
+using ClearDashboard.Wpf.Application.Converters;
 
 // ReSharper disable InconsistentNaming
 
@@ -159,7 +160,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
             INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
-            IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+            IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService, EditMode editMode = EditMode.MainViewOnly) : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService, editMode)
         {
             WindowManager = windowManager;
         }

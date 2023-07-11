@@ -252,11 +252,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     PaddingAfter = paddingAfter,
                     Translation = GetTranslationForToken(token, compositeToken),
                     AlignedToken = GetAlignedToken(token, compositeToken),
-                    NoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
+                    NoteIds = await GetNoteIdsForToken(token.TokenId),
                     IsSource = isSource,
                 });
             }
             return result;
+        }
+
+        protected virtual async Task<NoteIdCollection> GetNoteIdsForToken(TokenId tokenId)
+        {
+            return await NoteManager.GetNoteIdsAsync(tokenId);
         }
 
         public void MatchingTokenAction(IEnumerable<IId> entityIds, Action<TokenDisplayViewModel> action)

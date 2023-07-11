@@ -13,6 +13,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:userControls1="clr-namespace:ClearDashboard.Wpf.Application.UserControls;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters;assembly=ClearDashboard.Wpf.Application.Abstractions"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=enhancedView:AlignmentEnhancedViewItemViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -20,6 +21,7 @@
         <ResourceDictionary>
             <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
             <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
+            <converters1:EditModeToVisibilityConverter x:Key="EditModeToVisibilityConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -36,7 +38,8 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.IsDeferredScrollingEnabled="True"
                 VirtualizingStackPanel.IsVirtualizing="True"
-                VirtualizingStackPanel.VirtualizationMode="Recycling">
+                VirtualizingStackPanel.VirtualizationMode="Recycling"
+                Visibility="{Binding EditMode, Converter={StaticResource EditModeToVisibilityConverter}, ConverterParameter={x:Static converters1:EditMode.MainViewOnly}}">
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseDown">
                         <cm:ActionMessage MethodName="SetFocus" />
@@ -138,7 +141,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <userControls:AlignmentBulkReview x:Name="AlignmentBulkReview" Visibility="{Binding EnableEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" DataContext="{Binding .}"/>
+            <userControls:AlignmentBulkReview x:Name="AlignmentBulkReview" Visibility="{Binding EditMode, Converter={StaticResource EditModeToVisibilityConverter}, ConverterParameter={x:Static converters1:EditMode.EditorViewOnly}}" DataContext="{Binding .}"/>
                                
         </StackPanel>
 

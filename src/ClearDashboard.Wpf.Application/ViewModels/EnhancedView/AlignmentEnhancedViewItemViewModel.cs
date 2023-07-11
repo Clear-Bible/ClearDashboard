@@ -23,6 +23,7 @@ using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Token = ClearBible.Engine.Corpora.Token;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.Wpf.Application.UserControls;
+using ClearDashboard.Wpf.Application.Converters;
 
 
 // ReSharper disable UnusedMember.Global
@@ -49,10 +50,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 }
     public class AlignmentEnhancedViewItemViewModel : VerseAwareEnhancedViewItemViewModel, IHandle<UiLanguageChangedMessage>
     {
-        public AlignmentEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager, INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService)
-            : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService)
+        public AlignmentEnhancedViewItemViewModel(DashboardProjectManager? projectManager, 
+                                                  IEnhancedViewManager enhancedViewManager, 
+                                                  INavigationService? navigationService, 
+                                                  ILogger<VerseAwareEnhancedViewItemViewModel>? logger, 
+                                                  IEventAggregator? eventAggregator, 
+                                                  IMediator? mediator, 
+                                                  ILifetimeScope? lifetimeScope, 
+                                                  IWindowManager windowManager, 
+                                                  ILocalizationService localizationService, 
+                                                  EditMode editMode = EditMode.MainViewOnly)
+            : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService, editMode)
         {
-            ShowEditButton = true;
+            ShowEditButton = EditMode == EditMode.ManualToggle;
             EnableEditMode = false;
             EditModeButtonLabel = LocalizationService.Get("BulkAlignmentReview_BulkAlignmentReview");
             _sourceToTarget = true;

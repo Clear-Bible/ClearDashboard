@@ -11,9 +11,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.Wpf.Application.Converters;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+
+
 
 public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 {
@@ -94,6 +97,7 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
     private readonly ILocalizationService _localizationService;
     private readonly IEnhancedViewManager _enhancedViewManager;
     private string _editModeButtonLabel1;
+    private EditMode _editMode;
 
 
     public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
@@ -112,12 +116,19 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
         return Task.CompletedTask;
     }
 
+    public EditMode EditMode
+    {
+        get => _editMode;
+        set => Set(ref _editMode, value);
+    }
+
     protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
         INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
-        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService, EditMode editMode = EditMode.MainViewOnly) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
         _localizationService = localizationService;
         _enhancedViewManager = enhancedViewManager;
+        EditMode = editMode;
 
     }       
 
