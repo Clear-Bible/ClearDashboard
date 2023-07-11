@@ -19,6 +19,12 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:AlignmentTypesEnumToBooleanConverter x:Key="AlignmentTypesEnumToBooleanConverter"/>
+
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" />
+          
+        </Style>
     </UserControl.Resources>
 
     <Grid  VerticalAlignment="Top">
@@ -32,32 +38,40 @@
             <ColumnDefinition Width=".20*" ></ColumnDefinition>
             <ColumnDefinition Width="*" ></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <materialDesign:Card Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Height="40" Margin="5">
+        <materialDesign:Card Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Height="110" Margin="5">
             <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <!--<ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>-->
                 </Grid.ColumnDefinitions>
-                <ListBox Grid.Column="0" 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListBox Grid.Row="0" Grid.Column="0" 
                          Style="{StaticResource MaterialDesignToolToggleListBox}" 
                          Margin="4"  SelectedIndex="0" SelectionMode="Single" 
+                         Height="28"
                          cm:Message.Attach="[Event SelectionChanged] = [Action OnCountByTextTypeChanged($eventArgs)]"
                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_CountByTrainingText}" Tag="{x:Static a:BulkAlignmentReviewTags.CountsByTrainingText}"></ListBoxItem>
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_CountBySurfaceText}" Tag="{x:Static a:BulkAlignmentReviewTags.CountBySurfaceText}"></ListBoxItem>
                 </ListBox>
-                <ListBox Grid.Column="1" 
+                <ListBox Grid.Row="1" Grid.Column="0" 
                          Style="{StaticResource MaterialDesignToolToggleListBox}" 
                          Margin="4"  SelectedIndex="0" SelectionMode="Single" 
+                         Height="28"
                          cm:Message.Attach="[Event SelectionChanged] = [Action OnPivotWordSourceChanged($eventArgs)]"
                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Source}" Tag="{x:Static a:BulkAlignmentReviewTags.Source}"></ListBoxItem>
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Target}" Tag="{x:Static a:BulkAlignmentReviewTags.Target}"></ListBoxItem>
                 </ListBox>
-                <ListBox Grid.Column="2"  x:Name="AlignedWordsOptionListBox"
+                <ListBox Grid.Row="2" Grid.Column="0"  x:Name="AlignedWordsOptionListBox"
                                                        Margin="4" Style="{StaticResource MaterialDesignToolToggleListBox}"
                                                        SelectionMode="Extended"
+                                                       Height="28"
                                                        cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignedWordOptionsChanged($eventArgs)]"
                                                        IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Machine}" 
@@ -88,11 +102,12 @@
             </Grid>
         </materialDesign:Card>
 
-        <materialDesign:Card Grid.Row="0" Grid.Column="3" Height="40" Margin="5">
-            <Grid>
+        <materialDesign:Card Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Height="110" Margin="5">
+            <Grid VerticalAlignment="Top">
                 <ListBox 
                             Style="{StaticResource MaterialDesignToolToggleListBox}"
                             Margin="4"
+                            Height="28"
                             IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
                             cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignmentApprovalChanged($eventArgs)]">
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_ApproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.ApproveSelected}"></ListBoxItem>
@@ -104,7 +119,7 @@
         <materialDesign:Card Grid.Row="1" Grid.Column="0" Height="300" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" ></RowDefinition>
+                    <RowDefinition Height="28" ></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
@@ -112,8 +127,8 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="{Binding PivotWordsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasPivotWords, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
-                    <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_PivotedWords}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
+                    <Label Grid.Row="0" Content="{Binding PivotWordsCountMessage}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasPivotWords, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
+                    <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_PivotedWords}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
                 </Grid>
                 <DataGrid Grid.Row="1" Name="PivotedWordsDataGrid"
                           ItemsSource="{Binding PivotWords}"
@@ -139,16 +154,16 @@
         <materialDesign:Card Grid.Row="1" Grid.Column="1" Height="300" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" ></RowDefinition>
+                    <RowDefinition Height="28" ></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="14"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="{Binding AlignedWordsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasAlignedWords, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
-                    <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_AlignedWords}" FontSize="10" Margin="0, 2, 4 ,0" Padding="0" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Right" ></Label>
+                    <Label Grid.Row="0" Content="{Binding AlignedWordsCountMessage}"  HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasAlignedWords, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
+                    <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_AlignedWords}" Margin="0, 2, 4 ,0" Padding="0"  HorizontalAlignment="Right" ></Label>
                 </Grid>
                 <DataGrid Grid.Row="1" Name="SourceTargetCountDataGrid" 
                           ItemsSource="{Binding AlignedWords}" 
@@ -177,6 +192,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" ></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
@@ -188,13 +204,13 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0" Content="{Binding BulkAlignmentsCountMessage}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
+                    <Label Grid.Row="0" Grid.Column="0" Content="{Binding BulkAlignmentsCountMessage}"  HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
                     <userControls:BookSelector Grid.Row="0" Grid.Column="1" Books="{Binding RelevantBooks}" CurrentBook="{Binding CurrentBook}" cm:Message.Attach="[Event SelectionChanged] = [Action OnBookChanged($eventArgs)];" HorizontalAlignment="Left" ></userControls:BookSelector>
-                    <Label Grid.Row="0" Grid.Column="2" Content="{helpers:Localization BulkAlignmentReview_Alignments}" FontSize="10" Foreground="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
+                    <Label Grid.Row="0" Grid.Column="2" Content="{helpers:Localization BulkAlignmentReview_Alignments}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
                 </Grid>
                 <DataGrid Grid.Row="1" Grid.Column="0" 
                           Name="ApprovalDataGrid" 
-                          ItemsSource="{Binding BulkAlignments}" 
+                          ItemsSource="{Binding PagedBulkAlignments}" 
                           AutoGenerateColumns="False" 
                           HorizontalAlignment="Stretch"
                           Margin="4"
@@ -254,6 +270,16 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" >
+                    <Button Content="Previous"   cm:Message.Attach="[Event Click] = [Action OnPreviousPageClicked()]" Margin="2"/>
+                    <Label  Margin="2,2,0,2" Content="{Binding PagedBulkAlignments.CurrentPage}" ContentStringFormat="Current Page: {0}">
+                        
+                    </Label>
+                    <Label Margin="-2,2,2,2" Content="{Binding PagedBulkAlignments.PageCount}" ContentStringFormat="of {0}">
+                       
+                    </Label>
+                    <Button Content="Next" cm:Message.Attach="[Event Click] = [Action OnNextPageClicked()]" Margin="2" />
+                </StackPanel>
             </Grid>
         </materialDesign:Card>
     </Grid>
