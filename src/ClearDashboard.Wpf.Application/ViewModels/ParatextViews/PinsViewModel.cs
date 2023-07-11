@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
+using QuickGraph.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -865,50 +866,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             {
                                 var verseReferences = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
                                 
-                                //SortRefs(ref rs); // sort the List  
-                                List<CoupleOfStrings> bothReferences = new();
-                                foreach (var verseReference in verseReferences)
-                                {
-                                    var tmp = verseReference.Trim();
-                                    if (tmp.Length >= 3 && !verseReference.Contains("missing") && verseReference != "")
-                                    {
-                                        var book = tmp.Substring(0, 3);//the issue is we are assuming the string is a certian length etc.  do more checking
-                                        var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
-                                        if (bookNum.Length > 0)
-                                        {
-                                            if (tmp.Length >= 4)
-                                            {
-                                                tmp = tmp.Substring(3).Trim();
-                                                var parts = tmp.Split(':');
-                                                if (parts.Length > 1)
-                                                {
-                                                    string chapter = parts[0].Trim();
-                                                    string verse = parts[1].Trim();
-                                                    if (verse.IndexOf("-") > 0)
-                                                    {
-                                                        verse = verse.Substring(0, verse.IndexOf("-"));
-                                                    }
-
-                                                    if (verse.IndexOf(".") > 0)
-                                                    {
-                                                        verse = verse.Substring(0, verse.IndexOf("."));
-                                                    }
-
-                                                    var numRef = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}";
-
-                                                    bothReferences.Add(new CoupleOfStrings
-                                                    {
-                                                        stringA = numRef,
-                                                        stringB = verseReference
-                                                    });
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                var orderedList = bothReferences.OrderBy(x => x.stringA).ToList();
-                                orderedList = orderedList.DistinctBy(x => x.stringA).ToList();
-
+                                var orderedList = SortRefs(verseReferences); // sort the List  
+                                
                                 verseReferences.Clear();
                                 foreach (var orderedReference in orderedList)
                                 {
@@ -987,13 +946,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         // sort the references in the list to their Biblical order
-        private void SortRefs(ref List<string> refs)
+        private List<CoupleOfStrings> SortRefs(List<string> verseReferences)
         {
-            List<CoupleOfStrings> references = new();
-            foreach (var r in refs)
+            List<CoupleOfStrings> bothReferences = new();
+            foreach (var verseReference in verseReferences)
             {
-                var tmp = r.Trim();
-                if (tmp.Length >= 3)
+                var tmp = verseReference.Trim();
+                if (tmp.Length >= 3 && !verseReference.Contains("missing") && verseReference != "")
                 {
                     var book = tmp.Substring(0, 3);//the issue is we are assuming the string is a certian length etc.  do more checking
                     var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
@@ -1017,25 +976,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     verse = verse.Substring(0, verse.IndexOf("."));
                                 }
 
-                                references.Add(new CoupleOfStrings
+                                var numRef = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}";
+
+                                bothReferences.Add(new CoupleOfStrings
                                 {
-                                    stringA = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}",
-                                    stringB = r
+                                    stringA = numRef,
+                                    stringB = verseReference
                                 });
                             }
                         }
                     }
                 }
             }
-
-            var orderedList = references.OrderBy(x => x.stringA).ToList();
+            var orderedList = bothReferences.OrderBy(x => x.stringA).ToList();
             orderedList = orderedList.DistinctBy(x => x.stringA).ToList();
 
-            refs.Clear();
-            foreach (var reference in orderedList)
-            {
-                refs.Add(reference.stringB);
-            }
+            return orderedList;
         }
 
         private async Task<bool> GetLexicon()
