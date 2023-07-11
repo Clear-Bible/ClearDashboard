@@ -32,6 +32,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #region Static Dependency Properties
 
         /// <summary>
+        /// Identifies the CountVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CountVisibilityProperty = DependencyProperty.Register(nameof(CountVisibility), typeof(Visibility), typeof(LexiconTranslationDisplay),
+            new PropertyMetadata(Visibility.Visible));
+
+        /// <summary>
         /// Identifies the DeleteVisibility dependency property.
         /// </summary>
         public static readonly DependencyProperty DeleteVisibilityProperty = DependencyProperty.Register(nameof(DeleteVisibility), typeof(Visibility), typeof(LexiconTranslationDisplay),
@@ -101,6 +107,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         #endregion Private Event Handlers
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the visibility of the count text.
+        /// </summary>
+        public Visibility CountVisibility
+        {
+            get => (Visibility)GetValue(CountVisibilityProperty);
+            set => SetValue(CountVisibilityProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets the visibility of the delete button.

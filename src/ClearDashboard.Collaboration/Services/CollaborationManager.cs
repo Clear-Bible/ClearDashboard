@@ -43,7 +43,7 @@ public class CollaborationManager
 
     #region Public Properties
 
-    public const string BranchName = "main";
+    public const string BranchName = "master";
     public const string RemoteOrigin = "origin";
     public string RepositoryPath => _repositoryPath;
 
@@ -375,7 +375,14 @@ public class CollaborationManager
             foreach (Remote remote in repo.Network.Remotes)
             {
                 IEnumerable<string> refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
-                Commands.Fetch(repo, remote.Name, refSpecs, options, logMessage);
+                try
+                {
+                    Commands.Fetch(repo, remote.Name, refSpecs, options, logMessage);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.Message, e);
+                }
             }
 
             var signature = new LibGit2Sharp.Signature(
@@ -561,10 +568,10 @@ public class CollaborationManager
 
         using (var repo = new Repository(_repositoryPath))
         {
-            Branch originMain = repo.Branches["origin/main"];
-            if (originMain is not null)
+            Branch originMaster = repo.Branches["origin/master"];
+            if (originMaster is not null)
             {
-                repo.Reset(ResetMode.Hard, originMain.Tip);
+                repo.Reset(ResetMode.Hard, originMaster.Tip);
             }
         }
     }
@@ -650,7 +657,7 @@ public class CollaborationManager
             options.CredentialsProvider = (_url, _user, _cred) =>
                 new UsernamePasswordCredentials
                 { Username = _configuration.RemoteUserName, Password = _configuration.RemotePersonalAccessToken };
-            repo.Network.Push(remote, @"refs/heads/main", options);
+            repo.Network.Push(remote, @"refs/heads/master", options);
         }
 
     }

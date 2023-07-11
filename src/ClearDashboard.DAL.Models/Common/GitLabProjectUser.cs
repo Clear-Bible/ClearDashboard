@@ -30,6 +30,12 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
         public PermissionLevel GetPermissionLevel
         {
             get {
+                if (IsOwner)
+                {
+                    return PermissionLevel.Owner;
+                }
+
+
                 switch (AccessLevel)
                 {
                     case 30:

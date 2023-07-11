@@ -4,6 +4,7 @@ using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
@@ -24,17 +25,28 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
         protected override async Task<RequestResult<IEnumerable<Label>>> GetDataAsync(GetLabelsByPartialTextQuery request, CancellationToken cancellationToken)
         {
-            var labels = ProjectDbContext.Labels
-                .Where(l => l.Text != null && l.Text.StartsWith(request.PartialText))
+            var labelsQueryable = ProjectDbContext.Labels
+                .Where(l => l.Text != null);
+
+            if (request.PartialText is not null)
+            {
+                labelsQueryable = labelsQueryable.Where(l => l.Text!.StartsWith(request.PartialText));
+            }
+
+            if (request.LabelGroupId is not null)
+            {
+                labelsQueryable = labelsQueryable.Where(l => l.LabelGroups.Any(lg => lg.Id == request.LabelGroupId.Id));
+            }
+
+            var labels = await labelsQueryable
                 .Select(l => new Label(
                     new LabelId(l.Id),
-                    l.Text!
-                    ));
+                    l.Text ?? string.Empty,
+                    l.TemplateText
+                ))
+                .ToListAsync(cancellationToken: cancellationToken);
 
-            // need an await to get the compiler to be 'quiet'
-            await Task.CompletedTask;
-
-            return new RequestResult<IEnumerable<Label>>(labels.ToList());
+            return new RequestResult<IEnumerable<Label>>(labels);
         }
     }
 }

@@ -31,6 +31,9 @@ namespace ClearDashboard.Wpf.Application.Services
         private ILogger<TranslationManager> Logger { get; }
         private IMediator Mediator { get; }
 
+        public string? SourceLanguage => TranslationSet?.ParallelCorpusId.SourceTokenizedCorpusId?.CorpusId?.Language;
+        public string? TargetLanguage => TranslationSet?.ParallelCorpusId.TargetTokenizedCorpusId?.CorpusId?.Language;
+
         private async Task GetTranslationSetAsync()
         {
             try

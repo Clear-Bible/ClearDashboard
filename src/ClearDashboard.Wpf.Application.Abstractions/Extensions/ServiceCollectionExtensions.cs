@@ -9,7 +9,7 @@ using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-
+using System.Net.Http;
 
 
 namespace ClearDashboard.Wpf.Application.Extensions
@@ -42,6 +42,23 @@ namespace ClearDashboard.Wpf.Application.Extensions
             });
 
 
+
+            serviceCollection.AddSingleton<CollaborationHttpClientServices>();
+
+            var bearerTokenEncrypted = Settings.Default.BearerTokenEncrypted;
+            value = Encryption.Decrypt(bearerTokenEncrypted);
+            // add in a service for the MySQL Collaboration API
+            serviceCollection.AddHttpClient<CollaborationClient>("CollaborationClient", client =>
+
+            {
+                // Other settings
+                client.BaseAddress = new Uri(Settings.Default.CollaborationRootUrl); //"https://collaborationapi.cleardashboard.org"
+                client.DefaultRequestHeaders.Add("Accept", "*/*");
+                client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + value);
+            });
+
+
             serviceCollection.AddScoped<ParatextProxy>();
             
             // QUESTION:  Can we run the HostedService as a scoped service?
@@ -50,6 +67,24 @@ namespace ClearDashboard.Wpf.Application.Extensions
             //serviceCollection.AddHostedService<ClearEngineBackgroundService>();
             serviceCollection.AddScoped<ClearEngineBackgroundService>();
             serviceCollection.AddScoped<IClearEngineProcessingService, ClearEngineProcessingService>();
+        }
+
+        public static CollaborationHttpClientServices GetSqlHttpClientServices()
+        {
+            var bearerTokenEncrypted = Settings.Default.BearerTokenEncrypted;
+            var value = Encryption.Decrypt(bearerTokenEncrypted);
+
+            var client = new HttpClient();
+
+            client.BaseAddress = new Uri(Settings.Default.CollaborationRootUrl); //"https://mysqlapi.cleardashboard.org"
+            client.DefaultRequestHeaders.Add("Accept", "*/*");
+            client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + value);
+
+            var mySqlClient = new CollaborationClient(client);
+            var mySqlHttpClientServices = new CollaborationHttpClientServices(mySqlClient);
+
+            return mySqlHttpClientServices;
         }
     }
 } 

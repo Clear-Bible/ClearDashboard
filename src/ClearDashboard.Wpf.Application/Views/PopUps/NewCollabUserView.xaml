@@ -5,8 +5,7 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -14,12 +13,13 @@
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
-    Title="NewCollabUserView"
+    xmlns:validatorsAbstracted="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    Title="{helpers:Localization NewCollabUserView_CreateACollabUser}"
     Width="800"
     Height="650"
     d:DataContext="{d:DesignInstance Type=popUps:NewCollabUserViewModel,
                                      IsDesignTimeCreatable=True}"
-    helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -52,9 +52,8 @@
                 Margin="10,0,0,0"
                 FontSize="30"
                 Style="{StaticResource MaterialDesignHeadline1TextBlock}"
-                TextAlignment="Center">
-                Create a Collaboration User
-            </TextBlock>
+                Text="{helpers:Localization NewCollabUserView_CreateACollabUser}"
+                TextAlignment="Center" />
         </StackPanel>
 
         <GroupBox
@@ -62,7 +61,7 @@
             Grid.Column="0"
             Margin="16"
             materialDesign:ColorZoneAssist.Mode="PrimaryMid"
-            Header="New Collaboration User"
+            Header="{helpers:Localization NewCollabUserView_NewCollabUser}"
             Style="{DynamicResource MaterialDesignGroupBox}">
 
             <StackPanel Orientation="Vertical">
@@ -71,7 +70,7 @@
                     Margin="15"
                     VerticalAlignment="Top"
                     cm:Message.Attach="GroupSelected"
-                    materialDesign:HintAssist.Hint="Select Organization"
+                    materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_SelectOrganization}"
                     FontSize="16"
                     IsEnabled="True"
                     ItemsSource="{Binding Groups}"
@@ -93,7 +92,7 @@
                     x:Name="FirstName"
                     Margin="10,5,10,5"
                     materialDesign:HintAssist.Foreground="Green"
-                    materialDesign:HintAssist.Hint="First Name"
+                    materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_FirstName}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
@@ -103,7 +102,7 @@
                     x:Name="LastName"
                     Margin="10,5,10,5"
                     materialDesign:HintAssist.Foreground="Green"
-                    materialDesign:HintAssist.Hint="Last Name"
+                    materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_LastName}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
@@ -112,13 +111,13 @@
                     x:Name="Email"
                     Margin="10,5,10,5"
                     materialDesign:HintAssist.Foreground="Green"
-                    materialDesign:HintAssist.Hint="Email Address"
+                    materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_EmailAddress}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                     <TextBox.Text>
                         <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <validators:EmailValidator />
+                                <validatorsAbstracted:EmailValidator />
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
@@ -133,10 +132,9 @@
                         x:Name="CheckUser"
                         Grid.Column="0"
                         Margin="5"
+                        Content="{helpers:Localization NewCollabUserView_CheckUserAvailability}"
                         IsEnabled="{Binding ShowCheckUserButtonEnabled}"
-                        Style="{StaticResource TransparentStyle}">
-                        Check User Availability
-                    </Button>
+                        Style="{StaticResource TransparentStyle}" />
                     <materialDesign:PackIcon
                         Grid.Column="1"
                         Width="48"
@@ -167,11 +165,11 @@
             Grid.Column="0"
             Margin="16"
             materialDesign:ColorZoneAssist.Mode="PrimaryMid"
-            Header="Validate Email Code"
+            Header="{helpers:Localization NewCollabUserView_ValidateEmailCode}"
             IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
             Style="{DynamicResource MaterialDesignGroupBox}">
             <StackPanel Orientation="Vertical">
-                <Label Content="Check your email and enter in the validation code:" />
+                <Label Content="{helpers:Localization NewCollabUserView_CheckEmail}" />
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <TextBox
                         x:Name="EmailCode"
@@ -182,10 +180,9 @@
                         x:Name="ValidateEmailCode"
                         Height="45"
                         Margin="10,0,0,0"
+                        Content="{helpers:Localization NewCollabUserView_ValidateEmailCode}"
                         IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
-                        Style="{StaticResource TransparentStyle}">
-                        Validate Email Code
-                    </Button>
+                        Style="{StaticResource TransparentStyle}" />
                     <iconPacks:PackIconMaterial
                         Width="40"
                         Height="40"
@@ -214,10 +211,9 @@
             Grid.Row="3"
             Grid.Column="0"
             Margin="5"
+            Content="{helpers:Localization NewCollabUserView_CreateCollabUser}"
             IsEnabled="{Binding ShowGenerateUserButtonEnabled}"
-            Style="{StaticResource TransparentStyle}">
-            Create Collaboration User
-        </Button>
+            Style="{StaticResource TransparentStyle}" />
 
         <TextBlock
             x:Name="ErrorMessage"
@@ -228,19 +224,24 @@
             Foreground="Red" />
         <StackPanel Grid.Row="2" Grid.Column="1">
             <TextBlock Margin="5,15,0,0">
-                <Run FontWeight="Bold" Text="Username: " />
+                <Run FontWeight="Bold" Text="{helpers:Localization NewCollabUserView_Username}" />
+                <Run FontWeight="Bold" Text=": " />
                 <Run Text="{Binding CollaborationConfig.RemoteUserName}" />
                 <LineBreak />
-                <Run FontWeight="Bold" Text="Group: " />
+                <Run FontWeight="Bold" Text="{helpers:Localization NewCollabUserView_Group}" />
+                <Run FontWeight="Bold" Text=": " />
                 <Run Text="{Binding CollaborationConfig.Group}" />
                 <LineBreak />
-                <Run FontWeight="Bold" Text="Email: " />
+                <Run FontWeight="Bold" Text="{helpers:Localization NewCollabUserView_Email}" />
+                <Run FontWeight="Bold" Text=": " />
                 <Run Text="{Binding CollaborationConfig.RemoteEmail}" />
                 <LineBreak />
-                <Run FontWeight="Bold" Text="Password: " />
+                <Run FontWeight="Bold" Text="{helpers:Localization NewCollabUserView_Password}" />
+                <Run FontWeight="Bold" Text=": " />
                 <Run Text="{Binding CollaborationConfig.RemotePersonalPassword}" />
                 <LineBreak />
-                <Run FontWeight="Bold" Text="Access Token: " />
+                <Run FontWeight="Bold" Text="{helpers:Localization NewCollabUserView_AccessToken}" />
+                <Run FontWeight="Bold" Text=": " />
                 <Run Text="{Binding CollaborationConfig.RemotePersonalAccessToken}" />
             </TextBlock>
             <TextBlock
@@ -256,9 +257,8 @@
             Grid.Row="3"
             Grid.Column="1"
             Margin="5"
-            Style="{StaticResource TransparentStyle}">
-            Close
-        </Button>
+            Content="{helpers:Localization Close}"
+            Style="{StaticResource TransparentStyle}" />
 
     </Grid>
 </Window>

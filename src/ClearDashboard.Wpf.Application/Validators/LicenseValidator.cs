@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {
-    public class LicenseUserValidator : AbstractValidator<User>
+    public class LicenseUserValidator : AbstractValidator<DashboardUser>
     {
         private ILogger _logger;
         private ILocalizationService _localizationService;

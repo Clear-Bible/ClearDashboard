@@ -102,7 +102,7 @@ public class GitHelper
             var options = new PushOptions();
             options.CredentialsProvider = (_url, _user, _cred) =>
                 new UsernamePasswordCredentials { Username = "morleycb", Password = "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" };
-            repo.Network.Push(remote, @"refs/heads/main", options);
+            repo.Network.Push(remote, @"refs/heads/master", options);
         }
     }
 

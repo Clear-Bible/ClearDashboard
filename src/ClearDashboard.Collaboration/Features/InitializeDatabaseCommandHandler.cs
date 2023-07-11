@@ -50,7 +50,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
             var projectModelSnapshot = factory.LoadProject(request.CommitSha, request.ProjectId);
             var userModelSnapshots = factory.LoadUsers(request.CommitSha, request.ProjectId);
 
-            request.Progress.Report(new ProgressStatus(0, "Creating database..."));
+            request.Progress.Report(new ProgressStatus(0, "MergeDialog_CreatingDatabase"));
 
             await using (var requestScope = _projectNameDbContextFactory!.ServiceScope
                 .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag))

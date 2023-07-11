@@ -28,6 +28,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
                 if (Equals(value, Entity.Lemma)) return;
                 Entity.Lemma = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(LemmaDisplay));
             }
         }
 
@@ -39,8 +40,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
                 if (Equals(value, Entity.Language)) return;
                 Entity.Language = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(LemmaDisplay));
             }
         }
+
+        public string LemmaDisplay => $"{Lemma} ({Language})";
 
         public string? Type
         {

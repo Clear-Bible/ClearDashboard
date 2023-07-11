@@ -8,9 +8,9 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.0.5.12</AssemblyVersion>
-    <FileVersion>1.0.5.12</FileVersion>
-    <Version>1.0.5.12</Version>
+    <AssemblyVersion>1.0.6.7</AssemblyVersion>
+    <FileVersion>1.0.6.7</FileVersion>
+    <Version>1.0.6.7</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
 	<UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
 	<Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
@@ -42,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\ClearCollabIcon.png" />
     <None Remove="Assets\ClearDashboard_logo.ico" />
     <None Remove="Assets\ClearDashboard_logo_100.png" />
     <None Remove="Assets\ClearDashboard_logo_128.png" />
@@ -50,10 +51,18 @@
     <None Remove="Assets\ClearDashboard_logo_50.png" />
     <None Remove="Assets\newproject.png" />
     <None Remove="Assets\splash_screen.png" />
+    <None Remove="Resources\add16.png" />
+    <None Remove="Resources\add24.png" />
+    <None Remove="Resources\add32.png" />
+    <None Remove="Resources\add512.png" />
     <None Remove="Resources\BiblicalTerms_logo_32.png" />
     <None Remove="Resources\block_16.png" />
     <None Remove="Resources\CautionTape.bmp" />
     <None Remove="Resources\ClearDashboard_logo_128.png" />
+    <None Remove="Resources\close16.png" />
+    <None Remove="Resources\close24.png" />
+    <None Remove="Resources\close32.png" />
+    <None Remove="Resources\close512.png" />
     <None Remove="Resources\Crystal Click 2.wav" />
     <None Remove="Resources\DashboardFailure.wav" />
     <None Remove="Resources\donut_icon.ico" />
@@ -87,6 +96,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\ClearCollabIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\ClearDashboard_Icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -158,6 +170,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\add16.png" />
+    <Resource Include="Resources\add24.png" />
+    <Resource Include="Resources\add32.png" />
+    <Resource Include="Resources\add512.png" />
     <Resource Include="Resources\BiblicalTerms_logo_32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -168,6 +184,10 @@
     <Resource Include="Resources\ClearDashboard_logo_128.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\close16.png" />
+    <Resource Include="Resources\close24.png" />
+    <Resource Include="Resources\close32.png" />
+    <Resource Include="Resources\close512.png" />
     <Resource Include="Resources\donut_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

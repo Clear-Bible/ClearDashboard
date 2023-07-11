@@ -444,14 +444,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task InitializeCollaborationUser()
         {
-            var localizedString = _localizationService!["MainView_About"];
+            //var localizedString = _localizationService!["MainView_About"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.NoResize;
             settings.MinWidth = 500;
             settings.MinHeight = 500;
-            settings.Title = $"{localizedString}";
+            //settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<NewCollabUserViewModel>();
 
@@ -568,6 +568,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         version = results.Data;
                     }
 
+
+                    bool shaPresent = false;
+                    results =
+                        await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
+                    if (results.Success && results.HasData)
+                    {
+                        if (results.Data.ToString() != "")
+                        {
+                            shaPresent = true;
+                        }
+                    }
+
                     // add as ListItem
                     var dashboardProject = new DashboardProject
                     {
@@ -576,6 +588,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         ShortFilePath = fileInfo.Name,
                         FullFilePath = fileInfo.FullName,
                         Version = version,
+                        IsCollabProject = shaPresent,
                     };
 
                     DashboardProjects.Add(dashboardProject);
@@ -620,7 +633,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task RefreshProjectList()
         {
-            await GetProjectsVersion(true);
+            await GetProjectsVersion(afterMigration:true);
         }
 
         private async Task GetCollabProjects()
@@ -659,6 +672,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     if (gitLabProject is not null)
                     {
+                        dashboardProject.CollabOwner = gitLabProject.RemoteOwner.Name;
+                        dashboardProject.PermissionLevel = gitLabProject.RemotePermissionLevel;
+
                         // remove from the available GitLab projects
                         projects.Remove(gitLabProject);
                     }
@@ -676,7 +692,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         ProjectId = Guid.Parse(gitLabProject.Name.ToUpper().Replace("P_", "")),
                         ProjectName = gitLabProject.Description.ToString()!,
                         AppVersion = "unknown",
-                        Created = gitLabProject.CreatedAt
+                        Created = gitLabProject.CreatedAt,
+                        RemoteOwner = gitLabProject.RemoteOwner.Name,
+                        PermissionLevel = gitLabProject.RemotePermissionLevel,
                     };
                     DashboardCollabProjects.Add(dashboardCollabProject);
 
@@ -690,6 +708,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             DashboardCollabProjectsDisplay = DashboardCollabProjects;
+
+            if (DashboardCollabProjectsDisplay.Count() > 0)
+            {
+                CollabButtonsEnabled = true;
+            }
+
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+
+            NotifyOfPropertyChange(nameof(DashboardProjectsDisplay));
         }
 
         private void SetCollabVisibility()
@@ -726,10 +753,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async void ListenForParatextStart()
         {
-            while (!IsParatextRunning)
+            while (!IsParatextRunning || !Connected)
             {
-                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning()).ConfigureAwait(false);
-                Thread.Sleep(1000);
+                IsParatextRunning = await Task.Run(() => _paratextProxy.IsParatextRunning());
             }
         }
 
@@ -950,8 +976,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
+            if (!message.Connected && Connected) //only run when going from connected to not connected
+            {
+                IsParatextRunning=false;
+                ListenForParatextStart();
+            }
+
             Connected = message.Connected;
-            IsParatextRunning = true;
 
             await Task.CompletedTask;
         }

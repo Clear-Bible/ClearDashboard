@@ -579,7 +579,6 @@
                             x:Name="ListView"
                             Grid.Row="1"
                             Grid.ColumnSpan="2"
-                            Height="520"
                             Margin="5"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
@@ -693,7 +692,6 @@
             </materialDesign:DialogHost.DialogContent>
             <Border
                 MinWidth="256"
-                MinHeight="256"
                 BorderBrush="{StaticResource PrimaryHueMidBrush}"
                 BorderThickness="0"
                 ClipToBounds="True" />

@@ -11,16 +11,15 @@ using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Aqua.Module.Services;
-using FluentValidation.Results;
 using FluentValidation;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearBible.Engine.Exceptions;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 using System.Collections.Generic;
-using ClearDashboard.Aqua.Module.Models;
 using System.Windows;
 using System.Linq;
 using Autofac.Features.AttributeFilters;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
@@ -69,6 +68,13 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         set => Set(ref _dialogMode, value);
     }
 
+    private string? _versionId;
+    public string? VersionId
+    {
+        get => _versionId;
+        set => Set(ref _versionId, value);
+    }
+
     private string? name_;
     public string? Name
     {
@@ -90,6 +96,17 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
             ValidationResult = Validate();
         }
     }
+
+    private Visibility isoLanguageErrorVisibility_;
+    public Visibility IsoLanguageErrorVisibility
+    {
+        get => isoLanguageErrorVisibility_;
+        set
+        {
+            Set(ref isoLanguageErrorVisibility_, value);
+        }
+    }
+
     private Script? isoScript_;
     public Script? IsoScript
     {
@@ -98,6 +115,16 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         {
             Set(ref isoScript_, value);
             ValidationResult = Validate();
+        }
+    }
+
+    private Visibility isoScriptErrorVisibility_;
+    public Visibility IsoScriptErrorVisibility
+    {
+        get => isoScriptErrorVisibility_;
+        set
+        {
+            Set(ref isoScriptErrorVisibility_, value);
         }
     }
     private string? abbreviation_;
@@ -246,6 +273,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 ParentViewModel!.Message = ex.Message ?? ex.ToString();
             });
         }
+
+        ValidationResult = Validate();
     }
 
     private void ClearIdData()
@@ -318,15 +347,16 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 cancellationToken),
             async (version) =>
             {
-                Name = version.name;
+                VersionId = version?.id?.ToString();
+                Name = version?.name;
                 IsoLanguage = IsoLanguages
-                    .Where(l => l.iso639 == version.isoLanguage)
+                    .Where(l => l.iso639 == version?.isoLanguage)
                     .FirstOrDefault();
                 IsoScript = IsoScripts
                     .Where(s => s.iso15924 == ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript)
                     .FirstOrDefault();
-                Abbreviation = version.abbreviation;
-                Rights = version.rights;
+                Abbreviation = version?.abbreviation;
+                Rights = version?.rights;
                 ForwardTranslationToVersionId = ParentViewModel!.AquaTokenizedTextCorpusMetadata.forwardTranslationToVersionId?.ToString();
                 BackTranslationToVersionId = ParentViewModel!.AquaTokenizedTextCorpusMetadata.backTranslationToVersionId?.ToString();
                 MachineTranslation = ParentViewModel!.AquaTokenizedTextCorpusMetadata.machineTranslation;
@@ -612,6 +642,11 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     }
     protected override ValidationResult? Validate()
     {
-        return Validator!.Validate(this);
+        var result = Validator!.Validate(this);
+
+        IsoLanguageErrorVisibility = result.Errors.Any(e => e.PropertyName == "IsoLanguage") ? Visibility.Visible : Visibility.Hidden;
+        IsoScriptErrorVisibility = result.Errors.Any(e => e.PropertyName == "IsoScript") ? Visibility.Visible : Visibility.Hidden;
+        
+        return result;
     }
 }

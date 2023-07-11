@@ -29,7 +29,6 @@ namespace ClearDashboard.WPF.Tests
             var originalLicenseUser = new User
             {
                 Id = Guid.NewGuid(),
-                LicenseKey = Guid.NewGuid().ToString("N"),
                 FirstName = "Bob",
                 LastName = "Smith",
             };
@@ -52,7 +51,6 @@ namespace ClearDashboard.WPF.Tests
             var originalLicenseUser = new User
             {
                 Id = Guid.NewGuid(),
-                LicenseKey = Guid.NewGuid().ToString("N"),
                 FirstName = "Bob",
                 LastName = "Smith",
             };
@@ -67,8 +65,6 @@ namespace ClearDashboard.WPF.Tests
             Assert.Equal(user.Id, originalLicenseUser.Id);
             Assert.Equal(user.FirstName, originalLicenseUser.FirstName);
             Assert.Equal(user.LastName, originalLicenseUser.LastName);
-            Assert.Equal(user.LicenseKey, originalLicenseUser.LicenseKey);
-            Assert.NotEqual(user.Id.ToString("N"), user.LicenseKey);
 
             //Assert.True(LicenseManager.CompareGivenUserAndDecryptedUser(originalLicenseUser, decryptedLicenseUser));
 
@@ -84,7 +80,6 @@ namespace ClearDashboard.WPF.Tests
             var user = LicenseManager.DecryptedJsonToUser(json);
             Assert.NotNull(user);
             Assert.Equal("Michael Gerfen", user.FullName);
-            Assert.NotEqual(user.Id.ToString("N"), user.LicenseKey);
         }
     }
 }

@@ -58,1660 +58,1894 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MainView_WindowsMarble" xml:space="preserve">
-    <value>ĐÁ HOA</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Đóng</value>
-  </data>
-  <data name="Marble_Chapter" xml:space="preserve">
-    <value>Chương</value>
-  </data>
-  <data name="Pds_Source" xml:space="preserve">
-    <value>Nguồn</value>
-  </data>
-  <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>Định nghĩa dài:</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Đánh giá căn chỉnh số lượng lớn</value>
-  </data>
-  <data name="ProperCase_Acts" xml:space="preserve">
-    <value>Hành vi</value>
-  </data>
-  <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Cho phép ClearDashboard thay đổi chế độ công suất trong các sự kiện tính toán cao</value>
-  </data>
-  <data name="SNG" xml:space="preserve">
-    <value>SNG</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
-  </data>
-  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Marble_DomainsTitle" xml:space="preserve">
-    <value>Miền</value>
-  </data>
-  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Số lỗi:</value>
-  </data>
-  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>Xóa từ vựng này</value>
-  </data>
-  <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Bởi người dùng</value>
-  </data>
-  <data name="Notes_NoteReplies" xml:space="preserve">
-    <value>Trả lời</value>
-  </data>
-  <data name="Pins_Word" xml:space="preserve">
-    <value>Từ</value>
-  </data>
-  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
-    <value>Bóng:</value>
-  </data>
-  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>Sắp xếp</value>
-  </data>
-  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>Dấu hiệu và kỳ quan</value>
-  </data>
-  <data name="ShellView_Loading" xml:space="preserve">
-    <value>Đang tải...</value>
-  </data>
-  <data name="DisplayName" xml:space="preserve">
-    <value>Tên hiển thị</value>
-  </data>
-  <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Loại Lexeme</value>
-  </data>
-  <data name="MainView_About" xml:space="preserve">
-    <value>Về</value>
-  </data>
-  <data name="ProperCase_1_Peter" xml:space="preserve">
-    <value>1 Peter</value>
-  </data>
-  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>hy sinh và lễ vật</value>
-  </data>
-  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
-    <value>Ghi chú rõ ràng</value>
-  </data>
-  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Thêm InterLinear mới</value>
-  </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Chọn Corpus</value>
-  </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Định nghĩa không có sẵn</value>
-  </data>
-  <data name="NewTestament" xml:space="preserve">
-    <value>Di chúc mới</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>Khóa giấy phép của bạn bị thiếu hoặc bị hỏng.</value>
-  </data>
-  <data name="ProperCase_2_Samuel" xml:space="preserve">
-    <value>2 Samuel</value>
-  </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>Tất cả</value>
-  </data>
-  <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>Tạo dự án mới</value>
-  </data>
-  <data name="Created" xml:space="preserve">
-    <value>Tạo</value>
-  </data>
-  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>Đóng ứng dụng</value>
-  </data>
-  <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Ghi chú</value>
-  </data>
-  <data name="ProperCase_1_Chronicles" xml:space="preserve">
-    <value>1 Biên niên sử</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>công cụ; Sinh con</value>
-  </data>
-  <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>Loại bỏ biểu mẫu này</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
-  </data>
-  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>Một dự án có tên '{0}' đã tồn tại. Vui lòng chọn một tên duy nhất. "</value>
-  </data>
-  <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Theo ghi chú văn bản</value>
-  </data>
-  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
-    <value>thiên nhiên</value>
-  </data>
-  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
-    <value>Trả lời chưa đọc hiện tại</value>
-  </data>
-  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>Nghiên cứu</value>
-  </data>
-  <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>Chương trước</value>
-  </data>
-  <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>Ê -sai</value>
-  </data>
-  <data name="Pds_Resource" xml:space="preserve">
-    <value>Nguồn</value>
-  </data>
-  <data name="SlackMessageView_NoInternet" xml:space="preserve">
-    <value>Không có mạng</value>
-  </data>
-  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Nguồn ref</value>
-  </data>
-  <data name="Marble_GeneralInformation" xml:space="preserve">
-    <value>Thông tin chung</value>
-  </data>
-  <data name="ProperCase_2_Corinthians" xml:space="preserve">
-    <value>2 Cô -rinh -tô</value>
-  </data>
-  <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Habakkuk</value>
-  </data>
-  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>cá nhân mới</value>
-  </data>
-  <data name="Pins_Forms" xml:space="preserve">
-    <value>Các hình thức</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="Notes_UnreadReplies" xml:space="preserve">
-    <value>Trả lời chưa đọc</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
-  </data>
-  <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Thêm Corpora</value>
-  </data>
-  <data name="GEN" xml:space="preserve">
-    <value>GEN</value>
-  </data>
-  <data name="Landing_Settings" xml:space="preserve">
-    <value>Cài đặt</value>
-  </data>
-  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
-    <value>Hiệp hội</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>động vật có vú; vật nuôi</value>
-  </data>
-  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>Macula Do Thái</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>Số lượng mã thông báo khác nhau</value>
-  </data>
-  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Mô hình đối xứng xe lửa?</value>
-  </data>
-  <data name="Marble_Scope" xml:space="preserve">
-    <value>Phạm vi:</value>
-  </data>
-  <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Leviticus</value>
-  </data>
-  <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Ở đây thật là cô đơn. Vui lòng tạo một dự án mới.</value>
-  </data>
-  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
-    <value>Tăng cường xem</value>
-  </data>
-  <data name="ProjectPicker_NoMatches" xml:space="preserve">
-    <value>Không có trận đấu.</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
-  </data>
-  <data name="Pins_Prefix" xml:space="preserve">
-    <value>Tiếp đầu ngữ</value>
-  </data>
-  <data name="Language [UID_Key]" xml:space="preserve">
-    <value>Vietnamese [vi]</value>
-  </data>
-  <data name="ProperCase_Joel" xml:space="preserve">
-    <value>Joel</value>
-  </data>
-  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>Bề mặt thiết kế dự án</value>
-  </data>
-  <data name="BiblicalTermsForm_Category" xml:space="preserve">
-    <value>Loại</value>
-  </data>
-  <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Người La Mã</value>
-  </data>
-  <data name="ProperCase_Ruth" xml:space="preserve">
-    <value>Ruth</value>
-  </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Chế độ xem nâng cao mới</value>
-  </data>
-  <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Định dạng</value>
-  </data>
-  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>Các từ xoay tròn</value>
-  </data>
-  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>Xóa Interlinear</value>
-  </data>
-  <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>LƯU Ý Các chỉ số:</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
-    <value>công cụ; cân nặng; thương mại</value>
-  </data>
-  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Phần nguồn</value>
-  </data>
-  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>hộp đựng; chăn nuôi</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Liên kết</value>
-  </data>
-  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Tên dự án đã cho chứa các ký tự bất hợp pháp. Các ký tự hợp lệ bao gồm 'a-z' (chữ thường và chữ hoa), số '0-9' và các ký tự '-' và '_'.</value>
-  </data>
-  <data name="EZR" xml:space="preserve">
-    <value>EZR</value>
-  </data>
-  <data name="ClockUserControl_Add" xml:space="preserve">
-    <value>Thêm vào</value>
-  </data>
-  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
-    <value>nhóm</value>
-  </data>
-  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Xóa ý nghĩa này</value>
-  </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
-  </data>
-  <data name="BulkAlignmentReview_Target" xml:space="preserve">
-    <value>Mục tiêu</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Xen kẽ</value>
-  </data>
-  <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 Kings</value>
-  </data>
-  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>tang chế</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>Mặt sau</value>
-  </data>
-  <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>bảng điều khiển</value>
-  </data>
-  <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Xen kẽ</value>
-  </data>
-  <data name="Marble_Book" xml:space="preserve">
-    <value>Sách</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Tạo song song với các câu thơ Corpora</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
-  </data>
-  <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Chân lọc</value>
-  </data>
-  <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>Điều khoản Kinh Thánh</value>
-  </data>
-  <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>Phát hành ghi chú</value>
-  </data>
-  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>đài kỷ niệm</value>
-  </data>
-  <data name="ExpandView" xml:space="preserve">
-    <value>Mở rộng chế độ xem</value>
-  </data>
-  <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>Ezekiel</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>ZEP</value>
-  </data>
-  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
-    <value>địa phương</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
-  </data>
-  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>Các vấn đề đã biết</value>
-  </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Bấm vào đây để bắt đầu paratext</value>
   </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>Từ:</value>
-  </data>
-  <data name="ProperCase_Esther" xml:space="preserve">
-    <value>Esther</value>
-  </data>
-  <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>Số</value>
-  </data>
-  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Tham gia mã thông báo cho cặp ngôn ngữ</value>
-  </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
-  </data>
-  <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>Tìm kiếm bằng tiếng Anh bóng</value>
-  </data>
-  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>Tên đầu tiên được yêu cầu</value>
-  </data>
-  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext đang chạy nhưng không được kết nối.</value>
-  </data>
-  <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Phiên bản:</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>JON</value>
-  </data>
-  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Hủy nhiệm vụ</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>Xóa căn chỉnh cho '{0}'?</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Xóa tất cả các sắp xếp?</value>
-  </data>
-  <data name="1SA" xml:space="preserve">
-    <value>1SA</value>
-  </data>
-  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Chìa khóa được cung cấp là bị lỗi. Khi được giải mã, các yếu tố JSON nhất định không thể được tìm thấy.</value>
-  </data>
-  <data name="Copy" xml:space="preserve">
-    <value>Sao chép</value>
-  </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>Phê duyệt đã chọn</value>
-  </data>
-  <data name="JER" xml:space="preserve">
-    <value>JER</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1JN</value>
-  </data>
-  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>Siêu dữ liệu JSON</value>
-  </data>
-  <data name="Pins_Match" xml:space="preserve">
-    <value>Cuộc thi đấu</value>
-  </data>
-  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Bố cục dự án</value>
-  </data>
-  <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Giê -rê -mi</value>
-  </data>
-  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>sự yêu mến</value>
-  </data>
-  <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>Kích thước phông chữ tiêu đề:</value>
-  </data>
-  <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>Bao gồm trong vòng quay hiển thị đồng hồ</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>xây dựng; chăn nuôi</value>
-  </data>
-  <data name="FontSettings_Height" xml:space="preserve">
-    <value>Chiều cao:</value>
-  </data>
-  <data name="Bcv_Offset" xml:space="preserve">
-    <value>BÙ LẠI</value>
-  </data>
-  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>Tạo InterLinear mới</value>
-  </data>
-  <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>Chọn Timezone</value>
-  </data>
-  <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Ti -mô -thê</value>
-  </data>
-  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
-    <value>khu vực</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="ProperCase_Nahum" xml:space="preserve">
-    <value>Nahum</value>
-  </data>
-  <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>Không định dạng</value>
-  </data>
-  <data name="Windows_Dashboard" xml:space="preserve">
-    <value>BẢNG ĐIỀU KHIỂN</value>
-  </data>
-  <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luke</value>
-  </data>
-  <data name="CreatedBy" xml:space="preserve">
-    <value>Được tạo bởi</value>
-  </data>
-  <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Thêm một biểu mẫu</value>
-  </data>
-  <data name="Settings_TextCollections" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>Bố cục tiêu chuẩn</value>
-  </data>
-  <data name="Pds_Xml" xml:space="preserve">
-    <value>XML</value>
-  </data>
-  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
-    <value>Xóa Tăng cường này?</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>sự thi công; các hoạt động tôn giáo</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Tạo nên</value>
-  </data>
-  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>Đếm</value>
-  </data>
-  <data name="MainView_FileNew" xml:space="preserve">
-    <value>Mới</value>
-  </data>
-  <data name="TargetContextView_ZoomIn" xml:space="preserve">
-    <value>Phóng to</value>
-  </data>
-  <data name="ProperCase_Mark" xml:space="preserve">
-    <value>Đánh dấu</value>
-  </data>
-  <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
-  </data>
-  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Trí tuệ, sự hiểu biết</value>
-  </data>
-  <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Phù hợp với tất cả các nút vào chế độ xem</value>
-  </data>
-  <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Tạo dự án:</value>
-  </data>
-  <data name="MRK" xml:space="preserve">
-    <value>MRK</value>
-  </data>
-  <data name="MainView_FileOpen" xml:space="preserve">
-    <value>Mở</value>
-  </data>
-  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Đã chọn không từ chối</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Mã thông báo '{0}' có nhiều căn chỉnh được xác định. Nhấp vào '{1}' sẽ xóa tất cả các sắp xếp.</value>
-  </data>
-  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm vào chế độ xem nâng cao mới</value>
-  </data>
-  <data name="Landing_NewProject" xml:space="preserve">
-    <value>Dự án mới</value>
-  </data>
-  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Tìm kiếm gần đây</value>
-  </data>
-  <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>Đồ thị tần số</value>
-  </data>
-  <data name="UseDefaults" xml:space="preserve">
-    <value>Tạo bằng cách sử dụng mặc định</value>
-  </data>
-  <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1 Cô -rinh -tô</value>
-  </data>
-  <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Ê -phê -sô</value>
-  </data>
-  <data name="AboutView_Version" xml:space="preserve">
-    <value>Phiên bản</value>
-  </data>
-  <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>Đăng ký</value>
-  </data>
-  <data name="Bcv_NextVerse" xml:space="preserve">
-    <value>Câu thơ tiếp theo</value>
-  </data>
-  <data name="Marble_Verse" xml:space="preserve">
-    <value>Thơ</value>
-  </data>
-  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
-    <value>Văn bản câu thơ</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
-    <value>Chấp thuận</value>
-  </data>
-  <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Nghiên cứu</value>
-  </data>
-  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
-    <value>Nhu cầu xem xét</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
-    <value>Từ ngữ phù hợp</value>
-  </data>
-  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>Quy mô nội dung lên 100%</value>
-  </data>
-  <data name="Notes_LabelAdd" xml:space="preserve">
-    <value>Thêm một nhãn</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Thuật toán căn chỉnh từ máy</value>
-  </data>
-  <data name="ProperCase_Matthew" xml:space="preserve">
-    <value>Matthew</value>
-  </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
-  </data>
-  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Không có lỗi</value>
-  </data>
-  <data name="Pins_Lexeme" xml:space="preserve">
-    <value>Từ vựng</value>
-  </data>
-  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>Sao chép vào clipboard</value>
-  </data>
-  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
-    <value>mục đích</value>
-  </data>
-  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
-    <value>Tạo căn chỉnh từ mới</value>
-  </data>
-  <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>Tục ngữ</value>
-  </data>
-  <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>Mã thông báo Corpus</value>
-  </data>
-  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>Tên miền phụ:</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Làm cho khỏe lại</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
-  </data>
-  <data name="Notes_LabelRemove" xml:space="preserve">
-    <value>Xóa nhãn này</value>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
   </data>
   <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
     <value>Chương</value>
   </data>
-  <data name="ProperCase_2_Peter" xml:space="preserve">
-    <value>2 Peter</value>
-  </data>
-  <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Phóng to nội dung</value>
-  </data>
-  <data name="MainView_LayoutsDelete" xml:space="preserve">
-    <value>Xóa bố cục đã lưu</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
-    <value>Mở</value>
-  </data>
-  <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Nhãn</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
-    <value>cây; nước hoa và gia vị</value>
-  </data>
-  <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>Cỡ chữ:</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Tên</value>
-  </data>
-  <data name="MainView_GettingStartedGuide" xml:space="preserve">
-    <value>Bắt đầu khóa hướng dẫn</value>
-  </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Thêm một miền ngữ nghĩa</value>
-  </data>
-  <data name="BiblicalTermsForm_Found" xml:space="preserve">
-    <value>Thành lập</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Cứu</value>
-  </data>
-  <data name="Next" xml:space="preserve">
-    <value>Kế tiếp</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>CHỌN TẤT CẢ</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>Kiểu</value>
-  </data>
-  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
-    <value>Máy móc</value>
-  </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>Thánh vịnh</value>
-  </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>SÁCH</value>
-  </data>
-  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Nội dung của khóa cấp phép được giải mã không phù hợp với thông tin bạn cung cấp.</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
-  </data>
-  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>Mở gần đây</value>
-  </data>
-  <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Hiển thị backtranslation</value>
-  </data>
-  <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Hiển thị các điều khiển chế độ xem nâng cao</value>
-  </data>
-  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Chọn cách để mã hóa Quả văn</value>
-  </data>
-  <data name="MainView_WindowsTextCollections" xml:space="preserve">
-    <value>Bộ sưu tập văn bản</value>
-  </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>Xe lửa</value>
-  </data>
-  <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>Vui lòng nhập tên cho dự án của bạn</value>
-  </data>
-  <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Kích thước phông chữ mục tiêu:</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Cập nhật</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
-  </data>
-  <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Xem/Tạo ghi chú</value>
-  </data>
-  <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>Cần có khóa cấp phép</value>
-  </data>
-  <data name="Marble_Definition" xml:space="preserve">
-    <value>Sự định nghĩa</value>
-  </data>
-  <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Nehemiah</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
-  </data>
-  <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Xóa miền ngữ nghĩa này</value>
-  </data>
-  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>Chế độ nguồn được bật</value>
-  </data>
-  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>Tạo một dự án mới</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Chọn sách để xử lý</value>
-  </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
-  </data>
-  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
-    <value>Tạo căn chỉnh từ mới</value>
-  </data>
-  <data name="Landing_Project" xml:space="preserve">
-    <value>Dự án</value>
-  </data>
-  <data name="Pins_Code" xml:space="preserve">
-    <value>Mã số</value>
-  </data>
-  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
-    <value>sự kết hợp</value>
-  </data>
-  <data name="Bcv_NextChapter" xml:space="preserve">
-    <value>Chương tiếp theo</value>
-  </data>
-  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext không được cài đặt. Vui lòng cài đặt paratext và chạy lại ứng dụng ClearDashboard.</value>
-  </data>
-  <data name="ClockUserControl_Delete" xml:space="preserve">
-    <value>Xóa bỏ</value>
-  </data>
-  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Người dùng</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Song song với những câu thơ</value>
-  </data>
-  <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>Khoảng cách thẳng đứng:</value>
-  </data>
-  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
-    <value>Vui lòng nhập tên cho dự án của bạn.</value>
-  </data>
-  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Đá quý</value>
-  </data>
-  <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Thu phóng từ nội dung</value>
-  </data>
-  <data name="Pins_Phrase" xml:space="preserve">
-    <value>Cụm từ</value>
-  </data>
-  <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
-  </data>
-  <data name="ShellView_User" xml:space="preserve">
-    <value>Người dùng</value>
-  </data>
-  <data name="AMO" xml:space="preserve">
-    <value>AMO</value>
-  </data>
-  <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Đóng mở</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>Kiểm tra USFM</value>
-  </data>
-  <data name="FontSettings_Target" xml:space="preserve">
-    <value>Văn bản đích:</value>
-  </data>
-  <data name="ProperCase_2_Chronicles" xml:space="preserve">
-    <value>2 Biên niên sử</value>
-  </data>
-  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Pins_Language" xml:space="preserve">
-    <value>Ngôn ngữ</value>
-  </data>
-  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>Không có tác vụ nền đang chạy</value>
-  </data>
-  <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Cuốn sách tiếp theo</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>Nhiệm vụ đã bị hủy bỏ</value>
-  </data>
-  <data name="BiblicalTermsDomains_All" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
-    <value>Xóa bản dịch này</value>
-  </data>
-  <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Sự mặc khải</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>PHM</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="MainView_WindowsPINS" xml:space="preserve">
-    <value>PINS</value>
-  </data>
-  <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 John</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>Hiển thị các nhiệm vụ nền</value>
-  </data>
-  <data name="Bcv_Sync" xml:space="preserve">
-    <value>ĐỒNG BỘ HÓA</value>
-  </data>
-  <data name="ProjectPicker_GetStarted" xml:space="preserve">
-    <value>Bắt đầu</value>
-  </data>
-  <data name="BiblicalTermsForm_Term" xml:space="preserve">
-    <value>Thuật ngữ</value>
-  </data>
-  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
-    <value>Bóng</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Biên tập</value>
-  </data>
-  <data name="BiblicalTermsForm_All" xml:space="preserve">
-    <value>Tất cả</value>
-  </data>
-  <data name="FontSettings_Title" xml:space="preserve">
-    <value>Tiêu đề:</value>
-  </data>
-  <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Philemon</value>
-  </data>
-  <data name="MainView_LayoutsSave" xml:space="preserve">
-    <value>Lưu bố cục hiện tại</value>
-  </data>
-  <data name="ProperCase_Genesis" xml:space="preserve">
-    <value>Genesis</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>Đóng</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Xóa căn chỉnh</value>
-  </data>
-  <data name="ProperCase_3_John" xml:space="preserve">
-    <value>3 John</value>
-  </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1CO</value>
-  </data>
-  <data name="Notes_FilterStatus_Open" xml:space="preserve">
-    <value>Mở</value>
-  </data>
-  <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Tải tài liệu tham khảo</value>
-  </data>
-  <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>Thu nhỏ</value>
-  </data>
-  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>các hoạt động tôn giáo</value>
-  </data>
-  <data name="ProperCase_1_Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
-  </data>
-  <data name="ProperCase_Micah" xml:space="preserve">
-    <value>Micah</value>
-  </data>
-  <data name="MainView_Help" xml:space="preserve">
-    <value>Giúp đỡ</value>
-  </data>
-  <data name="Bcv_Chapter" xml:space="preserve">
-    <value>Chương</value>
-  </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>LÀm sạch bộ lọc</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Mã mạnh</value>
-  </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
-  </data>
-  <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>Tin nhắn:</value>
-  </data>
-  <data name="Settings_ReservedCaption" xml:space="preserve">
-    <value>Dành riêng cho việc mở rộng trong tương lai</value>
-  </data>
-  <data name="2KI" xml:space="preserve">
-    <value>2KI</value>
-  </data>
-  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm chế độ xem câu vào chế độ xem nâng cao tập trung</value>
-  </data>
-  <data name="EnhancedView_Notes" xml:space="preserve">
-    <value>Ghi chú</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2PE</value>
-  </data>
-  <data name="Pds_Standard" xml:space="preserve">
-    <value>Tiêu chuẩn</value>
-  </data>
-  <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Gửi ghi chú này đến paratext?</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>HOS</value>
-  </data>
-  <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Thêm một ghi chú mới</value>
-  </data>
-  <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Backtranslation</value>
-  </data>
-  <data name="ProperCase_Judges" xml:space="preserve">
-    <value>Ban giám khảo</value>
-  </data>
-  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>Mã thông báo Corpus</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>Trạng thái</value>
-  </data>
-  <data name="Marble_Glosses" xml:space="preserve">
-    <value>Glosses:</value>
-  </data>
-  <data name="Pins_Gloss" xml:space="preserve">
-    <value>Bóng</value>
-  </data>
-  <data name="Marble_Sense" xml:space="preserve">
-    <value>Giác quan</value>
-  </data>
-  <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Bổ số liên quan</value>
-  </data>
-  <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>Bảng điều khiển</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="ProperCase_Daniel" xml:space="preserve">
-    <value>Daniel</value>
-  </data>
-  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Thiếu kết xuất</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="ProperCase_2_Kings" xml:space="preserve">
-    <value>2 Kings</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>mọi người; danh dự, sự tôn trọng, địa vị</value>
-  </data>
-  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm chế độ xem phê duyệt số lượng lớn vào chế độ xem nâng cao tập trung</value>
-  </data>
-  <data name="ProperCase_Titus" xml:space="preserve">
-    <value>Titus</value>
-  </data>
-  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>giải quyết</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
-  <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Galati</value>
-  </data>
-  <data name="Windows_PINS" xml:space="preserve">
-    <value>Ghim</value>
-  </data>
-  <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Đặt tên cho mục</value>
-  </data>
-  <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Tham gia mã thông báo</value>
-  </data>
-  <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Bạn không thể xóa dự án đó, một ứng dụng khác vẫn đang sử dụng nó.</value>
-  </data>
-  <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jonah</value>
-  </data>
-  <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>Phiên âm</value>
-  </data>
-  <data name="WordMeaningsView_Domain" xml:space="preserve">
-    <value>Lãnh địa:</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
-    <value>Xóa căn chỉnh?</value>
-  </data>
-  <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Xóa ghi chú này?</value>
-  </data>
-  <data name="Pds_Target" xml:space="preserve">
-    <value>Mục tiêu</value>
-  </data>
-  <data name="EnhancedView_AddAlignment" xml:space="preserve">
-    <value>Thêm căn chỉnh?</value>
-  </data>
-  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
-    <value>Miền ngữ nghĩa:</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Miền phụ:</value>
-  </data>
-  <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức độ zoom của nội dung</value>
-  </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
-  </data>
-  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm văn bản văn bản mã hóa vào chế độ xem nâng cao mới</value>
-  </data>
-  <data name="ProjectSetup_Title" xml:space="preserve">
-    <value>Tạo dự án mới của bạn</value>
-  </data>
-  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Xóa dự án</value>
-  </data>
-  <data name="Notes_NoteReplies_Read" xml:space="preserve">
-    <value>Đã xem</value>
-  </data>
-  <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Phụ trợ</value>
-  </data>
-  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Truyền đạo</value>
-  </data>
-  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
-    <value>người</value>
-  </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>Phần</value>
-  </data>
-  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
-    <value>nông nghiệp</value>
-  </data>
-  <data name="Pins_Notes" xml:space="preserve">
-    <value>Ghi chú</value>
-  </data>
-  <data name="BiblicalTermsForm_Project" xml:space="preserve">
-    <value>Dự án</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
-    <value>nhóm; khu vực</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Chào mừng bạn đến Cleardashboard! Vui lòng nhập thông tin đăng ký của bạn.</value>
-  </data>
-  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
-    <value>Thơ</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="BulkAlignmentReview_Count" xml:space="preserve">
-    <value>Đếm</value>
-  </data>
-  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>Paganism</value>
-  </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>Sở thích</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="Marble_Senses" xml:space="preserve">
-    <value>Giác quan</value>
-  </data>
-  <data name="Marble_Verses" xml:space="preserve">
-    <value>Câu thơ</value>
-  </data>
-  <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>Lắp toàn bộ khu vực nội dung vào chế độ xem</value>
-  </data>
-  <data name="Pds_PropertiesMenu" xml:space="preserve">
-    <value>Của cải</value>
-  </data>
-  <data name="Notes_FilterExpander" xml:space="preserve">
-    <value>Bộ lọc</value>
-  </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
-  </data>
-  <data name="Notes_Note_NoteStatus" xml:space="preserve">
-    <value>Trạng thái</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>sinh vật siêu nhiên và sức mạnh; tiêu đề</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Đúng</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>Bắt đầu</value>
+  <data name="Windows_WordMeanings" xml:space="preserve">
+    <value>Ý nghĩa từ</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
     <value>Cảm giác câu thơ</value>
   </data>
-  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
-    <value>công cụ</value>
-  </data>
-  <data name="ProperCase_James" xml:space="preserve">
-    <value>James</value>
-  </data>
-  <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Jude</value>
-  </data>
-  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>động vật</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="ProperCase_Joshua" xml:space="preserve">
-    <value>Joshua</value>
-  </data>
-  <data name="OldTestament" xml:space="preserve">
-    <value>Di chúc cũ</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>Thêm vào</value>
-  </data>
-  <data name="Pins_Suffix" xml:space="preserve">
-    <value>Hậu tố</value>
-  </data>
-  <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Liên kết</value>
-  </data>
-  <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>Bài hát của các bài hát</value>
-  </data>
-  <data name="FontSettings_Source" xml:space="preserve">
-    <value>Nguồn văn bản:</value>
-  </data>
-  <data name="ProperCase_John" xml:space="preserve">
-    <value>John</value>
-  </data>
-  <data name="SlackMessageView_Send" xml:space="preserve">
-    <value>Gửi</value>
-  </data>
-  <data name="Windows_AlignmentTool" xml:space="preserve">
-    <value>Công cụ căn chỉnh</value>
-  </data>
-  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Căn chỉnh '{0}' với '{1}'?</value>
-  </data>
-  <data name="Bcv_PreviousVerse" xml:space="preserve">
-    <value>Câu trước</value>
-  </data>
-  <data name="BulkAlignmentReview_Source" xml:space="preserve">
-    <value>Nguồn</value>
-  </data>
-  <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Dự án:</value>
-  </data>
-  <data name="Bcv_Verse" xml:space="preserve">
-    <value>THƠ</value>
-  </data>
-  <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language Sourcel</value>
-  </data>
-  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>Ý nghĩa từ</value>
-  </data>
-  <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>Hê -bơ -rơ</value>
-  </data>
-  <data name="MainView_Windows" xml:space="preserve">
-    <value>các cửa sổ</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Tạo Interlinear</value>
-  </data>
-  <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Macula Hy Lạp</value>
-  </data>
-  <data name="MainView_ShowLog" xml:space="preserve">
-    <value>Hiển thị nhật ký</value>
-  </data>
-  <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Tổng số câu</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>Được rồi</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="Migrate_Header2" xml:space="preserve">
-    <value>Đặt lại ánh xạ câu thơ về sự đa dạng hóa mặc định</value>
-  </data>
-  <data name="ProperCase_Haggai" xml:space="preserve">
-    <value>Haggai</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm văn bản văn bản mã hóa vào chế độ xem nâng cao tập trung</value>
-  </data>
-  <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>Ý nghĩa từ</value>
-  </data>
   <data name="Notes_Note_Modified" xml:space="preserve">
     <value>Sửa đổi</value>
   </data>
-  <data name="ProperCase_Philippians" xml:space="preserve">
-    <value>Phi -líp</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Xóa bỏ</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>NEH</value>
-  </data>
-  <data name="ProperCase_2_John" xml:space="preserve">
-    <value>2 John</value>
-  </data>
-  <data name="ZEC" xml:space="preserve">
-    <value>ZEC</value>
-  </data>
-  <data name="BiblicalTermsDomains_People" xml:space="preserve">
-    <value>mọi người</value>
-  </data>
-  <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>nhóm mới</value>
-  </data>
-  <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>Định nghĩa ngắn:</value>
-  </data>
-  <data name="Marble_Domains" xml:space="preserve">
-    <value>Miền:</value>
-  </data>
-  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Đặt ánh xạ câu giữa các tập đoàn song song</value>
-  </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
-    <value>đồ thủ công; vải</value>
-  </data>
-  <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>Họ được yêu cầu</value>
-  </data>
-  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>Cỏ</value>
-  </data>
-  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
-    <value>Kết xuất</value>
-  </data>
-  <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>COLOSSIANS</value>
-  </data>
-  <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Gửi ghi chú này đến paratext</value>
-  </data>
-  <data name="FontSettings_ParagraphMode" xml:space="preserve">
-    <value>Chế độ đoạn văn</value>
-  </data>
-  <data name="Windows_TextCollection" xml:space="preserve">
-    <value>Bộ sưu tập văn bản</value>
-  </data>
-  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Xóa căn chỉnh</value>
-  </data>
-  <data name="FontSettings_SourceFontSize" xml:space="preserve">
-    <value>Kích thước phông chữ nguồn:</value>
-  </data>
-  <data name="ProperCase_Amos" xml:space="preserve">
-    <value>Amos</value>
-  </data>
-  <data name="MainView_File" xml:space="preserve">
-    <value>Tài liệu</value>
-  </data>
-  <data name="Pds_Dictionary" xml:space="preserve">
-    <value>Từ điển</value>
-  </data>
-  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>Điều khoản Kinh Thánh</value>
-  </data>
-  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Transitationwithencoder</value>
-  </data>
-  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>BỎ CHỌN TẤT CẢ</value>
-  </data>
-  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
-    <value>khu vực; thiên nhiên</value>
-  </data>
-  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Train Machine Word Aligner</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>Những sinh vật và sức mạnh siêu nhiên</value>
-  </data>
-  <data name="Landing_Projects" xml:space="preserve">
-    <value>Dự án</value>
-  </data>
-  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Bởi các hiệp hội</value>
-  </data>
-  <data name="MainView_GatherLogs" xml:space="preserve">
-    <value>Gửi tin nhắn để xóa</value>
-  </data>
-  <data name="WordMeaningsView_Sense" xml:space="preserve">
-    <value>Giác quan:</value>
-  </data>
-  <data name="Pins_Origin" xml:space="preserve">
-    <value>Nguồn gốc</value>
-  </data>
-  <data name="Settings_PowerModes" xml:space="preserve">
-    <value>Chế độ năng lượng</value>
-  </data>
-  <data name="ClockUserControl_LocalTime" xml:space="preserve">
-    <value>Giờ địa phương</value>
-  </data>
-  <data name="Marble_All" xml:space="preserve">
-    <value>Tất cả</value>
-  </data>
-  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>Tạo mã thông báo mới</value>
-  </data>
-  <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>Tài liệu tham khảo câu</value>
-  </data>
-  <data name="Pds_Unknown" xml:space="preserve">
-    <value>không xác định</value>
-  </data>
-  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Tạo sự liên kết</value>
-  </data>
-  <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Than thở</value>
-  </data>
-  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
-    <value>Phạm vi:</value>
-  </data>
-  <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Tìm kiếm bằng tiếng Do Thái/tiếng Hy Lạp</value>
-  </data>
-  <data name="ProperCase_Job" xml:space="preserve">
-    <value>Công việc</value>
-  </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
-  </data>
-  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Đóng</value>
-  </data>
-  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
-    <value>2 Tê -sa -lô -ni -ca</value>
-  </data>
-  <data name="ProperCase_Hosea" xml:space="preserve">
-    <value>Ô -sê</value>
-  </data>
-  <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Bật plugin Aqua thử nghiệm</value>
-  </data>
-  <data name="Pins_Occurences" xml:space="preserve">
-    <value>Xảy ra</value>
-  </data>
-  <data name="LUK" xml:space="preserve">
-    <value>LUK</value>
-  </data>
-  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Mã thông báo tổng hợp không khớp</value>
-  </data>
-  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Tính toán mô hình dịch mới</value>
-  </data>
-  <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>Vui lòng nhập họ của bạn</value>
-  </data>
-  <data name="Settings_Plugins" xml:space="preserve">
-    <value>bổ sung</value>
-  </data>
-  <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Bằng nhãn</value>
-  </data>
-  <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>Cuốn sách trước</value>
-  </data>
-  <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Cơ sở dữ liệu:</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Lỗi</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>KHÔNG</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Không chấp thuận</value>
-  </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>Bản dịch:</value>
-  </data>
-  <data name="FontSettings_Horizontal" xml:space="preserve">
-    <value>Khoảng cách ngang:</value>
-  </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
-  </data>
-  <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>Obadiah</value>
-  </data>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
+  <data name="ProjectPicker_NoProject" xml:space="preserve">
+    <value>Ở đây thật là cô đơn. Vui lòng tạo một dự án mới.</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Hủy bỏ</value>
   </data>
-  <data name="ProperCase_Deuteronomy" xml:space="preserve">
-    <value>Phục truyền luật lệ ký</value>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
   </data>
-  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>Tạo căn chỉnh từ</value>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>Nhiệm vụ đã bị hủy bỏ</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Cá bốngusource</value>
+  <data name="Pds_BackTranslation" xml:space="preserve">
+    <value>Backtranslation</value>
   </data>
-  <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Nhập mã xác nhận của bạn</value>
-  </data>
-  <data name="ProperCase_Exodus" xml:space="preserve">
-    <value>Cuộc di cư</value>
-  </data>
-  <data name="MainView_Settings" xml:space="preserve">
-    <value>Cài đặt</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
-    <value>cây; trái cây</value>
-  </data>
-  <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Ti -mô -thê</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
-    <value>mọi người; thẩm quyền</value>
-  </data>
-  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
-    <value>Sách</value>
+  <data name="Lexicon_Lemma" xml:space="preserve">
+    <value>Bổ đề</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>Zechariah</value>
   </data>
-  <data name="Windows_EnhancedView" xml:space="preserve">
-    <value>Tăng cường xem</value>
+  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
+    <value>Máy móc</value>
   </data>
-  <data name="ProjectValidator_SameName" xml:space="preserve">
-    <value>Một dự án có cùng tên đã tồn tại. Vui lòng chọn một tên duy nhất.</value>
+  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
+    <value>Quy mô nội dung lên 100%</value>
   </data>
-  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
-    <value>Công cụ căn chỉnh</value>
-  </data>
-  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
-    <value>trái cây</value>
-  </data>
-  <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Hiển thị trước khi phát hành</value>
-  </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext không chạy</value>
-  </data>
-  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
-    <value>Tất cả</value>
-  </data>
-  <data name="BiblicalTermsForm_Note" xml:space="preserve">
-    <value>Ghi chú</value>
-  </data>
-  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>danh dự, sự tôn trọng, địa vị</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="MainView_Layouts" xml:space="preserve">
-    <value>Bố cục</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
-    <value>1 Tê -sa -lô -ni -ca</value>
-  </data>
-  <data name="Notes_NoteText" xml:space="preserve">
-    <value>Chữ</value>
-  </data>
-  <data name="Notes_Note_Created" xml:space="preserve">
+  <data name="Created" xml:space="preserve">
     <value>Tạo</value>
   </data>
-  <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Các phần của bài phát biểu</value>
-  </data>
-  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
-    <value>Kết xuất</value>
-  </data>
-  <data name="Notes_FilterStatus_Any" xml:space="preserve">
-    <value>Bất kì</value>
-  </data>
-  <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Đặt lại ánh xạ câu thơ về sự đa dạng hóa mặc định</value>
-  </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>Cài đặt ClearDashboard</value>
-  </data>
-  <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Thêm văn bản văn bản mã hóa vào cửa sổ nâng cao mới</value>
-  </data>
-  <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>Gửi tin nhắn Slack</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Thuật toán căn chỉnh từ máy</value>
-  </data>
-  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
-    <value>đạo đức và đạo đức</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
-    <value>động vật có vú; động vật hoang dã</value>
-  </data>
-  <data name="Pins_Filter" xml:space="preserve">
-    <value>Lọc:</value>
-  </data>
-  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm vào chế độ xem nâng cao tập trung</value>
+  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
+    <value>Khóa giấy phép của bạn bị thiếu hoặc bị hỏng.</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Cập nhật chương trình được tìm thấy</value>
   </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Đánh dấu được chọn là 'Đánh giá nhu cầu'</value>
+  <data name="ClockUserControl_NewGroup" xml:space="preserve">
+    <value>nhóm mới</value>
   </data>
-  <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>Tạo dự án của bạn để bắt đầu.</value>
+  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
+    <value>Xóa tất cả các sắp xếp?</value>
   </data>
-  <data name="Pins_Stem" xml:space="preserve">
-    <value>Thân cây</value>
+  <data name="ShellView_User" xml:space="preserve">
+    <value>Người dùng</value>
   </data>
-  <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vui lòng nhập tên của bạn</value>
+  <data name="Marble_SubDomains" xml:space="preserve">
+    <value>Miền phụ:</value>
   </data>
-  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Loại bỏ kho văn bản</value>
+  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
+    <value>đồ thủ công; vải</value>
   </data>
-  <data name="REV" xml:space="preserve">
-    <value>REV</value>
+  <data name="Pins_Prefix" xml:space="preserve">
+    <value>Tiếp đầu ngữ</value>
   </data>
-  <data name="Pds_Daughter" xml:space="preserve">
-    <value>Con gái</value>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>Các dự án hợp tác</value>
   </data>
-  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>Phần mục tiêu</value>
+  <data name="ProperCase_1_Timothy" xml:space="preserve">
+    <value>1 Ti -mô -thê</value>
+  </data>
+  <data name="ProperCase_Romans" xml:space="preserve">
+    <value>Người La Mã</value>
+  </data>
+  <data name="ProjectPicker_DeleteError" xml:space="preserve">
+    <value>Bạn không thể xóa dự án đó, một ứng dụng khác vẫn đang sử dụng nó.</value>
+  </data>
+  <data name="Pds_MarbleResource" xml:space="preserve">
+    <value>Cá bốngusource</value>
+  </data>
+  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
+    <value>Đếm</value>
+  </data>
+  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
+    <value>Không có tác vụ nền đang chạy</value>
+  </data>
+  <data name="ProperCase_Proverbs" xml:space="preserve">
+    <value>Tục ngữ</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Xóa bỏ</value>
+  </data>
+  <data name="ProperCase_Zephaniah" xml:space="preserve">
+    <value>Zephaniah</value>
+  </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>Phần</value>
+  </data>
+  <data name="TargetContextView_ZoomIn" xml:space="preserve">
+    <value>Phóng to</value>
+  </data>
+  <data name="ProperCase_Exodus" xml:space="preserve">
+    <value>Cuộc di cư</value>
+  </data>
+  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
+    <value>công cụ</value>
+  </data>
+  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
+    <value>Chìa khóa được cung cấp là bị lỗi. Khi được giải mã, các yếu tố JSON nhất định không thể được tìm thấy.</value>
+  </data>
+  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
+    <value>Quản lý các dự án hợp tác</value>
+  </data>
+  <data name="ShellView_ShowNotes" xml:space="preserve">
+    <value>Phát hành ghi chú</value>
+  </data>
+  <data name="MainView_LayoutsSave" xml:space="preserve">
+    <value>Lưu bố cục hiện tại</value>
+  </data>
+  <data name="ProjectPicker_AppName" xml:space="preserve">
+    <value>Bảng điều khiển</value>
+  </data>
+  <data name="Landing_NewProject" xml:space="preserve">
+    <value>Dự án mới</value>
+  </data>
+  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
+    <value>Tăng cường xem</value>
+  </data>
+  <data name="Marble_PartsOfSpeech" xml:space="preserve">
+    <value>Các phần của bài phát biểu</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="Marble_Verse" xml:space="preserve">
+    <value>Thơ</value>
+  </data>
+  <data name="FontSettings_Source" xml:space="preserve">
+    <value>Nguồn văn bản:</value>
+  </data>
+  <data name="Landing_Settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="Marble_Scope" xml:space="preserve">
+    <value>Phạm vi:</value>
+  </data>
+  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
+    <value>Nguồn ref</value>
+  </data>
+  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
+    <value>Tạo sự liên kết</value>
+  </data>
+  <data name="Marble_Sense" xml:space="preserve">
+    <value>Giác quan</value>
+  </data>
+  <data name="FontSettings_TargetFontSize" xml:space="preserve">
+    <value>Kích thước phông chữ mục tiêu:</value>
+  </data>
+  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
+    <value>Công cụ căn chỉnh</value>
+  </data>
+  <data name="Settings_Plugins" xml:space="preserve">
+    <value>bổ sung</value>
+  </data>
+  <data name="ProperCase_Habakkuk" xml:space="preserve">
+    <value>Habakkuk</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="SlackMessageView_Title" xml:space="preserve">
+    <value>Gửi tin nhắn Slack</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Chuyên gia tư vấn</value>
   </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>sinh vật siêu nhiên và sức mạnh; tiêu đề</value>
+  </data>
+  <data name="Windows_Dashboard" xml:space="preserve">
+    <value>BẢNG ĐIỀU KHIỂN</value>
+  </data>
+  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
+    <value>Song song hóa câu thơ</value>
+  </data>
+  <data name="Notes_OpenClosed" xml:space="preserve">
+    <value>Đóng mở</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>Xe lửa</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
+    <value>Phần mục tiêu</value>
+  </data>
+  <data name="Bcv_Verse" xml:space="preserve">
+    <value>THƠ</value>
+  </data>
+  <data name="ProperCase_Amos" xml:space="preserve">
+    <value>Amos</value>
+  </data>
+  <data name="ProperCase_Galatians" xml:space="preserve">
+    <value>Galati</value>
+  </data>
+  <data name="ProjectPicker_NoMatches" xml:space="preserve">
+    <value>Không có trận đấu.</value>
+  </data>
+  <data name="ProjectSetup_Hint" xml:space="preserve">
+    <value>Vui lòng nhập tên cho dự án của bạn</value>
+  </data>
+  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
+  </data>
+  <data name="ProperCase_Revelation" xml:space="preserve">
+    <value>Sự mặc khải</value>
+  </data>
+  <data name="MainView_WindowsPINS" xml:space="preserve">
+    <value>PINS</value>
+  </data>
+  <data name="Lexicon_AddMeaning" xml:space="preserve">
+    <value>Thêm ý nghĩa</value>
+  </data>
+  <data name="ProperCase_2_Samuel" xml:space="preserve">
+    <value>2 Samuel</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="Pds_Unknown" xml:space="preserve">
+    <value>không xác định</value>
+  </data>
+  <data name="NewCollabUserView_FirstName" xml:space="preserve">
+    <value>Tên đầu tiên</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>Phê duyệt đã chọn</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>Mã xác minh email</value>
+  </data>
+  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
+    <value>địa phương</value>
+  </data>
+  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
+    <value>Thêm chế độ xem phê duyệt số lượng lớn vào chế độ xem nâng cao tập trung</value>
+  </data>
+  <data name="EnhancedView_Alignment" xml:space="preserve">
+    <value>Liên kết</value>
+  </data>
+  <data name="ClockUserControl_Select" xml:space="preserve">
+    <value>Chọn Timezone</value>
+  </data>
+  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
+    <value>Không có lỗi</value>
+  </data>
+  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
+    <value>Chọn cách để mã hóa Quả văn</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Tên hiển thị</value>
+  </data>
+  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
+    <value>hy sinh và lễ vật</value>
+  </data>
+  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
+    <value>Kết xuất</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>Những sinh vật và sức mạnh siêu nhiên</value>
+  </data>
+  <data name="Notes_UnreadReplies" xml:space="preserve">
+    <value>Trả lời chưa đọc</value>
+  </data>
+  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
+    <value>Cần có khóa cấp phép</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>Người dùng đã tồn tại trên máy chủ</value>
+  </data>
+  <data name="Pds_Daughter" xml:space="preserve">
+    <value>Con gái</value>
+  </data>
+  <data name="EnhancedView_CreateNote" xml:space="preserve">
+    <value>Xem/Tạo ghi chú</value>
+  </data>
+  <data name="Pins_Match" xml:space="preserve">
+    <value>Cuộc thi đấu</value>
+  </data>
+  <data name="ProjectValidator_SameName" xml:space="preserve">
+    <value>Một dự án có cùng tên đã tồn tại. Vui lòng chọn một tên duy nhất.</value>
+  </data>
+  <data name="Lexicon_LexemeExists" xml:space="preserve">
+    <value>Một từ vựng đã tồn tại cho bổ đề</value>
+  </data>
+  <data name="MainView_Layouts" xml:space="preserve">
+    <value>Bố cục</value>
+  </data>
+  <data name="Notes_NoteLabels" xml:space="preserve">
+    <value>Nhãn</value>
+  </data>
+  <data name="MainView_WindowsMarble" xml:space="preserve">
+    <value>ĐÁ HOA</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="Bcv_PreviousChapter" xml:space="preserve">
+    <value>Chương trước</value>
+  </data>
+  <data name="ClockUserControl_Include" xml:space="preserve">
+    <value>Bao gồm trong vòng quay hiển thị đồng hồ</value>
+  </data>
+  <data name="Notes_Note_NoteStatus" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="ProperCase_1_Kings" xml:space="preserve">
+    <value>1 vị vua</value>
+  </data>
+  <data name="ClockUserControl_Name" xml:space="preserve">
+    <value>Đặt tên cho mục</value>
+  </data>
+  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
+    <value>Kết xuất</value>
+  </data>
+  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
+    <value>2 Tê -sa -lô -ni -ca</value>
+  </data>
+  <data name="ProperCase_Esther" xml:space="preserve">
+    <value>Esther</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>Thành viên dự án</value>
+  </data>
+  <data name="Marble_Senses" xml:space="preserve">
+    <value>Giác quan</value>
+  </data>
+  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
+    <value>Tham gia mã thông báo cho cặp ngôn ngữ</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
+    <value>Tạo căn chỉnh từ</value>
+  </data>
+  <data name="Pins_Suffix" xml:space="preserve">
+    <value>Hậu tố</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
+    <value>Thuật toán căn chỉnh từ máy</value>
+  </data>
+  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
+    <value>Kiểm tra email của bạn và nhập mã xác thực:</value>
+  </data>
+  <data name="NewCollabUserView_Password" xml:space="preserve">
+    <value>Mật khẩu:</value>
+  </data>
+  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
+    <value>Bề mặt thiết kế dự án</value>
+  </data>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="ProperCase_Leviticus" xml:space="preserve">
+    <value>Leviticus</value>
+  </data>
+  <data name="ProperCase_2_Timothy" xml:space="preserve">
+    <value>2 Timothy</value>
+  </data>
+  <data name="SlackMessageView_NoInternet" xml:space="preserve">
+    <value>Không có mạng</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>Thánh vịnh</value>
+  </data>
+  <data name="ProperCase_John" xml:space="preserve">
+    <value>John</value>
+  </data>
+  <data name="BiblicalTermsDomains_People" xml:space="preserve">
+    <value>mọi người</value>
+  </data>
+  <data name="MainView_ShowLog" xml:space="preserve">
+    <value>Hiển thị nhật ký</value>
+  </data>
+  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
+    <value>Xóa dự án</value>
+  </data>
+  <data name="Pds_ManuscriptGreek" xml:space="preserve">
+    <value>Macula Hy Lạp</value>
+  </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>Dự án máy chủ nhập khẩu</value>
+  </data>
+  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
+    <value />
+  </data>
+  <data name="FontSettings_ParagraphMode" xml:space="preserve">
+    <value>Chế độ đoạn văn</value>
+  </data>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>Lưu các thiết lập</value>
+  </data>
+  <data name="Bcv_Chapter" xml:space="preserve">
+    <value>Chương</value>
+  </data>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>Thêm InterLinear mới</value>
+  </data>
+  <data name="Settings_TextCollections" xml:space="preserve">
+    <value>Bộ sưu tập văn bản</value>
+  </data>
+  <data name="ProperCase_Ezekiel" xml:space="preserve">
+    <value>Ezekiel</value>
+  </data>
+  <data name="Pds_Resource" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="EnhancedView_Notes" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
+    <value>thiên nhiên</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="Pds_StudyBible" xml:space="preserve">
+    <value>Nghiên cứu</value>
+  </data>
+  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
+    <value>Văn bản câu thơ</value>
+  </data>
+  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
+    <value>Tạo người dùng cộng tác</value>
+  </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>Người dùng cộng tác có sẵn:</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="NewProjectDialog_Title" xml:space="preserve">
+    <value>Tạo dự án mới</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>Dự án</value>
+  </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>tên tài khoản</value>
+  </data>
+  <data name="RegistrationView_LicenseKey" xml:space="preserve">
+    <value>Nhập mã xác nhận của bạn</value>
+  </data>
+  <data name="ProjectPicker_GetStarted" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="Windows_TextCollection" xml:space="preserve">
+    <value>Bộ sưu tập văn bản</value>
+  </data>
+  <data name="Pins_Language" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="Pins_Lexeme" xml:space="preserve">
+    <value>Từ vựng</value>
+  </data>
+  <data name="Pds_TransliterationManual" xml:space="preserve">
+    <value>Phiên âm</value>
+  </data>
+  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
+    <value>Không chấp thuận được chọn</value>
+  </data>
+  <data name="ProperCase_Ephesians" xml:space="preserve">
+    <value>Ê -phê -sô</value>
+  </data>
+  <data name="LicenseValidator_LastMissing" xml:space="preserve">
+    <value>Họ được yêu cầu</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="1SA" xml:space="preserve">
+    <value>1SA</value>
+  </data>
+  <data name="Pins_LoadReferences" xml:space="preserve">
+    <value>Tải tài liệu tham khảo</value>
+  </data>
+  <data name="FontSettings_Title" xml:space="preserve">
+    <value>Tiêu đề:</value>
+  </data>
+  <data name="ProjectPicker_Paratext" xml:space="preserve">
+    <value>Paratext</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
+    <value>Mã xác minh email:</value>
+  </data>
+  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
+    <value>Nhu cầu xem xét</value>
+  </data>
+  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
+    <value>Bóng</value>
+  </data>
+  <data name="Notes_FilterLabels" xml:space="preserve">
+    <value>Bằng nhãn</value>
+  </data>
+  <data name="Notes_FilterExpander" xml:space="preserve">
+    <value>Bộ lọc</value>
+  </data>
+  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
+    <value>Tên miền phụ:</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Thêm vào</value>
+  </data>
+  <data name="ProperCase_Acts" xml:space="preserve">
+    <value>Hành vi</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
+    <value>sự thi công; các hoạt động tôn giáo</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="BulkAlignmentReview_Target" xml:space="preserve">
+    <value>Mục tiêu</value>
+  </data>
+  <data name="Lexicon_LemmaForms" xml:space="preserve">
+    <value>Bổ đề/hình thức:</value>
+  </data>
+  <data name="Marble_SearchEnglish" xml:space="preserve">
+    <value>Tìm kiếm bằng tiếng Anh bóng</value>
+  </data>
+  <data name="Landing_Projects" xml:space="preserve">
+    <value>Dự án</value>
+  </data>
+  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
+    <value>Mã thông báo tổng hợp không khớp</value>
+  </data>
+  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
+    <value>Siêu dữ liệu JSON</value>
+  </data>
+  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
+    <value>BỎ CHỌN TẤT CẢ</value>
+  </data>
+  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
+    <value>Phần nguồn</value>
+  </data>
+  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
+    <value>Đá quý</value>
+  </data>
+  <data name="Pins_Notes" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="ProjectPicker_Project" xml:space="preserve">
+    <value>Dự án:</value>
+  </data>
+  <data name="Marble_Chapter" xml:space="preserve">
+    <value>Chương</value>
+  </data>
+  <data name="Pds_FitNodesToViewport" xml:space="preserve">
+    <value>Phù hợp với tất cả các nút vào chế độ xem</value>
+  </data>
+  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
+    <value>Áp dụng dịch</value>
+  </data>
+  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
+    <value>các hoạt động tôn giáo</value>
+  </data>
+  <data name="Pins_ShowBackTranslation" xml:space="preserve">
+    <value>Hiển thị backtranslation</value>
+  </data>
+  <data name="Marble_Glosses" xml:space="preserve">
+    <value>Glosses:</value>
+  </data>
+  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
+    <value>Train Machine Word Aligner</value>
+  </data>
+  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
+    <value>Phiên dịchWithEncoder</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="ProperCase_Isaiah" xml:space="preserve">
+    <value>Ê -sai</value>
+  </data>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>Gửi email xác thực</value>
+  </data>
+  <data name="ClockUserControl_Add" xml:space="preserve">
+    <value>Thêm vào</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>Xác thực mã email</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Được rồi</value>
+  </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Kín đáo</value>
   </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="ProperCase_Nahum" xml:space="preserve">
+    <value>Nahum</value>
+  </data>
+  <data name="Bcv_NextBook" xml:space="preserve">
+    <value>Cuốn sách tiếp theo</value>
+  </data>
+  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
+    <value>Mã thông báo Corpus</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Kế tiếp</value>
+  </data>
+  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
+    <value>Chấp thuận</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Phiên bản</value>
+  </data>
+  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
+    <value>Thơ</value>
+  </data>
+  <data name="ProperCase_1_John" xml:space="preserve">
+    <value>1 John</value>
+  </data>
+  <data name="SlackMessageView_Message" xml:space="preserve">
+    <value>Tin nhắn:</value>
+  </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>Địa chỉ email</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="ProperCase_Obadiah" xml:space="preserve">
+    <value>Obadiah</value>
+  </data>
+  <data name="Bcv_PreviousBook" xml:space="preserve">
+    <value>Cuốn sách trước</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
+    <value>công cụ; Sinh con</value>
+  </data>
+  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
+    <value>đài kỷ niệm</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
+    <value>Xóa căn chỉnh cho '{0}'?</value>
+  </data>
+  <data name="MainView_Settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="Pds_FitContentToViewport" xml:space="preserve">
+    <value>Lắp toàn bộ khu vực nội dung vào chế độ xem</value>
+  </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>Chọn Dự án</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Làm cho khỏe lại</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="FontSettings_FontSize" xml:space="preserve">
+    <value>Cỡ chữ:</value>
+  </data>
+  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
+    <value>nhóm; khu vực</value>
+  </data>
+  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
+    <value>Hủy nhiệm vụ</value>
+  </data>
+  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
+    <value>Các vấn đề đã biết</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
+    <value>mọi người; danh dự, sự tôn trọng, địa vị</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
+    <value>cây; trái cây</value>
+  </data>
+  <data name="ProperCase_Genesis" xml:space="preserve">
+    <value>Genesis</value>
+  </data>
+  <data name="EnhancedView_FilterPins" xml:space="preserve">
+    <value>Chân lọc</value>
+  </data>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>Hủy dịch</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
+    <value>Không chấp thuận</value>
+  </data>
+  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
+    <value>Tạo mã thông báo mới</value>
+  </data>
+  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
+    <value>Phạm vi:</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="Language [UID_Key]" xml:space="preserve">
+    <value>Vietnamese [vi]</value>
+  </data>
+  <data name="Marble_DefinitionShort" xml:space="preserve">
+    <value>Định nghĩa ngắn:</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
+    <value>danh dự, sự tôn trọng, địa vị</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>Về</value>
+  </data>
+  <data name="ProperCase_Song of Songs" xml:space="preserve">
+    <value>Bài hát của các bài hát</value>
+  </data>
+  <data name="BiblicalTermsForm_Project" xml:space="preserve">
+    <value>Dự án</value>
+  </data>
+  <data name="ProperCase_Malachi" xml:space="preserve">
+    <value>Malachi</value>
+  </data>
+  <data name="Marble_Definition" xml:space="preserve">
+    <value>Sự định nghĩa</value>
+  </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>Làm mới danh sách các dự án cộng tác</value>
+  </data>
+  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
+    <value>Số lỗi:</value>
+  </data>
+  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
+    <value>Căn chỉnh '{0}' với '{1}'?</value>
+  </data>
+  <data name="ProperCase_Job" xml:space="preserve">
+    <value>Công việc</value>
+  </data>
+  <data name="MainView_WindowsTextCollections" xml:space="preserve">
+    <value>Bộ sưu tập văn bản</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
+  </data>
+  <data name="Notes_FilterUsers" xml:space="preserve">
+    <value>Bởi người dùng</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="NewCollabUserView_Username" xml:space="preserve">
+    <value>Tên tài khoản:</value>
+  </data>
+  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
+    <value>Bố cục dự án</value>
+  </data>
+  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
+    <value>Tìm kiếm gần đây</value>
+  </data>
+  <data name="Notes_FilterNoteText" xml:space="preserve">
+    <value>Theo ghi chú văn bản</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Cứu</value>
+  </data>
+  <data name="Pins_Occurences" xml:space="preserve">
+    <value>Xảy ra</value>
+  </data>
+  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
+    <value>Bố cục tiêu chuẩn</value>
+  </data>
+  <data name="ExpandView" xml:space="preserve">
+    <value>Mở rộng chế độ xem</value>
+  </data>
+  <data name="MainView_Windows" xml:space="preserve">
+    <value>các cửa sổ</value>
+  </data>
+  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
+    <value>Nhập một bản dịch mới</value>
+  </data>
+  <data name="Lexicon_SetTranslation" xml:space="preserve">
+    <value>Đặt bản dịch cho</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
+    <value>Tạo song song với các câu thơ Corpora</value>
+  </data>
+  <data name="Pds_ShowVersesMenu" xml:space="preserve">
+    <value>Thêm văn bản văn bản mã hóa vào cửa sổ nâng cao mới</value>
+  </data>
+  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
+    <value>Mở gần đây</value>
+  </data>
+  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
+    <value>giải quyết</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="ProperCase_Philippians" xml:space="preserve">
+    <value>Phi -líp</value>
+  </data>
+  <data name="Windows_AlignmentTool" xml:space="preserve">
+    <value>Công cụ căn chỉnh</value>
+  </data>
+  <data name="Pins_Filter" xml:space="preserve">
+    <value>Lọc:</value>
+  </data>
+  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
+    <value>Kiểm tra tính khả dụng của người dùng</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
+    <value>Xóa căn chỉnh</value>
+  </data>
+  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
+    <value>Nhập một bản dịch mới cho</value>
+  </data>
+  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
+    <value>Sắp xếp</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
+    <value>Đếm bằng văn bản đào tạo</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
+    <value>Đặt ánh xạ câu giữa các tập đoàn song song</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
+    <value>mọi người; thẩm quyền</value>
+  </data>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>SÁCH</value>
+  </data>
+  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
+    <value>Xóa ý nghĩa này</value>
+  </data>
+  <data name="Notes_NoteText" xml:space="preserve">
+    <value>Chữ</value>
+  </data>
+  <data name="Settings_ReservedCaption" xml:space="preserve">
+    <value>Dành riêng cho việc mở rộng trong tương lai</value>
+  </data>
+  <data name="Pds_Auxiliary" xml:space="preserve">
+    <value>Phụ trợ</value>
+  </data>
+  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
+    <value>Chọn tổ chức</value>
+  </data>
+  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
+    <value>Truy cập thẻ:</value>
+  </data>
+  <data name="Marble_StrongCodes" xml:space="preserve">
+    <value>Mã mạnh</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>Lưu người dùng Gitlab vào máy chủ</value>
+  </data>
+  <data name="ProperCase_2_Corinthians" xml:space="preserve">
+    <value>2 Cô -rinh -tô</value>
+  </data>
+  <data name="EnhancedView_JoinTokens" xml:space="preserve">
+    <value>Tham gia mã thông báo</value>
+  </data>
+  <data name="BiblicalTermsForm_All" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="Pds_Xml" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="ProjectPicker_CreateLong" xml:space="preserve">
+    <value>Tạo dự án của bạn để bắt đầu.</value>
+  </data>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>Không tìm thấy trên hệ thống!</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
+    <value>Chọn Corpus</value>
+  </data>
+  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
+    <value>Thêm chế độ xem câu vào chế độ xem nâng cao tập trung</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
+    <value>Liên kết</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="ProperCase_2_Chronicles" xml:space="preserve">
+    <value>2 Biên niên sử</value>
+  </data>
+  <data name="Notes_DeleteConfirmation" xml:space="preserve">
+    <value>Xóa ghi chú này?</value>
+  </data>
+  <data name="OldTestament" xml:space="preserve">
+    <value>Di chúc cũ</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
+    <value>Xóa căn chỉnh?</value>
+  </data>
+  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
+    <value>1 Tê -sa -lô -ni -ca</value>
+  </data>
+  <data name="Notes_NoteReplies" xml:space="preserve">
+    <value>Trả lời</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="ProperCase_Hebrews" xml:space="preserve">
+    <value>Hê -bơ -rơ</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Tạo nên</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
+    <value>cây; nước hoa và gia vị</value>
+  </data>
+  <data name="Bcv_Offset" xml:space="preserve">
+    <value>BÙ LẠI</value>
+  </data>
+  <data name="Marble_Domains" xml:space="preserve">
+    <value>Miền:</value>
+  </data>
+  <data name="ProperCase_1_Samuel" xml:space="preserve">
+    <value>1 Samuel</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Biên tập</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
+    <value>Xóa Interlinear</value>
+  </data>
+  <data name="TargetContextView_Unformatted" xml:space="preserve">
+    <value>Không định dạng</value>
+  </data>
+  <data name="RegistrationView_LastName" xml:space="preserve">
+    <value>Vui lòng nhập họ của bạn</value>
+  </data>
+  <data name="RegistrationView_FirstName" xml:space="preserve">
+    <value>Vui lòng nhập tên của bạn</value>
+  </data>
+  <data name="ProjectPicker_Database" xml:space="preserve">
+    <value>Cơ sở dữ liệu:</value>
+  </data>
+  <data name="FontSettings_NoteIndicators" xml:space="preserve">
+    <value>LƯU Ý Các chỉ số:</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
+    <value>Đóng ứng dụng</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
+  </data>
+  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
+    <value>Trả lời chưa đọc hiện tại</value>
+  </data>
+  <data name="Bcv_Sync" xml:space="preserve">
+    <value>ĐỒNG BỘ HÓA</value>
+  </data>
+  <data name="ProperCase_Mark" xml:space="preserve">
+    <value>Đánh dấu</value>
+  </data>
+  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
+    <value>Miền ngữ nghĩa:</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>Định nghĩa không có sẵn</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Mặt sau</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
+    <value>Chào mừng bạn đến Cleardashboard! Vui lòng nhập thông tin đăng ký của bạn.</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>xây dựng; chăn nuôi</value>
+  </data>
+  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
+    <value>Xóa căn chỉnh</value>
+  </data>
+  <data name="Marble_GeneralInformation" xml:space="preserve">
+    <value>Thông tin chung</value>
+  </data>
+  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
+    <value>Thiếu kết xuất</value>
+  </data>
+  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
+    <value>nhóm</value>
+  </data>
+  <data name="BiblicalTermsForm_Term" xml:space="preserve">
+    <value>Thuật ngữ</value>
+  </data>
+  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
+    <value>Paratext không được cài đặt. Vui lòng cài đặt paratext và chạy lại ứng dụng ClearDashboard.</value>
+  </data>
+  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
+    <value>Thêm vào chế độ xem nâng cao mới</value>
+  </data>
+  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
+    <value>Tạo InterLinear mới</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="Lexicon_RemoveDomain" xml:space="preserve">
+    <value>Loại bỏ miền ngữ nghĩa này khỏi ý nghĩa này</value>
+  </data>
+  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
+    <value>Bật hiển thị bộ sưu tập văn bản từng câu</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
+  </data>
+  <data name="ProperCase_Deuteronomy" xml:space="preserve">
+    <value>Phục truyền luật lệ ký</value>
+  </data>
+  <data name="Notes_SendConfirmation" xml:space="preserve">
+    <value>Gửi ghi chú này đến paratext?</value>
+  </data>
+  <data name="NewCollabUserView_Group" xml:space="preserve">
+    <value>Nhóm:</value>
+  </data>
+  <data name="BulkAlignmentReview_Count" xml:space="preserve">
+    <value>Đếm</value>
+  </data>
+  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
+    <value>Xóa bản dịch này</value>
+  </data>
+  <data name="MainView_WindowsDashboard" xml:space="preserve">
+    <value>bảng điều khiển</value>
+  </data>
+  <data name="BiblicalTermsDomains_All" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="EnhancedView_Interlinear" xml:space="preserve">
+    <value>Xen kẽ</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>Khôi phục người dùng cộng tác</value>
+  </data>
+  <data name="Marble_FrequencyGraph" xml:space="preserve">
+    <value>Đồ thị tần số</value>
+  </data>
+  <data name="Windows_EnhancedView" xml:space="preserve">
+    <value>Tăng cường xem</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
+    <value>công cụ; cân nặng; thương mại</value>
+  </data>
+  <data name="Marble_Verses" xml:space="preserve">
+    <value>Câu thơ</value>
+  </data>
+  <data name="Lexicon_ChangeAll" xml:space="preserve">
+    <value>Thay đổi tất cả các lần xuất hiện không được đặt</value>
+  </data>
+  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
+    <value>Tạo căn chỉnh từ mới</value>
+  </data>
+  <data name="Notes_AddNewNote" xml:space="preserve">
+    <value>Thêm một ghi chú mới</value>
+  </data>
+  <data name="ProperCase_Joshua" xml:space="preserve">
+    <value>Joshua</value>
+  </data>
+  <data name="ProperCase_Micah" xml:space="preserve">
+    <value>Micah</value>
+  </data>
+  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
+    <value>Paganism</value>
+  </data>
+  <data name="MainView_FileNew" xml:space="preserve">
+    <value>Mới</value>
+  </data>
+  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
+    <value>Được lưu vào máy chủ từ xa</value>
+  </data>
+  <data name="Settings_PowerModes" xml:space="preserve">
+    <value>Chế độ năng lượng</value>
+  </data>
+  <data name="Lexicon_Meanings" xml:space="preserve">
+    <value>Ý nghĩa:</value>
+  </data>
+  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
+    <value>hộp đựng; chăn nuôi</value>
+  </data>
+  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
+    <value>Ghi chú rõ ràng</value>
+  </data>
+  <data name="ProperCase_Lamentations" xml:space="preserve">
+    <value>Than thở</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="ProperCase_Daniel" xml:space="preserve">
+    <value>Daniel</value>
+  </data>
+  <data name="Settings_PowerModesDescription" xml:space="preserve">
+    <value>Cho phép ClearDashboard thay đổi chế độ công suất trong các sự kiện tính toán cao</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
+    <value>Nghiên cứu</value>
+  </data>
+  <data name="ProperCase_2_Peter" xml:space="preserve">
+    <value>2 Peter</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
+    <value>động vật có vú; động vật hoang dã</value>
+  </data>
+  <data name="NewCollabUserView_Email" xml:space="preserve">
+    <value>E-mail:</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="RegistrationDialogView_Register" xml:space="preserve">
+    <value>Đăng ký</value>
+  </data>
+  <data name="Pds_ChangeZoom" xml:space="preserve">
+    <value>Thay đổi mức độ zoom của nội dung</value>
+  </data>
+  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
+    <value>Thêm văn bản văn bản mã hóa vào chế độ xem nâng cao mới</value>
+  </data>
+  <data name="ProperCase_Joel" xml:space="preserve">
+    <value>Joel</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>Kiểu</value>
+  </data>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>Paratext không chạy</value>
+  </data>
+  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
+    <value>Người dùng đã có trên hệ thống!</value>
+  </data>
+  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
+    <value>Hiệp hội</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>Người dùng dự án hiện tại:</value>
+  </data>
+  <data name="ClockUserControl_Delete" xml:space="preserve">
+    <value>Xóa bỏ</value>
+  </data>
+  <data name="MainView_GatherLogs" xml:space="preserve">
+    <value>Gửi tin nhắn để xóa</value>
+  </data>
+  <data name="ShellView_Loading" xml:space="preserve">
+    <value>Đang tải...</value>
+  </data>
+  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
+    <value>Nội dung của khóa cấp phép được giải mã không phù hợp với thông tin bạn cung cấp.</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>KHÔNG</value>
+  </data>
+  <data name="BiblicalTermsForm_Note" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
+    <value>khu vực; thiên nhiên</value>
+  </data>
+  <data name="Pds_Target" xml:space="preserve">
+    <value>Mục tiêu</value>
+  </data>
+  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
+    <value>cá nhân mới</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="ProperCase_Titus" xml:space="preserve">
+    <value>Titus</value>
+  </data>
+  <data name="FontSettings_TitleFontSize" xml:space="preserve">
+    <value>Kích thước phông chữ tiêu đề:</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Tài liệu</value>
+  </data>
+  <data name="BiblicalTermsForm_Found" xml:space="preserve">
+    <value>Thành lập</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
+    <value>Đánh giá căn chỉnh số lượng lớn</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Giúp đỡ</value>
+  </data>
+  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
+    <value>Một dự án có tên '{0}' đã tồn tại. Vui lòng chọn một tên duy nhất. "</value>
+  </data>
+  <data name="Pds_AddCorpora" xml:space="preserve">
+    <value>Thêm Corpora</value>
+  </data>
+  <data name="ProperCase_Ruth" xml:space="preserve">
+    <value>Ruth</value>
+  </data>
+  <data name="NewCollabUserView_LastName" xml:space="preserve">
+    <value>Họ</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
+    <value>Vui lòng nhập tên cho dự án của bạn.</value>
+  </data>
+  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
+    <value>đạo đức và đạo đức</value>
+  </data>
+  <data name="Marble_SearchHebrew" xml:space="preserve">
+    <value>Tìm kiếm bằng tiếng Do Thái/tiếng Hy Lạp</value>
+  </data>
+  <data name="ClockUserControl_LocalTime" xml:space="preserve">
+    <value>Giờ địa phương</value>
+  </data>
+  <data name="ProperCase_Haggai" xml:space="preserve">
+    <value>Haggai</value>
+  </data>
+  <data name="Pds_Standard" xml:space="preserve">
+    <value>Tiêu chuẩn</value>
+  </data>
+  <data name="MainView_WindowsNotes" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="FontSettings_Height" xml:space="preserve">
+    <value>Chiều cao:</value>
+  </data>
+  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
+    <value>Chế độ nguồn được bật</value>
+  </data>
+  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
+    <value>Bởi các hiệp hội</value>
+  </data>
+  <data name="ProperCase_2_John" xml:space="preserve">
+    <value>2 John</value>
+  </data>
+  <data name="Pds_ZoomIn" xml:space="preserve">
+    <value>Phóng to nội dung</value>
+  </data>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>Thêm vào chế độ xem nâng cao tập trung</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>Hiển thị các nhiệm vụ nền</value>
+  </data>
+  <data name="ProperCase_Jude" xml:space="preserve">
+    <value>Jude</value>
+  </data>
+  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
+    <value>Sách</value>
+  </data>
+  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
+    <value>sự kết hợp</value>
+  </data>
+  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
+    <value>Trí tuệ, sự hiểu biết</value>
+  </data>
+  <data name="Lexicon_Lexeme" xml:space="preserve">
+    <value>Từ vựng</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="Migrate_Header2" xml:space="preserve">
+    <value>Đặt lại ánh xạ câu thơ về sự đa dạng hóa mặc định</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Được tạo bởi</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>Thêm văn bản văn bản mã hóa vào chế độ xem nâng cao tập trung</value>
+  </data>
+  <data name="Pins_ClearFilter" xml:space="preserve">
+    <value>LÀm sạch bộ lọc</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Cập nhật</value>
+  </data>
+  <data name="ProjectPicker_Version" xml:space="preserve">
+    <value>Phiên bản:</value>
+  </data>
+  <data name="Lexicon_AddForm" xml:space="preserve">
+    <value>Thêm một dạng từ vựng vào bổ đề này</value>
+  </data>
+  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
+    <value>Xóa từ vựng này</value>
+  </data>
+  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
+    <value>người</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
+    <value>sự yêu mến</value>
+  </data>
+  <data name="Pds_Dictionary" xml:space="preserve">
+    <value>Từ điển</value>
+  </data>
+  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
+    <value>Người dùng cộng tác mới</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
+    <value>Không chấp thuận</value>
+  </data>
+  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
+    <value>Các từ xoay tròn</value>
+  </data>
+  <data name="Pds_ZoomOut" xml:space="preserve">
+    <value>Thu phóng từ nội dung</value>
+  </data>
+  <data name="Marble_RelatedLemmas" xml:space="preserve">
+    <value>Bổ số liên quan</value>
+  </data>
+  <data name="SlackMessageView_Send" xml:space="preserve">
+    <value>Gửi</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Đúng</value>
+  </data>
+  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
+    <value>động vật</value>
+  </data>
+  <data name="FontSettings_Horizontal" xml:space="preserve">
+    <value>Khoảng cách ngang:</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>Xác thực mã email</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>Số lượng mã thông báo khác nhau</value>
+  </data>
+  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
+    <value>Sao chép vào clipboard</value>
+  </data>
+  <data name="Pins_Origin" xml:space="preserve">
+    <value>Nguồn gốc</value>
+  </data>
+  <data name="NewTestament" xml:space="preserve">
+    <value>Di chúc mới</value>
+  </data>
+  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
+    <value>mục đích</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
+    <value>Thuật toán căn chỉnh từ máy</value>
+  </data>
+  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
+    <value>Tán thành</value>
+  </data>
+  <data name="MainView_LayoutsDelete" xml:space="preserve">
+    <value>Xóa bố cục đã lưu</value>
+  </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>Email gửi lỗi</value>
+  </data>
+  <data name="WordMeaningsView_Sense" xml:space="preserve">
+    <value>Giác quan:</value>
+  </data>
+  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
+    <value>Thêm một ý nghĩa cho bổ đề này</value>
+  </data>
+  <data name="Lexicon_AddLexeme" xml:space="preserve">
+    <value>Thêm từ vựng</value>
+  </data>
+  <data name="ProperCase_1_Chronicles" xml:space="preserve">
+    <value>1 Biên niên sử</value>
+  </data>
+  <data name="FontSettings_SourceFontSize" xml:space="preserve">
+    <value>Kích thước phông chữ nguồn:</value>
+  </data>
+  <data name="ProperCase_Colossians" xml:space="preserve">
+    <value>COLOSSIANS</value>
+  </data>
+  <data name="Pds_ResetVerseVersification" xml:space="preserve">
+    <value>Đặt lại ánh xạ câu thơ về sự đa dạng hóa mặc định</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
+    <value>Chọn sách để xử lý</value>
+  </data>
+  <data name="ProperCase_Jeremiah" xml:space="preserve">
+    <value>Giê -rê -mi</value>
+  </data>
+  <data name="Pins_Word" xml:space="preserve">
+    <value>Từ</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>Địa chỉ email</value>
+  </data>
+  <data name="Notes_LabelRemove" xml:space="preserve">
+    <value>Xóa nhãn này</value>
+  </data>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>Sự miêu tả</value>
+  </data>
+  <data name="ProperCase_Jonah" xml:space="preserve">
+    <value>Jonah</value>
+  </data>
+  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
+    <value>Paratext đang chạy nhưng không được kết nối.</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
+    <value>Truyền đạo</value>
+  </data>
+  <data name="ProperCase_Nehemiah" xml:space="preserve">
+    <value>Nehemiah</value>
+  </data>
+  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
+    <value>Mô hình đối xứng xe lửa?</value>
+  </data>
+  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
+    <value>Người dùng đã tồn tại trên máy chủ</value>
+  </data>
+  <data name="Settings_AquaEnabled" xml:space="preserve">
+    <value>Bật plugin Aqua thử nghiệm</value>
+  </data>
+  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
+    <value>Người dùng</value>
+  </data>
+  <data name="Pins_Gloss" xml:space="preserve">
+    <value>Bóng</value>
+  </data>
+  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
+    <value>Tạo căn chỉnh từ mới</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>Kiểm tra email của bạn và nhập mã xác thực:</value>
+  </data>
+  <data name="Bcv_PreviousVerse" xml:space="preserve">
+    <value>Câu trước</value>
+  </data>
+  <data name="Pins_VerseReferences" xml:space="preserve">
+    <value>Tài liệu tham khảo câu</value>
+  </data>
+  <data name="Marble_VerseTotal" xml:space="preserve">
+    <value>Tổng số câu</value>
+  </data>
+  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
+    <value>Cỏ</value>
+  </data>
+  <data name="Pds_PropertiesMenu" xml:space="preserve">
+    <value>Của cải</value>
+  </data>
+  <data name="ProperCase_Numbers" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
+    <value>Mã thông báo '{0}' có nhiều căn chỉnh được xác định. Nhấp vào '{1}' sẽ xóa tất cả các sắp xếp.</value>
+  </data>
+  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
+    <value>Tên dự án đã cho chứa các ký tự bất hợp pháp. Các ký tự hợp lệ bao gồm 'a-z' (chữ thường và chữ hoa), số '0-9' và các ký tự '-' và '_'.</value>
+  </data>
+  <data name="TargetContextView_ZoomOut" xml:space="preserve">
+    <value>Thu nhỏ</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>Từ:</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
+    <value>Từ ngữ phù hợp</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
+  </data>
+  <data name="Lexicon_RemoveForm" xml:space="preserve">
+    <value>Loại bỏ hình thức từ vựng này khỏi bổ đề này</value>
+  </data>
+  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
+    <value>Macula Do Thái</value>
+  </data>
+  <data name="Notes_SendToParatext" xml:space="preserve">
+    <value>Gửi ghi chú này đến paratext</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
+    <value>Tạo Interlinear</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>Quản lý cộng tác</value>
+  </data>
+  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
+    <value>Tạo cơ sở dữ liệu ...</value>
+  </data>
+  <data name="ProperCase_Luke" xml:space="preserve">
+    <value>Luke</value>
+  </data>
+  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
+    <value>Bổ đề cho Lexeme mới:</value>
+  </data>
+  <data name="Lexicon_Concordance" xml:space="preserve">
+    <value>Sự phù hợp</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>Cài đặt ClearDashboard</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
+    <value>động vật có vú; vật nuôi</value>
+  </data>
+  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
+    <value>Loại bỏ kho văn bản</value>
+  </data>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>Sở thích</value>
+  </data>
+  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
+    <value>Tạo người dùng cộng tác</value>
+  </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
     <value>Không có dữ liệu câu trong phạm vi câu này.</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
+    <value>CHỌN TẤT CẢ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
+    <value>tang chế</value>
+  </data>
+  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
+    <value>Bóng:</value>
+  </data>
+  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
+    <value>Ý nghĩa từ</value>
+  </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>Chế độ xem nâng cao mới</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>Kiểm tra USFM</value>
+  </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>Tính toán mô hình dịch mới</value>
+  </data>
+  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
+    <value>Lỗi khi tạo người dùng trên máy chủ</value>
+  </data>
+  <data name="MainView_GettingStartedGuide" xml:space="preserve">
+    <value>Bắt đầu khóa hướng dẫn</value>
+  </data>
+  <data name="Windows_BiblicalTerms" xml:space="preserve">
+    <value>Điều khoản Kinh Thánh</value>
+  </data>
+  <data name="FontSettings_Target" xml:space="preserve">
+    <value>Văn bản đích:</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="UseDefaults" xml:space="preserve">
+    <value>Tạo bằng cách sử dụng mặc định</value>
+  </data>
+  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
+    <value>Xóa điều này tăng cường này?</value>
+  </data>
+  <data name="ShellView_ShowPreReleases" xml:space="preserve">
+    <value>Hiển thị trước khi phát hành</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>Chủ dự án</value>
+  </data>
+  <data name="MainView_FileOpen" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="ProperCase_James" xml:space="preserve">
+    <value>James</value>
+  </data>
+  <data name="ProperCase_Judges" xml:space="preserve">
+    <value>Ban giám khảo</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="ProjectSetup_Title" xml:space="preserve">
+    <value>Tạo dự án mới của bạn</value>
+  </data>
+  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
+    <value>Hợp nhất hoàn thành ... Giao diện tải lại</value>
+  </data>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>Thêm một miền ngữ nghĩa</value>
+  </data>
+  <data name="ProperCase_Philemon" xml:space="preserve">
+    <value>Philemon</value>
+  </data>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
+  </data>
+  <data name="Marble_Book" xml:space="preserve">
+    <value>Sách</value>
+  </data>
+  <data name="Pins_Code" xml:space="preserve">
+    <value>Mã số</value>
+  </data>
+  <data name="ProperCase_Matthew" xml:space="preserve">
+    <value>Matthew</value>
+  </data>
+  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="WordMeaningsView_Domain" xml:space="preserve">
+    <value>Lãnh địa:</value>
+  </data>
+  <data name="BulkAlignmentReview_Source" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
+    <value>Đếm theo văn bản bề mặt</value>
+  </data>
+  <data name="Pins_Phrase" xml:space="preserve">
+    <value>Cụm từ</value>
+  </data>
+  <data name="ProperCase_Hosea" xml:space="preserve">
+    <value>Ô -sê</value>
+  </data>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>Được lưu vào máy chủ từ xa</value>
+  </data>
+  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
+    <value>nông nghiệp</value>
+  </data>
+  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
+    <value>trái cây</value>
+  </data>
+  <data name="Lexicon_NewTranslation" xml:space="preserve">
+    <value>Bản dịch mới</value>
+  </data>
+  <data name="EnhancedView_ShowControls" xml:space="preserve">
+    <value>Hiển thị các điều khiển chế độ xem nâng cao</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
+    <value>Tạo một dự án mới</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>Ezra</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="BiblicalTermsForm_Category" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Mã xác thực email ClearDashboard</value>
+  </data>
+  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Mã xác thực email ClearDashboard</value>
+  </data>
+  <data name="Bcv_NextVerse" xml:space="preserve">
+    <value>Câu thơ tiếp theo</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="Pds_SourceLanguage" xml:space="preserve">
+    <value>Language Sourcel</value>
+  </data>
+  <data name="Pins_Forms" xml:space="preserve">
+    <value>Các hình thức</value>
+  </data>
+  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
+    <value>khu vực</value>
+  </data>
+  <data name="FontSettings_Vertical" xml:space="preserve">
+    <value>Khoảng cách thẳng đứng:</value>
+  </data>
+  <data name="Notes_FilterStatus_Open" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="Windows_PINS" xml:space="preserve">
+    <value>Ghim</value>
+  </data>
+  <data name="Marble_All" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="Windows_CorpusTokens" xml:space="preserve">
+    <value>Mã thông báo Corpus</value>
+  </data>
+  <data name="Pins_LexemeType" xml:space="preserve">
+    <value>Loại Lexeme</value>
+  </data>
+  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
+    <value>Nếu được kiểm tra, điều này sẽ thay đổi tất cả các lần xuất hiện của từ này</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Pds_Source" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="ProperCase_2_Kings" xml:space="preserve">
+    <value>2 Kings</value>
+  </data>
+  <data name="Landing_Project" xml:space="preserve">
+    <value>Dự án</value>
+  </data>
+  <data name="Notes_Note_Created" xml:space="preserve">
+    <value>Tạo</value>
+  </data>
+  <data name="TargetContextView_Formatted" xml:space="preserve">
+    <value>Định dạng</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
+    <value>Đánh dấu được chọn là 'Đánh giá nhu cầu'</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
+    <value>Xen kẽ</value>
+  </data>
+  <data name="ProperCase_1_Corinthians" xml:space="preserve">
+    <value>1 Cô -rinh -tô</value>
+  </data>
+  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
+    <value>Xóa từ vựng này?</value>
+  </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="Marble_DomainsTitle" xml:space="preserve">
+    <value>Miền</value>
+  </data>
+  <data name="Notes_LabelAdd" xml:space="preserve">
+    <value>Thêm một nhãn</value>
+  </data>
+  <data name="Pins_Stem" xml:space="preserve">
+    <value>Thân cây</value>
+  </data>
+  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
+    <value>Dấu hiệu và kỳ quan</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="Bcv_NextChapter" xml:space="preserve">
+    <value>Chương tiếp theo</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
+    <value>Điều khoản Kinh Thánh</value>
+  </data>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>Cài đặt cộng tác</value>
+  </data>
+  <data name="Marble_DefinitionLong" xml:space="preserve">
+    <value>Định nghĩa dài:</value>
+  </data>
+  <data name="ProperCase_3_John" xml:space="preserve">
+    <value>3 John</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="Notes_NoteReplies_Read" xml:space="preserve">
+    <value>Đã xem</value>
+  </data>
+  <data name="ProjectPicker_CreateProject" xml:space="preserve">
+    <value>Tạo dự án:</value>
+  </data>
+  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
+    <value>Tên đầu tiên được yêu cầu</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
+    <value>Thêm một từ vựng</value>
+  </data>
+  <data name="EnhancedView_AddAlignment" xml:space="preserve">
+    <value>Thêm căn chỉnh?</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>Bản dịch:</value>
+  </data>
+  <data name="ProperCase_1_Peter" xml:space="preserve">
+    <value>1 Peter</value>
+  </data>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>Thêm người dùng cộng tác mới</value>
+  </data>
+  <data name="Notes_FilterStatus_Any" xml:space="preserve">
+    <value>Bất kì</value>
   </data>
 </root>
