@@ -134,6 +134,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private bool _sourceToTarget;
 
+        public override async  Task GetData(CancellationToken cancellationToken)
+        {
+            //await base.GetData(cancellationToken);
+            if (EditMode == EditMode.EditorViewOnly)
+            {
+                await GetEditorData();
+            }
+            else
+            {
+                await base.GetData(cancellationToken);
+            }
+        }
+
         protected override async Task GetEditorData()
         {
 

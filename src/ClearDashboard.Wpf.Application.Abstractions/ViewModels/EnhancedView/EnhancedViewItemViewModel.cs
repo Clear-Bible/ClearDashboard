@@ -114,6 +114,7 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
     public virtual Task GetData(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
+
     }
 
     public EditMode EditMode
