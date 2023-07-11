@@ -311,8 +311,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                         FetchingData = true;
                         ProgressBarVisibility = Visibility.Visible;
-                        _verseContexts = await _alignmentSet.GetAlignmentVerseContexts(CurrentAlignedWord.Source,
-                            CurrentAlignedWord.Target, _countsByTrainingText, CurrentBook.Number, AlignmentTypes);
+
+                       var result = await _alignmentSet.GetAlignmentVerseContexts(CurrentAlignedWord.Source,
+                            CurrentAlignedWord.Target, _countsByTrainingText, CurrentBook.Number, AlignmentTypes, 10);
+
+                       _verseContexts = result.VerseContexts;
 
                         //await Execute.OnUIThreadAsync(async () =>
                         //{
@@ -341,7 +344,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                 )
                             });
 
-                        BulkAlignments = new List<BulkAlignmentVerseRow>(verseRows.Take(3).OrderBy(vr => vr.SourceRef));
+                        BulkAlignments = new List<BulkAlignmentVerseRow>(verseRows.OrderBy(vr => vr.SourceRef));
 
                         PagedBulkAlignments = new PagingCollectionView(BulkAlignments, 5);
                         //});

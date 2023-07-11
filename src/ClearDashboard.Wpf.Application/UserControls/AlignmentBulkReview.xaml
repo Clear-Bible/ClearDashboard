@@ -242,7 +242,8 @@
                         <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}" Width=".6*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <userControls:ReadOnlyVerseDisplay 
+                                    <TextBlock Text="{Binding BulkAlignmentDisplayViewModel.DisplayTokens }" />
+                                    <!--<userControls:ReadOnlyVerseDisplay 
                                         DataContext="{Binding BulkAlignmentDisplayViewModel}"
                                         HorizontalAlignment="Stretch"
                                         HorizontalSpacing="{Binding DataContext.SourceHorizontalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}"
@@ -255,7 +256,7 @@
                                         TargetFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TargetFontFamily}"
                                         TargetFontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}"
                                         TitleFontSize="10"
-                                        TitleVisibility="Collapsed" />
+                                        TitleVisibility="Collapsed" />-->
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

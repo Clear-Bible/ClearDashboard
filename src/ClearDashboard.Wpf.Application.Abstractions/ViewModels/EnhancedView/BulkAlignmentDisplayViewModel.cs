@@ -36,6 +36,9 @@ public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
         TargetTokenMap = new TokenMap(bulkAlignment.TargetVerseTokens, targetDetokenizer, isTargetRtl);
     }
 
+    public string DisplayTokens =>
+        string.Join(" ", _bulkAlignment.SourceVerseTokens.Select(token => token.TrainingText));
+
     public static async Task<BulkAlignmentDisplayViewModel> CreateAsync(IComponentContext componentContext, BulkAlignment bulkAlignment, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl)
     {
         var viewModel = componentContext.Resolve<BulkAlignmentDisplayViewModel>(
@@ -52,6 +55,7 @@ public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
     {
         await base.InitializeAsync();
 
+        
         var sourceToken = _bulkAlignment.SourceVerseTokens.ToArray()[(int)_bulkAlignment.SourceVerseTokensIndex];
         var targetToken = _bulkAlignment.TargetVerseTokens.ToArray()[(int)_bulkAlignment.TargetVerseTokensIndex];
 

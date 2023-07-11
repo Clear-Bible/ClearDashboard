@@ -234,6 +234,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         private async Task<IEnumerable<Models.Alignment>> GetAlignmentsLimitCursorAsync(Models.AlignmentSet alignmentSet, GetAlignmentVerseContextsQuery request, string afterSourceEngineTokenId, string afterTargetEngineTokenId, CancellationToken cancellationToken)
         {
+            var sw = Stopwatch.StartNew();
+#if DEBUG
+            sw.Stop();
+            Logger.LogInformation("Elapsed={0} -  GetAlignmentsLimitCursorAsync", sw.Elapsed);
+            sw.Restart();
+#endif
             var alignmentsById = new Dictionary<Guid, Models.Alignment>();
             var tokenCompositeIdToAlignmentIdMapping = new Dictionary<Guid, (bool IsSource, Guid AlignmentId)>();
 
@@ -241,16 +247,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             try
             {
-                using var connection = ProjectDbContext.Database.GetDbConnection();
+                await using var connection = ProjectDbContext.Database.GetDbConnection();
 
                 var alignmentCommand = BuildAlignmentSelectQueryCommand(connection, request, afterSourceEngineTokenId, afterTargetEngineTokenId); ;
-                using (DbDataReader dataReader = await alignmentCommand.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
+                
+                
+                await using (DbDataReader dataReader = await alignmentCommand.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    while (dataReader.Read())
+
+#if DEBUG
+                    sw.Stop();
+                    Logger.LogInformation("Elapsed={0} -  GetAlignmentsLimitCursorAsync, Executed ReaderAsync", sw.Elapsed);
+                    sw.Restart();
+#endif
+                    while (await dataReader.ReadAsync(cancellationToken))
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
-                            dataReader.Close();
+                            await dataReader.CloseAsync();
                             cancellationToken.ThrowIfCancellationRequested();
                         }
 
@@ -313,7 +327,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         }
                     }
 
-                    dataReader.Close();
+                    await dataReader.CloseAsync();
+
+#if DEBUG
+                    sw.Stop();
+                    Logger.LogInformation("Elapsed={0} -  GetAlignmentsLimitCursorAsync, Closed Reader", sw.Elapsed);
+                    sw.Restart();
+#endif
                 }
 
                 if (tokenCompositeIdToAlignmentIdMapping.Any())
@@ -341,11 +361,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     }
                 }
 
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation("Elapsed={0} -  GetAlignmentsLimitCursorAsync, Begin filtering", sw.Elapsed);
+                sw.Restart();
+#endif
+
                 IEnumerable<Models.Alignment> filteredDatabaseAlignments = alignmentsById.Values
                     .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude)
                     .OrderBy(e => e.SourceTokenComponent!.EngineTokenId)
                     .ThenBy(e => e.TargetTokenComponent!.EngineTokenId)
                     .ThenBy(e => (int)e.AlignmentOriginatedFrom);
+
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation("Elapsed={0} -  GetAlignmentsLimitCursorAsync, Filtering complete", sw.Elapsed);
+                sw.Restart();
+#endif
 
                 return filteredDatabaseAlignments;
             }
@@ -359,13 +391,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         {
             var tokenCompositesById = new Dictionary<Guid, Models.TokenComposite>();
 
-            using (DbDataReader dataReader = await compositeCommand.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
+            await using (DbDataReader dataReader = await compositeCommand.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
             {
-                while (dataReader.Read())
+                while (await dataReader.ReadAsync(cancellationToken))
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        dataReader.Close();
+                        await dataReader.CloseAsync();
                         cancellationToken.ThrowIfCancellationRequested();
                     }
 
@@ -409,7 +441,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     token.TokenCompositeTokenAssociations.Add(targetTokenCompositeAssociation);
                 }
 
-                dataReader.Close();
+                await dataReader.CloseAsync();
             }
 
             return tokenCompositesById;

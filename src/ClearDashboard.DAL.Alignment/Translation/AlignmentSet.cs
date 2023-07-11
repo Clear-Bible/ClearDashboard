@@ -78,13 +78,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return result.Data!;
         }
 
-        public async Task<IEnumerable<(
+        public async Task<(IEnumerable<(
             Alignment alignment,
             IEnumerable<Token> sourceVerseTokens,
             uint sourceVerseTokensIndex,
             IEnumerable<Token> targetVerseTokens,
             uint targetVerseTokensIndex
-        )>> GetAlignmentVerseContexts(string sourceString, string targetString, bool stringsAreTraining = true, int? bookNumber = null, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+            )> VerseContexts, string Cursor, bool HasNextPage)> GetAlignmentVerseContexts(string sourceString, string targetString, bool stringsAreTraining = true, int? bookNumber = null, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default)
         {
             var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(
                 AlignmentSetId,
@@ -93,11 +93,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 stringsAreTraining,
                 bookNumber,
                 alignmentTypesToInclude,
-                null,
-                null), cancellationToken);
+                limit,
+                cursor), cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
 
-            return result.Data!.VerseContexts;
+            return result.Data;
         }
 
         public async Task<IEnumerable<int>> GetBookNumbers(string sourceString, string targetString, bool stringsAreTraining = true, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
