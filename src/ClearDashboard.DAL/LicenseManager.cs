@@ -42,7 +42,7 @@ namespace ClearDashboard.DataAccessLayer
         public static void EncryptToFile(User licenseUser, string folderPath)
         {
 
-            var str = EncryptToString(licenseUser, folderPath);
+            var str = EncryptToString(licenseUser);
 
             if (!Directory.Exists(folderPath))
             {
@@ -53,7 +53,7 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        public static string EncryptToString(User licenseUser, string folderPath)
+        public static string EncryptToString(User licenseUser)
         {
 
             var cryptProvider = CreateCryptoProvider();
@@ -89,7 +89,7 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static string DecryptLicenseFromString(string str)
+        public static string DecryptLicenseFromString(string str, bool isGenerator = false)
         {
             try
             {
@@ -106,8 +106,13 @@ namespace ClearDashboard.DataAccessLayer
             }
             catch (Exception ex)
             {
-                var logger = IoC.Get<ILogger<LicenseUserMatchType>>();
-                logger.LogError("DecryptLicenseFromString failed details: "+ex);
+                ILogger<LicenseUserMatchType> logger = null;
+                if (!isGenerator)
+                {
+                    logger = IoC.Get<ILogger<LicenseUserMatchType>>();
+                    logger.LogError("DecryptLicenseFromString failed details: " + ex);
+                }
+
                 return "";
             }
         }
@@ -131,7 +136,7 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static User DecryptedJsonToUser(string decryptedLicenseKey)
+        public static User DecryptedJsonToUser(string decryptedLicenseKey, bool isGenerator=false)
         {
             try
             {
@@ -140,8 +145,12 @@ namespace ClearDashboard.DataAccessLayer
             }
             catch (Exception ex)
             {
-                var logger = IoC.Get<ILogger<LicenseUserMatchType>>();
-                logger.LogError("DecryptedJsonToUser initial deserialization failed: "+ex);
+                ILogger<LicenseUserMatchType> logger = null;
+                if (!isGenerator)
+                {
+                    logger = IoC.Get<ILogger<LicenseUserMatchType>>();
+                    logger.LogError("DecryptedJsonToUser initial deserialization failed: " + ex);
+                }
                 try
                 {
                     var temporaryLicenseUser = JsonSerializer.Deserialize<TemporaryLicenseUser>(decryptedLicenseKey);
@@ -149,7 +158,6 @@ namespace ClearDashboard.DataAccessLayer
                     {
                         FirstName = temporaryLicenseUser.FirstName,
                         LastName = temporaryLicenseUser.LastName,
-                        LicenseKey = temporaryLicenseUser.LicenseKey,
                         ParatextUserName = temporaryLicenseUser.ParatextUserName,
                         Id = Guid.Parse(temporaryLicenseUser.Id)
                     };
@@ -157,7 +165,11 @@ namespace ClearDashboard.DataAccessLayer
                 }
                 catch
                 {
-                    logger.LogError("DecryptedJsonToUser second deserialization failed: "+ex);
+                    if (!isGenerator)
+                    {
+                        logger.LogError("DecryptedJsonToUser second deserialization failed: " + ex);
+                    }
+
                     return new User();
                 }
             }

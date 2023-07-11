@@ -61,6 +61,8 @@ namespace ClearDashboard.Aqua.Module
 
             builder.RegisterType<AquaDialogViewModel>().AsSelf().WithAttributeFiltering();
 
+            builder.RegisterType<AquaCorpusAnalysisEnhancedViewItemViewModel>().AsSelf().WithAttributeFiltering();
+
             builder.RegisterType<AquaVersionStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithAttributeFiltering()

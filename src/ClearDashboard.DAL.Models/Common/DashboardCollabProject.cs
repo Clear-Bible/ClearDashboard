@@ -14,5 +14,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? AppVersion { get; set; }
         public DateTimeOffset? Created { get; set; }
         public Guid ProjectId { get; set; } = Guid.Empty;
+
+        public string RemoteOwner { get; set; } = string.Empty;
+        public PermissionLevel? PermissionLevel { get; set; } = Models.PermissionLevel.Owner;
     }
 }

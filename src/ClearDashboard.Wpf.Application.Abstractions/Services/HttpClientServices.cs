@@ -5,7 +5,6 @@ using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -72,10 +71,6 @@ namespace ClearDashboard.Wpf.Application.Services
 
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
-
-            Debug.WriteLine(result);
-
-
 
             return list;
         }
@@ -198,9 +193,58 @@ namespace ClearDashboard.Wpf.Application.Services
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
 
+                // remove non-project repos
                 for (int i = list.Count - 1; i >= 0; i--)
                 {
                     if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
+                    {
+                        list.RemoveAt(i);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return list;
+        }
+
+
+        public async Task<List<GitLabProject>> GetProjectsForUserWhereOwner(CollaborationConfiguration user)
+        {
+            List<GitLabProject> list = new();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"projects");
+
+            GitLabClient newClient = _gitLabClient;
+            newClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.RemotePersonalAccessToken);
+
+            try
+            {
+                var response = await newClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+
+                list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
+                // sort the list
+                list = list.OrderBy(s => s.Name).ToList();
+
+                // remove non-project repos
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
+                    {
+                        list.RemoveAt(i);
+                    }
+                }
+
+                // remove projects for which we are not the owner
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (!list[i].PathWithNamespace.StartsWith(user.RemoteUserName))
                     {
                         list.RemoveAt(i);
                     }

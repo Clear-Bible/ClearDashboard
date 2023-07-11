@@ -5,18 +5,18 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    Title="CollabProjectManagementView"
+    Title="{helpers:Localization CollabProjectManagementView_CollaborationManagement}"
     Width="700"
-    Height="450"
+    Height="550"
     d:DataContext="{d:DesignInstance Type=popUps:CollabProjectManagementViewModel,
                                      IsDesignTimeCreatable=True}"
-    helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -40,7 +40,33 @@
         </Grid.ColumnDefinitions>
 
         <!--  HEADER  -->
-        <Label Margin="5">Projects:</Label>
+        <Label
+            Margin="5,30,0,0"
+            Content="{helpers:Localization CollabProjectManagementView_Projects}"
+            FontWeight="Medium" />
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="2"
+            Margin="5,5,0,0"
+            Orientation="Horizontal">
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Medium">Filter By Organization</TextBlock>
+                <ComboBox
+                    Margin="0,10,0,0"
+                    ItemsSource="{Binding Organization}"
+                    SelectedItem="{Binding SelectedOrganization}" />
+            </StackPanel>
+            <StackPanel Margin="25,0,0,0" Orientation="Vertical">
+                <TextBlock FontWeight="Medium">Filter By Name</TextBlock>
+                <TextBox
+                    MinWidth="160"
+                    VerticalAlignment="Center"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </StackPanel>
 
         <!--  PROJECTS  -->
         <StackPanel
@@ -52,14 +78,14 @@
                 Height="Auto"
                 Margin="5"
                 VerticalAlignment="Top"
-                materialDesign:HintAssist.Hint="Select Project"
+                materialDesign:HintAssist.Hint="{helpers:Localization CollabProjectManagementView_SelectProject}"
                 FontSize="16"
                 IsEnabled="True"
                 ItemsSource="{Binding Projects}"
                 ScrollViewer.CanContentScroll="False"
                 SelectedItem="{Binding SelectedProject}"
                 Style="{StaticResource MaterialDesignFilledComboBox}"
-                TextSearch.TextPath="Description">
+                TextSearch.TextPath="{helpers:Localization CollabProjectManagementView_Description}">
                 <controls:AutoCompleteComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
@@ -70,10 +96,13 @@
                 </controls:AutoCompleteComboBox.ItemTemplate>
             </controls:AutoCompleteComboBox>
 
-            <Label Margin="5" Content="Current Project Users:" />
+            <Label
+                Margin="5"
+                Content="{helpers:Localization CollabProjectManagementView_CurrentProjectUsers}"
+                FontWeight="Medium" />
 
             <ListBox
-                MinHeight="260"
+                Height="300"
                 Margin="5,0,5,0"
                 VerticalContentAlignment="Stretch"
                 BorderBrush="{StaticResource PrimaryHueMidBrush}"
@@ -92,13 +121,13 @@
                                 <iconPacks:PackIconRemixIcon.Style>
                                     <Style TargetType="iconPacks:PackIconRemixIcon">
                                         <Setter Property="Kind" Value="UserLine" />
-                                        <Setter Property="Foreground" Value="{StaticResource OrangeMidBrush}" />
-                                        <Setter Property="ToolTip" Value="Project Member" />
+                                        <Setter Property="Foreground" Value="{StaticResource BlueLightBrush}" />
+                                        <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectMember}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsOwner}" Value="True">
                                                 <Setter Property="Kind" Value="AdminLine" />
                                                 <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
-                                                <Setter Property="ToolTip" Value="Project Owner" />
+                                                <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectOwner}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -113,7 +142,21 @@
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Center"
                                     FontStyle="Italic"
-                                    Text="{Binding GetPermissionLevel}" />
+                                    Text="{Binding GetPermissionLevel}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding GetPermissionLevel}" Value="Owner">
+                                                    <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding GetPermissionLevel}" Value="ReadWrite">
+                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
@@ -122,7 +165,7 @@
 
         </StackPanel>
 
-        <!--  SELECT  -->
+        <!--  SELECT BUTTONS  -->
         <StackPanel
             Grid.Row="1"
             Grid.RowSpan="2"
@@ -132,13 +175,40 @@
             Orientation="Vertical">
 
             <Button
-                x:Name="AddUsers"
-                Height="40"
+                x:Name="AddUsersReadWrite"
+                Height="60"
                 Style="{StaticResource GreenMidButton}">
-                <materialDesign:PackIcon
-                    Width="32"
-                    Height="32"
-                    Kind="ArrowLeftDropCircleOutline" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Center"
+                        Kind="ArrowLeftDropCircleOutline" />
+                    <TextBlock Grid.Row="1" Text="Read/Write" />
+                </Grid>
+            </Button>
+
+            <Button
+                x:Name="AddUsers"
+                Height="60"
+                Margin="0,5,0,0"
+                Style="{StaticResource YellowMidButton}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Center"
+                        Kind="ArrowLeftDropCircleOutline" />
+                    <TextBlock Grid.Row="1" Text="Read-Only" />
+                </Grid>
             </Button>
 
             <Button
@@ -159,10 +229,14 @@
             Grid.Row="1"
             Grid.RowSpan="2"
             Grid.Column="2"
+            Margin="0,20,0,0"
             Orientation="Vertical">
 
 
-            <Label Margin="5" Content="Available Collaboration Users:" />
+            <Label
+                Margin="5"
+                Content="{helpers:Localization CollabProjectManagementView_AvailableCollaborationUsers}"
+                FontWeight="Medium" />
 
             <Border
                 Margin="5,0,5,0"
@@ -171,20 +245,19 @@
                 CornerRadius="3">
 
                 <ListView
-                    MinHeight="310"
-                    MaxHeight="340"
+                    Height="325"
                     Margin="5"
                     BorderBrush="{StaticResource PrimaryHueMidBrush}"
                     BorderThickness="1"
                     IsEnabled="{Binding IsGitLabUserListEnabled}"
-                    ItemsSource="{Binding CollabUsers}"
+                    ItemsSource="{Binding CollabeUserCollectionView}"
                     ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}" />
@@ -229,8 +302,7 @@
             Grid.Column="2"
             Width="200"
             Margin="5"
-            HorizontalAlignment="Right">
-            Close
-        </Button>
+            HorizontalAlignment="Right"
+            Content="{helpers:Localization Close}" />
     </Grid>
 </Window>

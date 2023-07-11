@@ -28,19 +28,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
         protected override async Task<RequestResult<IEnumerable<Label>>> GetDataAsync(GetAllLabelsQuery request, CancellationToken cancellationToken)
         {
-            // need an await to get the compiler to be 'quiet'
-            await Task.CompletedTask;
+            var labelsQueryable = ProjectDbContext.Labels.AsQueryable();
 
-            var labels = ProjectDbContext.Labels
+            if (request.LabelGroupId is not null)
+            {
+                labelsQueryable = labelsQueryable.Where(l => l.LabelGroups.Any(lg => lg.Id == request.LabelGroupId.Id));
+            }
+
+            var labels = await labelsQueryable
                 .Select(l => new Label(
                     new LabelId(l.Id),
-                    l.Text ?? string.Empty
-                    ));
+                    l.Text ?? string.Empty,
+                    l.TemplateText
+                ))
+                .ToListAsync(cancellationToken: cancellationToken);
 
-            return new RequestResult<IEnumerable<Label>>
-            (
-                labels.ToList()
-            );
+            return new RequestResult<IEnumerable<Label>>(labels);
         }
     }
 }

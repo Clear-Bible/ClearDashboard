@@ -233,7 +233,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (TargetTokenMap != null)
             {
                 TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokenMap, false);
-                NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
+                NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
             }
         }
         

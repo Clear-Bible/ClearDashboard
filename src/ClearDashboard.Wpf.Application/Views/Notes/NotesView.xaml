@@ -350,9 +350,12 @@
                                 VerticalAlignment="Center"
                                 Kind="BookOutline">
                                 <materialDesign:PackIcon.Visibility>
-                                    <MultiBinding Converter="{StaticResource GuidInGuidsToVisibilityConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
-                                        <Binding Path="UserIdsSeenAllReplies"/>
-                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                                    <MultiBinding
+                                        Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
+                                        ConverterParameter="{StaticResource True}"
+                                        Mode="OneWay">
+                                        <Binding Path="UserIdsSeenAllReplies" />
+                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
                                     </MultiBinding>
                                 </materialDesign:PackIcon.Visibility>
                             </materialDesign:PackIcon>
@@ -613,15 +616,15 @@
                         </StackPanel>
                         <userControls:NoteRepliesDisplay
                             Margin="20,0"
+                            CurrentUser="{Binding CurrentUser}"
+                            IsEnabled="{Binding IsNoteSelected}"
                             NoteReplyAdded="OnNoteReplyAdd"
                             NoteSeen="OnNoteSeen"
                             NoteViewModelWithReplies="{Binding Path=SelectedNoteViewModel}"
                             TimestampColor="DarkGray"
                             TimestampFontStyle="Normal"
                             TimestampMargin="-2,0,10,0"
-                            CurrentUser="{Binding CurrentUser}"
-                            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}"
-                        />
+                            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}" />
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

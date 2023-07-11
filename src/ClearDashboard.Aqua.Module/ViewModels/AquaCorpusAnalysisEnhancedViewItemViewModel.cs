@@ -4,13 +4,11 @@ using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.Models;
 using ClearDashboard.Aqua.Module.Services;
+using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application;
-using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
-using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -24,9 +22,11 @@ using MimeKit;
 using SIL.Scripture;
 using SkiaSharp;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,6 +34,27 @@ using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 
 namespace ClearDashboard.Aqua.Module.ViewModels
 {
+    public class MissingWordsTarget
+    {
+        [JsonPropertyName("69")]
+        public string? First { get; set; }
+        
+        [JsonPropertyName("72")]
+        public string? Second { get; set; }
+        
+        [JsonPropertyName("71")]
+        public string? Third { get; set; }
+        
+        [JsonPropertyName("73")]
+        public string? Forth { get; set; }
+        
+        [JsonPropertyName("70")]
+        public string? Fifth { get; set; }
+    }
+
+    public record MissingWordsResultTarget(string name, string value);
+    public record MissingWordsResult(string? Source, List<MissingWordsResultTarget> Targets);
+
     public class AquaCorpusAnalysisEnhancedViewItemViewModel :
         VerseAwareEnhancedViewItemViewModel
     {
@@ -50,6 +71,14 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             BarChart,
             MissingWords,
             HeatMap
+        }
+
+        public enum ZoomEnum
+        {
+            Verse,
+            Chapter,
+            Book,
+            All
         }
 
         public readonly List<string> Types = new()
@@ -100,7 +129,6 @@ namespace ClearDashboard.Aqua.Module.ViewModels
 
         private readonly IAquaManager aquaManager_;
         private readonly LongRunningTaskManager longRunningTaskManager_;
-        private LongRunningTask? currentLongRunningTask_;
         private int? assessmentId_;
         private int? versionId_;
 
@@ -168,16 +196,31 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             set => Set(ref bodyText_, value);
         }
 
-        private string verse_ = string.Empty;
-        public string Verse
+        private ZoomEnum zoom_ = ZoomEnum.Chapter;
+        public ZoomEnum Zoom
         {
-            get => verse_;
-            set => Set(ref verse_, value);
+            get => zoom_;
+            set
+            {
+                Set(ref zoom_, value);
+                ZoomString = LocalizationService.Get($"Aqua_EnhancedView_Zoom_{value}");
+            }
         }
 
-        private int chapterNum_ = -1;
-        private int verseNum_ = -1;
-        private int offset_ = -1;
+        private string zoomString_ = string.Empty;
+        public string ZoomString
+        {
+            get => zoomString_;
+            set => Set(ref zoomString_, value);
+        }
+
+        private BindableCollection<MissingWordsResult> missingWordsResultCollection_ = new();
+        public BindableCollection<MissingWordsResult> MissingWordsResultCollection
+        {
+            get => missingWordsResultCollection_;
+            //set => Set(ref resultsCollection_, value);
+            set => missingWordsResultCollection_ = value;
+        }
 
         private BindableCollection<ISeries> seriesCollection_ = new();
         public BindableCollection<ISeries> SeriesCollection
@@ -202,9 +245,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             //set => xAxis_ = value;
         }
 
-        private IEnumerable<Result> sortedResultsForChapter_ = new List<Result>();
-
-        private IEnumerable<Result>? allResults_;
+        private IEnumerable<Result> allResultsForAssessment_;
 
         public AquaCorpusAnalysisEnhancedViewItemViewModel(
             DashboardProjectManager? projectManager,
@@ -250,35 +291,48 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             {
                 await GetAssessment(assessmentId_
                     ?? throw new InvalidStateEngineException(name: "assessmentId_", value: "null"));
-                await GetRevisions(Assessment
+                await GetRevision(Assessment
+                    ?? throw new InvalidStateEngineException(name: "Assessment", value: "null"));
+                await GetReferenceRevision(Assessment
                     ?? throw new InvalidStateEngineException(name: "Assessment", value: "null"));
                 await GetResults();
             }
             catch (Exception ex)
             {
-                Logger!.LogError(ex, ex.Message);
-                OnUIThread(() =>
-                {
-                    Message = ex.Message ?? ex.ToString();
-                });
+                //Logger!.LogError(ex, ex.Message);
+                //OnUIThread(() =>
+                //{
+                //    Message = ex.Message ?? ex.ToString();
+                //});
             }
         }
 
 
-        private void SetSeries(TypeAnalysisConfiguration typeAnalysis, VisualizationEnum visualization, IEnumerable<Result> results)
+        private void SetDataForVisualization(
+            VisualizationEnum visualization, 
+            ZoomEnum zoom,
+            IEnumerable<Result> allResultsForAssessment,
+            VerseRef currentVerseRef, 
+            int offset)
         {
             if (visualization == VisualizationEnum.CartesianChart)
             {
-                var min = sortedResultsForChapter_.Min(r => r.score) -
-                    (sortedResultsForChapter_.Max(r => r.score) - sortedResultsForChapter_.Min(r => r.score)) * 0.2;
-                var max = sortedResultsForChapter_.Max(r => r.score) +
-                    (sortedResultsForChapter_.Max(r => r.score) - sortedResultsForChapter_.Min(r => r.score)) * 0.2;
+                var sortedResultsForZoom = SortedResultsForZoom(
+                    allResultsForAssessment,
+                    currentVerseRef,
+                    offset,
+                    zoom) ?? new List<Result>();
+
+                var min = sortedResultsForZoom.Min(r => r.score) -
+                    (sortedResultsForZoom.Max(r => r.score) - sortedResultsForZoom.Min(r => r.score)) * 0.2;
+                var max = sortedResultsForZoom.Max(r => r.score) +
+                    (sortedResultsForZoom.Max(r => r.score) - sortedResultsForZoom.Min(r => r.score)) * 0.2;
                 SeriesCollection.Clear();
                 SeriesCollection.AddRange(new ISeries[]
                 {
                     new LineSeries<Result>
                     {
-                        Values = results.ToList(),
+                        Values = sortedResultsForZoom.ToList(),
                         Mapping = (result, point) =>
                         {
                             point.PrimaryValue = result.score ?? 0;
@@ -289,7 +343,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 XAxis.Clear();
                 YAxis.Clear();
                 var labels = new List<string>() { "" };
-                labels.AddRange(results
+                labels.AddRange(sortedResultsForZoom
                             .Select(r => r.vref ?? "")
                             .ToArray());
                 XAxis.AddRange(new Axis[]
@@ -309,10 +363,16 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             }
             else if (visualization == VisualizationEnum.BarChart)
             {
-                var min = sortedResultsForChapter_.Min(r => r.score) -
-                    (sortedResultsForChapter_.Max(r => r.score) - sortedResultsForChapter_.Min(r => r.score)) * 0.2;
-                var max = sortedResultsForChapter_.Max(r => r.score) +
-                    (sortedResultsForChapter_.Max(r => r.score) - sortedResultsForChapter_.Min(r => r.score)) * 0.2;
+                var sortedResultsForZoom = SortedResultsForZoom(
+                    allResultsForAssessment,
+                    currentVerseRef,
+                    offset,
+                    zoom) ?? new List<Result>();
+
+                var min = sortedResultsForZoom.Min(r => r.score) -
+                    (sortedResultsForZoom.Max(r => r.score) - sortedResultsForZoom.Min(r => r.score)) * 0.2;
+                var max = sortedResultsForZoom.Max(r => r.score) +
+                    (sortedResultsForZoom.Max(r => r.score) - sortedResultsForZoom.Min(r => r.score)) * 0.2;
                 SeriesCollection.Clear();
                 SeriesCollection.AddRange(new ISeries[]
                 {
@@ -326,7 +386,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                     //},
                     new ColumnSeries<Result>
                     {
-                        Values = sortedResultsForChapter_.ToList(),
+                        Values = sortedResultsForZoom.ToList(),
                         //Stroke = null,
                         Fill = new SolidColorPaint(SKColors.CornflowerBlue),
                         //IgnoresBarPosition = true,
@@ -340,7 +400,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 XAxis.Clear();
                 YAxis.Clear();
                 var labels = new List<string>() { "" };
-                labels.AddRange(results
+                labels.AddRange(sortedResultsForZoom
                             .Select(r => r.vref ?? "")
                             .ToArray());
                 XAxis.AddRange(new Axis[]
@@ -360,13 +420,44 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             }
             else if (visualization == VisualizationEnum.MissingWords)
             {
+                var sortedResultsForZoom = (SortedResultsForZoom(
+                    allResultsForAssessment,
+                    currentVerseRef,
+                    offset,
+                    zoom) ?? new List<Result>())
+                        .Select(r =>
+                        {
+                            List<MissingWordsResultTarget> targetTranslations = new();
+                            object o = JsonSerializer.Deserialize<MissingWordsTarget>(r.target?.Replace("'", "\"") ?? "")!;
+                            string[] propertyNames = o.GetType().GetProperties().Select(p => p.Name).ToArray();
+                            foreach (var propertyName in propertyNames)
+                            {
+                                var localizedPropertyName = LocalizationService.Get($"Aqua_EnhancedView_{propertyName}");
 
+                                targetTranslations.Add(
+                                    new MissingWordsResultTarget(localizedPropertyName, (string) (o.GetType().GetProperty(propertyName)?.GetValue(o, null) ?? "")));
+                            }
+
+                            return new MissingWordsResult(r.source, targetTranslations);
+                        })
+                        .ToList();
+
+                MissingWordsResultCollection.Clear();
+                MissingWordsResultCollection.AddRange(sortedResultsForZoom);
+
+                //BodyText = JsonSerializer.Serialize(sortedResultsForZoom);
             }
             else if (visualization == VisualizationEnum.HeatMap)
             {
+                var sortedResultsForZoom = SortedResultsForZoom(
+                    allResultsForAssessment,
+                    currentVerseRef,
+                    offset,
+                    zoom) ?? new List<Result>();
+
                 var values = new BindableCollection<WeightedPoint>();
                 values.AddRange(
-                    results
+                    sortedResultsForZoom
                         .Select(r =>
                             new WeightedPoint((new VerseRef(r.vref)).VerseNum, 0, r.score))
                 );
@@ -389,7 +480,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 XAxis.Clear(); 
                 YAxis.Clear();
                 var labels = new List<string>() { "" };
-                labels.AddRange(results
+                labels.AddRange(sortedResultsForZoom
                             .Select(r => r.vref ?? "")
                             .ToArray());
                 XAxis.AddRange(new Axis[]
@@ -415,48 +506,66 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 return Task.CompletedTask;
 
             var currentVerseRef = new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV());
-            var chapterNum = currentVerseRef.ChapterNum;
-            offset_ = ParentViewModel.VerseOffsetRange;
-            verseNum_ = currentVerseRef.VerseNum;
-            Verse = currentVerseRef.ToString();
-            //if (chapterNum != chapterNum_ && allResults_ != null && allResults_.Count() > 0)
-            //{
-                sortedResultsForChapter_ = SortedResultsForCurrentChapter(
-                    allResults_,
-                    currentVerseRef) ?? new List<Result>();
-                chapterNum_ = chapterNum;
-            //}
-            //if (
-            //    (sortedResultsForChapter_ != null && sortedResultsForChapter_.Count() > 0) ||
-            //    reloadType== ReloadType.Force)
-            //{
-                SetSeries(TypeAnalysis!, Visualization, sortedResultsForChapter_);
-            //}
+            //Verse = currentVerseRef.ToString();
+            //OffsetString = ParentViewModel.VerseOffsetRange.ToString();
+
+            if (Visualization == VisualizationEnum.MissingWords)
+                Zoom = ZoomEnum.Verse;
+            else
+                Zoom = ZoomEnum.Chapter;
+            Title = $"{LocalizationService.Get("Aqua_DialogTitle")} {TypeAnalysis?.name} ({currentVerseRef.Book} {currentVerseRef.ChapterNum}:{currentVerseRef.VerseNum})";
+
+            SetDataForVisualization(Visualization, Zoom, allResultsForAssessment_, currentVerseRef, ParentViewModel.VerseOffsetRange);
+
             return Task.CompletedTask;
         }
-        private IEnumerable<Result>? SortedResultsForCurrentChapter(IEnumerable<Result>? results, VerseRef currentVerseRef)
+        private IEnumerable<Result>? SortedResultsForZoom(
+            IEnumerable<Result>? results, 
+            VerseRef currentVerseRef, 
+            int offset, 
+            ZoomEnum zoom)
         {
             return results?
                 .Where(r =>
                 {
                     var vref = new VerseRef(r.vref);
-                    return vref.BookNum == currentVerseRef.BookNum &&
-                        vref.ChapterNum == currentVerseRef.ChapterNum;
+
+                    if (zoom == ZoomEnum.All)
+                    {
+                        return true;
+                    }
+                    else if (zoom == ZoomEnum.Book)
+                    {
+                        return vref.BookNum == currentVerseRef.BookNum;
+                    }
+                    else if (zoom == ZoomEnum.Chapter)
+                    {
+                        return vref.BookNum == currentVerseRef.BookNum &&
+                            vref.ChapterNum == currentVerseRef.ChapterNum;
+                    }
+                    else if (zoom == ZoomEnum.Verse)
+                    {
+                        return vref.BookNum == currentVerseRef.BookNum &&
+                            vref.ChapterNum == currentVerseRef.ChapterNum &&
+                            vref.VerseNum >= currentVerseRef.VerseNum - offset &&
+                            vref.VerseNum <= currentVerseRef.VerseNum + offset;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
                 })
                 .OrderBy(r => new VerseRef(r.vref));
         }
-        public async Task GetRevisions(Assessment assessment)
+
+        public async Task GetReferenceRevision(Assessment assessment)
         {
             var processStatus = await RunLongRunningTask(
-                "AQuA-List_Revisions",
-                (cancellationToken) => aquaManager_!.ListRevisions(
-                    versionId_,
-                    cancellationToken),
-                (revisions) => 
+                "AQuA-Get_Revision_For_Assessment",
+                GetAllProjectRevisions,
+                (revisions) =>
                 {
-                    Revision = revisions?
-                        .Where(r => r.id == assessment.revision_id)
-                        .FirstOrDefault();
                     ReferenceRevision = revisions?
                         .Where(r => r.id == assessment.reference_id)
                         .FirstOrDefault();
@@ -465,16 +574,81 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             switch (processStatus)
             {
                 case LongRunningTaskStatus.Completed:
-                    //await MoveForwards();
                     break;
                 case LongRunningTaskStatus.Failed:
-                    break;
                 case LongRunningTaskStatus.Cancelled:
-                    break;
                 case LongRunningTaskStatus.NotStarted:
-                    break;
                 case LongRunningTaskStatus.Running:
+                    throw new Exception();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+
+        private async Task<IEnumerable<Revision>> GetAllProjectRevisions(CancellationToken cancellationToken)
+        {
+            var allCorpus = await Corpus.GetAllCorpusIds(Mediator!);
+            List<TokenizedTextCorpusId> tokenizedCorpusIds = new();
+            foreach (var corpusId in allCorpus)
+            {
+                tokenizedCorpusIds.AddRange(await TokenizedTextCorpus.GetAllTokenizedCorpusIds(
+                    Mediator!,
+                    corpusId
+                ));
+            }
+
+            BlockingCollection<Revision> revisionsInProject = new();
+            await Parallel.ForEachAsync(tokenizedCorpusIds, new ParallelOptions(), async (tokenizedCorpusId, cancellationToken) =>
+            {
+                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
+                    Mediator!,
+                    tokenizedCorpusId,
+                    false);
+
+                var aquaTokenizedTextCorpusMetadata = AquaTokenizedTextCorpusMetadata.Get(tokenizedTextCorpus);
+
+                var versionId = aquaTokenizedTextCorpusMetadata?.id ?? null;
+
+                if (versionId != null)
+                {
+                    var versionRevisions = await aquaManager_!.ListRevisions(
+                        versionId,
+                        cancellationToken);
+                    if (versionRevisions != null)
+                    {
+                        foreach (var revision in versionRevisions)
+                        {
+                            revisionsInProject.Add(revision);
+                        }
+                    }
+                }
+            });
+            return revisionsInProject;
+        }
+        public async Task GetRevision(Assessment assessment)
+        {
+            var processStatus = await RunLongRunningTask(
+                "AQuA-Get_Revision_For_Assessment",
+                (cancellationToken) => aquaManager_!.ListRevisions(
+                    versionId_,
+                    cancellationToken),
+                (revisions) => 
+                {
+                    Revision = revisions?
+                        .Where(r => r.id == assessment.revision_id)
+                        .FirstOrDefault();
+                });
+
+            switch (processStatus)
+            {
+                case LongRunningTaskStatus.Completed:
                     break;
+                case LongRunningTaskStatus.Failed:
+                case LongRunningTaskStatus.Cancelled:
+                case LongRunningTaskStatus.NotStarted:
+                case LongRunningTaskStatus.Running:
+                    throw new Exception();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -529,16 +703,12 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             switch (processStatus)
             {
                 case LongRunningTaskStatus.Completed:
-                    //await MoveForwards();
                     break;
                 case LongRunningTaskStatus.Failed:
-                    break;
                 case LongRunningTaskStatus.Cancelled:
-                    break;
                 case LongRunningTaskStatus.NotStarted:
-                    break;
                 case LongRunningTaskStatus.Running:
-                    break;
+                    throw new Exception();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -548,28 +718,21 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             var processStatus = await RunLongRunningTask(
                 "AQuA-Get_Results",
                 (cancellationToken) => aquaManager_!.ListResults(
-                    Assessment!?.id ?? 
-                        throw new InvalidStateEngineException(name: "Assessment", value: "null"),
+                    assessmentId_ ?? 
+                        throw new InvalidStateEngineException(name: "Assessment", value: "null", message: "Assessment Id was not set for this enhanced view item"),
                     cancellationToken),
-                (results) =>
+                (allResultsForAssessment) =>
                 {
-                    allResults_ = results;
+                    allResultsForAssessment_ = allResultsForAssessment ?? new List<Result>();
                     RefreshData();
-
-                    BodyText = JsonSerializer.Serialize(results);
                 });
 
             switch (processStatus)
             {
                 case LongRunningTaskStatus.Completed:
-                    //await MoveForwards();
-                    break;
                 case LongRunningTaskStatus.Failed:
-                    break;
                 case LongRunningTaskStatus.Cancelled:
-                    break;
                 case LongRunningTaskStatus.NotStarted:
-                    break;
                 case LongRunningTaskStatus.Running:
                     break;
                 default:
@@ -602,15 +765,17 @@ namespace ClearDashboard.Aqua.Module.ViewModels
 
             IsBusy = true;
             ProgressBarVisibility = Visibility.Visible;
-            currentLongRunningTask_ = longRunningTaskManager_!.Create(taskName, LongRunningTaskStatus.Running);
-            var cancellationToken = currentLongRunningTask_!.CancellationTokenSource?.Token
+            var longRunningTask = longRunningTaskManager_!.Create(taskName, LongRunningTaskStatus.Running);
+            var cancellationToken = longRunningTask!.CancellationTokenSource?.Token
                 ?? throw new Exception("Cancellation source is not set.");
+
+            LongRunningTaskStatus returnStatus;
             try
             {
-                currentLongRunningTask_.Status = LongRunningTaskStatus.Running;
+                longRunningTask.Status = LongRunningTaskStatus.Running;
                 await SendBackgroundStatus(
                     taskName,
-                    currentLongRunningTask_.Status,
+                    longRunningTask.Status,
                     cancellationToken,
                     $"{taskName} running");
                 Logger!.LogDebug($"{taskName} started");
@@ -619,19 +784,19 @@ namespace ClearDashboard.Aqua.Module.ViewModels
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                    longRunningTask.Status = LongRunningTaskStatus.Cancelled;
                     await SendBackgroundStatus(taskName,
-                        currentLongRunningTask_.Status,
+                        longRunningTask.Status,
                         cancellationToken,
                         $"{taskName} canceled.");
                     Logger!.LogDebug($"{taskName} cancelled.");
                 }
                 else
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Completed;
+                    longRunningTask.Status = LongRunningTaskStatus.Completed;
                     await SendBackgroundStatus(
                         taskName,
-                        currentLongRunningTask_.Status,
+                        longRunningTask.Status,
                         cancellationToken,
                         $"{taskName} complete");
                     Logger!.LogDebug($"{taskName} complete.");
@@ -639,10 +804,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             }
             catch (OperationCanceledException)
             {
-                currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                longRunningTask.Status = LongRunningTaskStatus.Cancelled;
                 await SendBackgroundStatus(
                     taskName,
-                    currentLongRunningTask_.Status,
+                    longRunningTask.Status,
                     cancellationToken,
                     $"{taskName} cancelled.");
                 Logger!.LogDebug($"{taskName}: cancelled.");
@@ -651,10 +816,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             {
                 if (ex.Message.Contains("The operation was canceled."))
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                    longRunningTask.Status = LongRunningTaskStatus.Cancelled;
                     await SendBackgroundStatus(
                         taskName,
-                        currentLongRunningTask_.Status,
+                        longRunningTask.Status,
                         cancellationToken,
                         $"{taskName} cancelled.");
                     Logger!.LogDebug($"{taskName}: cancelled.");
@@ -662,10 +827,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 }
                 else
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Failed;
+                    longRunningTask.Status = LongRunningTaskStatus.Failed;
                     await SendBackgroundStatus(
                        taskName,
-                       currentLongRunningTask_.Status,
+                       longRunningTask.Status,
                        cancellationToken,
                        $"{taskName} failed: {ex.Message}.",
                        ex);
@@ -676,10 +841,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             {
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Failed;
+                    longRunningTask.Status = LongRunningTaskStatus.Failed;
                     await SendBackgroundStatus(
                         taskName,
-                        currentLongRunningTask_.Status,
+                        longRunningTask.Status,
                         cancellationToken,
                         $"{taskName} failed: {ex.Message}.",
                         ex);
@@ -688,13 +853,13 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             }
             finally
             {
+                returnStatus = longRunningTask.Status;
                 longRunningTaskManager_.TaskComplete(taskName);
 
                 IsBusy = false;
                 ProgressBarVisibility = Visibility.Hidden;
             }
-            return currentLongRunningTask_.Status;
-
+            return returnStatus;
         }
     }
 }

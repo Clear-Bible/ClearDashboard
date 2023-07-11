@@ -376,7 +376,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 // For thread safety, because Note.CreateAssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
                 async void CreateAssociateLabel()
                 {
-                    var newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText);
+                    var newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText, null);
                     LabelSuggestions.Add(newLabel);
                     LabelSuggestions = new LabelCollection(LabelSuggestions.OrderBy(l => l.Text));
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));

@@ -47,6 +47,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<NoteAssociation> NoteAssociations => Set<NoteAssociation>();
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<Label> Labels => Set<Label>();
+        public virtual DbSet<LabelGroup> LabelGroups => Set<LabelGroup>();
+        public virtual DbSet<LabelGroupAssociation> LabelGroupAssociations => Set<LabelGroupAssociation>();
         public virtual DbSet<LabelNoteAssociation> LabelNoteAssociations => Set<LabelNoteAssociation>();
         public virtual DbSet<NoteDomainEntityAssociation> NoteDomainEntityAssociations => Set<NoteDomainEntityAssociation>();
         public virtual DbSet<NoteUserSeenAssociation> NoteUserSeenAssociations => Set<NoteUserSeenAssociation>();
@@ -290,6 +292,20 @@ namespace ClearDashboard.DataAccessLayer.Data
 //            modelBuilder.Entity<Translation>().Navigation(e => e.SourceTokenComponent).AutoInclude();
             modelBuilder.Entity<TranslationModelEntry>().HasIndex(e => new { e.TranslationSetId, e.SourceText }).IsUnique();
             modelBuilder.Entity<TranslationModelTargetTextScore>().HasIndex(e => new { e.TranslationModelEntryId, e.Text}).IsUnique();
+
+            modelBuilder.Entity<Label>()
+                .HasIndex(e => e.Text)
+                .IsUnique();
+
+            modelBuilder.Entity<LabelGroup>()
+                .HasIndex(e => e.Name)
+                .IsUnique();
+
+            modelBuilder
+                .Entity<LabelGroup>()
+                .HasMany(p => p.Labels)
+                .WithMany(p => p.LabelGroups)
+                .UsingEntity<LabelGroupAssociation>();
 
             modelBuilder
                 .Entity<Note>()
