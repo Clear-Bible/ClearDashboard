@@ -341,7 +341,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                 )
                             });
 
-                        BulkAlignments = new List<BulkAlignmentVerseRow>(verseRows.OrderBy(vr => vr.SourceRef));
+                        BulkAlignments = new List<BulkAlignmentVerseRow>(verseRows.Take(3).OrderBy(vr => vr.SourceRef));
 
                         PagedBulkAlignments = new PagingCollectionView(BulkAlignments, 5);
                         //});
