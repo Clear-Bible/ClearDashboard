@@ -728,8 +728,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                             var xmlSource = XmlSource.TermsRenderings;
 
-                            //Dispatcher.CurrentDispatcher.Invoke(() =>
-                            //{
                             _gridData.Add(new PinsDataTable
                             {
                                 Id = Guid.NewGuid(),
@@ -753,7 +751,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Suffix = "",
                                 Word = "",
                             });
-                            //});
 
                         }
                     }
