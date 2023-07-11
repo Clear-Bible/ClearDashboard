@@ -18,7 +18,6 @@ using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
-using QuickGraph.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,9 +33,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Threading;
 using System.Xml;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 
