@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -339,15 +340,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             _licenseUser = LicenseManager.GetUserFromLicense();
-            _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_licenseUser.Id);
-            if (_dashboardUser.Email != string.Empty)
+            _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_licenseUser.Id); 
+            GetParatextRegistrationData();
+            if (!string.IsNullOrWhiteSpace(_dashboardUser.Email))
             {
-                Email = _dashboardUser.Email;
+                Email = _dashboardUser.Email ?? string.Empty;
                 EmailEnabled = false;
             }
             else
             {
-                GetParatextRegistrationData();
                 Email = _registration.Email;
             }
 
@@ -366,6 +367,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                         SelectedGroup = group;
                         SelectedGroupEnabled = false;
                         orgFound = true;
+                        break;
                     }
                 }
             }
@@ -378,6 +380,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     {
                         SelectedGroup = group;
                         orgFound = true;
+                        break;
                     }
                 }
             }
@@ -389,6 +392,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                         group.Description == _registration.SupporterName)
                     {
                         SelectedGroup = group;
+                        break;
                     }
                 }
             }
@@ -596,7 +600,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     SaveMessageForegroundColor = Brushes.Red;
                 }
 
-                if (_dashboardUser.Id == Guid.Empty)
+                if (_dashboardUser.GitLabUserId == null)
                 {
                     await CreateDashboardUser();
                 }
@@ -607,14 +611,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async Task CreateDashboardUser()
         {
-            await _collaborationHttpClientServices.CreateNewDashboardUser(new DashboardUser(
-                _licenseUser,
-                Email,
-                LicenseManager.GetLicenseFromFile(LicenseManager.LicenseFilePath),
-                SelectedGroup.Name,
-                CollaborationConfig.UserId,
-                Assembly.GetEntryAssembly()?.GetName().Version?.ToString(),
-                DateTime.Today.ToString(CultureInfo.InvariantCulture)));
+            if (_dashboardUser.Id == Guid.Empty) //make a DashboardUser
+            {
+                var newDashboardUser = new DashboardUser(
+                    _licenseUser,
+                    Email,
+                    LicenseManager.GetLicenseFromFile(LicenseManager.LicenseFilePath),
+                    SelectedGroup.Name,
+                    CollaborationConfig.UserId,
+                    Assembly.GetEntryAssembly()?.GetName().Version?.ToString(),
+                    DateTime.Today.ToString(CultureInfo.InvariantCulture));
+
+                await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
+            }
+            else //update a DashboardUser
+            {
+                _dashboardUser.ParatextUserName ??= ProjectManager.CurrentUser.ParatextUserName;
+                _dashboardUser.Organization ??= SelectedGroup.Name;
+                _dashboardUser.GitLabUserId ??= CollaborationConfig.UserId;
+                _dashboardUser.AppVersionNumber ??= Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
+                _dashboardUser.AppLastDate ??= DateTime.Today.ToString(CultureInfo.InvariantCulture);
+
+                //TODO use CollabHttpServices to modify existing DashboardUser 
+            }
         }
 
 
@@ -635,6 +654,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            System.Windows.Application.Current.Shutdown();
+            
+            base.Dispose(disposing);
+        }
 
         #endregion // Methods
 

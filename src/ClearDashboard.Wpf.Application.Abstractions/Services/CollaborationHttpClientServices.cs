@@ -11,6 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Reflection.Metadata;
+using System.Security.Policy;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -55,7 +58,13 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<CollaborationUser> GetUserExistsById(int userId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/{userId}");
+            var query = new Dictionary<string, string>()
+            {
+                ["api-version"] = "2.0",
+            };
+            var uri = QueryHelpers.AddQueryString($"/api/users/{userId}", query);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
@@ -85,7 +94,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<CollaborationUser> GetUserExistsByEmail(string email)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
+            var query = new Dictionary<string, string>()
+            {
+                ["api-version"] = "2.0",
+            };
+            var uri = QueryHelpers.AddQueryString("/api/users/", query);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
@@ -121,7 +136,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<DashboardUser> GetDashboardUserExistsById(Guid userId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers/{userId.ToString()}");
+            var query = new Dictionary<string, string>()
+            {
+                ["api-version"] = "2.0",
+            };
+            var uri = QueryHelpers.AddQueryString($"/api/extendedusers/{userId.ToString()}", query);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
@@ -147,7 +168,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<DashboardUser> GetDashboardUserExistsByEmail(string email)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers/search/{email}");
+            var query = new Dictionary<string, string>()
+            {
+                ["api-version"] = "2.0",
+            };
+            var uri = QueryHelpers.AddQueryString($"/api/extendedusers/search/{email}", query);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
@@ -174,7 +201,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<DashboardUser>> GetAllDashboardUsers()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers");
+            var query = new Dictionary<string, string>()
+            {
+                ["api-version"] = "2.0",
+            };
+            var uri = QueryHelpers.AddQueryString($"/api/extendedusers", query);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
@@ -206,7 +239,42 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-                var response = await _collaborationClient.Client.DeleteAsync($"/api/dashboardusers/{userId}");
+                var query = new Dictionary<string, string>()
+                {
+                    ["api-version"] = "2.0",
+                };
+                var uri = QueryHelpers.AddQueryString($"/api/extendedusers/{userId}", query);
+                var response = await _collaborationClient.Client.DeleteAsync(uri);
+                response.EnsureSuccessStatusCode();
+
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        #endregion //DELETE Requests
+
+        #region PUT Requests
+
+        public async Task<bool> UpdateDashboardUser(DashboardUser user)
+        {
+            string jsonUser = JsonSerializer.Serialize(user);
+            var content = new System.Net.Http.StringContent(jsonUser, Encoding.UTF8, "application/json");
+
+            try
+            {
+                // add in the query to the URL
+                var query = new Dictionary<string, string>()
+                {
+                    ["api-version"] = "2.0",
+                };
+                var uri = QueryHelpers.AddQueryString("/api/extendedusers", query);
+
+                var response = await _collaborationClient.Client.PutAsync(uri, content);
                 response.EnsureSuccessStatusCode();
 
                 return true;
@@ -220,7 +288,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
 
 
-        #endregion // DELETE Requests
+        #endregion // PUT Requests
 
 
         #region POST Requests
@@ -252,7 +320,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
             try
             {
-                var response = await _collaborationClient.Client.PostAsync("/api/users", content);
+                var query = new Dictionary<string, string>()
+                {
+                    ["api-version"] = "2.0",
+                };
+                var uri = QueryHelpers.AddQueryString("/api/users", query);
+
+                var response = await _collaborationClient.Client.PostAsync(uri, content);
                 response.EnsureSuccessStatusCode();
 
                 return true;
@@ -274,7 +348,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
             try
             {
-                var response = await _collaborationClient.Client.PostAsync("/api/dashboardusers", content);
+                var query = new Dictionary<string, string>()
+                {
+                    ["api-version"] = "2.0",
+                };
+                var uri = QueryHelpers.AddQueryString("/api/extendedusers", query);
+
+                var response = await _collaborationClient.Client.PostAsync(uri, content);
                 response.EnsureSuccessStatusCode();
 
                 return true;
