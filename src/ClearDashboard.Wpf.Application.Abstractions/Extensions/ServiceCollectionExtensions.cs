@@ -56,6 +56,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
                 client.DefaultRequestHeaders.Add("Accept", "*/*");
                 client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + value);
+                client.DefaultRequestHeaders.Add("api-version", "2.0 ");
             });
 
 

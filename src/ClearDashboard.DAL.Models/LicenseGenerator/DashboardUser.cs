@@ -10,17 +10,21 @@ namespace ClearDashboard.DataAccessLayer.Models.LicenseGenerator
         {
         }
 
-        public DashboardUser(User user, string email, string licenseKey)
+        public DashboardUser(User user, string email, string licenseKey, string? organization, int? gitLabUserId, string? appVersionNumber, string? appLastDate)
         {
             Id = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;
-            ParatextUserName = user.ParatextUserName;
+            ParatextUserName = user.ParatextUserName;//many original license didn't have this info
             IsInternal = user.IsInternal;
             LicenseVersion = user.LicenseVersion;
 
             LicenseKey = licenseKey;
             Email = email;
+            Organization = organization;
+            GitLabUserId = gitLabUserId;
+            AppVersionNumber = appVersionNumber;
+            AppLastDate = appLastDate;
         }
 
         [JsonPropertyName("id")]
@@ -49,8 +53,20 @@ namespace ClearDashboard.DataAccessLayer.Models.LicenseGenerator
         [JsonPropertyName("licenseKey")]
         public string? LicenseKey { get; set; }
 
+        [JsonPropertyName("organization")]
+        public string? Organization { get; set; }
+
         [JsonPropertyName("email")]
         public string? Email { get; set; }
+
+        [JsonPropertyName("gitLabUserId")]
+        public int? GitLabUserId { get; set; }
+
+        [JsonPropertyName("appVersionNumber")]
+        public string? AppVersionNumber { get; set; }
+
+        [JsonPropertyName("appLastDate")]
+        public string? AppLastDate { get; set; }
 
         public User ToUser()
         {

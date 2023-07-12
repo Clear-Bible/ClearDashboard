@@ -21,15 +21,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -44,6 +49,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly TranslationSource? _translationSource;
         private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
+        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
@@ -369,7 +375,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IWindowManager windowManager,
             HttpClientServices httpClientServices,
             GitLabClient gitLabClient,
-            CollaborationManager collaborationManager)
+            CollaborationManager collaborationManager,
+            CollaborationHttpClientServices collaborationHttpClientServices)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
@@ -389,6 +396,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             SetCollabVisibility();
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
+            _collaborationHttpClientServices=collaborationHttpClientServices;
         }
 
         public async Task StartParatext()
@@ -429,6 +437,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 // await this.ShowMessageAsync("This is the title", "Some message");
             }
+
+            await FinishAccountSetup();
 
             await base.OnActivateAsync(cancellationToken);
         }
@@ -509,6 +519,58 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             await GetCollabProjects().ConfigureAwait(false);
             SetCollabVisibility();
+        }
+
+        private async Task FinishAccountSetup()
+        {
+            var licenseUser = LicenseManager.GetUserFromLicense();
+
+            var dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
+
+            CollaborationUser collaborationUser;
+
+            if (_collaborationManager.HasRemoteConfigured())
+            {
+                CollaborationConfig = _collaborationManager.GetConfig();
+
+                collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
+
+                if (dashboardUser.Id == Guid.Empty) //make a DashboardUser
+                {
+                    var newDashboardUser = new DashboardUser(
+                        licenseUser,
+                        collaborationUser.RemoteEmail,
+                        LicenseManager.GetLicenseFromFile(LicenseManager.LicenseFilePath),
+                        collaborationUser.GroupName,
+                        collaborationUser.UserId,
+                        Assembly.GetEntryAssembly()?.GetName().Version?.ToString(),
+                        DateTime.Today.ToString(CultureInfo.InvariantCulture));
+
+                    await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
+                }
+                else //update a DashboardUser
+                {
+                    dashboardUser.ParatextUserName ??= ParatextUserName;
+                    dashboardUser.Organization ??= collaborationUser.GroupName;
+                    dashboardUser.GitLabUserId ??= collaborationUser.UserId;
+                    dashboardUser.AppVersionNumber ??= Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
+                    dashboardUser.AppLastDate ??= DateTime.Today.ToString(CultureInfo.InvariantCulture);
+
+                    //TODO use CollabHttpServices to modify existing DashboardUser 
+                }
+            }
+
+            dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);//redundant but done in case the collab user was there and modified the dashboard user
+            collaborationUser = await _collaborationHttpClientServices.GetUserExistsByEmail(dashboardUser.Email);//Why not use CollaborationConfig?
+
+            if (collaborationUser.UserId == -1)
+            {
+                await System.Windows.Application.Current.Dispatcher.Invoke(async delegate
+                {
+                    await InitializeCollaborationUser();
+                });
+
+            }
         }
 
         private async Task GetRemoteUser()
@@ -633,7 +695,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task RefreshProjectList()
         {
-            await GetProjectsVersion(afterMigration:true);
+            await GetProjectsVersion(afterMigration: true);
         }
 
         private async Task GetCollabProjects()
