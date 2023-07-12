@@ -402,20 +402,20 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 "verse",
                 true,
                 null,
-                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, null, null,
                 CancellationToken.None);
-            Assert.Equal(12, alignmentSetVerseContexts.Count());
+            Assert.Equal(12, alignmentSetVerseContexts.VerseContexts.Count());
 
             var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
                 "verse",
                 "verse",
                 true,
                 40,
-                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded,
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, null, null,
                 CancellationToken.None);
-            Assert.Equal(9, alignmentSetVerseContexts2.Count());
+            Assert.Equal(9, alignmentSetVerseContexts2.VerseContexts.Count());
 
-            var one = alignmentSetVerseContexts.FirstOrDefault();
+            var one = alignmentSetVerseContexts.VerseContexts.FirstOrDefault();
             Assert.True(one != default);
 
             Assert.Equal(6, one.sourceVerseTokens.Count());
@@ -443,20 +443,20 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 "three",
                 true,
                 null,
-                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, null, null,
                 CancellationToken.None);
-            Assert.Equal(2, alignmentSetVerseContexts3.Count());
+            Assert.Equal(2, alignmentSetVerseContexts3.VerseContexts.Count());
 
             var alignmentSetVerseContexts4 = await alignmentSet.GetAlignmentVerseContexts(
                 "one_verse_three",
                 "three",
                 true,
                 40,
-                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded,
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, null, null,
                 CancellationToken.None);
-            Assert.Single(alignmentSetVerseContexts4);
+            Assert.Single(alignmentSetVerseContexts4.VerseContexts);
 
-            var two = alignmentSetVerseContexts3.FirstOrDefault();
+            var two = alignmentSetVerseContexts3.VerseContexts.FirstOrDefault();
             Assert.True(two != default);
 
             Assert.Equal(4, two.sourceVerseTokens.Count());
