@@ -20,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control for displaying a single <see cref="Token"/> alongside a possible note indicator, <see cref="Translation"/>, and aligned token.
     /// </summary>
-    public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>, IHandle<AlignmentAddedMessage>, IHandle<AlignmentDeletedMessage>
+    public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>
     {
         #region Static DependencyProperties
 
@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the AlignedTokenColor dependency property.
         /// </summary>
         public static readonly DependencyProperty AlignedTokenColorProperty =
-            DependencyProperty.Register(nameof(AlignedTokenColor), typeof(Brush), typeof(TokenDisplay), 
+            DependencyProperty.Register(nameof(AlignedTokenColor), typeof(Brush), typeof(TokenDisplay),
                 new PropertyMetadata(Brushes.Black));
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             nameof(AlignedTokenVisibility), typeof(Visibility), typeof(TokenDisplay),
             new PropertyMetadata(Visibility.Visible));
 
-     
+
 
         /// <summary>
         /// Identifies the CompositeIndicatorHeight dependency property.
@@ -133,7 +133,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             nameof(CompositeIndicatorMargin), typeof(Thickness), typeof(TokenDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
-        
+
         /// <summary>
         /// Identifies the ExtendedProperties dependency property.
         /// </summary>
@@ -238,7 +238,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             nameof(TokenBackground), typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.Transparent));
 
-        
+
         /// <summary>
         /// Identifies the TokenColor dependency property.
         /// </summary>
@@ -246,7 +246,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             nameof(TokenColor), typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.Black));
 
-        
+
         /// <summary>
         /// Identifies the TokenFontStyle dependency property.
         /// </summary>
@@ -261,7 +261,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             nameof(TokenFontWeight), typeof(FontWeight), typeof(TokenDisplay),
             new PropertyMetadata(FontWeights.SemiBold));
 
-       
+
         /// <summary>
         /// Identifies the TokenVerticalSpacing dependency property.
         /// </summary>
@@ -1037,22 +1037,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
             control.CalculateLayout();
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            TokenDisplayViewModel.PropertyChanged += TokenDisplayViewModelPropertyChanged;
-            CalculateLayout();
-        }
+        //private void OnLoaded(object sender, RoutedEventArgs e)
+        //{
+        //    TokenDisplayViewModel.PropertyChanged += TokenDisplayViewModelPropertyChanged;
+        //    CalculateLayout();
+        //}
 
-        private void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            TokenDisplayViewModel.PropertyChanged -= TokenDisplayViewModelPropertyChanged;
-        }
+        //private void OnUnloaded(object sender, RoutedEventArgs e)
+        //{
+        //    TokenDisplayViewModel.PropertyChanged -= TokenDisplayViewModelPropertyChanged;
+        //}
 
-        private void TokenDisplayViewModelPropertyChanged(object? sender,
-            System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            CalculateLayout();
-        }
+        //private void TokenDisplayViewModelPropertyChanged(object? sender,
+        //    System.ComponentModel.PropertyChangedEventArgs e)
+        //{
+        //    CalculateLayout();
+        //}
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
@@ -1102,7 +1102,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             var tokenDisplay = (TokenDisplayViewModel)DataContext;
 
-            if (tokenDisplay.VerseDisplay is AlignmentDisplayViewModel) { 
+            if (tokenDisplay.VerseDisplay is AlignmentDisplayViewModel)
+            {
                 if (e.NewValue != null && (bool)e.NewValue)
                 {
                     var keyBoardModifiers = Keyboard.Modifiers;
@@ -1111,7 +1112,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
                     }
-                    
+
                 }
             }
             base.OnIsKeyboardFocusWithinChanged(e);
@@ -1144,16 +1145,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
-            if (e is MouseEventArgs args)
+
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                
-               if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
-               {
-                   TokenDisplayContextMenu.PlacementTarget = sender as UIElement;
-                   TokenDisplayContextMenu.Placement = PlacementMode.Right;
-                   TokenDisplayContextMenu.IsOpen = true;
-                   return;
-               }
+                TokenDisplayContextMenu.PlacementTarget = sender as UIElement;
+                TokenDisplayContextMenu.Placement = PlacementMode.Right;
+                TokenDisplayContextMenu.IsOpen = true;
+                return;
             }
             RaiseTokenEvent(TokenMouseEnterEvent, e);
         }
@@ -1358,7 +1356,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseNoteEvent(CopyEvent, e);
         }
-        
+
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
             AllSelectedTokens = message.SelectedTokens;
@@ -1389,7 +1387,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #region Public Properties
 
-       
+
         /// <summary>
         /// Gets or sets the collection of tokens selected across all displays.
         /// </summary>
@@ -1522,7 +1520,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             private set => SetValue(AlignedTokenTextProperty, value);
         }
 
-      
+
         /// <summary>
         /// Gets or sets the height of the composite indicator.
         /// </summary>
@@ -1794,7 +1792,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public double TranslationFontSize
         {
-            get => (double) GetValue(TranslationFontSizeProperty);
+            get => (double)GetValue(TranslationFontSizeProperty);
             set => SetValue(TranslationFontSizeProperty, value);
         }
 
@@ -1824,7 +1822,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </remarks>
         public Thickness TranslationMargin
         {
-            get => (Thickness) GetValue(TranslationMarginProperty);
+            get => (Thickness)GetValue(TranslationMarginProperty);
             private set => SetValue(TranslationMarginProperty, value);
         }
 
@@ -1843,7 +1841,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <remarks>This should not be set explicitly; it is computed based on the <see cref="ShowTranslation"/> value.</remarks>
         public Visibility TranslationVisibility
         {
-            get => (Visibility) GetValue(TranslationVisibilityProperty);
+            get => (Visibility)GetValue(TranslationVisibilityProperty);
             private set => SetValue(TranslationVisibilityProperty, value);
         }
 
@@ -1855,7 +1853,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </remarks>
         public string TranslationText
         {
-            get => (string) GetValue(TranslationTextProperty);
+            get => (string)GetValue(TranslationTextProperty);
             set => SetValue(TranslationTextProperty, value);
         }
         #endregion Public Properties
@@ -1888,7 +1886,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
-            TranslationBackground = TokenDisplayViewModel.IsTranslationSelected ? SelectedTokenBackground : Brushes.Transparent; 
+            TranslationBackground = TokenDisplayViewModel.IsTranslationSelected ? SelectedTokenBackground : Brushes.Transparent;
             TranslationText = TokenDisplayViewModel.TargetTranslationText;
             TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
@@ -1909,28 +1907,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public TokenDisplay()
         {
             InitializeComponent();
-
-            //HorizontalContentAlignment = HorizontalAlignment.Center;
-            //var horizontalAlignmentProperty = System.ComponentModel.DependencyPropertyDescriptor.FromProperty(Control.HorizontalContentAlignmentProperty, typeof(Control));
-            //horizontalAlignmentProperty.AddValueChanged(this, OnHorizontalAlignmentChanged);
-            
-            //Loaded += OnLoaded;
-            //Unloaded += OnUnloaded;
-
-            //EventAggregator?.SubscribeOnUIThread(this);
         }
-
-        //~TokenDisplay()
-        //{
-        //    Loaded -= OnLoaded;
-        //    Unloaded -= OnUnloaded;
-
-        //    EventAggregator?.Unsubscribe(this);
-        //}
-
-        //private void OnHorizontalAlignmentChanged(object? sender, EventArgs args)
-        //{
-        //    CalculateLayout();
-        //}
     }
 }

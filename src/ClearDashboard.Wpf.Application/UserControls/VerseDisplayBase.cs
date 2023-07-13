@@ -19,9 +19,7 @@ namespace ClearDashboard.Wpf.Application.UserControls;
 /// <summary>
 /// A base class vor verse display controls.
 /// </summary>
-public class VerseDisplayBase : UserControl, INotifyPropertyChanged,
-    IHandle<SelectionUpdatedMessage>,
-    IHandle<TokensUpdatedMessage>
+public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<TokensUpdatedMessage>
 {
 
     #region Static RoutedEvents
@@ -97,17 +95,10 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged,
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-
-
-    public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
-    {
-        VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
-        await Task.CompletedTask;
-    }
-
     public async Task HandleAsync(TokensUpdatedMessage message, CancellationToken cancellationToken)
     {
         OnPropertyChanged(nameof(SourceTokens));
+        OnPropertyChanged(nameof(TargetTokens));
         await Task.CompletedTask;
     }
 
@@ -260,9 +251,12 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged,
 
     #endregion Public properties
 
+  
+
     public VerseDisplayBase()
     {
-       
+      
+
         if (EventAggregator != null)
         {
             EventAggregator.SubscribeOnUIThread(this);

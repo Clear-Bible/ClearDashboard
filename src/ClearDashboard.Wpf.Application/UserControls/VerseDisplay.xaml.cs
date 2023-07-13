@@ -5,16 +5,13 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using SIL.Extensions;
 using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -22,9 +19,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// A control for displaying a verse, as represented by <see cref="VerseDisplayViewModel"/> instance containing
     /// an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
     /// </summary>
-    public partial class VerseDisplay : INotifyPropertyChanged,
-        IHandle<SelectionUpdatedMessage>,
-        IHandle<TokensUpdatedMessage>
+    public partial class VerseDisplay : IHandle<SelectionUpdatedMessage>
     {
         #region Static RoutedEvents
         /// <summary>
@@ -411,18 +406,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty ShowTranslationsProperty = DependencyProperty.Register(nameof(ShowTranslations), typeof(bool), typeof(VerseDisplay),
             new PropertyMetadata(true));
 
-        /// <summary>
-        /// Identifies the SourceFontFamily dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SourceFontFamilyProperty = DependencyProperty.Register(nameof(SourceFontFamily), typeof(FontFamily), typeof(VerseDisplay),
-            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
-
-        /// <summary>
-        /// Identifies the SourceFontSize dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SourceFontSizeProperty = DependencyProperty.Register(nameof(SourceFontSize), typeof(double), typeof(VerseDisplay),
-            new PropertyMetadata(18d));
-
+      
         /// <summary>
         /// Identifies the SourceFontStyle dependency property.
         /// </summary>
@@ -440,18 +424,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty SourceItemsPanelTemplateProperty = DependencyProperty.Register(nameof(SourceItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
 
-        /// <summary>
-        /// Identifies the TargetFontFamily dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TargetFontFamilyProperty = DependencyProperty.Register(nameof(TargetFontFamily), typeof(FontFamily), typeof(VerseDisplay),
-            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
-
-        /// <summary>
-        /// Identifies the TargetFontSize dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TargetFontSizeProperty = DependencyProperty.Register(nameof(TargetFontSize), typeof(double), typeof(VerseDisplay),
-            new PropertyMetadata(16d));
-
+      
         /// <summary>
         /// Identifies the TargetFontStyle dependency property.
         /// </summary>
@@ -503,12 +476,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TitleVisibilityProperty = DependencyProperty.Register(nameof(TitleVisibility), typeof(Visibility), typeof(VerseDisplay), new PropertyMetadata(Visibility.Visible));
 
-        /// <summary>
-        /// Identifies the TokenVerticalSpacing dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register(nameof(TokenVerticalSpacing), typeof(double), typeof(VerseDisplay),
-            new PropertyMetadata(4d));
-
+      
         /// <summary>
         /// Identifies the TranslationAlignment dependency property.
         /// </summary>
@@ -551,36 +519,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register(nameof(TranslationVerticalSpacing), typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(10d));
 
-        /// <summary>
-        /// Identifies the VerseBackground dependency property.
-        /// </summary>
-        public static readonly DependencyProperty VerseBackgroundProperty = DependencyProperty.Register(nameof(VerseBackground), typeof(Brush), typeof(VerseDisplay),
-            new PropertyMetadata(Brushes.AliceBlue));
-
-        /// <summary>
-        /// Identifies the VerseBorderBrush dependency property.
-        /// </summary>
-        public static readonly DependencyProperty VerseBorderBrushProperty = DependencyProperty.Register(nameof(VerseBorderBrush), typeof(Brush), typeof(VerseDisplay),
-            new PropertyMetadata(Brushes.Black));
-
-        /// <summary>
-        /// Identifies the VerseBorderThickness dependency property.
-        /// </summary>
-        public static readonly DependencyProperty VerseBorderThicknessProperty = DependencyProperty.Register(nameof(VerseBorderThickness), typeof(Thickness), typeof(VerseDisplay),
-            new PropertyMetadata(new Thickness(1)));
-
-        /// <summary>
-        /// Identifies the VerseMargin dependency property.
-        /// </summary>
-        public static readonly DependencyProperty VerseMarginProperty = DependencyProperty.Register(nameof(VerseMargin), typeof(Thickness), typeof(VerseDisplay),
-            new PropertyMetadata(new Thickness(0, 10, 0, 10)));
-
-        /// <summary>
-        /// Identifies the VersePadding dependency property.
-        /// </summary>
-        public static readonly DependencyProperty VersePaddingProperty = DependencyProperty.Register(nameof(VersePadding), typeof(Thickness), typeof(VerseDisplay),
-            new PropertyMetadata(new Thickness(10)));
-
+    
         /// <summary>
         /// Identifies the Wrap dependency property.
         /// </summary>
@@ -590,11 +529,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion Static DependencyProperties
         #region Private event handlers
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         /// <summary>
         /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="SourceItemsPanelTemplate"/>.
@@ -613,10 +547,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TargetItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "TargetWrapPanelTemplate" : "TargetStackPanelTemplate");
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            CalculateItemsPanelTemplate(Wrap);
-        }
+     
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, TokenEventArgs args)
         {
@@ -632,6 +563,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             RaiseTokenEvent(routedEvent, (TokenEventArgs)e);
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CalculateItemsPanelTemplate(Wrap);
+            Loaded -= OnLoaded;
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
@@ -708,18 +645,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     VerseSelectedTokens.Remove(token);
                 }
             }
-        }
-
-        public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
-        {
-            VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
-            await Task.CompletedTask;
-        }
-
-        public async Task HandleAsync(TokensUpdatedMessage message, CancellationToken cancellationToken)
-        {
-            OnPropertyChanged(nameof(SourceTokens));
-            await Task.CompletedTask;
         }
 
         private void OnAlignedTokenClicked(object sender, RoutedEventArgs e)
@@ -1067,11 +992,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(AlignedTokenMouseWheelEvent, value);
         }
 
-        /// <summary>
-        /// Occurs when a property is changed.
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-
+      
         /// <summary>
         /// Occurs when an individual token is clicked.
         /// </summary>
@@ -1477,11 +1398,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="IEventAggregator"/> that this control instance can use to listen for events.
-        /// </summary>
-        public static IEventAggregator? EventAggregator { get; set; }
-
-        /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the background of highlighted tokens.
         /// </summary>
         public Brush HighlightedTokenBackground
@@ -1568,23 +1484,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(ShowTranslationsProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the token.
-        /// </summary>
-        public FontFamily SourceFontFamily
-        {
-            get => (FontFamily)GetValue(SourceFontFamilyProperty);
-            set => SetValue(SourceFontFamilyProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the font size for the token.
-        /// </summary>
-        public double SourceFontSize
-        {
-            get => (double)GetValue(SourceFontSizeProperty);
-            set => SetValue(SourceFontSizeProperty, value);
-        }
 
         /// <summary>
         /// Gets or sets the font style for the token.
@@ -1615,29 +1514,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets the collection of <see cref="TokenDisplayViewModel"/> source objects to display in the control.
-        /// </summary>
-        public IEnumerable SourceTokens => VerseDisplayViewModel?.SourceTokenDisplayViewModels;
-
-        /// <summary>
-        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the target tokens.
-        /// </summary>
-        public FontFamily TargetFontFamily
-        {
-            get => (FontFamily)GetValue(TargetFontFamilyProperty);
-            set => SetValue(TargetFontFamilyProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the font size for the target tokens.
-        /// </summary>
-        public double TargetFontSize
-        {
-            get => (double)GetValue(TargetFontSizeProperty);
-            set => SetValue(TargetFontSizeProperty, value);
-        }
-
-        /// <summary>
         /// Gets or sets the font style for the target tokens.
         /// </summary>
         public FontStyle TargetFontStyle
@@ -1665,16 +1541,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TargetItemsPanelTemplateProperty, value);
         }
 
-        /// <summary>
-        /// Gets the collection of <see cref="TokenDisplayViewModel"/> target objects to display in the control.
-        /// </summary>
-        public TokenDisplayViewModelCollection TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
-
-        /// <summary>
-        /// Gets or sets the visibility of the target (alignment) verse.
-        /// </summary>
-        public Visibility TargetVisibility => TargetTokens.Any() ? Visibility.Visible : Visibility.Collapsed;
-
+      
         /// <summary>
         /// Gets or sets the title to be displayed for the verse.
         /// </summary>
@@ -1729,15 +1596,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TitleVisibilityProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets the vertical spacing below the token.
-        /// </summary>
-        public double TokenVerticalSpacing
-        {
-            get => (double)GetValue(TokenVerticalSpacingProperty);
-            set => SetValue(TokenVerticalSpacingProperty, value);
-        }
-
+     
         /// <summary>
         /// Gets or sets the <see cref="HorizontalAlignment"/> for the token and translation.
         /// </summary>
@@ -1801,60 +1660,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TranslationVerticalSpacingProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the background of the tokens list.
-        /// </summary>
-        public Brush VerseBackground
-        {
-            get => (Brush)GetValue(VerseBackgroundProperty);
-            set => SetValue(VerseBackgroundProperty, value);
-        }
+  
 
-        /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the border around the tokens list.
-        /// </summary>
-        public Brush VerseBorderBrush
-        {
-            get => (Brush)GetValue(VerseBorderBrushProperty);
-            set => SetValue(VerseBorderBrushProperty, value);
-        }
 
-        /// <summary>
-        /// Gets or sets the border thickness for the tokens list.
-        /// </summary>
-        public Thickness VerseBorderThickness
-        {
-            get => (Thickness)GetValue(VerseBorderThicknessProperty);
-            set => SetValue(VerseBorderThicknessProperty, value);
-        }
-
-        /// <summary>
-        /// Gets the strongly-typed VerseDisplayViewModel bound to this control.
-        /// </summary>
-        public VerseDisplayViewModel VerseDisplayViewModel => (DataContext.GetType().Name != "NamedObject" ? DataContext as VerseDisplayViewModel : null)!;
-
-        /// <summary>
-        /// Gets or sets the margin for the tokens list.
-        /// </summary>
-        public Thickness VerseMargin
-        {
-            get => (Thickness) GetValue(VerseMarginProperty);
-            set => SetValue(VerseMarginProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected in the UI for this verse.
-        /// </summary>
-        public TokenDisplayViewModelCollection VerseSelectedTokens { get; set; } = new();
-
-        /// <summary>
-        /// Gets or sets the padding for the tokens list.
-        /// </summary>
-        public Thickness VersePadding
-        {
-            get => (Thickness) GetValue(VersePaddingProperty);
-            set => SetValue(VersePaddingProperty, value);
-        }
 
         /// <summary>
         /// Gets or sets whether the tokens should wrap in the control.
@@ -1867,15 +1675,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion Public properties
 
+        public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
+            await Task.CompletedTask;
+        }
+
         public VerseDisplay()
         {
             InitializeComponent();
+
             Loaded += OnLoaded;
 
-            if (EventAggregator != null)
-            {
-                EventAggregator.SubscribeOnUIThread(this);
-            }
         }
     }
 }
