@@ -242,11 +242,12 @@
                         <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}" Width=".6*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding BulkAlignmentDisplayViewModel.DisplayTokens }" />
-                                    <!--<userControls:ReadOnlyVerseDisplay 
+                                    <!--<StackPanel>
+                                        <TextBlock Text="{Binding BulkAlignmentDisplayViewModel.DisplayTokens }" />
+                                    </StackPanel>-->
+                                    <userControls:ReadOnlyVerseDisplay 
                                         DataContext="{Binding BulkAlignmentDisplayViewModel}"
                                         HorizontalAlignment="Stretch"
-                                        HorizontalSpacing="{Binding DataContext.SourceHorizontalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}"
                                         VerseBackground="Transparent"
                                         VerseBorderBrush="Transparent"
                                         VerseMargin="0"
@@ -254,9 +255,7 @@
                                         SourceFontFamily="{Binding ElementName=InnerListView, Path=DataContext.SourceFontFamily}"
                                         SourceFontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}"
                                         TargetFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TargetFontFamily}"
-                                        TargetFontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}"
-                                        TitleFontSize="10"
-                                        TitleVisibility="Collapsed" />-->
+                                        TargetFontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
