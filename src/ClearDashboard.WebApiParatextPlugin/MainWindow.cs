@@ -150,15 +150,18 @@ namespace ClearDashboard.WebApiParatextPlugin
                 AppendText(Color.Red,
                     $"Unexpected error occurred calling PluginHub.SendConnectionChange() : {ex.Message}");
             }
+            finally
+            {
+                WebAppProxy?.Dispose();
+            }
         }
 
         /// <summary>
-        /// Called when window is closed
+        /// Called when window loses focus
         /// </summary>
         /// <param name="e"></param>
         protected override async void OnLeave(EventArgs e)
         {
-            WebAppProxy?.Dispose();
 
             base.OnLeave(e);
         }
