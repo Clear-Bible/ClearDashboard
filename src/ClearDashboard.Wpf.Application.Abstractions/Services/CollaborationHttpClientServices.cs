@@ -56,13 +56,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<CollaborationUser> GetUserExistsById(int userId)
         {
-            var query = new Dictionary<string, string>()
-            {
-                ["api-version"] = "2.0",
-            };
-            var uri = QueryHelpers.AddQueryString($"/api/users/{userId}", query);
-
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/{userId}");
 
             try
             {
@@ -92,13 +86,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<CollaborationUser> GetUserExistsByEmail(string email)
         {
-            var query = new Dictionary<string, string>()
-            {
-                ["api-version"] = "2.0",
-            };
-            var uri = QueryHelpers.AddQueryString("/api/users/", query);
-
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
 
             try
             {
@@ -318,13 +306,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             try
             {
-                var query = new Dictionary<string, string>()
-                {
-                    ["api-version"] = "2.0",
-                };
-                var uri = QueryHelpers.AddQueryString("/api/users", query);
-
-                var response = await _collaborationClient.Client.PostAsync(uri, content);
+                var response = await _collaborationClient.Client.PostAsync("/api/users", content);
                 response.EnsureSuccessStatusCode();
 
                 return true;
