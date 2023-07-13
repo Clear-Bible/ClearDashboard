@@ -600,7 +600,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     SaveMessageForegroundColor = Brushes.Red;
                 }
 
-                if (_dashboardUser.GitLabUserId == null)
+                if (_dashboardUser.GitLabUserId == 0)
                 {
                     await CreateDashboardUser();
                 }
@@ -620,19 +620,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     SelectedGroup.Name,
                     CollaborationConfig.UserId,
                     Assembly.GetEntryAssembly()?.GetName().Version?.ToString(),
-                    DateTime.Today.ToString(CultureInfo.InvariantCulture));
+                    DateTime.Today.Date);
 
                 await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
             }
             else //update a DashboardUser
             {
-                _dashboardUser.ParatextUserName ??= ProjectManager.CurrentUser.ParatextUserName;
-                _dashboardUser.Organization ??= SelectedGroup.Name;
-                _dashboardUser.GitLabUserId ??= CollaborationConfig.UserId;
-                _dashboardUser.AppVersionNumber ??= Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
-                _dashboardUser.AppLastDate ??= DateTime.Today.ToString(CultureInfo.InvariantCulture);
-
-                //TODO use CollabHttpServices to modify existing DashboardUser 
+                _dashboardUser.ParatextUserName = ProjectManager.CurrentUser.ParatextUserName;
+                _dashboardUser.Organization = SelectedGroup.Name;
+                _dashboardUser.GitLabUserId = CollaborationConfig.UserId;
+                _dashboardUser.AppVersionNumber = Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
+                _dashboardUser.AppLastDate = DateTime.Today.Date;
+                
+                await _collaborationHttpClientServices.UpdateDashboardUser(_dashboardUser);
             }
         }
 

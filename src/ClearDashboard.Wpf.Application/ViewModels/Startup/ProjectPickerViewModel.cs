@@ -544,19 +544,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         collaborationUser.GroupName,
                         collaborationUser.UserId,
                         Assembly.GetEntryAssembly()?.GetName().Version?.ToString(),
-                        DateTime.Today.ToString(CultureInfo.InvariantCulture));
+                        DateTime.Today.Date);
 
                     await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
                 }
                 else //update a DashboardUser
                 {
-                    dashboardUser.ParatextUserName ??= ParatextUserName;
-                    dashboardUser.Organization ??= collaborationUser.GroupName;
-                    dashboardUser.GitLabUserId ??= collaborationUser.UserId;
-                    dashboardUser.AppVersionNumber ??= Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
-                    dashboardUser.AppLastDate ??= DateTime.Today.ToString(CultureInfo.InvariantCulture);
-
-                    //TODO use CollabHttpServices to modify existing DashboardUser 
+                    dashboardUser.ParatextUserName = ParatextUserName;
+                    dashboardUser.Organization = collaborationUser.GroupName;
+                    dashboardUser.GitLabUserId = collaborationUser.UserId;
+                    dashboardUser.AppVersionNumber = Assembly.GetEntryAssembly()?.GetName().Version.ToString();
+                    dashboardUser.AppLastDate = DateTime.Today.Date;
+                    
+                    await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
                 }
             }
 
