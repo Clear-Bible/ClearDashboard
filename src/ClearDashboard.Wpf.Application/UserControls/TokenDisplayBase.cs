@@ -156,7 +156,7 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
     public Brush TokenBorder
     {
         get => (Brush)GetValue(TokenBorderProperty);
-        private set => SetValue(TokenBorderProperty, value);
+        protected set => SetValue(TokenBorderProperty, value);
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
     public Brush CompositeIndicatorComputedColor
     {
         get => (Brush)GetValue(CompositeIndicatorComputedColorProperty);
-        private set => SetValue(CompositeIndicatorComputedColorProperty, value);
+        protected set => SetValue(CompositeIndicatorComputedColorProperty, value);
     }
 
 
@@ -181,7 +181,7 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
     public Visibility CompositeIndicatorVisibility
     {
         get => (Visibility)GetValue(CompositeIndicatorVisibilityProperty);
-        private set => SetValue(CompositeIndicatorVisibilityProperty, value);
+        protected set => SetValue(CompositeIndicatorVisibilityProperty, value);
     }
 
     /// <summary>
@@ -193,7 +193,7 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
     public string SurfaceText
     {
         get => (string)GetValue(SurfaceTextProperty);
-        private set => SetValue(SurfaceTextProperty, value);
+        protected set => SetValue(SurfaceTextProperty, value);
     }
 
     /// <summary>
@@ -259,7 +259,7 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
     public Thickness TokenMargin
     {
         get => (Thickness)GetValue(TokenMarginProperty);
-        private set => SetValue(TokenMarginProperty, value);
+        protected set => SetValue(TokenMarginProperty, value);
     }
 
 

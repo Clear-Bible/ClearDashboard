@@ -1,10 +1,10 @@
-﻿<UserControl
+﻿<usercontrols:TokenDisplayBase
+    xmlns:usercontrols="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Class="ClearDashboard.Wpf.Application.UserControls.TokenDisplay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -181,4 +181,4 @@
             <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenText}" />
         </Button>
     </StackPanel>
-</UserControl>
+</usercontrols:TokenDisplayBase>
