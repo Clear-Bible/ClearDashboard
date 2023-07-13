@@ -142,7 +142,7 @@ namespace ClearDashboard.DataAccessLayer
                 var str = File.ReadAllText(filePath);
                 return str;
             }
-            catch
+            catch (Exception)
             {
                 return "";
             }

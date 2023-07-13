@@ -1,9 +1,12 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -21,7 +24,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,11 +32,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
-using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -528,9 +527,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
 
             CollaborationUser collaborationUser;
-
+            bool dashboardUserChanged = false;
+            bool collaborationUserSet = false;
             if (_collaborationManager.HasRemoteConfigured())
             {
+                
                 CollaborationConfig = _collaborationManager.GetConfig();
 
                 collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
@@ -544,9 +545,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         collaborationUser.GroupName,
                         collaborationUser.UserId,
                         Assembly.GetEntryAssembly()?.GetName().Version?.ToString(),
-                        DateTime.Today.Date);
+                        DateTime.Today.Date,
+                        ProjectManager.CurrentUser.ParatextUserName);
 
-                    await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
+                    dashboardUserChanged = await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
                 }
                 else //update a DashboardUser
                 {
@@ -556,12 +558,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     dashboardUser.AppVersionNumber = Assembly.GetEntryAssembly()?.GetName().Version.ToString();
                     dashboardUser.AppLastDate = DateTime.Today.Date;
                     
-                    await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+                    dashboardUserChanged = await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
                 }
             }
 
-            dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);//redundant but done in case the collab user was there and modified the dashboard user
-            collaborationUser = await _collaborationHttpClientServices.GetUserExistsByEmail(dashboardUser.Email);//Why not use CollaborationConfig?
+            if (dashboardUserChanged)
+            {
+                dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
+            }
+            collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
 
             if (collaborationUser.UserId == -1)
             {

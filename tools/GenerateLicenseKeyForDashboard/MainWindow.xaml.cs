@@ -78,7 +78,7 @@ namespace GenerateLicenseKeyForDashboard
 
             var encryptedLicense = LicenseManager.EncryptToString(licenseUser);
 
-            var dashboardUser = new DashboardUser(licenseUser, email, encryptedLicense,null, null, null, null);
+            var dashboardUser = new DashboardUser(licenseUser, email, encryptedLicense);
 
             var results = await _mySqlHttpClientServices.CreateNewDashboardUser(dashboardUser);
             

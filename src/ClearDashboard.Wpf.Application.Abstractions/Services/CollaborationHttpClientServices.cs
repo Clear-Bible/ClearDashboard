@@ -1,19 +1,17 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Reflection.Metadata;
-using System.Security.Policy;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.Services
 {

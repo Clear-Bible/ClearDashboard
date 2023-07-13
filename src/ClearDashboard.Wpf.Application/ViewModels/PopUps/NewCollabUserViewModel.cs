@@ -3,10 +3,10 @@ using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
@@ -16,7 +16,6 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -318,12 +317,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         protected override async void OnViewLoaded(object view)
         {
-            //License, DashboardUser, GitLabUser, Paratext Registration.xml
-            //FirstName         X           -                               -
-            //LastName           X          -                               -      
-            //Email                         X                               X                                                  
-            //Organization                  X                               X                  
-
             if (_projectManager.CurrentUser is not null)
             {
                 FirstName = _projectManager.CurrentUser.FirstName ?? string.Empty;
@@ -404,7 +397,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         #region Methods
-        private RegistrationData GetParatextRegistrationData()
+        private void GetParatextRegistrationData()
         {
             var fileName = Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData), @"Paratext93\RegistrationInfo.xml");
@@ -418,7 +411,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     _registration = (RegistrationData)serializer.Deserialize(reader);
                 }
             }
-            return _registration;
         }
 
         private string GetOrganizationNameFromEmail()
@@ -620,13 +612,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     SelectedGroup.Name,
                     CollaborationConfig.UserId,
                     Assembly.GetEntryAssembly()?.GetName().Version?.ToString(),
-                    DateTime.Today.Date);
+                    DateTime.Today.Date,
+                    _registration.Name);
 
                 await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
             }
             else //update a DashboardUser
             {
-                _dashboardUser.ParatextUserName = ProjectManager.CurrentUser.ParatextUserName;
+                _dashboardUser.ParatextUserName = _registration.Name;
                 _dashboardUser.Organization = SelectedGroup.Name;
                 _dashboardUser.GitLabUserId = CollaborationConfig.UserId;
                 _dashboardUser.AppVersionNumber = Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
@@ -663,22 +656,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #endregion // Methods
 
-    }
-
-    [XmlRoot(ElementName = "RegistrationData")]
-    public class RegistrationData
-    {
-
-        [XmlElement(ElementName = "Name")]
-        public string Name { get; set; }
-
-        [XmlElement(ElementName = "Code")]
-        public string Code { get; set; }
-
-        [XmlElement(ElementName = "Email")]
-        public string Email { get; set; }
-
-        [XmlElement(ElementName = "SupporterName")]
-        public string SupporterName { get; set; }
     }
 }

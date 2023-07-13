@@ -10,12 +10,12 @@ namespace ClearDashboard.DataAccessLayer.Models.LicenseGenerator
         {
         }
 
-        public DashboardUser(User user, string email, string licenseKey, string? organization, int? gitLabUserId, string? appVersionNumber, DateTime appLastDate)
+        public DashboardUser(User user, string email, string licenseKey, string? organization = null, int? gitLabUserId = null, string? appVersionNumber = null, DateTime appLastDate = default, string? paratextUserName = null)
         {
             Id = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;
-            ParatextUserName = user.ParatextUserName;//many original license didn't have this info
+            ParatextUserName = paratextUserName ?? user.ParatextUserName;
             IsInternal = user.IsInternal ?? false;
             LicenseVersion = user.LicenseVersion ?? 0;
 
