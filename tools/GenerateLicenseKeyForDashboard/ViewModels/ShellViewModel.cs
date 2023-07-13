@@ -1,22 +1,25 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Services;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace GenerateLicenseKeyForDashboard.ViewModels
 {
     public class ShellViewModel : PropertyChangedBase
     {
+        // ReSharper disable global MemberCanBePrivate.Global
+
         #region Member Variables   
 
-        private int _licenseVersion = 2;
+        private readonly int _licenseVersion = 2;
         private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
 
         #endregion //Member Variables
@@ -29,7 +32,23 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         #region Observable Properties
 
-        private string _title;
+        private Visibility _fetchByEmailInput;
+        public Visibility FetchByEmailInput
+        {
+            get => _fetchByEmailInput;
+            set => Set(ref _fetchByEmailInput, value);
+        }
+
+
+        private Visibility _fetchByIdInput;
+        public Visibility FetchByIdInput
+        {
+            get => _fetchByIdInput;
+            set => Set(ref _fetchByIdInput, value);
+        }
+
+
+        private string _title = string.Empty;
         public string Title
         {
             get => _title;
@@ -60,7 +79,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             set => Set(ref _isInternalChecked, value);
         }
 
-        private string _emailBox;
+        private string _emailBox = string.Empty;
         public string EmailBox
         {
             get => _emailBox;
@@ -68,7 +87,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         }
 
 
-        private string _generatedLicenseBoxText;
+        private string _generatedLicenseBoxText = string.Empty;
         public string GeneratedLicenseBoxText
         {
             get => _generatedLicenseBoxText;
@@ -77,19 +96,130 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
 
 
-        private string _firstNameBox;
+        private string _firstNameBox = string.Empty;
         public string FirstNameBox
         {
             get => _firstNameBox;
             set => Set(ref _firstNameBox, value);
         }
 
-        private string _lastNameBox;
+        private string _lastNameBox = string.Empty;
         public string LastNameBox
         {
             get => _lastNameBox;
             set => Set(ref _lastNameBox, value);
         }
+
+
+        private string _licenseDecryptionBox = string.Empty;
+        public string LicenseDecryptionBox
+        {
+            get => _licenseDecryptionBox;
+            set => Set(ref _licenseDecryptionBox, value);
+        }
+
+
+        private string _decryptedFirstNameBox = string.Empty;
+        public string DecryptedFirstNameBox
+        {
+            get => _decryptedFirstNameBox;
+            set => Set(ref _decryptedFirstNameBox, value);
+        }
+
+        private string _decryptedLastNameBox = string.Empty;
+        public string DecryptedLastNameBox
+        {
+            get => _decryptedLastNameBox;
+            set => Set(ref _decryptedLastNameBox, value);
+        }
+
+        private string _decryptedGuidBox = string.Empty;
+        public string DecryptedGuidBox
+        {
+            get => _decryptedGuidBox;
+            set => Set(ref _decryptedGuidBox, value);
+        }
+
+        private string _decryptedLicenseVersionBox = string.Empty;
+        public string DecryptedLicenseVersionBox
+        {
+            get => _decryptedLicenseVersionBox;
+            set => Set(ref _decryptedLicenseVersionBox, value);
+        }
+
+
+        private bool _decryptedInternalCheckBox;
+        public bool DecryptedInternalCheckBox
+        {
+            get => _decryptedInternalCheckBox;
+            set => Set(ref _decryptedInternalCheckBox, value);
+        }
+
+
+        private string _fetchedEmailBox = string.Empty;
+        public string FetchedEmailBox
+        {
+            get => _fetchedEmailBox;
+            set => Set(ref _fetchedEmailBox, value);
+        }
+
+
+        private string _fetchedLicenseBox = string.Empty;
+        public string FetchedLicenseBox
+        {
+            get => _fetchedLicenseBox;
+            set => Set(ref _fetchedLicenseBox, value);
+        }
+
+        
+        private string _fetchByIdBox = string.Empty;
+        public string FetchByIdBox
+        {
+            get => _fetchByIdBox;
+            set => Set(ref _fetchByIdBox, value);
+        }
+
+        
+        private string _fetchByEmailBox = string.Empty;
+        public string FetchByEmailBox
+        {
+            get => _fetchByEmailBox;
+            set => Set(ref _fetchByEmailBox, value);
+        }
+
+        
+        private string _deleteByIdBox = string.Empty;
+        public string DeleteByIdBox
+        {
+            get => _deleteByIdBox;
+            set => Set(ref _deleteByIdBox, value);
+        }
+
+
+        private string _deletedLicenseBox = string.Empty;
+        public string DeletedLicenseBox
+        {
+            get => _deletedLicenseBox;
+            set => Set(ref _deletedLicenseBox, value);
+        }
+
+
+        private string _generatedLicenseBox = string.Empty;
+        public string GeneratedLicenseBox
+        {
+            get => _generatedLicenseBox;
+            set => Set(ref _generatedLicenseBox, value);
+        }
+
+
+        private bool _generateLicenseButtonEnabled;
+        public bool GenerateLicenseButtonEnabled
+        {
+            get => _generateLicenseButtonEnabled;
+            set => Set(ref _generateLicenseButtonEnabled, value);
+        }
+
+
 
         #endregion //Observable Properties
 
@@ -102,8 +232,8 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             
 
             //get the assembly version
-            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-            Title = $"License Key Manager - {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+            var thisVersion = Assembly.GetEntryAssembly()?.GetName().Version;
+            Title = $"License Key Manager - {thisVersion!.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
             EmailChecked = true;
         }
 
@@ -113,7 +243,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         #region Methods
 
 
-        private async void GenerateLicense_OnClick(object sender, RoutedEventArgs e)
+        public async void GenerateLicenseButton(object sender, RoutedEventArgs e)
         {
             var emailAlreadyExists = await CheckForPreExistingEmail(EmailBox);
 
@@ -149,7 +279,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 FirstName = firstName,
                 LastName = lastName,
                 Id = id,
-                IsInternal = IsInternalCheckBox.IsChecked,
+                IsInternal = IsInternalChecked,
                 LicenseVersion = _licenseVersion
             };
 
@@ -167,109 +297,119 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             return encryptedLicense;
         }
 
-        private void DecryptLicense_OnClick(object sender, RoutedEventArgs e)
+        public void DecryptLicense_OnClick(object sender, RoutedEventArgs e)
         {
-            var json = LicenseManager.DecryptLicenseFromString(LicenseDecryptionBox.Text, isGenerator: true);
+            var json = LicenseManager.DecryptLicenseFromString(LicenseDecryptionBox, isGenerator: true);
             var licenseUser = LicenseManager.DecryptedJsonToUser(json, isGenerator: true);
 
-            DecryptedFirstNameBox.Text = licenseUser.FirstName;
-            DecryptedLastNameBox.Text = licenseUser.LastName;
-            DecryptedGuidBox.Text = licenseUser.Id.ToString();
-            DecryptedInternalCheckBox.IsChecked = licenseUser.IsInternal;
-            DecryptedLicenseVersionBox.Text = licenseUser.LicenseVersion.ToString();
+            DecryptedFirstNameBox = licenseUser.FirstName ?? string.Empty;
+            DecryptedLastNameBox = licenseUser.LastName ?? string.Empty;
+            DecryptedGuidBox = licenseUser.Id.ToString();
+            DecryptedInternalCheckBox = (bool)licenseUser.IsInternal!;
+            DecryptedLicenseVersionBox = licenseUser.LicenseVersion.ToString() ?? string.Empty;
         }
 
-        private void ByIdRadio_OnCheck(object sender, RoutedEventArgs e)
+        public void ByIdRadio_OnCheck(object sender, RoutedEventArgs e)
         {
-            FetchByEmailInput.Visibility = Visibility.Collapsed;
-            FetchByIdInput.Visibility = Visibility.Visible;
+            FetchByEmailInput = Visibility.Collapsed;
+            FetchByIdInput = Visibility.Visible;
         }
 
-        private void ByEmailRadio_OnCheck(object sender, RoutedEventArgs e)
+        public void ByEmailRadio_OnCheck(object sender, RoutedEventArgs e)
         {
-            FetchByEmailInput.Visibility = Visibility.Visible;
-            FetchByIdInput.Visibility = Visibility.Collapsed;
+            FetchByEmailInput = Visibility.Visible;
+            FetchByIdInput = Visibility.Collapsed;
         }
 
-        private async void FetchLicenseById_OnClick(object sender, RoutedEventArgs e)
+        public async void FetchLicenseById_OnClick(object sender, RoutedEventArgs e)
         {
-            var fetchByEmail = FetchByEmailInput.IsVisible;
+            var fetchByEmail = FetchByEmailInput;
 
             DashboardUser dashboardUser;
-            if (fetchByEmail)
+            if (fetchByEmail == Visibility.Visible)
             {
-                dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsByEmail(FetchByEmailBox.Text);
+                dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsByEmail(FetchByEmailBox);
             }
             else
             {
-                Guid.TryParse(FetchByIdBox.Text, out var guid);
+                Guid.TryParse(FetchByIdBox, out var guid);
                 dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsById(guid);
             }
 
-            FetchedEmailBox.Text = dashboardUser.Email;
-            FetchedLicenseBox.Text = dashboardUser.LicenseKey;
+            FetchedEmailBox = dashboardUser.Email ?? string.Empty;
+            FetchedLicenseBox = dashboardUser.LicenseKey ?? string.Empty;
         }
 
-        private async void DeleteLicenseById_OnClick(object sender, RoutedEventArgs e)
+        public async void DeleteLicenseById_OnClick(object sender, RoutedEventArgs e)
         {
 
-            var deleted = await _mySqlHttpClientServices.DeleteDashboardUserExistsById(Guid.Parse(DeleteByIdBox.Text));
+            var deleted = await _mySqlHttpClientServices.DeleteDashboardUserExistsById(Guid.Parse(DeleteByIdBox));
 
             if (deleted)
             {
-                DeletedLicenseBox.Text = DeleteByIdBox.Text;
+                DeletedLicenseBox = DeleteByIdBox;
             }
             else
             {
-                DeletedLicenseBox.Text = "Delete failed.";
+                DeletedLicenseBox = "Delete failed.";
             }
         }
 
-        private void Copy_OnClick(object sender, RoutedEventArgs e)
+        public void Copy_OnClick(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             switch (button.Name)
             {
                 case "CopyGeneratedLicense":
-                    Clipboard.SetText(GeneratedLicenseBox.Text);
+                    Clipboard.SetText(GeneratedLicenseBox);
                     break;
                 case "CopyDecryptedFirstName":
-                    Clipboard.SetText(DecryptedFirstNameBox.Text);
+                    Clipboard.SetText(DecryptedFirstNameBox);
                     break;
                 case "CopyDecryptedLastName":
-                    Clipboard.SetText(DecryptedLastNameBox.Text);
+                    Clipboard.SetText(DecryptedLastNameBox);
                     break;
                 case "CopyDecryptedGuid":
-                    Clipboard.SetText(DecryptedGuidBox.Text);
+                    Clipboard.SetText(DecryptedGuidBox);
                     break;
                 case "CopyFetchedEmail":
-                    Clipboard.SetText(FetchedEmailBox.Text);
+                    Clipboard.SetText(FetchedEmailBox);
                     break;
                 case "CopyFetchedLicense":
-                    Clipboard.SetText(FetchedLicenseBox.Text);
+                    Clipboard.SetText(FetchedLicenseBox);
                     break;
                 case "CopyDeletedLicense":
-                    Clipboard.SetText(DeletedLicenseBox.Text);
+                    Clipboard.SetText(DeletedLicenseBox);
                     break;
             }
         }
 
-        private void CheckGenerateLicenseBoxes(object sender, TextChangedEventArgs e)
+        public void EmailCheckedEvent()
+        {
+            Console.WriteLine();
+        }
+
+        public void IdCheckedEvent()
+        {
+            Console.WriteLine();
+        }
+
+        public void CheckGenerateLicenseBoxes(object sender, TextChangedEventArgs e)
         {
 
-            if (!Validation.GetHasError(FirstNameBox) &&
-                !Validation.GetHasError(LastNameBox) &&
-                !Validation.GetHasError(EmailBox) &&
-                FirstNameBox.Text.Length > 0 &&
-                LastNameBox.Text.Length > 0 &&
-                EmailBox.Text.Length > 0)
-            {
-                GenerateLicenseButton.IsEnabled = true;
-            }
-            else
-            {
-                GenerateLicenseButton.IsEnabled = false;
-            }
+            //if (!Validation.GetHasError(FirstNameBox) &&
+            //    !Validation.GetHasError(LastNameBox) &&
+            //    !Validation.GetHasError(EmailBox) &&
+            //    FirstNameBox.Length > 0 &&
+            //    LastNameBox.Length > 0 &&
+            //    EmailBox.Length > 0)
+            //{
+            //    GenerateLicenseButtonEnabled = true;
+            //}
+            //else
+            //{
+            //    GenerateLicenseButtonEnabled = false;
+            //}
         }
 
         #endregion // Methods

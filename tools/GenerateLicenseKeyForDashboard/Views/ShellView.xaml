@@ -1,24 +1,8 @@
-﻿<!--<UserControl x:Class="GenerateLicenseKeyForDashboard.Views.ShellView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:GenerateLicenseKeyForDashboard.Views"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <Label Content="Hello please write your name" />
-        <TextBox x:Name="Name" />
-        <Button x:Name="SayHello"
-                Content="Click Me" />
-    </StackPanel>
-</UserControl>-->
-
-
-<Window
+﻿<Window
     x:Class="GenerateLicenseKeyForDashboard.Views.ShellView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -36,6 +20,7 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
     <Window.DataContext>
         <viewModels:ShellViewModel />
@@ -102,15 +87,14 @@
             <TextBox
                 Name="FirstNameBox"
                 Margin="10"
-                materialDesign:HintAssist.Hint="Enter first name here."
-                TextChanged="{Binding CheckGenerateLicenseBoxes}">
-                <TextBox.Text>
+                materialDesign:HintAssist.Hint="Enter first name here.">
+                <!--<TextBox.Text>
                     <Binding Path="{Binding FirstNameBox}" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <validators:NameValidator />
                         </Binding.ValidationRules>
                     </Binding>
-                </TextBox.Text>
+                </TextBox.Text>-->
             </TextBox>
 
             <TextBlock
@@ -120,8 +104,7 @@
             <TextBox
                 Name="LastNameBox"
                 Margin="10"
-                materialDesign:HintAssist.Hint="Enter last name here."
-                TextChanged="{Binding CheckGenerateLicenseBoxes}">
+                materialDesign:HintAssist.Hint="Enter last name here.">
                 <TextBox.Text>
                     <Binding Path="LastNameBox" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -138,8 +121,7 @@
             <TextBox
                 Name="EmailBox"
                 Margin="10,10,10,20"
-                materialDesign:HintAssist.Hint="Enter email here."
-                TextChanged="{Binding CheckGenerateLicenseBoxes}">
+                materialDesign:HintAssist.Hint="Enter email here.">
                 <TextBox.Text>
                     <Binding Path="EmailBox" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -149,12 +131,15 @@
                 </TextBox.Text>
             </TextBox>
 
-            <CheckBox IsChecked="{Binding IsInternalChecked}" Name="IsInternalCheckBox" Content="User is Internal to Clear.  Reflect this in usage metrics." />
+            <CheckBox
+                Name="IsInternalCheckBox"
+                Content="User is Internal to Clear.  Reflect this in usage metrics."
+                IsChecked="{Binding IsInternalChecked}" />
 
             <Button
                 Name="GenerateLicenseButton"
                 Margin="10"
-                Click="{Binding GenerateLicense_OnClick}"
+                cm:Message.Attach="[Event Click] = [Action GenerateLicense_OnClick]"
                 Content="Generate license!"
                 IsEnabled="False" />
 
@@ -163,7 +148,7 @@
                     Name="GeneratedLicenseBlock"
                     Margin="10"
                     Text="Generated License" />
-                <Button Name="CopyGeneratedLicense" Click="{Binding Copy_OnClick}">
+                <Button Name="CopyGeneratedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
             </StackPanel>
@@ -191,11 +176,12 @@
             <TextBox
                 Name="LicenseDecryptionBox"
                 Margin="10"
-                materialDesign:HintAssist.Hint="Enter license here." />
+                materialDesign:HintAssist.Hint="Enter license here."
+                Text="{Binding LicenseDecryptionBox}" />
 
             <Button
                 Margin="10"
-                Click="{Binding DecryptLicense_OnClick}"
+                cm:Message.Attach="[Event Click] = [Action DecryptLicense_OnClick]"
                 Content="Decrypt License!" />
 
             <StackPanel Orientation="Horizontal">
@@ -203,7 +189,7 @@
                     Name="DecryptedFirstNameBlock"
                     Margin="10"
                     Text="Decrypted First Name" />
-                <Button Name="CopyDecryptedFirstName" Click="{Binding Copy_OnClick}">
+                <Button Name="CopyDecryptedFirstName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
             </StackPanel>
@@ -221,7 +207,7 @@
                     Name="DecryptedLastNameBlock"
                     Margin="10"
                     Text="Decrypted Last Name" />
-                <Button Name="CopyDecryptedLastName" Click="{Binding Copy_OnClick}">
+                <Button Name="CopyDecryptedLastName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
             </StackPanel>
@@ -239,7 +225,7 @@
                     Name="DecryptedGuidBlock"
                     Margin="10"
                     Text="Decrypted User Id" />
-                <Button Name="CopyDecryptedGuid" Click="{Binding Copy_OnClick}">
+                <Button Name="CopyDecryptedGuid" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
             </StackPanel>
@@ -265,7 +251,7 @@
                     Name="DecryptedLicenseVersionBlock"
                     Margin="10"
                     Text="Decrypted License Version" />
-                <Button Name="CopyDecryptedLicenseVersion" Click="{Binding Copy_OnClick}">
+                <Button Name="CopyDecryptedLicenseVersion" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
             </StackPanel>
@@ -287,13 +273,13 @@
 
             <RadioButton
                 Name="ByEmailRadio"
-                Checked="{Binding ByEmailRadio_OnCheck}"
+                cm:Message.Attach="[Event Checked] = [Action EmailCheckedEvent]"
                 Content="By Email"
                 GroupName="FetchByRadios"
                 IsChecked="{Binding EmailChecked}" />
             <RadioButton
                 Name="ByIdRadio"
-                Checked="{Binding ByIdRadio_OnCheck}"
+                cm:Message.Attach="[Event Checked] = [Action IdCheckedEvent]"
                 Content="By Id"
                 GroupName="FetchByRadios"
                 IsChecked="{Binding IdChecked}" />
@@ -322,7 +308,7 @@
 
             <Button
                 Margin="10"
-                Click="{Binding FetchLicenseById_OnClick}"
+                cm:Message.Attach="[Event Click] = [Action FetchLicenseById_OnClick]"
                 Content="Fetch License!" />
 
             <StackPanel Orientation="Horizontal">
@@ -330,7 +316,7 @@
                     Name="FetchedEmailBlock"
                     Margin="10"
                     Text="Fetched Email" />
-                <Button Name="CopyFetchedEmail" Click="{Binding Copy_OnClick}">
+                <Button Name="CopyFetchedEmail" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
             </StackPanel>
@@ -348,7 +334,7 @@
                     Name="FetchedLicenseBlock"
                     Margin="10"
                     Text="Fetched License" />
-                <Button Name="CopyFetchedLicense" Click="{Binding Copy_OnClick}">
+                <Button Name="CopyFetchedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
             </StackPanel>
@@ -379,7 +365,7 @@
 
             <Button
                 Margin="10"
-                Click="{Binding DeleteLicenseById_OnClick}"
+                cm:Message.Attach="[Event Click] = [Action DeleteLicenseById_OnClick]"
                 Content="Delete License!" />
 
             <StackPanel Orientation="Horizontal">
@@ -387,7 +373,7 @@
                     Name="DeletedLicenseBlock"
                     Margin="10"
                     Text="Deleted License" />
-                <Button Name="CopyDeletedLicense" Click="{Binding Copy_OnClick}">
+                <Button Name="CopyDeletedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
             </StackPanel>
