@@ -2,9 +2,9 @@
 using HttpClientToCurl;
 using System.Text.RegularExpressions;
 
-namespace GenerateLicenseKeyForDashboard
+namespace GenerateLicenseKeyForDashboard.Models
 {
-    public class MainWindowViewModel: ApplicationScreen
+    public class MainWindowViewModel : ApplicationScreen
     {
         private string _emailBox;
         public string EmailBox

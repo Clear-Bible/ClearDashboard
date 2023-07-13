@@ -1,53 +1,130 @@
-﻿using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Services;
-using System;
-using System.IO;
 using System.Linq;
+using System;
 using System.Reflection;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.DataAccessLayer.Models.Common;
 
-namespace GenerateLicenseKeyForDashboard
+namespace GenerateLicenseKeyForDashboard.ViewModels
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public class ShellViewModel : PropertyChangedBase
     {
+        #region Member Variables   
+
         private int _licenseVersion = 2;
         private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
 
-        public MainWindow()
-        {
-            _mySqlHttpClientServices = ServiceCollectionExtensions.GetSqlHttpClientServices();
-            InitializeComponent();
+        #endregion //Member Variables
 
-            //get the assembly version
-            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-            TheWindow.Title += $" - {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
-            ByEmailRadio.IsChecked = true;
+
+        #region Public Properties
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
+        private string _title;
+        public string Title
+        {
+            get => _title;
+            set => Set(ref _title, value);
+        }
+
+
+        private bool _emailChecked;
+        public bool EmailChecked
+        {
+            get => _emailChecked;
+            set => Set(ref _emailChecked, value);
+        }
+
+
+        private bool _idChecked;
+        public bool IdChecked
+        {
+            get => _idChecked;
+            set => Set(ref _idChecked, value);
+        }
+
+
+        private bool _isInternalChecked;
+        public bool IsInternalChecked
+        {
+            get => _isInternalChecked;
+            set => Set(ref _isInternalChecked, value);
+        }
+
+        private string _emailBox;
+        public string EmailBox
+        {
+            get => _emailBox;
+            set => Set(ref _emailBox, value);
+        }
+
+
+        private string _generatedLicenseBoxText;
+        public string GeneratedLicenseBoxText
+        {
+            get => _generatedLicenseBoxText;
+            set => Set(ref _generatedLicenseBoxText, value);
         }
 
 
 
+        private string _firstNameBox;
+        public string FirstNameBox
+        {
+            get => _firstNameBox;
+            set => Set(ref _firstNameBox, value);
+        }
+
+        private string _lastNameBox;
+        public string LastNameBox
+        {
+            get => _lastNameBox;
+            set => Set(ref _lastNameBox, value);
+        }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
+        public ShellViewModel()
+        {
+            _mySqlHttpClientServices = ServiceCollectionExtensions.GetSqlHttpClientServices();
+            
+
+            //get the assembly version
+            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            Title = $"License Key Manager - {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+            EmailChecked = true;
+        }
+
+        #endregion //Constructor
+
+
+        #region Methods
+
+
         private async void GenerateLicense_OnClick(object sender, RoutedEventArgs e)
         {
-            var emailAlreadyExists = await CheckForPreExistingEmail(EmailBox.Text);
+            var emailAlreadyExists = await CheckForPreExistingEmail(EmailBox);
 
             if (emailAlreadyExists)
             {
-                GeneratedLicenseBox.Text = "Email already exists";
+                GeneratedLicenseBoxText = "Email already exists";
             }
             else
             {
-                var licenseKey = await GenerateLicense(FirstNameBox.Text, LastNameBox.Text, Guid.NewGuid(), EmailBox.Text);
-                GeneratedLicenseBox.Text = licenseKey;
+                var licenseKey = await GenerateLicense(FirstNameBox, LastNameBox, Guid.NewGuid(), EmailBox);
+                GeneratedLicenseBoxText = licenseKey;
             }
         }
 
@@ -194,5 +271,9 @@ namespace GenerateLicenseKeyForDashboard
                 GenerateLicenseButton.IsEnabled = false;
             }
         }
+
+        #endregion // Methods
+
+
     }
 }

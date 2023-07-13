@@ -11,6 +11,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MainWindow.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="MainWindow.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.7.1" />
   </ItemGroup>
 
