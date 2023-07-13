@@ -21,7 +21,6 @@ namespace GenerateLicenseKeyForDashboard
     public partial class MainWindow : Window
     {
         private int _licenseVersion = 2;
-        
         private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
 
         public MainWindow()
@@ -100,6 +99,7 @@ namespace GenerateLicenseKeyForDashboard
             DecryptedLastNameBox.Text = licenseUser.LastName;
             DecryptedGuidBox.Text = licenseUser.Id.ToString();
             DecryptedInternalCheckBox.IsChecked = licenseUser.IsInternal;
+            DecryptedLicenseVersionBox.Text = licenseUser.LicenseVersion.ToString();
         }
 
         private void ByIdRadio_OnCheck(object sender, RoutedEventArgs e)

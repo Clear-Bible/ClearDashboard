@@ -120,20 +120,33 @@ namespace ClearDashboard.DataAccessLayer
         {
             try
             {
-                if (!File.Exists(LicenseFilePath)&& filePath == LicenseFilePath)
-                {
-                    filePath = LegacyLicenseFilePath;
-                }
-
-                var str = File.ReadAllText(filePath);
+                var str = GetLicenseFromFile(filePath);
 
                 return DecryptLicenseFromString(str);
-
             }
             catch (Exception)
             {
                 return "";
             }
+        }
+
+        public static string GetLicenseFromFile(string filePath)
+        {
+            try
+            {
+                if (!File.Exists(LicenseFilePath) && filePath == LicenseFilePath)
+                {
+                    filePath = LegacyLicenseFilePath;
+                }
+
+                var str = File.ReadAllText(filePath);
+                return str;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+           
         }
 
         public static User DecryptedJsonToUser(string decryptedLicenseKey, bool isGenerator=false)
