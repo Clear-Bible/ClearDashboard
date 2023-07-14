@@ -1,19 +1,24 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Extensions;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Services;
+using HttpClientToCurl;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace GenerateLicenseKeyForDashboard.ViewModels
 {
-    public class ShellViewModel : PropertyChangedBase
+    public class ShellViewModel : Screen
     {
         // ReSharper disable global MemberCanBePrivate.Global
 
@@ -21,6 +26,16 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         private readonly int _licenseVersion = 2;
         private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
+        private readonly HttpClientServices _gitLabServices;
+
+
+        /// <summary>
+        /// Function to generate a user name from first & lastnames
+        /// </summary>
+        /// <returns></returns>
+        private string GetUserName() => (FirstNameBox + "." + LastNameBox).ToLower();
+
+        private CollaborationConfiguration _collaborationConfiguration;
 
         #endregion //Member Variables
 
@@ -31,6 +46,16 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
 
         #region Observable Properties
+
+
+        private bool _isCreateButtonEnabled = false;
+        public bool IsCreateButtonEnabled
+        {
+            get => _isCreateButtonEnabled;
+            set => Set(ref _isCreateButtonEnabled, value);
+        }
+
+
 
         private Visibility _fetchByEmailInput;
         public Visibility FetchByEmailInput
@@ -83,7 +108,11 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         public string EmailBox
         {
             get => _emailBox;
-            set => Set(ref _emailBox, value);
+            set
+            {
+                Set(ref _emailBox, value);
+                ValidateCreateButton();
+            }
         }
 
 
@@ -100,14 +129,22 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         public string FirstNameBox
         {
             get => _firstNameBox;
-            set => Set(ref _firstNameBox, value);
+            set
+            {
+                Set(ref _firstNameBox, value);
+                ValidateCreateButton();
+            }
         }
 
         private string _lastNameBox = string.Empty;
         public string LastNameBox
         {
             get => _lastNameBox;
-            set => Set(ref _lastNameBox, value);
+            set
+            {
+                Set(ref _lastNameBox, value);
+                ValidateCreateButton();
+            }
         }
 
 
@@ -220,21 +257,78 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         }
 
 
+        private List<GitLabGroup> _groups;
+        public List<GitLabGroup> Groups
+        {
+            get => _groups;
+            set
+            {
+                _groups = value;
+                NotifyOfPropertyChange(() => Groups);
+            }
+        }
+
+        private GitLabGroup _selectedGroup;
+        public GitLabGroup SelectedGroup
+        {
+            get => _selectedGroup;
+            set
+            {
+                _selectedGroup = value;
+                NotifyOfPropertyChange(() => SelectedGroup);
+
+                ValidateCreateButton();
+            }
+        }
+
+
+        private CollaborationConfiguration _collaborationConfig = new();
+        public CollaborationConfiguration CollaborationConfig
+        {
+            get => _collaborationConfig;
+            set
+            {
+                _collaborationConfig = value;
+                NotifyOfPropertyChange(() => CollaborationConfig);
+            }
+        }
 
         #endregion //Observable Properties
 
 
         #region Constructor
 
+#pragma warning disable CS8618
         public ShellViewModel()
+#pragma warning restore CS8618
         {
+
+            var _collaborationManager = 
+
             _mySqlHttpClientServices = ServiceCollectionExtensions.GetSqlHttpClientServices();
-            
+
+            _gitLabServices = ServiceCollectionExtensions.GetGitLabHttpClientServices();
+
 
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly()?.GetName().Version;
             Title = $"License Key Manager - {thisVersion!.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
             EmailChecked = true;
+        }
+
+        protected override async void OnViewReady(object view)
+        {
+
+            try
+            {
+                Groups = await _gitLabServices.GetAllGroups();
+            }
+            catch
+            {
+                // ignored
+            }
+
+            base.OnViewReady(view);
         }
 
         #endregion //Constructor
@@ -243,7 +337,27 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         #region Methods
 
 
-        public async void GenerateLicenseButton(object sender, RoutedEventArgs e)
+        public void GroupSelected()
+        {
+            // for caliburn
+        }
+
+        public void ValidateCreateButton()
+        {
+            if (FirstNameBox != string.Empty && LastNameBox != string.Empty && EmailBox != string.Empty && SelectedGroup.Name != string.Empty)
+            {
+                IsCreateButtonEnabled = true;
+            }
+            else
+            {
+                IsCreateButtonEnabled = false;
+            }
+
+            
+        }
+
+
+        public async void GenerateLicense_OnClick()
         {
             var emailAlreadyExists = await CheckForPreExistingEmail(EmailBox);
 
@@ -253,9 +367,66 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             }
             else
             {
+                // create Dashboard User
                 var licenseKey = await GenerateLicense(FirstNameBox, LastNameBox, Guid.NewGuid(), EmailBox);
                 GeneratedLicenseBoxText = licenseKey;
+
+                // create GitLab User
+                CreateGitLabUser();
             }
+        }
+
+
+        /// <summary>
+        /// Creates the User on the GitLab Server
+        /// </summary>
+        public async void CreateGitLabUser()
+        {
+            var password = GenerateRandomPassword.RandomPassword(16);
+
+            GitLabUser user = await _gitLabServices.CreateNewUser(FirstNameBox, LastNameBox, GetUserName(), password,
+                EmailBox, SelectedGroup.Name).ConfigureAwait(false);
+
+            if (user.Id == 0)
+            {
+                GeneratedLicenseBoxText = "Error Creating user on Server";
+
+                CollaborationConfig = new();
+            }
+            else
+            {
+                var accessToken = await _gitLabServices.GeneratePersonalAccessToken(user).ConfigureAwait(false);
+
+                CollaborationConfig = new CollaborationConfiguration
+                {
+                    Group = SelectedGroup.Name,
+                    RemoteEmail = EmailBox,
+                    RemotePersonalAccessToken = accessToken,
+                    RemotePersonalPassword = password,
+                    RemoteUrl = "",
+                    RemoteUserName = user.UserName,
+                    UserId = user.Id,
+                    NamespaceId = user.NamespaceId,
+                };
+
+                _collaborationConfiguration = CollaborationConfig;
+                //_collaborationManager.SaveCollaborationLicense(_collaborationConfiguration);
+
+                user.Password = password;
+
+                var results = await _mySqlHttpClientServices.CreateNewUser(user, accessToken).ConfigureAwait(false);
+
+                if (results)
+                {
+                    GeneratedLicenseBoxText = "Saved to remote server";
+                }
+                else
+                {
+                    GeneratedLicenseBoxText = "User already exists on server";
+                }
+
+            }
+
         }
 
         private async Task<bool> CheckForPreExistingEmail(string email)
@@ -297,7 +468,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             return encryptedLicense;
         }
 
-        public void DecryptLicense_OnClick(object sender, RoutedEventArgs e)
+        public void DecryptLicense_OnClick()
         {
             var json = LicenseManager.DecryptLicenseFromString(LicenseDecryptionBox, isGenerator: true);
             var licenseUser = LicenseManager.DecryptedJsonToUser(json, isGenerator: true);
@@ -309,19 +480,19 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             DecryptedLicenseVersionBox = licenseUser.LicenseVersion.ToString() ?? string.Empty;
         }
 
-        public void ByIdRadio_OnCheck(object sender, RoutedEventArgs e)
+        public void ByIdRadio_OnCheck()
         {
             FetchByEmailInput = Visibility.Collapsed;
             FetchByIdInput = Visibility.Visible;
         }
 
-        public void ByEmailRadio_OnCheck(object sender, RoutedEventArgs e)
+        public void ByEmailRadio_OnCheck()
         {
             FetchByEmailInput = Visibility.Visible;
             FetchByIdInput = Visibility.Collapsed;
         }
 
-        public async void FetchLicenseById_OnClick(object sender, RoutedEventArgs e)
+        public async void FetchLicenseById_OnClick()
         {
             var fetchByEmail = FetchByEmailInput;
 
@@ -340,7 +511,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             FetchedLicenseBox = dashboardUser.LicenseKey ?? string.Empty;
         }
 
-        public async void DeleteLicenseById_OnClick(object sender, RoutedEventArgs e)
+        public async void DeleteLicenseById_OnClick()
         {
 
             var deleted = await _mySqlHttpClientServices.DeleteDashboardUserExistsById(Guid.Parse(DeleteByIdBox));
@@ -355,32 +526,34 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             }
         }
 
-        public void Copy_OnClick(object sender, RoutedEventArgs e)
+        public void Copy_OnClick(object sender)
         {
-            var button = sender as Button;
-            switch (button.Name)
+            if (sender is Button button)
             {
-                case "CopyGeneratedLicense":
-                    Clipboard.SetText(GeneratedLicenseBox);
-                    break;
-                case "CopyDecryptedFirstName":
-                    Clipboard.SetText(DecryptedFirstNameBox);
-                    break;
-                case "CopyDecryptedLastName":
-                    Clipboard.SetText(DecryptedLastNameBox);
-                    break;
-                case "CopyDecryptedGuid":
-                    Clipboard.SetText(DecryptedGuidBox);
-                    break;
-                case "CopyFetchedEmail":
-                    Clipboard.SetText(FetchedEmailBox);
-                    break;
-                case "CopyFetchedLicense":
-                    Clipboard.SetText(FetchedLicenseBox);
-                    break;
-                case "CopyDeletedLicense":
-                    Clipboard.SetText(DeletedLicenseBox);
-                    break;
+                switch (button.Name)
+                {
+                    case "CopyGeneratedLicense":
+                        Clipboard.SetText(GeneratedLicenseBox);
+                        break;
+                    case "CopyDecryptedFirstName":
+                        Clipboard.SetText(DecryptedFirstNameBox);
+                        break;
+                    case "CopyDecryptedLastName":
+                        Clipboard.SetText(DecryptedLastNameBox);
+                        break;
+                    case "CopyDecryptedGuid":
+                        Clipboard.SetText(DecryptedGuidBox);
+                        break;
+                    case "CopyFetchedEmail":
+                        Clipboard.SetText(FetchedEmailBox);
+                        break;
+                    case "CopyFetchedLicense":
+                        Clipboard.SetText(FetchedLicenseBox);
+                        break;
+                    case "CopyDeletedLicense":
+                        Clipboard.SetText(DeletedLicenseBox);
+                        break;
+                }
             }
         }
 
@@ -394,23 +567,6 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             Console.WriteLine();
         }
 
-        public void CheckGenerateLicenseBoxes(object sender, TextChangedEventArgs e)
-        {
-
-            //if (!Validation.GetHasError(FirstNameBox) &&
-            //    !Validation.GetHasError(LastNameBox) &&
-            //    !Validation.GetHasError(EmailBox) &&
-            //    FirstNameBox.Length > 0 &&
-            //    LastNameBox.Length > 0 &&
-            //    EmailBox.Length > 0)
-            //{
-            //    GenerateLicenseButtonEnabled = true;
-            //}
-            //else
-            //{
-            //    GenerateLicenseButtonEnabled = false;
-            //}
-        }
 
         #endregion // Methods
 

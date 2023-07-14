@@ -13,8 +13,8 @@
 
                 <materialDesign:BundledTheme
                     BaseTheme="Dark"
-                    PrimaryColor="DeepPurple"
-                    SecondaryColor="Lime" />
+                    PrimaryColor="Blue"
+                    SecondaryColor="Amber" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
                 <ResourceDictionary x:Uid="ResourceDictionary_6">

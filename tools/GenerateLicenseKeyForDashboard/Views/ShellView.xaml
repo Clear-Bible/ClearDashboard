@@ -3,7 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
+    xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
@@ -11,8 +14,10 @@
     xmlns:viewModels="clr-namespace:GenerateLicenseKeyForDashboard.ViewModels"
     x:Name="TheWindow"
     Title="{Binding Title}"
-    Width="1400"
-    Height="600"
+    Width="1000"
+    Height="700"
+    d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
+                                     IsDesignTimeCreatable=True}"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="13"
@@ -20,11 +25,12 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
+
     <Window.DataContext>
         <viewModels:ShellViewModel />
     </Window.DataContext>
+
     <Window.Resources>
         <Style x:Key="TextBoxAsLabel" TargetType="{x:Type TextBox}">
             <Setter Property="BorderBrush" Value="Transparent" />
@@ -67,325 +73,545 @@
             </Setter>
         </Style>
     </Window.Resources>
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Orientation="Vertical">
-            <TextBlock
-                Margin="10"
-                FontSize="24"
-                Text="GENERATE LICENSE" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <TextBlock
-                Name="FirstNameBlock"
-                Margin="10"
-                Text="First Name" />
-            <TextBox
-                Name="FirstNameBox"
-                Margin="10"
-                materialDesign:HintAssist.Hint="Enter first name here.">
-                <!--<TextBox.Text>
-                    <Binding Path="{Binding FirstNameBox}" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <validators:NameValidator />
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>-->
-            </TextBox>
+        <materialDesign:Card
+            Grid.Row="0"
+            Margin="0"
+            VerticalAlignment="Center"
+            materialDesign:ShadowAssist.ShadowDepth="Depth3">
+            <DockPanel Margin="10">
+                <Image
+                    Width="36"
+                    Height="36"
+                    Source="pack://application:,,,/Resources/Dashboard_Key_icon2.png" />
 
-            <TextBlock
-                Name="LastNameBlock"
-                Margin="10"
-                Text="Last Name" />
-            <TextBox
-                Name="LastNameBox"
-                Margin="10"
-                materialDesign:HintAssist.Hint="Enter last name here.">
-                <TextBox.Text>
-                    <Binding Path="LastNameBox" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <validators:NameValidator />
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
-
-            <TextBlock
-                Name="EmailBlock"
-                Margin="10"
-                Text="Email" />
-            <TextBox
-                Name="EmailBox"
-                Margin="10,10,10,20"
-                materialDesign:HintAssist.Hint="Enter email here.">
-                <TextBox.Text>
-                    <Binding Path="EmailBox" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <validators:EmailValidator />
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
-
-            <CheckBox
-                Name="IsInternalCheckBox"
-                Content="User is Internal to Clear.  Reflect this in usage metrics."
-                IsChecked="{Binding IsInternalChecked}" />
-
-            <Button
-                Name="GenerateLicenseButton"
-                Margin="10"
-                cm:Message.Attach="[Event Click] = [Action GenerateLicense_OnClick]"
-                Content="Generate license!"
-                IsEnabled="False" />
-
-            <StackPanel Orientation="Horizontal">
                 <TextBlock
-                    Name="GeneratedLicenseBlock"
-                    Margin="10"
-                    Text="Generated License" />
-                <Button Name="CopyGeneratedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="30"
+                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                    Style="{DynamicResource MaterialDesignHeadline6TextBlock}">
+                    Generate License Key for Dashboard / Collab
+                </TextBlock>
+            </DockPanel>
+        </materialDesign:Card>
 
-            <TextBox
-                Name="GeneratedLicenseBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your license will appear here." />
-        </StackPanel>
+        <TabControl
+            Grid.Row="1"
+            materialDesign:ColorZoneAssist.Mode="Standard"
+            materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+            BorderBrush="Transparent"
+            BorderThickness="0"
+            SnapsToDevicePixels="True"
+            Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+            TabStripPlacement="Left">
+            <!--  ENCRYPTED  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconMaterial
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Kind="Lock" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Create Key" />
 
-        <StackPanel Grid.Column="1" Orientation="Vertical">
-            <TextBlock
-                Margin="10"
-                FontSize="24"
-                Text="DECRYPT LICENSE" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-            <TextBlock
-                Name="LicenseDecryptionBlock"
-                Margin="10"
-                Text="License" />
-            <TextBox
-                Name="LicenseDecryptionBox"
-                Margin="10"
-                materialDesign:HintAssist.Hint="Enter license here."
-                Text="{Binding LicenseDecryptionBox}" />
+                        <TextBlock
+                            Margin="20"
+                            FontSize="24"
+                            Text="GENERATE LICENSE" />
 
-            <Button
-                Margin="10"
-                cm:Message.Attach="[Event Click] = [Action DecryptLicense_OnClick]"
-                Content="Decrypt License!" />
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Name="DecryptedFirstNameBlock"
-                    Margin="10"
-                    Text="Decrypted First Name" />
-                <Button Name="CopyDecryptedFirstName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
-            <TextBox
-                Name="DecryptedFirstNameBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your first name will appear here." />
+                        <StackPanel
+                            Grid.Row="1"
+                            Margin="10"
+                            Orientation="Vertical">
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Name="DecryptedLastNameBlock"
-                    Margin="10"
-                    Text="Decrypted Last Name" />
-                <Button Name="CopyDecryptedLastName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
-            <TextBox
-                Name="DecryptedLastNameBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your last name will appear here." />
+                            <controls:AutoCompleteComboBox
+                                Height="Auto"
+                                Margin="15"
+                                VerticalAlignment="Top"
+                                cm:Message.Attach="GroupSelected"
+                                materialDesign:HintAssist.Hint="Select Organization"
+                                FontSize="16"
+                                ItemsSource="{Binding Groups}"
+                                ScrollViewer.CanContentScroll="False"
+                                SelectedItem="{Binding SelectedGroup}"
+                                Style="{StaticResource MaterialDesignFilledComboBox}">
+                                <controls:AutoCompleteComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock FontSize="18" Text="{Binding Name}" />
+                                            <TextBlock FontSize="12" Text="{Binding Description}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </controls:AutoCompleteComboBox.ItemTemplate>
+                            </controls:AutoCompleteComboBox>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Name="DecryptedGuidBlock"
-                    Margin="10"
-                    Text="Decrypted User Id" />
-                <Button Name="CopyDecryptedGuid" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
-            <TextBox
-                Name="DecryptedGuidBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your guid will appear here." />
 
-            <CheckBox
-                Name="DecryptedInternalCheckBox"
-                Margin="10"
-                Content="User is Internal"
-                FontSize="20"
-                Foreground="Gray"
-                IsEnabled="False" />
+                            <TextBox
+                                x:Name="FirstNameBox"
+                                Margin="10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="First Name">
+                                <TextBox.Text>
+                                    <Binding Path="FirstNameBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Name="DecryptedLicenseVersionBlock"
-                    Margin="10"
-                    Text="Decrypted License Version" />
-                <Button Name="CopyDecryptedLicenseVersion" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
-            <TextBox
-                Name="DecryptedLicenseVersionBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your license version will appear here." />
-        </StackPanel>
 
-        <StackPanel Grid.Column="2" Orientation="Vertical">
-            <TextBlock
-                Margin="10"
-                FontSize="24"
-                Text="FETCH LICENSE" />
+                            <TextBox
+                                x:Name="LastNameBox"
+                                Margin="10,20,10,10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="Last Name">
+                                <TextBox.Text>
+                                    <Binding Path="LastNameBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-            <RadioButton
-                Name="ByEmailRadio"
-                cm:Message.Attach="[Event Checked] = [Action EmailCheckedEvent]"
-                Content="By Email"
-                GroupName="FetchByRadios"
-                IsChecked="{Binding EmailChecked}" />
-            <RadioButton
-                Name="ByIdRadio"
-                cm:Message.Attach="[Event Checked] = [Action IdCheckedEvent]"
-                Content="By Id"
-                GroupName="FetchByRadios"
-                IsChecked="{Binding IdChecked}" />
 
-            <StackPanel Name="FetchByEmailInput" Visibility="Visible">
-                <TextBlock
-                    Name="FetchByEmailBlock"
-                    Margin="10"
-                    Text="Email" />
-                <TextBox
-                    Name="FetchByEmailBox"
-                    Margin="10"
-                    materialDesign:HintAssist.Hint="Enter email here." />
-            </StackPanel>
+                            <TextBox
+                                x:Name="EmailBox"
+                                Margin="10,20,10,10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="Email">
 
-            <StackPanel Name="FetchByIdInput" Visibility="Collapsed">
-                <TextBlock
-                    Name="FetchByIdBlock"
-                    Margin="10"
-                    Text="User Id" />
-                <TextBox
-                    Name="FetchByIdBox"
-                    Margin="10"
-                    materialDesign:HintAssist.Hint="Enter guid here." />
-            </StackPanel>
+                                <TextBox.Text>
+                                    <Binding Path="EmailBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:EmailValidator />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-            <Button
-                Margin="10"
-                cm:Message.Attach="[Event Click] = [Action FetchLicenseById_OnClick]"
-                Content="Fetch License!" />
+                            <CheckBox
+                                Name="IsInternalCheckBox"
+                                Margin="10,20,10,10"
+                                Content="User is Internal to Clear.  Reflect this in usage metrics."
+                                IsChecked="{Binding IsInternalChecked}" />
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Name="FetchedEmailBlock"
-                    Margin="10"
-                    Text="Fetched Email" />
-                <Button Name="CopyFetchedEmail" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
-            <TextBox
-                Name="FetchedEmailBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your email will appear here." />
+                            <Button
+                                Name="GenerateLicenseButton"
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action GenerateLicense_OnClick]"
+                                Content="Generate License!"
+                                IsEnabled="{Binding IsCreateButtonEnabled}" />
+                        </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Name="FetchedLicenseBlock"
-                    Margin="10"
-                    Text="Fetched License" />
-                <Button Name="CopyFetchedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
-            <TextBox
-                Name="FetchedLicenseBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your license will appear here." />
-        </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="15,0,0,0"
+                            Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Name="GeneratedLicenseBlock"
+                                    Margin="10"
+                                    Text="Generated License" />
+                                <Button Name="CopyGeneratedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
 
-        <StackPanel Grid.Column="3" Orientation="Vertical">
-            <TextBlock
-                Margin="10"
-                FontSize="24"
-                Text="DELETE LICENSE" />
+                            <TextBox
+                                Name="GeneratedLicenseBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Your license will appear here."
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding GeneratedLicenseBox}" />
+                        </StackPanel>
+                    </Grid>
+                </TextBlock>
+            </TabItem>
 
-            <TextBlock
-                Name="DeleteByIdBlock"
-                Margin="10"
-                Text="User Id" />
-            <TextBox
-                Name="DeleteByIdBox"
-                Margin="10"
-                materialDesign:HintAssist.Hint="Enter guid here." />
+            <!--  DECRYPTED  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconMaterial
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Kind="LockOpenVariant" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Decrypt" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="350" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-            <Button
-                Margin="10"
-                cm:Message.Attach="[Event Click] = [Action DeleteLicenseById_OnClick]"
-                Content="Delete License!" />
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Margin="10"
+                                FontSize="24"
+                                Text="DECRYPT LICENSE" />
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Name="DeletedLicenseBlock"
-                    Margin="10"
-                    Text="Deleted License" />
-                <Button Name="CopyDeletedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick]">
-                    <materialDesign:PackIcon Kind="ContentCopy" />
-                </Button>
-            </StackPanel>
-            <TextBox
-                Name="DeletedLicenseBox"
-                Margin="10"
-                FontSize="20"
-                Foreground="Gray"
-                IsReadOnly="True"
-                Style="{StaticResource TextBoxAsLabel}"
-                Text="Your deleted license will appear here." />
-        </StackPanel>
+
+                            <TextBox
+                                x:Name="LicenseDecryptionBox"
+                                Margin="10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="Encrypted License"
+                                TextWrapping="Wrap">
+                                <TextBox.Text>
+                                    <Binding Path="LicenseDecryptionBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action DecryptLicense_OnClick]"
+                                Content="Decrypt License!" />
+                        </StackPanel>
+
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="10,50,0,0"
+                            Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedFirstNameBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted First Name" />
+                                <Button Name="CopyDecryptedFirstName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedFirstNameBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="First Name will appear here."
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DecryptedFirstNameBox}" />
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedLastNameBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted Last Name" />
+                                <Button Name="CopyDecryptedLastName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedLastNameBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Decrypted license will appear here."
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DecryptedLastNameBox}" />
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedGuidBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted User Id" />
+                                <Button Name="CopyDecryptedGuid" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedGuidBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Decrypted GUID will appear here."
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DecryptedGuidBox}" />
+
+                            <CheckBox
+                                Name="DecryptedInternalCheckBox"
+                                Margin="10,20,0,0"
+                                Content="User is Internal"
+                                FontSize="20"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                IsChecked="{Binding DecryptedInternalCheckBox}"
+                                IsEnabled="False" />
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedLicenseVersionBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted License Version" />
+                                <Button Name="CopyDecryptedLicenseVersion" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedLicenseVersionBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="License Version will appear here."
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DecryptedLicenseVersionBox}" />
+                        </StackPanel>
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+            <!--  FETCH LICENSE  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconMaterial
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Kind="DatabaseArrowLeft" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Fetch License"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Margin="10"
+                                FontSize="24"
+                                Text="FETCH LICENSE" />
+
+                            <RadioButton
+                                Name="ByEmailRadio"
+                                Margin="10"
+                                cm:Message.Attach="[Event Checked] = [Action EmailCheckedEvent]"
+                                Content="By Email"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                GroupName="FetchByRadios"
+                                IsChecked="{Binding EmailChecked}" />
+                            <RadioButton
+                                Name="ByIdRadio"
+                                Margin="10"
+                                cm:Message.Attach="[Event Checked] = [Action IdCheckedEvent]"
+                                Content="By Id"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                GroupName="FetchByRadios"
+                                IsChecked="{Binding IdChecked}" />
+
+                            <TextBox
+                                x:Name="FetchByEmailBox"
+                                Margin="10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="Email / License">
+                                <TextBox.Text>
+                                    <Binding Path="FetchByEmailBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <StackPanel Name="FetchByIdInput" Visibility="Collapsed">
+                                <TextBlock
+                                    Name="FetchByIdBlock"
+                                    Margin="10"
+                                    Text="User Id" />
+                                <TextBox
+                                    Name="FetchByIdBox"
+                                    Margin="10"
+                                    materialDesign:HintAssist.Hint="Enter guid here." />
+                            </StackPanel>
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action FetchLicenseById_OnClick]"
+                                Content="Fetch License!" />
+
+
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="10,50,0,0"
+                            Orientation="Vertical">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Name="FetchedEmailBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Fetched Email" />
+                                <Button Name="CopyFetchedEmail" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="FetchedEmailBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Fetched Email will appear here"
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding FetchedEmailBox}" />
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="FetchedLicenseBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Fetched License" />
+                                <Button Name="CopyFetchedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="FetchedLicenseBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Fetched license will appear here"
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding FetchedLicenseBox}" />
+                        </StackPanel>
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+            <!--  DELETE LICENSE  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+
+                        <iconPacks:PackIconFontAwesome
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Kind="UserSlashSolid" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Delete License"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Margin="10"
+                                FontSize="24"
+                                Text="DELETE LICENSE" />
+
+                            <TextBlock
+                                Name="DeleteByIdBlock"
+                                Margin="10"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Text="User Id" />
+                            <TextBox
+                                Name="DeleteByIdBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Enter guid here." />
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action DeleteLicenseById_OnClick]"
+                                Content="Delete License!" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="20,50,0,0"
+                            Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DeletedLicenseBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Deleted License" />
+                                <Button Name="CopyDeletedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DeletedLicenseBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Deleted License will appear here"
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DeletedLicenseBox}" />
+                        </StackPanel>
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>

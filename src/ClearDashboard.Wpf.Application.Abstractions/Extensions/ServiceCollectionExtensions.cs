@@ -86,5 +86,22 @@ namespace ClearDashboard.Wpf.Application.Extensions
 
             return mySqlHttpClientServices;
         }
+
+
+        public static HttpClientServices GetGitLabHttpClientServices()
+        {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var client = new HttpClient();
+
+            client.BaseAddress = new Uri(Settings.Default.GitRootUrl); //"https://gitlab.cleardashboard.org/api/v4/"
+            client.DefaultRequestHeaders.Add("Accept", "*/*");
+            client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
+            client.DefaultRequestHeaders.Add("Authorization", value);
+
+            var gitLabClient = new GitLabClient(client);
+            var getGitLabHttpClientServices = new HttpClientServices(gitLabClient);
+
+            return getGitLabHttpClientServices;
+        }
     }
 } 
