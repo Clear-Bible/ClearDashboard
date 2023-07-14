@@ -313,7 +313,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         ProgressBarVisibility = Visibility.Visible;
 
                        var result = await _alignmentSet.GetAlignmentVerseContexts(CurrentAlignedWord.Source,
-                            CurrentAlignedWord.Target, _countsByTrainingText, CurrentBook.Number, AlignmentTypes, 10);
+                            CurrentAlignedWord.Target, _countsByTrainingText, CurrentBook.Number, AlignmentTypes);
 
                        _verseContexts = result.VerseContexts;
 
