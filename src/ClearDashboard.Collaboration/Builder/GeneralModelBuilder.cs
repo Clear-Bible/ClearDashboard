@@ -116,16 +116,19 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
                 }
                 else
                 {
-                    var foreignKeyId = (Guid)modelInstance.GetType().GetProperty(n)!.GetValue(modelInstance, null)!;
+                    modelProperties.Add(n!, (typeof(Guid?), modelInstance.GetType().GetProperty(n!)!.GetValue(modelInstance, null)));
 
-                    if (builderContext.TryGetIdToIndexValue(modelPropertyType.Name, foreignKeyId, out var foreignKeyIndex))
-                    {
-                        modelProperties.Add(BuildPropertyRefName(modelPropertyName), (typeof(string), BuildPropertyRefValue(modelPropertyType.Name, foreignKeyIndex)));
-                    }
-                    else
-                    {
-                        modelProperties.Add(n, (typeof(Guid), foreignKeyId));
-                    }
+
+                    //var foreignKeyId = (Guid)modelInstance.GetType().GetProperty(n)!.GetValue(modelInstance, null)!;
+
+                    //if (builderContext.TryGetIdToIndexValue(modelPropertyType.Name, foreignKeyId, out var foreignKeyIndex))
+                    //{
+                    //    modelProperties.Add(BuildPropertyRefName(modelPropertyName), (typeof(string), BuildPropertyRefValue(modelPropertyType.Name, foreignKeyIndex)));
+                    //}
+                    //else
+                    //{
+                    //    modelProperties.Add(n, (typeof(Guid), foreignKeyId));
+                    //}
                 }
             }
         });
