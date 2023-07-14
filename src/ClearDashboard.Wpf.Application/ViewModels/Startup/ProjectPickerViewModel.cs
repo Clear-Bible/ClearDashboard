@@ -568,7 +568,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
 
-            if (collaborationUser.UserId == -1)
+            if (collaborationUser.UserId < 1)
             {
                 await System.Windows.Application.Current.Dispatcher.Invoke(async delegate
                 {
