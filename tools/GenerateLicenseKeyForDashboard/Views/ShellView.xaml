@@ -459,6 +459,7 @@
 
                             <TextBox
                                 x:Name="FetchByEmailBox"
+                                MinWidth="300"
                                 Margin="10"
                                 materialDesign:HintAssist.HelperText="Helper text longer than error"
                                 materialDesign:HintAssist.Hint="Email / License">
@@ -576,6 +577,7 @@
                                 Text="User Id" />
                             <TextBox
                                 Name="DeleteByIdBox"
+                                MinWidth="300"
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Enter guid here." />
 
