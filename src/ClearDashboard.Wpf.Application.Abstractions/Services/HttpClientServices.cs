@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Autofac.Features.OwnedInstances;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
@@ -278,41 +279,22 @@ namespace ClearDashboard.Wpf.Application.Services
                 list = JsonSerializer.Deserialize<List<GitLabProjectUser>>(result)!;
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
-            }
-            catch (Exception e)
-            {
-                WireUpLogger();
-                _logger?.LogError(e.Message, e);
-            }
-
-
-            try
-            {
-                // find out the project owner
-                request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}");
-                var response = await _gitLabClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
-
-                var project = JsonSerializer.Deserialize<GitLabProjectOwner>(result)!;
-
-                var owner = project.Owner.Id;
 
                 foreach (var item in list)
                 {
-                    if (item.Id == owner)
+                    if (item.AccessLevel == 50)
                     {
                         item.IsOwner = true;
                     }
                 }
 
+
             }
             catch (Exception e)
             {
                 WireUpLogger();
                 _logger?.LogError(e.Message, e);
             }
-
 
             return list;
         }
@@ -474,6 +456,9 @@ namespace ClearDashboard.Wpf.Application.Services
                     break;
                 case PermissionLevel.ReadWrite:
                     content.Add(new StringContent("40"), "access_level");
+                    break;
+                case PermissionLevel.Owner:
+                    content.Add(new StringContent("50"), "access_level");
                     break;
                 default:
                     content.Add(new StringContent("40"), "access_level");

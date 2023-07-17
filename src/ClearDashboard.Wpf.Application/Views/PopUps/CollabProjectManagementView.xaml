@@ -212,6 +212,25 @@
             </Button>
 
             <Button
+                x:Name="AddOwner"
+                Height="60"
+                Margin="0,5,0,0"
+                Style="{StaticResource PurpleMidButton}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Center"
+                        Kind="ArrowLeftDropCircleOutline" />
+                    <TextBlock Grid.Row="1" Text="Owner" />
+                </Grid>
+            </Button>
+
+            <Button
                 x:Name="RemoveUser"
                 Height="40"
                 Margin="0,5,0,0"

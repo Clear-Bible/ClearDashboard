@@ -331,6 +331,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             AddUsers(PermissionLevel.ReadWrite);
         }
 
+        public void AddOwner()
+        {
+            AddUsers(PermissionLevel.Owner);
+        }
+
 
         public async void RemoveUser()
         {
