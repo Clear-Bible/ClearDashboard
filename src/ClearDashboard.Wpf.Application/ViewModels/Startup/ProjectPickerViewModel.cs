@@ -423,6 +423,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             EventAggregator.Subscribe(this);
 
+           IsParatextInstalled = _paratextProxy.IsParatextInstalled();
+
             await GetRemoteUser();
             await GetProjectsVersion().ConfigureAwait(false);
 
@@ -432,8 +434,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
-            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
-            if (IsParatextRunning)
             {
                 if (Connected)
                 {
