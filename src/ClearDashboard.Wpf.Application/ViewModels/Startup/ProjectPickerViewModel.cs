@@ -413,6 +413,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+
+
+            await base.OnActivateAsync(cancellationToken);
+        }
+
+
+        protected override async void OnViewLoaded(object view)
+        {
             EventAggregator.Subscribe(this);
 
             await GetRemoteUser();
@@ -444,7 +452,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (Pinger.PingHost())
                 await FinishAccountSetup();
 
-            await base.OnActivateAsync(cancellationToken);
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            Console.WriteLine();
+
+            base.OnViewReady(view);
         }
 
         #endregion Constructor
@@ -573,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
 
-            if (collaborationUser.UserId == -1)
+            if (collaborationUser.UserId < 1)
             {
                 await System.Windows.Application.Current.Dispatcher.Invoke(async delegate
                 {
