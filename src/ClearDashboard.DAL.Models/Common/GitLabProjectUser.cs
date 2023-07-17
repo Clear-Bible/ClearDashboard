@@ -36,6 +36,8 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
                         return PermissionLevel.ReadOnly;
                     case 40:
                         return PermissionLevel.ReadWrite;
+                    case 50:
+                        return PermissionLevel.Owner;
                 }
                 return PermissionLevel.ReadWrite;
             }
