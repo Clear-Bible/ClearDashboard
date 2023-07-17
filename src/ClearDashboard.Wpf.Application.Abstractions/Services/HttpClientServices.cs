@@ -1,11 +1,11 @@
-﻿using Caliburn.Micro;
+﻿using Autofac.Features.OwnedInstances;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -72,10 +72,6 @@ namespace ClearDashboard.Wpf.Application.Services
 
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
-
-            Debug.WriteLine(result);
-
-
 
             return list;
         }
@@ -193,14 +189,63 @@ namespace ClearDashboard.Wpf.Application.Services
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
 
-                
+
                 list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
 
+                // remove non-project repos
                 for (int i = list.Count - 1; i >= 0; i--)
                 {
                     if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
+                    {
+                        list.RemoveAt(i);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return list;
+        }
+
+
+        public async Task<List<GitLabProject>> GetProjectsForUserWhereOwner(CollaborationConfiguration user)
+        {
+            List<GitLabProject> list = new();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"projects");
+
+            GitLabClient newClient = _gitLabClient;
+            newClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.RemotePersonalAccessToken);
+
+            try
+            {
+                var response = await newClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+
+                list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
+                // sort the list
+                list = list.OrderBy(s => s.Name).ToList();
+
+                // remove non-project repos
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
+                    {
+                        list.RemoveAt(i);
+                    }
+                }
+
+                // remove projects for which we are not the owner
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (list[i].Permissions.ProjectAccess.AccessLevel < 50)
                     {
                         list.RemoveAt(i);
                     }
@@ -234,41 +279,22 @@ namespace ClearDashboard.Wpf.Application.Services
                 list = JsonSerializer.Deserialize<List<GitLabProjectUser>>(result)!;
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
-            }
-            catch (Exception e)
-            {
-                WireUpLogger();
-                _logger?.LogError(e.Message, e);
-            }
-
-
-            try
-            {
-                // find out the project owner
-                request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}");
-                var response = await _gitLabClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
-
-                var project = JsonSerializer.Deserialize<GitLabProjectOwner>(result)!;
-
-                var owner = project.Owner.Id;
 
                 foreach (var item in list)
                 {
-                    if (item.Id == owner)
+                    if (item.AccessLevel == 50)
                     {
                         item.IsOwner = true;
                     }
                 }
 
+
             }
             catch (Exception e)
             {
                 WireUpLogger();
                 _logger?.LogError(e.Message, e);
             }
-
 
             return list;
         }
@@ -304,7 +330,7 @@ namespace ClearDashboard.Wpf.Application.Services
             content.Add(new StringContent(email), "email");
             content.Add(new StringContent(password), "password");
             content.Add(new StringContent(organization), "organization");
-            content.Add(new StringContent("true"),"skip_confirmation");
+            content.Add(new StringContent("true"), "skip_confirmation");
             request.Content = content;
 
             try
@@ -393,7 +419,7 @@ namespace ClearDashboard.Wpf.Application.Services
             content.Add(new StringContent($"{user.Id}"), "user_id");
             content.Add(new StringContent($"{projectName}"), "name");
             // namespace_id: needed to point to the user that this project should fall under
-            content.Add(new StringContent($"{user.NamespaceId}"), "namespace_id"); 
+            content.Add(new StringContent($"{user.NamespaceId}"), "namespace_id");
             content.Add(new StringContent($"{projectDescription}"), "description");
             request.Content = content;
 
@@ -431,15 +457,18 @@ namespace ClearDashboard.Wpf.Application.Services
                 case PermissionLevel.ReadWrite:
                     content.Add(new StringContent("40"), "access_level");
                     break;
+                case PermissionLevel.Owner:
+                    content.Add(new StringContent("50"), "access_level");
+                    break;
                 default:
                     content.Add(new StringContent("40"), "access_level");
                     break;
             }
-            
+
             request.Content = content;
 
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
-            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ",""));
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
             {
