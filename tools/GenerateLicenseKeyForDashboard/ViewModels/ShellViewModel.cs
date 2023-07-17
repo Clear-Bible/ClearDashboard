@@ -359,11 +359,13 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         public async void GenerateLicense_OnClick()
         {
+            GeneratedLicenseBoxText = string.Empty;
+
             var emailAlreadyExists = await CheckForPreExistingEmail(EmailBox);
 
             if (emailAlreadyExists)
             {
-                GeneratedLicenseBoxText = "Email already exists";
+                GeneratedLicenseBoxText = "Email already exists on system!";
             }
             else
             {
@@ -419,6 +421,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 if (results)
                 {
                     GeneratedLicenseBoxText = "Saved to remote server";
+                    var encryptedLicense = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
                 }
                 else
                 {

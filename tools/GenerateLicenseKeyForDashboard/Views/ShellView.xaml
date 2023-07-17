@@ -233,6 +233,14 @@
                                 cm:Message.Attach="[Event Click] = [Action GenerateLicense_OnClick]"
                                 Content="Generate License!"
                                 IsEnabled="{Binding IsCreateButtonEnabled}" />
+
+
+                            <TextBlock
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="18"
+                                Foreground="{StaticResource RedMidBrush}"
+                                Text="{Binding GeneratedLicenseBoxText}" />
                         </StackPanel>
 
                         <StackPanel

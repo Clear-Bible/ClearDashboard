@@ -211,5 +211,19 @@ namespace ClearDashboard.DataAccessLayer
             return LicenseUserMatchType.Error;
 
         }
+
+        public static string EncryptCollabJsonToString(CollaborationConfiguration configuration)
+        {
+            var cryptProvider = CreateCryptoProvider();
+
+            var transform = cryptProvider.CreateEncryptor();
+            var serialized = JsonSerializer.Serialize(configuration);
+
+            var decryptedBytes = Encoding.ASCII.GetBytes(serialized);
+            var encryptedBytes = transform.TransformFinalBlock(decryptedBytes, 0, decryptedBytes.Length);
+            var str = Convert.ToBase64String(encryptedBytes);
+
+            return str;
+        }
     }
 }
