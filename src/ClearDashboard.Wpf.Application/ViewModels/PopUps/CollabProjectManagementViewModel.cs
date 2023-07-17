@@ -331,18 +331,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             AddUsers(PermissionLevel.ReadWrite);
         }
 
+        public void AddOwner()
+        {
+            AddUsers(PermissionLevel.Owner);
+        }
+
 
         public async void RemoveUser()
         {
             ShowProgressBar = Visibility.Visible;
             if (SelectedCurrentUser is not null)
             {
-                // only remove users who are not the owner
-                if (SelectedCurrentUser.IsOwner == false)
+                // you cannot remove yourself
+                if (SelectedCurrentUser.UserName != ProjectOwner.RemoteUserName)
                 {
-                    await _httpClientServices.RemoveUserFromProject(SelectedCurrentUser, SelectedProject);
-                    await Task.Delay(500);
-                    await GetUsersForProject();
+                    // you cannot delete the project's true owner
+                    if (SelectedCurrentUser.UserName != SelectedProject.RemoteOwner.Username)
+                    {
+                        await _httpClientServices.RemoveUserFromProject(SelectedCurrentUser, SelectedProject);
+                        await Task.Delay(500);
+                        await GetUsersForProject();
+                    }
                 }
             }
 
