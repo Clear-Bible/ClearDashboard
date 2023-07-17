@@ -342,7 +342,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ShowProgressBar = Visibility.Visible;
             if (SelectedCurrentUser is not null)
             {
-                // only remove users who are not the owner
+                // you cannot remove yourself
                 if (SelectedCurrentUser.UserName != ProjectOwner.RemoteUserName)
                 {
                     // you cannot delete the project's true owner
