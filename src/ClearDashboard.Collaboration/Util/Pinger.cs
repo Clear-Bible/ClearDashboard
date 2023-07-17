@@ -4,7 +4,7 @@ namespace ClearDashboard.Collaboration.Util;
 
 public class Pinger
 {
-    public static bool PingHost(string nameOrAddress)
+    public static bool PingHost(string nameOrAddress = "cleardashboard.org")
     {
         bool pingable = false;
         Ping pinger = null;
