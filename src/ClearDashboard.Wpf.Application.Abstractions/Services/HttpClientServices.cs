@@ -245,7 +245,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 // remove projects for which we are not the owner
                 for (int i = list.Count - 1; i >= 0; i--)
                 {
-                    if (!list[i].PathWithNamespace.StartsWith(user.RemoteUserName))
+                    if (list[i].Permissions.ProjectAccess.AccessLevel < 50)
                     {
                         list.RemoveAt(i);
                     }
