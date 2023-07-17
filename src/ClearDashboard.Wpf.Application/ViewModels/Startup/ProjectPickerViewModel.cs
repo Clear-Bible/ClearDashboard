@@ -32,8 +32,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ClearDashboard.Collaboration.Util;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using System.Net;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -423,7 +425,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             await GetRemoteUser();
             await GetProjectsVersion().ConfigureAwait(false);
-            await GetCollabProjects().ConfigureAwait(false);
+
+            if(Pinger.PingHost())
+                await GetCollabProjects().ConfigureAwait(false);
 
 
 
@@ -445,7 +449,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 // await this.ShowMessageAsync("This is the title", "Some message");
             }
 
-            await FinishAccountSetup();
+            if (Pinger.PingHost())
+                await FinishAccountSetup();
 
             base.OnViewLoaded(view);
         }
