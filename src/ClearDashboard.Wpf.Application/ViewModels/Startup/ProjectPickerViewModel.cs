@@ -434,6 +434,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
+            if (IsParatextRunning)
             {
                 if (Connected)
                 {
