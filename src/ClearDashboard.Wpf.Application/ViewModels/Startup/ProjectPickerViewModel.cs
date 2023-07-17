@@ -411,6 +411,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+
+
+            await base.OnActivateAsync(cancellationToken);
+        }
+
+
+        protected override async void OnViewLoaded(object view)
+        {
             EventAggregator.Subscribe(this);
 
             await GetRemoteUser();
@@ -439,7 +447,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             await FinishAccountSetup();
 
-            await base.OnActivateAsync(cancellationToken);
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            Console.WriteLine();
+
+            base.OnViewReady(view);
         }
 
         #endregion Constructor
