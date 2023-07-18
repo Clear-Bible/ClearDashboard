@@ -362,6 +362,13 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
 
 
+        private CollaborationConfiguration _collabUser;
+        public CollaborationConfiguration CollabUser
+        {
+            get => _collabUser;
+            set => Set(ref _collabUser, value);
+        }
+
         #endregion //Observable Properties
 
 
@@ -580,8 +587,21 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         public void DecryptLicense_OnClick()
         {
-            var json = LicenseManager.DecryptLicenseFromString(LicenseDecryptionBox, isGenerator: true);
-            DashboardUser = LicenseManager.DecryptedJsonToUser(json, isGenerator: true);
+            try
+            {
+                var json = LicenseManager.DecryptLicenseFromString(LicenseDecryptionBox, isGenerator: true);
+                DashboardUser = LicenseManager.DecryptedJsonToUser(json, isGenerator: true);
+
+                if (DashboardUser.Id == Guid.Empty)
+                {
+                    DashboardUser = new User();
+                    CollabUser = LicenseManager.DecryptCollabToConfiguration(LicenseDecryptionBox);
+                }
+            }
+            catch
+            {
+                
+            }
         }
 
         public void ByIdRadio_OnCheck()

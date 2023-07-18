@@ -327,6 +327,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="350" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical">
@@ -427,6 +428,48 @@
                                 Foreground="{StaticResource PrimaryHueLightBrush}"
                                 IsChecked="{Binding DashboardUser.IsInternal}"
                                 IsEnabled="False" />
+                        </StackPanel>
+
+
+                        <StackPanel
+                            Grid.Column="2"
+                            Margin="10,50,0,0"
+                            Orientation="Vertical">
+
+                            <TextBlock>
+                                <Run Text="UserId: " />
+                                <Run Text="{Binding CollabUser.UserId}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="RemoteUserName: " />
+                                <Run Text="{Binding CollabUser.RemoteUserName}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="RemoteEmail: " />
+                                <Run Text="{Binding CollabUser.RemoteEmail}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="Organization: " />
+                                <Run Text="{Binding CollabUser.Group}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="RemotePersonalAccessToken: " />
+                                <Run Text="{Binding CollabUser.RemotePersonalAccessToken}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="RemotePersonalPassword: " />
+                                <Run Text="{Binding CollabUser.RemotePersonalPassword}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="NamespaceId: " />
+                                <Run Text="{Binding CollabUser.NamespaceId}" />
+                            </TextBlock>
                         </StackPanel>
                     </Grid>
                 </TextBlock>
@@ -557,7 +600,7 @@
                                 TextWrapping="Wrap" />
 
 
-                            
+
                             <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
                                 <TextBlock
                                     Margin="10"
@@ -575,7 +618,6 @@
                                 Text="{Binding FetchedGitLabLicense}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
-
 
                     </Grid>
                 </TextBlock>

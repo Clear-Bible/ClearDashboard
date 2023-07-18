@@ -225,5 +225,21 @@ namespace ClearDashboard.DataAccessLayer
 
             return str;
         }
+
+        public static CollaborationConfiguration DecryptCollabToConfiguration(string encryptedString)
+        {
+            var cryptProvider = CreateCryptoProvider();
+
+            var transform = cryptProvider.CreateDecryptor();
+            var encryptedBytes = Convert.FromBase64String(encryptedString);
+            var decryptedBytes = transform.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+
+            var serialized = Encoding.ASCII.GetString(decryptedBytes);
+
+            var configuration = JsonSerializer.Deserialize<CollaborationConfiguration>(serialized);
+
+            return configuration;
+        }
+
     }
 }
