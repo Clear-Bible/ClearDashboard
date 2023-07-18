@@ -59,12 +59,12 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
         if (EnableEditMode)
         {
-            await GetEditorData();
+            await GetEditorData(CancellationToken.None);
         }
         
     }
 
-    protected virtual async Task GetEditorData()
+    protected virtual async Task GetEditorData(CancellationToken cancellationToken)
     {
         await Task.CompletedTask;
     }

@@ -10,7 +10,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public ReadOnlyTokenDisplay()
         {
             InitializeComponent();
-
         }
     }
 }

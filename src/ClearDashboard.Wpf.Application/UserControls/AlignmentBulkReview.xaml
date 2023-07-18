@@ -14,13 +14,15 @@
              xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
              xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:enhancedView1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
+             xmlns:enhancedView1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView" xmlns:enhancedView2="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              d:DataContext="{d:DesignInstance Type=enhancedView1:AlignmentEnhancedViewItemViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:AlignmentTypesEnumToBooleanConverter x:Key="AlignmentTypesEnumToBooleanConverter"/>
+        <converters1:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
 
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontSize" Value="12" />
@@ -106,7 +108,11 @@
 
         <materialDesign:Card Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Height="110" Margin="5">
             <Grid VerticalAlignment="Top">
-                <ListBox 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListBox Grid.Row="0" 
                             Style="{StaticResource MaterialDesignToolToggleListBox}"
                             Margin="4"
                             Height="28"
@@ -115,6 +121,17 @@
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_ApproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.ApproveSelected}"></ListBoxItem>
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_DisapproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.DisapproveSelected}"></ListBoxItem>
                     <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_MarkSelectedAsNeedsReview}" Tag="{x:Static a:BulkAlignmentReviewTags.MarkSelectedAsNeedsReview}"></ListBoxItem>
+                </ListBox>
+                <ListBox Grid.Row="1" 
+                         Style="{StaticResource MaterialDesignToolToggleListBox}"
+                         Margin="4"
+                         Height="28"
+                         SelectedIndex="0" SelectionMode="Single" 
+                         IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
+                         cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignmentFetchOptionsChanged($eventArgs)]">
+                    <ListBoxItem Content="Fetch alignments by book" Tag="{x:Static a:AlignmentFetchOptions.ByBook}"></ListBoxItem>
+                    <ListBoxItem Content="Fetch all alignments" Tag="{x:Static a:AlignmentFetchOptions.AllData}"></ListBoxItem>
+                   
                 </ListBox>
             </Grid>
         </materialDesign:Card>
@@ -167,7 +184,7 @@
                     <Label Grid.Row="0" Content="{Binding AlignedWordsCountMessage}"  HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasAlignedWords, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
                     <Label Grid.Row="0" Content="{helpers:Localization BulkAlignmentReview_AlignedWords}" Margin="0, 2, 4 ,0" Padding="0"  HorizontalAlignment="Right" ></Label>
                 </Grid>
-                <DataGrid Grid.Row="1" Name="SourceTargetCountDataGrid" 
+                <DataGrid Grid.Row="1" x:Name="SourceTargetCountDataGrid" 
                           ItemsSource="{Binding AlignedWords}" 
                           AutoGenerateColumns="False" 
                           Margin="4"
@@ -182,9 +199,29 @@
                           IsReadOnly="True"
                           IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="80"/>
-                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourcePart}"  Binding="{Binding Source}" Width="130"/>
-                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_TargetPart}" Binding="{Binding Target}" Width="130" />
+                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="80" />
+                        <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_SourcePart}"   Width="130" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock 
+                                        FontFamily="{Binding ElementName=SourceTargetCountDataGrid, Path=DataContext.SourceFontFamily}" 
+                                        FontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" 
+                                        FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView2:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
+                                        Text="{Binding Source}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_TargetPart}" Width="130" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock 
+                                        FontFamily="{Binding ElementName=SourceTargetCountDataGrid, Path=DataContext.TargetFontFamily}" 
+                                        FontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" 
+                                        FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView2:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
+                                        Text="{Binding Target}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
@@ -207,7 +244,12 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Content="{Binding BulkAlignmentsCountMessage}"  HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
-                    <userControls:BookSelector Grid.Row="0" Grid.Column="1" Books="{Binding RelevantBooks}" CurrentBook="{Binding CurrentBook}" cm:Message.Attach="[Event SelectionChanged] = [Action OnBookChanged($eventArgs)];" HorizontalAlignment="Left" ></userControls:BookSelector>
+                    <userControls:BookSelector Grid.Row="0" Grid.Column="1" 
+                                               Books="{Binding RelevantBooks}" 
+                                               CurrentBook="{Binding CurrentBook}" 
+                                               Visibility="{Binding ShowBookSelector, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               cm:Message.Attach="[Event SelectionChanged] = [Action OnBookChanged($eventArgs)];" 
+                                               HorizontalAlignment="Left" ></userControls:BookSelector>
                     <Label Grid.Row="0" Grid.Column="2" Content="{helpers:Localization BulkAlignmentReview_Alignments}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
                 </Grid>
                 <DataGrid Grid.Row="1" Grid.Column="0" 
@@ -244,10 +286,7 @@
                         <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}" Width=".6*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <!--<StackPanel>
-                                        <TextBlock Text="{Binding BulkAlignmentDisplayViewModel.DisplayTokens }" />
-                                    </StackPanel>-->
-                                    <userControls:ReadOnlyVerseDisplay 
+                                   <userControls:ReadOnlyVerseDisplay 
                                         DataContext="{Binding BulkAlignmentDisplayViewModel}"
                                         HorizontalAlignment="Stretch"
                                         VerseBackground="Transparent"
@@ -272,7 +311,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" >
+                <!--<StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" >
                     <Button Content="Previous"   cm:Message.Attach="[Event Click] = [Action OnPreviousPageClicked()]" Margin="2"/>
                     <Label  Margin="2,2,0,2" Content="{Binding PagedBulkAlignments.CurrentPage}" ContentStringFormat="Current Page: {0}">
                         
@@ -281,7 +320,7 @@
                        
                     </Label>
                     <Button Content="Next" cm:Message.Attach="[Event Click] = [Action OnNextPageClicked()]" Margin="2" />
-                </StackPanel>
+                </StackPanel>-->
             </Grid>
         </materialDesign:Card>
     </Grid>

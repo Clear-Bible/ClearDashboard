@@ -1,6 +1,4 @@
-﻿using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-
-namespace ClearDashboard.Wpf.Application.UserControls
+﻿namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
     /// A lightweight control for displaying a verse with no interactivity.

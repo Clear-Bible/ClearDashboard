@@ -28,6 +28,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public VerseDisplayViewModel VerseDisplay { get; set; }
 
+        public bool IsSourceRtl => VerseDisplay.IsSourceRtl;
+
+        public bool IsTargetRtl => VerseDisplay.IsTargetRtl;
+
         /// <summary>
         /// Gets or sets whether this is a source token.
         /// </summary>

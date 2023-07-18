@@ -88,6 +88,22 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
             set => Set(ref _isSelected, value);
         }
 
+        private bool _isSourceRtl;
+        
+        public bool IsSourceRtl
+        {
+            get => _isSourceRtl;
+            set => Set(ref _isSourceRtl, value);
+        }
+
+        private bool _isTargetRtl;
+
+        public bool IsTargetRtl
+        {
+            get => _isTargetRtl;
+            set => Set(ref _isTargetRtl, value);
+        }
+
         private Alignment? _alignment;
         private string? _type;
         private BulkAlignmentDisplayViewModel _bulkAlignmentDisplayViewModel;
@@ -137,6 +153,12 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
 
     //    public string? Target { get; set; }
     //}
+
+    public enum AlignmentFetchOptions
+    {
+        ByBook,
+        AllData
+    }
 
     public class AlignedWord 
     {
