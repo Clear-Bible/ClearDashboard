@@ -211,7 +211,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             set => Set(ref _fetchedLicenseBox, value);
         }
 
-        
+
         private string _fetchByIdBox = string.Empty;
         public string FetchByIdBox
         {
@@ -219,7 +219,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             set => Set(ref _fetchByIdBox, value);
         }
 
-        
+
         private string _fetchByEmailBox = string.Empty;
         public string FetchByEmailBox
         {
@@ -227,7 +227,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             set => Set(ref _fetchByEmailBox, value);
         }
 
-        
+
         private string _deleteByIdBox = string.Empty;
         public string DeleteByIdBox
         {
@@ -328,6 +328,14 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         }
 
 
+        private User _dashboardUser;
+        public User DashboardUser
+        {
+            get { return _dashboardUser; }
+            set => Set(ref _dashboardUser, value);
+        }
+
+
         private List<GitUser> _gitLabUsers;
         public List<GitUser> GitLabUsers
         {
@@ -345,6 +353,14 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         }
 
 
+        private string _fetchedGitLabLicense;
+        public string FetchedGitLabLicense
+        {
+            get => _fetchedGitLabLicense;
+            set => Set(ref _fetchedGitLabLicense, value);
+        }
+
+
 
         #endregion //Observable Properties
 
@@ -356,7 +372,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 #pragma warning restore CS8618
         {
 
-            var _collaborationManager = 
+            var _collaborationManager =
 
             _mySqlHttpClientServices = ServiceCollectionExtensions.GetSqlHttpClientServices();
 
@@ -423,7 +439,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                     var gitLabUserId = await CreateGitLabUser();
 
                     // create Dashboard User
-                    var licenseKey = await GenerateLicense(FirstNameBox, LastNameBox, Guid.NewGuid(), EmailBox, gitLabUserId);
+                    var licenseKey = await GenerateDashboardLicense(FirstNameBox, LastNameBox, Guid.NewGuid(), EmailBox, gitLabUserId);
                     GeneratedLicenseBoxText = licenseKey;
 
                     GenerateLicenseMessage = "Saved to remote server";
@@ -432,9 +448,6 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 }
 
             }
-
-
-
         }
 
         public void GroupSelected()
@@ -453,7 +466,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 IsCreateButtonEnabled = false;
             }
 
-            
+
         }
 
 
@@ -491,7 +504,6 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 };
 
                 _collaborationConfiguration = CollaborationConfig;
-                //_collaborationManager.SaveCollaborationLicense(_collaborationConfiguration);
 
                 user.Password = password;
 
@@ -528,7 +540,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         }
 
 
-        private async Task<string> GenerateLicense(string firstName, string lastName, Guid id, string email,
+        private async Task<string> GenerateDashboardLicense(string firstName, string lastName, Guid id, string email,
             int gitLabUserId)
         {
             var licenseUser = new User
@@ -569,13 +581,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         public void DecryptLicense_OnClick()
         {
             var json = LicenseManager.DecryptLicenseFromString(LicenseDecryptionBox, isGenerator: true);
-            var licenseUser = LicenseManager.DecryptedJsonToUser(json, isGenerator: true);
-
-            DecryptedFirstNameBox = licenseUser.FirstName ?? string.Empty;
-            DecryptedLastNameBox = licenseUser.LastName ?? string.Empty;
-            DecryptedGuidBox = licenseUser.Id.ToString();
-            DecryptedInternalCheckBox = (bool)licenseUser.IsInternal!;
-            DecryptedLicenseVersionBox = licenseUser.LicenseVersion.ToString() ?? string.Empty;
+            DashboardUser = LicenseManager.DecryptedJsonToUser(json, isGenerator: true);
         }
 
         public void ByIdRadio_OnCheck()
@@ -598,6 +604,24 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             if (fetchByEmail == Visibility.Visible)
             {
                 dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsByEmail(FetchByEmailBox);
+
+                var gitLabUser = await _mySqlHttpClientServices.GetUserExistsByEmail(FetchByEmailBox);
+                if (gitLabUser != null)
+                {
+
+                    var user = new CollaborationConfiguration
+                    {
+                        UserId = gitLabUser.UserId,
+                        RemoteUserName = gitLabUser.RemoteUserName,
+                        RemoteEmail = gitLabUser.RemoteEmail,
+                        RemotePersonalAccessToken = Encryption.Decrypt(gitLabUser.RemotePersonalAccessToken),
+                        RemotePersonalPassword = Encryption.Decrypt(gitLabUser.RemotePersonalPassword),
+                        Group = gitLabUser.GroupName,
+                        NamespaceId = gitLabUser.NamespaceId,
+                    };
+
+                    FetchedGitLabLicense = LicenseManager.EncryptCollabJsonToString(user);
+                }
             }
             else
             {
@@ -631,7 +655,10 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 switch (button.Name)
                 {
                     case "CopyGeneratedLicense":
-                        Clipboard.SetText(GeneratedLicenseBox);
+                        Clipboard.SetText(GeneratedLicenseBoxText);
+                        break;
+                    case "CopyGeneratedGitLabLicense":
+                        Clipboard.SetText(GeneratedGitLabLicense);
                         break;
                     case "CopyDecryptedFirstName":
                         Clipboard.SetText(DecryptedFirstNameBox);
@@ -647,6 +674,10 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                         break;
                     case "CopyFetchedLicense":
                         Clipboard.SetText(FetchedLicenseBox);
+                        break;
+
+                    case "CopyFetchedGitLabLicense":
+                        Clipboard.SetText(FetchedGitLabLicense);
                         break;
                     case "CopyDeletedLicense":
                         Clipboard.SetText(DeletedLicenseBox);

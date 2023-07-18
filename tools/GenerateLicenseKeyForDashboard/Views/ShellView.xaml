@@ -165,8 +165,7 @@
                                 ScrollViewer.CanContentScroll="False"
                                 SelectedItem="{Binding SelectedGroup}"
                                 Style="{StaticResource MaterialDesignFilledComboBox}"
-                                TextSearch.TextPath ="{Binding Groups.CombinedStrings}"
-                                >
+                                TextSearch.TextPath="{Binding Groups.CombinedStrings}">
                                 <controls:AutoCompleteComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
@@ -281,9 +280,9 @@
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Your Dashboard license will appear here."
                                 FontSize="20"
+                                Foreground="Gray"
                                 Text="{Binding GeneratedLicenseBoxText}"
-                                TextWrapping="Wrap"
-                                Foreground="Gray" />
+                                TextWrapping="Wrap" />
 
 
                             <StackPanel Orientation="Horizontal">
@@ -380,7 +379,7 @@
                                 FontSize="20"
                                 Foreground="Gray"
                                 IsReadOnly="True"
-                                Text="{Binding DecryptedFirstNameBox}" />
+                                Text="{Binding DashboardUser.FirstName}" />
 
                             <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
                                 <TextBlock
@@ -399,7 +398,7 @@
                                 FontSize="20"
                                 Foreground="Gray"
                                 IsReadOnly="True"
-                                Text="{Binding DecryptedLastNameBox}" />
+                                Text="{Binding DashboardUser.LastName}" />
 
                             <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
                                 <TextBlock
@@ -418,7 +417,7 @@
                                 FontSize="20"
                                 Foreground="Gray"
                                 IsReadOnly="True"
-                                Text="{Binding DecryptedGuidBox}" />
+                                Text="{Binding DashboardUser.Id}" />
 
                             <CheckBox
                                 Name="DecryptedInternalCheckBox"
@@ -426,27 +425,8 @@
                                 Content="User is Internal"
                                 FontSize="20"
                                 Foreground="{StaticResource PrimaryHueLightBrush}"
-                                IsChecked="{Binding DecryptedInternalCheckBox}"
+                                IsChecked="{Binding DashboardUser.IsInternal}"
                                 IsEnabled="False" />
-
-                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
-                                <TextBlock
-                                    Name="DecryptedLicenseVersionBlock"
-                                    Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
-                                    Text="Decrypted License Version" />
-                                <Button Name="CopyDecryptedLicenseVersion" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
-                                    <materialDesign:PackIcon Kind="ContentCopy" />
-                                </Button>
-                            </StackPanel>
-                            <TextBox
-                                Name="DecryptedLicenseVersionBox"
-                                Margin="10"
-                                materialDesign:HintAssist.Hint="License Version will appear here."
-                                FontSize="20"
-                                Foreground="Gray"
-                                IsReadOnly="True"
-                                Text="{Binding DecryptedLicenseVersionBox}" />
                         </StackPanel>
                     </Grid>
                 </TextBlock>
@@ -563,20 +543,40 @@
                                     Name="FetchedLicenseBlock"
                                     Margin="10"
                                     Foreground="{StaticResource PrimaryHueLightBrush}"
-                                    Text="Fetched License" />
+                                    Text="Fetched Dashboard License" />
                                 <Button Name="CopyFetchedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
                                 </Button>
                             </StackPanel>
-                            <TextBox
-                                Name="FetchedLicenseBox"
+                            <TextBlock
                                 Margin="10"
-                                materialDesign:HintAssist.Hint="Fetched license will appear here"
+                                materialDesign:HintAssist.Hint="Fetched GitLab license will appear here"
                                 FontSize="20"
                                 Foreground="Gray"
-                                IsReadOnly="True"
-                                Text="{Binding FetchedLicenseBox}" />
+                                Text="{Binding FetchedLicenseBox}"
+                                TextWrapping="Wrap" />
+
+
+                            
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Fetched GitLab License" />
+                                <Button Name="CopyFetchedGitLabLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Fetched GitLab license will appear here"
+                                FontSize="20"
+                                Foreground="Gray"
+                                Text="{Binding FetchedGitLabLicense}"
+                                TextWrapping="Wrap" />
                         </StackPanel>
+
+
                     </Grid>
                 </TextBlock>
             </TabItem>
