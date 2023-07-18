@@ -32,6 +32,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private List<GitUser> _gitLabUsers = new();
         
 
+
         #endregion //Member Variables
 
         #region Public Properties
@@ -49,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             get => _projects;
             set
             {
-                _projects = value; 
+                _projects = value;
                 NotifyOfPropertyChange(() => Projects);
             }
         }
@@ -70,7 +71,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
                 else
                 {
-                    IsGitLabUserListEnabled= false;
+                    IsGitLabUserListEnabled = false;
                 }
 
                 _ = GetUsersForProject();
@@ -78,7 +79,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         private ObservableCollection<GitLabProjectUser> _projectUsers = new();
-        public ObservableCollection<GitLabProjectUser>  ProjectUsers
+        public ObservableCollection<GitLabProjectUser> ProjectUsers
         {
             get => _projectUsers;
             set
@@ -144,8 +145,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             get => _isGitLabUserListEnabled;
             set
             {
-                _isGitLabUserListEnabled = value; 
-                NotifyOfPropertyChange(()=> IsGitLabUserListEnabled);
+                _isGitLabUserListEnabled = value;
+                NotifyOfPropertyChange(() => IsGitLabUserListEnabled);
+            }
+        }
+
+        private string _filterText = string.Empty;
+        public string FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value;
+                CollabeUserCollectionView.Refresh();
+                NotifyOfPropertyChange(() => FilterText);
+
+                if (value is null)
+                {
+                    SelectedOrganization = null;
+                    NotifyOfPropertyChange(nameof(SelectedOrganization));
+                }
             }
         }
 
@@ -229,7 +248,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
             Projects = await _httpClientServices.GetProjectsForUserWhereOwner(ProjectOwner);
-            
             _gitLabUsers = await _httpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
 
@@ -270,7 +288,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             if (obj is GitUser user)
             {
                 if (user.Name!.ToUpper().Contains(FilterText.ToUpper()) || user.Organization.ToUpper().Contains(FilterText.ToUpper()))
-                { 
+                {
                     return true;
                 }
             }
@@ -295,7 +313,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var ids = ProjectUsers.Select(u => u.Id).ToList();
             //
             _collabUsers.RemoveAll(x => ids.Contains(x.Id));
-            NotifyOfPropertyChange(() =>  CollabUsers);
+            NotifyOfPropertyChange(() => CollabUsers);
+
+            CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
+            CollabeUserCollectionView.Refresh();
 
             CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
             CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
