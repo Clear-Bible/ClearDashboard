@@ -11,12 +11,9 @@ namespace ClearDashboard.DataAccessLayer.Models
             TranslationSets = new HashSet<TranslationSet>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
-
+        
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-
-        [NotMapped]
-        public string? LicenseKey { get; set; }
 
         [NotMapped] 
         public string? FullName => $"{FirstName} {LastName}";
@@ -31,6 +28,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int? LicenseVersion { get; set; } = 0;
 
         public int? LastAlignmentLevelId { get; set; }
+
+        public Guid? DefaultLabelGroupId {  get; set; }
 
         public virtual ICollection<AlignmentSet> AlignmentSets { get; set; }
         public virtual ICollection<TranslationSet> TranslationSets { get; set; }

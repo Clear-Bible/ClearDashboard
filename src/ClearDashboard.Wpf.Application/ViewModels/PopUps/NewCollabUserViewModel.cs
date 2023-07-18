@@ -1,10 +1,12 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
-using ClearDashboard.DAL.Alignment.Features.Denormalization;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
@@ -12,11 +14,14 @@ using MailKit.Net.Smtp;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -26,12 +31,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private readonly ILogger<AboutViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
+        private readonly ILocalizationService _localizationService;
         private readonly HttpClientServices _httpClientServices;
         private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private CollaborationConfiguration _collaborationConfiguration;
+        private DashboardUser _dashboardUser;
+        private User _licenseUser;
 
         private string _emailValidationString = "";
+
+        private RegistrationData _registration;
 
 
         #endregion //Member Variables
@@ -100,6 +110,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 _email = value.Trim();
                 NotifyOfPropertyChange(() => Email);
                 CheckEntryFields();
+            }
+        }
+
+        private bool _selectedGroupEnabled = true;
+        public bool SelectedGroupEnabled
+        {
+            get => _selectedGroupEnabled;
+            set
+            {
+                _selectedGroupEnabled = value;
+                NotifyOfPropertyChange(() => SelectedGroupEnabled);
+            }
+        }
+
+        private bool _firstNameEnabled = true;
+        public bool FirstNameEnabled
+        {
+            get => _firstNameEnabled;
+            set
+            {
+                _firstNameEnabled = value;
+                NotifyOfPropertyChange(() => FirstNameEnabled);
+            }
+        }
+
+        private bool _lastNameEnabled = true;
+        public bool LastNameEnabled
+        {
+            get => _lastNameEnabled;
+            set
+            {
+                _lastNameEnabled = value;
+                NotifyOfPropertyChange(() => LastNameEnabled);
+            }
+        }
+
+        private bool _emailEnabled = true;
+        public bool EmailEnabled
+        {
+            get => _emailEnabled;
+            set
+            {
+                _emailEnabled = value;
+                NotifyOfPropertyChange(() => EmailEnabled);
             }
         }
 
@@ -197,7 +251,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             get => _errorMessage;
             set
             {
-                _errorMessage = value; 
+                _errorMessage = value;
                 NotifyOfPropertyChange(() => ErrorMessage);
             }
         }
@@ -238,13 +292,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // no-op used by caliburn micro XAML
         }
 
-       
-        public NewCollabUserViewModel(INavigationService navigationService, 
+
+        public NewCollabUserViewModel(INavigationService navigationService,
             ILogger<AboutViewModel> logger,
-            DashboardProjectManager? projectManager, 
-            IEventAggregator eventAggregator, 
-            IMediator mediator, 
-            ILifetimeScope? lifetimeScope, 
+            DashboardProjectManager? projectManager,
+            IEventAggregator eventAggregator,
+            IMediator mediator,
+            ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService,
             HttpClientServices httpClientServices,
             CollaborationHttpClientServices collaborationHttpClientServices,
@@ -254,6 +308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             _logger = logger;
             _projectManager = projectManager;
+            _localizationService = localizationService;
             _httpClientServices = httpClientServices;
             _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
@@ -266,11 +321,73 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 FirstName = _projectManager.CurrentUser.FirstName ?? string.Empty;
                 LastName = _projectManager.CurrentUser.LastName ?? string.Empty;
+
+                if (FirstName != string.Empty)
+                {
+                    FirstNameEnabled = false;
+                }
+                if (LastName != string.Empty)
+                {
+                    LastNameEnabled = false;
+                }
+            }
+
+            _licenseUser = LicenseManager.GetUserFromLicense();
+            _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_licenseUser.Id); 
+            GetParatextRegistrationData();
+            if (!string.IsNullOrWhiteSpace(_dashboardUser.Email))
+            {
+                Email = _dashboardUser.Email ?? string.Empty;
+                EmailEnabled = false;
+            }
+            else
+            {
+                Email = _registration.Email;
             }
 
             if (InternetAvailability.IsInternetAvailable())
             {
                 Groups = await _httpClientServices.GetAllGroups();
+            }
+
+            bool orgFound = false;
+            if (_dashboardUser.Organization != null)
+            {
+                foreach (var group in Groups)
+                {
+                    if (group.Name == _dashboardUser.Organization)
+                    {
+                        SelectedGroup = group;
+                        SelectedGroupEnabled = false;
+                        orgFound = true;
+                        break;
+                    }
+                }
+            }
+            if (!orgFound)
+            {
+                var orgName = GetOrganizationNameFromEmail();
+                foreach (var group in Groups)
+                {
+                    if (group.Name ==orgName)
+                    {
+                        SelectedGroup = group;
+                        orgFound = true;
+                        break;
+                    }
+                }
+            }
+            if (!orgFound)
+            {
+                foreach (var group in Groups)
+                {
+                    if (group.Name == _registration.SupporterName ||
+                        group.Description == _registration.SupporterName)
+                    {
+                        SelectedGroup = group;
+                        break;
+                    }
+                }
             }
 
             base.OnViewLoaded(view);
@@ -280,6 +397,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         #region Methods
+        private void GetParatextRegistrationData()
+        {
+            var fileName = Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.LocalApplicationData), @"Paratext93\RegistrationInfo.xml");
+
+            if (File.Exists(fileName))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(RegistrationData));
+                var xml = File.ReadAllText(fileName);
+                using (StringReader reader = new StringReader(xml))
+                {
+                    _registration = (RegistrationData)serializer.Deserialize(reader);
+                }
+            }
+        }
+
+        private string GetOrganizationNameFromEmail()
+        {
+            string resultString = string.Empty;
+            try
+            {
+                resultString = Regex.Match(_registration.Email, "(?<=@)[^.]+", RegexOptions.IgnoreCase).Value;
+            }
+            catch (ArgumentException ex)
+            {
+                // Syntax error in the regular expression
+            }
+
+            if (resultString == string.Empty)
+            {
+                return string.Empty;
+            }
+
+            switch (resultString.ToLower())
+            {
+                case "tsco":
+                    return "SeedCo";
+                case "sil":
+                    return "SIL";
+                case "clear":
+                    return "Clear-Bible";
+                case "wycliffe":
+                    return "Wycliffe";
+            }
+
+            return resultString;
+        }
 
         /// <summary>
         /// Function to generate a user name from first & lastnames
@@ -313,7 +477,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 ShowCheckUserButtonEnabled = false;
                 return;
             }
-            
+
             ShowCheckUserButtonEnabled = true;
         }
 
@@ -335,10 +499,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var mailMessage = new MimeMessage();
                 mailMessage.From.Add(new MailboxAddress("cleardas@cleardashboard.org", "cleardas@cleardashboard.org"));
                 mailMessage.To.Add(new MailboxAddress(FirstName + " " + LastName, Email));
-                mailMessage.Subject = LocalizationStrings.Get("NewCollabUserView_DashboardEmailValidationCode", _logger); //"ClearDashboard Email Validation Code";
+                mailMessage.Subject = _localizationService["NewCollabUserView_DashboardEmailValidationCode"]; //"ClearDashboard Email Validation Code";
                 mailMessage.Body = new TextPart("plain")
                 {
-                    Text = LocalizationStrings.Get("NewCollabUserView_EmailValidationCode", _logger) + " " + _emailValidationString //Email Verification Code: 
+                    Text = _localizationService["NewCollabUserView_EmailValidationCode"] + " " + _emailValidationString //Email Verification Code: 
                 };
 
                 try
@@ -366,7 +530,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                ErrorMessage = LocalizationStrings.Get("NewCollabUserView_UserOnSystem", _logger); //"User is already on the system!";
+                ErrorMessage = _localizationService["NewCollabUserView_EmailValidationCode"]; //"User is already on the system!";
             }
 
 
@@ -390,7 +554,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             if (user.Id == 0)
             {
-                ErrorMessage = LocalizationStrings.Get("NewCollabUserView_ErrorCreatingUser", _logger); //"Error Creating user on Server";
+                ErrorMessage = _localizationService["NewCollabUserView_ErrorCreatingUser"]; //"Error Creating user on Server";
 
                 CollaborationConfig = new();
             }
@@ -419,17 +583,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 if (results)
                 {
-                    SaveGitLabUserMessage = LocalizationStrings.Get("NewCollabUserView_SavedToRemoteServer", _logger); //Saved to remote server
+                    SaveGitLabUserMessage = _localizationService["NewCollabUserView_SavedToRemoteServer"]; //Saved to remote server
                     SaveMessageForegroundColor = Brushes.Green;
                 }
                 else
                 {
-                    SaveGitLabUserMessage = LocalizationStrings.Get("NewCollabUserView_UserAlreadyExists", _logger); //User already exists on server
+                    SaveGitLabUserMessage = _localizationService["NewCollabUserView_UserAlreadyExists"]; //User already exists on server
                     SaveMessageForegroundColor = Brushes.Red;
+                }
+
+                if (_dashboardUser.GitLabUserId == 0)
+                {
+                    await CreateDashboardUser();
                 }
             }
 
             ShowGenerateUserButtonEnabled = false;
+        }
+
+        public async Task CreateDashboardUser()
+        {
+            if (_dashboardUser.Id == Guid.Empty) //make a DashboardUser
+            {
+                var newDashboardUser = new DashboardUser(
+                    _licenseUser,
+                    Email,
+                    LicenseManager.GetLicenseFromFile(LicenseManager.LicenseFilePath),
+                    SelectedGroup.Name,
+                    CollaborationConfig.UserId,
+                    Assembly.GetEntryAssembly()?.GetName().Version?.ToString(),
+                    DateTime.Today.Date,
+                    _registration.Name);
+
+                await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
+            }
+            else //update a DashboardUser
+            {
+                _dashboardUser.ParatextUserName = _registration.Name;
+                _dashboardUser.Organization = SelectedGroup.Name;
+                _dashboardUser.GitLabUserId = CollaborationConfig.UserId;
+                _dashboardUser.AppVersionNumber = Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
+                _dashboardUser.AppLastDate = DateTime.Today.Date;
+                
+                await _collaborationHttpClientServices.UpdateDashboardUser(_dashboardUser);
+            }
         }
 
 
@@ -450,6 +647,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            System.Windows.Application.Current.Shutdown();
+            
+            base.Dispose(disposing);
+        }
 
         #endregion // Methods
 

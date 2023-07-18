@@ -85,7 +85,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                     <TextBlock
                         VerticalAlignment="Center"
-                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{StaticResource PrimaryHueMidBrush}"
                         Text="{Binding Header}" />
                 </HierarchicalDataTemplate>
             </Menu.ItemTemplate>
@@ -432,7 +432,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="26"
-            Foreground="{DynamicResource MaterialDesignBody}"
+            Foreground="{StaticResource MaterialDesignBody}"
             Text="{Binding Message}"
             Visibility="{Binding ShowProgressBar, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>

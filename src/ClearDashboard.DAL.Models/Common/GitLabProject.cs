@@ -83,5 +83,4 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
         public int NotificationLevel { get; set; }
     }
 
-
 }

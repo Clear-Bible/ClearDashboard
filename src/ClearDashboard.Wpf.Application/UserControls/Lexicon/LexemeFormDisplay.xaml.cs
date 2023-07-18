@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
-using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 
@@ -44,6 +43,30 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// </summary>
         public static readonly DependencyProperty LexemeFormCornerRadiusProperty = DependencyProperty.Register(nameof(LexemeFormCornerRadius), typeof(CornerRadius), typeof(LexemeFormDisplay),
             new PropertyMetadata(new CornerRadius(0)));
+
+        /// <summary>
+        /// Identifies the LexemeFormFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LexemeFormFontFamilyProperty = DependencyProperty.Register(nameof(LexemeFormFontFamily), typeof(FontFamily), typeof(LexemeFormDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the LexemeFormFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LexemeFormFontSizeProperty = DependencyProperty.Register(nameof(LexemeFormFontSize), typeof(double), typeof(LexemeFormDisplay),
+            new PropertyMetadata(11d));
+
+        /// <summary>
+        /// Identifies the LexemeFormFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LexemeFormFontStyleProperty = DependencyProperty.Register(nameof(LexemeFormFontStyle), typeof(FontStyle), typeof(LexemeFormDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the LexemeFormFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LexemeFormFontWeightProperty = DependencyProperty.Register(nameof(LexemeFormFontWeight), typeof(FontWeight), typeof(LexemeFormDisplay),
+            new PropertyMetadata(FontWeights.Normal));
 
         /// <summary>
         /// Identifies the LexemeFormMargin dependency property.
@@ -142,6 +165,42 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             get => (CornerRadius)GetValue(LexemeFormCornerRadiusProperty);
             set => SetValue(LexemeFormCornerRadiusProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets the font family for lexeme form boxes.
+        /// </summary>
+        public FontFamily LexemeFormFontFamily
+        {
+            get => (FontFamily)GetValue(LexemeFormFontFamilyProperty);
+            set => SetValue(LexemeFormFontFamilyProperty, value);
+        }
+        /// <summary>
+        /// Gets or sets the font size for individual lexeme form boxes.
+        /// </summary>
+        public double LexemeFormFontSize
+        {
+            get => (double)GetValue(LexemeFormFontSizeProperty);
+            set => SetValue(LexemeFormFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for individual lexeme form boxes.
+        /// </summary>
+        public FontStyle LexemeFormFontStyle
+        {
+            get => (FontStyle)GetValue(LexemeFormFontStyleProperty);
+            set => SetValue(LexemeFormFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for individual lexeme form boxes.
+        /// </summary>
+        public FontWeight LexemeFormFontWeight
+        {
+            get => (FontWeight)GetValue(LexemeFormFontWeightProperty);
+            set => SetValue(LexemeFormFontWeightProperty, value);
+        }
+
 
         /// <summary>
         /// Gets or sets a collection of <see cref="Form"/> objects to display in the control.

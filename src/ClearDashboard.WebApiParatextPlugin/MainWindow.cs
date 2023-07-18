@@ -142,7 +142,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             try
             {
-                HubContext.Clients.All.SendPluginClosing(new PluginClosing { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
+                HubContext.Clients.All.SendPluginClosing(new PluginClosing
+                    { PluginConnectionChangeType = PluginConnectionChangeType.Closing });
                 await Task.Delay(500);
             }
             catch (Exception ex)
@@ -1094,7 +1095,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                         LanguageName = project.LanguageName,
                         Name = project.ShortName,
                         LongName = project.LongName,
-                        CorpusType = DetermineCorpusType(project.Type),
+                        CorpusType = DetermineCorpusType(project.Type, project.IsResource),
                         IsRtl = project.Language.IsRtoL,
                         AvailableBooks = project.GetAvailableBooks(),
                         ScrVers = new ScrVers(scrVersType),
@@ -1172,12 +1173,20 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// Returns the Paratext project type
         /// </summary>
         /// <param name="projectType"></param>
+        /// <param name="isResource"></param>
         /// <returns></returns>
-        private CorpusType DetermineCorpusType(ProjectType projectType)
+        private CorpusType DetermineCorpusType(ProjectType projectType, bool isResource)
         {
             try
             {
-                return (CorpusType)(projectType);
+                if (isResource)
+                {
+                    return CorpusType.Resource;
+                }
+                else
+                {
+                    return (CorpusType)(projectType);
+                }
             }
             catch
             {

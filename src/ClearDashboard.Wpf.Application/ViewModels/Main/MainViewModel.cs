@@ -1146,30 +1146,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task AddNewEnhancedView()
         {
-            var viewModel = IoC.Get<EnhancedViewModel>();
-            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-            viewModel.VerseChange = ProjectManager.CurrentVerse;
-            viewModel.EnhancedViewLayout = new EnhancedViewLayout();
-
-
-
-            // add vm to conductor
-            Items.Add(viewModel);
-
-            // figure out how many enhanced views there are and set the title number for the window
             var enhancedViews = Items.Where(w => w is EnhancedViewModel).ToList();
+            await DeactivateDockedWindows();
 
-            // make a new document for the windows
+            var viewModel = await ActivateItemAsync<EnhancedViewModel>(CancellationToken.None);
+
+            await viewModel.Initialize(new EnhancedViewLayout
+            {
+                ParatextSync = false,
+                Title = $"{viewModel.Title}  ({enhancedViews.Count})",
+                VerseOffset = 0
+            }, null, CancellationToken.None);
+            
             var windowDockable = new LayoutDocument
             {
-                Title = $"{viewModel.Title}  ({enhancedViews.Count})",
+                Title = $"{viewModel.Title}",
                 Content = viewModel,
                 IsActive = true
             };
-
             AddNewEnhancedViewTab(windowDockable);
-
+            
+            await SaveAvalonDockLayout();
             await SaveProjectData();
         }
 
@@ -1258,7 +1255,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Commit Changes to Server", Id = MenuIds.CollaborationCommit,
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable()
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository() &&
+                                !_collaborationManager.AreUnmergedChanges() &&
+                                InternetAvailability.IsInternetAvailable() &&
+                                ProjectManager!.CurrentDashboardProject.PermissionLevel != PermissionLevel.ReadOnly,
                 },
                 //// separator
                 //new() { Header = "---------------------------------", Id = MenuIds.Separator, ViewModel = this, },
@@ -1926,6 +1926,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
             }
             await SaveAvalonDockLayout();
+            await SaveProjectData();
         }
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)

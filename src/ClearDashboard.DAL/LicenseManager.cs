@@ -42,7 +42,7 @@ namespace ClearDashboard.DataAccessLayer
         public static void EncryptToFile(User licenseUser, string folderPath)
         {
 
-            var str = EncryptToString(licenseUser, folderPath);
+            var str = EncryptToString(licenseUser);
 
             if (!Directory.Exists(folderPath))
             {
@@ -53,7 +53,7 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        public static string EncryptToString(User licenseUser, string folderPath)
+        public static string EncryptToString(User licenseUser)
         {
 
             var cryptProvider = CreateCryptoProvider();
@@ -89,7 +89,7 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        public static string DecryptLicenseFromString(string str)
+        public static string DecryptLicenseFromString(string str, bool isGenerator = false)
         {
             try
             {
@@ -106,8 +106,13 @@ namespace ClearDashboard.DataAccessLayer
             }
             catch (Exception ex)
             {
-                var logger = IoC.Get<ILogger<LicenseUserMatchType>>();
-                logger.LogError("DecryptLicenseFromString failed details: "+ex);
+                ILogger<LicenseUserMatchType> logger = null;
+                if (!isGenerator)
+                {
+                    logger = IoC.Get<ILogger<LicenseUserMatchType>>();
+                    logger.LogError("DecryptLicenseFromString failed details: " + ex);
+                }
+
                 return "";
             }
         }
@@ -115,20 +120,33 @@ namespace ClearDashboard.DataAccessLayer
         {
             try
             {
-                if (!File.Exists(LicenseFilePath)&& filePath == LicenseFilePath)
-                {
-                    filePath = LegacyLicenseFilePath;
-                }
-
-                var str = File.ReadAllText(filePath);
+                var str = GetLicenseFromFile(filePath);
 
                 return DecryptLicenseFromString(str);
-
             }
             catch (Exception)
             {
                 return "";
             }
+        }
+
+        public static string GetLicenseFromFile(string filePath)
+        {
+            try
+            {
+                if (!File.Exists(LicenseFilePath) && filePath == LicenseFilePath)
+                {
+                    filePath = LegacyLicenseFilePath;
+                }
+
+                var str = File.ReadAllText(filePath);
+                return str;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+           
         }
 
         public static User DecryptedJsonToUser(string decryptedLicenseKey, bool isGenerator=false)
@@ -153,7 +171,6 @@ namespace ClearDashboard.DataAccessLayer
                     {
                         FirstName = temporaryLicenseUser.FirstName,
                         LastName = temporaryLicenseUser.LastName,
-                        LicenseKey = temporaryLicenseUser.LicenseKey,
                         ParatextUserName = temporaryLicenseUser.ParatextUserName,
                         Id = Guid.Parse(temporaryLicenseUser.Id)
                     };

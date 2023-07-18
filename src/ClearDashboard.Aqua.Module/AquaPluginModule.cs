@@ -6,6 +6,7 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Aqua.Module.Menu;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Aqua.Module.Validators;
+using ClearDashboard.Aqua.Module.ViewModels;
 using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 using ClearDashboard.Aqua.Module.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -55,6 +56,8 @@ namespace ClearDashboard.Aqua.Module
             //AquaDialog
 
             builder.RegisterType<AquaDialogViewModel>().AsSelf().WithAttributeFiltering();
+
+            builder.RegisterType<AquaCorpusAnalysisEnhancedViewItemViewModel>().AsSelf().WithAttributeFiltering();
 
             builder.RegisterType<AquaVersionStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")

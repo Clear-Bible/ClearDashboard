@@ -17,6 +17,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="TranslationDisplayTemplate">
             <lexiconControls:LexiconTranslationDisplay
+                CountVisibility="Collapsed"
                 FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
@@ -102,18 +103,18 @@
                     SemanticDomainSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SemanticDomainSuggestions}"
                     />
             </StackPanel>
-            <Button Grid.Column="2"
-                Name="DeleteMeaningButton"
-                Margin="9,-5,0,0"
-                Padding="0,0,0,0"
-                Background="Transparent"
-                BorderThickness="0"
-                Click="ConfirmMeaningDeletion"
-                ToolTip="{helpers:Localization Lexicon_DeleteMeaning}"
-                FontSize="12"
-                FontWeight="SemiBold">
-                X
+            <Button Grid.Column="2"  Name="DeleteMeaningButton"
+                    Margin="9,-5,0,0"
+                    Padding="0,0,0,0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="ConfirmMeaningDeletion"
+                    ToolTip="{helpers:Localization Lexicon_DeleteMeaning}"
+                    FontSize="12"
+                    FontWeight="SemiBold">
+                <Image Height="18" Source="/Resources/close24.png" />
             </Button>
+
             <Popup Grid.Column="2"
                 Name="ConfirmDeletePopup"
                 Width="200"
@@ -143,12 +144,11 @@
             ItemTemplate="{StaticResource TranslationDisplayTemplate}"
             ItemsPanel="{StaticResource TranslationPanelTemplate}"
             ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Meaning.Translations}" />
-        <Grid Grid.Row="2" Margin="26,5,0,0">
+        <Grid Grid.Row="2" Margin="26,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <RadioButton Grid.Column="0" VerticalAlignment="Center" Checked="OnNewTranslationChecked" Unchecked="OnNewTranslationUnchecked" GroupName="SelectedTransaction"/>
             <TextBox x:Name="NewTranslationTextBox"
                      Grid.Column="1"
                      FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
@@ -160,9 +160,7 @@
                      VerticalAlignment="Center"
                      HorizontalAlignment="Left"
                      KeyUp="OnNewTranslationTextBoxKeyUp"
-                     TextChanged="OnNewTranslationChanged"
-                     Width="200"
-                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewTranslationTextBoxIsEnabled}"
+                     Width="250"
             />
             <TextBlock
                 Grid.Column="1"
@@ -170,10 +168,10 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Foreground="DarkGray"
-                FontSize="11"
+                FontSize="13"
                 FontStyle="Italic"
-                IsHitTestVisible="False"
-                Text="Enter a new translation for this meaning">
+                FontFamily="{DynamicResource MaterialDesignFont}"
+                IsHitTestVisible="False">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed" />
@@ -184,6 +182,10 @@
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
+                <Run Text="{helpers:Localization Lexicon_EnterNewMeaningTranslation}" />
+                <Run Text="'" />
+                <Run Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Meaning.Text}" />
+                <Run Text="'" />
             </TextBlock>
         </Grid>
     </Grid>

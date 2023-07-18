@@ -13,6 +13,7 @@
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
+    xmlns:validatorsAbstracted="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{helpers:Localization NewCollabUserView_CreateACollabUser}"
     Width="800"
     Height="650"
@@ -71,7 +72,7 @@
                     cm:Message.Attach="GroupSelected"
                     materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_SelectOrganization}"
                     FontSize="16"
-                    IsEnabled="True"
+                    IsEnabled="{Binding SelectedGroupEnabled}"
                     ItemsSource="{Binding Groups}"
                     ScrollViewer.CanContentScroll="False"
                     SelectedItem="{Binding SelectedGroup}"
@@ -93,6 +94,7 @@
                     materialDesign:HintAssist.Foreground="Green"
                     materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_FirstName}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                    IsEnabled="{Binding FirstNameEnabled}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
 
@@ -103,6 +105,7 @@
                     materialDesign:HintAssist.Foreground="Green"
                     materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_LastName}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                    IsEnabled="{Binding LastNameEnabled}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                 <!--  Email  -->
@@ -112,11 +115,12 @@
                     materialDesign:HintAssist.Foreground="Green"
                     materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_EmailAddress}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                    IsEnabled="{Binding EmailEnabled}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                     <TextBox.Text>
                         <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <validators:EmailValidator />
+                                <validatorsAbstracted:EmailValidator />
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
@@ -179,7 +183,7 @@
                         x:Name="ValidateEmailCode"
                         Height="45"
                         Margin="10,0,0,0"
-                        Content="NewCollabUserView_ValidateEmailCode"
+                        Content="{helpers:Localization NewCollabUserView_ValidateEmailCode}"
                         IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
                         Style="{StaticResource TransparentStyle}" />
                     <iconPacks:PackIconMaterial

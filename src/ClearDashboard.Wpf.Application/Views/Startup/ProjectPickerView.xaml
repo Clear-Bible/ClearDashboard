@@ -12,12 +12,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:startup="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Name="UserControl"
     Width="Auto"
-    Height="635"
+    Height="800"
     MinWidth="886"
     MinHeight="594"
     d:DesignHeight="450"
@@ -295,7 +294,15 @@
         </StackPanel>
 
         <!--  Open Recent  -->
-        <StackPanel Grid.Row="2" Grid.Column="0">
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
             <TextBlock
                 Margin="40,0,0,0"
                 FontSize="19"
@@ -303,6 +310,7 @@
                 Text="{helpers:Localization ProjectPicker_OpenRecent}" />
             <TextBox
                 x:Name="SearchText"
+                Grid.Row="1"
                 Width="320"
                 Height="30"
                 Margin="54,10,0,10"
@@ -324,6 +332,7 @@
             </TextBox>
 
             <materialDesign:Card
+                Grid.Row="2"
                 Width="475"
                 Height="60"
                 Margin="5"
@@ -339,6 +348,7 @@
             </materialDesign:Card>
             <Button
                 x:Name="CreateProjectFromSearchText"
+                Grid.Row="3"
                 Width="475"
                 Height="60"
                 Margin="15"
@@ -362,7 +372,7 @@
 
             <ListView
                 x:Name="ProjectListView"
-                Height="326"
+                Grid.Row="4"
                 Margin="5"
                 IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding DashboardProjectsDisplay}"
@@ -457,10 +467,7 @@
                                         <Run FontSize="11" Text="{Binding CompactFilePath, Mode=OneTime}" />
                                     </TextBlock>
 
-                                    <TextBlock
-                                        Grid.Row="2"
-                                        Grid.Column="1"
-                                        Grid.ColumnSpan="2">
+                                    <TextBlock Grid.Row="2" Grid.Column="1">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
@@ -472,6 +479,38 @@
                                         </TextBlock.Style>
                                         <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Version}" />
                                         <Run FontSize="11" Text="{Binding Version}" />
+                                    </TextBlock>
+
+                                    <!--<TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="2">
+                                        <Run FontSize="11" Text="Access Level:" FontWeight="DemiBold" />
+                                        <Run FontSize="11" Text="{Binding PermissionLevel}" />
+                                    </TextBlock>-->
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="2"
+                                        VerticalAlignment="Center"
+                                        FontStyle="Italic">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="Owner">
+                                                        <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="ReadWrite">
+                                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                        <Run
+                                            FontSize="11"
+                                            FontWeight="DemiBold"
+                                            Text="Access Level:" />
+                                        <Run FontSize="11" Text="{Binding PermissionLevel}" />
                                     </TextBlock>
 
                                     <Button
@@ -499,7 +538,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackPanel>
+        </Grid>
 
         <!--  Language Picker  -->
         <StackPanel
@@ -533,10 +572,17 @@
         </StackPanel>-->
 
         <!--  Collab  -->
-        <StackPanel
+        <Grid
             Grid.Row="2"
             Grid.Column="1"
             Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
             <TextBlock
                 Margin="40,0,0,0"
@@ -546,6 +592,7 @@
 
             <Button
                 x:Name="NewCollabUser"
+                Grid.Row="1"
                 Width="340"
                 Height="60"
                 Margin="10,5,40,10"
@@ -574,6 +621,7 @@
 
             <Button
                 x:Name="CollabProjectManager"
+                Grid.Row="1"
                 Width="340"
                 Height="60"
                 Margin="10,5,40,10"
@@ -603,6 +651,7 @@
 
             <Button
                 x:Name="RefreshCollabProjectButton"
+                Grid.Row="2"
                 Width="340"
                 Height="60"
                 Margin="10,5,40,10"
@@ -625,13 +674,15 @@
             </Button>
 
             <Label
+                Grid.Row="3"
                 Margin="7,0"
                 Content="{helpers:Localization ProjectPicker_ImportServerProject}"
                 FontSize="19"
-                Visibility="{Binding CollabProjectVisibility}" />
+                FontWeight="Medium"
+                Visibility="{Binding ManageCollabVisibility, Converter={StaticResource BoolToVisibilityConverter}}" />
             <ListView
                 x:Name="CollabProjectListView"
-                Height="231"
+                Grid.Row="4"
                 ItemsSource="{Binding DashboardCollabProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible">
@@ -652,7 +703,7 @@
                             Background="Transparent"
                             Tag="{Binding DataContext, ElementName=GridLayout}">
                             <StackPanel Margin="0" Orientation="Horizontal">
-                                <Grid Width="450" Height="45">
+                                <Grid Width="450" Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -688,14 +739,43 @@
                                         FontSize="14"
                                         FontWeight="DemiBold"><Run Text="{Binding ProjectName}" /></TextBlock>
 
-                                    <TextBlock
+                                    <StackPanel
                                         Grid.Row="0"
                                         Grid.Column="2"
-                                        Width="145"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Text="{Binding Created}" />
+                                        Orientation="Vertical">
+                                        <TextBlock VerticalAlignment="Center" FontSize="12">
+                                            <Run FontWeight="DemiBold" Text="Owner:" />
+                                            <Run Text="{Binding RemoteOwner}" />
+                                        </TextBlock>
+                                        <TextBlock VerticalAlignment="Center" FontStyle="Italic">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PermissionLevel}" Value="Owner">
+                                                            <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding PermissionLevel}" Value="ReadWrite">
+                                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Run
+                                                FontSize="11"
+                                                FontWeight="DemiBold"
+                                                Text="Access Level:" />
+                                            <Run FontSize="11" Text="{Binding PermissionLevel}" />
+                                        </TextBlock>
+                                        <TextBlock
+                                            Width="145"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Text="{Binding Created}" />
+
+                                    </StackPanel>
+
 
                                     <!--<TextBlock
                                         Grid.Row="1"
@@ -718,7 +798,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-        </StackPanel>
+        </Grid>
 
         <!--  Errors  -->
         <StackPanel Grid.Row="3" Grid.Column="0">

@@ -12,6 +12,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
+    xmlns:validatorsAbstract="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{helpers:Localization Settings_Settings}"
     Width="800"
     Height="650"
@@ -248,7 +249,7 @@
                                     <TextBox.Text>
                                         <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
                                             <Binding.ValidationRules>
-                                                <validators:EmailValidator />
+                                                <validatorsAbstract:EmailValidator />
                                             </Binding.ValidationRules>
                                         </Binding>
                                     </TextBox.Text>
