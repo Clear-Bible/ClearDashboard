@@ -300,10 +300,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
             CollabeUserCollectionView.Refresh();
 
-            CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
-            CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
-            CollabeUserCollectionView.Refresh();
-
             ShowProgressBar = Visibility.Hidden;
         }
 
