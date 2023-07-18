@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.Helpers;
+using System.Drawing;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using System.Windows.Documents;
 
 namespace GenerateLicenseKeyForDashboard.ViewModels
 {
@@ -293,6 +296,56 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             }
         }
 
+
+        private string _generatedGitLabLicense;
+        public string GeneratedGitLabLicense
+        {
+            get => _generatedGitLabLicense;
+            set => Set(ref _generatedGitLabLicense, value);
+        }
+
+
+        private string _generateLicenseMessage;
+        public string GenerateLicenseMessage
+        {
+            get => _generateLicenseMessage;
+            set => Set(ref _generateLicenseMessage, value);
+        }
+
+        private Brush _generateLicenseMessageBrush = Brushes.Red;
+        public Brush GenerateLicenseMessageBrush
+        {
+            get => _generateLicenseMessageBrush;
+            set => Set(ref _generateLicenseMessageBrush, value);
+        }
+
+
+        private List<DashboardUser> _gitlabUsers;
+        public List<DashboardUser> DashboardUsers
+        {
+            get { return _gitlabUsers; }
+            set => Set(ref _gitlabUsers, value);
+        }
+
+
+        private List<GitUser> _gitLabUsers;
+        public List<GitUser> GitLabUsers
+        {
+            get => _gitLabUsers;
+            set => Set(ref _gitLabUsers, value);
+        }
+
+
+
+        private string _paratextUserName = string.Empty;
+        public string ParatextUserName
+        {
+            get { return _paratextUserName; }
+            set => Set(ref _paratextUserName, value);
+        }
+
+
+
         #endregion //Observable Properties
 
 
@@ -328,6 +381,12 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 // ignored
             }
 
+            var dashboardUsersList = await _mySqlHttpClientServices.GetAllDashboardUsers();
+            DashboardUsers = dashboardUsersList.OrderBy(s => s.LastName).ThenBy(s => s.FirstName).ToList();
+
+            var gitUsers = await _gitLabServices.GetAllUsers();
+            GitLabUsers = gitUsers.OrderBy(s => s.Name).ToList();
+
             base.OnViewReady(view);
         }
 
@@ -336,6 +395,47 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         #region Methods
 
+        public async void GenerateLicense_OnClick()
+        {
+            GeneratedLicenseBoxText = string.Empty;
+            GenerateLicenseMessage = string.Empty;
+            GeneratedGitLabLicense = string.Empty;
+
+            var emailAlreadyExists = await CheckForPreExistingDashboardEmail(EmailBox);
+
+            if (emailAlreadyExists)
+            {
+                GenerateLicenseMessage = "Dashboard Email already exists on system!";
+                GenerateLicenseMessageBrush = Brushes.Red;
+            }
+            else
+            {
+                var gitlabUsersExists = await CheckForPreExistingGitlabEmail(EmailBox);
+
+                if (gitlabUsersExists)
+                {
+                    GenerateLicenseMessage = "Gitlab users already exists on system!";
+                    GenerateLicenseMessageBrush = Brushes.Red;
+                }
+                else
+                {
+                    // create GitLab User First to get it's GitLab Id
+                    var gitLabUserId = await CreateGitLabUser();
+
+                    // create Dashboard User
+                    var licenseKey = await GenerateLicense(FirstNameBox, LastNameBox, Guid.NewGuid(), EmailBox, gitLabUserId);
+                    GeneratedLicenseBoxText = licenseKey;
+
+                    GenerateLicenseMessage = "Saved to remote server";
+                    GenerateLicenseMessageBrush = Brushes.Green;
+
+                }
+
+            }
+
+
+
+        }
 
         public void GroupSelected()
         {
@@ -357,32 +457,10 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         }
 
 
-        public async void GenerateLicense_OnClick()
-        {
-            GeneratedLicenseBoxText = string.Empty;
-
-            var emailAlreadyExists = await CheckForPreExistingEmail(EmailBox);
-
-            if (emailAlreadyExists)
-            {
-                GeneratedLicenseBoxText = "Email already exists on system!";
-            }
-            else
-            {
-                // create Dashboard User
-                var licenseKey = await GenerateLicense(FirstNameBox, LastNameBox, Guid.NewGuid(), EmailBox);
-                GeneratedLicenseBoxText = licenseKey;
-
-                // create GitLab User
-                CreateGitLabUser();
-            }
-        }
-
-
         /// <summary>
         /// Creates the User on the GitLab Server
         /// </summary>
-        public async void CreateGitLabUser()
+        public async Task<int> CreateGitLabUser()
         {
             var password = GenerateRandomPassword.RandomPassword(16);
 
@@ -391,7 +469,8 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
             if (user.Id == 0)
             {
-                GeneratedLicenseBoxText = "Error Creating user on Server";
+                GenerateLicenseMessage = "Error Creating user on Server";
+                GenerateLicenseMessageBrush = Brushes.Red;
 
                 CollaborationConfig = new();
             }
@@ -420,19 +499,15 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
                 if (results)
                 {
-                    GeneratedLicenseBoxText = "Saved to remote server";
-                    var encryptedLicense = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
-                }
-                else
-                {
-                    GeneratedLicenseBoxText = "User already exists on server";
+                    GeneratedGitLabLicense = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
                 }
 
             }
 
+            return user.Id;
         }
 
-        private async Task<bool> CheckForPreExistingEmail(string email)
+        private async Task<bool> CheckForPreExistingDashboardEmail(string email)
         {
             var results = await _mySqlHttpClientServices.GetAllDashboardUsers();
 
@@ -446,7 +521,15 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             return true;
         }
 
-        private async Task<string> GenerateLicense(string firstName, string lastName, Guid id, string email)
+
+        private async Task<bool> CheckForPreExistingGitlabEmail(string email)
+        {
+            return await _gitLabServices.CheckForExistingUser(GetUserName(), EmailBox);
+        }
+
+
+        private async Task<string> GenerateLicense(string firstName, string lastName, Guid id, string email,
+            int gitLabUserId)
         {
             var licenseUser = new User
             {
@@ -454,12 +537,24 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 LastName = lastName,
                 Id = id,
                 IsInternal = IsInternalChecked,
-                LicenseVersion = _licenseVersion
+                LicenseVersion = _licenseVersion,
             };
 
             var encryptedLicense = LicenseManager.EncryptToString(licenseUser);
 
-            var dashboardUser = new DashboardUser(licenseUser, email, encryptedLicense);
+            var dashboardUser = new DashboardUser
+            {
+                GitLabUserId = gitLabUserId,
+                Email = email,
+                ParatextUserName = ParatextUserName,
+                FirstName = firstName,
+                LastName = lastName,
+                Id = id,
+                LicenseVersion = _licenseVersion,
+                LicenseKey = encryptedLicense,
+                IsInternal = IsInternalChecked,
+                Organization = SelectedGroup.Name,
+            };
 
             var results = await _mySqlHttpClientServices.CreateNewDashboardUser(dashboardUser);
 
