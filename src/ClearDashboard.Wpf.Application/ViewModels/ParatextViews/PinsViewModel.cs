@@ -1140,11 +1140,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (itemDt.Gloss is null)
             {
-                return (itemDt.Source.Contains(_filterString) || itemDt.Notes.Contains(_filterString))
+                return (itemDt.Source.Contains(_filterString, StringComparison.OrdinalIgnoreCase) 
+                        || itemDt.Notes.Contains(_filterString, StringComparison.OrdinalIgnoreCase))
                     && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
             }
 
-            return (itemDt.Source.Contains(_filterString) || itemDt.Gloss.Contains(_filterString) || itemDt.Notes.Contains(_filterString))
+            return (itemDt.Source.Contains(_filterString, StringComparison.OrdinalIgnoreCase) 
+                    || itemDt.Gloss.Contains(_filterString, StringComparison.OrdinalIgnoreCase) 
+                    || itemDt.Notes.Contains(_filterString, StringComparison.OrdinalIgnoreCase))
                 && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
         }
 
