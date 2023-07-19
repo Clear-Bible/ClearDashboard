@@ -164,7 +164,8 @@
                                 ItemsSource="{Binding Groups}"
                                 ScrollViewer.CanContentScroll="False"
                                 SelectedItem="{Binding SelectedGroup}"
-                                Style="{StaticResource MaterialDesignFilledComboBox}">
+                                Style="{StaticResource MaterialDesignFilledComboBox}"
+                                TextSearch.TextPath="CombinedStrings">
                                 <controls:AutoCompleteComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
@@ -267,7 +268,7 @@
 
 
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="10" Text="Generated GitLab License" />
+                                <TextBlock Margin="10" Text="Combined Dashboard + GitLab License" />
                                 <Button Name="CopyCombinedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
                                 </Button>
@@ -445,6 +446,25 @@
                                 Foreground="{StaticResource PrimaryHueLightBrush}"
                                 IsChecked="{Binding DashboardUser.IsInternal}"
                                 IsEnabled="False" />
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedLicenseVersionBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted License Version" />
+                                <Button Name="CopyDecryptedLicenseVersion" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedLicenseVersionBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Decrypted License Version will appear here."
+                                FontSize="14"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DashboardUser.LicenseVersion}" />
                         </StackPanel>
 
 
@@ -526,7 +546,7 @@
                             <RadioButton
                                 Name="ByEmailRadio"
                                 Margin="10"
-                                cm:Message.Attach="[Event Checked] = [Action EmailCheckedEvent]"
+                                cm:Message.Attach="[Event Checked] = [Action ByEmailRadio_OnCheck]"
                                 Content="By Email"
                                 Foreground="{StaticResource PrimaryHueLightBrush}"
                                 GroupName="FetchByRadios"
@@ -534,28 +554,37 @@
                             <RadioButton
                                 Name="ByIdRadio"
                                 Margin="10"
-                                cm:Message.Attach="[Event Checked] = [Action IdCheckedEvent]"
+                                cm:Message.Attach="[Event Checked] = [Action ByIdRadio_OnCheck]"
                                 Content="By Id"
                                 Foreground="{StaticResource PrimaryHueLightBrush}"
                                 GroupName="FetchByRadios"
                                 IsChecked="{Binding IdChecked}" />
 
-                            <TextBox
-                                x:Name="FetchByEmailBox"
-                                MinWidth="300"
-                                Margin="10"
-                                materialDesign:HintAssist.HelperText="Helper text longer than error"
-                                materialDesign:HintAssist.Hint="Email / License">
-                                <TextBox.Text>
-                                    <Binding Path="FetchByEmailBox" UpdateSourceTrigger="PropertyChanged">
-                                        <Binding.ValidationRules>
-                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </TextBox.Text>
-                            </TextBox>
+                            <StackPanel Name="FetchByEmailInput" Visibility="{Binding FetchByEmailInput}">
+                                <TextBlock
+                                    Name="FetchByEmailBlock"
+                                    Margin="10"
+                                    Text="User Email" />
 
-                            <StackPanel Name="FetchByIdInput" Visibility="Collapsed">
+                                <TextBox
+                                    x:Name="FetchByEmailBox"
+                                    MinWidth="300"
+                                    Margin="10"
+                                    materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                    materialDesign:HintAssist.Hint="Enter User Email"
+                                    Visibility="{Binding FetchByEmailInput}">
+                                    <TextBox.Text>
+                                        <Binding Path="FetchByEmailBox" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                            </StackPanel>
+
+
+                            <StackPanel Name="FetchByIdInput" Visibility="{Binding FetchByIdInput}">
                                 <TextBlock
                                     Name="FetchByIdBlock"
                                     Margin="10"
@@ -563,7 +592,8 @@
                                 <TextBox
                                     Name="FetchByIdBox"
                                     Margin="10"
-                                    materialDesign:HintAssist.Hint="Enter guid here." />
+                                    materialDesign:HintAssist.Hint="Enter guid here."
+                                    Text="{Binding FetchByIdBox}" />
                             </StackPanel>
 
                             <Button
@@ -571,7 +601,7 @@
                                 cm:Message.Attach="[Event Click] = [Action FetchLicenseById_OnClick]"
                                 Content="Fetch License!" />
 
-                            
+
                             <TextBlock
                                 MinWidth="300"
                                 Margin="10"
@@ -727,7 +757,8 @@
                                 Name="DeleteByIdBox"
                                 MinWidth="300"
                                 Margin="10"
-                                materialDesign:HintAssist.Hint="Enter guid here." />
+                                materialDesign:HintAssist.Hint="Enter guid here."
+                                Text="{Binding DeleteByIdBox}" />
 
                             <Button
                                 Margin="10"

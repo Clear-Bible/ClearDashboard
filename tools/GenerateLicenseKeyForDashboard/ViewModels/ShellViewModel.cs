@@ -448,7 +448,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         protected override async void OnViewReady(object view)
         {
-
+            FetchByIdInput = Visibility.Collapsed;
             try
             {
                 Groups = await _gitLabServices.GetAllGroups();
@@ -677,11 +677,12 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             FetchedLicenseBox = string.Empty;
             FetchedGitLabLicense = string.Empty;
             FetchUserMessage = string.Empty;
+            CombinedLicense = string.Empty;
 
-            var fetchByEmail = FetchByEmailInput;
+            var fetchByEmail = !IdChecked;
 
             DashboardUser dashboardUser;
-            if (fetchByEmail == Visibility.Visible)
+            if (fetchByEmail)
             {
                 dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsByEmail(FetchByEmailBox);
 
@@ -718,7 +719,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
             FetchedEmailBox = dashboardUser.Email ?? string.Empty;
             FetchedLicenseBox = dashboardUser.LicenseKey ?? string.Empty;
-
+            
             CombinedLicense = CombineLicenses(FetchedLicenseBox, FetchedGitLabLicense);
         }
 
@@ -761,13 +762,16 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                         Clipboard.SetText(GeneratedGitLabLicense);
                         break;
                     case "CopyDecryptedFirstName":
-                        Clipboard.SetText(DecryptedFirstNameBox);
+                        Clipboard.SetText(DashboardUser.FirstName);
                         break;
                     case "CopyDecryptedLastName":
-                        Clipboard.SetText(DecryptedLastNameBox);
+                        Clipboard.SetText(DashboardUser.LastName);
                         break;
                     case "CopyDecryptedGuid":
-                        Clipboard.SetText(DecryptedGuidBox);
+                        Clipboard.SetText(DashboardUser.Id.ToString());
+                        break;
+                    case "CopyDecryptedLicenseVersion":
+                        Clipboard.SetText(DashboardUser.LicenseVersion.ToString());
                         break;
                     case "CopyFetchedEmail":
                         Clipboard.SetText(FetchedEmailBox);
