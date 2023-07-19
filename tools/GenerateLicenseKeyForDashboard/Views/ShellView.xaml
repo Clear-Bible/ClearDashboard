@@ -264,6 +264,24 @@
                             Grid.Column="1"
                             Margin="15,0,0,0"
                             Orientation="Vertical">
+
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="10" Text="Generated GitLab License" />
+                                <Button Name="CopyCombinedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+
+                            <TextBlock
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Your GitLab license will appear here."
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding CombinedCreateLicense}"
+                                TextWrapping="Wrap" />
+
+
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock
                                     Name="GeneratedLicenseBlock"
@@ -553,6 +571,13 @@
                                 cm:Message.Attach="[Event Click] = [Action FetchLicenseById_OnClick]"
                                 Content="Fetch License!" />
 
+                            
+                            <TextBlock
+                                MinWidth="300"
+                                Margin="10"
+                                FontSize="18"
+                                Foreground="{Binding FetchUserForeColor}"
+                                Text="{Binding FetchUserMessage}" />
 
                         </StackPanel>
 
@@ -579,6 +604,27 @@
                                 Foreground="Gray"
                                 IsReadOnly="True"
                                 Text="{Binding FetchedEmailBox}" />
+
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Combined License" />
+                                <Button x:Name="CombinedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Combined license will appear here"
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding CombinedLicense}"
+                                TextWrapping="Wrap" />
+
+
+
 
                             <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
                                 <TextBlock
@@ -654,9 +700,27 @@
                                 FontSize="24"
                                 Text="DELETE LICENSE" />
 
+
+
+                            <TextBlock
+                                Margin="10,30,10,10"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Text="Email" />
+                            <TextBox
+                                MinWidth="300"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Enter email here."
+                                Text="{Binding EmailDelete}" />
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action DeleteLicenseByEmail]"
+                                Content="Delete License By Email" />
+
+
                             <TextBlock
                                 Name="DeleteByIdBlock"
-                                Margin="10"
+                                Margin="10,40,10,10"
                                 Foreground="{StaticResource PrimaryHueLightBrush}"
                                 Text="User Id" />
                             <TextBox
@@ -673,25 +737,9 @@
 
 
                             <TextBlock
-                                Margin="10,40,10,10"
-                                Foreground="{StaticResource PrimaryHueLightBrush}"
-                                Text="Email" />
-                            <TextBox
                                 MinWidth="300"
                                 Margin="10"
-                                materialDesign:HintAssist.Hint="Enter email here."
-                                Text="{Binding EmailDelete}" />
-
-                            <Button
-                                Margin="10"
-                                cm:Message.Attach="[Event Click] = [Action DeleteLicenseByEmail]"
-                                Content="Delete License By Email" />
-
-
-
-                            <TextBlock
-                                MinWidth="300"
-                                Margin="10"
+                                FontSize="18"
                                 Foreground="{Binding DeleteUserForeColor}"
                                 Text="{Binding DeleteUserMessage}" />
                         </StackPanel>
@@ -772,13 +820,13 @@
                             SelectionMode="Extended"
                             VerticalScrollBarVisibility="Visible">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn>
+                                <!--<DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button>UnMapped</Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                </DataGridTemplateColumn>-->
 
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.Header>
@@ -834,7 +882,7 @@
                                             <TextBlock
                                                 Width="300"
                                                 Text="{Binding LicenseKey}"
-                                                TextWrapping="Wrap" />
+                                                TextTrimming="WordEllipsis" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -995,13 +1043,13 @@
                             SelectionMode="Extended"
                             VerticalScrollBarVisibility="Visible">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn>
+                                <!--<DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button>UnMapped</Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                </DataGridTemplateColumn>-->
 
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.Header>

@@ -43,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
 
 
 
-            serviceCollection.AddSingleton<CollaborationHttpClientServices>();
+            serviceCollection.AddSingleton<CollaborationServerHttpClientServices>();
 
             var bearerTokenEncrypted = Settings.Default.BearerTokenEncrypted;
             value = Encryption.Decrypt(bearerTokenEncrypted);
@@ -69,7 +69,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddScoped<IClearEngineProcessingService, ClearEngineProcessingService>();
         }
 
-        public static CollaborationHttpClientServices GetSqlHttpClientServices()
+        public static CollaborationServerHttpClientServices GetSqlHttpClientServices()
         {
             var bearerTokenEncrypted = Settings.Default.BearerTokenEncrypted;
             var value = Encryption.Decrypt(bearerTokenEncrypted);
@@ -82,7 +82,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + value);
 
             var mySqlClient = new CollaborationClient(client);
-            var mySqlHttpClientServices = new CollaborationHttpClientServices(mySqlClient);
+            var mySqlHttpClientServices = new CollaborationServerHttpClientServices(mySqlClient);
 
             return mySqlHttpClientServices;
         }

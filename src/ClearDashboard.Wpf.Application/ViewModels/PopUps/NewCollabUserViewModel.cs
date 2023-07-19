@@ -33,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly DashboardProjectManager? _projectManager;
         private readonly ILocalizationService _localizationService;
         private readonly GitLabHttpClientServices _gitLabHttpClientServices;
-        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
+        private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private CollaborationConfiguration _collaborationConfiguration;
         private DashboardUser _dashboardUser;
@@ -301,7 +301,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService,
             GitLabHttpClientServices gitLabHttpClientServices,
-            CollaborationHttpClientServices collaborationHttpClientServices,
+            CollaborationServerHttpClientServices collaborationHttpClientServices,
             CollaborationManager collaborationManager,
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
@@ -579,7 +579,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 user.Password = password;
 
-                var results = await _collaborationHttpClientServices.CreateNewUser(user, accessToken).ConfigureAwait(false);
+                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken).ConfigureAwait(false);
 
                 if (results)
                 {

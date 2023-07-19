@@ -1,12 +1,12 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Extensions;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Services;
-using HttpClientToCurl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +14,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.Wpf.Application.Helpers;
-using System.Drawing;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using System.Windows.Documents;
+using System.Windows.Media;
+
 
 namespace GenerateLicenseKeyForDashboard.ViewModels
 {
@@ -28,7 +26,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         #region Member Variables   
 
         private readonly int _licenseVersion = 2;
-        private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
+        private readonly CollaborationServerHttpClientServices _mySqlHttpClientServices;
         private readonly GitLabHttpClientServices _gitLabServices;
 
 
@@ -236,6 +234,22 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         }
 
 
+        private string _combinedLicense = string.Empty;
+        public string CombinedLicense
+        {
+            get => _combinedLicense;
+            set => Set(ref _combinedLicense, value);
+        }
+
+
+        private string _combinedCreateLicense = string.Empty;
+        public string CombinedCreateLicense
+        {
+            get => _combinedCreateLicense;
+            set => Set(ref _combinedCreateLicense, value);
+        }
+        
+
         private string _deleteByIdBox = string.Empty;
         public string DeleteByIdBox
         {
@@ -341,6 +355,22 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             get => _deleteUserMessage;
             set => Set(ref _deleteUserMessage, value);
         }
+
+
+        private Brush _fetchUserForeColor = Brushes.Red;
+        public Brush FetchUserForeColor
+        {
+            get => _fetchUserForeColor;
+            set => Set(ref _fetchUserForeColor, value);
+        }
+
+        private string _fetchUserMessage;
+        public string FetchUserMessage
+        {
+            get => _fetchUserMessage;
+            set => Set(ref _fetchUserMessage, value);
+        }
+                 
 
 
 
@@ -476,6 +506,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                     GenerateLicenseMessage = "Saved to remote server";
                     GenerateLicenseMessageBrush = Brushes.Green;
 
+                    CombinedCreateLicense = CombineLicenses(GeneratedLicenseBoxText, GeneratedGitLabLicense);
                 }
 
             }
@@ -538,7 +569,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
                 user.Password = password;
 
-                var results = await _mySqlHttpClientServices.CreateNewUser(user, accessToken).ConfigureAwait(false);
+                var results = await _mySqlHttpClientServices.CreateNewCollabUser(user, accessToken).ConfigureAwait(false);
 
                 if (results)
                 {
@@ -642,6 +673,11 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         public async void FetchLicenseById_OnClick()
         {
+            FetchedEmailBox = string.Empty;
+            FetchedLicenseBox = string.Empty;
+            FetchedGitLabLicense = string.Empty;
+            FetchUserMessage = string.Empty;
+
             var fetchByEmail = FetchByEmailInput;
 
             DashboardUser dashboardUser;
@@ -649,10 +685,17 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             {
                 dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsByEmail(FetchByEmailBox);
 
-                var gitLabUser = await _mySqlHttpClientServices.GetUserExistsByEmail(FetchByEmailBox);
-                if (gitLabUser != null)
+                if (dashboardUser.Id == Guid.Empty)
                 {
+                    FetchUserForeColor = Brushes.Red;
+                    FetchUserMessage = "Email Not Found";
+                    return;
+                }
 
+
+                var gitLabUser = await _mySqlHttpClientServices.GetCollabUserExistsByEmail(FetchByEmailBox);
+                if (gitLabUser.UserId != -1)
+                {
                     var user = new CollaborationConfiguration
                     {
                         UserId = gitLabUser.UserId,
@@ -675,6 +718,13 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
             FetchedEmailBox = dashboardUser.Email ?? string.Empty;
             FetchedLicenseBox = dashboardUser.LicenseKey ?? string.Empty;
+
+            CombinedLicense = CombineLicenses(FetchedLicenseBox, FetchedGitLabLicense);
+        }
+
+        private string CombineLicenses(string dashboardLicense, string collabLicense)
+        {
+            return $"{dashboardLicense}^{collabLicense}";
         }
 
         public async void DeleteLicenseById_OnClick()
@@ -698,6 +748,12 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             {
                 switch (button.Name)
                 {
+                    case "CombinedLicense":
+                        Clipboard.SetText(CombinedLicense);
+                        break;
+                    case "CopyCombinedLicense":
+                        Clipboard.SetText(CombinedCreateLicense);
+                        break;
                     case "CopyGeneratedLicense":
                         Clipboard.SetText(GeneratedLicenseBoxText);
                         break;
@@ -755,7 +811,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             if (dashUser is null || gitUser is null)
             {
                 DeleteUserForeColor = Brushes.Red;
-                DeleteUserMessage = $"User {dashUser.FullName} NOT Found";
+                DeleteUserMessage = $"User {EmailDelete} NOT Found";
             }
             else
             {

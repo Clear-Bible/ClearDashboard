@@ -50,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly TranslationSource? _translationSource;
         private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
-        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
+        private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
@@ -377,7 +377,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             GitLabHttpClientServices gitLabHttpClientServices,
             GitLabClient gitLabClient,
             CollaborationManager collaborationManager,
-            CollaborationHttpClientServices collaborationHttpClientServices)
+            CollaborationServerHttpClientServices collaborationHttpClientServices)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
@@ -555,7 +555,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 
                 CollaborationConfig = _collaborationManager.GetConfig();
 
-                collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
+                collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(CollaborationConfig.UserId);
 
                 if (dashboardUser.Id == Guid.Empty) //make a DashboardUser
                 {
@@ -587,7 +587,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
             }
-            collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
+            collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
 
             if (collaborationUser.UserId < 1)
             {

@@ -18,7 +18,7 @@ using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public class CollaborationHttpClientServices
+    public class CollaborationServerHttpClientServices
     {
         #region Member Variables   
 
@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         #region Constructor
 
-        public CollaborationHttpClientServices(CollaborationClient collaborationClient)
+        public CollaborationServerHttpClientServices(CollaborationClient collaborationClient)
         {
             _collaborationClient = collaborationClient;
         }
@@ -47,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             if (_logger is null)
             {
-                _logger = IoC.Get<ILogger<CollaborationHttpClientServices>>();
+                _logger = IoC.Get<ILogger<CollaborationServerHttpClientServices>>();
             }
         }
 
@@ -57,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Gets a list of all the GitLab projects
         /// </summary>
         /// <returns></returns>
-        public async Task<CollaborationUser> GetUserExistsById(int userId)
+        public async Task<CollaborationUser> GetCollabUserExistsById(int userId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/{userId}");
 
@@ -87,7 +87,7 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
 
-        public async Task<CollaborationUser> GetUserExistsByEmail(string email)
+        public async Task<CollaborationUser> GetCollabUserExistsByEmail(string email)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
 
@@ -313,7 +313,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="user"></param>
         /// <param name="accessToken"></param>
         /// <returns></returns>
-        public async Task<bool> CreateNewUser(GitLabUser user, string accessToken)
+        public async Task<bool> CreateNewCollabUser(GitLabUser user, string accessToken)
         {
             var encryptedPassword = Encryption.Encrypt(user.Password);
             var encryptedPersonalAccessToken = Encryption.Encrypt(accessToken);
