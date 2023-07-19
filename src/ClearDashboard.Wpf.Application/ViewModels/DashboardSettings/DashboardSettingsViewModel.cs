@@ -15,7 +15,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using MimeKit;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -551,6 +554,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
                 HideExistingCollabUser = Visibility.Collapsed;
                 ShowExistingCollabUser = Visibility.Visible;
+
+               await EventAggregator.PublishOnBackgroundThreadAsync(new RebuildMainMenuMessage());
             }
         }
 
