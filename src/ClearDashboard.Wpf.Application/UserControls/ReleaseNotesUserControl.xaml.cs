@@ -79,7 +79,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 seeRelease = false;
                 if (fullUpdateDataList.FirstOrDefault().VersionType == VersionType.Prerelease)
                 {
-                    if (PrereleaseToggle.IsChecked.Value)
+                    PreReleaseStack.Visibility = Visibility.Visible;
+                    if (PreReleaseToggle.IsChecked.Value)
                     {
                         seeRelease = true;
                     }
@@ -161,7 +162,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             manager.ShowWindowAsync(viewModel, null, settings);
         }
 
-        private void PrereleaseToggle_OnChecked(object sender, RoutedEventArgs e)
+        private void PreReleaseToggle_OnChecked(object sender, RoutedEventArgs e)
         {
             CheckForProgramUpdates();
         }

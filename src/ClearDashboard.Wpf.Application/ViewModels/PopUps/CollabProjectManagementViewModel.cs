@@ -32,6 +32,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private List<GitUser> _gitLabUsers = new();
         
 
+
         #endregion //Member Variables
 
         #region Public Properties
@@ -49,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             get => _projects;
             set
             {
-                _projects = value; 
+                _projects = value;
                 NotifyOfPropertyChange(() => Projects);
             }
         }
@@ -70,7 +71,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
                 else
                 {
-                    IsGitLabUserListEnabled= false;
+                    IsGitLabUserListEnabled = false;
                 }
 
                 _ = GetUsersForProject();
@@ -78,7 +79,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         private ObservableCollection<GitLabProjectUser> _projectUsers = new();
-        public ObservableCollection<GitLabProjectUser>  ProjectUsers
+        public ObservableCollection<GitLabProjectUser> ProjectUsers
         {
             get => _projectUsers;
             set
@@ -144,8 +145,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             get => _isGitLabUserListEnabled;
             set
             {
-                _isGitLabUserListEnabled = value; 
-                NotifyOfPropertyChange(()=> IsGitLabUserListEnabled);
+                _isGitLabUserListEnabled = value;
+                NotifyOfPropertyChange(() => IsGitLabUserListEnabled);
             }
         }
 
@@ -229,7 +230,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
             Projects = await _httpClientServices.GetProjectsForUserWhereOwner(ProjectOwner);
-            
             _gitLabUsers = await _httpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
 
@@ -270,7 +270,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             if (obj is GitUser user)
             {
                 if (user.Name!.ToUpper().Contains(FilterText.ToUpper()) || user.Organization.ToUpper().Contains(FilterText.ToUpper()))
-                { 
+                {
                     return true;
                 }
             }
@@ -295,7 +295,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var ids = ProjectUsers.Select(u => u.Id).ToList();
             //
             _collabUsers.RemoveAll(x => ids.Contains(x.Id));
-            NotifyOfPropertyChange(() =>  CollabUsers);
+            NotifyOfPropertyChange(() => CollabUsers);
 
             CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
             CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
@@ -331,18 +331,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             AddUsers(PermissionLevel.ReadWrite);
         }
 
+        public void AddOwner()
+        {
+            AddUsers(PermissionLevel.Owner);
+        }
+
 
         public async void RemoveUser()
         {
             ShowProgressBar = Visibility.Visible;
             if (SelectedCurrentUser is not null)
             {
-                // only remove users who are not the owner
-                if (SelectedCurrentUser.IsOwner == false)
+                // you cannot remove yourself
+                if (SelectedCurrentUser.UserName != ProjectOwner.RemoteUserName)
                 {
-                    await _httpClientServices.RemoveUserFromProject(SelectedCurrentUser, SelectedProject);
-                    await Task.Delay(500);
-                    await GetUsersForProject();
+                    // you cannot delete the project's true owner
+                    if (SelectedCurrentUser.UserName != SelectedProject.RemoteOwner.Username)
+                    {
+                        await _httpClientServices.RemoveUserFromProject(SelectedCurrentUser, SelectedProject);
+                        await Task.Delay(500);
+                        await GetUsersForProject();
+                    }
                 }
             }
 

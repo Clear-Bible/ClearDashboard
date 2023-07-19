@@ -32,8 +32,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ClearDashboard.Collaboration.Util;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using System.Net;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -411,16 +413,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+
+
+            await base.OnActivateAsync(cancellationToken);
+        }
+
+
+        protected override async void OnViewLoaded(object view)
+        {
             EventAggregator.Subscribe(this);
+
+           IsParatextInstalled = _paratextProxy.IsParatextInstalled();
 
             await GetRemoteUser();
             await GetProjectsVersion().ConfigureAwait(false);
-            await GetCollabProjects().ConfigureAwait(false);
+
+            if(Pinger.PingHost())
+                await GetCollabProjects().ConfigureAwait(false);
 
 
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
-            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
             if (IsParatextRunning)
             {
                 if (Connected)
@@ -437,9 +450,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 // await this.ShowMessageAsync("This is the title", "Some message");
             }
 
-            await FinishAccountSetup();
+            if (Pinger.PingHost())
+                await FinishAccountSetup();
 
-            await base.OnActivateAsync(cancellationToken);
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            Console.WriteLine();
+
+            base.OnViewReady(view);
         }
 
         #endregion Constructor
@@ -568,7 +589,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
 
-            if (collaborationUser.UserId == -1)
+            if (collaborationUser.UserId < 1)
             {
                 await System.Windows.Application.Current.Dispatcher.Invoke(async delegate
                 {
