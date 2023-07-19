@@ -36,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         #region Member Variables   
 
         private readonly CollaborationManager _collaborationManager;
-        private readonly HttpClientServices _httpClientServices;
+        private readonly GitLabHttpClientServices _gitLabHttpClientServices;
         private CancellationTokenSource _cancellationTokenSource;
         private Task? _runningTask;
 
@@ -151,14 +151,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
             TranslationSource translationSource,
-            HttpClientServices httpClientServices,
+            GitLabHttpClientServices gitLabHttpClientServices,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _localizationService = localizationService;
             _cancellationTokenSource = new CancellationTokenSource();
             _collaborationManager = collaborationManager;
-            _httpClientServices = httpClientServices;
+            _gitLabHttpClientServices = gitLabHttpClientServices;
 
             //return base.OnInitializeAsync(cancellationToken);
         }
@@ -209,13 +209,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private async Task CreateProjectOnServerIfNotCreated()
         {
-            var projects = await _httpClientServices.GetProjectsForUser(_userInfo);
+            var projects = await _gitLabHttpClientServices.GetProjectsForUser(_userInfo);
             var project = projects.FirstOrDefault(x => x.Name == $"P_{ProjectId}");
 
             if (project is null)
             {
                 project =
-                    await _httpClientServices.CreateNewProjectForUser(_gitLabUser, $"P_{ProjectId}", ProjectName);
+                    await _gitLabHttpClientServices.CreateNewProjectForUser(_gitLabUser, $"P_{ProjectId}", ProjectName);
             }
 
             _userInfo.RemoteUrl = project.HttpUrlToRepo.Replace("http:", "https:");
