@@ -432,7 +432,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             DashboardUsers = dashboardUsersList.OrderBy(s => s.LastName).ThenBy(s => s.FirstName).ToList();
 
             var gitUsers = await _gitLabServices.GetAllUsers();
-            GitLabUsers = gitUsers.OrderBy(s => s.Name).ToList();
+            GitLabUsers = gitUsers.OrderBy(s => s.UserName).ToList();
 
             base.OnViewReady(view);
         }

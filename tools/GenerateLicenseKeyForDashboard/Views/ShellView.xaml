@@ -279,7 +279,7 @@
                                 Name="GeneratedLicenseBoxText"
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Your Dashboard license will appear here."
-                                FontSize="20"
+                                FontSize="14"
                                 Foreground="Gray"
                                 Text="{Binding GeneratedLicenseBoxText}"
                                 TextWrapping="Wrap" />
@@ -296,7 +296,7 @@
                                 Name="GeneratedGitLabLicense"
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Your GitLab license will appear here."
-                                FontSize="20"
+                                FontSize="14"
                                 Foreground="Gray"
                                 Text="{Binding GeneratedGitLabLicense}"
                                 TextWrapping="Wrap" />
@@ -396,7 +396,7 @@
                                 Name="DecryptedLastNameBox"
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Decrypted license will appear here."
-                                FontSize="20"
+                                FontSize="14"
                                 Foreground="Gray"
                                 IsReadOnly="True"
                                 Text="{Binding DashboardUser.LastName}" />
@@ -415,7 +415,7 @@
                                 Name="DecryptedGuidBox"
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Decrypted GUID will appear here."
-                                FontSize="20"
+                                FontSize="14"
                                 Foreground="Gray"
                                 IsReadOnly="True"
                                 Text="{Binding DashboardUser.Id}" />
@@ -594,7 +594,7 @@
                             <TextBlock
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Fetched GitLab license will appear here"
-                                FontSize="20"
+                                FontSize="14"
                                 Foreground="Gray"
                                 Text="{Binding FetchedLicenseBox}"
                                 TextWrapping="Wrap" />
@@ -613,7 +613,7 @@
                             <TextBlock
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Fetched GitLab license will appear here"
-                                FontSize="20"
+                                FontSize="14"
                                 Foreground="Gray"
                                 Text="{Binding FetchedGitLabLicense}"
                                 TextWrapping="Wrap" />
@@ -670,31 +670,31 @@
                                 Margin="10"
                                 cm:Message.Attach="[Event Click] = [Action DeleteLicenseById_OnClick]"
                                 Content="Delete License by GUID" />
-                            
-                            
-                            
+
+
+
                             <TextBlock
-                                Margin="10 40 10 10"
+                                Margin="10,40,10,10"
                                 Foreground="{StaticResource PrimaryHueLightBrush}"
                                 Text="Email" />
                             <TextBox
                                 MinWidth="300"
                                 Margin="10"
                                 materialDesign:HintAssist.Hint="Enter email here."
-                                Text="{Binding EmailDelete}"/>
+                                Text="{Binding EmailDelete}" />
 
                             <Button
                                 Margin="10"
                                 cm:Message.Attach="[Event Click] = [Action DeleteLicenseByEmail]"
                                 Content="Delete License By Email" />
-                            
-                            
-                            
+
+
+
                             <TextBlock
                                 MinWidth="300"
                                 Margin="10"
                                 Foreground="{Binding DeleteUserForeColor}"
-                                Text="{Binding DeleteUserMessage}"/>
+                                Text="{Binding DeleteUserMessage}" />
                         </StackPanel>
 
                         <StackPanel
@@ -776,7 +776,7 @@
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button>Show/Hide</Button>
+                                            <Button>UnMapped</Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -941,6 +941,142 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+
+            <!--  GITLAB GRID  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <Grid>
+
+                            <iconPacks:PackIconBootstrapIcons
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource SecondaryHueLightBrush}"
+                                Kind="Grid3x3" />
+                            <iconPacks:PackIconJamIcons
+                                Width="16"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Kind="Gitlab" />
+                        </Grid>
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="GitLab Users"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <DataGrid
+                            Margin="10"
+                            AlternatingRowBackground="LightBlue"
+                            AutoGenerateColumns="False"
+                            CanUserReorderColumns="False"
+                            CanUserResizeColumns="True"
+                            CanUserSortColumns="True"
+                            Foreground="Black"
+                            GridLinesVisibility="Vertical"
+                            HorizontalScrollBarVisibility="Visible"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding GitLabUsers}"
+                            RowBackground="LightYellow"
+                            SelectionMode="Extended"
+                            VerticalScrollBarVisibility="Visible">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button>UnMapped</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Name" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="UserName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding UserName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Email" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Email}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="GitLab Id" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Id}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="State" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Width="300"
+                                                Text="{Binding State}"
+                                                TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
                             </DataGrid.Columns>
 
                         </DataGrid>
