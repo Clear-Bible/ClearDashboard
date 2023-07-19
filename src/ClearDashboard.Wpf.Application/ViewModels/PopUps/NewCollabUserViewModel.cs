@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly ILogger<AboutViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
         private readonly ILocalizationService _localizationService;
-        private readonly HttpClientServices _httpClientServices;
+        private readonly GitLabHttpClientServices _gitLabHttpClientServices;
         private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private CollaborationConfiguration _collaborationConfiguration;
@@ -300,7 +300,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService,
-            HttpClientServices httpClientServices,
+            GitLabHttpClientServices gitLabHttpClientServices,
             CollaborationHttpClientServices collaborationHttpClientServices,
             CollaborationManager collaborationManager,
             CollaborationConfiguration collaborationConfiguration)
@@ -309,7 +309,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _logger = logger;
             _projectManager = projectManager;
             _localizationService = localizationService;
-            _httpClientServices = httpClientServices;
+            _gitLabHttpClientServices = gitLabHttpClientServices;
             _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
@@ -347,7 +347,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             if (InternetAvailability.IsInternetAvailable())
             {
-                Groups = await _httpClientServices.GetAllGroups();
+                Groups = await _gitLabHttpClientServices.GetAllGroups();
             }
 
             bool orgFound = false;
@@ -488,7 +488,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public async void CheckUser()
         {
             var username = GetUserName();
-            var isAlreadyOnGitLab = await _httpClientServices.CheckForExistingUser(username, Email);
+            var isAlreadyOnGitLab = await _gitLabHttpClientServices.CheckForExistingUser(username, Email);
 
             // not a user
             if (isAlreadyOnGitLab == false)
@@ -549,7 +549,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             var password = GenerateRandomPassword.RandomPassword(16);
 
-            GitLabUser user = await _httpClientServices.CreateNewUser(FirstName, LastName, GetUserName(), password,
+            GitLabUser user = await _gitLabHttpClientServices.CreateNewUser(FirstName, LastName, GetUserName(), password,
                 Email, SelectedGroup.Name).ConfigureAwait(false);
 
             if (user.Id == 0)
@@ -560,7 +560,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                var accessToken = await _httpClientServices.GeneratePersonalAccessToken(user).ConfigureAwait(false);
+                var accessToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(user).ConfigureAwait(false);
 
                 CollaborationConfig = new CollaborationConfiguration
                 {

@@ -28,7 +28,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddSingleton<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddSingleton<IProjectProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddSingleton<GitLabClient>();
-            serviceCollection.AddSingleton<HttpClientServices>();
+            serviceCollection.AddSingleton<GitLabHttpClientServices>();
 
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             // add in a service for the GitLab repository
@@ -88,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
         }
 
 
-        public static HttpClientServices GetGitLabHttpClientServices()
+        public static GitLabHttpClientServices GetGitLabHttpClientServices()
         {
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             var client = new HttpClient();
@@ -99,7 +99,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             client.DefaultRequestHeaders.Add("Authorization", value);
 
             var gitLabClient = new GitLabClient(client);
-            var getGitLabHttpClientServices = new HttpClientServices(gitLabClient);
+            var getGitLabHttpClientServices = new GitLabHttpClientServices(gitLabClient);
 
             return getGitLabHttpClientServices;
         }

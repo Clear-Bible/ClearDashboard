@@ -20,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private readonly ILogger<AboutViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
-        private readonly HttpClientServices _httpClientServices;
+        private readonly GitLabHttpClientServices _gitLabHttpClientServices;
 
 
         #endregion //Member Variables
@@ -110,14 +110,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             IMediator mediator, 
             ILifetimeScope? lifetimeScope, 
             ILocalizationService localizationService,
-            HttpClientServices httpClientServices,
+            GitLabHttpClientServices gitLabHttpClientServices,
             CollaborationManager collaborationManager,
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _logger = logger;
             _projectManager = projectManager;
-            _httpClientServices = httpClientServices;
+            _gitLabHttpClientServices = gitLabHttpClientServices;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -132,7 +132,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             if (InternetAvailability.IsInternetAvailable())
             {
-                Groups = await _httpClientServices.GetAllGroups();
+                Groups = await _gitLabHttpClientServices.GetAllGroups();
             }
         }
 

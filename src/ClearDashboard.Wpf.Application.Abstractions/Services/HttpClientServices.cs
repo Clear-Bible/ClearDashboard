@@ -15,7 +15,7 @@ using StringContent = System.Net.Http.StringContent;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public class HttpClientServices
+    public class GitLabHttpClientServices
     {
         #region Member Variables   
 
@@ -33,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         #region Constructor
 
-        public HttpClientServices(GitLabClient gitLabClient)
+        public GitLabHttpClientServices(GitLabClient gitLabClient)
         {
             _gitLabClient = gitLabClient;
         }
@@ -50,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             if (_logger is null)
             {
-                _logger = IoC.Get<ILogger<HttpClientServices>>();
+                _logger = IoC.Get<ILogger<GitLabHttpClientServices>>();
             }
         }
 
