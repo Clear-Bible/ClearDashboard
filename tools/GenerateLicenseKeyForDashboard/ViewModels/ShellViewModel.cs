@@ -91,6 +91,14 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             set => Set(ref _emailChecked, value);
         }
 
+        private string _emailDelete;
+        public string EmailDelete
+        {
+            get => _emailDelete;
+            set => Set(ref _emailDelete, value);
+        }
+
+
 
         private bool _idChecked;
         public bool IdChecked
@@ -318,6 +326,22 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             get => _generateLicenseMessageBrush;
             set => Set(ref _generateLicenseMessageBrush, value);
         }
+
+
+        private Brush _deleteUserForeColor = Brushes.Red;
+        public Brush DeleteUserForeColor
+        {
+            get => _deleteUserForeColor;
+            set => Set(ref _deleteUserForeColor, value);
+        }
+
+        private string _deleteUserMessage;
+        public string DeleteUserMessage
+        {
+            get => _deleteUserMessage;
+            set => Set(ref _deleteUserMessage, value);
+        }
+
 
 
         private List<DashboardUser> _gitlabUsers;
@@ -600,7 +624,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             }
             catch
             {
-                
+
             }
         }
 
@@ -714,6 +738,56 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         public void IdCheckedEvent()
         {
             Console.WriteLine();
+        }
+
+
+        public async void DeleteLicenseByEmail()
+        {
+
+            // get the dashboard user with this email address
+            var dashUsers = await _mySqlHttpClientServices.GetAllDashboardUsers();
+            var dashUser = dashUsers.FirstOrDefault(s => s.Email == EmailDelete);
+
+            // get the gitlab user on MySQL with this email address
+            var gitUsers = await _gitLabServices.GetAllUsers();
+            var gitUser = gitUsers.FirstOrDefault(u => u.Email == EmailDelete);
+
+            if (dashUser is null || gitUser is null)
+            {
+                DeleteUserForeColor = Brushes.Red;
+                DeleteUserMessage = $"User {dashUser.FullName} NOT Found";
+            }
+            else
+            {
+                var result = await _mySqlHttpClientServices.DeleteDashboardUserExistsById(dashUser.Id);
+
+                var resultGit = await _mySqlHttpClientServices.DeleteCollaborationUserById(gitUser.Id);
+
+                if (resultGit)
+                {
+                    var gitLabUsers = await _gitLabServices.GetAllUsers();
+                    var gitLabUser = gitLabUsers.FirstOrDefault(u => u.Id == gitUser.Id);
+                    if (gitLabUser is not null)
+                    {
+                        var gitLabProjectUser = new GitLabProjectUser
+                        {
+                            Id = gitUser.Id,
+                        };
+
+
+                        // remove from GitLab
+                        var resultGitLab = await _gitLabServices.DeleteUser(gitLabProjectUser);
+
+                        if (resultGitLab)
+                        {
+                            DeleteUserForeColor = Brushes.Green;
+                            DeleteUserMessage = $"User {dashUser.FullName} Deleted Sucessfully";
+                        }
+                    }
+
+                }
+            }
+
         }
 
 

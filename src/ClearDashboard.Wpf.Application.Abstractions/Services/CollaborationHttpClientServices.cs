@@ -1,10 +1,12 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -242,6 +245,31 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        public async Task<bool> DeleteCollaborationUserById(int userId)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/users/{userId}");
+
+            try
+            {
+                var response = await _collaborationClient.Client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (result.Contains("Deleted Successfully"))
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return false;
+        }
+
         #endregion //DELETE Requests
 
         #region PUT Requests
@@ -345,7 +373,6 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
         }
-
 
         #endregion // POST Requests
 

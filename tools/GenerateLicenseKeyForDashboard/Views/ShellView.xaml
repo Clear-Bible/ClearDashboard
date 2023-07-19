@@ -669,7 +669,32 @@
                             <Button
                                 Margin="10"
                                 cm:Message.Attach="[Event Click] = [Action DeleteLicenseById_OnClick]"
-                                Content="Delete License!" />
+                                Content="Delete License by GUID" />
+                            
+                            
+                            
+                            <TextBlock
+                                Margin="10 40 10 10"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Text="Email" />
+                            <TextBox
+                                MinWidth="300"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Enter email here."
+                                Text="{Binding EmailDelete}"/>
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action DeleteLicenseByEmail]"
+                                Content="Delete License By Email" />
+                            
+                            
+                            
+                            <TextBlock
+                                MinWidth="300"
+                                Margin="10"
+                                Foreground="{Binding DeleteUserForeColor}"
+                                Text="{Binding DeleteUserMessage}"/>
                         </StackPanel>
 
                         <StackPanel

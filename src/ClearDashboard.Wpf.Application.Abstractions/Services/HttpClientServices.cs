@@ -511,6 +511,41 @@ namespace ClearDashboard.Wpf.Application.Services
 
         #endregion // POST Requests
 
+
+        #region DELETE Requests
+
+        public async Task<bool> DeleteUser(GitLabProjectUser user)
+        {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"users/{user.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                if ((int)response.StatusCode == 204)
+                {
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return false;
+        }
+
+        #endregion // Delete requests
+
+
+
         #endregion // Methods
     }
 }
