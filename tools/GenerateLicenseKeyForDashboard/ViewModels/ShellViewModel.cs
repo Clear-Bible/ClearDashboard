@@ -29,7 +29,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         private readonly int _licenseVersion = 2;
         private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
-        private readonly HttpClientServices _gitLabServices;
+        private readonly GitLabHttpClientServices _gitLabServices;
 
 
         /// <summary>
