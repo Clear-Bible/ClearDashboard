@@ -168,7 +168,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-
         private string _selectedOrganization;
         public string SelectedOrganization
         {
