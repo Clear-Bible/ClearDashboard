@@ -517,6 +517,18 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             // for caliburn
         }
 
+        public async void RefreshDashboardUsersGrid()
+        {
+            var dashboardUsersList = await _mySqlHttpClientServices.GetAllDashboardUsers();
+            DashboardUsers = dashboardUsersList.OrderBy(s => s.LastName).ThenBy(s => s.FirstName).ToList();
+        }
+
+        public async void RefreshGitLabUsersGrid()
+        {
+            var gitUsers = await _gitLabServices.GetAllUsers();
+            GitLabUsers = gitUsers.OrderBy(s => s.UserName).ToList();
+        }
+
         public void ValidateCreateButton()
         {
             if (FirstNameBox != string.Empty && LastNameBox != string.Empty && EmailBox != string.Empty && SelectedGroup.Name != string.Empty)
@@ -684,6 +696,8 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             DashboardUser dashboardUser;
             if (fetchByEmail)
             {
+                // Get by Email
+
                 dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsByEmail(FetchByEmailBox);
 
                 if (dashboardUser.Id == Guid.Empty)
@@ -713,8 +727,27 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             }
             else
             {
+                // get by ID
+
                 Guid.TryParse(FetchByIdBox, out var guid);
                 dashboardUser = await _mySqlHttpClientServices.GetDashboardUserExistsById(guid);
+
+                var gitLabUser = await _mySqlHttpClientServices.GetCollabUserExistsByEmail(dashboardUser.Email);
+                if (gitLabUser.UserId != -1)
+                {
+                    var user = new CollaborationConfiguration
+                    {
+                        UserId = gitLabUser.UserId,
+                        RemoteUserName = gitLabUser.RemoteUserName,
+                        RemoteEmail = gitLabUser.RemoteEmail,
+                        RemotePersonalAccessToken = Encryption.Decrypt(gitLabUser.RemotePersonalAccessToken),
+                        RemotePersonalPassword = Encryption.Decrypt(gitLabUser.RemotePersonalPassword),
+                        Group = gitLabUser.GroupName,
+                        NamespaceId = gitLabUser.NamespaceId,
+                    };
+
+                    FetchedGitLabLicense = LicenseManager.EncryptCollabJsonToString(user);
+                }
             }
 
             FetchedEmailBox = dashboardUser.Email ?? string.Empty;

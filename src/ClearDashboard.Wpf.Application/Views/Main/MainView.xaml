@@ -251,171 +251,167 @@
 
         </Grid>
 
-        <materialDesign:Card  
-            BorderThickness="1"
-            materialDesign:ElevationAssist.Elevation="Dp0"
-            MaxWidth="400"
-            Margin="10"
-            Background="#EEEBEB"
+        <materialDesign:Card
             Grid.Row="0"
             Grid.Column="0"
+            MaxWidth="400"
+            Margin="10"
+            materialDesign:ElevationAssist.Elevation="Dp0"
+            Background="#EEEBEB"
+            BorderThickness="1"
             Visibility="{Binding GridIsVisible, Mode=TwoWay}">
-        <Grid 
-            x:Name="GridIsVisible"
-            Margin="4"
-            Width="250">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="24" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="40" />
-            </Grid.RowDefinitions>
-            <Label Grid.Row="0" Content="Save Current Layout:" />
-            <ComboBox
-                x:Name="CboNames"
-                Grid.Row="1"
-                Padding="15"
-                DisplayMemberPath="LayoutName"
-                IsEditable="True"
-                ItemsSource="{Binding Path=FileLayouts}"
-                SelectedItem="{Binding Path=SelectedLayout, Mode=OneWayToSource}"
-                Text="{Binding SelectedLayoutText, UpdateSourceTrigger=PropertyChanged}" />
-            <DockPanel Grid.Row="2">
-                <Button
-                    x:Name="OkSave"
-                    Margin="50,0,0,0"
-                    Padding="0"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource GreenMidButton}">
-                    <materialDesign:PackIcon
-                        Width="32"
-                        Height="32"
-                        Foreground="White"
-                        Kind="CheckboxMarkedCircle" />
-                </Button>
-                <Button
-                    x:Name="CancelSave"
-                    Margin="0,0,50,0"
-                    Padding="0"
-                    HorizontalAlignment="Right"
-                    cm:Message.Attach="CancelSave"
-                    Style="{StaticResource RedMidButton}">
-                    <materialDesign:PackIcon
-                        Width="32"
-                        Height="32"
-                        Foreground="White"
-                        Kind="CloseCircle" />
-                </Button>
-            </DockPanel>
-        </Grid>
-            </materialDesign:Card>
+            <Grid
+                x:Name="GridIsVisible"
+                Width="250"
+                Margin="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Save Current Layout:" />
+                <ComboBox
+                    x:Name="CboNames"
+                    Grid.Row="1"
+                    Padding="15"
+                    DisplayMemberPath="LayoutName"
+                    IsEditable="True"
+                    ItemsSource="{Binding Path=FileLayouts}"
+                    SelectedItem="{Binding Path=SelectedLayout, Mode=OneWayToSource}"
+                    Text="{Binding SelectedLayoutText, UpdateSourceTrigger=PropertyChanged}" />
+                <DockPanel Grid.Row="2">
+                    <Button
+                        x:Name="OkSave"
+                        Margin="50,0,0,0"
+                        Padding="0"
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource GreenMidButton}">
+                        <materialDesign:PackIcon
+                            Width="32"
+                            Height="32"
+                            Foreground="White"
+                            Kind="CheckboxMarkedCircle" />
+                    </Button>
+                    <Button
+                        x:Name="CancelSave"
+                        Margin="0,0,50,0"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        cm:Message.Attach="CancelSave"
+                        Style="{StaticResource RedMidButton}">
+                        <materialDesign:PackIcon
+                            Width="32"
+                            Height="32"
+                            Foreground="White"
+                            Kind="CloseCircle" />
+                    </Button>
+                </DockPanel>
+            </Grid>
+        </materialDesign:Card>
 
-        <materialDesign:Card  
-            BorderThickness="1"
-            materialDesign:ElevationAssist.Elevation="Dp0"
-            MaxWidth="400"
-            Margin="10"
-            Background="#EEEBEB"
+        <materialDesign:Card
             Grid.Row="0"
             Grid.Column="0"
+            MaxWidth="400"
+            Margin="10"
+            materialDesign:ElevationAssist.Elevation="Dp0"
+            Background="#EEEBEB"
+            BorderThickness="1"
             Visibility="{Binding DeleteGridIsVisible, Mode=TwoWay}">
 
             <Grid
-            x:Name="DeleteGridIsVisible"
-            Margin="4"
-            Width="250"
-            Height="150"
-            >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="40" />
-            </Grid.RowDefinitions>
-            <Label Grid.Row="0" Content="Delete Layout:" />
-            <ListBox
-                x:Name="FileLayouts"
-                Grid.Row="1"
-                BorderBrush="{DynamicResource MaterialDesignCardBackground}"
-                BorderThickness="1">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Padding" Value="0" />
-                            <Setter Property="Background" Value="{DynamicResource MaterialDesignCardBackground}"></Setter>
-                        
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                           >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Button Padding="-10" cm:Message.Attach="[Event Click] = [Action DeleteLayout($this)]">
-                                <Button.Style>
-                                    <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
-                                        <Setter Property="IsEnabled" Value="True" />
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Cursor" Value="Hand" />
-                                            </Trigger>
-                                            <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
-                                                <Setter Property="IsEnabled" Value="False" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <materialDesign:PackIcon
-                                    Width="20"
-                                    Height="20"
-                                    Cursor="Hand"
-                                    Foreground="Red"
-                                    IsHitTestVisible="False"
-                                    Kind="DeleteForever" />
-                            </Button>
-                            <TextBlock
-                                Grid.Column="1"
-                                MinWidth="200"
-                                Margin="10,0,0,0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                Text="{Binding LayoutName}">
-                                <TextBlock.Style>
-                                    <Style BasedOn="{StaticResource MaterialDesignTextBlock}" TargetType="{x:Type TextBlock}">
-                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
-                                                <Setter Property="Foreground" Value="Gray" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                x:Name="DeleteGridIsVisible"
+                Width="250"
+                Height="150"
+                Margin="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Delete Layout:" />
+                <ListBox
+                    x:Name="FileLayouts"
+                    Grid.Row="1"
+                    BorderBrush="{DynamicResource MaterialDesignCardBackground}"
+                    BorderThickness="1">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Background" Value="{DynamicResource MaterialDesignCardBackground}" />
 
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <DockPanel Grid.Row="2">
-                <Button
-                    x:Name="CancelDelete"
-                    Padding="0"
-                    HorizontalAlignment="Center"
-                    Style="{StaticResource RedMidButton}">
-                    <materialDesign:PackIcon
-                        Width="32"
-                        Height="32"
-                        Foreground="White"
-                        Kind="CloseCircle" />
-                </Button>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="24" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button Padding="-10" cm:Message.Attach="[Event Click] = [Action DeleteLayout($this)]">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="IsEnabled" Value="True" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Cursor" Value="Hand" />
+                                                </Trigger>
+                                                <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Cursor="Hand"
+                                        Foreground="Red"
+                                        IsHitTestVisible="False"
+                                        Kind="DeleteForever" />
+                                </Button>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    MinWidth="200"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding LayoutName}">
+                                    <TextBlock.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignTextBlock}" TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding LayoutType}" Value="Standard">
+                                                    <Setter Property="Foreground" Value="Gray" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
 
-            </DockPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <DockPanel Grid.Row="2">
+                    <Button
+                        x:Name="CancelDelete"
+                        Padding="0"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource RedMidButton}">
+                        <materialDesign:PackIcon
+                            Width="32"
+                            Height="32"
+                            Foreground="White"
+                            Kind="CloseCircle" />
+                    </Button>
+
+                </DockPanel>
 
 
-        </Grid>
-            </materialDesign:Card>
+            </Grid>
+        </materialDesign:Card>
         <ProgressBar
             x:Name="ProgressBarVisibility"
             Grid.Row="1"

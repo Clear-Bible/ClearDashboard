@@ -592,6 +592,8 @@
                                 <TextBox
                                     Name="FetchByIdBox"
                                     Margin="10"
+                                    MaxWidth="400"
+                                    TextWrapping="Wrap"
                                     materialDesign:HintAssist.Hint="Enter guid here."
                                     Text="{Binding FetchByIdBox}" />
                             </StackPanel>
@@ -767,15 +769,19 @@
 
 
 
-                            <TextBlock
-                                MinWidth="300"
-                                Margin="10"
-                                FontSize="18"
-                                Foreground="{Binding DeleteUserForeColor}"
-                                Text="{Binding DeleteUserMessage}" />
                         </StackPanel>
 
-                        <StackPanel
+
+
+                        <TextBlock
+                            Grid.Column="1"
+                            MinWidth="300"
+                            Margin="10,80,10,0"
+                            FontSize="18"
+                            Foreground="{Binding DeleteUserForeColor}"
+                            Text="{Binding DeleteUserMessage}" />
+
+                        <!--<StackPanel
                             Grid.Column="1"
                             Margin="20,50,0,0"
                             Orientation="Vertical">
@@ -797,7 +803,7 @@
                                 Foreground="Gray"
                                 IsReadOnly="True"
                                 Text="{Binding DeletedLicenseBox}" />
-                        </StackPanel>
+                        </StackPanel>-->
                     </Grid>
                 </TextBlock>
             </TabItem>
@@ -835,6 +841,11 @@
                 </TabItem.Header>
                 <TextBlock>
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
                         <DataGrid
                             Margin="10"
                             AlternatingRowBackground="LightBlue"
@@ -1023,6 +1034,14 @@
 
                         </DataGrid>
 
+                        <Button
+                            Grid.Row="1"
+                            Width="160"
+                            cm:Message.Attach="RefreshDashboardUsersGrid">
+                            Refresh
+                        </Button>
+
+
                     </Grid>
                 </TextBlock>
             </TabItem>
@@ -1058,6 +1077,11 @@
                 </TabItem.Header>
                 <TextBlock>
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
                         <DataGrid
                             Margin="10"
                             AlternatingRowBackground="LightBlue"
@@ -1158,6 +1182,14 @@
                             </DataGrid.Columns>
 
                         </DataGrid>
+
+
+                        <Button
+                            Grid.Row="1"
+                            Width="160"
+                            cm:Message.Attach="RefreshGitLabUsersGrid">
+                            Refresh
+                        </Button>
 
                     </Grid>
                 </TextBlock>
