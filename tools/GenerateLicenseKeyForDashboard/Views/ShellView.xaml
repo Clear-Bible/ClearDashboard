@@ -164,8 +164,7 @@
                                 ItemsSource="{Binding Groups}"
                                 ScrollViewer.CanContentScroll="False"
                                 SelectedItem="{Binding SelectedGroup}"
-                                Style="{StaticResource MaterialDesignFilledComboBox}"
-                                TextSearch.TextPath="{Binding Groups.CombinedStrings}">
+                                Style="{StaticResource MaterialDesignFilledComboBox}">
                                 <controls:AutoCompleteComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
