@@ -591,11 +591,11 @@
                                     Text="User Id" />
                                 <TextBox
                                     Name="FetchByIdBox"
-                                    Margin="10"
                                     MaxWidth="400"
-                                    TextWrapping="Wrap"
+                                    Margin="10"
                                     materialDesign:HintAssist.Hint="Enter guid here."
-                                    Text="{Binding FetchByIdBox}" />
+                                    Text="{Binding FetchByIdBox}"
+                                    TextWrapping="Wrap" />
                             </StackPanel>
 
                             <Button
@@ -750,7 +750,7 @@
                                 Content="Delete License By Email" />
 
 
-                            <TextBlock
+                            <!--<TextBlock
                                 Name="DeleteByIdBlock"
                                 Margin="10,40,10,10"
                                 Foreground="{StaticResource PrimaryHueLightBrush}"
@@ -765,7 +765,7 @@
                             <Button
                                 Margin="10"
                                 cm:Message.Attach="[Event Click] = [Action DeleteLicenseById_OnClick]"
-                                Content="Delete License by GUID" />
+                                Content="Delete License by GUID" />-->
 
 
 
@@ -861,6 +861,24 @@
                             RowBackground="LightYellow"
                             SelectionMode="Extended"
                             VerticalScrollBarVisibility="Visible">
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="CopyDashboardUser_OnClick" Header="{helpers:Localization Copy}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.CommandBindings>
+                                <CommandBinding Command="Copy" Executed="CopyDashboardUser_OnClick" />
+                            </DataGrid.CommandBindings>
+
+                            <DataGrid.InputBindings>
+                                <KeyBinding
+                                    Key="C"
+                                    Command="Copy"
+                                    Modifiers="Control" />
+                            </DataGrid.InputBindings>
+
                             <DataGrid.Columns>
                                 <!--<DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
@@ -1097,6 +1115,25 @@
                             RowBackground="LightYellow"
                             SelectionMode="Extended"
                             VerticalScrollBarVisibility="Visible">
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="CopyGitUser_OnClick" Header="{helpers:Localization Copy}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.CommandBindings>
+                                <CommandBinding Command="Copy" Executed="CopyGitUser_OnClick" />
+                            </DataGrid.CommandBindings>
+
+                            <DataGrid.InputBindings>
+                                <KeyBinding
+                                    Key="C"
+                                    Command="Copy"
+                                    Modifiers="Control" />
+                            </DataGrid.InputBindings>
+
+
                             <DataGrid.Columns>
                                 <!--<DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
