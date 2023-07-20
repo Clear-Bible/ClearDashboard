@@ -235,8 +235,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                             Directory.CreateDirectory(LicenseManager.LicenseFolderPath);
                         }
                         File.WriteAllText(LicenseManager.LicenseFilePath, encryptedLicense);
-                        await MoveForwards();
-                        await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
 
                         if (licenseArray.Length > 1)
                         {
@@ -244,13 +242,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                             var collaborationConfig = LicenseManager.DecryptCollabToConfiguration(encryptedCollabConfig);
 
-                            var success = _collaborationManager.SaveCollaborationLicense(collaborationConfig);
-
-                            if (success)
+                            if (collaborationConfig.UserId > 0)
                             {
-                                await EventAggregator.PublishOnBackgroundThreadAsync(new RebuildMainMenuMessage());
+                                _collaborationManager.SaveCollaborationLicense(collaborationConfig);
                             }
                         }
+
+                        await MoveForwards();
+                        await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
 
                         break;
                     case LicenseUserMatchType.BothNameMismatch:
