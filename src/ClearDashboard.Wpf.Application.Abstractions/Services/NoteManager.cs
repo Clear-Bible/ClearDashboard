@@ -27,12 +27,11 @@ namespace ClearDashboard.Wpf.Application.Services
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
         private IUserProvider UserProvider { get; }
-        private static ILocalizationService LocalizationService { get; set; }
+        private ILocalizationService LocalizationService { get; }
 
         private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
 
-        // TODO: localize
-        private static string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
+        private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
             if (associatedEntityId is TokenId)
             {
@@ -89,6 +88,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId,bool)"/>.
         /// </remarks>
         /// <param name="entityIds">A collection of entity IDs for which to retrieve note IDs.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the async operation.</param>
         /// <returns>A <see cref="EntityNoteIdDictionary"/> containing the note IDs.</returns>
         public async Task<EntityNoteIdDictionary> GetNoteIdsAsync(IEnumerable<IId>? entityIds = null, CancellationToken cancellationToken = default)
         {
@@ -123,7 +123,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task<NoteIdCollection> GetNoteIdsAsync(IId entityId)
         {
             var dictionary = await GetNoteIdsAsync(entityId.ToEnumerable());
-            return dictionary.ContainsKey(entityId) ? dictionary[entityId] : new NoteIdCollection();
+            return dictionary.TryGetValue(entityId, out var noteIds) ? noteIds : new NoteIdCollection();
         }
 
         /// <summary>
@@ -157,9 +157,9 @@ namespace ClearDashboard.Wpf.Application.Services
                     {
                         AssociatedEntityId = associatedEntityId
                     };
-                    if (domainEntityContexts.ContainsKey(associatedEntityId))
+                    if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
                     {
-                        association.Description = GetNoteAssociationDescription(associatedEntityId, domainEntityContexts[associatedEntityId]);
+                        association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
                     }
                     noteViewModel.Associations.Add(association);
                 }
