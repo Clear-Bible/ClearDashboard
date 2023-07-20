@@ -3,19 +3,19 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Collaboration.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -23,6 +23,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     {
         private readonly DashboardProjectManager _dashboardProjectManager;
         private readonly ILocalizationService _localizationService;
+        private readonly CollaborationManager _collaborationManager;
 
         #region Member Variables
         private RegistrationDialogViewModel _parent;
@@ -94,12 +95,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IMediator? mediator,
             ILifetimeScope? lifetimeScope,
             IValidator<DashboardUser> licenseValidator,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            CollaborationManager collaborationManager)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
             _dashboardProjectManager = dashboardProjectManager;
             _localizationService = localizationService;
             LicenseUser = new DashboardUser();
+            _collaborationManager = collaborationManager;
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -150,11 +153,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger.LogError("Deleting the LicenseFilePath failed: "+ex);
             }
 
+            //parsing LicenseKey
+            var licenseArray = LicenseKey.Split('^');
+
+            var encryptedLicense = licenseArray.FirstOrDefault();
+            string encryptedCollabConfig;
+            if (licenseArray.Length > 1)
+            {
+                encryptedCollabConfig = licenseArray.LastOrDefault();
+
+                var collaborationConfig = LicenseManager.DecryptCollabToConfiguration(encryptedCollabConfig);
+
+                _collaborationManager.SaveCollaborationLicense(collaborationConfig);
+
+                await EventAggregator.PublishOnBackgroundThreadAsync(new RebuildMainMenuMessage());
+            }
+            
+
             string decryptedLicenseKey = string.Empty;
             try
             {
-                Logger.LogInformation("LicenseKey is: "+LicenseKey);
-                decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(LicenseKey);
+                Logger.LogInformation("LicenseKey is: "+encryptedLicense);
+                decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(encryptedLicense);
             }
             catch (Exception ex)
             {
@@ -226,7 +246,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         {
                             Directory.CreateDirectory(LicenseManager.LicenseFolderPath);
                         }
-                        File.WriteAllText(LicenseManager.LicenseFilePath, LicenseKey);
+                        File.WriteAllText(LicenseManager.LicenseFilePath, encryptedLicense);
                         await MoveForwards();
                         await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
                         break;
