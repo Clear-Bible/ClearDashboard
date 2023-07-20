@@ -5,9 +5,11 @@ using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -48,11 +50,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _selectedParatextLwcProject, value);
         }
 
+        public List<string?> ParatextProjectIds => new() {
+            SelectedParatextProject?.Id,
+            SelectedParatextBtProject?.Id,
+            SelectedParatextLwcProject?.Id};
+
         private bool _showBiblicalTexts = true;
         public bool ShowBiblicalTexts
         {
             get => _showBiblicalTexts;
             set => Set(ref _showBiblicalTexts, value);
+        }
+
+        private Dictionary<string, List<UsfmError>> _usfmErrors;
+        public Dictionary<string, List<UsfmError>> UsfmErrors
+        {
+            get => _usfmErrors;
+            set => Set(ref _usfmErrors, value);
         }
 
 

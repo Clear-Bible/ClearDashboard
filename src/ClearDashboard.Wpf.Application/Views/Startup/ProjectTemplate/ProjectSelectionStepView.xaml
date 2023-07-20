@@ -22,6 +22,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
+            <RowDefinition Height="150" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -30,6 +31,51 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="1" Orientation="Vertical">
+            <Label Grid.Row="1" Content="{helpers:Localization ProjectSetup_Title}" />
+            <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="24,10"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Orientation="Vertical">
+                <TextBox
+                x:Name="ProjectName"
+                MinWidth="400"
+                VerticalAlignment="Center"
+                materialDesign:HintAssist.FloatingScale="0.60"
+                materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                FontSize="20"
+                Foreground="{DynamicResource MaterialDesignBody}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                        Mode="TwoWay"
+                        Path="ProjectName"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+                </TextBox>
+            </StackPanel>
+
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Vertical">
             <Label Margin="0,0,0,-10" Content="Paratext Project" />
             <controls:AutoCompleteComboBox
                     Height="Auto"
@@ -56,7 +102,7 @@
                 </controls:AutoCompleteComboBox.ItemTemplate>
             </controls:AutoCompleteComboBox>
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Vertical">
+        <StackPanel Grid.Row="3" Orientation="Vertical">
             <Label Margin="0,0,0,-10" Content="PT Back Translation" />
             <controls:AutoCompleteComboBox
                     Height="Auto"
@@ -83,7 +129,7 @@
                 </controls:AutoCompleteComboBox.ItemTemplate>
             </controls:AutoCompleteComboBox>
         </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Vertical">
+        <StackPanel Grid.Row="4" Orientation="Vertical">
             <Label Margin="0,0,0,-10" Content="Interlinear Bible (LWC)" />
             <controls:AutoCompleteComboBox
                     Height="Auto"
@@ -110,7 +156,7 @@
                 </controls:AutoCompleteComboBox.ItemTemplate>
             </controls:AutoCompleteComboBox>
         </StackPanel>
-        <StackPanel Grid.Row="4"
+        <StackPanel Grid.Row="5"
                     HorizontalAlignment="Left"
                     Orientation="Vertical">
             <CheckBox x:Name="ShowBiblicalTextsCheckBox"

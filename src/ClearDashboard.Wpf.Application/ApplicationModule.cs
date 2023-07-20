@@ -54,6 +54,7 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
             builder.RegisterType<TranslationManager>().AsSelf();
             builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
+            builder.RegisterType<SelectedBookManager>().AsSelf();
         }
 
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
@@ -76,8 +77,6 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterStartupDialogDependencies(this ContainerBuilder builder)
         {
-            builder.RegisterType<SelectedBookManager>().AsSelf();
-
             builder.RegisterType<RegistrationViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("Startup")
                 .WithMetadata("Order", 1);

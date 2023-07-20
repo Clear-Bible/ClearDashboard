@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
-    public class ProjectSelectionStepViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>
+    public class ProjectSelectionStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<StartupDialogViewModel, ProjectSelectionStepViewModel>
     {
         private List<ParatextProjectMetadata>? _projects;
         public List<ParatextProjectMetadata>? Projects
@@ -80,6 +80,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _isEnabledSelectedParatextLwcProject, value);
         }
 
+        private DataAccessLayer.Models.Project _project;
+        public DataAccessLayer.Models.Project Project
+        {
+            get => _project;
+            private init => Set(ref _project, value);
+        }
+
+        private string _projectName;
+        public string ProjectName
+        {
+            get => _projectName;
+            set
+            {
+                Set(ref _projectName, value.Replace(' ', '_'));
+                ProjectManager!.CurrentDashboardProject.ProjectName = _projectName;
+                Project.ProjectName = _projectName;
+                ValidationResult = Validator!.Validate(this);
+                CanCreate = !string.IsNullOrEmpty(_projectName) && ValidationResult.IsValid;
+                NotifyOfPropertyChange(nameof(Project));
+            }
+        }
+
+        private bool _canCreate;
+        public bool CanCreate
+        {
+            get => _canCreate;
+            set => Set(ref _canCreate, value);
+        }
+
         public async void ParatextProjectSelected()
         {
             //CanOk = false;
@@ -118,9 +147,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public ProjectSelectionStepViewModel(DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, ILocalizationService localizationService)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ProjectSelectionStepViewModel> validator, 
+            ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
         {
+            if (!ProjectManager!.HasDashboardProject)
+            {
+                ProjectManager.CreateDashboardProject();
+            }
+
+            _project = new DataAccessLayer.Models.Project();
+            _projectName = string.Empty;
+
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
@@ -153,6 +191,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ParentViewModel!.ShowBiblicalTexts = ShowBiblicalTexts;
 
             await base.MoveForwardsAction();
+        }
+
+        protected override FluentValidation.Results.ValidationResult? Validate()
+        {
+            return (!string.IsNullOrEmpty(ProjectName)) ? Validator!.Validate(this) : null;
         }
     }
 

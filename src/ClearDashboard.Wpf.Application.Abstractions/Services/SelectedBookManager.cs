@@ -12,7 +12,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using ClearDashboard.Wpf.Application.Models;
 using MediatR;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
+namespace ClearDashboard.Wpf.Application.Services;
 
 public class SelectedBookManager : PropertyChangedBase
 {
@@ -31,8 +31,38 @@ public class SelectedBookManager : PropertyChangedBase
         set => Set(ref _selectedBooks, value);
     }
 
-    public async Task InitializeBooks(IEnumerable<UsfmError>? usfmErrors, string? paratextProjectId, CancellationToken cancellationToken)
+    public async Task InitializeBooks(IDictionary<string, IEnumerable<UsfmError>> usfmErrorsByParatextProjectId, CancellationToken cancellationToken)
     {
+        var commonBooks = CreateBooks(true).ToDictionary(e => e.Abbreviation, e => e);
+
+        
+        foreach (var kvp in usfmErrorsByParatextProjectId.Where(e => e.Key != null))
+        {
+            var books = await InitializeBooksInternal(kvp.Value, kvp.Key, cancellationToken);
+
+            foreach (var book in books.Where(book => book.HasUsfmError || !book.IsEnabled))
+            {
+                commonBooks[book.Abbreviation].HasUsfmError = commonBooks[book.Abbreviation].HasUsfmError || book.HasUsfmError;
+                commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled;
+            }
+        }
+
+        SelectedBooks = new(commonBooks.Values);
+        NotifyOfPropertyChange(() => SelectedBooks);
+    }
+
+    public async Task InitializeBooks(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, CancellationToken cancellationToken)
+    {
+        var books = await InitializeBooksInternal(usfmErrors, paratextProjectId, cancellationToken);
+
+        SelectedBooks = new(books);
+        NotifyOfPropertyChange(() => SelectedBooks);
+    }
+
+    private async Task<IEnumerable<SelectedBook>> InitializeBooksInternal(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, CancellationToken cancellationToken)
+    {
+        var books = CreateBooks();
+
         // get those books which actually have text in them from Paratext
         var requestFromParatext = await _mediator.Send(new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId), cancellationToken);
 
@@ -41,7 +71,7 @@ public class SelectedBookManager : PropertyChangedBase
             var booksInProject = requestFromParatext.Data;
 
             // iterate through and enable those books which have text
-            foreach (var book in SelectedBooks)
+            foreach (var book in books)
             {
                 var found = booksInProject!.BookAbbreviations!.FirstOrDefault(x => x == book.Abbreviation);
                 if (found != null)
@@ -70,9 +100,9 @@ public class SelectedBookManager : PropertyChangedBase
                 {
                     if (int.TryParse(book, out var index))
                     {
-                        SelectedBooks[index - 1].IsEnabled = false;
-                        SelectedBooks[index - 1].IsSelected = true;
-                        SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Black);
+                        books[index - 1].IsEnabled = false;
+                        books[index - 1].IsSelected = true;
+                        books[index - 1].BookColor = new SolidColorBrush(Colors.Black);
                     }
                 }
             }
@@ -85,13 +115,13 @@ public class SelectedBookManager : PropertyChangedBase
                 var indexString = BookChapterVerseViewModel.GetBookNumFromBookName(error.Reference.Substring(0, 3));
                 if (int.TryParse(indexString, out var index))
                 {
-                    SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Red);
-                   SelectedBooks[index - 1].HasUsfmError = true;
+                    books[index - 1].BookColor = new SolidColorBrush(Colors.Red);
+                    books[index - 1].HasUsfmError = true;
                 }
             }
         }
 
-        NotifyOfPropertyChange(()=>SelectedBooks);
+        return books;
     }
 
     public void UnselectAllBooks()
@@ -156,7 +186,7 @@ public class SelectedBookManager : PropertyChangedBase
 
     public IEnumerable<string> SelectedAndEnabledBookAbbreviations => SelectedAndEnabledBooks.Select(b => b.Abbreviation);
 
-    public static List<SelectedBook> CreateBooks()
+    public static List<SelectedBook> CreateBooks(bool isEnabledDefault = false)
     {
         return new List<SelectedBook>
         {
@@ -166,8 +196,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Genesis",
                 Abbreviation = "GEN",
                 ColorText = SelectedBook.BookColors.Pentateuch,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -176,8 +206,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Exodus",
                 Abbreviation = "EXO",
                 ColorText = SelectedBook.BookColors.Pentateuch,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -186,8 +216,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Leviticus",
                 Abbreviation = "LEV",
                 ColorText = SelectedBook.BookColors.Pentateuch,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -196,8 +226,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Numbers",
                 Abbreviation = "NUM",
                 ColorText = SelectedBook.BookColors.Pentateuch,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -206,8 +236,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Deuteronomy",
                 Abbreviation = "DEU",
                 ColorText = SelectedBook.BookColors.Pentateuch,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -216,8 +246,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Joshua",
                 Abbreviation = "JOS",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -226,8 +256,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Judges",
                 Abbreviation = "JDG",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -236,8 +266,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Ruth",
                 Abbreviation = "RUT",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -246,8 +276,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "1 Samuel(1 Kings)",
                 Abbreviation = "1SA",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -256,8 +286,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "2 Samuel(2 Kings)",
                 Abbreviation = "2SA",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -266,8 +296,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "1 Kings(3 Kings)",
                 Abbreviation = "1KI",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -276,8 +306,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "2 Kings(4 Kings)",
                 Abbreviation = "2KI",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -286,8 +316,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "1 Chronicles",
                 Abbreviation = "1CH",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -296,8 +326,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "2 Chronicles",
                 Abbreviation = "2CH",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -306,8 +336,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Ezra",
                 Abbreviation = "EZR",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -316,8 +346,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Nehemiah",
                 Abbreviation = "NEH",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -326,8 +356,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Esther",
                 Abbreviation = "EST",
                 ColorText = SelectedBook.BookColors.Historical,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -336,8 +366,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Job",
                 Abbreviation = "JOB",
                 ColorText = SelectedBook.BookColors.Wisdom,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -346,8 +376,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Psalms",
                 Abbreviation = "PSA",
                 ColorText = SelectedBook.BookColors.Wisdom,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -356,8 +386,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Proverbs",
                 Abbreviation = "PRO",
                 ColorText = SelectedBook.BookColors.Wisdom,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -366,8 +396,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Ecclesiastes",
                 Abbreviation = "ECC",
                 ColorText = SelectedBook.BookColors.Wisdom,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -376,8 +406,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Song of Solomon",
                 Abbreviation = "SNG",
                 ColorText = SelectedBook.BookColors.Wisdom,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -386,8 +416,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Isaiah",
                 Abbreviation = "ISA",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -396,8 +426,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Jeremiah",
                 Abbreviation = "JER",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -406,8 +436,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Lamentations",
                 Abbreviation = "LAM",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -416,8 +446,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Ezekiel",
                 Abbreviation = "EZK",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -426,8 +456,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Daniel",
                 Abbreviation = "DAN",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -436,8 +466,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Hosea",
                 Abbreviation = "HOS",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -446,8 +476,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Joel",
                 Abbreviation = "JOL",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -456,8 +486,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Amos",
                 Abbreviation = "AMO",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -466,8 +496,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Obadiah",
                 Abbreviation = "OBA",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -476,8 +506,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Jonah",
                 Abbreviation = "JON",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -486,8 +516,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Micah",
                 Abbreviation = "MIC",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -496,8 +526,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Nahum",
                 Abbreviation = "NAM",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -506,8 +536,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Habakkuk",
                 Abbreviation = "HAB",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -516,8 +546,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Zephaniah",
                 Abbreviation = "ZEP",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -526,8 +556,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Haggai",
                 Abbreviation = "HAG",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -536,8 +566,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Zechariah",
                 Abbreviation = "ZEC",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -546,8 +576,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Malachi",
                 Abbreviation = "MAL",
                 ColorText = SelectedBook.BookColors.Prophets,
-                IsOt = true,
-                IsEnabled = false,
+                IsOldTestament = true,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -556,8 +586,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Matthew",
                 Abbreviation = "MAT",
                 ColorText = SelectedBook.BookColors.Gospels,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -566,8 +596,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Mark",
                 Abbreviation = "MRK",
                 ColorText = SelectedBook.BookColors.Gospels,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -576,8 +606,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Luke",
                 Abbreviation = "LUK",
                 ColorText = SelectedBook.BookColors.Gospels,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -586,8 +616,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "John",
                 Abbreviation = "JHN",
                 ColorText = SelectedBook.BookColors.Gospels,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -596,8 +626,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Acts",
                 Abbreviation = "ACT",
                 ColorText = SelectedBook.BookColors.Acts,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -606,8 +636,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Romans",
                 Abbreviation = "ROM",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -616,8 +646,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "1 Corinthians",
                 Abbreviation = "1CO",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -626,8 +656,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "2 Corinthians",
                 Abbreviation = "2CO",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -636,8 +666,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Galatians",
                 Abbreviation = "GAL",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -646,8 +676,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Ephesians",
                 Abbreviation = "EPH",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -656,8 +686,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Philippians",
                 Abbreviation = "PHP",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -666,8 +696,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Colossians",
                 Abbreviation = "COL",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -676,8 +706,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "1 Thessalonians",
                 Abbreviation = "1TH",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -686,8 +716,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "2 Thessalonians",
                 Abbreviation = "2TH",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -696,8 +726,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "1 Timothy",
                 Abbreviation = "1TI",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -706,8 +736,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "2 Timothy",
                 Abbreviation = "2TI",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -716,8 +746,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Titus",
                 Abbreviation = "TIT",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -726,8 +756,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Philemon",
                 Abbreviation = "PHM",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -736,8 +766,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Hebrews",
                 Abbreviation = "HEB",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -746,8 +776,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "James",
                 Abbreviation = "JAS",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -756,8 +786,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "1 Peter",
                 Abbreviation = "1PE",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -766,8 +796,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "2 Peter",
                 Abbreviation = "2PE",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -776,8 +806,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "1 John",
                 Abbreviation = "1JN",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -786,8 +816,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "2 John",
                 Abbreviation = "2JN",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -796,8 +826,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "3 John",
                 Abbreviation = "3JN",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -806,8 +836,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Jude",
                 Abbreviation = "JUD",
                 ColorText = SelectedBook.BookColors.Epistles,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             },
             new()
@@ -816,8 +846,8 @@ public class SelectedBookManager : PropertyChangedBase
                 BookName = "Revelation",
                 Abbreviation = "REV",
                 ColorText = SelectedBook.BookColors.Revelation,
-                IsOt = false,
-                IsEnabled = false,
+                IsOldTestament = false,
+                IsEnabled = isEnabledDefault,
                 IsSelected = true,
             }
         };
