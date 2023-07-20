@@ -98,6 +98,8 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterParatextDialogDependencies(this ContainerBuilder builder)
         {
+            builder.RegisterType<SelectedBookManager>().AsSelf();
+
             builder.RegisterType<AddParatextCorpusStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
                 .WithMetadata("Order", 1);
