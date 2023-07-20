@@ -157,18 +157,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var licenseArray = LicenseKey.Split('^');
 
             var encryptedLicense = licenseArray.FirstOrDefault();
-            string encryptedCollabConfig;
-            if (licenseArray.Length > 1)
-            {
-                encryptedCollabConfig = licenseArray.LastOrDefault();
-
-                var collaborationConfig = LicenseManager.DecryptCollabToConfiguration(encryptedCollabConfig);
-
-                _collaborationManager.SaveCollaborationLicense(collaborationConfig);
-
-                await EventAggregator.PublishOnBackgroundThreadAsync(new RebuildMainMenuMessage());
-            }
-            
 
             string decryptedLicenseKey = string.Empty;
             try
@@ -249,6 +237,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         File.WriteAllText(LicenseManager.LicenseFilePath, encryptedLicense);
                         await MoveForwards();
                         await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
+
+                        if (licenseArray.Length > 1)
+                        {
+                            var encryptedCollabConfig = licenseArray.LastOrDefault();
+
+                            var collaborationConfig = LicenseManager.DecryptCollabToConfiguration(encryptedCollabConfig);
+
+                            var success = _collaborationManager.SaveCollaborationLicense(collaborationConfig);
+
+                            if (success)
+                            {
+                                await EventAggregator.PublishOnBackgroundThreadAsync(new RebuildMainMenuMessage());
+                            }
+                        }
+
                         break;
                     case LicenseUserMatchType.BothNameMismatch:
                         MatchType = "The license key does not match either name provided.";
