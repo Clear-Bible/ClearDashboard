@@ -76,6 +76,8 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterStartupDialogDependencies(this ContainerBuilder builder)
         {
+            builder.RegisterType<SelectedBookManager>().AsSelf();
+
             builder.RegisterType<RegistrationViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("Startup")
                 .WithMetadata("Order", 1);
