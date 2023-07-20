@@ -290,6 +290,15 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
+                if (NotesCache.TryGetValue(note.NoteId!.Id, out var noteViewModel))
+                {
+                    noteViewModel.Entity = note;
+                }
+                else
+                {
+                    NotesCache[note.NoteId!.Id] = new NoteViewModel(note);
+                }
+
                 await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true));
 
             }
