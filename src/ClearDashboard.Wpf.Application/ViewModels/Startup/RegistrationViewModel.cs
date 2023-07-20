@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
-using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
 using FluentValidation.Results;
@@ -15,7 +15,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.Collaboration.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {

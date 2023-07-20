@@ -95,7 +95,7 @@ public class CollaborationManager
 
     #region Methods
 
-    public bool SaveCollaborationLicense(Models.CollaborationConfiguration collaborationConfiguration)
+    public void SaveCollaborationLicense(Models.CollaborationConfiguration collaborationConfiguration)
     {
         _configuration = new Models.CollaborationConfiguration
         {
@@ -127,10 +127,8 @@ public class CollaborationManager
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return false;
         }
-
-        return true;
+        
 
     }
 
