@@ -32,7 +32,7 @@
                 Margin ="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=TokenMargin}">
             
             <TextBlock
-                x:Name="ScrewyTokenBlock"
+                x:Name="TokenTokenBlock"
                 Height="Auto"
                 Background="Transparent"
                 HorizontalAlignment="Center"

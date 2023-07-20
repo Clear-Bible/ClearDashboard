@@ -1,21 +1,21 @@
 ﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.AlignmentBulkReview"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:a="clr-namespace:ClearDashboard.Wpf.Application.Models.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
-             xmlns:cm="http://caliburnmicro.com"
-             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-             xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
-             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:translation="clr-namespace:ClearDashboard.DAL.Alignment.Translation;assembly=ClearDashboard.DAL.Alignment"
-             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-             xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:enhancedView1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView" xmlns:enhancedView2="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:a="clr-namespace:ClearDashboard.Wpf.Application.Models.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             xmlns:enhancedView1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
+             xmlns:enhancedView2="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              d:DataContext="{d:DesignInstance Type=enhancedView1:AlignmentEnhancedViewItemViewModel}"
              mc:Ignorable="d"
@@ -165,7 +165,17 @@
                           IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Count}"  Binding="{Binding Count}" Width="80"/>
-                        <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Part}"  Binding="{Binding Word}"  Width="80" />
+                         <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_Part}"   Width="80" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock 
+                                        FontFamily="{Binding ElementName=PivotedWordsDataGrid, Path=DataContext.SourceFontFamily}" 
+                                        FontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" 
+                                        FlowDirection="{Binding ElementName=PivotedWordsDataGrid, Path=DataContext.IsSourceRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
+                                        Text="{Binding Word}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
@@ -206,7 +216,7 @@
                                     <TextBlock 
                                         FontFamily="{Binding ElementName=SourceTargetCountDataGrid, Path=DataContext.SourceFontFamily}" 
                                         FontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" 
-                                        FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView2:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
+                                        FlowDirection="{Binding ElementName=SourceTargetCountDataGrid, Path=DataContext.IsSourceRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                         Text="{Binding Source}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -214,11 +224,12 @@
                         <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_TargetPart}" Width="130" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock 
-                                        FontFamily="{Binding ElementName=SourceTargetCountDataGrid, Path=DataContext.TargetFontFamily}" 
-                                        FontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" 
-                                        FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView2:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                                        Text="{Binding Target}" />
+                                    <TextBlock Width="40"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="{Binding ElementName=SourceTargetCountDataGrid, Path=DataContext.TargetFontFamily}" 
+                                               FontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" 
+                                               FlowDirection="{Binding ElementName=SourceTargetCountDataGrid, Path=DataContext.IsTargetRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
+                                               Text="{Binding Target}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using System.Windows.Input;
+using ClearBible.Engine.Corpora;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -10,6 +11,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public ReadOnlyTokenDisplay()
         {
             InitializeComponent();
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            var d = this.DataContext;
+            base.OnMouseDown(e);
         }
     }
 }
