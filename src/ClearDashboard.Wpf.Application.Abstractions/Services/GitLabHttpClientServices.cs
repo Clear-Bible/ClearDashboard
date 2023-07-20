@@ -15,7 +15,7 @@ using StringContent = System.Net.Http.StringContent;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public class HttpClientServices
+    public class GitLabHttpClientServices
     {
         #region Member Variables   
 
@@ -33,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         #region Constructor
 
-        public HttpClientServices(GitLabClient gitLabClient)
+        public GitLabHttpClientServices(GitLabClient gitLabClient)
         {
             _gitLabClient = gitLabClient;
         }
@@ -50,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             if (_logger is null)
             {
-                _logger = IoC.Get<ILogger<HttpClientServices>>();
+                _logger = IoC.Get<ILogger<GitLabHttpClientServices>>();
             }
         }
 
@@ -510,6 +510,41 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         #endregion // POST Requests
+
+
+        #region DELETE Requests
+
+        public async Task<bool> DeleteUser(GitLabProjectUser user)
+        {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"users/{user.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                if ((int)response.StatusCode == 204)
+                {
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return false;
+        }
+
+        #endregion // Delete requests
+
+
 
         #endregion // Methods
     }

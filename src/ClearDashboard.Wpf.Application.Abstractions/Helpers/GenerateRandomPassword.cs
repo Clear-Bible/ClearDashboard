@@ -57,5 +57,4 @@ namespace ClearDashboard.Wpf.Application.Helpers
             return shuffledText;
         }
     }
-    
 }

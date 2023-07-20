@@ -44,13 +44,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
         private readonly IMediator _mediator;
-        private readonly HttpClientServices _httpClientServices;
+        private readonly GitLabHttpClientServices _gitLabHttpClientServices;
         private readonly GitLabClient _gitLabClient;
         private readonly ILocalizationService _localizationService;
         private readonly TranslationSource? _translationSource;
         private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
-        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
+        private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
@@ -381,17 +381,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService,
             IWindowManager windowManager,
-            HttpClientServices httpClientServices,
+            GitLabHttpClientServices gitLabHttpClientServices,
             GitLabClient gitLabClient,
             CollaborationManager collaborationManager,
-            CollaborationHttpClientServices collaborationHttpClientServices)
+            CollaborationServerHttpClientServices collaborationHttpClientServices)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
             _paratextProxy = paratextProxy;
             _mediator = mediator;
-            _httpClientServices = httpClientServices;
+            _gitLabHttpClientServices = gitLabHttpClientServices;
             _gitLabClient = gitLabClient;
             _localizationService = localizationService;
             AlertVisibility = Visibility.Collapsed;
@@ -562,7 +562,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 
                 CollaborationConfig = _collaborationManager.GetConfig();
 
-                collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
+                collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(CollaborationConfig.UserId);
 
                 if (dashboardUser.Id == Guid.Empty) //make a DashboardUser
                 {
@@ -594,7 +594,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
             }
-            collaborationUser = await _collaborationHttpClientServices.GetUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
+            collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
 
             if (collaborationUser.UserId < 1)
             {
@@ -618,7 +618,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
 
                 // get the user's projects
-                var list = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+                var list = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
             }
             else
             {
@@ -753,7 +753,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             // get the list of those GitLab projects that haven't been sync'd locally
-            var projects = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+            var projects = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
             projects = projects.OrderByDescending(e => e.CreatedAt).ToList();
             foreach (var dashboardProject in DashboardProjects)
             {
@@ -914,7 +914,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
 
             // get the user's projects
-            var projectList = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+            var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
 
             foreach (var gitLabProject in projectList)
             {
@@ -950,7 +950,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             // get the user's projects
-            var projectList = await _httpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+            var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
 
             foreach (var gitLabProject in projectList)
             {
