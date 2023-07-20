@@ -276,7 +276,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task UpdateNoteAsync(Note note)
+        private async Task UpdateNoteAsync(Note note)
         {
             try
             {
@@ -289,15 +289,6 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
-
-                if (NotesCache.TryGetValue(note.NoteId!.Id, out var noteViewModel))
-                {
-                    noteViewModel.Entity = note;
-                }
-                else
-                {
-                    NotesCache[note.NoteId!.Id] = new NoteViewModel(note);
-                }
 
                 await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true));
 
@@ -318,6 +309,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task UpdateNoteAsync(NoteViewModel noteViewModel)
         {
             await UpdateNoteAsync(noteViewModel.Entity);
+            NotesCache[noteViewModel.NoteId!.Id] = noteViewModel;
         }
 
         /// <summary>

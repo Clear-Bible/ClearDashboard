@@ -621,9 +621,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         }
         public async Task AddReplyToNote(NoteViewModel noteViewModelWithReplies, string text)
         {
-            var replyNote = new Note(noteViewModelWithReplies.Entity) { Text = text };
+            var replyNote = new NoteViewModel(new Note(noteViewModelWithReplies.Entity) { Text = text });
             await noteManager_!.UpdateNoteAsync(replyNote);
         }
+
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
             var noteViewModelWithDetails = await noteManager_!.GetNoteDetailsAsync(message.Note.NoteId!);
