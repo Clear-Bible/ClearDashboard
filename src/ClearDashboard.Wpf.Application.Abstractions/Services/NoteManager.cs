@@ -27,6 +27,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
         private IUserProvider UserProvider { get; }
+        private static ILocalizationService LocalizationService { get; set; }
 
         private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
 
@@ -36,9 +37,9 @@ namespace ClearDashboard.Wpf.Application.Services
             if (associatedEntityId is TokenId)
             {
                 var sb = new StringBuilder();
-                sb.Append($"Tokenized Corpus {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
+                sb.Append($"{LocalizationService["Notes_TokenizedCorpus"]} {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
-                sb.Append($" word {entityContext[EntityContextKeys.TokenId.WordNumber]} part {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
+                sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
                 return sb.ToString();
             }
 
@@ -483,8 +484,9 @@ namespace ClearDashboard.Wpf.Application.Services
             CurrentNotes = await GetNoteDetailsAsync(message.SelectedTokens.NoteIds);
         }
 
-        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider)
+        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider, ILocalizationService localizationService)
         {
+            LocalizationService = localizationService;
             EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
