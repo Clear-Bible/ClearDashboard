@@ -230,8 +230,10 @@ namespace ClearDashboard.WebApiParatextPlugin
                 return;
             }
 
-
-            await hubProxy.Clients.All.SendCurrentProject();
+            //var result = await _mediator.Send(new GetCurrentProjectQuery());
+            await HubContext.Clients.All.SendProject(new ParatextProject());
+            
+            //await hubProxy.Clients.All.SendCurrentProject();
 
             AppendText(Color.DarkOrange, $"Sending new project reference - {_project.ShortName}");
 

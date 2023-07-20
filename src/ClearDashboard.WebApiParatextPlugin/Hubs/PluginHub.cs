@@ -31,7 +31,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
             Clients.All.addMessage(name, message);
         }
 
-        public async void SendProject(ParatextProject project)
+        public void SendProject(ParatextProject project)
         {
             Clients.All.addMessage(project);
         }
