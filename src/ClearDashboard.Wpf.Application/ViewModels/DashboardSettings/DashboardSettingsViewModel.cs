@@ -28,7 +28,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Member Variables
 
         private readonly IEventAggregator _eventAggregator;
-        private readonly CollaborationHttpClientServices _collaborationHttpClientServices;
+        private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private readonly ILogger<DashboardSettingsViewModel> _logger;
         private bool _isAquaEnabledOnStartup;
@@ -284,7 +284,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
-            CollaborationHttpClientServices collaborationHttpClientServices,
+            CollaborationServerHttpClientServices collaborationHttpClientServices,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
@@ -348,7 +348,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         protected override async void OnViewLoaded(object view)
         {
-            var user = await _collaborationHttpClientServices.GetUserExistsById(CollaborationConfig.UserId);
+            var user = await _collaborationHttpClientServices.GetCollabUserExistsById(CollaborationConfig.UserId);
 
             if (user.UserId > 0)
             {
@@ -414,7 +414,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             };
 #pragma warning restore CA1416
 
-            var results = await _collaborationHttpClientServices.CreateNewUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
+            var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
 
             if (results)
             {
@@ -471,7 +471,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         public async void SendValidationEmail()
         {
-            var user = await _collaborationHttpClientServices.GetUserExistsByEmail(Email);
+            var user = await _collaborationHttpClientServices.GetCollabUserExistsByEmail(Email);
 
             if (user.UserId <= 0)
             {
@@ -526,7 +526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         {
             if (EmailCode == _emailValidationString)
             {
-                var user = await _collaborationHttpClientServices.GetUserExistsByEmail(Email);
+                var user = await _collaborationHttpClientServices.GetCollabUserExistsByEmail(Email);
 
                 if (user.UserId <= 0)
                 {
