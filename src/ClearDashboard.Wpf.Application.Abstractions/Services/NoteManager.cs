@@ -28,6 +28,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private IMediator Mediator { get; }
         private IUserProvider UserProvider { get; }
 
+        private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
 
         // TODO: localize
         private static string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
@@ -84,7 +85,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <remarks>
         /// This returns a dictionary of note IDs, which indicate the presence of notes on the entities.  To retrieve the details
-        /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId)"/>.
+        /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId,bool)"/>.
         /// </remarks>
         /// <param name="entityIds">A collection of entity IDs for which to retrieve note IDs.</param>
         /// <returns>A <see cref="EntityNoteIdDictionary"/> containing the note IDs.</returns>
@@ -114,7 +115,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <remarks>
         /// This returns a collection of note IDs, which indicate the presence of notes on the entities.  To retrieve the details
-        /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId)"/>.
+        /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId,bool)"/>.
         /// </remarks>
         /// <param name="entityId">An entity IDs for which to retrieve note IDs.</param>
         /// <returns>A <see cref="NoteIdCollection"/> containing the note IDs.</returns>
@@ -128,11 +129,18 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Gets the note details for a specific note ID.
         /// </summary>
         /// <param name="noteId">A note ID for which to retrieve the note details.</param>
+        /// <param name="doGetParatextSendNoteInformation">If true, also retrieve information needed for sending the note to Paratext.</param>
         /// <returns>A <see cref="NoteViewModel"/> containing the note details.</returns>
         public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true)
         {
             try
             {
+                if (NotesCache.TryGetValue(noteId.Id, out var noteDetails))
+                {
+                    Logger?.LogInformation($"Returning cached details for note \"{noteDetails.Text}\" ({noteId.Id})");
+                    return noteDetails;
+                }
+
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -161,6 +169,8 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
+
+                NotesCache[noteId.Id] = noteViewModel;
 
                 return noteViewModel;
             }
