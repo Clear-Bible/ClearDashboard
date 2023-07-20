@@ -1,11 +1,11 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Caliburn.Micro;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -228,15 +228,28 @@ namespace ClearDashboard.DataAccessLayer
 
         public static CollaborationConfiguration DecryptCollabToConfiguration(string encryptedString)
         {
-            var cryptProvider = CreateCryptoProvider();
+            var configuration = new CollaborationConfiguration
+            {
+                UserId = -1
+            };
 
-            var transform = cryptProvider.CreateDecryptor();
-            var encryptedBytes = Convert.FromBase64String(encryptedString);
-            var decryptedBytes = transform.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+            try
+            {
+                var cryptProvider = CreateCryptoProvider();
 
-            var serialized = Encoding.ASCII.GetString(decryptedBytes);
+                var transform = cryptProvider.CreateDecryptor();
+                var encryptedBytes = Convert.FromBase64String(encryptedString);
+                var decryptedBytes = transform.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
 
-            var configuration = JsonSerializer.Deserialize<CollaborationConfiguration>(serialized);
+                var serialized = Encoding.ASCII.GetString(decryptedBytes);
+
+                configuration = JsonSerializer.Deserialize<CollaborationConfiguration>(serialized);
+            }
+            catch (Exception ex)
+            {
+                var logger = IoC.Get<ILogger<LicenseUserMatchType>>();
+                logger.LogError("DecryptCollabToConfiguration failed: " + ex);
+            }
 
             return configuration;
         }

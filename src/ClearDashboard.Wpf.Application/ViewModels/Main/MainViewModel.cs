@@ -60,6 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ProgressBarVisibilityMessage>,
                 IHandle<ProgressBarMessage>,
                 IHandle<UiLanguageChangedMessage>,
+                IHandle<RebuildMainMenuMessage>,
                 IHandle<ActiveDocumentMessage>,
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
@@ -2206,6 +2207,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
             // rebuild the menu system with the new language
+            await RebuildMainMenu();
+        }
+
+        public async Task HandleAsync(RebuildMainMenuMessage message, CancellationToken cancellationToken)
+        {
             await RebuildMainMenu();
         }
 
