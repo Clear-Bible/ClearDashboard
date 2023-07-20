@@ -115,6 +115,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private bool _useProjectTemplate;
+        public bool UseProjectTemplate
+        {
+            get => _useProjectTemplate;
+            set => Set(ref _useProjectTemplate, value);
+        }
+
         private Visibility _showCollabUserInfo = Visibility.Visible;
         public Visibility ShowCollabUserInfo
         {
@@ -1058,6 +1065,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             MoveForwards();
             EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
+        }
+
+        public override async Task MoveForwardsAction()
+        {
+            if (UseProjectTemplate)
+            {
+                await ParentViewModel!.GoToStep(3);
+            }
+            else
+            {
+                await base.MoveForwardsAction();
+            }
         }
 
         #endregion  Methods

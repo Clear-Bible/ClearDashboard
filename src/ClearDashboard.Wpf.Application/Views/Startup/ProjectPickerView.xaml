@@ -261,8 +261,8 @@
             <Button
                 x:Name="MoveForwards"
                 Width="340"
-                Height="60"
-                Margin="10,5,40,10"
+                Height="86"
+                Margin="10,5,40,2"
                 HorizontalContentAlignment="Left"
                 VerticalContentAlignment="Top"
                 cal:Message.Attach="MoveForwards"
@@ -294,6 +294,7 @@
                     </StackPanel>
                 </StackPanel>
             </Button>
+            <CheckBox Content="Use Project Template" Margin="108,0,0,2" HorizontalAlignment="Left" IsChecked="{Binding UseProjectTemplate, Mode=TwoWay}"/>
         </StackPanel>
 
         <!--  Open Recent  -->

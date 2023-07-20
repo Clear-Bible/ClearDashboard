@@ -4,6 +4,7 @@ using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -25,6 +26,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private bool _runRegistration = false;
         public static bool GoToSetup = false;
         public string Version { get; set; }
+
+        private ParatextProjectMetadata? _selectedParatextProject;
+        public ParatextProjectMetadata? SelectedParatextProject
+        {
+            get => _selectedParatextProject;
+            set => Set(ref _selectedParatextProject, value);
+        }
+
+        private ParatextProjectMetadata? _selectedParatextBtProject;
+        public ParatextProjectMetadata? SelectedParatextBtProject
+        {
+            get => _selectedParatextBtProject;
+            set => Set(ref _selectedParatextBtProject, value);
+        }
+
+        private ParatextProjectMetadata? _selectedParatextLwcProject;
+        public ParatextProjectMetadata? SelectedParatextLwcProject
+        {
+            get => _selectedParatextLwcProject;
+            set => Set(ref _selectedParatextLwcProject, value);
+        }
+
+        private bool _showBiblicalTexts = true;
+        public bool ShowBiblicalTexts
+        {
+            get => _showBiblicalTexts;
+            set => Set(ref _showBiblicalTexts, value);
+        }
+
 
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
@@ -53,11 +83,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'Startup'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
+            var projectTemplateViews = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("ProjectTemplate", "Order").ToArray();
+
+            if (projectTemplateViews == null || !projectTemplateViews.Any())
+            {
+                throw new DependencyRegistrationMissingException(
+                    "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'ProjectTemplate'.  Please check the dependency registration in your bootstrapper implementation.");
+            }
+
             _runRegistration = CheckLicenseToRunRegistration(IoC.Get<RegistrationDialogViewModel>());
 
             foreach (var view in views)
             {
                 Steps!.Add(view);
+            }
+
+            foreach (var projectTemplateView in projectTemplateViews)
+            {
+                Steps!.Add(projectTemplateView);
             }
 
             if (GoToSetup)
@@ -93,6 +136,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             await base.OnInitializeAsync(cancellationToken);
+        }
+
+        public async Task GoToStep(int stepIndex, CancellationToken cancellationToken = default)
+        {
+            if (stepIndex >= 0 && stepIndex <= Steps!.Count - 1)
+            {
+                CurrentStep = Steps![stepIndex];
+                await ActivateItemAsync(CurrentStep, cancellationToken);
+            }
         }
         
         public bool CanCancel => true /* can always cancel */;
