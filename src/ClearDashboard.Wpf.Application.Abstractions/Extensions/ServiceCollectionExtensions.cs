@@ -28,7 +28,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddSingleton<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddSingleton<IProjectProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddSingleton<GitLabClient>();
-            serviceCollection.AddSingleton<HttpClientServices>();
+            serviceCollection.AddSingleton<GitLabHttpClientServices>();
 
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             // add in a service for the GitLab repository
@@ -43,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
 
 
 
-            serviceCollection.AddSingleton<CollaborationHttpClientServices>();
+            serviceCollection.AddSingleton<CollaborationServerHttpClientServices>();
 
             var bearerTokenEncrypted = Settings.Default.BearerTokenEncrypted;
             value = Encryption.Decrypt(bearerTokenEncrypted);
@@ -69,7 +69,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddScoped<IClearEngineProcessingService, ClearEngineProcessingService>();
         }
 
-        public static CollaborationHttpClientServices GetSqlHttpClientServices()
+        public static CollaborationServerHttpClientServices GetSqlHttpClientServices()
         {
             var bearerTokenEncrypted = Settings.Default.BearerTokenEncrypted;
             var value = Encryption.Decrypt(bearerTokenEncrypted);
@@ -82,9 +82,26 @@ namespace ClearDashboard.Wpf.Application.Extensions
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + value);
 
             var mySqlClient = new CollaborationClient(client);
-            var mySqlHttpClientServices = new CollaborationHttpClientServices(mySqlClient);
+            var mySqlHttpClientServices = new CollaborationServerHttpClientServices(mySqlClient);
 
             return mySqlHttpClientServices;
+        }
+
+
+        public static GitLabHttpClientServices GetGitLabHttpClientServices()
+        {
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var client = new HttpClient();
+
+            client.BaseAddress = new Uri(Settings.Default.GitRootUrl); //"https://gitlab.cleardashboard.org/api/v4/"
+            client.DefaultRequestHeaders.Add("Accept", "*/*");
+            client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-ClearDashboard");
+            client.DefaultRequestHeaders.Add("Authorization", value);
+
+            var gitLabClient = new GitLabClient(client);
+            var getGitLabHttpClientServices = new GitLabHttpClientServices(gitLabClient);
+
+            return getGitLabHttpClientServices;
         }
     }
 } 

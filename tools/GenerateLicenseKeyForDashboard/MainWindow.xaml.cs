@@ -21,7 +21,6 @@ namespace GenerateLicenseKeyForDashboard
     public partial class MainWindow : Window
     {
         private int _licenseVersion = 2;
-        
         private readonly CollaborationHttpClientServices _mySqlHttpClientServices;
 
         public MainWindow()
@@ -31,11 +30,11 @@ namespace GenerateLicenseKeyForDashboard
 
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-            TheWindow.Title +=  $" - {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+            TheWindow.Title += $" - {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
             ByEmailRadio.IsChecked = true;
         }
 
-        
+
 
         private async void GenerateLicense_OnClick(object sender, RoutedEventArgs e)
         {
@@ -47,7 +46,7 @@ namespace GenerateLicenseKeyForDashboard
             }
             else
             {
-                var licenseKey = await GenerateLicense(FirstNameBox.Text, LastNameBox.Text, Guid.NewGuid(),EmailBox.Text);
+                var licenseKey = await GenerateLicense(FirstNameBox.Text, LastNameBox.Text, Guid.NewGuid(), EmailBox.Text);
                 GeneratedLicenseBox.Text = licenseKey;
             }
         }
@@ -82,8 +81,8 @@ namespace GenerateLicenseKeyForDashboard
             var dashboardUser = new DashboardUser(licenseUser, email, encryptedLicense);
 
             var results = await _mySqlHttpClientServices.CreateNewDashboardUser(dashboardUser);
-            
-            if(!results)
+
+            if (!results)
             {
                 encryptedLicense = "User failed to be added to the remote server";
             }
@@ -94,12 +93,13 @@ namespace GenerateLicenseKeyForDashboard
         private void DecryptLicense_OnClick(object sender, RoutedEventArgs e)
         {
             var json = LicenseManager.DecryptLicenseFromString(LicenseDecryptionBox.Text, isGenerator: true);
-            var licenseUser = LicenseManager.DecryptedJsonToUser(json, isGenerator:true);
+            var licenseUser = LicenseManager.DecryptedJsonToUser(json, isGenerator: true);
 
             DecryptedFirstNameBox.Text = licenseUser.FirstName;
             DecryptedLastNameBox.Text = licenseUser.LastName;
             DecryptedGuidBox.Text = licenseUser.Id.ToString();
             DecryptedInternalCheckBox.IsChecked = licenseUser.IsInternal;
+            DecryptedLicenseVersionBox.Text = licenseUser.LicenseVersion.ToString();
         }
 
         private void ByIdRadio_OnCheck(object sender, RoutedEventArgs e)
@@ -179,13 +179,13 @@ namespace GenerateLicenseKeyForDashboard
 
         private void CheckGenerateLicenseBoxes(object sender, TextChangedEventArgs e)
         {
-            
-            if (!Validation.GetHasError(FirstNameBox) && 
+
+            if (!Validation.GetHasError(FirstNameBox) &&
                 !Validation.GetHasError(LastNameBox) &&
                 !Validation.GetHasError(EmailBox) &&
-                FirstNameBox.Text.Length>0 &&
-                LastNameBox.Text.Length>0 &&
-                EmailBox.Text.Length>0)
+                FirstNameBox.Text.Length > 0 &&
+                LastNameBox.Text.Length > 0 &&
+                EmailBox.Text.Length > 0)
             {
                 GenerateLicenseButton.IsEnabled = true;
             }

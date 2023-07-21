@@ -242,6 +242,24 @@
                 FontSize="20"
                 Foreground="Gray"
                 IsEnabled="False" />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Name="DecryptedLicenseVersionBlock"
+                    Margin="10"
+                    Text="Decrypted License Version" />
+                <Button Name="CopyDecryptedLicenseVersion" Click="Copy_OnClick">
+                    <materialDesign:PackIcon Kind="ContentCopy" />
+                </Button>
+            </StackPanel>
+            <TextBox
+                Name="DecryptedLicenseVersionBox"
+                Margin="10"
+                FontSize="20"
+                Foreground="Gray"
+                IsReadOnly="True"
+                Style="{StaticResource TextBoxAsLabel}"
+                Text="Your license version will appear here." />
         </StackPanel>
 
         <StackPanel Grid.Column="2" Orientation="Vertical">
