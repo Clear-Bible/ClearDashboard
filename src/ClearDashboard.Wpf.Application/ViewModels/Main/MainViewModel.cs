@@ -35,6 +35,7 @@ using Dahomey.Json.Serialization.Conventions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -2339,26 +2340,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //}
             //await SaveProjectData();
             //UnsubscribeFromEventAggregator();
-            await PinsViewModel.DeactivateAsync(true);
-            // await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
+
+            //await PinsViewModel.DeactivateAsync(true);
             //foreach (var screen in Items)
             //{
             //    await screen.DeactivateAsync(true, cancellationToken);
             //}
-            //// Clear the items in the event the user is switching projects.
-            //Items.Clear();
 
-            IScreen removeItem = null;
+            //Items.Clear();
+            Collection<IScreen> removeItemList = new Collection<IScreen>();
             foreach (var item in Items)
             {
-                if (item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.PinsViewModel")
+                if (item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.BiblicalTermsViewModel"||
+                    item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.PinsViewModel"||
+                    item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.TextCollectionsViewModel"||
+                    item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.MarbleViewModel"||
+                    item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.NotesViewModel"
+                    )
                 {
-                    removeItem = item;
-                    break;
+                    await item.DeactivateAsync(true, cancellationToken);
+                    removeItemList.Add(item);
                 }
             }
-            Items.Remove(removeItem);
-
+            Items.RemoveRange(removeItemList);
+            
             //OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
             //base.OnDeactivateAsync(true, cancellationToken);
 
@@ -2374,8 +2379,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //ProjectManager.CheckForCurrentUser();
             //await NoteManager!.InitializeAsync();
             //await RebuildMainMenu();
+
             //await ActivateDockedWindowViewModels(cancellationToken);
+            await ActivateItemAsync<BiblicalTermsViewModel>(cancellationToken);
             PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+            await ActivateItemAsync<TextCollectionsViewModel>(cancellationToken);
+            await ActivateItemAsync<MarbleViewModel>(cancellationToken);
+            await ActivateItemAsync<NotesViewModel>(cancellationToken);
+
             await LoadAvalonDockLayout();
             //await LoadEnhancedViewTabs(cancellationToken);
             //await base.OnInitializeAsync(cancellationToken);
