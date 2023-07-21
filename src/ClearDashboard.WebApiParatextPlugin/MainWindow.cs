@@ -1,12 +1,14 @@
 ﻿using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
 using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
@@ -230,10 +232,21 @@ namespace ClearDashboard.WebApiParatextPlugin
                 return;
             }
 
-            //var result = await _mediator.Send(new GetCurrentProjectQuery());
-            await HubContext.Clients.All.SendProject(new ParatextProject());
-            
-            //await hubProxy.Clients.All.SendCurrentProject();
+            _mediator = WebHostStartup.ServiceProvider.GetService<IMediator>();
+
+            try
+            {
+                var result = await _mediator.Send(new GetCurrentProjectQuery());
+                if (result.Success)
+                {
+                    AppendText(Color.DarkOrange, $"Sending project - {result.Data?.ShortName}");
+                    await HubContext.Clients.All.SendProject(result.Data);
+                }
+            }
+            catch (Exception e)
+            {
+                AppendText(Color.Red, e.Message);
+            }
 
             AppendText(Color.DarkOrange, $"Sending new project reference - {_project.ShortName}");
 
