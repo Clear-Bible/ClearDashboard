@@ -169,7 +169,7 @@ public class DashboardProjectManager : ProjectManager
 
 
             CurrentParatextProject = project;
-            await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
+            await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));//if the message isn't making it try commenting this line out
         });
 
 

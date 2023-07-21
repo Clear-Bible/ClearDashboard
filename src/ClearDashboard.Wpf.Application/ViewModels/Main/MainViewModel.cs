@@ -66,7 +66,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ApplicationWindowSettings>,
                 IHandle<FilterPinsMessage>,
                 IHandle<BackgroundTaskChangedMessage>,
-                IHandle<ReloadProjectMessage>
+                IHandle<ReloadProjectMessage>,
+                IHandle<ProjectChangedMessage>
     {
         #region Member Variables
 
@@ -413,7 +414,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #pragma warning restore CA1416 // Validate platform compatibility
 
             this.SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
-
         }
 
 
@@ -2326,5 +2326,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
         #endregion
+
+        public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
+            //ProjectManager.CurrentParatextProject = message.Project;
+            //await PinsViewModel.DeactivateAsync(false);
+            //PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+            //PinsViewModel.Refresh();
+        }
     }
 }
