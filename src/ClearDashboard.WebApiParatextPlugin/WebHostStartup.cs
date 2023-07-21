@@ -119,7 +119,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddMediatR(typeof(GetCurrentProjectQueryHandler));
 
 
-            services.AddSingleton<IProject>(sp => _project);
+            services.AddTransient<IProject>(sp => _project);
             services.AddTransient<IVerseRef>(sp => _verseRef);
             services.AddSingleton<IPluginHost>(sp => _pluginHost);
             services.AddSingleton<IPluginChildWindow>(sp => _parent);
