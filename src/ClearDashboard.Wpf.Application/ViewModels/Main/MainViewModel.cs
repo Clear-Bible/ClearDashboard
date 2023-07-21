@@ -2329,11 +2329,65 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectMessage());
-            //ProjectManager.CurrentParatextProject = message.Project;
-            //await PinsViewModel.DeactivateAsync(false);
-            //PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
-            //PinsViewModel.Refresh();
+            //Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
+            //_dockingManager.ActiveContentChanged -= OnActiveContentChanged;
+            //_dockingManager.DocumentClosed -= OnEnhancedViewClosed;
+            //if (_lastLayout == "")
+            //{
+            //    SelectedLayoutText = "Last Saved";
+            //    await SaveAvalonDockLayout();
+            //}
+            //await SaveProjectData();
+            //UnsubscribeFromEventAggregator();
+            await PinsViewModel.DeactivateAsync(true);
+            // await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
+            //foreach (var screen in Items)
+            //{
+            //    await screen.DeactivateAsync(true, cancellationToken);
+            //}
+            //// Clear the items in the event the user is switching projects.
+            //Items.Clear();
+
+            IScreen removeItem = null;
+            foreach (var item in Items)
+            {
+                if (item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.PinsViewModel")
+                {
+                    removeItem = item;
+                    break;
+                }
+            }
+            Items.Remove(removeItem);
+
+            //OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
+            //base.OnDeactivateAsync(true, cancellationToken);
+
+
+
+
+            //if (string.IsNullOrWhiteSpace(ProjectManager.CurrentUser.ParatextUserName))
+            //{
+            //    await ProjectManager.UpdateCurrentUserWithParatextUserInformation();
+            //}
+            await LoadParatextProjectMetadata(cancellationToken);
+            //await LoadProject();
+            //ProjectManager.CheckForCurrentUser();
+            //await NoteManager!.InitializeAsync();
+            //await RebuildMainMenu();
+            //await ActivateDockedWindowViewModels(cancellationToken);
+            PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+            await LoadAvalonDockLayout();
+            //await LoadEnhancedViewTabs(cancellationToken);
+            //await base.OnInitializeAsync(cancellationToken);
+
+
+
+
+            //EventAggregator.SubscribeOnUIThread(this);
+            //Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
+            //_dockingManager.ActiveContentChanged += OnActiveContentChanged;
+            //_dockingManager.DocumentClosed += OnEnhancedViewClosed;
+            //await base.OnActivateAsync(cancellationToken);
         }
     }
 }
