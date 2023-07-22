@@ -31,19 +31,20 @@ public class SelectedBookManager : PropertyChangedBase
         set => Set(ref _selectedBooks, value);
     }
 
-    public async Task InitializeBooks(IDictionary<string, IEnumerable<UsfmError>> usfmErrorsByParatextProjectId, CancellationToken cancellationToken)
+    public async Task InitializeBooks(IDictionary<string, IEnumerable<UsfmError>> usfmErrorsByParatextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
     {
-        var commonBooks = CreateBooks(true).ToDictionary(e => e.Abbreviation, e => e);
+        var commonBooks = CreateBooks(true, true).ToDictionary(e => e.Abbreviation, e => e);
 
         
         foreach (var kvp in usfmErrorsByParatextProjectId.Where(e => e.Key != null))
         {
-            var books = await InitializeBooksInternal(kvp.Value, kvp.Key, cancellationToken);
+            var books = await InitializeBooksInternal(kvp.Value, kvp.Key, enableTokenizedBooks, cancellationToken);
 
-            foreach (var book in books.Where(book => book.HasUsfmError || !book.IsEnabled))
+            foreach (var book in books.Where(book => book.HasUsfmError || !book.IsEnabled || !book.IsSelected))
             {
                 commonBooks[book.Abbreviation].HasUsfmError = commonBooks[book.Abbreviation].HasUsfmError || book.HasUsfmError;
                 commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled;
+                commonBooks[book.Abbreviation].IsSelected = commonBooks[book.Abbreviation].IsSelected && book.IsSelected;
             }
         }
 
@@ -51,15 +52,15 @@ public class SelectedBookManager : PropertyChangedBase
         NotifyOfPropertyChange(() => SelectedBooks);
     }
 
-    public async Task InitializeBooks(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, CancellationToken cancellationToken)
+    public async Task InitializeBooks(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
     {
-        var books = await InitializeBooksInternal(usfmErrors, paratextProjectId, cancellationToken);
+        var books = await InitializeBooksInternal(usfmErrors, paratextProjectId, enableTokenizedBooks, cancellationToken);
 
         SelectedBooks = new(books);
         NotifyOfPropertyChange(() => SelectedBooks);
     }
 
-    private async Task<IEnumerable<SelectedBook>> InitializeBooksInternal(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, CancellationToken cancellationToken)
+    private async Task<IEnumerable<SelectedBook>> InitializeBooksInternal(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
     {
         var books = CreateBooks();
 
@@ -87,22 +88,25 @@ public class SelectedBookManager : PropertyChangedBase
             }
         }
 
-        var tokenizedBookRequest = await _mediator.Send(new GetBooksFromTokenizedCorpusQuery(paratextProjectId), cancellationToken);
-
-        if (tokenizedBookRequest.Success && tokenizedBookRequest.HasData)
+        if (enableTokenizedBooks)
         {
-            var tokenizedBooks = tokenizedBookRequest.Data;
+            var tokenizedBookRequest = await _mediator.Send(new GetBooksFromTokenizedCorpusQuery(paratextProjectId), cancellationToken);
 
-            if (tokenizedBooks != null)
+            if (tokenizedBookRequest.Success && tokenizedBookRequest.HasData)
             {
-                // iterate through and enable those books which have text
-                foreach (var book in tokenizedBooks)
+                var tokenizedBooks = tokenizedBookRequest.Data;
+
+                if (tokenizedBooks != null)
                 {
-                    if (int.TryParse(book, out var index))
+                    // iterate through and enable those books which have text
+                    foreach (var book in tokenizedBooks)
                     {
-                        books[index - 1].IsEnabled = false;
-                        books[index - 1].IsSelected = true;
-                        books[index - 1].BookColor = new SolidColorBrush(Colors.Black);
+                        if (int.TryParse(book, out var index))
+                        {
+                            books[index - 1].IsEnabled = false;
+                            books[index - 1].IsSelected = true;
+                            books[index - 1].BookColor = new SolidColorBrush(Colors.Black);
+                        }
                     }
                 }
             }
@@ -186,7 +190,7 @@ public class SelectedBookManager : PropertyChangedBase
 
     public IEnumerable<string> SelectedAndEnabledBookAbbreviations => SelectedAndEnabledBooks.Select(b => b.Abbreviation);
 
-    public static List<SelectedBook> CreateBooks(bool isEnabledDefault = false)
+    public static List<SelectedBook> CreateBooks(bool isEnabledDefault = false, bool isSelectedDefault = false)
     {
         return new List<SelectedBook>
         {
@@ -198,7 +202,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Pentateuch,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -208,7 +212,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Pentateuch,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -218,7 +222,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Pentateuch,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -228,7 +232,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Pentateuch,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -238,7 +242,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Pentateuch,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -248,7 +252,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -258,7 +262,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -268,7 +272,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -278,7 +282,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -288,7 +292,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -298,7 +302,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -308,7 +312,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -318,7 +322,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -328,7 +332,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -338,7 +342,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -348,7 +352,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -358,7 +362,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Historical,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -368,7 +372,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Wisdom,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -378,7 +382,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Wisdom,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -388,7 +392,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Wisdom,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -398,7 +402,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Wisdom,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -408,7 +412,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Wisdom,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -418,7 +422,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -428,7 +432,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -438,7 +442,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -448,7 +452,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -458,7 +462,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -468,7 +472,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -478,7 +482,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -488,7 +492,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -498,7 +502,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -508,7 +512,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -518,7 +522,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -528,7 +532,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -538,7 +542,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -548,7 +552,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -558,7 +562,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -568,7 +572,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -578,7 +582,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Prophets,
                 IsOldTestament = true,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -588,7 +592,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Gospels,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -598,7 +602,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Gospels,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -608,7 +612,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Gospels,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -618,7 +622,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Gospels,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -628,7 +632,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Acts,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -638,7 +642,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -648,7 +652,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -658,7 +662,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -668,7 +672,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -678,7 +682,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -688,7 +692,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -698,7 +702,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -708,7 +712,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -718,7 +722,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -728,7 +732,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -738,7 +742,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -748,7 +752,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -758,7 +762,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -768,7 +772,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -778,7 +782,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -788,7 +792,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -798,7 +802,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -808,7 +812,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -818,7 +822,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -828,7 +832,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -838,7 +842,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Epistles,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             },
             new()
             {
@@ -848,7 +852,7 @@ public class SelectedBookManager : PropertyChangedBase
                 ColorText = SelectedBook.BookColors.Revelation,
                 IsOldTestament = false,
                 IsEnabled = isEnabledDefault,
-                IsSelected = true,
+                IsSelected = isSelectedDefault,
             }
         };
     }

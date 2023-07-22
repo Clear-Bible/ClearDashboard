@@ -77,84 +77,132 @@
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Vertical">
             <Label Margin="0,0,0,-10" Content="Paratext Project" />
-            <controls:AutoCompleteComboBox
-                    Height="Auto"
-                    Margin="15"
-                    VerticalAlignment="Top"
-                    cal:Message.Attach="ParatextProjectSelected"
-                    materialDesign:HintAssist.Hint="Paratext Project"
-                    FontSize="16"
-                    IsEnabled="{Binding IsEnabledSelectedParatextProject}"
-                    ItemsSource="{Binding Projects}"
-                    ScrollViewer.CanContentScroll="False"
-                    SelectedItem="{Binding SelectedParatextProject}"
-                    Style="{StaticResource MaterialDesignFilledComboBox}"
-                    TextSearch.TextPath="CombinedName">
-                <controls:AutoCompleteComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                            <TextBlock FontSize="24" Text="{Binding Name}" />
-                            <TextBlock FontSize="12" Text="{Binding LongName}" />
-                            <TextBlock FontSize="10" Text="{Binding Id}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </controls:AutoCompleteComboBox.ItemTemplate>
-            </controls:AutoCompleteComboBox>
+            <StackPanel Orientation="Horizontal">
+                <controls:AutoCompleteComboBox
+                        Height="Auto"
+                        Width="400"
+                        Margin="15"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        cal:Message.Attach="ParatextProjectSelected"
+                        materialDesign:HintAssist.Hint="Paratext Project"
+                        FontSize="16"
+                        IsEnabled="{Binding IsEnabledSelectedParatextProject}"
+                        ItemsSource="{Binding ParatextProjects}"
+                        ScrollViewer.CanContentScroll="False"
+                        SelectedItem="{Binding SelectedParatextProject, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignFilledComboBox}"
+                        TextSearch.TextPath="CombinedName">
+                    <controls:AutoCompleteComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                <TextBlock FontSize="24" Text="{Binding Name}" />
+                                <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                <TextBlock FontSize="10" Text="{Binding Id}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:AutoCompleteComboBox.ItemTemplate>
+                </controls:AutoCompleteComboBox>
+                <Button
+                    x:Name="ClearSelectedParatextProject"
+                    Margin="5,5,5,5"
+                    Width="100"
+                    cal:Message.Attach="ClearSelectedParatextProject"
+                    Style="{StaticResource TransparentStyle}">
+                    <materialDesign:PackIcon
+                            Width="36"
+                            Height="36"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="CloseBox" />
+                </Button>
+            </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Vertical">
             <Label Margin="0,0,0,-10" Content="PT Back Translation" />
-            <controls:AutoCompleteComboBox
+            <StackPanel Orientation="Horizontal">
+                <controls:AutoCompleteComboBox
                     Height="Auto"
+                    Width="400"
                     Margin="15"
                     VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
                     cal:Message.Attach="ParatextBtProjectSelected"
                     materialDesign:HintAssist.Hint="Paratext Back Translation"
                     FontSize="16"
                     IsEnabled="{Binding IsEnabledSelectedParatextBtProject}"
-                    ItemsSource="{Binding Projects}"
+                    ItemsSource="{Binding ParatextBtProjects}"
                     ScrollViewer.CanContentScroll="False"
-                    SelectedItem="{Binding SelectedParatextBtProject}"
+                    SelectedItem="{Binding SelectedParatextBtProject, Mode=TwoWay}"
                     Style="{StaticResource MaterialDesignFilledComboBox}"
                     TextSearch.TextPath="CombinedName">
-                <controls:AutoCompleteComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                            <TextBlock FontSize="24" Text="{Binding Name}" />
-                            <TextBlock FontSize="12" Text="{Binding LongName}" />
-                            <TextBlock FontSize="10" Text="{Binding Id}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </controls:AutoCompleteComboBox.ItemTemplate>
-            </controls:AutoCompleteComboBox>
+                    <controls:AutoCompleteComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                <TextBlock FontSize="24" Text="{Binding Name}" />
+                                <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                <TextBlock FontSize="10" Text="{Binding Id}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:AutoCompleteComboBox.ItemTemplate>
+                </controls:AutoCompleteComboBox>
+                <Button
+                    x:Name="ClearSelectedParatextBtProject"
+                    Margin="5,5,5,5"
+                    Width="100"
+                    cal:Message.Attach="ClearSelectedParatextBtProject"
+                    Style="{StaticResource TransparentStyle}">
+                    <materialDesign:PackIcon
+                            Width="36"
+                            Height="36"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="CloseBox" />
+                </Button>
+            </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Vertical">
             <Label Margin="0,0,0,-10" Content="Interlinear Bible (LWC)" />
-            <controls:AutoCompleteComboBox
+            <StackPanel Orientation="Horizontal">
+                <controls:AutoCompleteComboBox
                     Height="Auto"
                     Margin="15"
+                    Width="400"
                     VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
                     cal:Message.Attach="ParatextLwcProjectSelected"
                     materialDesign:HintAssist.Hint="Paratext Interlinear Bible (LWC)"
                     FontSize="16"
                     IsEnabled="{Binding IsEnabledSelectedParatextLwcProject}"
-                    ItemsSource="{Binding Projects}"
+                    ItemsSource="{Binding ParatextLwcProjects}"
                     ScrollViewer.CanContentScroll="False"
-                    SelectedItem="{Binding SelectedParatextLwcProject}"
+                    SelectedItem="{Binding SelectedParatextLwcProject, Mode=TwoWay}"
                     Style="{StaticResource MaterialDesignFilledComboBox}"
                     TextSearch.TextPath="CombinedName">
-                <controls:AutoCompleteComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                            <TextBlock FontSize="24" Text="{Binding Name}" />
-                            <TextBlock FontSize="12" Text="{Binding LongName}" />
-                            <TextBlock FontSize="10" Text="{Binding Id}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </controls:AutoCompleteComboBox.ItemTemplate>
-            </controls:AutoCompleteComboBox>
+                    <controls:AutoCompleteComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                <TextBlock FontSize="24" Text="{Binding Name}" />
+                                <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                <TextBlock FontSize="10" Text="{Binding Id}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:AutoCompleteComboBox.ItemTemplate>
+                </controls:AutoCompleteComboBox>
+                <Button
+                    x:Name="ClearSelectedParatextLwcProject"
+                    Margin="5,5,5,5"
+                    Width="100"
+                    cal:Message.Attach="ClearSelectedParatextLwcProject"
+                    Style="{StaticResource TransparentStyle}">
+                    <materialDesign:PackIcon
+                            Width="36"
+                            Height="36"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="CloseBox" />
+                </Button>
+            </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="5"
                     HorizontalAlignment="Left"
@@ -162,7 +210,7 @@
             <CheckBox x:Name="ShowBiblicalTextsCheckBox"
                       Margin="10,20,0,20"
                       FontSize="13"
-                      IsChecked="{Binding ShowBiblicalTexts}">
+                      IsChecked="{Binding ShowBiblicalTexts, Mode=TwoWay}">
                 Show Biblical Texts
                 <CheckBox.ToolTip>If checked, this will ...</CheckBox.ToolTip>
             </CheckBox>
@@ -179,13 +227,13 @@
                 Margin="5,5,5,5"
                 cal:Message.Attach="MoveBackwards"
                 Content="{helpers:Localization Back}"
-                IsEnabled="{Binding EnableControls}"
+                IsEnabled="{Binding CanMoveBackwards}"
                 Style="{StaticResource TransparentStyle}" />
             <Button
                 x:Name="MoveForwards"
                 cal:Message.Attach="MoveForwards"
                 Content="{helpers:Localization Next}"
-                IsEnabled="{Binding EnableControls}"
+                IsEnabled="{Binding CanMoveForwards}"
                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}" />
         </StackPanel>

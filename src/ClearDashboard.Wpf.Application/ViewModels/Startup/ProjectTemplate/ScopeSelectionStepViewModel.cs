@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
@@ -24,6 +25,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         {
             get => _continueEnabled;
             set => Set(ref _continueEnabled, value);
+        }
+
+        private Visibility _progressIndicatorVisibility = Visibility.Hidden;
+        public Visibility ProgressIndicatorVisibility
+        {
+            get => _progressIndicatorVisibility;
+            set => Set(ref _progressIndicatorVisibility, value);
         }
 
         public ScopeSelectionStepViewModel(DashboardProjectManager projectManager, SelectedBookManager selectedBookManager,
@@ -40,6 +48,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            ProgressIndicatorVisibility = Visibility.Visible;
+
             var usfmErorsByParatextProjectId = new Dictionary<string, IEnumerable<UsfmError>>();
 
             if (ParentViewModel!.SelectedParatextProject != null)
@@ -75,8 +85,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 usfmErorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextLwcProject.Id!, result.Data!.UsfmErrors);
             }
 
-            await SelectedBookManager!.InitializeBooks(usfmErorsByParatextProjectId, CancellationToken.None);
+            await SelectedBookManager!.InitializeBooks(usfmErorsByParatextProjectId, false, CancellationToken.None);
             ContinueEnabled = SelectedBookManager.SelectedBooks.Any();
+
+            ProgressIndicatorVisibility = Visibility.Hidden;
+
             await base.OnActivateAsync(cancellationToken);
         }
 
@@ -85,8 +98,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             // FIXME
             await ParentViewModel!.GoToStep(1);
             //ParentViewModel?.Ok();
+
+
+            //await ProjectManager!.CreateNewProject(ProjectManager!.CurrentDashboardProject.ProjectName);
+            //DoLongRunningProcesses()
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public void UnselectAllBooks()
+        {
+            SelectedBookManager.UnselectAllBooks();
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public void SelectAllBooks()
+        {
+            SelectedBookManager.SelectAllBooks();
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public void SelectNewTestamentBooks()
+        {
+            SelectedBookManager.SelectNewTestamentBooks();
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public void SelectOldTestamentBooks()
+        {
+            SelectedBookManager.SelectOldTestamentBooks();
         }
     }
-
-
 }

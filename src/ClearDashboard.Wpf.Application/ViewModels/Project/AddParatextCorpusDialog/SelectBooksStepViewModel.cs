@@ -97,7 +97,7 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
 
     protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        await SelectedBookManager.InitializeBooks(ParentViewModel.UsfmErrors, ParentViewModel.SelectedProject.Id, new CancellationToken());
+        await SelectedBookManager.InitializeBooks(ParentViewModel.UsfmErrors, ParentViewModel.SelectedProject.Id, true, new CancellationToken());
         ContinueEnabled = SelectedBookManager.SelectedBooks.Any();
         await base.OnActivateAsync(cancellationToken);
     }

@@ -24,11 +24,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
     public class ProjectSelectionStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<StartupDialogViewModel, ProjectSelectionStepViewModel>
     {
-        private List<ParatextProjectMetadata>? _projects;
-        public List<ParatextProjectMetadata>? Projects
+        private BindableCollection<ParatextProjectMetadata>? _projects;
+        public BindableCollection<ParatextProjectMetadata>? Projects
         {
             get => _projects;
             set => Set(ref _projects, value);
+        }
+
+        private BindableCollection<ParatextProjectMetadata>? _paratextProjects;
+        public BindableCollection<ParatextProjectMetadata>? ParatextProjects
+        {
+            get => _paratextProjects;
+            set => Set(ref _paratextProjects, value);
+        }
+
+        private BindableCollection<ParatextProjectMetadata>? _paratextBtProjects;
+        public BindableCollection<ParatextProjectMetadata>? ParatextBtProjects
+        {
+            get => _paratextBtProjects;
+            set => Set(ref _paratextBtProjects, value);
+        }
+
+        private BindableCollection<ParatextProjectMetadata>? _paratextLwcProjects;
+        public BindableCollection<ParatextProjectMetadata>? ParatextLwcProjects
+        {
+            get => _paratextLwcProjects;
+            set => Set(ref _paratextLwcProjects, value);
         }
 
         private ParatextProjectMetadata? _selectedParatextProject;
@@ -97,52 +118,119 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 ProjectManager!.CurrentDashboardProject.ProjectName = _projectName;
                 Project.ProjectName = _projectName;
                 ValidationResult = Validator!.Validate(this);
-                CanCreate = !string.IsNullOrEmpty(_projectName) && ValidationResult.IsValid;
+                CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName) && ValidationResult.IsValid);
                 NotifyOfPropertyChange(nameof(Project));
             }
         }
 
-        private bool _canCreate;
-        public bool CanCreate
+        private BindableCollection<ParatextProjectMetadata>? GetSelectableParatextProjects()
         {
-            get => _canCreate;
-            set => Set(ref _canCreate, value);
+            if (Projects != null)
+            {
+                var otherSelectedIds = new List<string?>
+                {
+                    SelectedParatextBtProject?.Id,
+                    SelectedParatextLwcProject?.Id
+                }
+                .Where(p => p != null);
+
+                return new(Projects.Where(p => !otherSelectedIds.Contains(p.Id)));
+            }
+            return null;
+        }
+
+        private BindableCollection<ParatextProjectMetadata>? GetSelectableParatextBtProjects()
+        {
+            if (Projects != null)
+            {
+                var otherSelectedIds = new List<string?>
+                {
+                    SelectedParatextProject?.Id,
+                    SelectedParatextLwcProject?.Id
+                }
+                .Where(p => p != null);
+
+                return new(Projects.Where(p => !otherSelectedIds.Contains(p.Id)));
+            }
+            return null;
+        }
+
+        private BindableCollection<ParatextProjectMetadata>? GetSelectableParatextLwcProjects()
+        {
+            if (Projects != null)
+            {
+                var otherSelectedIds = new List<string?>
+                {
+                    SelectedParatextProject?.Id,
+                    SelectedParatextBtProject?.Id
+                }
+                .Where(p => p != null);
+
+                return new(Projects.Where(p => !otherSelectedIds.Contains(p.Id)));
+            }
+            return null;
         }
 
         public async void ParatextProjectSelected()
         {
-            //CanOk = false;
+            if (Projects != null)
+            {
+                ParatextBtProjects = GetSelectableParatextBtProjects();
+                ParatextLwcProjects = GetSelectableParatextLwcProjects();
+            }
 
-            //await CheckUsfm(ParentViewModel);
+            CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName));
 
-            //ValidationResult = Validator?.Validate(this);
-            //CanOk = ValidationResult.IsValid;
+            if (SelectedParatextBtProject == null)
+            {
+                // FIXME:  Dirk knows some way to get the back translation for a given paratext project
+                // so we can in theory prefill SelectedParatextBtProject value
+            }
+
+            if (SelectedParatextLwcProject == null)
+            {
+                // FIXME:  Dirk knows some way to get the lwc translation for a given paratext project
+                // so we can in theory prefill SelectedParatextLwcProject value
+            }
 
             await Task.CompletedTask;
         }
 
         public async void ParatextBtProjectSelected()
         {
-            //CanOk = false;
-
-            //await CheckUsfm(ParentViewModel);
-
-            //ValidationResult = Validator?.Validate(this);
-            //CanOk = ValidationResult.IsValid;
+            if (Projects != null)
+            {
+                ParatextProjects = GetSelectableParatextProjects();
+                ParatextLwcProjects = GetSelectableParatextLwcProjects();
+            }
 
             await Task.CompletedTask;
         }
 
         public async void ParatextLwcProjectSelected()
         {
-            //CanOk = false;
-
-            //await CheckUsfm(ParentViewModel);
-
-            //ValidationResult = Validator?.Validate(this);
-            //CanOk = ValidationResult.IsValid;
+            if (Projects != null)
+            {
+                ParatextProjects = GetSelectableParatextProjects();
+                ParatextBtProjects = GetSelectableParatextBtProjects();
+            }
 
             await Task.CompletedTask;
+        }
+
+        public void ClearSelectedParatextProject()
+        {
+            SelectedParatextProject = null;
+        }
+
+        public void ClearSelectedParatextBtProject()
+        {
+            SelectedParatextBtProject = null;
+        }
+
+        public void ClearSelectedParatextLwcProject()
+        {
+            SelectedParatextLwcProject = null;
         }
 
         public ProjectSelectionStepViewModel(DashboardProjectManager projectManager,
@@ -166,16 +254,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            var result = await ProjectManager!.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
-            if (result.Success)
+            if (Projects == null)
             {
-                Projects = result.Data!.OrderBy(p => p.Name).ToList();
+                var result = await ProjectManager!.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                if (result.Success)
+                {
+                    Projects = new(result.Data!.OrderBy(p => p.Name).ToList());
 
-                // send new metadata results to the Main Window    
-                //await EventAggregator.PublishOnUIThreadAsync(new ProjectsMetadataChangedMessage(result.Data), cancellationToken);
+                    // send new metadata results to the Main Window    
+                    //await EventAggregator.PublishOnUIThreadAsync(new ProjectsMetadataChangedMessage(result.Data), cancellationToken);
+                }
             }
 
+            if (Projects != null)
+            {
+                ParatextProjects = new(Projects);
+                ParatextBtProjects = new(Projects);
+                ParatextLwcProjects = new(Projects);
+            }
+
+            CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName));
+
             await base.OnActivateAsync(cancellationToken);
+        }
+
+        public async Task CreateAsync()
+        {
+            if (ProjectManager!.HasCurrentParatextProject == false)
+            {
+                return;
+            }
+
+            var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
+            if (currentlyOpenProjectsList.Contains(ProjectName))
+            {
+                return;
+            }
+
+            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectName));
+
+            OpenProjectManager.AddProjectToOpenProjectList(ProjectManager!);
+
+            ProjectManager!.CurrentDashboardProject.ProjectName = Project.ProjectName;
+
+            ParentViewModel!.ExtraData = ProjectManager.CurrentDashboardProject;
         }
 
         public override async Task MoveBackwardsAction()
@@ -185,6 +307,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public override async Task MoveForwardsAction()
         {
+            await CreateAsync();
+
             ParentViewModel!.SelectedParatextProject = SelectedParatextProject;
             ParentViewModel!.SelectedParatextBtProject = SelectedParatextBtProject;
             ParentViewModel!.SelectedParatextLwcProject = SelectedParatextLwcProject;
