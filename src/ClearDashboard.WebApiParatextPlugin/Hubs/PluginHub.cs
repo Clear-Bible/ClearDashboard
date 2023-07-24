@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
-using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
-using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.WebApiParatextPlugin.Hubs
 {

@@ -8,8 +8,11 @@ using Paratext.PluginInterfaces;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Reflection;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 
@@ -73,9 +76,27 @@ namespace ClearDashboard.WebApiParatextPlugin
                 appBuilder.UseWebApi(config);
 
             }
+            catch (ReflectionTypeLoadException ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (Exception exSub in ex.LoaderExceptions)
+                {
+                    sb.AppendLine(exSub.Message);
+                    if (exSub is FileNotFoundException exFileNotFound)
+                    {
+                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                        {
+                            sb.AppendLine("Fusion Log:");
+                            sb.AppendLine(exFileNotFound.FusionLog);
+                        }
+                    }
+                    sb.AppendLine();
+                }
+                Log.Error(ex, $"ReflectionTypeLoadException: {sb.ToString()}");
+            }
             catch (Exception ex)
             {
-                Log.Error(ex, "An unexpected error occurred while configuring Web API.");
+                Log.Error(ex, $"An unexpected error occurred while configuring Web API. {ex.Message}");
             }
 
         }
@@ -110,24 +131,49 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IServiceProvider SetupDependencyInjection()
         {
             var services = new ServiceCollection();
-            services.AddLogging();
+            try
+            {
+                services.AddLogging();
 
-            services.AddSingleton<MainWindow>(sp => _mainWindow);
-            //services.AddSerilog();
+                services.AddSingleton<MainWindow>(sp => _mainWindow);
+                //services.AddSerilog();
 
-            services.AddMediatR(typeof(GetCurrentProjectQueryHandler));
+                services.AddMediatR(typeof(GetCurrentProjectQueryHandler));
 
 
-            services.AddSingleton<IProject>(sp => _project);
-            services.AddTransient<IVerseRef>(sp => _verseRef);
-            services.AddSingleton<IPluginHost>(sp => _pluginHost);
-            services.AddSingleton<IPluginChildWindow>(sp => _parent);
-            services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
+                services.AddSingleton<IProject>(sp => _project);
+                services.AddTransient<IVerseRef>(sp => _verseRef);
+                services.AddSingleton<IPluginHost>(sp => _pluginHost);
+                services.AddSingleton<IPluginChildWindow>(sp => _parent);
+                services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
 
-            services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
-                .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
-                .Where(t => typeof(IHttpController).IsAssignableFrom(t)
-                            || t.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)));
+                services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
+                    .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
+                    .Where(t => typeof(IHttpController).IsAssignableFrom(t)
+                                || t.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)));
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (Exception exSub in ex.LoaderExceptions)
+                {
+                    sb.AppendLine(exSub.Message);
+                    if (exSub is FileNotFoundException exFileNotFound)
+                    {
+                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                        {
+                            sb.AppendLine("Fusion Log:");
+                            sb.AppendLine(exFileNotFound.FusionLog);
+                        }
+                    }
+                    sb.AppendLine();
+                }
+                Log.Error(ex, $"ReflectionTypeLoadException: {sb.ToString()}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"An unexpected error occurred while configuring SetupDependencyInjection: {ex.Message}");
+            }
 
             var serviceProvider = services.BuildServiceProvider();
             return serviceProvider;
