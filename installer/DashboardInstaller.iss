@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ClearDashboard"
-#define MyAppVersion "1.0.6.10"
+#define MyAppVersion "1.0.6.11"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -177,11 +177,11 @@ Name: "{autodesktop}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsName
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 
 [InstallDelete]
-Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"
 Type: filesandordirs; Name: "{app}"
 
 [UninstallDelete]
-Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"
 Type: filesandordirs; Name: "{app}"
 
 [Code]
