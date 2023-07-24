@@ -56,7 +56,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
         private IMediator _mediator;
-        private readonly IPluginLogger _logger;
+        private IPluginLogger _logger;
         private IHubContext HubContext => GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
         private WebHostStartup WebHostStartup { get; set; }
         private IDisposable WebAppProxy { get; set; }
@@ -78,7 +78,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             DisplayPluginVersion();
             Disposed += HandleWindowDisposed;
 
-            _logger = WebHostStartup.ServiceProvider.GetService<IPluginLogger>();
+            
 
 
             // NB:  Use the following for debugging plug-in start up crashes.
@@ -140,6 +140,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             //zzSur
             //Invoke((Action)(() => GetUsfmForBook("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 40)));
+            _logger = WebHostStartup.ServiceProvider.GetService<IPluginLogger>();
         }
 
         private async void WindowClosing(IPluginChildWindow sender, CancelEventArgs args)
@@ -236,7 +237,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             try
             {
-                var paratextProject = ConvertIProjectToParatextProject.BuildParatextProjectFromIProject(_project, _logger);
+                var paratextProject = ConvertIProjectToParatextProject.BuildParatextProjectFromIProject(_project);
                 AppendText(Color.DarkOrange, $"Sending project - {newProject.ShortName}");
                 await HubContext.Clients.All.SendProject(paratextProject);
             }
