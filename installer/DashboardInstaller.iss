@@ -177,11 +177,11 @@ Name: "{autodesktop}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsName
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 
 [InstallDelete]
-Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"
 Type: filesandordirs; Name: "{app}"
 
 [UninstallDelete]
-Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"
 Type: filesandordirs; Name: "{app}"
 
 [Code]
