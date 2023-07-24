@@ -7,16 +7,19 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.Framework.Input;
 using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Exceptions;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -47,11 +50,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ClearDashboard.Collaboration.Services;
-using ClearDashboard.Wpf.Application.Helpers;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
-using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -2330,24 +2330,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
-            //Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
-            //_dockingManager.ActiveContentChanged -= OnActiveContentChanged;
-            //_dockingManager.DocumentClosed -= OnEnhancedViewClosed;
-            //if (_lastLayout == "")
-            //{
-            //    SelectedLayoutText = "Last Saved";
-            //    await SaveAvalonDockLayout();
-            //}
-            //await SaveProjectData();
-            //UnsubscribeFromEventAggregator();
-
-            //await PinsViewModel.DeactivateAsync(true);
-            //foreach (var screen in Items)
-            //{
-            //    await screen.DeactivateAsync(true, cancellationToken);
-            //}
-
-            //Items.Clear();
+            Logger.LogInformation($"Reloading panels due to the Paratext project being switched.");
+            
             Collection<IScreen> removeItemList = new Collection<IScreen>();
             foreach (var item in Items)
             {
@@ -2363,24 +2347,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
             Items.RemoveRange(removeItemList);
-            
-            //OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
-            //base.OnDeactivateAsync(true, cancellationToken);
 
-
-
-
-            //if (string.IsNullOrWhiteSpace(ProjectManager.CurrentUser.ParatextUserName))
-            //{
-            //    await ProjectManager.UpdateCurrentUserWithParatextUserInformation();
-            //}
             await LoadParatextProjectMetadata(cancellationToken);
-            //await LoadProject();
-            //ProjectManager.CheckForCurrentUser();
-            //await NoteManager!.InitializeAsync();
-            //await RebuildMainMenu();
 
-            //await ActivateDockedWindowViewModels(cancellationToken);
             await ActivateItemAsync<BiblicalTermsViewModel>(cancellationToken);
             PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
             await ActivateItemAsync<TextCollectionsViewModel>(cancellationToken);
@@ -2388,17 +2357,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<NotesViewModel>(cancellationToken);
 
             await LoadAvalonDockLayout();
-            //await LoadEnhancedViewTabs(cancellationToken);
-            //await base.OnInitializeAsync(cancellationToken);
-
-
-
-
-            //EventAggregator.SubscribeOnUIThread(this);
-            //Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
-            //_dockingManager.ActiveContentChanged += OnActiveContentChanged;
-            //_dockingManager.DocumentClosed += OnEnhancedViewClosed;
-            //await base.OnActivateAsync(cancellationToken);
         }
     }
 }
