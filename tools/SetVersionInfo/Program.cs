@@ -31,12 +31,17 @@ foreach (FileInfo file in dir.GetFiles("*.csproj", SearchOption.AllDirectories))
         doc.AppendChild(rootNode);
     }
 
+
     XmlNode fileVersionNode = rootNode.SelectSingleNode("FileVersion");
     if (fileVersionNode == null)
     {
         fileVersionNode = doc.CreateElement("FileVersion");
         fileVersionNode.InnerText = versionNumber;
         rootNode.AppendChild(fileVersionNode);
+    }
+    else
+    {
+        fileVersionNode.InnerText = versionNumber;
     }
 
     XmlNode versionNode = rootNode.SelectSingleNode("Version");
@@ -46,6 +51,10 @@ foreach (FileInfo file in dir.GetFiles("*.csproj", SearchOption.AllDirectories))
         versionNode.InnerText = versionNumber;
         rootNode.AppendChild(versionNode);
     }
+    else
+    {
+        versionNode.InnerText = versionNumber;
+    }
 
     XmlNode assemblyVersionNode = rootNode.SelectSingleNode("AssemblyVersion");
     if (assemblyVersionNode == null)
@@ -53,6 +62,10 @@ foreach (FileInfo file in dir.GetFiles("*.csproj", SearchOption.AllDirectories))
         assemblyVersionNode = doc.CreateElement("AssemblyVersion");
         assemblyVersionNode.InnerText = versionNumber;
         rootNode.AppendChild(assemblyVersionNode);
+    }
+    else
+    {
+        assemblyVersionNode.InnerText = versionNumber;
     }
 
     doc.Save(file.FullName);
