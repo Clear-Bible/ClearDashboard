@@ -27,6 +27,7 @@ using ClearDashboard.Wpf.Application.Converters;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.Windows.Media;
 
 
 // ReSharper disable UnusedMember.Global
@@ -157,6 +158,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EditModeButtonLabel = LocalizationService.Get("BulkAlignmentReview_BulkAlignmentReview");
             _sourceToTarget = true;
 
+            SelectedFontFamily = SourceFontFamily;
+
             AlignmentTypes = AlignmentTypes.Assigned_Invalid |
                              AlignmentTypes.Assigned_Unverified |
                              AlignmentTypes.Assigned_Verified |
@@ -171,6 +174,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             CreateAlignmentTypesMap();
 
         }
+
+        public FontFamily? SelectedFontFamily
+        {
+            get => _selectedFontFamily;
+            set => Set(ref _selectedFontFamily, value);
+        }
+
+        public bool SelectedRtl { get; set; }
 
         public EnhancedViewModel EnhancedViewModel => (EnhancedViewModel)Parent;
 
@@ -290,6 +301,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
             {
                 _sourceToTarget = (item.Tag as string) == BulkAlignmentReviewTags.Source;
+                SelectedFontFamily = _sourceToTarget ? SourceFontFamily : TargetFontFamily;
                 _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords(CancellationToken.None));
             }
         }
@@ -580,7 +592,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     if (_alignmentSet != null)
                     {
                         AlignmentCounts = await _alignmentSet.GetAlignmentCounts(_sourceToTarget, _countsByTrainingText, true,
-                            AlignmentTypes);
+                            AlignmentTypes, cancellationToken: cancellationToken);
 
                         await Execute.OnUIThreadAsync(async () =>
                         {
@@ -612,6 +624,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private Book _currentBook;
         private PagingCollectionView? _pagedBulkAlignments;
         private bool _showBookSelector;
+        private FontFamily _selectedFontFamily;
 
 
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)

@@ -169,7 +169,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock 
-                                        FontFamily="{Binding ElementName=PivotedWordsDataGrid, Path=DataContext.SourceFontFamily}" 
+                                        FontFamily="{Binding ElementName=PivotedWordsDataGrid, Path=DataContext.SelectedFontFamily}" 
                                         FontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" 
                                         FlowDirection="{Binding ElementName=PivotedWordsDataGrid, Path=DataContext.IsSourceRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                         Text="{Binding Word}"/>
