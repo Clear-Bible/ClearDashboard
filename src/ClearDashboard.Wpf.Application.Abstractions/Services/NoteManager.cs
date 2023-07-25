@@ -312,6 +312,15 @@ namespace ClearDashboard.Wpf.Application.Services
             NotesCache[noteViewModel.NoteId!.Id] = noteViewModel;
         }
 
+        public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
+        {
+            var replyNote = new Note(parentNote.Entity) { Text = replyText };
+            await UpdateNoteAsync(replyNote);
+
+            parentNote.Replies.Add(new NoteViewModel(replyNote));
+            NotesCache[parentNote.NoteId!.Id] = parentNote;
+        }
+
         /// <summary>
         /// Deletes a note.
         /// </summary>
