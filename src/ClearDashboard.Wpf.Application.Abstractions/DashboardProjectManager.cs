@@ -174,14 +174,14 @@ public class DashboardProjectManager : ProjectManager
         });
 
 
-        HubProxy.On<ParatextProject>("sendCurrentProject", async (project) =>
-        {
-            project = GetParatextProjectDirectoryPath(project);
+        //HubProxy.On<ParatextProject>("sendCurrentProject", async (project) =>
+        //{
+        //    project = GetParatextProjectDirectoryPath(project);
 
 
-            CurrentParatextProject = project;
-            await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
-        });
+        //    CurrentParatextProject = project;
+        //    await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
+        //});
 
 
         HubProxy.On<List<TextCollection>>("textCollections", async (textCollection) =>

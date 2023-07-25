@@ -36,22 +36,22 @@ namespace ClearDashboard.WebApiParatextPlugin.Hubs
             Clients.All.addMessage(project);
         }
 
-        public async void SendCurrentProject()
-        {
-            try
-            {
-                var result = await _mediator.Send(new GetCurrentProjectQuery());
-                if (result.Success)
-                {
-                    _logger.AppendText(Color.DarkOrange, $"Sending project - {result.Data?.ShortName}");
-                    Clients.All.SendProject(result.Data);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.AppendText(Color.Red, e.Message);
-            }
-        }
+        //public async void SendCurrentProject()
+        //{
+        //    try
+        //    {
+        //        var result = await _mediator.Send(new GetCurrentProjectQuery());
+        //        if (result.Success)
+        //        {
+        //            _logger.AppendText(Color.DarkOrange, $"Sending project - {result.Data?.ShortName}");
+        //            Clients.All.SendProject(result.Data);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.AppendText(Color.Red, e.Message);
+        //    }
+        //}
 
         public void SendVerse(string verse)
         {
