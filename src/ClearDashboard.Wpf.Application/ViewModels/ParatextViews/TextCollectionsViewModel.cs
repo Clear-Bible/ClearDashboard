@@ -87,6 +87,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         private bool _textCollectionCallInProgress = false;
+        public bool TextCollectionCallInProgress
+        {
+            get { return _textCollectionCallInProgress; }
+            set
+            {
+                _textCollectionCallInProgress = value;
+                NotifyOfPropertyChange(() => TextCollectionCallInProgress);
+            }
+        }
 
         #region BCV
         private bool _paratextSync = false;
@@ -248,9 +257,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task CallGetTextCollections()
         {
-            if (!_textCollectionCallInProgress)
+            if (!TextCollectionCallInProgress)
             {
-                _textCollectionCallInProgress = true;
+                TextCollectionCallInProgress = true;
 
                 var workWithUsx = true;
                 var showVerseByVerse = Settings.Default.VerseByVerseTextCollectionsEnabled;
@@ -341,7 +350,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
                 }
 
-                _textCollectionCallInProgress = false;
+                TextCollectionCallInProgress = false;
             }
         }
 
@@ -375,7 +384,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _currentVerse = incomingVerse;
             CurrentBcv.SetVerseFromId(_currentVerse);
 
-            await CallGetTextCollections().ConfigureAwait(false);
+            CallGetTextCollections().ConfigureAwait(false);
         }
 
         #endregion // Methods

@@ -604,13 +604,26 @@ namespace ClearDashboard.WebApiParatextPlugin
             else
             {
                 _textCollections.Clear();
-
+                var currentProjectGroup = SyncReferenceGroup.None;
                 var windows = _host.AllOpenWindows;
+
+                foreach (var window in windows)
+                {
+                    if (window.Project.ID == _project.ID)
+                    {
+                        currentProjectGroup = window.SyncReferenceGroup;
+                        break;
+                    }
+                }
+
+                var currentProjectGroupIsNone = currentProjectGroup == SyncReferenceGroup.None;
+
                 foreach (var window in windows)
                 {
                     // check if window is text collection
-                    if (window is ITextCollectionChildState tc)
+                    if (window is ITextCollectionChildState tc && (window.SyncReferenceGroup == currentProjectGroup || currentProjectGroupIsNone))
                     {
+
                         // get the projects for this window
                         var projects = tc.AllProjects;
                         foreach (var project in projects)
