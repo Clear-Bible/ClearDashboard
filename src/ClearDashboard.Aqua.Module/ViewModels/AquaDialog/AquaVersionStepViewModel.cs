@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Linq;
 using Autofac.Features.AttributeFilters;
+using ClearApplicationFoundation.Services;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;

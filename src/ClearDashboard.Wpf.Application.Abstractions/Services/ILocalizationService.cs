@@ -1,13 +1,13 @@
 ﻿
-namespace ClearDashboard.Wpf.Application.Services
-{
-    public interface ILocalizationService
-    {
-        string Get(string key);
+//namespace ClearDashboard.Wpf.Application.Services
+//{
+//    public interface ILocalizationService
+//    {
+//        string Get(string key);
 
-        string this[string key]
-        {
-            get;
-        }
-    }
-}
+//        string this[string key]
+//        {
+//            get;
+//        }
+//    }
+//}

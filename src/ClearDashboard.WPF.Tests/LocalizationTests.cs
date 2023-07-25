@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Threading;
+using ClearApplicationFoundation.Services;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.Wpf.Application.Services;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Xaml.Behaviors;

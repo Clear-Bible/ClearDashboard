@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Sample.Module.ViewModels.Menus
 {

@@ -46,6 +46,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Wpf.Application.Helpers;
 using DockingManager = AvalonDock.DockingManager;

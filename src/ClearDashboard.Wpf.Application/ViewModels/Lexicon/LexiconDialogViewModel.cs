@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;

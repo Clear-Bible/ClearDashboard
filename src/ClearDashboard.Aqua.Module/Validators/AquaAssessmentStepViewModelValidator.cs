@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 using ClearDashboard.Wpf.Application.Services;

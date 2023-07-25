@@ -21,6 +21,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.Services;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear

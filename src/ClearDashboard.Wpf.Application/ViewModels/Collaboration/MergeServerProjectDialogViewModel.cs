@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {

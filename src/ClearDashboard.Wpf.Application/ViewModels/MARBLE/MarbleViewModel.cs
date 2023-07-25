@@ -27,6 +27,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClearApplicationFoundation.Framework.Input;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.Wpf.Application.Services;
 using wpfKeyBoard;
 

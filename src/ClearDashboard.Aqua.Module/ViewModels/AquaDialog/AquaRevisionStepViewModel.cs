@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using ClearDashboard.Aqua.Module.Models;
 using System.Windows;
 using Autofac.Features.AttributeFilters;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 

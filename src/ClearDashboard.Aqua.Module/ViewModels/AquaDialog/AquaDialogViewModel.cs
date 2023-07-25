@@ -22,6 +22,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 using Autofac.Features.AttributeFilters;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.Wpf.Application.Strings;
 using Microsoft.Extensions.Logging;
 

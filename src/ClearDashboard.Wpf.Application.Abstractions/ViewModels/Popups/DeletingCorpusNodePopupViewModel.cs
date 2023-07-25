@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;

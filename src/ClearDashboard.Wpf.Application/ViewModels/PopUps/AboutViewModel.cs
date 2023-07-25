@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {

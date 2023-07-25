@@ -27,6 +27,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using AvalonDock.Properties;
 using ClearApplicationFoundation.Framework.Input;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.Wpf.Application.Properties;
 using HtmlAgilityPack;
 using Serilog;

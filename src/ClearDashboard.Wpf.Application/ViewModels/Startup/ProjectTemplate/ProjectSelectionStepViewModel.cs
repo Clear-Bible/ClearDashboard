@@ -19,6 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {

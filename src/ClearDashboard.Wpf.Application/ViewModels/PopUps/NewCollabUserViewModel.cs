@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Xml.Serialization;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {

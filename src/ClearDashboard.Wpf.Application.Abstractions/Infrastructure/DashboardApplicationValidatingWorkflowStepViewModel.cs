@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Services;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;

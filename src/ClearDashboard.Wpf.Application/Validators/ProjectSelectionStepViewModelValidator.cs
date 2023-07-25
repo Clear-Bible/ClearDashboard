@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate;
 

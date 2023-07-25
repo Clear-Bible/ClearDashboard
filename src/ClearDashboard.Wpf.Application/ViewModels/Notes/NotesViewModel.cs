@@ -26,6 +26,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.UserControls;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;

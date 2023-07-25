@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Sample.Module.Validators
 {

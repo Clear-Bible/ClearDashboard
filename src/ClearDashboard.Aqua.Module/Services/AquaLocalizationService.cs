@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using System.Resources;
 using System.Threading;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Aqua.Module.Services
 {

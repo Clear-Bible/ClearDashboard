@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 {

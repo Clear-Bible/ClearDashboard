@@ -29,6 +29,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.Services;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 
 namespace ClearDashboard.Aqua.Module.ViewModels

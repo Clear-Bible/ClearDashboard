@@ -29,6 +29,7 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 using System.Collections.Generic;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {

@@ -4,6 +4,7 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.Extensions
 {

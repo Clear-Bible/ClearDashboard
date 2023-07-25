@@ -2,6 +2,7 @@
 
 using Autofac;
 using Autofac.Features.AttributeFilters;
+using ClearApplicationFoundation.Services;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Aqua.Module.Menu;
 using ClearDashboard.Aqua.Module.Services;

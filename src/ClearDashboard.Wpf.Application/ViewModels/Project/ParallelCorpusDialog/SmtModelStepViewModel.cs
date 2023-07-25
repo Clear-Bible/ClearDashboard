@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Models;
 using System.Linq;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Translation;
 

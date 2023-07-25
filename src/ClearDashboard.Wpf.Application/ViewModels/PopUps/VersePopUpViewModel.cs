@@ -11,6 +11,7 @@ using System.Data;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {

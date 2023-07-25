@@ -13,5 +13,12 @@
     <Grid>
         <!--<Button x:Name="GoToMain" cm:Message.Attach="GoToMain"  Background="{DynamicResource BlueDarkBrush}" Width="120">Go to Main</Button>-->
         <ContentControl cm:View.Model="{Binding ActiveItem}" />
+        <Grid  Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" ZIndex="100" >
+            <StackPanel>
+                <TextBlock Text="My fancy overlay." FontSize="100" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                <Button Style="{StaticResource TransparentButton}" Foreground="Black" Content="OK" Width="50"></Button>
+            </StackPanel>
+        
+        </Grid>
     </Grid>
 </Page>

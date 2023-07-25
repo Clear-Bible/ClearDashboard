@@ -22,6 +22,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Sample.Module.ViewModels.SampleDialog
 {

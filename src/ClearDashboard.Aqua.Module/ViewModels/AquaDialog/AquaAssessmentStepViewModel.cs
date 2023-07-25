@@ -7,6 +7,7 @@ using System.Windows;
 using Autofac;
 using Autofac.Features.AttributeFilters;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Services;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.DAL.Alignment.Corpora;

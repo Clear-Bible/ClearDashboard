@@ -2,6 +2,7 @@
 
 using Autofac;
 using Autofac.Features.AttributeFilters;
+using ClearApplicationFoundation.Services;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Sample.Module.Menu;
 using ClearDashboard.Sample.Module.Services;

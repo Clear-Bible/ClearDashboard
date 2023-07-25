@@ -31,6 +31,7 @@ using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Token = ClearBible.Engine.Corpora.Token;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using ClearApplicationFoundation.Services;
 using SIL.Machine.Corpora;
 
 // ReSharper disable InconsistentNaming

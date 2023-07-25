@@ -34,6 +34,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Xml;
+using ClearApplicationFoundation.Services;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 

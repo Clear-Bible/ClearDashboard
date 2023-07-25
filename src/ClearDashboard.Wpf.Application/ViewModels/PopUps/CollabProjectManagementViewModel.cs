@@ -16,6 +16,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using ClearApplicationFoundation.Services;
+
 // https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1416
 #pragma warning disable CA1416
 

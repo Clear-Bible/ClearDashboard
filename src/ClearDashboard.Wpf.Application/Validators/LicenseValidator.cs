@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;

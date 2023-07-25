@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using MimeKit;
 using System;
 using System.Windows;
+using ClearApplicationFoundation.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {

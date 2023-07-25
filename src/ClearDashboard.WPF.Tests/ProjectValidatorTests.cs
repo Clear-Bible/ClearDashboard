@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using ClearApplicationFoundation.Services;
 using Xunit;
 using Xunit.Abstractions;
 

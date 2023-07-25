@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Services;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
