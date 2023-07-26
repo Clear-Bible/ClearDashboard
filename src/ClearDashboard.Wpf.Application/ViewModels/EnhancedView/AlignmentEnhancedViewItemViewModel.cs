@@ -159,6 +159,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _sourceToTarget = true;
 
             SelectedFontFamily = SourceFontFamily;
+            SelectedRtl = IsRtl;
 
             AlignmentTypes = AlignmentTypes.Assigned_Invalid |
                              AlignmentTypes.Assigned_Unverified |
@@ -181,7 +182,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _selectedFontFamily, value);
         }
 
-        public bool SelectedRtl { get; set; }
+        public bool SelectedRtl
+        {
+            get => _selectedRtl;
+            set => Set(ref _selectedRtl, value);
+        }
 
         public EnhancedViewModel EnhancedViewModel => (EnhancedViewModel)Parent;
 
@@ -264,18 +269,44 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (EditMode == EditMode.EditorViewOnly)
             {
                 var getEditorDataTask = GetEditorData(cancellationToken);
+
+                switch (EnhancedViewItemMetadatum)
+                {
+                    case AlignmentEnhancedViewItemMetadatum alignmentEnhancedViewItemMetadatum:
+
+                        await Execute.OnUIThreadAsync(async () =>
+                        {
+                            SourceFontFamily = await GetFontFamily(alignmentEnhancedViewItemMetadatum.SourceParatextId!);
+                            TargetFontFamily = await GetFontFamily(alignmentEnhancedViewItemMetadatum.TargetParatextId!);
+                            IsRtl = alignmentEnhancedViewItemMetadatum.IsRtl ?? false;
+                            IsTargetRtl = alignmentEnhancedViewItemMetadatum.IsTargetRtl ?? false;
+                            SelectedFontFamily = SourceFontFamily;
+                            SelectedRtl = IsRtl;
+                        });
+                        break;
+                }
+
                 var getDataTask = base.GetData(cancellationToken);
                 await Task.WhenAll(getDataTask, getEditorDataTask);
+
+             
             }
             else
             {
                 await base.GetData(cancellationToken);
             }
+
+
+           
+
+
+
+           
         }
 
         protected override async Task GetEditorData(CancellationToken cancellationToken)
         {
-
+         
             await GetPivotWords(cancellationToken);
 
         }
@@ -302,6 +333,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 _sourceToTarget = (item.Tag as string) == BulkAlignmentReviewTags.Source;
                 SelectedFontFamily = _sourceToTarget ? SourceFontFamily : TargetFontFamily;
+                SelectedRtl = _sourceToTarget ? IsRtl : IsTargetRtl;
                 _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords(CancellationToken.None));
             }
         }
@@ -564,6 +596,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private AlignmentSet? _alignmentSet;
         private async Task GetPivotWords(CancellationToken cancellationToken)
         {
+            PivotWords = null;
+            AlignedWords = null;
+            BulkAlignments = null;
+            AlignmentCounts = null;
+            PagedBulkAlignments = null;
+
             _ = await Task.Factory.StartNew(async () =>
             {
                 var taskName = "GetPivotWords";
@@ -575,10 +613,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     //    description: $"Fetching Pivot Words", cancellationToken: cancellationToken);
 
 
-                    AlignedWords = null;
-                    BulkAlignments = null;
-                    AlignmentCounts = null;
-                    PagedBulkAlignments = null;
                     FetchingData = true;
                     ProgressBarVisibility = Visibility.Visible;
 
@@ -625,6 +659,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private PagingCollectionView? _pagedBulkAlignments;
         private bool _showBookSelector;
         private FontFamily _selectedFontFamily;
+        private bool _selectedRtl;
 
 
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)

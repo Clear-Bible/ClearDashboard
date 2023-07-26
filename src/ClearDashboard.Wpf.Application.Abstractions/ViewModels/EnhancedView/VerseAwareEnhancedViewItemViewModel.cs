@@ -483,7 +483,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        private async Task GetAlignmentData(AlignmentEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        protected async Task GetAlignmentData(AlignmentEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
             try
             {
@@ -683,7 +683,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        private async Task<FontFamily> GetFontFamily(string paratextProjectId)
+        protected async Task<FontFamily> GetFontFamily(string paratextProjectId)
         {
             var fontFamilyName = await GetFontFamilyName(paratextProjectId);
 
