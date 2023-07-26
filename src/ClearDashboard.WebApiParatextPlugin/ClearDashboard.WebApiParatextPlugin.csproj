@@ -19,6 +19,7 @@
   <ItemGroup>
     <None Remove="Plugin.bmp" />
     <None Remove="Resources\DashboardFailure.wav" />
+    <None Remove="Resources\ChangeParatextProject.gif" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\DashboardFailure.wav" />
+    <EmbeddedResource Include="Resources\ChangeParatextProject.gif" />
   </ItemGroup>
 
   <ItemGroup>
