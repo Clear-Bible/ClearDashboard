@@ -143,34 +143,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             //zzSur
             //Invoke((Action)(() => GetUsfmForBook("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 40)));
             _logger = WebHostStartup.ServiceProvider.GetService<IPluginLogger>();
-
-            //Thread t = new Thread((ThreadStart)(() => {
-            //Clipboard.SetText("some Text");
-
-            //var assembly = Assembly.GetExecutingAssembly();
-            //    var gifString = "ClearDashboard.WebApiParatextPlugin.Resources.ChangeParatextProject.gif";
-            //    //using 
-            //        var stream = assembly.GetManifestResourceStream(gifString);
-            //    //{
-            //        var bitmap = new Bitmap(stream);
-            //        Clipboard.SetImage(bitmap);
-
-            ////}
-            //}));
-
-
-
-            ////t.SetApartmentState(ApartmentState.STA);
-            ////t.Start();
-            ////t.Join();
-
-            
-            //this.rtb.Invoke((MethodInvoker)delegate {
-            //    // Running on the UI thread
-            //    this.rtb.Paste();
-            //});
-
-            
         }
 
         private async void WindowClosing(IPluginChildWindow sender, CancelEventArgs args)
