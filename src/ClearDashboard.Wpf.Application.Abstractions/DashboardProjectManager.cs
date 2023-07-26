@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application;
 
@@ -171,7 +172,7 @@ public class DashboardProjectManager : ProjectManager
             {
                 CurrentParatextProject = project;
                 EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
-                //if the message isn't making it from paratext to here try commenting hte line above (important to leave unawaited)
+                //if the message isn't making it from paratext to here try commenting out the line above (important to leave unawaited)
             }
         });
 

@@ -2331,32 +2331,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
             Logger.LogInformation($"Reloading panels due to the Paratext project being switched.");
-            
-            Collection<IScreen> removeItemList = new Collection<IScreen>();
-            foreach (var item in Items)
-            {
-                if (item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.BiblicalTermsViewModel"||
-                    item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.PinsViewModel"||
-                    item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.TextCollectionsViewModel"||
-                    item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.MarbleViewModel"||
-                    item.DisplayName == "ClearDashboard.Wpf.Application.ViewModels.ParatextViews.NotesViewModel"
-                    )
-                {
-                    await item.DeactivateAsync(true, cancellationToken);
-                    removeItemList.Add(item);
-                }
-            }
-            Items.RemoveRange(removeItemList);
 
+            await OnDeactivateAsync(false, CancellationToken.None);
+
+            //await OnInitializeAsync(cancellationToken);
             await LoadParatextProjectMetadata(cancellationToken);
-
-            await ActivateItemAsync<BiblicalTermsViewModel>(cancellationToken);
-            PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
-            await ActivateItemAsync<TextCollectionsViewModel>(cancellationToken);
-            await ActivateItemAsync<MarbleViewModel>(cancellationToken);
-            await ActivateItemAsync<NotesViewModel>(cancellationToken);
-
+            //await LoadProject();
+            //ProjectManager.CheckForCurrentUser();
+            //await NoteManager!.InitializeAsync();
+            //await RebuildMainMenu();
+            await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
+            await LoadEnhancedViewTabs(cancellationToken);
+            
+            await OnActivateAsync(CancellationToken.None);
         }
     }
 }

@@ -1026,7 +1026,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 }
 
                 // remove the last paragraph tag if at the end
-                if (textCollection.Data.Length > 2)
+                if (textCollection.Data != null && textCollection.Data.Length > 2)
                 {
                     if (textCollection.Data.EndsWith("/ "))
                     {
