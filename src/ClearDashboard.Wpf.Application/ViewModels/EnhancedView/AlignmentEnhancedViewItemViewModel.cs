@@ -269,25 +269,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (EditMode == EditMode.EditorViewOnly)
             {
                 var getEditorDataTask = GetEditorData(cancellationToken);
-
-                switch (EnhancedViewItemMetadatum)
-                {
-                    case AlignmentEnhancedViewItemMetadatum alignmentEnhancedViewItemMetadatum:
-
-                        await Execute.OnUIThreadAsync(async () =>
-                        {
-                            SourceFontFamily = await GetFontFamily(alignmentEnhancedViewItemMetadatum.SourceParatextId!);
-                            TargetFontFamily = await GetFontFamily(alignmentEnhancedViewItemMetadatum.TargetParatextId!);
-                            IsRtl = alignmentEnhancedViewItemMetadatum.IsRtl ?? false;
-                            IsTargetRtl = alignmentEnhancedViewItemMetadatum.IsTargetRtl ?? false;
-                            SelectedFontFamily = SourceFontFamily;
-                            SelectedRtl = IsRtl;
-                        });
-                        break;
-                }
-
+                var setFontsAndRtlTask = SetFontsAndRtl();
                 var getDataTask = base.GetData(cancellationToken);
-                await Task.WhenAll(getDataTask, getEditorDataTask);
+
+                await Task.WhenAll(getDataTask, getEditorDataTask, setFontsAndRtlTask);
 
              
             }
@@ -295,13 +280,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 await base.GetData(cancellationToken);
             }
+          
+        }
 
+        private async Task SetFontsAndRtl()
+        {
+            switch (EnhancedViewItemMetadatum)
+            {
+                case AlignmentEnhancedViewItemMetadatum alignmentEnhancedViewItemMetadatum:
 
-           
-
-
-
-           
+                    await Execute.OnUIThreadAsync(async () =>
+                    {
+                        SourceFontFamily = await GetFontFamily(alignmentEnhancedViewItemMetadatum.SourceParatextId!);
+                        TargetFontFamily = await GetFontFamily(alignmentEnhancedViewItemMetadatum.TargetParatextId!);
+                        IsRtl = alignmentEnhancedViewItemMetadatum.IsRtl ?? false;
+                        IsTargetRtl = alignmentEnhancedViewItemMetadatum.IsTargetRtl ?? false;
+                        SelectedFontFamily = SourceFontFamily;
+                        SelectedRtl = IsRtl;
+                    });
+                    break;
+            }
         }
 
         protected override async Task GetEditorData(CancellationToken cancellationToken)
