@@ -97,7 +97,7 @@ public class CollaborationManager
 
     public void SaveCollaborationLicense(Models.CollaborationConfiguration collaborationConfiguration)
     {
-        _configuration = new Models.CollaborationConfiguration
+        var configuration = new Models.CollaborationConfiguration
         {
             Group = collaborationConfiguration.Group,
             RemoteEmail = collaborationConfiguration.RemoteEmail,
@@ -111,7 +111,7 @@ public class CollaborationManager
 
         var gitCollaboration = new GitCollaboration
         {
-            GitAccessToken = _configuration
+            GitAccessToken = configuration
         };
 
         var jsonString = JsonSerializer.Serialize(gitCollaboration);
