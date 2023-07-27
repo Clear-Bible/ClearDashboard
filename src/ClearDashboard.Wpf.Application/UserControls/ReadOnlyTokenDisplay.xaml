@@ -37,7 +37,7 @@
                 Height="Auto"
                 Background="Transparent"
                 HorizontalAlignment="Center"
-                FlowDirection="{Binding ElementName=TokenDisplayControl, Path=TokenFlowDirection}"
+                FlowDirection="{Binding ElementName=TokenDisplayControl, Path=FlowDirection}"
                 FontFamily="{Binding ElementName=TokenDisplayControl, Path=TokenFontFamily}"
                 FontSize="{Binding ElementName=TokenDisplayControl, Path=TokenFontSize}"
                 Foreground="Black"
