@@ -41,7 +41,7 @@
                Content="{Binding TokenDisplay.TranslationSurfaceText}"
                />
 
-        <lexiconControls:LabelEditor Grid.Row="2" x:Name="LexemeEditor" 
+        <lexiconControls:LexemeEditor Grid.Row="2" x:Name="LexemeEditor" 
                                       CurrentLexeme="{Binding CurrentLexeme}" 
                                       FontFamily="{DynamicResource MaterialDesignFont}"
                                       Lexemes="{Binding Lexemes}" 
@@ -114,7 +114,7 @@
                     <b:CallMethodAction MethodName="OnTranslationSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                 </b:EventTrigger>
             </b:Interaction.Triggers>
-        </lexiconControls:LabelEditor>
+        </lexiconControls:LexemeEditor>
         <TextBlock Grid.Row="3"
                    FontFamily="{DynamicResource MaterialDesignFont}"
                    FontSize="16"
