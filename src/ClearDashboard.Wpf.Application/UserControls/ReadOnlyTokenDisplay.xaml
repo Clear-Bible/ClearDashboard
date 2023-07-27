@@ -1,5 +1,6 @@
 ﻿<userControls:TokenDisplayBase
     x:Class="ClearDashboard.Wpf.Application.UserControls.ReadOnlyTokenDisplay"
+    x:Name="TokenDisplayControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -23,24 +24,24 @@
             Height="3"
             HorizontalAlignment="Center"
             Margin="0,0,0,0"
-            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=CompositeIndicatorComputedColor}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=CompositeIndicatorVisibility}" />
+            Fill="{Binding ElementName=TokenDisplayControl, Path=CompositeIndicatorComputedColor}"
+            Visibility="{Binding ElementName=TokenDisplayControl, Path=CompositeIndicatorVisibility}" />
         <Border x:Name="TokenButton"
-                BorderBrush ="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=TokenBorder}"
+                BorderBrush ="{Binding ElementName=TokenDisplayControl, Path=TokenBorder}"
                 BorderThickness="3"
                 Padding="0"
-                Margin ="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=TokenMargin}">
+                Margin ="{Binding ElementName=TokenDisplayControl, Path=TokenMargin}">
             
             <TextBlock
-                x:Name="TokenTokenBlock"
+                x:Name="TokenTextBlock"
                 Height="Auto"
                 Background="Transparent"
                 HorizontalAlignment="Center"
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=TokenFlowDirection}"
-                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=TokenFontFamily}"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=TokenFontSize}"
+                FlowDirection="{Binding ElementName=TokenDisplayControl, Path=FlowDirection}"
+                FontFamily="{Binding ElementName=TokenDisplayControl, Path=TokenFontFamily}"
+                FontSize="{Binding ElementName=TokenDisplayControl, Path=TokenFontSize}"
                 Foreground="Black"
-                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type userControls:TokenDisplayBase}}, Path=SurfaceText}" />
+                Text="{Binding ElementName=TokenDisplayControl, Path=SurfaceText}" />
 
         </Border>
     </StackPanel>

@@ -22,7 +22,7 @@ namespace ClearDashboard.Wpf.Application.UserControls;
 public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<TokensUpdatedMessage>
 {
 
-    #region Static RoutedEvents
+    #region Static dependency properties
 
     /// <summary>
     /// Identifies the SourceFontFamily dependency property.
@@ -54,8 +54,6 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<Tok
     public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register(nameof(TokenVerticalSpacing), typeof(double), typeof(VerseDisplayBase),
         new PropertyMetadata(4d));
 
-
-
     /// <summary>
     /// Identifies the VerseBackground dependency property.
     /// </summary>
@@ -86,8 +84,7 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<Tok
     public static readonly DependencyProperty VersePaddingProperty = DependencyProperty.Register(nameof(VersePadding), typeof(Thickness), typeof(VerseDisplayBase),
         new PropertyMetadata(new Thickness(10)));
 
-
-    #endregion Static DependencyProperties
+    #endregion Static dependency properties
     #region Private event handlers
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -119,14 +116,15 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<Tok
     #endregion
     #region Public properties
 
-
-
     /// <summary>
     /// Gets or sets the <see cref="IEventAggregator"/> that this control instance can use to listen for events.
     /// </summary>
     public static IEventAggregator? EventAggregator { get; set; }
 
-
+    /// <summary>
+    /// Gets the <see cref="FlowDirection"/> for the source tokens.
+    /// </summary>
+    public FlowDirection SourceFlowDirection => VerseDisplayViewModel is { IsSourceRtl: true } ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
     /// <summary>
     /// Gets or sets the <see cref="FontFamily"/> to use for displaying the token.
@@ -146,11 +144,15 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<Tok
         set => SetValue(SourceFontSizeProperty, value);
     }
 
-
     /// <summary>
     /// Gets the collection of <see cref="TokenDisplayViewModel"/> source objects to display in the control.
     /// </summary>
-    public IEnumerable SourceTokens => VerseDisplayViewModel.SourceTokenDisplayViewModels;
+    public IEnumerable SourceTokens => VerseDisplayViewModel != null ? VerseDisplayViewModel.SourceTokenDisplayViewModels : new TokenDisplayViewModelCollection();
+
+    /// <summary>
+    /// Gets the <see cref="FlowDirection"/> for the target tokens.
+    /// </summary>
+    public FlowDirection TargetFlowDirection => VerseDisplayViewModel is { IsTargetRtl: true } ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
     /// <summary>
     /// Gets or sets the <see cref="FontFamily"/> to use for displaying the target tokens.
@@ -170,11 +172,10 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<Tok
         set => SetValue(TargetFontSizeProperty, value);
     }
 
-
     /// <summary>
     /// Gets the collection of <see cref="TokenDisplayViewModel"/> target objects to display in the control.
     /// </summary>
-    public TokenDisplayViewModelCollection TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
+    public TokenDisplayViewModelCollection TargetTokens => VerseDisplayViewModel != null ? VerseDisplayViewModel.TargetTokenDisplayViewModels : new TokenDisplayViewModelCollection();
 
     /// <summary>
     /// Gets or sets the visibility of the target (alignment) verse.
@@ -223,7 +224,7 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<Tok
     /// <summary>
     /// Gets the strongly-typed VerseDisplayViewModel bound to this control.
     /// </summary>
-    public VerseDisplayViewModel VerseDisplayViewModel => (DataContext.GetType().Name != "NamedObject" ? DataContext as VerseDisplayViewModel : null)!;
+    public VerseDisplayViewModel VerseDisplayViewModel => (DataContext?.GetType().Name != "NamedObject" ? DataContext as VerseDisplayViewModel : null)!;
 
     /// <summary>
     /// Gets or sets the margin for the tokens list.

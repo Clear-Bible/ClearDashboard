@@ -57,8 +57,9 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
     /// Identifies the TokenFlowDirection dependency property.
     /// </summary>
     public static readonly DependencyProperty TokenFlowDirectionProperty = DependencyProperty.Register(
-        nameof(TokenFlowDirection), typeof(FlowDirection), typeof(TokenDisplayBase),
-        new PropertyMetadata(FlowDirection.LeftToRight));
+        nameof(TokenFlowDirection), typeof(FlowDirection), typeof(TokenDisplayBase)
+        //new PropertyMetadata(FlowDirection.LeftToRight)
+        );
 
     /// <summary>
     /// Identifies the TokenFontFamily dependency property.
