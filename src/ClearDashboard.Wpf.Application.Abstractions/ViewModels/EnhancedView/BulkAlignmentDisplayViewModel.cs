@@ -18,8 +18,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
 {
     private readonly BulkAlignment _bulkAlignment;
-
-
+    
     public BulkAlignmentDisplayViewModel(BulkAlignment bulkAlignment,
         EngineStringDetokenizer sourceDetokenizer,
         bool isSourceRtl,
@@ -36,8 +35,7 @@ public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
         TargetTokenMap = new TokenMap(bulkAlignment.TargetVerseTokens, targetDetokenizer, isTargetRtl);
     }
 
-    public string DisplayTokens =>
-        string.Join(" ", _bulkAlignment.SourceVerseTokens.Select(token => token.TrainingText));
+    public string DisplayTokens => string.Join(" ", _bulkAlignment.SourceVerseTokens.Select(token => token.TrainingText));
 
     public static async Task<BulkAlignmentDisplayViewModel> CreateAsync(IComponentContext componentContext, BulkAlignment bulkAlignment, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl)
     {

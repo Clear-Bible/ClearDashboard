@@ -1,6 +1,10 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
+using ClearDashboard.Wpf.Application.Converters;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Threading;
@@ -13,21 +17,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Threading;
-using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
-using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.Wpf.Application.Events;
+using System.Windows.Media;
 using Alignment = ClearDashboard.DAL.Alignment.Translation.Alignment;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Token = ClearBible.Engine.Corpora.Token;
-using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
-using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.Converters;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Data;
-using System.Windows.Media;
 
 
 // ReSharper disable UnusedMember.Global
@@ -35,108 +28,6 @@ using System.Windows.Media;
 // ReSharper disable InconsistentNaming
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-
-    public class PagingCollectionView : ListCollectionView
-    {
-        private readonly IList _innerList;
-        private readonly int _itemsPerPage;
-
-        private int _currentPage = 1;
-
-        public PagingCollectionView(IList innerList, int itemsPerPage)
-            : base(innerList)
-        {
-            _innerList = innerList;
-            _itemsPerPage = itemsPerPage;
-        }
-
-        public override int Count
-        {
-            get
-            {
-                if (_innerList.Count == 0) return 0;
-                if (_currentPage < PageCount) // page 1..n-1
-                {
-                    return _itemsPerPage;
-                }
-                else // page n
-                {
-                    var itemsLeft = _innerList.Count % _itemsPerPage;
-                    return 0 == itemsLeft ? _itemsPerPage : itemsLeft;
-                }
-            }
-        }
-
-        public int CurrentPage
-        {
-            get => _currentPage;
-            set
-            {
-                _currentPage = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("CurrentPage"));
-            }
-        }
-
-        public int ItemsPerPage => _itemsPerPage;
-
-        public int PageCount => (_innerList.Count + _itemsPerPage - 1) / _itemsPerPage;
-
-        private int EndIndex
-        {
-            get
-            {
-                var end = _currentPage * _itemsPerPage - 1;
-                return (end > _innerList.Count) ? _innerList.Count : end;
-            }
-        }
-
-        private int StartIndex => (_currentPage - 1) * _itemsPerPage;
-
-        public override object GetItemAt(int index)
-        {
-            var offset = index % (_itemsPerPage);
-            return _innerList[StartIndex + offset];
-        }
-
-        public void MoveToNextPage()
-        {
-            if (_currentPage < this.PageCount)
-            {
-                CurrentPage += 1;
-            }
-            Refresh();
-        }
-
-        public void MoveToPreviousPage()
-        {
-            if (_currentPage > 1)
-            {
-                CurrentPage -= 1;
-            }
-            Refresh();
-        }
-    }
-
-    public static class LinqExtensions
-    {
-        public static async Task<TResult[]> SelectAsync<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            if (selector == null)
-            {
-                throw new ArgumentNullException(nameof(selector));
-            }
-
-            return await Task.WhenAll(source.Select(selector));
-        }
-    }
-
- 
-
     public class AlignmentEnhancedViewItemViewModel : VerseAwareEnhancedViewItemViewModel, IHandle<UiLanguageChangedMessage>
     {
 
@@ -156,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             ShowEditButton = EditMode == EditMode.ManualToggle;
             EnableEditMode = false;
             EditModeButtonLabel = LocalizationService.Get("BulkAlignmentReview_BulkAlignmentReview");
-            _sourceToTarget = true;
+            SourceToTarget = true;
 
             SelectedFontFamily = SourceFontFamily;
             SelectedRtl = IsRtl;
@@ -167,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                              AlignmentTypes.FromAlignmentModel_Unverified_Not_Otherwise_Included;
 
             // TODO:  this should be a user setting.
-            _countsByTrainingText = true;
+            CountsByTrainingText = true;
             AlignmentFetchOptions = AlignmentFetchOptions.ByBook;
             ShowBookSelector = true;
             RelevantBooks = new List<Book>();
@@ -261,7 +152,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private bool _sourceToTarget;
+        public bool SourceToTarget
+        {
+            get => _sourceToTarget;
+            private set => Set(ref _sourceToTarget, value);
+        }
 
         public override async Task GetData(CancellationToken cancellationToken)
         {
@@ -329,19 +224,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
             {
-                _sourceToTarget = (item.Tag as string) == BulkAlignmentReviewTags.Source;
-                SelectedFontFamily = _sourceToTarget ? SourceFontFamily : TargetFontFamily;
-                SelectedRtl = _sourceToTarget ? IsRtl : IsTargetRtl;
+                SourceToTarget = (item.Tag as string) == BulkAlignmentReviewTags.Source;
+                SelectedFontFamily = SourceToTarget ? SourceFontFamily : TargetFontFamily;
+                SelectedRtl = SourceToTarget ? IsRtl : IsTargetRtl;
                 _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords(CancellationToken.None));
             }
         }
 
-        private bool _countsByTrainingText;
+        public bool CountsByTrainingText
+        {
+            get => _countsByTrainingText;
+            private set => Set(ref _countsByTrainingText, value);
+        }
+
         public void OnCountByTextTypeChanged(SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
             {
-                _countsByTrainingText = (item.Tag as string) == BulkAlignmentReviewTags.CountsByTrainingText;
+                CountsByTrainingText = (item.Tag as string) == BulkAlignmentReviewTags.CountsByTrainingText;
                 _debounceTimer.DebounceAsync(1000, async () => await GetPivotWords(CancellationToken.None));
             }
         }
@@ -375,6 +275,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             _ = await Task.Factory.StartNew(async () =>
             {
+                BulkAlignments = null;
+              
                 PagedBulkAlignments = new PagingCollectionView(new List<BulkAlignmentVerseRow>(), 0);
                 try
                 {
@@ -382,10 +284,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     ProgressBarVisibility = Visibility.Visible;
 
                     var result = AlignmentFetchOptions == AlignmentFetchOptions.ByBook
-                        ? await _alignmentSet.GetAlignmentVerseContexts(CurrentAlignedWord.Source,
-                            CurrentAlignedWord.Target, _countsByTrainingText, CurrentBook.Number, AlignmentTypes)
-                        : await _alignmentSet.GetAlignmentVerseContexts(CurrentAlignedWord.Source,
-                            CurrentAlignedWord.Target, _countsByTrainingText, null, AlignmentTypes);
+                        ? await AlignmentSet.GetAlignmentVerseContexts(CurrentAlignedWord.Source,
+                            CurrentAlignedWord.Target, CountsByTrainingText, CurrentBook.Number, AlignmentTypes)
+                        : await AlignmentSet.GetAlignmentVerseContexts(CurrentAlignedWord.Source,
+                            CurrentAlignedWord.Target, CountsByTrainingText, null, AlignmentTypes);
 
 
                     _verseContexts = result.VerseContexts;
@@ -433,10 +335,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         TargetVerseTokens = verseContext.targetVerseTokens,
                         TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
                     },
-                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                    _alignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl,
-                    _alignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
-                    _alignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.IsRtl
+                    AlignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
+                    AlignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl,
+                    AlignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
+                    AlignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.IsRtl
                 )
             };
         }
@@ -458,7 +360,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 AlignmentFetchOptions = (item.Tag is AlignmentFetchOptions options ? options : AlignmentFetchOptions.ByBook);
                 ShowBookSelector = AlignmentFetchOptions == AlignmentFetchOptions.ByBook;
-              _debounceTimer.DebounceAsync(10, async () => await GetBulkAlignments());
+                _debounceTimer.DebounceAsync(10, async () => await GetBulkAlignments());
 
             }
         }
@@ -475,20 +377,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     FetchingData = true;
                     ProgressBarVisibility = Visibility.Visible;
 
-                    if (_alignmentSet == null && EnhancedViewItemMetadatum is AlignmentEnhancedViewItemMetadatum)
-                    {
-                        AlignmentSetId = Guid.Parse(((AlignmentEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)
-                            .AlignmentSetId!);
-                        _alignmentSet = await AlignmentSet.Get(new AlignmentSetId(AlignmentSetId), Mediator!);
-                    }
+                    await EnsureAlignmentSet();
 
-                    var alignmentsToUpdate = BulkAlignments.Where(ba => ba.IsSelected).Select(ba => ba.Alignment).ToList();
-                    var alignmentsToSave = new List<Alignment>();
-                    if (alignmentsToUpdate.Any())
+                    if (BulkAlignments != null)
                     {
-                        var verification = DetermineVerification(approvalType);
-                        alignmentsToSave.AddRange(alignmentsToUpdate.Select(alignment => new Alignment(alignment.AlignedTokenPair, verification)));
-                        await _alignmentSet.PutAlignments(alignmentsToSave, CancellationToken.None);
+
+                        var alignmentsToUpdate = BulkAlignments.Where(ba => ba.IsSelected).Select(ba => ba.Alignment)
+                            .ToList();
+                        var alignmentsToSave = new List<Alignment>();
+                        if (alignmentsToUpdate.Any())
+                        {
+                            var verification = DetermineAlignmentVerificationStatus(approvalType);
+                            alignmentsToSave.AddRange(alignmentsToUpdate.Select(alignment =>
+                                new Alignment(alignment.AlignedTokenPair, verification)));
+                            await AlignmentSet.PutAlignments(alignmentsToSave, CancellationToken.None);
+                        }
                     }
                 }
                 finally
@@ -499,17 +402,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
-        private string DetermineVerification(string? approvalType)
+        private string DetermineAlignmentVerificationStatus(string? approvalType)
         {
             switch (approvalType)
             {
                 case BulkAlignmentReviewTags.ApproveSelected:
-                    return "Verified";
+                    return AlignmentVerificationStatus.Verified;
                 case BulkAlignmentReviewTags.DisapproveSelected:
-                    return "Invalid";
+                    return AlignmentVerificationStatus.Invalid;
                 case BulkAlignmentReviewTags.MarkSelectedAsNeedsReview:
+                    return AlignmentVerificationStatus.Unverified;
                 default:
-                    return "Unverified";
+                    return AlignmentVerificationStatus.Unverified;
             }
         }
 
@@ -541,8 +445,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         AlignedWords = new BindableCollection<AlignedWord>(alignedWordDictionary.Select(kvp =>
                                 new AlignedWord
                                 {
-                                    Source = _sourceToTarget ? pivotWord.Word : kvp.Key,
-                                    Target = _sourceToTarget ? kvp.Key : pivotWord.Word,
+                                    Source = SourceToTarget ? pivotWord.Word : kvp.Key,
+                                    Target = SourceToTarget ? kvp.Key : pivotWord.Word,
                                     Count = kvp.Value.StatusCounts.Sum(k => k.Value),
                                     PivotWord = pivotWord,
                                     RelevantBooks = CreateRelevantBooks(kvp.Value.BookNumbers)
@@ -583,7 +487,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private IEnumerable<(Alignment alignment, IEnumerable<Token> sourceVerseTokens, uint sourceVerseTokensIndex, IEnumerable<Token> targetVerseTokens, uint targetVerseTokensIndex)>? _verseContexts;
         private void GetAlignmentVerseContexts(AlignedWord alignedWord)
         {
-            if (alignedWord is { Source: { }, Target: { } } && _alignmentSet != null)
+            if (alignedWord is { Source: { }, Target: { } } && AlignmentSet != null)
             {
                 CurrentAlignedWord = alignedWord;
                 RelevantBooks = alignedWord.RelevantBooks;
@@ -591,7 +495,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private AlignmentSet? _alignmentSet;
+        private AlignmentSet? AlignmentSet { get; set; }
+
         private async Task GetPivotWords(CancellationToken cancellationToken)
         {
             PivotWords = null;
@@ -614,16 +519,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     FetchingData = true;
                     ProgressBarVisibility = Visibility.Visible;
 
-                    if (_alignmentSet == null && EnhancedViewItemMetadatum is AlignmentEnhancedViewItemMetadatum)
-                    {
-                        AlignmentSetId = Guid.Parse(((AlignmentEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)
-                            .AlignmentSetId!);
-                        _alignmentSet = await AlignmentSet.Get(new AlignmentSetId(AlignmentSetId), Mediator!);
-                    }
+                    await EnsureAlignmentSet();
 
-                    if (_alignmentSet != null)
+                    if (AlignmentSet != null)
                     {
-                        AlignmentCounts = await _alignmentSet.GetAlignmentCounts(_sourceToTarget, _countsByTrainingText, true,
+                        AlignmentCounts = await AlignmentSet.GetAlignmentCounts(SourceToTarget, CountsByTrainingText, true,
                             AlignmentTypes, cancellationToken: cancellationToken);
 
                         await Execute.OnUIThreadAsync(async () =>
@@ -651,6 +551,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
+        private async Task EnsureAlignmentSet()
+        {
+            if (AlignmentSet == null && EnhancedViewItemMetadatum is AlignmentEnhancedViewItemMetadatum)
+            {
+                AlignmentSetId = Guid.Parse(((AlignmentEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)
+                    .AlignmentSetId!);
+                AlignmentSet = await AlignmentSet.Get(new AlignmentSetId(AlignmentSetId), Mediator!);
+            }
+        }
+
         private Dictionary<AlignmentTypes, string> AlignmentTypesMap = new Dictionary<AlignmentTypes, string>();
         private List<Book> _relevantBooks;
         private Book _currentBook;
@@ -658,6 +568,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private bool _showBookSelector;
         private FontFamily _selectedFontFamily;
         private bool _selectedRtl;
+        private bool _countsByTrainingText;
+        private bool _sourceToTarget;
 
 
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
