@@ -1,5 +1,6 @@
 <UserControl
     x:Class="ClearDashboard.Wpf.Application.UserControls.Notes.LabelsDisplay"
+    x:Name="LabelsDisplayControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,30 +15,33 @@
     <UserControl.Resources>
         <DataTemplate x:Key="LabelBoxTemplate">
             <Border
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
-                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
                 Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
                 BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=BorderBrush}"
                 BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=BorderThickness}"
-                CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}">
+                CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
-                        Width="85"
+                        FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontFamily}"
+                        FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
+                        FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontStyle}"
+                        FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontWeight}"
                         Text="{Binding Path=Text}"
-                        TextWrapping="Wrap" />
+                        TextWrapping="Wrap" 
+                        Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelWidth}"
+                        />
                     <Button
                         Name="RemoveLabelButton"
-                        Height="12"
-                        Margin="8,0,0,0"
-                        Padding="0,0,0,0"
-                        HorizontalContentAlignment="Right"
                         Background="Transparent"
                         BorderThickness="0"
-                        Click="OnRemoveLabel"
-                        FontSize="11"
-                        FontWeight="Bold"
-                        ToolTip="{helpers:Localization Notes_LabelRemove}">
-                        X
+                        HorizontalContentAlignment="Right"
+                        Height="22"
+                        Margin="10,-4,0,0"
+                        Padding="0,0,0,0"
+                        ToolTip="{helpers:Localization Notes_LabelRemove}"
+                        Click="OnRemoveLabel">
+                        <Image Height="18" Source="/Resources/close24.png" />
                     </Button>
                 </StackPanel>
             </Border>
@@ -50,5 +54,4 @@
         ItemTemplate="{StaticResource LabelBoxTemplate}"
         ItemsPanel="{StaticResource LabelsPanelTemplate}"
         ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Labels}" />
-
 </UserControl>

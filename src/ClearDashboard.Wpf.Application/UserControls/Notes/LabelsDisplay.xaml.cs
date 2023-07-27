@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,34 +15,50 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
     public partial class LabelsDisplay
     {
         #region Static Routed Events
+
         /// <summary>
-        /// Identifies the LabelAddedEvent routed event.
+        /// Identifies the LabelRemovedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
             ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsDisplay));
+        
         #endregion
         #region Static DependencyProperties
 
         /// <summary>
-        /// Identifies the Note dependency property.
-        /// </summary>
-        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register(nameof(Note), typeof(NoteViewModel), typeof(LabelsDisplay));
-
-        /// <summary>
-        /// Identifies the Orientation dependency property.
-        /// </summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(LabelsDisplay));
-
-        /// <summary>
         /// Identifies the LabelBackground dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelBackgroundProperty = DependencyProperty.Register("LabelBackground", typeof(SolidColorBrush), typeof(LabelsDisplay));
+        public static readonly DependencyProperty LabelBackgroundProperty = DependencyProperty.Register(nameof(LabelBackground), typeof(SolidColorBrush), typeof(LabelsDisplay));
 
         /// <summary>
         /// Identifies the LabelCornerRadius dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelCornerRadiusProperty = DependencyProperty.Register(nameof(LabelCornerRadius), typeof(CornerRadius), typeof(LabelsDisplay),
             new PropertyMetadata(new CornerRadius(0)));
+
+        /// <summary>
+        /// Identifies the LabelFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelFormFontFamilyProperty = DependencyProperty.Register(nameof(LabelFontFamily), typeof(FontFamily), typeof(LabelsDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the LabelFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelFontSizeProperty = DependencyProperty.Register(nameof(LabelFontSize), typeof(double), typeof(LabelsDisplay),
+            new PropertyMetadata(11d));
+
+        /// <summary>
+        /// Identifies the LabelFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelFontStyleProperty = DependencyProperty.Register(nameof(LabelFontStyle), typeof(FontStyle), typeof(LabelsDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the LabelFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelFontWeightProperty = DependencyProperty.Register(nameof(LabelFontWeight), typeof(FontWeight), typeof(LabelsDisplay),
+            new PropertyMetadata(FontWeights.Normal));
 
         /// <summary>
         /// Identifies the LabelMargin dependency property.
@@ -53,12 +70,28 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the LabelPadding dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelPaddingProperty = DependencyProperty.Register(nameof(LabelPadding), typeof(Thickness), typeof(LabelsDisplay),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+            new PropertyMetadata(new Thickness(10, 6, 10, 50)));
+
+        /// <summary>
+        /// Identifies the LabelWidth dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelWidthProperty = DependencyProperty.Register(nameof(LabelWidth), typeof(double), typeof(LabelsDisplay),
+            new PropertyMetadata(Double.NaN));
 
         /// <summary>
         /// Identifies the Labels dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelsProperty = DependencyProperty.Register("Labels", typeof(IEnumerable), typeof(LabelsDisplay));
+        public static readonly DependencyProperty LabelsProperty = DependencyProperty.Register(nameof(Labels), typeof(IEnumerable), typeof(LabelsDisplay));
+
+        /// <summary>
+        /// Identifies the Note dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register(nameof(Note), typeof(NoteViewModel), typeof(LabelsDisplay));
+
+        /// <summary>
+        /// Identifies the Orientation dependency property.
+        /// </summary>
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(LabelsDisplay));
 
         #endregion Static DependencyProperties
         #region Private event handlers
@@ -76,9 +109,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnRemoveLabel(object sender, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
-            var label = control?.DataContext as NotesLabel;
-
-            if (label != null)
+            if (control?.DataContext is NotesLabel label)
             {
                 RaiseLabelEvent(LabelRemovedEvent, label);
             }
@@ -88,39 +119,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #region Public properties
 
         /// <summary>
-        /// Gets or sets the <see cref="NoteViewModel"/> that the labels are associated with.
-        /// </summary>
-        public NoteViewModel Note
-        {
-            get => (NoteViewModel) GetValue(NoteProperty);
-            set => SetValue(NoteProperty, value);
-        }
-
-        /// <summary>
         /// Gets or sets the orientation for displaying the labels.
         /// </summary>
         public Orientation Orientation
         {
             get => (Orientation)GetValue(OrientationProperty);
             set => SetValue(OrientationProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the margin for individual label boxes.
-        /// </summary>
-        public Thickness LabelMargin
-        {
-            get => (Thickness)GetValue(LabelMarginProperty);
-            set => SetValue(LabelMarginProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the padding for individual label boxes.
-        /// </summary>
-        public Thickness LabelPadding
-        {
-            get => (Thickness)GetValue(LabelPaddingProperty);
-            set => SetValue(LabelPaddingProperty, value);
         }
 
         /// <summary>
@@ -142,6 +146,70 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Gets or sets the font family for individual label boxes.
+        /// </summary>
+        public FontFamily LabelFontFamily
+        {
+            get => (FontFamily)GetValue(LabelFormFontFamilyProperty);
+            set => SetValue(LabelFormFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for individual label boxes.
+        /// </summary>
+        public double LabelFontSize
+        {
+            get => (double)GetValue(LabelFontSizeProperty);
+            set => SetValue(LabelFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for individual label boxes.
+        /// </summary>
+        public FontStyle LabelFontStyle
+        {
+            get => (FontStyle)GetValue(LabelFontStyleProperty);
+            set => SetValue(LabelFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for individual label boxes.
+        /// </summary>
+        public FontWeight LabelFontWeight
+        {
+            get => (FontWeight)GetValue(LabelFontWeightProperty);
+            set => SetValue(LabelFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin for individual label boxes.
+        /// </summary>
+        public Thickness LabelMargin
+        {
+            get => (Thickness)GetValue(LabelMarginProperty);
+            set => SetValue(LabelMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding for individual label boxes.
+        /// </summary>
+        public Thickness LabelPadding
+        {
+            get => (Thickness)GetValue(LabelPaddingProperty);
+            set => SetValue(LabelPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the width of individual label text boxes.
+        /// </summary>
+        /// <remarks><see cref="Double.NaN"/> is equivalent to "Auto" in XAML.</remarks>
+        public double LabelWidth
+        {
+            get => (double)GetValue(LabelWidthProperty);
+            set => SetValue(LabelWidthProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets a collection of <see cref="System.Windows.Controls.Label"/> objects to display in the control.
         /// </summary>
         public IEnumerable Labels
@@ -149,6 +217,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             get => (IEnumerable)GetValue(LabelsProperty);
             set => SetValue(LabelsProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets the <see cref="NoteViewModel"/> that the labels are associated with.
+        /// </summary>
+        public NoteViewModel Note
+        {
+            get => (NoteViewModel)GetValue(NoteProperty);
+            set => SetValue(NoteProperty, value);
+        }
+
         #endregion Public properties
         #region Public events
         /// <summary>
