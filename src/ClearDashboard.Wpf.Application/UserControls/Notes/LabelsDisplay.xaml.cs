@@ -3,6 +3,7 @@ using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
@@ -46,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the LabelFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelFontSizeProperty = DependencyProperty.Register(nameof(LabelFontSize), typeof(double), typeof(LabelsDisplay),
-            new PropertyMetadata(11d));
+            new PropertyMetadata(14d));
 
         /// <summary>
         /// Identifies the LabelFontStyle dependency property.
@@ -81,7 +82,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Identifies the Labels dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelsProperty = DependencyProperty.Register(nameof(Labels), typeof(IEnumerable), typeof(LabelsDisplay));
+        public static readonly DependencyProperty LabelsProperty = DependencyProperty.Register(nameof(Labels), typeof(LabelCollection), typeof(LabelsDisplay));
 
         /// <summary>
         /// Identifies the Note dependency property.
@@ -210,11 +211,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="System.Windows.Controls.Label"/> objects to display in the control.
+        /// Gets or sets a collection of <see cref="NotesLabel"/> objects to display in the control.
         /// </summary>
-        public IEnumerable Labels
+        public LabelCollection Labels
         {
-            get => (IEnumerable)GetValue(LabelsProperty);
+            get => (LabelCollection)GetValue(LabelsProperty);
             set => SetValue(LabelsProperty, value);
         }
 

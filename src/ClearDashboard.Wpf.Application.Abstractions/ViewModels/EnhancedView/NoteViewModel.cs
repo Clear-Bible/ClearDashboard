@@ -46,13 +46,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private LabelCollection? _labels;
         public ObservableCollection<Label> Labels
         {
-            get => Entity.Labels;
+            get => _labels ??= new LabelCollection(Entity.Labels);
             set
             {
-                if (Equals(value, Entity.Labels)) return;
                 Entity.Labels = value;
+                _labels = new LabelCollection(Entity.Labels);
                 NotifyOfPropertyChange();
             }
         }
@@ -191,6 +192,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteViewModel(Note note)
         {
             Entity = note;
+            _labels = new LabelCollection(note.Labels);
             Associations = new NoteAssociationViewModelCollection();
             Replies = new NoteViewModelCollection();
         }

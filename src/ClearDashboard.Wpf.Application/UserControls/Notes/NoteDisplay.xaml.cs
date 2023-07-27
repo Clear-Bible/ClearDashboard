@@ -157,7 +157,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the LabelFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelFontSizeProperty = DependencyProperty.Register(nameof(LabelFontSize), typeof(double), typeof(NoteDisplay),
-            new PropertyMetadata(11d));
+            new PropertyMetadata(14d));
 
         /// <summary>
         /// Identifies the LabelMargin dependency property.
@@ -169,7 +169,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the LabelPadding dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelPaddingProperty = DependencyProperty.Register(nameof(LabelPadding), typeof(Thickness), typeof(NoteDisplay),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+            new PropertyMetadata(new Thickness(10, 6, 10, 5)));
 
         /// <summary>
         /// Identifies the LabelSuggestions dependency property.
