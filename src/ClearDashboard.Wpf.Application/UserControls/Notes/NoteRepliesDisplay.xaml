@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Application.UserControls.NoteRepliesDisplay"
+    x:Class="ClearDashboard.Wpf.Application.UserControls.Notes.NoteRepliesDisplay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
@@ -9,15 +9,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:GuidInGuidsToBooleanConverter x:Key="GuidInGuidsToBooleanConverter" />
 
-        <DataTemplate x:Key="NoteReplyTemplate" DataType="{x:Type userControls:NoteReplyDisplay}">
+        <DataTemplate x:Key="NoteReplyTemplate" DataType="{x:Type notes:NoteReplyDisplay}">
             <StackPanel Orientation="Vertical">
                 <Separator Foreground="Blue" />
-                <userControls:NoteReplyDisplay
+                <notes:NoteReplyDisplay
                     x:Name="NoteDisplay"
                     NoteSeen="OnNoteSeen"
                     ParentNote="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext}"

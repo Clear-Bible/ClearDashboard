@@ -16,7 +16,7 @@ using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
     /// <summary>
     /// A control that displays the details of a single <see cref="NoteViewModel"/>.

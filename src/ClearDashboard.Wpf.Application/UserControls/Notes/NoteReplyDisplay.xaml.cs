@@ -12,13 +12,11 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
-using ClearDashboard.Wpf.Application.ViewModels.Notes;
-using Mono.Unix.Native;
 using TimeZoneNames;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
     /// <summary>
     /// A control that displays the details of a single note reply.

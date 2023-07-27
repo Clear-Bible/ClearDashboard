@@ -1,8 +1,8 @@
-﻿using ClearDashboard.Wpf.Application.Events;
+﻿using System.Windows;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using System.Windows;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
     /// <summary>
     /// A control for displaying the entity associations of a <see cref="ClearDashboard.DAL.Alignment.Notes.Note"/>.

@@ -7,12 +7,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using ClearBible.Engine.Utils;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
     /// <summary>
     /// A control to allow entry of note labels with autocomplete functionality.

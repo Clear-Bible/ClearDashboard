@@ -1,7 +1,4 @@
-﻿using ClearDashboard.DataAccessLayer.Annotations;
-using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -9,9 +6,12 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
     /// <summary>
     /// A control that displays a collection of note replies.

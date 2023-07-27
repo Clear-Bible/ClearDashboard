@@ -16,6 +16,7 @@ using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.Wpf.Application.Collections.Notes;
 
 namespace ClearDashboard.Wpf.Application.Services
 {

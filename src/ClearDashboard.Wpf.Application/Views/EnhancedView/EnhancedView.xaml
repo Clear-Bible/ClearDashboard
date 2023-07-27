@@ -15,6 +15,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -648,7 +649,7 @@
                     </TextBlock>
                 </controls:SidebarExpander.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <userControls:NoteCollectionDisplay
+                    <notes:NoteCollectionDisplay
                         x:Name="NotesControl"
                         Margin="0,0"
                         EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
@@ -696,7 +697,7 @@
                                 <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                    </userControls:NoteCollectionDisplay>
+                    </notes:NoteCollectionDisplay>
                 </ScrollViewer>
             </controls:SidebarExpander>
         </Grid>

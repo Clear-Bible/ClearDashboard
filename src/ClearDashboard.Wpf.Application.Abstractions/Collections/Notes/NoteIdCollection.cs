@@ -3,7 +3,7 @@ using ClearDashboard.DAL.Alignment.Notes;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ClearDashboard.Wpf.Application.Collections
+namespace ClearDashboard.Wpf.Application.Collections.Notes
 {
     public class NoteIdCollection : BindableCollection<NoteId>
     {

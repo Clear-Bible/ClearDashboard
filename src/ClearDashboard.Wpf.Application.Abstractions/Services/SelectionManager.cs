@@ -7,6 +7,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using System.Threading.Tasks;
 using System.Threading;
+using ClearDashboard.Wpf.Application.Collections.Notes;
 
 namespace ClearDashboard.Wpf.Application.Services
 {

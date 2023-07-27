@@ -4,7 +4,7 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 
-namespace ClearDashboard.Wpf.Application.Collections
+namespace ClearDashboard.Wpf.Application.Collections.Notes
 {
     /// <summary>
     /// A dictionary mapping entity IDs to their attached note IDs.

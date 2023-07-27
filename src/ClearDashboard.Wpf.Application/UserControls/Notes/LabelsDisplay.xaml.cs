@@ -6,7 +6,7 @@ using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
     /// <summary>
     /// A control for displaying a collection of <see cref="NotesLabel"/> values.

@@ -6,11 +6,12 @@ using System.Windows;
 using System.Windows.Media;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
-namespace ClearDashboard.Wpf.Application.UserControls
+namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
     /// <summary>
     /// A user control that displays a collection of <see cref="NoteViewModel"/> instances.

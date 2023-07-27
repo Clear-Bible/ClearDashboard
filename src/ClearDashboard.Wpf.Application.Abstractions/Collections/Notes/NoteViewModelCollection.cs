@@ -2,7 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
-namespace ClearDashboard.Wpf.Application.Collections
+namespace ClearDashboard.Wpf.Application.Collections.Notes
 {
     public class NoteViewModelCollection : BindableCollection<NoteViewModel>
     {
