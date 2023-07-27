@@ -38,7 +38,7 @@
                         BorderThickness="0"
                         Click="OnRemoveLexemeForm"
                         ToolTip="{helpers:Localization Lexicon_RemoveForm}">
-                        <Image Height="20" Source="/Resources/close16.png" />
+                        <Image Height="18" Source="/Resources/close16.png" />
                     </Button>
                 </StackPanel>
             </Border>
