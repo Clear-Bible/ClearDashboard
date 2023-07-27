@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.BulkAlignment.PivotAndAlignedWordOptions"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:a="clr-namespace:ClearDashboard.Wpf.Application.Models.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:translation="clr-namespace:ClearDashboard.DAL.Alignment.Translation;assembly=ClearDashboard.DAL.Alignment"
+             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:AlignmentTypesEnumToBooleanConverter x:Key="AlignmentTypesEnumToBooleanConverter"/>
+        <converters1:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" />
+
+        </Style>
+    </UserControl.Resources>
+    <materialDesign:Card Height="110" Margin="5">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <ListBox Grid.Row="0" Grid.Column="0" 
+                         Style="{StaticResource MaterialDesignToolToggleListBox}" 
+                         Margin="4"  SelectedIndex="0" SelectionMode="Single" 
+                         Height="28"
+                         cm:Message.Attach="[Event SelectionChanged] = [Action OnCountByTextTypeChanged($eventArgs)]"
+                         IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_CountByTrainingText}" Tag="{x:Static a:BulkAlignmentReviewTags.CountsByTrainingText}"></ListBoxItem>
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_CountBySurfaceText}" Tag="{x:Static a:BulkAlignmentReviewTags.CountBySurfaceText}"></ListBoxItem>
+            </ListBox>
+            <ListBox Grid.Row="1" Grid.Column="0" 
+                         Style="{StaticResource MaterialDesignToolToggleListBox}" 
+                         Margin="4"  SelectedIndex="0" SelectionMode="Single" 
+                         Height="28"
+                         cm:Message.Attach="[Event SelectionChanged] = [Action OnPivotWordSourceChanged($eventArgs)]"
+                         IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Source}" Tag="{x:Static a:BulkAlignmentReviewTags.Source}"></ListBoxItem>
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Target}" Tag="{x:Static a:BulkAlignmentReviewTags.Target}"></ListBoxItem>
+            </ListBox>
+            <ListBox Grid.Row="2" Grid.Column="0"  x:Name="AlignedWordsOptionListBox"
+                                                       Margin="4" Style="{StaticResource MaterialDesignToolToggleListBox}"
+                                                       SelectionMode="Extended"
+                                                       Height="28"
+                                                       cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignedWordOptionsChanged($eventArgs)]"
+                                                       IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Machine}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.Machine}" 
+                                 IsSelected="{Binding 
+                                 Path=AlignmentTypes,
+                                 Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
+                                 ConverterParameter={x:Static translation:AlignmentTypes.FromAlignmentModel_Unverified_Not_Otherwise_Included}, Mode=TwoWay}"></ListBoxItem>
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_NeedsReview}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.NeedsReview}"
+                                 IsSelected="{Binding 
+                                 Path=AlignmentTypes,
+                                 Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
+                                 ConverterParameter={x:Static translation:AlignmentTypes.Assigned_Unverified}, Mode=TwoWay}"></ListBoxItem>
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Disapprove}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.Disapproved}"
+                                 IsSelected="{Binding 
+                                 Path=AlignmentTypes,
+                                 Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
+                                 ConverterParameter={x:Static translation:AlignmentTypes.Assigned_Invalid}, Mode=TwoWay}"></ListBoxItem>
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Approve}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.Approved}"
+                                 IsSelected="{Binding 
+                                 Path=AlignmentTypes,
+                                 Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
+                                 ConverterParameter={x:Static translation:AlignmentTypes.Assigned_Verified}, Mode=TwoWay}"></ListBoxItem>
+            </ListBox>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>
