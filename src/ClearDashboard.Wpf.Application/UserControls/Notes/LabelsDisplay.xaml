@@ -5,31 +5,31 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:notes="clr-namespace:ClearDashboard.DAL.Alignment.Notes;assembly=ClearDashboard.DAL.Alignment"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <DataTemplate x:Key="LabelBoxTemplate">
+        <DataTemplate x:Key="LabelBoxTemplate" DataType="notes:Label">
             <Border
-                Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
-                BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=BorderBrush}"
-                BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=BorderThickness}"
-                CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
-                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}">
+                Background="{Binding ElementName=LabelsDisplayControl, Path=LabelBackground}"
+                BorderBrush="{Binding ElementName=LabelsDisplayControl, Path=BorderBrush}"
+                BorderThickness="{Binding ElementName=LabelsDisplayControl, Path=BorderThickness}"
+                CornerRadius="{Binding ElementName=LabelsDisplayControl, Path=LabelCornerRadius}"
+                Margin="{Binding ElementName=LabelsDisplayControl, Path=LabelMargin}"
+                Padding="{Binding ElementName=LabelsDisplayControl, Path=LabelPadding}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
-                        FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontFamily}"
-                        FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
-                        FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontStyle}"
-                        FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontWeight}"
+                        FontFamily="{Binding ElementName=LabelsDisplayControl, Path=LabelFontFamily}"
+                        FontSize="{Binding ElementName=LabelsDisplayControl, Path=LabelFontSize}"
+                        FontStyle="{Binding ElementName=LabelsDisplayControl, Path=LabelFontStyle}"
+                        FontWeight="{Binding ElementName=LabelsDisplayControl, Path=LabelFontWeight}"
                         Text="{Binding Path=Text}"
                         TextWrapping="Wrap" 
-                        Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelWidth}"
+                        Width="{Binding ElementName=LabelsDisplayControl, Path=LabelWidth}"
                         />
                     <Button
                         Name="RemoveLabelButton"
