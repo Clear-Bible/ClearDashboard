@@ -848,7 +848,6 @@
 
                         <DataGrid
                             x:Name="GridDashboardUsers"
-                            GridViewColumnHeader.Click="DashboardGridViewColumnHeaderClickedHandler"
                             Margin="10"
                             AlternatingRowBackground="LightBlue"
                             AutoGenerateColumns="False"
@@ -857,6 +856,7 @@
                             CanUserSortColumns="True"
                             Foreground="Black"
                             GridLinesVisibility="Vertical"
+                            GridViewColumnHeader.Click="DashboardGridViewColumnHeaderClickedHandler"
                             HorizontalScrollBarVisibility="Visible"
                             IsReadOnly="True"
                             ItemsSource="{Binding DashboardUsers}"
@@ -1104,7 +1104,6 @@
 
                         <DataGrid
                             x:Name="GridGitLabUsers"
-                            GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
                             Margin="10"
                             AlternatingRowBackground="LightBlue"
                             AutoGenerateColumns="False"
@@ -1113,12 +1112,12 @@
                             CanUserSortColumns="True"
                             Foreground="Black"
                             GridLinesVisibility="Vertical"
+                            GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
                             HorizontalScrollBarVisibility="Visible"
                             IsReadOnly="True"
                             ItemsSource="{Binding GitLabUsers}"
                             RowBackground="LightYellow"
                             SelectionMode="Extended"
-                            
                             VerticalScrollBarVisibility="Visible">
 
                             <DataGrid.ContextMenu>
@@ -1189,7 +1188,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                
+
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.Header>
                                         <TextBlock
@@ -1250,7 +1249,169 @@
                     </Grid>
                 </TextBlock>
             </TabItem>
+
+            <!--  COLLAB PROJECT GRID  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <Grid>
+
+                            <iconPacks:PackIconBootstrapIcons
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource SecondaryHueLightBrush}"
+                                Kind="Grid3x3" />
+                            <iconPacks:PackIconJamIcons
+                                Width="16"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Kind="Gitlab" />
+                        </Grid>
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Collab Projects"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox
+                            Name="UserFilterBox"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="5"
+                            materialDesign:HintAssist.HelperText="Filter by UserName"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Text="{Binding UserFilterString, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Name="ProjectFilterBox"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="5"
+                            materialDesign:HintAssist.HelperText="Filter by ProjectName"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Text="{Binding ProjectFilterString, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                        <DataGrid
+                            x:Name="ProjectUserConnectionGrid"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Margin="10"
+                            AlternatingRowBackground="LightBlue"
+                            AutoGenerateColumns="False"
+                            CanUserReorderColumns="False"
+                            CanUserResizeColumns="True"
+                            CanUserSortColumns="True"
+                            Foreground="Black"
+                            GridLinesVisibility="Vertical"
+                            GridViewColumnHeader.Click="ConnectionGridViewColumnHeaderClickedHandler"
+                            HorizontalScrollBarVisibility="Visible"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ProjectUserConnections}"
+                            RowBackground="LightYellow"
+                            SelectionMode="Extended"
+                            VerticalScrollBarVisibility="Visible">
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="CopyProjectUserConnection_OnClick" Header="{helpers:Localization Copy}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.CommandBindings>
+                                <CommandBinding Command="Copy" Executed="CopyProjectUserConnection_OnClick" />
+                            </DataGrid.CommandBindings>
+
+                            <DataGrid.InputBindings>
+                                <KeyBinding
+                                    Key="C"
+                                    Command="Copy"
+                                    Modifiers="Control" />
+                            </DataGrid.InputBindings>
+
+
+                            <DataGrid.Columns>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="UserName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding UserName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="ProjectName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ProjectName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="AccessLevel" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding AccessLevel}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+
+                        <Button
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Width="160"
+                            cm:Message.Attach="RefreshProjectUserConnectionGrid">
+                            Refresh
+                        </Button>
+
+                    </Grid>
+                </TextBlock>
+            </TabItem>
         </TabControl>
+
 
     </Grid>
 </Window>
