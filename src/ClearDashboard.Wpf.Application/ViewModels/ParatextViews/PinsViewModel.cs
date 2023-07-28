@@ -364,7 +364,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             ShowBackTranslation = Settings.Default.PinsShowBackTranslation;
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        public async Task Initialize(CancellationToken cancellationToken)
         {
             _watch.Start();
 #pragma warning disable CS4014
@@ -441,7 +441,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
 #pragma warning restore CS4014
 
-            _ = base.OnActivateAsync(cancellationToken);
+            //_ = base.OnActivateAsync(cancellationToken);
         }
 
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)

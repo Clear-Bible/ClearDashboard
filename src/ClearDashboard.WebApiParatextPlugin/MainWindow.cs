@@ -1,12 +1,14 @@
 ﻿using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
 using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
@@ -30,7 +32,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using Microsoft.Extensions.Logging;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
+using System.Media;
+using System.Threading;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -53,6 +58,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private IWindowPluginHost _host;
         private IPluginChildWindow _parent;
         private IMediator _mediator;
+        private IPluginLogger _logger;
         private IHubContext HubContext => GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
         private WebHostStartup WebHostStartup { get; set; }
         private IDisposable WebAppProxy { get; set; }
@@ -74,7 +80,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             DisplayPluginVersion();
             Disposed += HandleWindowDisposed;
 
-
+            
 
 
             // NB:  Use the following for debugging plug-in start up crashes.
@@ -136,6 +142,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             //zzSur
             //Invoke((Action)(() => GetUsfmForBook("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f", 40)));
+            _logger = WebHostStartup.ServiceProvider.GetService<IPluginLogger>();
         }
 
         private async void WindowClosing(IPluginChildWindow sender, CancelEventArgs args)
@@ -157,6 +164,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
         }
 
+
         #endregion
 
 
@@ -168,6 +176,84 @@ namespace ClearDashboard.WebApiParatextPlugin
             return null;
         }
 
+
+        /// <summary>
+        /// Paratext has a verse change
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="oldReference"></param>
+        /// <param name="newReference"></param>
+        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
+        {
+            // send the new verse & text collections
+            try
+            {
+                if (newReference != _verseRef)
+                {
+                    //SetVerseRef(newReference, reloadWebHost: true);
+
+                    _verseRef = newReference;
+
+                    WebHostStartup.ChangeVerse(newReference);
+
+                    try
+                    {
+                        AppendText(Color.DarkOrange, $"Sending verse - {_verseRef.BBBCCCVVV.ToString()}");
+                        await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
+
+                    }
+                    catch (Exception ex)
+                    {
+                        AppendText(Color.Red,
+                            $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
+            }
+
+        }
+
+        /// <summary>
+        /// Called when the user selects a different project in Paratext from the drop down list
+        /// We are unable to switch the project via the plugin API.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="newProject"></param>
+        private async void ProjectChanged(IPluginChildWindow sender, IProject newProject)
+        {
+            ProjectListBox.Visible = false;
+            
+            SetProject(newProject, reloadWebHost: false);
+
+            WebHostStartup.ChangeProject(newProject);
+
+            var hubProxy = GlobalHost.ConnectionManager.GetHubContext<PluginHub>();
+            if (hubProxy == null)
+            {
+                AppendText(Color.Red, "HubContext is null");
+                return;
+            }
+
+            try
+            {
+                var paratextProject = ConvertIProjectToParatextProject.BuildParatextProjectFromIProject(_project);
+                AppendText(Color.DarkOrange, $"Sending project - {newProject.ShortName}");
+                await HubContext.Clients.All.SendProject(paratextProject);
+            }
+            catch (Exception e)
+            {
+                AppendText(Color.Red, e.Message);
+            }
+
+        }
+
+        #endregion Paratext overrides - standard functions
+
+
+        #region WebServer Related
 
         private List<string> ExpectedFailedToLoadAssemblies = new List<string> { "Microsoft.Owin", "Microsoft.Extensions.DependencyInjection.Abstractions" };
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
@@ -236,6 +322,9 @@ namespace ClearDashboard.WebApiParatextPlugin
                 PortInUseMethod();
                 return;
             }
+
+            AppendText(Color.CornflowerBlue, "CHANGE PROJECTS using the dropdown in the tool bar.");
+            AppendText(Color.CornflowerBlue, string.Empty);
 
             AppendText(Color.Green, "StartWebApplication called");
 
@@ -332,6 +421,29 @@ namespace ClearDashboard.WebApiParatextPlugin
             _ = await hubProxy.Invoke<string>("ping", "Message", 0);
         }
 
+        /// <summary>
+        /// Method to check if a port is in use or not
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private bool PortInUse(int port)
+        {
+            bool inUse = false;
+
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
+
+            foreach (IPEndPoint endPoint in ipEndPoints)
+            {
+                if (endPoint.Port == port)
+                {
+                    inUse = true;
+                    break;
+                }
+            }
+            return inUse;
+        }
+
         private void PortInUseMethod()
         {
             ClearTextWindow();
@@ -350,17 +462,15 @@ namespace ClearDashboard.WebApiParatextPlugin
             PlaySound.PlaySoundFromResource(SoundType.Error);
         }
 
-        /// <summary>
-        /// Called when the user selects a different project in Paratext from the drop down list
-        /// We are unable to switch the project via the plugin API.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="newProject"></param>
-        private void ProjectChanged(IPluginChildWindow sender, IProject newProject)
+        private void OnExceptionOccurred(Exception exception)
         {
-            SetProject(newProject, reloadWebHost: true);
+            Log.Error($"OnLoad {exception.Message}");
+            AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
 
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Standard Paratext verse reference has been changed
@@ -388,79 +498,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 StartWebHost();
             }
-        }
-
-        /// <summary>
-        /// Paratext has a verse change
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="oldReference"></param>
-        /// <param name="newReference"></param>
-        private async void VerseRefChanged(IPluginChildWindow sender, IVerseRef oldReference, IVerseRef newReference)
-        {
-            // send the new verse & text collections
-            try
-            {
-                if (newReference != _verseRef)
-                {
-                    //SetVerseRef(newReference, reloadWebHost: true);
-
-                    _verseRef = newReference;
-
-                    WebHostStartup.ChangeVerse(newReference);
-
-                    try
-                    {
-                        AppendText(Color.DarkOrange, $"Sending verse - {_verseRef.BBBCCCVVV.ToString()}");
-                        await HubContext.Clients.All.SendVerse(_verseRef.BBBCCCVVV.ToString());
-
-                    }
-                    catch (Exception ex)
-                    {
-                        AppendText(Color.Red,
-                            $"Unexpected error occurred calling PluginHub.SendVerse() : {ex.Message}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
-            }
-
-        }
-
-        #endregion Paratext overrides - standard functions
-
-
-        #region Methods
-
-        /// <summary>
-        /// Method to check if a port is in use or not
-        /// </summary>
-        /// <param name="port"></param>
-        /// <returns></returns>
-        private bool PortInUse(int port)
-        {
-            bool inUse = false;
-
-            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
-            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
-
-            foreach (IPEndPoint endPoint in ipEndPoints)
-            {
-                if (endPoint.Port == port)
-                {
-                    inUse = true;
-                    break;
-                }
-            }
-            return inUse;
-        }
-
-        private void OnExceptionOccurred(Exception exception)
-        {
-            Log.Error($"OnLoad {exception.Message}");
-            AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
 
         private void DisplayPluginVersion()
@@ -503,28 +540,53 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// </summary>
         private void UpdateProjectList()
         {
+            // snag a list of all the projects
+            var allProjectsList = _host.GetAllProjects();
+
             _projectList.Clear();
+            ProjectListBox.Items.Clear();   
+
             var windows = _host.AllOpenWindows;
-            //ProjectsListBox.Items.Clear();
             foreach (var window in windows)
             {
                 if (window is ITextCollectionChildState tc)
                 {
-                    var projects = tc.AllProjects;
-                    foreach (var proj in projects)
+
+                }
+                else if (window is IParatextChildState win)
+                {
+                    try
                     {
-                        _projectList.Add(proj);
-                        //ProjectsListBox.Items.Add(proj.ShortName);
+                        // add only those projects for which the window is open
+                        var shortName = win.Project.ShortName;
+                        var project = allProjectsList.FirstOrDefault(x => x.ShortName == shortName);
+                        if (project != null)
+                        {
+                            _projectList.Add(project);
+                        }
                     }
-                    _verseRef = tc.VerseRef;
-                    break;
+                    catch (Exception)
+                    {
+                        // no-op
+                    }
+                }
+
+            }
+
+            foreach (var proj in _projectList)
+            {
+                if (proj is not null)
+                {
+                    ProjectListBox.Items.Add(proj.ShortName);
                 }
             }
-            //if (ProjectsListBox.Items.Count > 0)
-            //{
-            //    ProjectsListBox.SelectedIndex = 0;
-            //    ProjectListBox_SelectedIndexChanged(null, null);
-            //}
+
+
+            if (ProjectListBox.Items.Count > 0)
+            {
+                ProjectListBox.SelectedIndex = 0;
+                ProjectListBox_SelectedIndexChanged(null, null);
+            }
         }
 
 
@@ -547,13 +609,26 @@ namespace ClearDashboard.WebApiParatextPlugin
             else
             {
                 _textCollections.Clear();
-
+                var currentProjectGroup = SyncReferenceGroup.None;
                 var windows = _host.AllOpenWindows;
+
+                foreach (var window in windows)
+                {
+                    if (window.Project?.ID == _project.ID)
+                    {
+                        currentProjectGroup = window.SyncReferenceGroup;
+                        break;
+                    }
+                }
+
+                var currentProjectGroupIsNone = currentProjectGroup == SyncReferenceGroup.None;
+
                 foreach (var window in windows)
                 {
                     // check if window is text collection
-                    if (window is ITextCollectionChildState tc)
+                    if (window is ITextCollectionChildState tc && (window.SyncReferenceGroup == currentProjectGroup || currentProjectGroupIsNone))
                     {
+
                         // get the projects for this window
                         var projects = tc.AllProjects;
                         foreach (var project in projects)
@@ -923,7 +998,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 }
 
                 // remove the last paragraph tag if at the end
-                if (textCollection.Data.Length > 2)
+                if (textCollection.Data != null && textCollection.Data.Length > 2)
                 {
                     if (textCollection.Data.EndsWith("/ "))
                     {
@@ -1858,26 +1933,34 @@ namespace ClearDashboard.WebApiParatextPlugin
         }
 
         #endregion
+        private void btnSwitchProject_Click(object sender, EventArgs e)
+        {
+            SwitchProjectWindow switchProjectWindow = new SwitchProjectWindow();
+            switchProjectWindow.Show();
+        }
 
         private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //var found = false;
-            //if (ProjectsListBox.SelectedItem != null)
+            string name = ProjectListBox.SelectedItem.ToString();
+            bool found = false;
+            //foreach (var proj in m_ProjectList)
             //{
-            //    var name = ProjectsListBox.SelectedItem.ToString();
-            //    foreach (var proj in _projectList.Where(proj => name == proj.ShortName))
+            //    if (name == proj.ShortName)
             //    {
-            //        ShowScripture(proj);
+            //        m_Project = proj;
+            //        ShowScripture();
             //        found = true;
             //        break;
             //    }
             //}
             //if (!found)
             //{
-            //    textBox.Text = "Cannot find project.";
+            //    textBox.Text = $"Cannot find project named {name}";
             //}
 
         }
+
+
 
         //private void ShowScripture(IProject project)
         //{
