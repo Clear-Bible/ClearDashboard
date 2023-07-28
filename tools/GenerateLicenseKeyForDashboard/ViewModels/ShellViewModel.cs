@@ -17,6 +17,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using GenerateLicenseKeyForDashboard.Models;
 using LicenseManager = ClearDashboard.DataAccessLayer.LicenseManager;
 
 
@@ -970,14 +971,6 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         #endregion // Methods
 
-
-    }
-
-    public class ProjectUserConnection
-    {
-        public string UserName { get; set; }
-        public string ProjectName { get; set; }
-        public PermissionLevel AccessLevel { get; set; }
 
     }
 }
