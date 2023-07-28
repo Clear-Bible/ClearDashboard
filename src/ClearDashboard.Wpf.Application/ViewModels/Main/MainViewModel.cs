@@ -500,7 +500,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 await screen.DeactivateAsync(true, cancellationToken);
             }
-
+            
             // Clear the items in the event the user is switching projects.
             Items.Clear();
 
@@ -823,7 +823,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>(cancellationToken);
-            PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+
+            _ = await Task.Factory.StartNew(async () =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+                    await PinsViewModel.Initialize(cancellationToken);
+                });
+            }, cancellationToken);
+            //PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+            
             await ActivateItemAsync<TextCollectionsViewModel>(cancellationToken);
             //await ActivateItemAsync<WordMeaningsViewModel>();
             await ActivateItemAsync<MarbleViewModel>(cancellationToken);
@@ -846,7 +856,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
 
-            await Task.Delay(1000, cancellationToken);
+            await Task.Delay(1000, cancellationToken);//why is this delay here?
         }
 
         private async Task LoadAvalonDockLayout()
@@ -2333,15 +2343,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Logger.LogInformation($"Reloading panels due to the Paratext project being switched.");
 
             await OnDeactivateAsync(false, CancellationToken.None);
-
             //await OnInitializeAsync(cancellationToken);
             await LoadParatextProjectMetadata(cancellationToken);
             //await LoadProject();
             //ProjectManager.CheckForCurrentUser();
             //await NoteManager!.InitializeAsync();
             //await RebuildMainMenu();
+
             await ActivateDockedWindowViewModels(cancellationToken);
+
             await LoadAvalonDockLayout();
+
+           
+
             await LoadEnhancedViewTabs(cancellationToken);
             
             await OnActivateAsync(CancellationToken.None);
