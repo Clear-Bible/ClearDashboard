@@ -14,6 +14,7 @@ xcopy "%TargetPath%\*.dll" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
 xcopy "%TargetPath%\*.pdb" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
 xcopy "%TargetPath%\*.config" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
 xcopy "%TargetPath%\Plugin.bmp" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
+xcopy "%TargetPath%\*.gif" "%ParatextInstallDir%\plugins\%ProjectName%" /y /i
 
 rename "%ParatextInstallDir%\plugins\%ProjectName%\ClearDashboard.WebApiParatextPlugin.dll" "ClearDashboard.WebApiParatextPlugin.ptxplg"
 

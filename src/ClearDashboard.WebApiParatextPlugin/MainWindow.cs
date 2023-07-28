@@ -614,7 +614,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                 foreach (var window in windows)
                 {
-                    if (window.Project.ID == _project.ID)
+                    if (window.Project?.ID == _project.ID)
                     {
                         currentProjectGroup = window.SyncReferenceGroup;
                         break;
@@ -1935,8 +1935,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         #endregion
         private void btnSwitchProject_Click(object sender, EventArgs e)
         {
-            UpdateProjectList();
-            rtb.Visible = false;
+            SwitchProjectWindow switchProjectWindow = new SwitchProjectWindow();
+            switchProjectWindow.Show();
         }
 
         private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
