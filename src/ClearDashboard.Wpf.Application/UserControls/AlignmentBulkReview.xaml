@@ -32,8 +32,7 @@
         <!-- data grid cards -->
         <bulkAlignment:PivotedWords Grid.Row="1" Grid.Column="0" />
         <bulkAlignment:AlignedWords Grid.Row="1" Grid.Column="1" />
-        <bulkAlignment:AlignmentApproval Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" ></bulkAlignment:AlignmentApproval>
-
+        <bulkAlignment:AlignmentApproval Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" />
     </Grid>
 
 </UserControl>

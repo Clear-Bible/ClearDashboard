@@ -443,37 +443,37 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(connectionMenuItems);
             AddResetVerseMappings(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems);
-            AddMenuSeparator(connectionMenuItems);
+            //AddMenuSeparator(connectionMenuItems);
 
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-            {
-                Header = "Alignments Batch Review",
-                Id = Guid.NewGuid().ToString(),  //TODO - what should this be?
-                IconKind = PackIconPicolIconsKind.Relevance.ToString(),
-                MenuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>
-                {
+            //connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            //{
+            //    Header = "Alignments Batch Review",
+            //    Id = Guid.NewGuid().ToString(),  //TODO - what should this be?
+            //    IconKind = PackIconPicolIconsKind.Relevance.ToString(),
+            //    MenuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>
+            //    {
 
-                    new()
-                    {
-                        // Show Verses in New Windows
-                        Header = "Alignments Batch Review to current EnhancedView",
-                        Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView,
-                        ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                        IconKind = PackIconPicolIconsKind.AvatarEdit.ToString(),
-                        ConnectionId = parallelCorpusConnection.ParallelCorpusId.Id,
-                    },
+            //        new()
+            //        {
+            //            // Show Verses in New Windows
+            //            Header = "Alignments Batch Review to current EnhancedView",
+            //            Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView,
+            //            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+            //            IconKind = PackIconPicolIconsKind.AvatarEdit.ToString(),
+            //            ConnectionId = parallelCorpusConnection.ParallelCorpusId.Id,
+            //        },
 
-                    new()
-                    {
-                        // Show Verses in New Windows
-                        Header = "Alignments Batch Review to new EnhancedView",
-                        Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView,
-                        ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                        IconKind = PackIconPicolIconsKind.AvatarEdit.ToString(),
-                        ConnectionId = parallelCorpusConnection.ParallelCorpusId.Id,
-                    }
-                }
-            });
+            //        new()
+            //        {
+            //            // Show Verses in New Windows
+            //            Header = "Alignments Batch Review to new EnhancedView",
+            //            Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView,
+            //            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+            //            IconKind = PackIconPicolIconsKind.AvatarEdit.ToString(),
+            //            ConnectionId = parallelCorpusConnection.ParallelCorpusId.Id,
+            //        }
+            //    }
+            //});
 
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;

@@ -163,6 +163,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             //await base.GetData(cancellationToken);
             if (EditMode == EditMode.EditorViewOnly)
             {
+
+                await EnsureAlignmentSet();
                 var getEditorDataTask = GetEditorData(cancellationToken);
                 var setFontsAndRtlTask = SetFontsAndRtl();
                 var getDataTask = base.GetData(cancellationToken);
