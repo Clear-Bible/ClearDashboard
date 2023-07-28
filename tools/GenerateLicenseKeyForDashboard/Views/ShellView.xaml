@@ -847,6 +847,8 @@
                         </Grid.RowDefinitions>
 
                         <DataGrid
+                            x:Name="GridDashboardUsers"
+                            GridViewColumnHeader.Click="DashboardGridViewColumnHeaderClickedHandler"
                             Margin="10"
                             AlternatingRowBackground="LightBlue"
                             AutoGenerateColumns="False"
@@ -1101,6 +1103,8 @@
                         </Grid.RowDefinitions>
 
                         <DataGrid
+                            x:Name="GridGitLabUsers"
+                            GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
                             Margin="10"
                             AlternatingRowBackground="LightBlue"
                             AutoGenerateColumns="False"
@@ -1114,6 +1118,7 @@
                             ItemsSource="{Binding GitLabUsers}"
                             RowBackground="LightYellow"
                             SelectionMode="Extended"
+                            
                             VerticalScrollBarVisibility="Visible">
 
                             <DataGrid.ContextMenu>
@@ -1171,6 +1176,20 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
 
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Organization" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Organization}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.Header>
                                         <TextBlock
