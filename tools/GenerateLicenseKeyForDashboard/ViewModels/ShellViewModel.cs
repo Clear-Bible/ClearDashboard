@@ -597,8 +597,8 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         {
             if (obj is ProjectUserConnection connection)
             {
-                if (connection.UserName.Contains(UserFilterString) &&
-                    connection.ProjectName.Contains(ProjectFilterString))
+                if (connection.UserName.Contains(UserFilterString.ToLower()) &&
+                    connection.ProjectName.Contains(ProjectFilterString.ToLower()))
                 {
                     return true;
                 }
