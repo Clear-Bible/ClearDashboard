@@ -11,7 +11,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     x:Name="PinsViewWindow"
     d:DataContext="{d:DesignInstance Type=paratextViews:PinsViewModel,
                                      IsDesignTimeCreatable=True}"

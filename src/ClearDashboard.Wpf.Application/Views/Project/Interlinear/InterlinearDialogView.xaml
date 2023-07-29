@@ -8,7 +8,7 @@
     xmlns:interlinear="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="800"
     Height="450"
     d:DataContext="{d:DesignInstance Type=interlinear:InterlinearDialogViewModel,

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              Background="Transparent"

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
@@ -147,5 +148,15 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
         }
     
       
+    }
+
+    public void OnAlignmentApprovalChanged(SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+        {
+            var approvalType = (item.Tag as string);
+            //_debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
+
+        }
     }
 }

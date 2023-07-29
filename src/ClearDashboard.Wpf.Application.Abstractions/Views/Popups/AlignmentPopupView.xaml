@@ -8,8 +8,10 @@
              xmlns:cm="http://caliburnmicro.com"
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
              xmlns:a="clr-namespace:ClearDashboard.Wpf.Application.Models.EnhancedView"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              mc:Ignorable="d" 
-             Width="400"
+             Width="800"
              d:DesignHeight="450" d:DesignWidth="800"
              FocusManager.FocusedElement="{Binding ElementName=Ok}">
 
@@ -28,14 +30,13 @@
                  Height="28"
                  HorizontalAlignment="Center"
                  SelectedIndex="0"
-                 IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
-            <!--cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignmentApprovalChanged($eventArgs)]">-->
-            <!--<ListBoxItem Content="{helpers:Localization BulkAlignmentReview_ApproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.ApproveSelected}"></ListBoxItem>
-            <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_DisapproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.DisapproveSelected}"></ListBoxItem>
-            <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_MarkSelectedAsNeedsReview}" Tag="{x:Static a:BulkAlignmentReviewTags.MarkSelectedAsNeedsReview}"></ListBoxItem>-->
-            <ListBoxItem Content="Approve" Tag="Approve"></ListBoxItem>
-            <ListBoxItem Content="Disapprove" Tag="Disapprove"></ListBoxItem>
-            <ListBoxItem Content="Needs Review" Tag="NeedsReview"></ListBoxItem>
+                 cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignmentApprovalChanged($eventArgs)]">
+
+            <!--IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"-->
+            <ListBoxItem Content="{helpers:Localization EnhancedView_MarkAlignmentAsValid}" Tag="{x:Static a:BulkAlignmentReviewTags.ApproveSelected}"></ListBoxItem>
+            <ListBoxItem Content="{helpers:Localization EnhancedView_MarkAlignmentAsInvalid}" Tag="{x:Static a:BulkAlignmentReviewTags.DisapproveSelected}"></ListBoxItem>
+            <ListBoxItem Content="{helpers:Localization EnhancedView_MarkAlignmentAsNeedsReview}" Tag="{x:Static a:BulkAlignmentReviewTags.MarkSelectedAsNeedsReview}"></ListBoxItem>
+        
         </ListBox>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="Ok" Margin="5, 10" 

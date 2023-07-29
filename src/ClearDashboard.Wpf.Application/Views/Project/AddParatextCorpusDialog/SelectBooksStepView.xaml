@@ -6,7 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:addParatextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog"
     xmlns:addParatextCorpusDialog1="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
