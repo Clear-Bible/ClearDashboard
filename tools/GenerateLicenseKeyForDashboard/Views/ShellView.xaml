@@ -1357,7 +1357,11 @@
                                                     <ControlTemplate TargetType="{x:Type GroupItem}">
                                                         <StackPanel>
                                                             <StackPanel Orientation="Horizontal">
-                                                                <TextBlock Foreground="White" Text="{Binding Name}" />
+                                                                <TextBlock
+                                                                    Margin="0,10,0,0"
+                                                                    FontWeight="Bold"
+                                                                    Foreground="White"
+                                                                    Text="{Binding Name}" />
                                                             </StackPanel>
                                                             <ItemsPresenter />
                                                         </StackPanel>
