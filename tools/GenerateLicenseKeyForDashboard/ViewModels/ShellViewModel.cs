@@ -503,6 +503,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             await RefreshProjectUserConnectionGrid();
 
             ProjectUserConnectionsCollectionView  = CollectionViewSource.GetDefaultView(ProjectUserConnections);
+            ProjectUserConnectionsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("ProjectName"));
             ProjectUserConnectionsCollectionView.Filter += ConnectionCollection_Filter;
 
             base.OnViewReady(view);
