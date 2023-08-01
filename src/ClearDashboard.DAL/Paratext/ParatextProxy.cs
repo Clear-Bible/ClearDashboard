@@ -3,17 +3,16 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.DataAccessLayer.Models;
 using SIL.Program;
 using Process = System.Diagnostics.Process;
-
-
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
-    #nullable disable
+#nullable disable
     public class ParatextProxy
     {
         private string _paratextProjectPath = string.Empty;
@@ -661,6 +660,54 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return books;
         }
 
+        public RegistrationData GetParatextRegistrationData()
+        {
+            var fileName = Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.LocalApplicationData), @"Paratext93\RegistrationInfo.xml");
 
+            if (File.Exists(fileName))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(RegistrationData));
+                var xml = File.ReadAllText(fileName);
+                using (StringReader reader = new StringReader(xml))
+                {
+                    return (RegistrationData)serializer.Deserialize(reader);
+                }
+            }
+
+            return new RegistrationData();
+        }
+
+        public string GetOrganizationNameFromEmail()
+        {
+            string resultString = string.Empty;
+            try
+            {
+                resultString = Regex.Match(GetParatextRegistrationData().Email, "(?<=@)[^.]+", RegexOptions.IgnoreCase).Value;
+            }
+            catch (ArgumentException ex)
+            {
+                // Syntax error in the regular expression
+            }
+
+            if (resultString == string.Empty)
+            {
+                return string.Empty;
+            }
+
+            switch (resultString.ToLower())
+            {
+                case "tsco":
+                    return "SeedCo";
+                case "sil":
+                    return "SIL";
+                case "clear":
+                    return "Clear-Bible";
+                case "wycliffe":
+                    return "Wycliffe";
+            }
+
+            return resultString;
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace ClearDashboard.Wpf.Application.Models;
+namespace ClearDashboard.DataAccessLayer.Models;
 
 [XmlRoot(ElementName = "RegistrationData")]
 public class RegistrationData

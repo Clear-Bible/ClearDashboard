@@ -1155,6 +1155,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
         }
+        private void ShowAccountInfoWindow()
+        {
+            var localizedString = _localizationService!["MainView_AccountInfo"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<AccountInfoViewModel>();
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
+        }
 
         private async Task AddNewEnhancedView()
         {
@@ -1450,7 +1466,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_GatherLogs"), Id = MenuIds.GatherLogs, ViewModel = this, },
                         // About
                         new() { Header = _localizationService!.Get("MainView_About"), Id = MenuIds.About, ViewModel = this, },
-
+                        //AccountInfo
+                        new() { Header = _localizationService!.Get("MainView_AccountInfo"), Id = MenuIds.AccountInfo, ViewModel = this, },
                         // Test reloading a project.
                         //ViewModel merge
                         //new() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
@@ -2031,6 +2048,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         ShowAboutWindow();
                         break;
                     }
+                case MenuIds.AccountInfo:
+                {
+                    ShowAccountInfoWindow();
+                    break;
+                }
 
                 case MenuIds.GettingStartedGuide:
                     {
