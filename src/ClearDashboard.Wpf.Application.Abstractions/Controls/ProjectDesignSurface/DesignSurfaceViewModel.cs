@@ -443,8 +443,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(connectionMenuItems);
             AddResetVerseMappings(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems);
-            AddMenuSeparator(connectionMenuItems);
-
+        
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
 
@@ -474,8 +473,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             });
         }
 
-        private void AddResetVerseMappings(ParallelCorpusConnectionViewModel parallelCorpusConnection, 
-            IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel, 
+        private void AddResetVerseMappings(ParallelCorpusConnectionViewModel parallelCorpusConnection,
+            IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
             BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
         {
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
@@ -639,7 +638,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             new()
                             {
                                 // Add Verses to focused enhanced view
-                                Header = LocalizationService.Get("Pds_AddConnectionToEnhancedViewMenu"),
+                                Header = LocalizationService.Get("Pds_AddVerseViewToEnhancedViewMenu"),
                                 Id = DesignSurfaceMenuIds.AddAlignmentSetToCurrentEnhancedView,
                                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
@@ -770,8 +769,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                                 IconKind = PackIconPicolIconsKind.DocumentText.ToString(),
                                 CorpusNodeViewModel = corpusNodeViewModel,
                                 Tokenizer = tokenizer.ToString(),
-                            }
-                        }
+                            },
+
+
+                }
                     };
 
                     var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
@@ -790,6 +791,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             CorpusNodeViewModel = corpusNodeViewModel,
                             Tokenizer = tokenizer.ToString(),
                         });
+
+
 
                         foreach (var menuBuilder in menuBuilders)
                         {

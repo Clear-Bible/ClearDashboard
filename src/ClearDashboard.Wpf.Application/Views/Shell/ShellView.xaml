@@ -10,7 +10,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:shell1="clr-namespace:ClearDashboard.Wpf.Application.Views.Shell"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
