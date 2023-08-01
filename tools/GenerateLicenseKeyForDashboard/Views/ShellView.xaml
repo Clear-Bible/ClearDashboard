@@ -1,0 +1,1452 @@
+﻿<Window
+    x:Class="GenerateLicenseKeyForDashboard.Views.ShellView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
+    xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:viewModels="clr-namespace:GenerateLicenseKeyForDashboard.ViewModels"
+    x:Name="TheWindow"
+    Title="{Binding Title}"
+    Width="1000"
+    Height="700"
+    d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
+                                     IsDesignTimeCreatable=True}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+
+    <Window.DataContext>
+        <viewModels:ShellViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="TextBoxAsLabel" TargetType="{x:Type TextBox}">
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="AllowDrop" Value="False" />
+            <Setter Property="FontFamily" Value="Arial" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <themes:ClassicBorderDecorator
+                            x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderStyle="Sunken"
+                            BorderThickness="0">
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                BorderBrush="Transparent"
+                                BorderThickness="0" />
+                        </themes:ClassicBorderDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsReadOnly" Value="true">
+                                <Setter TargetName="Bd" Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="BorderThickness" Value="0,0,0,0" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <materialDesign:Card
+            Grid.Row="0"
+            Margin="0"
+            VerticalAlignment="Center"
+            materialDesign:ShadowAssist.ShadowDepth="Depth3">
+            <DockPanel Margin="10">
+                <Image
+                    Width="36"
+                    Height="36"
+                    Source="pack://application:,,,/Resources/Dashboard_Key_icon2.png" />
+
+                <TextBlock
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="30"
+                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                    Style="{DynamicResource MaterialDesignHeadline6TextBlock}">
+                    Generate License Key for Dashboard / Collab
+                </TextBlock>
+            </DockPanel>
+        </materialDesign:Card>
+
+        <TabControl
+            Grid.Row="1"
+            materialDesign:ColorZoneAssist.Mode="Standard"
+            materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+            BorderBrush="Transparent"
+            BorderThickness="0"
+            SnapsToDevicePixels="True"
+            Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+            TabStripPlacement="Left">
+            <!--  ENCRYPTED  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconMaterial
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Kind="Lock" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Create Key" />
+
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Margin="20"
+                            FontSize="24"
+                            Text="GENERATE LICENSE" />
+
+
+                        <StackPanel
+                            Grid.Row="1"
+                            Margin="10"
+                            Orientation="Vertical">
+
+                            <controls:AutoCompleteComboBox
+                                Height="Auto"
+                                Margin="15"
+                                VerticalAlignment="Top"
+                                cm:Message.Attach="GroupSelected"
+                                materialDesign:HintAssist.Hint="Select Organization"
+                                FontSize="16"
+                                ItemsSource="{Binding Groups}"
+                                ScrollViewer.CanContentScroll="False"
+                                SelectedItem="{Binding SelectedGroup}"
+                                Style="{StaticResource MaterialDesignFilledComboBox}"
+                                TextSearch.TextPath="CombinedStrings">
+                                <controls:AutoCompleteComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock FontSize="18" Text="{Binding Name}" />
+                                            <TextBlock FontSize="12" Text="{Binding Description}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </controls:AutoCompleteComboBox.ItemTemplate>
+                            </controls:AutoCompleteComboBox>
+
+
+                            <TextBox
+                                x:Name="FirstNameBox"
+                                Margin="10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="First Name">
+                                <TextBox.Text>
+                                    <Binding Path="FirstNameBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+
+                            <TextBox
+                                x:Name="LastNameBox"
+                                Margin="10,20,10,10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="Last Name">
+                                <TextBox.Text>
+                                    <Binding Path="LastNameBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+
+                            <TextBox
+                                x:Name="EmailBox"
+                                Margin="10,20,10,10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="Email">
+
+                                <TextBox.Text>
+                                    <Binding Path="EmailBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:EmailValidator />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+
+                            <TextBox
+                                x:Name="ParatextBox"
+                                Margin="10,20,10,10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="Paratext User Name">
+
+                                <TextBox.Text>
+                                    <Binding Path="ParatextUserName" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <CheckBox
+                                Name="IsInternalCheckBox"
+                                Margin="10,20,10,10"
+                                Content="User is Internal to Clear.  Reflect this in usage metrics."
+                                IsChecked="{Binding IsInternalChecked}" />
+
+                            <Button
+                                Name="GenerateLicenseButton"
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action GenerateLicense_OnClick]"
+                                Content="Generate License!"
+                                IsEnabled="{Binding IsCreateButtonEnabled}" />
+
+
+                            <TextBlock
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="18"
+                                Foreground="{Binding GenerateLicenseMessageBrush}"
+                                Text="{Binding GenerateLicenseMessage}" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="15,0,0,0"
+                            Orientation="Vertical">
+
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="10" Text="Combined Dashboard + GitLab License" />
+                                <Button Name="CopyCombinedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+
+                            <TextBlock
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Your GitLab license will appear here."
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding CombinedCreateLicense}"
+                                TextWrapping="Wrap" />
+
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Name="GeneratedLicenseBlock"
+                                    Margin="10"
+                                    Text="Generated Dashboard License" />
+                                <Button Name="CopyGeneratedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+
+                            <TextBlock
+                                Name="GeneratedLicenseBoxText"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Your Dashboard license will appear here."
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding GeneratedLicenseBoxText}"
+                                TextWrapping="Wrap" />
+
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="10" Text="Generated GitLab License" />
+                                <Button Name="CopyGeneratedGitLabLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+
+                            <TextBlock
+                                Name="GeneratedGitLabLicense"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Your GitLab license will appear here."
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding GeneratedGitLabLicense}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+            <!--  DECRYPTED  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconMaterial
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Kind="LockOpenVariant" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Decrypt" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="350" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Margin="10"
+                                FontSize="24"
+                                Text="DECRYPT LICENSE" />
+
+
+                            <TextBox
+                                x:Name="LicenseDecryptionBox"
+                                Margin="10"
+                                materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                materialDesign:HintAssist.Hint="Encrypted License"
+                                TextWrapping="Wrap">
+                                <TextBox.Text>
+                                    <Binding Path="LicenseDecryptionBox" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action DecryptLicense_OnClick]"
+                                Content="Decrypt License!" />
+                        </StackPanel>
+
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="10,50,0,0"
+                            Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedFirstNameBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted First Name" />
+                                <Button Name="CopyDecryptedFirstName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedFirstNameBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="First Name will appear here."
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DashboardUser.FirstName}" />
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedLastNameBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted Last Name" />
+                                <Button Name="CopyDecryptedLastName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedLastNameBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Decrypted license will appear here."
+                                FontSize="14"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DashboardUser.LastName}" />
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedGuidBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted User Id" />
+                                <Button Name="CopyDecryptedGuid" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedGuidBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Decrypted GUID will appear here."
+                                FontSize="14"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DashboardUser.Id}" />
+
+                            <CheckBox
+                                Name="DecryptedInternalCheckBox"
+                                Margin="10,20,0,0"
+                                Content="User is Internal"
+                                FontSize="20"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                IsChecked="{Binding DashboardUser.IsInternal}"
+                                IsEnabled="False" />
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedLicenseVersionBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted License Version" />
+                                <Button Name="CopyDecryptedLicenseVersion" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DecryptedLicenseVersionBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Decrypted License Version will appear here."
+                                FontSize="14"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DashboardUser.LicenseVersion}" />
+                        </StackPanel>
+
+
+                        <StackPanel
+                            Grid.Column="2"
+                            Margin="10,50,0,0"
+                            Orientation="Vertical">
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedCollabConfigBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted Collab Config" />
+                                <Button Name="CopyDecryptedCollabConfig" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+
+                            <TextBlock>
+                                <Run Text="UserId: " />
+                                <Run Text="{Binding CollabUser.UserId}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="RemoteUserName: " />
+                                <Run Text="{Binding CollabUser.RemoteUserName}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="RemoteEmail: " />
+                                <Run Text="{Binding CollabUser.RemoteEmail}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="Organization: " />
+                                <Run Text="{Binding CollabUser.Group}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="RemotePersonalAccessToken: " />
+                                <Run Text="{Binding CollabUser.RemotePersonalAccessToken}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="RemotePersonalPassword: " />
+                                <Run Text="{Binding CollabUser.RemotePersonalPassword}" />
+                            </TextBlock>
+
+                            <TextBlock>
+                                <Run Text="NamespaceId: " />
+                                <Run Text="{Binding CollabUser.NamespaceId}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+            <!--  FETCH LICENSE  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconMaterial
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Kind="DatabaseArrowLeft" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Fetch License"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Margin="10"
+                                FontSize="24"
+                                Text="FETCH LICENSE" />
+
+                            <RadioButton
+                                Name="ByEmailRadio"
+                                Margin="10"
+                                cm:Message.Attach="[Event Checked] = [Action ByEmailRadio_OnCheck]"
+                                Content="By Email"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                GroupName="FetchByRadios"
+                                IsChecked="{Binding EmailChecked}" />
+                            <RadioButton
+                                Name="ByIdRadio"
+                                Margin="10"
+                                cm:Message.Attach="[Event Checked] = [Action ByIdRadio_OnCheck]"
+                                Content="By Id"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                GroupName="FetchByRadios"
+                                IsChecked="{Binding IdChecked}" />
+
+                            <StackPanel Name="FetchByEmailInput" Visibility="{Binding FetchByEmailInput}">
+                                <TextBlock
+                                    Name="FetchByEmailBlock"
+                                    Margin="10"
+                                    Text="User Email" />
+
+                                <TextBox
+                                    x:Name="FetchByEmailBox"
+                                    MinWidth="300"
+                                    Margin="10"
+                                    materialDesign:HintAssist.HelperText="Helper text longer than error"
+                                    materialDesign:HintAssist.Hint="Enter User Email"
+                                    Visibility="{Binding FetchByEmailInput}">
+                                    <TextBox.Text>
+                                        <Binding Path="FetchByEmailBox" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <validators:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                            </StackPanel>
+
+
+                            <StackPanel Name="FetchByIdInput" Visibility="{Binding FetchByIdInput}">
+                                <TextBlock
+                                    Name="FetchByIdBlock"
+                                    Margin="10"
+                                    Text="User Id" />
+                                <TextBox
+                                    Name="FetchByIdBox"
+                                    MaxWidth="400"
+                                    Margin="10"
+                                    materialDesign:HintAssist.Hint="Enter guid here."
+                                    Text="{Binding FetchByIdBox}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action FetchLicenseById_OnClick]"
+                                Content="Fetch License!" />
+
+
+                            <TextBlock
+                                MinWidth="300"
+                                Margin="10"
+                                FontSize="18"
+                                Foreground="{Binding FetchUserForeColor}"
+                                Text="{Binding FetchUserMessage}" />
+
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="10,50,0,0"
+                            Orientation="Vertical">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Name="FetchedEmailBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Fetched Email" />
+                                <Button Name="CopyFetchedEmail" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="FetchedEmailBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Fetched Email will appear here"
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding FetchedEmailBox}" />
+
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Combined License" />
+                                <Button x:Name="CombinedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Combined license will appear here"
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding CombinedLicense}"
+                                TextWrapping="Wrap" />
+
+
+
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="FetchedLicenseBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Fetched Dashboard License" />
+                                <Button Name="CopyFetchedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Fetched GitLab license will appear here"
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding FetchedLicenseBox}"
+                                TextWrapping="Wrap" />
+
+
+
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Fetched GitLab License" />
+                                <Button Name="CopyFetchedGitLabLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBlock
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Fetched GitLab license will appear here"
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding FetchedGitLabLicense}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+            <!--  DELETE LICENSE  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+
+                        <iconPacks:PackIconFontAwesome
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Kind="UserSlashSolid" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Delete License"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Margin="10"
+                                FontSize="24"
+                                Text="DELETE LICENSE" />
+
+
+
+                            <TextBlock
+                                Margin="10,30,10,10"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Text="Email" />
+                            <TextBox
+                                MinWidth="300"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Enter email here."
+                                Text="{Binding EmailDelete}" />
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action DeleteLicenseByEmail]"
+                                Content="Delete License By Email" />
+
+
+                            <!--<TextBlock
+                                Name="DeleteByIdBlock"
+                                Margin="10,40,10,10"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Text="User Id" />
+                            <TextBox
+                                Name="DeleteByIdBox"
+                                MinWidth="300"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Enter guid here."
+                                Text="{Binding DeleteByIdBox}" />
+
+                            <Button
+                                Margin="10"
+                                cm:Message.Attach="[Event Click] = [Action DeleteLicenseById_OnClick]"
+                                Content="Delete License by GUID" />-->
+
+
+
+                        </StackPanel>
+
+
+
+                        <TextBlock
+                            Grid.Column="1"
+                            MinWidth="300"
+                            Margin="10,80,10,0"
+                            FontSize="18"
+                            Foreground="{Binding DeleteUserForeColor}"
+                            Text="{Binding DeleteUserMessage}" />
+
+                        <!--<StackPanel
+                            Grid.Column="1"
+                            Margin="20,50,0,0"
+                            Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DeletedLicenseBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Deleted License" />
+                                <Button Name="CopyDeletedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+                            <TextBox
+                                Name="DeletedLicenseBox"
+                                Margin="10"
+                                materialDesign:HintAssist.Hint="Deleted License will appear here"
+                                FontSize="20"
+                                Foreground="Gray"
+                                IsReadOnly="True"
+                                Text="{Binding DeletedLicenseBox}" />
+                        </StackPanel>-->
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+
+
+            <!--  DASHBOARD GRID  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <Grid>
+
+                            <iconPacks:PackIconBootstrapIcons
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource SecondaryHueLightBrush}"
+                                Kind="Grid3x3" />
+                            <iconPacks:PackIconMaterial
+                                Width="16"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Kind="AccountGroup" />
+
+                        </Grid>
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Dashboard Users"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
+                        <DataGrid
+                            x:Name="GridDashboardUsers"
+                            Margin="10"
+                            AlternatingRowBackground="LightBlue"
+                            AutoGenerateColumns="False"
+                            CanUserReorderColumns="False"
+                            CanUserResizeColumns="True"
+                            CanUserSortColumns="True"
+                            Foreground="Black"
+                            GridLinesVisibility="Vertical"
+                            GridViewColumnHeader.Click="DashboardGridViewColumnHeaderClickedHandler"
+                            HorizontalScrollBarVisibility="Visible"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding DashboardUsers}"
+                            RowBackground="LightYellow"
+                            SelectionMode="Extended"
+                            VerticalScrollBarVisibility="Visible">
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="CopyDashboardUser_OnClick" Header="{helpers:Localization Copy}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.CommandBindings>
+                                <CommandBinding Command="Copy" Executed="CopyDashboardUser_OnClick" />
+                            </DataGrid.CommandBindings>
+
+                            <DataGrid.InputBindings>
+                                <KeyBinding
+                                    Key="C"
+                                    Command="Copy"
+                                    Modifiers="Control" />
+                            </DataGrid.InputBindings>
+
+                            <DataGrid.Columns>
+                                <!--<DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button>UnMapped</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>-->
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="FirstName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding FirstName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="LastName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding LastName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Id" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Id}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="LicenseKey" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Width="300"
+                                                Text="{Binding LicenseKey}"
+                                                TextTrimming="WordEllipsis" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="ParatextUserName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ParatextUserName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Organization" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Organization}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="IsInternal" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding IsInternal}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Email" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Email}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="GitLabUserId" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding GitLabUserId}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="AppVersionNumber" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding AppVersionNumber}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="AppLastDate" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding AppLastDate}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                        <Button
+                            Grid.Row="1"
+                            Width="160"
+                            cm:Message.Attach="RefreshDashboardUsersGrid">
+                            Refresh
+                        </Button>
+
+
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+
+            <!--  GITLAB GRID  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <Grid>
+
+                            <iconPacks:PackIconBootstrapIcons
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource SecondaryHueLightBrush}"
+                                Kind="Grid3x3" />
+                            <iconPacks:PackIconJamIcons
+                                Width="16"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Kind="Gitlab" />
+                        </Grid>
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="GitLab Users"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
+                        <DataGrid
+                            x:Name="GridGitLabUsers"
+                            Margin="10"
+                            AlternatingRowBackground="LightBlue"
+                            AutoGenerateColumns="False"
+                            CanUserReorderColumns="False"
+                            CanUserResizeColumns="True"
+                            CanUserSortColumns="True"
+                            Foreground="Black"
+                            GridLinesVisibility="Vertical"
+                            GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
+                            HorizontalScrollBarVisibility="Visible"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding GitLabUsers}"
+                            RowBackground="LightYellow"
+                            SelectionMode="Extended"
+                            VerticalScrollBarVisibility="Visible">
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="CopyGitUser_OnClick" Header="{helpers:Localization Copy}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.CommandBindings>
+                                <CommandBinding Command="Copy" Executed="CopyGitUser_OnClick" />
+                            </DataGrid.CommandBindings>
+
+                            <DataGrid.InputBindings>
+                                <KeyBinding
+                                    Key="C"
+                                    Command="Copy"
+                                    Modifiers="Control" />
+                            </DataGrid.InputBindings>
+
+
+                            <DataGrid.Columns>
+                                <!--<DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button>UnMapped</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>-->
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Name" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="UserName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding UserName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Organization" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Organization}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="Email" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Email}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="GitLab Id" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Id}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="State" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Width="300"
+                                                Text="{Binding State}"
+                                                TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+
+                        <Button
+                            Grid.Row="1"
+                            Width="160"
+                            cm:Message.Attach="RefreshGitLabUsersGrid">
+                            Refresh
+                        </Button>
+
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+
+            <!--  COLLAB PROJECT GRID  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <Grid>
+
+                            <iconPacks:PackIconBootstrapIcons
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource SecondaryHueLightBrush}"
+                                Kind="Grid3x3" />
+                            <iconPacks:PackIconJamIcons
+                                Width="16"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Kind="Gitlab" />
+                        </Grid>
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource SecondaryHueLightBrush}"
+                            Text="Collab Projects"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox
+                            Name="UserFilterBox"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="5"
+                            materialDesign:HintAssist.HelperText="Filter by UserName"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Text="{Binding UserFilterString, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox
+                            Name="ProjectFilterBox"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="5"
+                            materialDesign:HintAssist.HelperText="Filter by ProjectName"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Text="{Binding ProjectFilterString, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                        <DataGrid
+                            x:Name="ProjectUserConnectionGrid"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Margin="10"
+                            AlternatingRowBackground="LightBlue"
+                            AutoGenerateColumns="False"
+                            CanUserReorderColumns="False"
+                            CanUserResizeColumns="True"
+                            CanUserSortColumns="True"
+                            Foreground="Black"
+                            GridLinesVisibility="Vertical"
+                            GridViewColumnHeader.Click="ConnectionGridViewColumnHeaderClickedHandler"
+                            HorizontalScrollBarVisibility="Visible"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ProjectUserConnections}"
+                            RowBackground="LightYellow"
+                            SelectionMode="Extended"
+                            VerticalScrollBarVisibility="Visible">
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="CopyProjectUserConnection_OnClick" Header="{helpers:Localization Copy}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.CommandBindings>
+                                <CommandBinding Command="Copy" Executed="CopyProjectUserConnection_OnClick" />
+                            </DataGrid.CommandBindings>
+
+                            <DataGrid.InputBindings>
+                                <KeyBinding
+                                    Key="C"
+                                    Command="Copy"
+                                    Modifiers="Control" />
+                            </DataGrid.InputBindings>
+
+                            <DataGrid.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                        <StackPanel>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock
+                                                                    Margin="0,10,0,0"
+                                                                    FontWeight="Bold"
+                                                                    Foreground="White"
+                                                                    Text="{Binding Name}" />
+                                                            </StackPanel>
+                                                            <ItemsPresenter />
+                                                        </StackPanel>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+                                </GroupStyle>
+                            </DataGrid.GroupStyle>
+
+                            <DataGrid.Columns>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="UserName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding UserName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="ProjectName" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ProjectName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{StaticResource MaterialDesignLightBackground}"
+                                            Text="AccessLevel" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding AccessLevel}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+
+                        <Button
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Width="160"
+                            cm:Message.Attach="RefreshProjectUserConnectionGrid">
+                            Refresh
+                        </Button>
+
+                    </Grid>
+                </TextBlock>
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+</Window>

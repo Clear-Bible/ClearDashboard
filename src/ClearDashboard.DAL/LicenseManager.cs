@@ -1,11 +1,11 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Caliburn.Micro;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -120,20 +120,33 @@ namespace ClearDashboard.DataAccessLayer
         {
             try
             {
-                if (!File.Exists(LicenseFilePath)&& filePath == LicenseFilePath)
-                {
-                    filePath = LegacyLicenseFilePath;
-                }
-
-                var str = File.ReadAllText(filePath);
+                var str = GetLicenseFromFile(filePath);
 
                 return DecryptLicenseFromString(str);
-
             }
             catch (Exception)
             {
                 return "";
             }
+        }
+
+        public static string GetLicenseFromFile(string filePath)
+        {
+            try
+            {
+                if (!File.Exists(LicenseFilePath) && filePath == LicenseFilePath)
+                {
+                    filePath = LegacyLicenseFilePath;
+                }
+
+                var str = File.ReadAllText(filePath);
+                return str;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+           
         }
 
         public static User DecryptedJsonToUser(string decryptedLicenseKey, bool isGenerator=false)
@@ -198,5 +211,48 @@ namespace ClearDashboard.DataAccessLayer
             return LicenseUserMatchType.Error;
 
         }
+
+        public static string EncryptCollabJsonToString(CollaborationConfiguration configuration)
+        {
+            var cryptProvider = CreateCryptoProvider();
+
+            var transform = cryptProvider.CreateEncryptor();
+            var serialized = JsonSerializer.Serialize(configuration);
+
+            var decryptedBytes = Encoding.ASCII.GetBytes(serialized);
+            var encryptedBytes = transform.TransformFinalBlock(decryptedBytes, 0, decryptedBytes.Length);
+            var str = Convert.ToBase64String(encryptedBytes);
+
+            return str;
+        }
+
+        public static CollaborationConfiguration DecryptCollabToConfiguration(string encryptedString)
+        {
+            var configuration = new CollaborationConfiguration
+            {
+                UserId = -1
+            };
+
+            try
+            {
+                var cryptProvider = CreateCryptoProvider();
+
+                var transform = cryptProvider.CreateDecryptor();
+                var encryptedBytes = Convert.FromBase64String(encryptedString);
+                var decryptedBytes = transform.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+
+                var serialized = Encoding.ASCII.GetString(decryptedBytes);
+
+                configuration = JsonSerializer.Deserialize<CollaborationConfiguration>(serialized);
+            }
+            catch (Exception ex)
+            {
+                var logger = IoC.Get<ILogger<LicenseUserMatchType>>();
+                logger.LogError("DecryptCollabToConfiguration failed: " + ex);
+            }
+
+            return configuration;
+        }
+
     }
 }

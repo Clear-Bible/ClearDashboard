@@ -364,7 +364,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             ShowBackTranslation = Settings.Default.PinsShowBackTranslation;
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        public async Task Initialize(CancellationToken cancellationToken)
         {
             _watch.Start();
 #pragma warning disable CS4014
@@ -441,7 +441,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
 #pragma warning restore CS4014
 
-            _ = base.OnActivateAsync(cancellationToken);
+            //_ = base.OnActivateAsync(cancellationToken);
         }
 
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
@@ -1140,11 +1140,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (itemDt.Gloss is null)
             {
-                return (itemDt.Source.Contains(_filterString) || itemDt.Notes.Contains(_filterString))
+                return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
+                        || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
                     && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
             }
 
-            return (itemDt.Source.Contains(_filterString) || itemDt.Gloss.Contains(_filterString) || itemDt.Notes.Contains(_filterString))
+            return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
+                    || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
+                    || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
                 && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
         }
 

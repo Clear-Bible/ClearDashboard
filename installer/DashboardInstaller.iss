@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ClearDashboard"
-#define MyAppVersion "1.0.6.7"
+#define MyAppVersion "1.0.6.10"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -11,6 +11,7 @@
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 #define MyAppHelpDocsName "Dashboard_Instructions.pdf"
 #define MyAppId "{{CD4BA885-D292-46D1-9EB8-1049865E327B}"
+#define MyAppPluginFolder "ClearDashboardWebApiPlugin"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -153,8 +154,8 @@ Source: "..\src\ClearDashboard.Wpf.Application\Resources\NotoSerif-Italic-Variab
 Source: "..\src\ClearDashboard.Wpf.Application\Resources\NotoSerif-VariableFont_wdth,wght.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "Noto Serif"
 
 ; Install Paratext Plugin
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 
 [Registry]
@@ -177,11 +178,11 @@ Name: "{autodesktop}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsName
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 
 [InstallDelete]
-Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"
 Type: filesandordirs; Name: "{app}"
 
 [UninstallDelete]
-Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"
 Type: filesandordirs; Name: "{app}"
 
 [Code]

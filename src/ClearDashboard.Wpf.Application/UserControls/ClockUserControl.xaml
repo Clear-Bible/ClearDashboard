@@ -137,7 +137,7 @@
                                 Visibility="{Binding TextBoxVisibility}">
                                 <b:Interaction.Behaviors>
                                     <local:TextBoxEnterKeyUpdateBehavior />
-                                    <local:DoubleClickBehavior/>
+                                    <local:DoubleClickBehavior />
                                 </b:Interaction.Behaviors>
                             </TextBox>
 

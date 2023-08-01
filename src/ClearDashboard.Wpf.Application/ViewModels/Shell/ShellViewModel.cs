@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Framework.Input;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -14,8 +16,6 @@ using ClearDashboard.Wpf.Application.Views.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,11 +24,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using ClearApplicationFoundation.Framework.Input;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Models;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
-using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {

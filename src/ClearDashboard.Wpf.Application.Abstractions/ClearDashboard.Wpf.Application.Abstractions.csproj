@@ -34,7 +34,6 @@
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.701" />
     <PackageReference Include="MailKit" Version="4.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0-preview.3.23174.8" />
     <PackageReference Include="PowerManagerAPI" Version="1.0.0" />
@@ -53,6 +52,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Popups\DeletingCorpusNodePopupView.xaml.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Popups\ClosingEnhancedViewPopupView.xaml.cs">
       <SubType>Code</SubType>
