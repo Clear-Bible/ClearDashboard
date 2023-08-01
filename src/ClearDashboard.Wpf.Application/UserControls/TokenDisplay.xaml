@@ -10,7 +10,9 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    d:DataContext="{d:DesignInstance Type=enhancedView:TokenDisplayViewModel}"
+   xmlns:cm="http://caliburnmicro.com"
+   xmlns:bulkAlignment="clr-namespace:ClearDashboard.Wpf.Application.UserControls.BulkAlignment"
+   d:DataContext="{d:DesignInstance Type=enhancedView:TokenDisplayViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -56,7 +58,8 @@
             MouseRightButtonUp="OnTokenRightButtonUp"
             MouseWheel="OnTokenMouseWheel"
             PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"
-            ToolTipOpening="OnToolTipOpening">
+            cm:Message.Attach="[ToolTipOpening]=[OnToolTipOpening($eventArgs)]">
+            <!-- ToolTipOpening="OnToolTipOpening"-->
             <Button.ContextMenu>
                 <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
                     <MenuItem Click="OnCreateNote" Header="{helpers:Localization EnhancedView_CreateNote}" />
@@ -104,7 +107,10 @@
                     Placement="Left"
                     PlacementRectangle="50,0,0,0"
                     VerticalOffset="20">
-                    <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
+                    <StackPanel Orientation="Vertical">
+                        <bulkAlignment:AlignmentTooltip Visibility="{Binding IsHighlighted, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendedPropertiesXml="{Binding ExtendedProperties}" Visibility="{Binding HasExtendedProperties, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
                 </ToolTip>
             </Button.ToolTip>
         </Button>

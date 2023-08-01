@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -48,11 +51,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public string Tooltip
+        /// <summary>
+        /// Placeholder for when we will need to support RTL for the selected application language.
+        /// </summary>
+        public FlowDirection TooltipFlowDirection => FlowDirection.LeftToRight;
+
+        public string AlignmentTooltip
         {
             get
             {
-                return "Hi ya!";
+
+                var localization = IoC.Get<ILocalizationService>();
+
+                if (IsInvalidAlignment)
+                {
+                    return localization["BulkAlignmentReview_Invalid"];
+                }
+
+                if (IsValidAlignment)
+                {
+                    return localization["BulkAlignmentReview_Valid"];
+                }
+
+                if (IsNeedReviewAlignment)
+                {
+                    return localization["BulkAlignmentReview_NeedsReview"];
+                }
+
+                return localization["BulkAlignmentReview_Machine"]; ;
             }
         }
 
@@ -260,6 +286,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         public bool HasNote => NoteIds.Any();
+
+        public bool HasExtendedProperties => !string.IsNullOrEmpty(ExtendedProperties);
+
+        public void OnToolTipOpening(ToolTipEventArgs e)
+        {
+            if (!IsHighlighted && string.IsNullOrWhiteSpace(ExtendedProperties))
+            {
+                e.Handled = true;
+            }
+
+
+        }
 
         public void NoteAdded(NoteViewModel note)
         {

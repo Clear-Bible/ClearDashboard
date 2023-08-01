@@ -152,14 +152,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty HighlightedTokenValidBackgroundProperty = DependencyProperty.Register(
             nameof(HighlightedTokenValidBackground), typeof(Brush), typeof(TokenDisplay),
-            new PropertyMetadata(Brushes.DarkTurquoise));
+            new PropertyMetadata(Brushes.MediumOrchid));
 
         /// <summary>
         /// Identifies the HighlightedTokenInvalidBackground dependency property.
         /// </summary>
         public static readonly DependencyProperty HighlightedTokenInvalidBackgroundProperty = DependencyProperty.Register(
             nameof(HighlightedTokenInvalidBackground), typeof(Brush), typeof(TokenDisplay),
-            new PropertyMetadata(Brushes.Fuchsia));
+            new PropertyMetadata(Brushes.Crimson));
 
 
         /// <summary>
