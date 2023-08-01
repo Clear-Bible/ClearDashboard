@@ -58,1951 +58,1954 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Pins_Notes" xml:space="preserve">
-    <value>ማስታወሻዎች</value>
+  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
+    <value>አካባቢ</value>
   </data>
-  <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>እቃውን ይሰይሙ</value>
+  <data name="ProperCase_1_Samuel" xml:space="preserve">
+    <value>1 ሳሙኤል</value>
   </data>
-  <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>ቁጥር ማጣቀሻዎች</value>
+  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
+    <value>የቃላት ትርጉም</value>
   </data>
-  <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>ስሪት</value>
+  <data name="NewTestament" xml:space="preserve">
+    <value>አዲስ ኪዳን</value>
   </data>
-  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
-    <value>ሪኮርዶች</value>
+  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
+    <value>gesmstone</value>
   </data>
-  <data name="LUK" xml:space="preserve">
-    <value>LUK</value>
-  </data>
-  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>የተሟላ ... በይነገጽ እንደገና መጫን</value>
+  <data name="Update" xml:space="preserve">
+    <value>ዝመና</value>
   </data>
   <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
     <value>ተጠቃሚው በአገልጋይ ላይ ቀድሞውኑ አለ</value>
   </data>
-  <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>ቀዳሚ መጽሐፍ</value>
-  </data>
-  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
-    <value>ጸድቋል</value>
-  </data>
-  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>የቅርብ ጊዜ ፍለጋ</value>
-  </data>
-  <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>ቀዳሚ ምዕራፍ</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>"ተቀባይነት ያለው" የሚል ምልክት ምልክት</value>
-  </data>
-  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>ምንም የዳራ ተግባራት አይሄዱም</value>
-  </data>
-  <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>መርፌዎችን ይቀላቀሉ</value>
-  </data>
-  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>መጽሐፍ ቅዱሳዊ ቃላት</value>
-  </data>
-  <data name="Created" xml:space="preserve">
-    <value>ተፈጠረ</value>
-  </data>
-  <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>በከፍተኛ የሂሳብ ዝግጅቶች ወቅት የኃይል ሞገድ እንዲቀይር ይፍቀዱ</value>
-  </data>
-  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>የታሸጉ የትብብር ፕሮጄክቶች ዝርዝር</value>
-  </data>
-  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
-    <value>ምዕራፍ</value>
-  </data>
-  <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>የአያት ስም</value>
-  </data>
-  <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>ቁጥር ጠቅላላ</value>
-  </data>
-  <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>ፍቺው ረጅም</value>
-  </data>
-  <data name="ProperCase_2_Peter" xml:space="preserve">
-    <value>2 ጴጥሮስ</value>
-  </data>
-  <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>የኋላ መመለሻ</value>
-  </data>
-  <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>መለያ ቡድን ያክሉ</value>
-  </data>
-  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>የትብብር ተጠቃሚ ይፍጠሩ</value>
-  </data>
-  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>መያዣዎች; የእንስሳት እርባታ</value>
-  </data>
-  <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>ራዕይ</value>
-  </data>
-  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>እርግጠኛ ነዎት ይህን አስከሬን መሰረዝ ይፈልጋሉ? ከዚህ አስከሬኖች ጋር የተዛመዱ ሁሉም ማስታወሻዎች, ቅጥር እና ፓውያኖች ይሰረዛሉ እና መልሶ ማግኘት አይቻልም.</value>
-  </data>
-  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>ምደባዎች</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>HOS</value>
-  </data>
-  <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>ሰቆሚዎች</value>
-  </data>
-  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
-    <value>ቁጥር</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>እሺ</value>
-  </data>
-  <data name="Marble_Scope" xml:space="preserve">
-    <value>ወሰን</value>
-  </data>
-  <data name="Pins_Match" xml:space="preserve">
-    <value>ግጥሚያ</value>
-  </data>
-  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
-    <value>ልክ ያልሆነ</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>ሰዎች; ክብር, አክብሮት, ሁኔታ</value>
-  </data>
-  <data name="MainView_Layouts" xml:space="preserve">
-    <value>አቀማመጦች</value>
-  </data>
-  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>የአመለካከት ትርጓሜ</value>
-  </data>
-  <data name="Marble_Verse" xml:space="preserve">
-    <value>ቁጥር</value>
-  </data>
-  <data name="Marble_Glosses" xml:space="preserve">
-    <value>ጦሮች:</value>
-  </data>
-  <data name="Bcv_PreviousVerse" xml:space="preserve">
-    <value>ቀዳሚው ጥቅስ</value>
-  </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>ቃል: -</value>
-  </data>
-  <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>መጽሐፍ ቅዱሳዊ ቃላት</value>
-  </data>
-  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>ይህንን ትርጉም ይሰርዙ</value>
-  </data>
-  <data name="Pins_Origin" xml:space="preserve">
-    <value>አመጣጥ</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
-  </data>
-  <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>አንድ የመለያ ቡድን ቀድሞውኑ ከስም ጋር ይገኛል</value>
-  </data>
-  <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>ሁሉንም ያልተለመዱ ክስተቶች ይለውጡ</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>የኃይል ሞድ ነቅቷል</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>ምልክት እንደ &lt;ፍላጎት ግምገማ&gt; የተመረጠውን ምልክት</value>
-  </data>
-  <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>ትርጉሞች</value>
-  </data>
-  <data name="ProperCase_James" xml:space="preserve">
-    <value>ጄምስ</value>
-  </data>
-  <data name="NewCollabUserView_Email" xml:space="preserve">
-    <value>ኢሜል:</value>
-  </data>
-  <data name="NewCollabUserView_FirstName" xml:space="preserve">
-    <value>የመጀመሪያ ስም</value>
-  </data>
-  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
-    <value>ግንድ</value>
-  </data>
-  <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>መልእክት:</value>
-  </data>
-  <data name="Bcv_Offset" xml:space="preserve">
-    <value>ማካካሻ</value>
-  </data>
-  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>ጥበብ, ማስተዋል</value>
-  </data>
-  <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>የአያት ስም ያስፈልጋል</value>
-  </data>
-  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>ሀዘን</value>
-  </data>
-  <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>አቀባዊ ክፍተቶች</value>
-  </data>
-  <data name="Settings_PowerModes" xml:space="preserve">
-    <value>የኃይል ሁነታዎች</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
-  </data>
-  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>ኢሜልዎን ይመልከቱ እና በማረጋገጫ ኮድ ውስጥ ያስገቡ</value>
-  </data>
-  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
-    <value>በስርዓት ላይ አልተገኘም!</value>
-  </data>
-  <data name="Settings_SaveSettings" xml:space="preserve">
-    <value>ቅንብሮችን ያስቀምጡ</value>
-  </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>ጥበቃዎች ማካሄድ አይደለም</value>
-  </data>
-  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
-    <value>ግምገማ ግምገማ</value>
-  </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>ማስታረቡ</value>
-  </data>
-  <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>ማጣሪያዎችን ያጣሩ</value>
-  </data>
-  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>ኮርፕስን ያስወግዱ</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="1SA" xml:space="preserve">
-    <value>1SA</value>
-  </data>
-  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>ቆጠራዎች</value>
-  </data>
-  <data name="BiblicalTermsForm_Project" xml:space="preserve">
-    <value>ፕሮጀክት</value>
-  </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>ትርጉም ሰርዝ</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>ፍጠር</value>
-  </data>
-  <data name="ProperCase_Titus" xml:space="preserve">
-    <value>ቲቶ</value>
-  </data>
-  <data name="TargetContextView_ZoomIn" xml:space="preserve">
-    <value>አቅርብ</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>አሰላለፍ</value>
-  </data>
-  <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>ትርጉም ያዘጋጁ</value>
-  </data>
-  <data name="ProperCase_2_Chronicles" xml:space="preserve">
-    <value>2 ዜና መዋዕል</value>
-  </data>
-  <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>ቆላስይስ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>አረማዊነት</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>ሰርዝ</value>
-  </data>
-  <data name="MainView_GettingStartedGuide" xml:space="preserve">
-    <value>መመሪያን በመጀመር ላይ</value>
-  </data>
-  <data name="Pins_Gloss" xml:space="preserve">
-    <value>ግንድ</value>
-  </data>
-  <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>አሰላለፍ</value>
-  </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>ምርጫዎች</value>
-  </data>
-  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>አዲስ ግለሰብ</value>
-  </data>
-  <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>የቃላት ትርጉም</value>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
   </data>
   <data name="ProperCase_Psalms" xml:space="preserve">
     <value>መዝሙሮች</value>
   </data>
-  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>የተሰጠው ፕሮጀክት ስም ሕገ-ወጥ ቁምፊዎች ይ contains ል. ትክክለኛ ቁምፊዎች &lt;A-Z '(ንዑስ እና አቢይ ሆሄ), ቁጥሮች &lt;0-9&gt; እና ቁምፊዎች -' እና '_' ን ያካትታሉ.</value>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
   </data>
-  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>ኢንተርናሽናል</value>
+  <data name="Lexicon_AddMeaning" xml:space="preserve">
+    <value>ትርጉም ያክሉ</value>
   </data>
-  <data name="MainView_WindowsTextCollections" xml:space="preserve">
-    <value>የጽሑፍ ስብስቦች</value>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>ትኩረት የተሻሻለ የእይታ እይታ ያክሉ</value>
   </data>
-  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
-    <value>ወደ አዲስ የተሻሻለ እይታ ያክሉ</value>
+  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
+    <value>የኃይል ሞድ ነቅቷል</value>
   </data>
-  <data name="Edit" xml:space="preserve">
-    <value>አርትዕ</value>
+  <data name="Created" xml:space="preserve">
+    <value>ተፈጠረ</value>
   </data>
-  <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>ማስታወሻዎች</value>
+  <data name="Landing_Project" xml:space="preserve">
+    <value>ፕሮጀክት</value>
   </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
+  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
+    <value>የፍቃድ ቁልፍዎ ጠፍቷል ወይም ተሰበረ.</value>
   </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
-  </data>
-  <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>ዘሌዋውያን</value>
-  </data>
-  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
-    <value>ቡድን; አካባቢ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>ሳርዎች</value>
-  </data>
-  <data name="ProperCase_Genesis" xml:space="preserve">
-    <value>ዘፍጥረት</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>JON</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
-  </data>
-  <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>የፕሮግራም ዝመና ተገኝቷል</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>ከሰው በላይ የሆኑ ፍጥረታት እና ኃይሎች</value>
-  </data>
-  <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>ያልተስተካከለ</value>
-  </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>ሁሉንም ምረጥ</value>
-  </data>
-  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
-    <value>ሪኮርዶች</value>
-  </data>
-  <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>አብድዩ</value>
-  </data>
-  <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>የርዕስ ቅርጸ-ቁምፊ መጠን</value>
-  </data>
-  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
-    <value>ይህን መለያ ቡድን ያስወግዱ</value>
-  </data>
-  <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>አዲስ ማስታወሻ ያክሉ</value>
-  </data>
-  <data name="Notes_Word" xml:space="preserve">
-    <value>ቃል</value>
-  </data>
-  <data name="SNG" xml:space="preserve">
-    <value>SNG</value>
-  </data>
-  <data name="MainView_FileNew" xml:space="preserve">
-    <value>አዲስ</value>
-  </data>
-  <data name="Bcv_Chapter" xml:space="preserve">
-    <value>ምዕራፍ</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>የ Unijoie Commonite ማስመሰያ</value>
-  </data>
-  <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>የግርግር መልእክት ይላኩ</value>
-  </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>ባቡር</value>
-  </data>
-  <data name="Settings_Reserved" xml:space="preserve">
-    <value>የተያዘ</value>
-  </data>
-  <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>የታሸገ ኮርፖስ</value>
-  </data>
-  <data name="Notes_FilterStatus_Open" xml:space="preserve">
-    <value>ክፈት</value>
-  </data>
-  <data name="Pins_Code" xml:space="preserve">
-    <value>ኮድ</value>
+  <data name="Marble_Verses" xml:space="preserve">
+    <value>ጥቅሶች</value>
   </data>
   <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
     <value>Lexeme ያክሉ</value>
   </data>
-  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>የተሻሻለ እይታን ለማተኮር ቁጥር እይታን ያክሉ</value>
+  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
+    <value>የተሻሻለ እይታን ለማተኮር የጅምላ ማረጋገጫ እይታ ያክሉ</value>
   </data>
-  <data name="Windows_AlignmentTool" xml:space="preserve">
-    <value>አሰላለፍ መሣሪያ</value>
+  <data name="BiblicalTermsForm_Term" xml:space="preserve">
+    <value>ቃል</value>
   </data>
-  <data name="GEN" xml:space="preserve">
-    <value>GEN</value>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>ኢሜል</value>
   </data>
-  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>ለዚህ ሎሚ ትርጉም ያክሉ</value>
+  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
+    <value>Corpus ን ይምረጡ</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
+    <value>አሰላለፍ</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
+    <value>የሃይማኖት እንቅስቃሴዎች</value>
+  </data>
+  <data name="Notes_LabelGroupName" xml:space="preserve">
+    <value>የቡድን ስም</value>
+  </data>
+  <data name="Pins_Code" xml:space="preserve">
+    <value>ኮድ</value>
+  </data>
+  <data name="BiblicalTermsForm_Found" xml:space="preserve">
+    <value>ተገኝቷል</value>
+  </data>
+  <data name="Windows_CorpusTokens" xml:space="preserve">
+    <value>CRPOPOS ማስኬዶች</value>
+  </data>
+  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
+    <value>ግንድ</value>
+  </data>
+  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
+    <value>የተሰጠው ፕሮጀክት ስም ሕገ-ወጥ ቁምፊዎች ይ contains ል. ትክክለኛ ቁምፊዎች &lt;A-Z '(ንዑስ እና አቢይ ሆሄ), ቁጥሮች &lt;0-9&gt; እና ቁምፊዎች -' እና '_' ን ያካትታሉ.</value>
+  </data>
+  <data name="Settings_PowerModesDescription" xml:space="preserve">
+    <value>በከፍተኛ የሂሳብ ዝግጅቶች ወቅት የኃይል ሞገድ እንዲቀይር ይፍቀዱ</value>
+  </data>
+  <data name="SlackMessageView_NoInternet" xml:space="preserve">
+    <value>በይነመረብ የለም</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="Pins_Phrase" xml:space="preserve">
+    <value>ሐረግ</value>
+  </data>
+  <data name="MainView_GettingStartedGuide" xml:space="preserve">
+    <value>መመሪያን በመጀመር ላይ</value>
+  </data>
+  <data name="Pins_VerseReferences" xml:space="preserve">
+    <value>ቁጥር ማጣቀሻዎች</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>የትብብር ፕሮጄክቶች</value>
+  </data>
+  <data name="Pds_ResetVerseVersification" xml:space="preserve">
+    <value>የቁጥር ካርታዎችን ወደ ነባሪ አቀራረብን ዳግም ያስጀምሩ</value>
+  </data>
+  <data name="ProperCase_Job" xml:space="preserve">
+    <value>ሥራ</value>
+  </data>
+  <data name="EnhancedView_JoinTokens" xml:space="preserve">
+    <value>መርፌዎችን ይቀላቀሉ</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
+    <value>'ፍላጎት ክለሳ' እንደመሆኑ ምልክት ምልክት ያድርጉበት</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
+    <value>የተሟላ ... በይነገጽ እንደገና መጫን</value>
+  </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>Cleardashashboard ቅንብሮች</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
+    <value>መሣሪያዎች; ክብደት; ንግድ</value>
+  </data>
+  <data name="Pins_Lexeme" xml:space="preserve">
+    <value>Lexeme</value>
+  </data>
+  <data name="Marble_Senses" xml:space="preserve">
+    <value>ስሜቶች</value>
+  </data>
+  <data name="Marble_VerseSense" xml:space="preserve">
+    <value>ቁጥር ስሜት</value>
+  </data>
+  <data name="Pds_Resource" xml:space="preserve">
+    <value>ሀብት</value>
   </data>
   <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
     <value>አሰላለፍ መሣሪያ</value>
   </data>
-  <data name="Lexicon_AddLexeme" xml:space="preserve">
-    <value>Lexeme ያክሉ</value>
+  <data name="Lexicon_LemmaForms" xml:space="preserve">
+    <value>ሎሚ / ቅጾች</value>
   </data>
-  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>ግንባታ, የእንስሳት እርባታ</value>
+  <data name="SlackMessageView_Send" xml:space="preserve">
+    <value>ላክ</value>
   </data>
-  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>ምንጭ</value>
+  <data name="ProjectSetup_Hint" xml:space="preserve">
+    <value>እባክዎን ለፕሮጄክትዎ ስም ያስገቡ</value>
+  </data>
+  <data name="FontSettings_TargetFontSize" xml:space="preserve">
+    <value>Target ላማው የቅርጸ-ቁምፊ መጠን</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>ይህንን የግምገማ እይታ ሰርዝ?</value>
   </data>
-  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>የትብብር አስተዳደር</value>
+  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
+    <value>በማጋራት</value>
   </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>አዲስ የተሻሻለ እይታ</value>
+  <data name="ProperCase_Malachi" xml:space="preserve">
+    <value>ሚልክያስ</value>
   </data>
-  <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>ፕሮጀክት ይፍጠሩ</value>
+  <data name="ProperCase_Colossians" xml:space="preserve">
+    <value>ቆላስይስ</value>
   </data>
-  <data name="MainView_FileOpen" xml:space="preserve">
-    <value>ክፈት</value>
+  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
+    <value>እንደ &lt;ልክ ያልሆነ&gt; የሚል ምልክት ያድርጉበት</value>
   </data>
-  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>ይህን lxememer ሰርዝ</value>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>የኢሜል ማረጋገጫ ኮድ</value>
   </data>
-  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>ንዑስ</value>
+  <data name="Lexicon_Concordance" xml:space="preserve">
+    <value>ስምምነት</value>
   </data>
-  <data name="ProperCase_Luke" xml:space="preserve">
-    <value>ሉቃስ</value>
+  <data name="ClockUserControl_Name" xml:space="preserve">
+    <value>እቃውን ይሰይሙ</value>
   </data>
-  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+  <data name="ProjectPicker_AppName" xml:space="preserve">
+    <value>Cleardashardboard</value>
+  </data>
+  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
+    <value>ወደ አዲስ የተሻሻለ እይታ ያክሉ</value>
+  </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>የ ኢሜል አድራሻ</value>
+  </data>
+  <data name="Notes_FilterExpander" xml:space="preserve">
+    <value>ማጣሪያዎች</value>
+  </data>
+  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
+    <value>ወደ ቅንጥብ ሰሌዳ ይቅዱ</value>
+  </data>
+  <data name="EnhancedView_ShowControls" xml:space="preserve">
+    <value>የተሻሻሉ የእይታ ቁጥሮችን ያሳዩ</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="Pds_TransliterationManual" xml:space="preserve">
+    <value>የቋንቋ ፊደል</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>ፋይል</value>
+  </data>
+  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
+    <value>ምንጭ</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
+    <value>ሰዎች; ባለስልጣን</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>ተመርጠዋል</value>
+  </data>
+  <data name="Notes_FilterUsers" xml:space="preserve">
+    <value>በተጠቃሚዎች</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="Pds_Unknown" xml:space="preserve">
+    <value>ያልታወቀ</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
+    <value>ግንባታ; የሃይማኖት እንቅስቃሴዎች</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
+    <value>የምስጋና የምስክር ወረቀቶች {0} "በርካታ ምደባዎች አሉት. '{1}' ጠቅ ማድረግ 'ሁሉንም አሰጣጦች ሁሉ ይሰርዛል.</value>
+  </data>
+  <data name="Settings_PowerModes" xml:space="preserve">
+    <value>የኃይል ሁነታዎች</value>
+  </data>
+  <data name="Pds_MarbleResource" xml:space="preserve">
+    <value>ማስታረቡ</value>
+  </data>
+  <data name="NewCollabUserView_Username" xml:space="preserve">
+    <value>የተጠቃሚ ስም</value>
+  </data>
+  <data name="ProperCase_Habakkuk" xml:space="preserve">
+    <value>ዕንባቆም</value>
+  </data>
+  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
+    <value>የጄሰን ሜታዳታ</value>
+  </data>
+  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
+    <value>የመረጃ ቋት መፍጠር ...</value>
+  </data>
+  <data name="ProperCase_Judges" xml:space="preserve">
+    <value>ዳኞች</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
+  </data>
+  <data name="FontSettings_SourceFontSize" xml:space="preserve">
+    <value>የቅርጸ-ቁምፊ መጠን</value>
+  </data>
+  <data name="ProperCase_Zephaniah" xml:space="preserve">
+    <value>ሶፎንያስ</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>የኢሜል ኮድ ያረጋግጡ</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>ኤፌሶን</value>
   </data>
-  <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>ለዚህ ሎሚ የሊክስክስ ቅፅ ያክሉ</value>
-  </data>
-  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>መተግበሪያ</value>
-  </data>
-  <data name="MainView_Settings" xml:space="preserve">
-    <value>ቅንብሮች</value>
-  </data>
-  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
-    <value>የኢሜል ማረጋገጫ ኮድ:</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>የማሽን ቃል አሰላለፍ ስልተ ቀመር</value>
-  </data>
-  <data name="Marble_Definition" xml:space="preserve">
-    <value>ፍቺ</value>
-  </data>
-  <data name="Bcv_NextChapter" xml:space="preserve">
-    <value>የሚቀጥለው ምዕራፍ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
-    <value>ማህበር</value>
-  </data>
-  <data name="ProperCase_Haggai" xml:space="preserve">
-    <value>ሐጌ</value>
-  </data>
-  <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>ያንን ፕሮጀክት መሰረዝ አይችሉም, ሌላ ትግበራ አሁንም እየተጠቀመ ነው.</value>
-  </data>
-  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>ለቋንቋ ጥንድ መርፌዎችን ይቀላቀሉ</value>
-  </data>
-  <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>ዮናስ</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>ዝመና</value>
-  </data>
-  <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>ሎሚ / ቅጾች</value>
-  </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
-  </data>
-  <data name="Pins_Word" xml:space="preserve">
-    <value>ቃል</value>
-  </data>
-  <data name="FontSettings_Target" xml:space="preserve">
-    <value>Target ላማ ጽሑፍ</value>
-  </data>
-  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>'{0}' የሚለው ፕሮጀክት ቀድሞውኑ አለ. እባክዎን ልዩ ስም ይምረጡ. "</value>
-  </data>
-  <data name="Migrate_Header2" xml:space="preserve">
-    <value>የቁጥር ካርታዎችን ወደ ነባሪ አቀራረብን ዳግም ያስጀምሩ</value>
-  </data>
-  <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>ሶፎንያስ</value>
-  </data>
-  <data name="ProperCase_Ruth" xml:space="preserve">
-    <value>ሩት</value>
-  </data>
-  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Translalitewitherwenceocker</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
-    <value>መሣሪያዎች; ክብደት; ንግድ</value>
-  </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
-  </data>
-  <data name="ProperCase_1_Chronicles" xml:space="preserve">
-    <value>1 ዜና መዋዕል</value>
-  </data>
-  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
-    <value>በርቀት አገልጋይ የተቀመጠ</value>
-  </data>
-  <data name="Next" xml:space="preserve">
-    <value>ቀጥሎም</value>
-  </data>
-  <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>ትርጓሜ አጭር</value>
+  <data name="RegistrationView_LicenseKey" xml:space="preserve">
+    <value>እባክዎን የፍቃድዎን ቁልፍ ያስገቡ</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
     <value>ኢሜል ተልኳል ስህተት</value>
   </data>
-  <data name="ProperCase_2_Samuel" xml:space="preserve">
-    <value>2 ሳሙኤል</value>
-  </data>
-  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
-    <value>ፍራፍሬዎች</value>
-  </data>
-  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
-    <value>ያልተነበቡ ምላሾች አሉ</value>
-  </data>
-  <data name="REV" xml:space="preserve">
-    <value>REV</value>
-  </data>
-  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>ጥናት ሊተገበር</value>
-  </data>
-  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
-    <value>ተቀባይነት ያለው</value>
-  </data>
-  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>ወደ ቅንጥብ ሰሌዳ ይቅዱ</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>የተለያዩ ምልክቶች ቁጥር</value>
-  </data>
-  <data name="Pds_Daughter" xml:space="preserve">
-    <value>ሴት ልጅ</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
-  </data>
-  <data name="Bcv_NextBook" xml:space="preserve">
-    <value>የሚቀጥለው መጽሐፍ</value>
-  </data>
-  <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Target ላማው የቅርጸ-ቁምፊ መጠን</value>
-  </data>
-  <data name="Bcv_Sync" xml:space="preserve">
-    <value>ማመሳሰል</value>
-  </data>
-  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
-    <value>መድረሻ ማስነሻ</value>
-  </data>
-  <data name="Pds_Source" xml:space="preserve">
-    <value>ምንጭ</value>
-  </data>
-  <data name="Pins_Phrase" xml:space="preserve">
-    <value>ሐረግ</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2PE</value>
-  </data>
-  <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>ይህንን ማስታወሻ ለማቃጠል ይላኩ?</value>
-  </data>
-  <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>ኤርምያስ</value>
-  </data>
-  <data name="OldTestament" xml:space="preserve">
-    <value>ብሉይ ኪዳን</value>
-  </data>
-  <data name="Notes_FilterExpander" xml:space="preserve">
-    <value>ማጣሪያዎች</value>
-  </data>
-  <data name="MainView_WindowsMarble" xml:space="preserve">
-    <value>እብጠት</value>
-  </data>
-  <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1 ኛ ቆሮንቶስ</value>
-  </data>
-  <data name="FontSettings_Source" xml:space="preserve">
-    <value>ምንጭ ጽሑፍ</value>
-  </data>
-  <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>ማጉላት</value>
-  </data>
-  <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>ዕንባቆም</value>
-  </data>
-  <data name="ProperCase_Matthew" xml:space="preserve">
-    <value>ማቲው</value>
-  </data>
-  <data name="Pins_Occurences" xml:space="preserve">
-    <value>የተከሰሱ ናቸው</value>
-  </data>
-  <data name="ProperCase_Jude" xml:space="preserve">
-    <value>ይሁዳ</value>
-  </data>
-  <data name="BiblicalTermsForm_Category" xml:space="preserve">
-    <value>ምድብ</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="ProjectValidator_SameName" xml:space="preserve">
-    <value>ተመሳሳይ ስም ያለው ፕሮጀክት ቀድሞውኑ አለ. እባክዎን ልዩ ስም ይምረጡ.</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexyeme ዓይነት</value>
-  </data>
-  <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>ተሻሽሏል</value>
-  </data>
-  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>አዲስ ትርጉም ያስገቡ</value>
-  </data>
-  <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>ይህን ማስታወሻ ይሰርዙ?</value>
-  </data>
-  <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>ኮርፖሬሽን ያክሉ</value>
-  </data>
-  <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>በይዘቱ ላይ ያጉሉ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
-    <value>አካባቢ</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>አስቀምጥ</value>
-  </data>
-  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
-    <value>ማህበራት</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
-  </data>
-  <data name="EnhancedView_Notes" xml:space="preserve">
-    <value>ማስታወሻዎች</value>
-  </data>
-  <data name="Landing_Projects" xml:space="preserve">
-    <value>ፕሮጄክቶች</value>
-  </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
-  </data>
-  <data name="MainView_ShowLog" xml:space="preserve">
-    <value>ምዝግብ ማስታወሻ አሳይ</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>የኮርፖግሬ ጥቅሶችን ትይዩ ይፍጠሩ</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>አሰላለፍ ሰርዝ</value>
-  </data>
-  <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>Lexeme</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
-    <value>ዛፎች; ፍራፍሬዎች</value>
-  </data>
-  <data name="ProperCase_Acts" xml:space="preserve">
-    <value>ድርጊቶች</value>
-  </data>
-  <data name="Pins_Filter" xml:space="preserve">
-    <value>ማጣሪያ:</value>
-  </data>
-  <data name="Windows_TextCollection" xml:space="preserve">
-    <value>የጽሑፍ ስብስብ</value>
-  </data>
-  <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>ማጣሪያ ማጣሪያ</value>
-  </data>
-  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>ትኩረት የተሻሻለ የእይታ እይታ ያክሉ</value>
-  </data>
-  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>የመተባበር ተጠቃሚን ይፍጠሩ</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
-  </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
-  </data>
-  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
-    <value>1 ተሰሎንቄ</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
-    <value>ሰዎች; ባለስልጣን</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>ZEP</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>ኢሜልዎን ይመልከቱ እና በማረጋገጫ ኮድ ውስጥ ያስገቡ</value>
-  </data>
-  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>አዲስ የትርጉም ሞዴልን ያሰሉ</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>ሁኔታ</value>
-  </data>
-  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>ሲምሞዚድ ሞዴልን ያሠለጥኑ?</value>
-  </data>
-  <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>ፊልሞና</value>
-  </data>
-  <data name="Notes_LabelAdd" xml:space="preserve">
-    <value>መለያ ያክሉ</value>
-  </data>
-  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>ኢንተርሊንሰር ሰርዝ</value>
-  </data>
-  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
-    <value>ሥነ ምግባር እና ሥነምግባር</value>
-  </data>
-  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>መደበኛ አቀማመጦች</value>
-  </data>
-  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>CRPOPOS ማስኬዶች</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>ምልክት እንደ &lt;ትክክለኛ&gt; የተመረጠ ምልክት ተደርጎበታል</value>
-  </data>
-  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
-    <value>Cleardashሽርቦርድ ኢሜል የማረጋገጫ ኮድ</value>
-  </data>
-  <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>ከጠቅላላው የይዘት ቦታ ጋር ወደ የእይታ እይታ ይጣጣሙ</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
-  </data>
-  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>ይህን መለያ ቡድን ያስወግዱ?</value>
-  </data>
-  <data name="ClockUserControl_Delete" xml:space="preserve">
-    <value>ሰርዝ</value>
-  </data>
-  <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>የይለፍ ቃል:</value>
-  </data>
-  <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>በእንግሊዘኛ አንጸባራቂ ፍለጋ</value>
-  </data>
-  <data name="Notes_NoteText" xml:space="preserve">
-    <value>ጽሑፍ</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>የቡድን ስም</value>
-  </data>
-  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>የትብብር ፕሮጄክቶችን ያቀናብሩ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
-    <value>መሣሪያዎች</value>
-  </data>
-  <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>ኢሳይያስ</value>
-  </data>
-  <data name="ProperCase_Romans" xml:space="preserve">
-    <value>ሮማውያን</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>ሰፈራ</value>
-  </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>ክፍል</value>
-  </data>
-  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
-    <value>የተጠቃሚ ተገኝነትን ያረጋግጡ</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>ይህን ሌክሴም ሰርዝ?</value>
-  </data>
-  <data name="EZR" xml:space="preserve">
-    <value>EZR</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>አጥቢ እንስሳት; የቤት እንስሳት</value>
-  </data>
-  <data name="Marble_DomainsTitle" xml:space="preserve">
-    <value>ጎራዎች</value>
-  </data>
-  <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>የመረጃ ቋት</value>
-  </data>
-  <data name="Pds_Unknown" xml:space="preserve">
-    <value>ያልታወቀ</value>
-  </data>
-  <data name="Marble_Sense" xml:space="preserve">
-    <value>ስሜት</value>
-  </data>
-  <data name="Pds_Target" xml:space="preserve">
-    <value>Target ላማ</value>
-  </data>
-  <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>ድግግሞሽ ግራፍ</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>ገጠመ</value>
-  </data>
-  <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>ከይዘቱ ያጉሉ</value>
-  </data>
-  <data name="CollabProjectManagementView_Description" xml:space="preserve">
-    <value>መግለጫ</value>
-  </data>
-  <data name="BiblicalTermsForm_Found" xml:space="preserve">
-    <value>ተገኝቷል</value>
-  </data>
-  <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>የቋንቋ ፊደል</value>
-  </data>
-  <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>በዚህ ቁጥር ውስጥ ምንም ቁጥር የለም.</value>
-  </data>
-  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
-    <value>የሚገኙ የትራንስፖርት ተጠቃሚዎች</value>
-  </data>
-  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
-    <value>አካባቢ; ተፈጥሮ</value>
-  </data>
-  <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>ከዚህ ሎማ ውስጥ ይህን ሌክሳይክ ቅፅ ያስወግዱ</value>
-  </data>
-  <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>ምሳሌዎች</value>
-  </data>
-  <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>ቅርጸት ተደርጓል</value>
-  </data>
-  <data name="ProperCase_Esther" xml:space="preserve">
-    <value>አስቴር</value>
-  </data>
-  <data name="Windows_Dashboard" xml:space="preserve">
-    <value>ዳሽቦርድ</value>
-  </data>
-  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>አዲስ ኢንተርናሽናል ያክሉ</value>
-  </data>
-  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
-    <value>የአሁኑ ፕሮጀክት ተጠቃሚዎች</value>
-  </data>
-  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>የባቡር ማሽን ቃሉ ሹክነር</value>
-  </data>
-  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
-    <value>የትብብር ፕሮጄክቶች</value>
-  </data>
-  <data name="ProperCase_2_Corinthians" xml:space="preserve">
-    <value>2 ኛ ቆሮንቶስ</value>
-  </data>
-  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
-    <value>አዲስ የቃል አሰላለፍ ይፍጠሩ</value>
-  </data>
-  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>የጄሰን ሜታዳታ</value>
-  </data>
-  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>ዝግ</value>
-  </data>
-  <data name="ProperCase_Job" xml:space="preserve">
-    <value>ሥራ</value>
-  </data>
-  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
-    <value>ወሰን</value>
-  </data>
-  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>የታወቁ ጉዳዮች</value>
-  </data>
-  <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>ዳሽቦርድ</value>
-  </data>
-  <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>ዘካርያስ</value>
-  </data>
-  <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>የተሻሻሉ የእይታ ቁጥሮችን ያሳዩ</value>
-  </data>
-  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Gitlab ተጠቃሚን ለአገልጋይ ያኑሩ</value>
-  </data>
-  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>የተጎዱ ቃላት</value>
-  </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1CO</value>
-  </data>
-  <data name="Pds_Standard" xml:space="preserve">
-    <value>ደረጃ</value>
-  </data>
-  <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>ቁጥሮች</value>
-  </data>
-  <data name="Notes_FilterStatus_Any" xml:space="preserve">
-    <value>ማናቸውም</value>
-  </data>
-  <data name="Marble_GeneralInformation" xml:space="preserve">
-    <value>አጠቃላይ መረጃ</value>
-  </data>
-  <data name="Notes_Note_Created" xml:space="preserve">
-    <value>ተፈጠረ</value>
-  </data>
-  <data name="MainView_AccountInfo" xml:space="preserve">
-    <value>የመለያ መረጃ</value>
-  </data>
-  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
-    <value>ሁሉም</value>
-  </data>
-  <data name="ShellView_Loading" xml:space="preserve">
-    <value>በመጫን ላይ ...</value>
-  </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>Cleardashashboard ቅንብሮች</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>ወደ Cleardashboard እንኳን በደህና መጡ! እባክዎ የምዝገባ መረጃዎን ያስገቡ.</value>
-  </data>
-  <data name="Settings_EmailVerificationCode" xml:space="preserve">
-    <value>የኢሜል ማረጋገጫ ኮድ</value>
-  </data>
-  <data name="ExpandView" xml:space="preserve">
-    <value>ዕይታን ዘርጋ</value>
-  </data>
-  <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>የጥቃቅን ጥቆማ ለመጀመር እዚህ ጠቅ ያድርጉ</value>
-  </data>
-  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>አዲስ የኮርፒየስ ማስመሰያ ይፍጠሩ</value>
-  </data>
-  <data name="Notes_NoteReplies_Read" xml:space="preserve">
-    <value>ታይቷል</value>
-  </data>
-  <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>እባክዎን የፍቃድዎን ቁልፍ ያስገቡ</value>
-  </data>
-  <data name="Settings_CollaborationSettings" xml:space="preserve">
-    <value>የትብብር ቅንብሮች</value>
-  </data>
-  <data name="ClockUserControl_Add" xml:space="preserve">
-    <value>ጨምር</value>
-  </data>
-  <data name="MainView_File" xml:space="preserve">
-    <value>ፋይል</value>
-  </data>
-  <data name="Notes_NoteLabelGroups" xml:space="preserve">
-    <value>መለያዎች</value>
-  </data>
-  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>የተሻሻለ እይታን ለማተኮር የጅምላ ማረጋገጫ እይታ ያክሉ</value>
-  </data>
-  <data name="ProjectSetup_Title" xml:space="preserve">
-    <value>አዲሱን ፕሮጀክትዎን ይፍጠሩ</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>ስም</value>
-  </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>ትርጉሞች</value>
-  </data>
-  <data name="ProperCase_2_John" xml:space="preserve">
-    <value>2 ዮሐንስ</value>
-  </data>
-  <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>ማስታወሻዎችን ይመልከቱ / ይፍጠሩ</value>
-  </data>
-  <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>ሕዝቅኤል</value>
-  </data>
-  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>ጥቁሩ ካርታዎችን በትላልቅ ኮርፖሬሽን መካከል ያዘጋጁ</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>ለሎማ ቀድሞውኑ ለመጨረሻ ጊዜ ለመኖር</value>
-  </data>
-  <data name="Copy" xml:space="preserve">
-    <value>ቅጂ</value>
-  </data>
-  <data name="SlackMessageView_NoInternet" xml:space="preserve">
-    <value>በይነመረብ የለም</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>ተግባር ተሰር was ል</value>
-  </data>
-  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>የተሻሻለ ኮርፕስ ጽሑፍ ወደ አዲስ የተሻሻለ እይታ ያክሉ</value>
-  </data>
-  <data name="Marble_All" xml:space="preserve">
-    <value>ሁሉም</value>
-  </data>
-  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
-    <value>2 ተሰሎንቄ</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
-    <value>አሰላለፍ ሰርዝ?</value>
-  </data>
-  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>አሰላለፍ ፍጠር</value>
-  </data>
-  <data name="Settings_Plugins" xml:space="preserve">
-    <value>ተሰኪዎች</value>
-  </data>
-  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>የመጀመሪያ ስም ያስፈልጋል</value>
-  </data>
-  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
-    <value>ማጽደቅ</value>
-  </data>
-  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
-    <value>መጽሐፍ</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
-    <value>የተስተካከሉ ቃላት</value>
-  </data>
-  <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>እባክዎን የመጀመሪያ ስምዎን ያስገቡ</value>
-  </data>
-  <data name="Marble_VerseSense" xml:space="preserve">
-    <value>ቁጥር ስሜት</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>ሁሉንም አሰጣጦች ይሰርዙ?</value>
-  </data>
-  <data name="ProperCase_Hosea" xml:space="preserve">
-    <value>ሆሴዕ</value>
-  </data>
-  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>'{0}' ጋር '{1}'?</value>
-  </data>
-  <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>በተጠቃሚዎች</value>
-  </data>
-  <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>የኋላ መመለሻን አሳይ</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
-    <value>አጥቢ እንስሳት; የዱር እንስሳት</value>
-  </data>
-  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>ከተመረተ ይህ የዚህን ቃል አስፈላጊነት ሁሉ የማይካድ አለመሆኑን ይለውጣል</value>
-  </data>
-  <data name="Notes_Part" xml:space="preserve">
-    <value>ክፍል</value>
-  </data>
-  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>gesmstone</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>ዝግ</value>
-  </data>
-  <data name="Bcv_NextVerse" xml:space="preserve">
-    <value>የሚቀጥለው ቁጥር</value>
-  </data>
-  <data name="ProperCase_John" xml:space="preserve">
-    <value>ጆን</value>
-  </data>
-  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>አዲስ ኢንተርናሽናል ይፍጠሩ</value>
-  </data>
-  <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>ሚልክያስ</value>
-  </data>
-  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
-    <value>ቁጥር ጽሑፍ</value>
-  </data>
-  <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>አስተናጋጅ ቋንቋ</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>'ፍላጎት ክለሳ' እንደመሆኑ ምልክት ምልክት ያድርጉበት</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>ግንባታ; የሃይማኖት እንቅስቃሴዎች</value>
-  </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>የኢሜል ኮድ ያረጋግጡ</value>
-  </data>
-  <data name="Notes_NoteReplies" xml:space="preserve">
-    <value>ምላሾች</value>
-  </data>
-  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>ጥበቃዎች አልተጫነም. እባክዎን የጥቃቅን ጠቅ ያድርጉ እና CleardardHobodbobod መተግበሪያን እንደገና ይደግፉ.</value>
-  </data>
-  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
-    <value>እባክዎ ለፕሮጄክትዎ ስም ያስገቡ.</value>
-  </data>
-  <data name="ShellView_User" xml:space="preserve">
-    <value>ተጠቃሚ</value>
-  </data>
-  <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>እዚህ ብቸኛ ነው. እባክዎን አዲስ ፕሮጀክት ይፍጠሩ.</value>
-  </data>
-  <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>የዘፈኖች መዝሙር</value>
-  </data>
-  <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>ማኡግ ግሪክ</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
-    <value>ተቀባይነት አላገኘም</value>
-  </data>
-  <data name="BiblicalTermsForm_All" xml:space="preserve">
-    <value>ሁሉም</value>
-  </data>
-  <data name="FontSettings_SourceFontSize" xml:space="preserve">
-    <value>የቅርጸ-ቁምፊ መጠን</value>
-  </data>
-  <data name="BiblicalTermsForm_Note" xml:space="preserve">
-    <value>ማስታወሻ</value>
-  </data>
-  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>ሥራ ይቅር</value>
-  </data>
-  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
-    <value>በስልጠና ጽሑፍ ውስጥ መቁጠር</value>
-  </data>
-  <data name="FontSettings_Height" xml:space="preserve">
-    <value>ቁመት</value>
-  </data>
-  <data name="ProjectPicker_GetStarted" xml:space="preserve">
-    <value>እንጀምር</value>
-  </data>
-  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
-    <value>ትሬዚኒክ ጎራ</value>
-  </data>
-  <data name="Pins_Prefix" xml:space="preserve">
-    <value>ቅድመ ቅጥያ</value>
-  </data>
-  <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>ክፍት / ዝግ</value>
-  </data>
-  <data name="Notes_Note_NoteStatus" xml:space="preserve">
-    <value>ሁኔታ</value>
-  </data>
-  <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>ነህምያ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
-    <value>ዓላማ</value>
-  </data>
-  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>የሃይማኖት እንቅስቃሴዎች</value>
-  </data>
-  <data name="UseDefaults" xml:space="preserve">
-    <value>ነባሪዎች በመጠቀም ይፍጠሩ</value>
-  </data>
-  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>መክብብ</value>
-  </data>
-  <data name="AboutView_Version" xml:space="preserve">
-    <value>ስሪት</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
-    <value>ክፈት</value>
-  </data>
-  <data name="Lexicon_AddMeaning" xml:space="preserve">
-    <value>ትርጉም ያክሉ</value>
-  </data>
-  <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>ማስታወሻ አመልካቾች</value>
-  </data>
-  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>አዲስ ፕሮጀክት ይፍጠሩ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
-    <value>አካባቢ</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
-  </data>
-  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>የፕሮጀክት ንድፍ ወለል</value>
-  </data>
-  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>ፍቅር</value>
-  </data>
-  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>አስመጪ አገልጋይ ፕሮጀክት</value>
-  </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
-  </data>
-  <data name="MainView_WindowsPINS" xml:space="preserve">
-    <value>PINS</value>
-  </data>
-  <data name="Windows_PINS" xml:space="preserve">
-    <value>ፓይዶች</value>
-  </data>
-  <data name="ProperCase_3_John" xml:space="preserve">
-    <value>3 ዮሐንስ</value>
-  </data>
-  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>የቃላት ትርጉም</value>
-  </data>
-  <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>CRPOPOS ማስኬዶች</value>
-  </data>
-  <data name="Landing_NewProject" xml:space="preserve">
-    <value>አዲስ ፕሮጀክት</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>አዲስ ትብብር ተጠቃሚ</value>
-  </data>
-  <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 ጢሞቴዎስ</value>
-  </data>
-  <data name="Settings_UserAlreadyExists" xml:space="preserve">
-    <value>ተጠቃሚው በአገልጋይ ላይ ቀድሞውኑ አለ</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>ይቅር</value>
-  </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>የ ኢሜል አድራሻ</value>
-  </data>
-  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>የዲክሪፕት የፈቃድ ቁልፍ ይዘቶች ከሰጡት መረጃ ጋር አይዛመድም.</value>
-  </data>
-  <data name="ProperCase_Micah" xml:space="preserve">
-    <value>ሚክያስ</value>
-  </data>
-  <data name="ProperCase_2_Kings" xml:space="preserve">
-    <value>2 ነገሥታት</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>ተመለስ</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>ኢንተርናሽናል ፍጠር</value>
-  </data>
-  <data name="Pds_StudyBible" xml:space="preserve">
-    <value>ጥናት</value>
-  </data>
-  <data name="Windows_EnhancedView" xml:space="preserve">
-    <value>የተሻሻለ እይታ</value>
-  </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>መጽሐፍ</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="MainView_LayoutsDelete" xml:space="preserve">
-    <value>የተቀመጠ አቀማመጥ ሰርዝ</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Corpus ን ይምረጡ</value>
-  </data>
-  <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>ለመጀመር ፕሮጀክትዎን ይፍጠሩ.</value>
-  </data>
-  <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>ተዛማጅ Lemmas</value>
+  <data name="Settings_AquaEnabled" xml:space="preserve">
+    <value>የሙከራ Aqua Pluckin ን ያንቁ</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>ግጥሚያዎች የሉም.</value>
   </data>
-  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>ስህተቶች ብዛት: -</value>
-  </data>
-  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
-    <value>ግልጽ ማስታወሻዎች</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>ዓይነት</value>
-  </data>
-  <data name="Settings_ReservedCaption" xml:space="preserve">
-    <value>ለወደፊቱ መስፋፋት ተጠብቋል</value>
-  </data>
-  <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>የቅርጸ-ቁምፊ መጠን</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>ስምምነት</value>
-  </data>
-  <data name="Settings_UserName" xml:space="preserve">
-    <value>የተጠቃሚ ስም</value>
-  </data>
-  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>የቅርብ ጊዜ ክፍት ነው</value>
-  </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>ጠንካራ ኮዶች</value>
-  </data>
-  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>ፕሮጀክት ይምረጡ</value>
-  </data>
-  <data name="WordMeaningsView_Sense" xml:space="preserve">
-    <value>ስሜት: -</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>አድስ</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
-  </data>
-  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
-    <value>ተፈጥሮ</value>
-  </data>
-  <data name="BulkAlignmentReview_Source" xml:space="preserve">
-    <value>ምንጭ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>የመታሰቢያ ሐውልት</value>
-  </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>ሁሉም</value>
-  </data>
-  <data name="ProperCase_1_Peter" xml:space="preserve">
-    <value>1 ጴጥሮስ</value>
-  </data>
-  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>ይዘቱን እስከ 100% ሚዛን</value>
-  </data>
-  <data name="Landing_Project" xml:space="preserve">
-    <value>ፕሮጀክት</value>
-  </data>
-  <data name="DisplayName" xml:space="preserve">
-    <value>መጠሪያው ስም</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>አዎ</value>
-  </data>
-  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
-    <value>በአገልጋይ ላይ ተጠቃሚን መፍጠር ስህተት</value>
-  </data>
-  <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>መለያዎች</value>
-  </data>
-  <data name="ProperCase_Exodus" xml:space="preserve">
-    <value>ዘፀአት</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>ምንጭ ክፍል</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>የተሻሻለ የ CRPus ጽሑፍን ለማተኮር የተሻሻለ ኮርፖስ ጽሑፍ ያክሉ</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>USFM ን በመፈተሽ ላይ</value>
-  </data>
-  <data name="Settings_TextCollections" xml:space="preserve">
-    <value>የጽሑፍ ስብስብ</value>
-  </data>
-  <data name="Marble_Domains" xml:space="preserve">
-    <value>ጎራዎች</value>
-  </data>
-  <data name="MainView_GatherLogs" xml:space="preserve">
-    <value>ለማፅዳት መልእክት ይላኩ</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
-  </data>
-  <data name="MainView_LayoutsSave" xml:space="preserve">
-    <value>የአሁኑን አቀማመጥ ይቆጥቡ</value>
-  </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>ወደዚህ ትርጉም አንድ ትሬዚክ ጎራ ያክሉ</value>
-  </data>
-  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>የተሰጠው ቁልፍ ስህተት ነው. ዲክሪፕት በሚሆንበት ጊዜ የተወሰኑ የ JSON ነገሮች ሊገኙ አልቻሉም.</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
-    <value>የፕሮጀክት አባል</value>
-  </data>
-  <data name="ProperCase_Mark" xml:space="preserve">
-    <value>ማርክ</value>
-  </data>
-  <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 ጆን</value>
-  </data>
-  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>አሰላለፍ ሰርዝ</value>
-  </data>
-  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>ተጠቃሚው ቀድሞውኑ በስርዓቱ ላይ ነው!</value>
-  </data>
-  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
-    <value>Cleardashሽርቦርድ ኢሜል የማረጋገጫ ኮድ</value>
-  </data>
-  <data name="FontSettings_Horizontal" xml:space="preserve">
-    <value>አግድም አሰጣጥ</value>
-  </data>
-  <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>በዕብራይስጥ / ግሪክ ፍለጋ</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>መሣሪያዎች; ልጅ መውለድ</value>
-  </data>
-  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
-    <value>በርቀት አገልጋይ የተቀመጠ</value>
-  </data>
-  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
-    <value>ግንድ</value>
-  </data>
-  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>በጽሑፍ ጥቅስ ይቁጠሩ</value>
-  </data>
-  <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>ቅድመ-ቅናሾችን አሳይ</value>
-  </data>
-  <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>አዲስ ቡድን</value>
-  </data>
-  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>አስከሬኑን እንዴት እንደሚያስቆርጡ ይምረጡ</value>
-  </data>
-  <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>አማካሪዎች</value>
-  </data>
-  <data name="NewCollabUserView_Group" xml:space="preserve">
-    <value>ቡድን</value>
-  </data>
-  <data name="FontSettings_ParagraphMode" xml:space="preserve">
-    <value>የአንቀጽ ሁኔታ</value>
-  </data>
-  <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>የይዘቱን የማጉላት ደረጃን ይለውጡ</value>
-  </data>
-  <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>የንግግር ክፍሎች</value>
-  </data>
-  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
-    <value>የተሻሻለ እይታ</value>
-  </data>
-  <data name="Marble_SubDomains" xml:space="preserve">
-    <value>ንዑስ ጎራዎች:</value>
-  </data>
-  <data name="ClockUserControl_LocalTime" xml:space="preserve">
-    <value>የአካባቢ ጊዜ</value>
-  </data>
-  <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>ገላትያ ሰዎች</value>
-  </data>
-  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>አዲስ ትርጉም ያስገቡ ለ</value>
-  </data>
-  <data name="Pins_Forms" xml:space="preserve">
-    <value>ቅጾች</value>
-  </data>
-  <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>ይመዝገቡ</value>
-  </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
-  </data>
-  <data name="MainView_Help" xml:space="preserve">
-    <value>እገዛ</value>
-  </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
-  </data>
-  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>ሁሉንም አይምረጡ</value>
-  </data>
-  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma ለአዲሱ Lexteme</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
-    <value>የፕሮጀክት ባለቤት</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>ጨምር</value>
-  </data>
-  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>እንስሳት</value>
-  </data>
-  <data name="BulkAlignmentReview_Count" xml:space="preserve">
-    <value>ቆጠራ</value>
-  </data>
-  <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>Cleardashardboard</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>NEH</value>
-  </data>
-  <data name="MainView_About" xml:space="preserve">
-    <value>ስለ</value>
-  </data>
-  <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>ሎሚ</value>
-  </data>
-  <data name="FontSettings_Title" xml:space="preserve">
-    <value>ርዕስ</value>
-  </data>
-  <data name="AMO" xml:space="preserve">
-    <value>AMO</value>
-  </data>
-  <data name="ProperCase_Joshua" xml:space="preserve">
-    <value>ኢያሱ</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1JN</value>
-  </data>
-  <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>አዲስ ፕሮጀክት ይፍጠሩ</value>
-  </data>
-  <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 ነገሥታት</value>
-  </data>
-  <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>ማጣቀሻዎችን ይጫኑ</value>
-  </data>
-  <data name="Pds_Dictionary" xml:space="preserve">
-    <value>መዝገበ ቃላት</value>
-  </data>
-  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
-    <value>ይህን ትርጉም ይሰርዙ</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>ተቀባይነት አላገኘም</value>
-  </data>
-  <data name="ProperCase_Deuteronomy" xml:space="preserve">
-    <value>ዘዳግም</value>
-  </data>
-  <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>በመሰየም</value>
-  </data>
-  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>በማጋራት</value>
-  </data>
-  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>ምልክቶች እና ድንቆች</value>
-  </data>
-  <data name="MainView_Windows" xml:space="preserve">
-    <value>ዊንዶውስ</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>ዕዝራ</value>
-  </data>
-  <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>እባክዎን ለፕሮጄክትዎ ስም ያስገቡ</value>
-  </data>
-  <data name="Language [UID_Key]" xml:space="preserve">
-    <value>Amharic [am]</value>
-  </data>
-  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>የፕሮጀክት አቀማመጥ</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>እንዲዘጋጁ መጽሐፍ ይምረጡ</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="Pds_Resource" xml:space="preserve">
-    <value>ሀብት</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>PHM</value>
-  </data>
-  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>ኮርተሮች ኮርፖሬሽን ጥቅሶች</value>
-  </data>
-  <data name="ZEC" xml:space="preserve">
-    <value>ZEC</value>
-  </data>
-  <data name="Marble_Verses" xml:space="preserve">
-    <value>ጥቅሶች</value>
-  </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>ትርጓሜ አይገኝም</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>የማሽን ቃል አሰላለፍ ስልተ ቀመር</value>
-  </data>
-  <data name="Pds_PropertiesMenu" xml:space="preserve">
-    <value>ንብረቶች</value>
-  </data>
-  <data name="BiblicalTermsDomains_People" xml:space="preserve">
-    <value>ሰዎች</value>
-  </data>
-  <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 ጢሞቴዎስ</value>
-  </data>
-  <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>To ሰዓት ይምረጡ</value>
-  </data>
-  <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>የቁጥር ካርታዎችን ወደ ነባሪ አቀራረብን ዳግም ያስጀምሩ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
-    <value>ቡድን</value>
-  </data>
-  <data name="ProperCase_Daniel" xml:space="preserve">
-    <value>ዳንኤል</value>
-  </data>
-  <data name="Notes_LabelRemove" xml:space="preserve">
-    <value>ይህን መለያ ያስወግዱ</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>ፕሮጄክቶች</value>
-  </data>
-  <data name="Pins_Stem" xml:space="preserve">
-    <value>ግንድ</value>
-  </data>
-  <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>ዕብራውያን</value>
-  </data>
-  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>ጥበቃዎች እየሰራ ነው ግን አልተገናኘም.</value>
-  </data>
-  <data name="Pins_Lexeme" xml:space="preserve">
-    <value>Lexeme</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>የጀርባ ተግባሮችን አሳይ</value>
-  </data>
-  <data name="ProperCase_Amos" xml:space="preserve">
-    <value>አሞጽ</value>
-  </data>
-  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>ማካካ የዕብራይስጥ</value>
-  </data>
-  <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>የ ኢሜል አድራሻ</value>
-  </data>
-  <data name="ProperCase_Joel" xml:space="preserve">
-    <value>ጆኤል</value>
-  </data>
-  <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>ጥበቃዎች</value>
-  </data>
-  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>ምንም ስህተቶች የሉም</value>
-  </data>
-  <data name="Marble_Book" xml:space="preserve">
-    <value>መጽሐፍ</value>
-  </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
-  </data>
-  <data name="Landing_Settings" xml:space="preserve">
-    <value>ቅንብሮች</value>
-  </data>
-  <data name="BiblicalTermsForm_Term" xml:space="preserve">
-    <value>ቃል</value>
+  <data name="Notes_DeleteConfirmation" xml:space="preserve">
+    <value>ይህን ማስታወሻ ይሰርዙ?</value>
   </data>
   <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
     <value>ተመርጦ አልተመረጠም</value>
   </data>
-  <data name="ProperCase_Nahum" xml:space="preserve">
-    <value>ናሆም</value>
+  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
+    <value>ትሬዚኒክ ጎራ</value>
   </data>
-  <data name="BiblicalTermsDomains_All" xml:space="preserve">
-    <value>*</value>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>አዲስ ኢንተርናሽናል ያክሉ</value>
   </data>
-  <data name="Pds_Xml" xml:space="preserve">
-    <value>XML</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="Marble_Chapter" xml:space="preserve">
-    <value>ምዕራፍ</value>
-  </data>
-  <data name="SlackMessageView_Send" xml:space="preserve">
-    <value>ላክ</value>
-  </data>
-  <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>ሁሉንም አንጓዎች ወደ የእይታ መረብ ይግባኝ</value>
-  </data>
-  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>ክብር, አክብሮት, ሁኔታ</value>
-  </data>
-  <data name="ProperCase_Philippians" xml:space="preserve">
-    <value>ፊልጵስዩስ</value>
-  </data>
-  <data name="Pins_Suffix" xml:space="preserve">
-    <value>ቅጥያ</value>
-  </data>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>የምስጋና የምስክር ወረቀቶች {0} "በርካታ ምደባዎች አሉት. '{1}' ጠቅ ማድረግ 'ሁሉንም አሰጣጦች ሁሉ ይሰርዛል.</value>
-  </data>
-  <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>እባክዎ የአያት ስምዎን ያስገቡ</value>
-  </data>
-  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
-    <value>ማሽን</value>
-  </data>
-  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>የመረጃ ቋት መፍጠር ...</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="MRK" xml:space="preserve">
-    <value>MRK</value>
-  </data>
-  <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ይህንን ማስታወሻ ለማሸነፍ ይላኩ</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>ለ '{0}' ምደባውን ይሰርዙ?</value>
-  </data>
-  <data name="Marble_Senses" xml:space="preserve">
-    <value>ስሜቶች</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>የፍቃድ ቁልፍዎ ጠፍቷል ወይም ተሰበረ.</value>
-  </data>
-  <data name="Settings_Email" xml:space="preserve">
-    <value>ኢሜል</value>
-  </data>
-  <data name="Bcv_Verse" xml:space="preserve">
-    <value>ቁጥር</value>
-  </data>
-  <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>የማረጋገጫ ኢሜል ይላኩ</value>
-  </data>
-  <data name="NewTestament" xml:space="preserve">
-    <value>አዲስ ኪዳን</value>
-  </data>
-  <data name="Notes_UnreadReplies" xml:space="preserve">
-    <value>ያልተነበቡ ምላሾች</value>
-  </data>
-  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>ትርጉም ይተግብሩ</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>ምልክት ልክ ያልሆነ "</value>
-  </data>
-  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
-    <value>አዲስ የቃል አሰላለፍ ይፍጠሩ</value>
-  </data>
-  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>የመገናኛ ተጠቃሚን መልሶ መመለስ</value>
-  </data>
-  <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>ፕሮጀክት:</value>
-  </data>
-  <data name="BulkAlignmentReview_Target" xml:space="preserve">
-    <value>Target ላማ</value>
-  </data>
-  <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>ኢንተርናሽናል</value>
-  </data>
-  <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>በሰዓት ማሳያ ማሽከርከር ይካተቱ</value>
-  </data>
-  <data name="EnhancedView_AddAlignment" xml:space="preserve">
-    <value>አሰላለፍ ይጨምሩ?</value>
-  </data>
-  <data name="ProperCase_Judges" xml:space="preserve">
-    <value>ዳኞች</value>
-  </data>
-  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>ተጠቃሚ</value>
-  </data>
-  <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>የሙከራ Aqua Pluckin ን ያንቁ</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>ከተፈጥሮ በላይነት እና ኃይሎች; ርዕሶች</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>የተሻሻለ ኮርፖስ ጽሑፍ ወደ አዲስ የተሻሻለ መስኮት ያክሉ</value>
-  </data>
-  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>ፕሮጀክት ሰርዝ</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="Settings_Group" xml:space="preserve">
-    <value>ቡድን</value>
-  </data>
-  <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>ማስታወሻዎችን ይልቀቁ</value>
-  </data>
-  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>መስዋትነቶች እና መባዎች</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>የቃል አሰላለፍ ፍጠር</value>
-  </data>
-  <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>ረዳትነት</value>
-  </data>
-  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>የፍቃድ ቁልፍ ያስፈልጋል</value>
-  </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>ተመርጠዋል</value>
+  <data name="EnhancedView_FilterPins" xml:space="preserve">
+    <value>ማጣሪያዎችን ያጣሩ</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>በማስታወሻ ጽሑፍ</value>
   </data>
-  <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>አዲስ ትርጉም</value>
+  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
+    <value>የተጎዱ ቃላት</value>
   </data>
-  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>የጅምላ ምደባ ግምገማ</value>
+  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
+    <value>የአመለካከት ትርጓሜ</value>
   </data>
-  <data name="Notes_LabelGroupAdd" xml:space="preserve">
-    <value>መለያ ቡድን ያክሉ</value>
+  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
+    <value>አዲስ ኢንተርናሽናል ይፍጠሩ</value>
   </data>
-  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>በቁልፍ ቃላት ውስጥ ፒኖች ያጣሩ</value>
+  <data name="ClockUserControl_Include" xml:space="preserve">
+    <value>በሰዓት ማሳያ ማሽከርከር ይካተቱ</value>
   </data>
-  <data name="CreatedBy" xml:space="preserve">
-    <value>የተፈጠረ</value>
+  <data name="EnhancedView_NoVerseData" xml:space="preserve">
+    <value>በዚህ ቁጥር ውስጥ ምንም ቁጥር የለም.</value>
   </data>
-  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>በቁጥር በቁጥር የጽሑፍ ስብስቦች ማሳያዎችን ያንቁ</value>
+  <data name="BiblicalTermsForm_Project" xml:space="preserve">
+    <value>ፕሮጀክት</value>
   </data>
-  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
-    <value>ድርጅት ይምረጡ</value>
+  <data name="Lexicon_Lexeme" xml:space="preserve">
+    <value>Lexeme</value>
   </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>የ &lt;SELMACE&gt; ጎራ ያክሉ</value>
+  <data name="Pins_LoadReferences" xml:space="preserve">
+    <value>ማጣቀሻዎችን ይጫኑ</value>
   </data>
-  <data name="2KI" xml:space="preserve">
-    <value>2KI</value>
+  <data name="Create" xml:space="preserve">
+    <value>ፍጠር</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>ሰው</value>
   </data>
-  <data name="NewCollabUserView_Username" xml:space="preserve">
+  <data name="NewCollabUserView_FirstName" xml:space="preserve">
+    <value>የመጀመሪያ ስም</value>
+  </data>
+  <data name="ProperCase_Numbers" xml:space="preserve">
+    <value>ቁጥሮች</value>
+  </data>
+  <data name="FontSettings_Height" xml:space="preserve">
+    <value>ቁመት</value>
+  </data>
+  <data name="ProperCase_Titus" xml:space="preserve">
+    <value>ቲቶ</value>
+  </data>
+  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
+    <value>የመተባበር ተጠቃሚን ይፍጠሩ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
+    <value>አረማዊነት</value>
+  </data>
+  <data name="Bcv_Chapter" xml:space="preserve">
+    <value>ምዕራፍ</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>የፕሮጀክት ባለቤት</value>
+  </data>
+  <data name="ProperCase_1_Kings" xml:space="preserve">
+    <value>1 ነገሥታት</value>
+  </data>
+  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
+    <value>አዲስ የቃል አሰላለፍ ይፍጠሩ</value>
+  </data>
+  <data name="ProjectPicker_NoProject" xml:space="preserve">
+    <value>እዚህ ብቸኛ ነው. እባክዎን አዲስ ፕሮጀክት ይፍጠሩ.</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="ShellView_UpdateFound" xml:space="preserve">
+    <value>ወደ አዲስ የ Cleardashboardard ስሪት ያዘምኑ</value>
+  </data>
+  <data name="Landing_Projects" xml:space="preserve">
+    <value>ፕሮጄክቶች</value>
+  </data>
+  <data name="ProperCase_2_John" xml:space="preserve">
+    <value>2 ዮሐንስ</value>
+  </data>
+  <data name="Pds_ChangeZoom" xml:space="preserve">
+    <value>የይዘቱን የማጉላት ደረጃን ይለውጡ</value>
+  </data>
+  <data name="Marble_DefinitionShort" xml:space="preserve">
+    <value>ትርጓሜ አጭር</value>
+  </data>
+  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
+    <value>ፕሮጀክት ሰርዝ</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>የጀርባ ተግባሮችን አሳይ</value>
+  </data>
+  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
+    <value>መጽሐፍ ቅዱሳዊ ቃላት</value>
+  </data>
+  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
+    <value>በስልጠና ጽሑፍ ውስጥ መቁጠር</value>
+  </data>
+  <data name="ProperCase_James" xml:space="preserve">
+    <value>ጄምስ</value>
+  </data>
+  <data name="Marble_Verse" xml:space="preserve">
+    <value>ቁጥር</value>
+  </data>
+  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
+    <value>አዲስ ትብብር ተጠቃሚ</value>
+  </data>
+  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
+    <value>ለዚህ ሎሚ ትርጉም ያክሉ</value>
+  </data>
+  <data name="Pds_Auxiliary" xml:space="preserve">
+    <value>ረዳትነት</value>
+  </data>
+  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
+    <value>በቁልፍ ቃላት ውስጥ ፒኖች ያጣሩ</value>
+  </data>
+  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
+    <value>'{0}' የሚለው ፕሮጀክት ቀድሞውኑ አለ. እባክዎን ልዩ ስም ይምረጡ. "</value>
+  </data>
+  <data name="Notes_AddNewNote" xml:space="preserve">
+    <value>አዲስ ማስታወሻ ያክሉ</value>
+  </data>
+  <data name="MainView_LayoutsDelete" xml:space="preserve">
+    <value>የተቀመጠ አቀማመጥ ሰርዝ</value>
+  </data>
+  <data name="Marble_SearchEnglish" xml:space="preserve">
+    <value>በእንግሊዘኛ አንጸባራቂ ፍለጋ</value>
+  </data>
+  <data name="Marble_FrequencyGraph" xml:space="preserve">
+    <value>ድግግሞሽ ግራፍ</value>
+  </data>
+  <data name="Settings_UserName" xml:space="preserve">
     <value>የተጠቃሚ ስም</value>
   </data>
-  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>Target ላማው</value>
+  <data name="Close" xml:space="preserve">
+    <value>ገጠመ</value>
+  </data>
+  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
+    <value>በቁጥር በቁጥር የጽሑፍ ስብስቦች ማሳያዎችን ያንቁ</value>
   </data>
   <data name="Pins_Language" xml:space="preserve">
     <value>ቋንቋ</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>ስህተት</value>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>የትብብር ቅንብሮች</value>
   </data>
-  <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>ከዚህ ትርጉም ይህንን የትርጉም ጎራ ያስወግዱ</value>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
   </data>
-  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
-    <value>እርሻ</value>
+  <data name="MainView_Settings" xml:space="preserve">
+    <value>ቅንብሮች</value>
   </data>
-  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>አዲስ የመተባበር ተጠቃሚን ያክሉ</value>
+  <data name="ProperCase_2_Timothy" xml:space="preserve">
+    <value>2 ጢሞቴዎስ</value>
   </data>
-  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
-    <value>ዛፎች; ሽቶዎች እና ቅመሞች</value>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>ምርጫዎች</value>
   </data>
-  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
-    <value>የእጅ ሥራዎች; ጨርቅ</value>
+  <data name="Windows_Dashboard" xml:space="preserve">
+    <value>ዳሽቦርድ</value>
+  </data>
+  <data name="ProjectPicker_CreateLong" xml:space="preserve">
+    <value>ለመጀመር ፕሮጀክትዎን ይፍጠሩ.</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
+    <value>አጥቢ እንስሳት; የዱር እንስሳት</value>
+  </data>
+  <data name="ProjectPicker_Database" xml:space="preserve">
+    <value>የመረጃ ቋት</value>
+  </data>
+  <data name="ProjectSetup_Title" xml:space="preserve">
+    <value>አዲሱን ፕሮጀክትዎን ይፍጠሩ</value>
+  </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>አዲስ የትርጉም ሞዴልን ያሰሉ</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
+    <value>አሰላለፍ ሰርዝ</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="Bcv_PreviousChapter" xml:space="preserve">
+    <value>ቀዳሚ ምዕራፍ</value>
+  </data>
+  <data name="Settings_Reserved" xml:space="preserve">
+    <value>የተያዘ</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>አይ</value>
   </data>
-  <data name="ProperCase_1_Samuel" xml:space="preserve">
-    <value>1 ሳሙኤል</value>
+  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
+    <value>የኮርፖግሬ ጥቅሶችን ትይዩ ይፍጠሩ</value>
   </data>
-  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
-    <value>እንደ &lt;ልክ ያልሆነ&gt; የሚል ምልክት ያድርጉበት</value>
+  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
+    <value>መሣሪያዎች; ልጅ መውለድ</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>ጀምር</value>
+  <data name="ProperCase_1_Timothy" xml:space="preserve">
+    <value>1 ጢሞቴዎስ</value>
+  </data>
+  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
+    <value>መጽሐፍ</value>
+  </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>ቡድን</value>
+  </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>ፕሮጀክት ይምረጡ</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="Pds_ZoomIn" xml:space="preserve">
+    <value>በይዘቱ ላይ ያጉሉ</value>
+  </data>
+  <data name="ProperCase_Joshua" xml:space="preserve">
+    <value>ኢያሱ</value>
+  </data>
+  <data name="Settings_ReservedCaption" xml:space="preserve">
+    <value>ለወደፊቱ መስፋፋት ተጠብቋል</value>
+  </data>
+  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
+    <value>ግንድ</value>
+  </data>
+  <data name="ClockUserControl_NewGroup" xml:space="preserve">
+    <value>አዲስ ቡድን</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
+    <value>ተቀባይነት አላገኘም</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="Marble_DomainsTitle" xml:space="preserve">
+    <value>ጎራዎች</value>
+  </data>
+  <data name="Pds_Target" xml:space="preserve">
+    <value>Target ላማ</value>
+  </data>
+  <data name="FontSettings_Horizontal" xml:space="preserve">
+    <value>አግድም አሰጣጥ</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>ትርጓሜ አይገኝም</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
+    <value>የቃል አሰላለፍ ፍጠር</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
+    <value>አዲስ ትርጉም ያስገቡ ለ</value>
+  </data>
+  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
+    <value>አስከሬኑን እንዴት እንደሚያስቆርጡ ይምረጡ</value>
+  </data>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>በስርዓት ላይ አልተገኘም!</value>
+  </data>
+  <data name="FontSettings_TitleFontSize" xml:space="preserve">
+    <value>የርዕስ ቅርጸ-ቁምፊ መጠን</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>ተጠቃሚው በአገልጋይ ላይ ቀድሞውኑ አለ</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
+    <value>ኢንተርናሽናል</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>ከተፈጥሮ በላይነት እና ኃይሎች; ርዕሶች</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>ከሰው በላይ የሆኑ ፍጥረታት እና ኃይሎች</value>
+  </data>
+  <data name="ProperCase_Haggai" xml:space="preserve">
+    <value>ሐጌ</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="ProperCase_Joel" xml:space="preserve">
+    <value>ጆኤል</value>
+  </data>
+  <data name="Notes_Note_NoteStatus" xml:space="preserve">
+    <value>ሁኔታ</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="Bcv_Offset" xml:space="preserve">
+    <value>ማካካሻ</value>
+  </data>
+  <data name="Notes_OpenClosed" xml:space="preserve">
+    <value>ክፍት / ዝግ</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>የተሻሻለ የ CRPus ጽሑፍን ለማተኮር የተሻሻለ ኮርፖስ ጽሑፍ ያክሉ</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>ስሪት</value>
+  </data>
+  <data name="ExpandView" xml:space="preserve">
+    <value>ዕይታን ዘርጋ</value>
+  </data>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
+  </data>
+  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
+    <value>ጥበቃዎች እየሰራ ነው ግን አልተገናኘም.</value>
+  </data>
+  <data name="MainView_Windows" xml:space="preserve">
+    <value>ዊንዶውስ</value>
+  </data>
+  <data name="NewProjectDialog_Title" xml:space="preserve">
+    <value>አዲስ ፕሮጀክት ይፍጠሩ</value>
+  </data>
+  <data name="Bcv_NextVerse" xml:space="preserve">
+    <value>የሚቀጥለው ቁጥር</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
+    <value>ለ '{0}' ምደባውን ይሰርዙ?</value>
+  </data>
+  <data name="ProperCase_Deuteronomy" xml:space="preserve">
+    <value>ዘዳግም</value>
+  </data>
+  <data name="Marble_VerseTotal" xml:space="preserve">
+    <value>ቁጥር ጠቅላላ</value>
+  </data>
+  <data name="ProperCase_2_Peter" xml:space="preserve">
+    <value>2 ጴጥሮስ</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>ትርጉም ሰርዝ</value>
+  </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>የታሸጉ የትብብር ፕሮጄክቶች ዝርዝር</value>
+  </data>
+  <data name="Lexicon_NewTranslation" xml:space="preserve">
+    <value>አዲስ ትርጉም</value>
+  </data>
+  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
+    <value>ግልጽ ማስታወሻዎች</value>
+  </data>
+  <data name="NewCollabUserView_Password" xml:space="preserve">
+    <value>የይለፍ ቃል:</value>
+  </data>
+  <data name="Notes_NoteLabels" xml:space="preserve">
+    <value>መለያዎች</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>የትብብር አስተዳደር</value>
+  </data>
+  <data name="RegistrationView_LastName" xml:space="preserve">
+    <value>እባክዎ የአያት ስምዎን ያስገቡ</value>
+  </data>
+  <data name="MainView_WindowsPINS" xml:space="preserve">
+    <value>PINS</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>እሺ</value>
+  </data>
+  <data name="MainView_AccountInfo" xml:space="preserve">
+    <value>የመለያ መረጃ</value>
+  </data>
+  <data name="Windows_TextCollection" xml:space="preserve">
+    <value>የጽሑፍ ስብስብ</value>
+  </data>
+  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
+    <value>ጥበብ, ማስተዋል</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
+    <value>ወደ Cleardashboard እንኳን በደህና መጡ! እባክዎ የምዝገባ መረጃዎን ያስገቡ.</value>
+  </data>
+  <data name="Marble_Domains" xml:space="preserve">
+    <value>ጎራዎች</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>የተለያዩ ምልክቶች ቁጥር</value>
+  </data>
+  <data name="MainView_ShowLog" xml:space="preserve">
+    <value>ምዝግብ ማስታወሻ አሳይ</value>
+  </data>
+  <data name="Windows_EnhancedView" xml:space="preserve">
+    <value>የተሻሻለ እይታ</value>
+  </data>
+  <data name="Bcv_Verse" xml:space="preserve">
+    <value>ቁጥር</value>
+  </data>
+  <data name="ClockUserControl_Delete" xml:space="preserve">
+    <value>ሰርዝ</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
+    <value>ሰዎች; ክብር, አክብሮት, ሁኔታ</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
+    <value>የማሽን ቃል አሰላለፍ ስልተ ቀመር</value>
+  </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>ወደዚህ ትርጉም አንድ ትሬዚክ ጎራ ያክሉ</value>
+  </data>
+  <data name="ProperCase_3_John" xml:space="preserve">
+    <value>3 ዮሐንስ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
+    <value>ሰፈራ</value>
+  </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>አዲስ የተሻሻለ እይታ</value>
+  </data>
+  <data name="Bcv_NextChapter" xml:space="preserve">
+    <value>የሚቀጥለው ምዕራፍ</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>ቀጥሎም</value>
+  </data>
+  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
+    <value>የመታሰቢያ ሐውልት</value>
+  </data>
+  <data name="ProperCase_1_John" xml:space="preserve">
+    <value>1 ጆን</value>
+  </data>
+  <data name="BiblicalTermsForm_Note" xml:space="preserve">
+    <value>ማስታወሻ</value>
+  </data>
+  <data name="Notes_SendToParatext" xml:space="preserve">
+    <value>ይህንን ማስታወሻ ለማሸነፍ ይላኩ</value>
+  </data>
+  <data name="ShellView_ShowNotes" xml:space="preserve">
+    <value>ማስታወሻዎችን ይልቀቁ</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>ጨምር</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>ባቡር</value>
+  </data>
+  <data name="ClockUserControl_LocalTime" xml:space="preserve">
+    <value>የአካባቢ ጊዜ</value>
+  </data>
+  <data name="BiblicalTermsForm_All" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="WordMeaningsView_Domain" xml:space="preserve">
+    <value>ጎራ</value>
+  </data>
+  <data name="ProperCase_Micah" xml:space="preserve">
+    <value>ሚክያስ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
+    <value>ሳርዎች</value>
+  </data>
+  <data name="Pins_Stem" xml:space="preserve">
+    <value>ግንድ</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="Marble_All" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="Marble_StrongCodes" xml:space="preserve">
+    <value>ጠንካራ ኮዶች</value>
+  </data>
+  <data name="Lexicon_Meanings" xml:space="preserve">
+    <value>ትርጉሞች</value>
+  </data>
+  <data name="ProjectPicker_Version" xml:space="preserve">
+    <value>ስሪት</value>
+  </data>
+  <data name="FontSettings_Vertical" xml:space="preserve">
+    <value>አቀባዊ ክፍተቶች</value>
+  </data>
+  <data name="Notes_Note_Modified" xml:space="preserve">
+    <value>ተሻሽሏል</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>ስለ</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
+    <value>ዛፎች; ፍራፍሬዎች</value>
+  </data>
+  <data name="Bcv_NextBook" xml:space="preserve">
+    <value>የሚቀጥለው መጽሐፍ</value>
+  </data>
+  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
+    <value>ክብር, አክብሮት, ሁኔታ</value>
+  </data>
+  <data name="Pds_FitContentToViewport" xml:space="preserve">
+    <value>ከጠቅላላው የይዘት ቦታ ጋር ወደ የእይታ እይታ ይጣጣሙ</value>
+  </data>
+  <data name="BiblicalTermsDomains_People" xml:space="preserve">
+    <value>ሰዎች</value>
+  </data>
+  <data name="MainView_FileOpen" xml:space="preserve">
+    <value>ክፈት</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>ይቅር</value>
+  </data>
+  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
+    <value>የእጅ ሥራዎች; ጨርቅ</value>
+  </data>
+  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
+    <value>ኢሜልዎን ይመልከቱ እና በማረጋገጫ ኮድ ውስጥ ያስገቡ</value>
+  </data>
+  <data name="Pds_ManuscriptGreek" xml:space="preserve">
+    <value>ማኡግ ግሪክ</value>
+  </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>አስመጪ አገልጋይ ፕሮጀክት</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
+  </data>
+  <data name="Lexicon_AddForm" xml:space="preserve">
+    <value>ለዚህ ሎሚ የሊክስክስ ቅፅ ያክሉ</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>መጽሐፍ</value>
+  </data>
+  <data name="FontSettings_FontSize" xml:space="preserve">
+    <value>የቅርጸ-ቁምፊ መጠን</value>
+  </data>
+  <data name="Lexicon_Lemma" xml:space="preserve">
+    <value>ሎሚ</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>አድስ</value>
+  </data>
+  <data name="Pds_AddCorpora" xml:space="preserve">
+    <value>ኮርፖሬሽን ያክሉ</value>
+  </data>
+  <data name="FontSettings_Source" xml:space="preserve">
+    <value>ምንጭ ጽሑፍ</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="ShellView_User" xml:space="preserve">
+    <value>ተጠቃሚ</value>
+  </data>
+  <data name="Notes_Part" xml:space="preserve">
+    <value>ክፍል</value>
+  </data>
+  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
+    <value>ምደባዎች</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>የኢሜል ኮድ ያረጋግጡ</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
+    <value>መያዣዎች; የእንስሳት እርባታ</value>
+  </data>
+  <data name="EnhancedView_Notes" xml:space="preserve">
+    <value>ማስታወሻዎች</value>
+  </data>
+  <data name="ProperCase_Song of Songs" xml:space="preserve">
+    <value>የዘፈኖች መዝሙር</value>
+  </data>
+  <data name="ProperCase_Genesis" xml:space="preserve">
+    <value>ዘፍጥረት</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
+    <value>አዲስ የቃል አሰላለፍ ይፍጠሩ</value>
+  </data>
+  <data name="ProjectValidator_SameName" xml:space="preserve">
+    <value>ተመሳሳይ ስም ያለው ፕሮጀክት ቀድሞውኑ አለ. እባክዎን ልዩ ስም ይምረጡ.</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
+    <value>አጥቢ እንስሳት; የቤት እንስሳት</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>ስህተት</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>ግንባታ, የእንስሳት እርባታ</value>
+  </data>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>በርቀት አገልጋይ የተቀመጠ</value>
+  </data>
+  <data name="Pds_ZoomOut" xml:space="preserve">
+    <value>ከይዘቱ ያጉሉ</value>
+  </data>
+  <data name="ProjectPicker_Paratext" xml:space="preserve">
+    <value>ጥበቃዎች</value>
+  </data>
+  <data name="ProperCase_2_Chronicles" xml:space="preserve">
+    <value>2 ዜና መዋዕል</value>
+  </data>
+  <data name="Pds_StudyBible" xml:space="preserve">
+    <value>ጥናት</value>
+  </data>
+  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
+    <value>ከተመረተ ይህ የዚህን ቃል አስፈላጊነት ሁሉ የማይካድ አለመሆኑን ይለውጣል</value>
+  </data>
+  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
+    <value>ትርጉም ይተግብሩ</value>
+  </data>
+  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
+    <value>አሰላለፍ ሰርዝ</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="ProperCase_Acts" xml:space="preserve">
+    <value>ድርጊቶች</value>
+  </data>
+  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
+    <value>ምንም የዳራ ተግባራት አይሄዱም</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
+    <value>ተጠቃሚው ቀድሞውኑ በስርዓቱ ላይ ነው!</value>
+  </data>
+  <data name="Pins_Match" xml:space="preserve">
+    <value>ግጥሚያ</value>
+  </data>
+  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
+    <value>የታወቁ ጉዳዮች</value>
+  </data>
+  <data name="Lexicon_RemoveDomain" xml:space="preserve">
+    <value>ከዚህ ትርጉም ይህንን የትርጉም ጎራ ያስወግዱ</value>
+  </data>
+  <data name="Bcv_PreviousBook" xml:space="preserve">
+    <value>ቀዳሚ መጽሐፍ</value>
+  </data>
+  <data name="ProperCase_Esther" xml:space="preserve">
+    <value>አስቴር</value>
+  </data>
+  <data name="Pins_Forms" xml:space="preserve">
+    <value>ቅጾች</value>
+  </data>
+  <data name="BiblicalTermsDomains_All" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="ProjectPicker_CreateProject" xml:space="preserve">
+    <value>ፕሮጀክት ይፍጠሩ</value>
+  </data>
+  <data name="Marble_Chapter" xml:space="preserve">
+    <value>ምዕራፍ</value>
+  </data>
+  <data name="SlackMessageView_Message" xml:space="preserve">
+    <value>መልእክት:</value>
+  </data>
+  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
+    <value>ይህን መለያ ቡድን ያስወግዱ?</value>
+  </data>
+  <data name="Notes_NoteReplies_Read" xml:space="preserve">
+    <value>ታይቷል</value>
+  </data>
+  <data name="Marble_Scope" xml:space="preserve">
+    <value>ወሰን</value>
+  </data>
+  <data name="Lexicon_ChangeAll" xml:space="preserve">
+    <value>ሁሉንም ያልተለመዱ ክስተቶች ይለውጡ</value>
+  </data>
+  <data name="Pins_Notes" xml:space="preserve">
+    <value>ማስታወሻዎች</value>
+  </data>
+  <data name="ProperCase_1_Peter" xml:space="preserve">
+    <value>1 ጴጥሮስ</value>
+  </data>
+  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
+    <value>ምዕራፍ</value>
+  </data>
+  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
+    <value>ማሽን</value>
+  </data>
+  <data name="OldTestament" xml:space="preserve">
+    <value>ብሉይ ኪዳን</value>
+  </data>
+  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
+    <value>ያልተነበቡ ምላሾች አሉ</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
+    <value>ኢንተርናሽናል ፍጠር</value>
+  </data>
+  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
+    <value>እባክዎ ለፕሮጄክትዎ ስም ያስገቡ.</value>
+  </data>
+  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
+    <value>ግምገማ ግምገማ</value>
+  </data>
+  <data name="Marble_PartsOfSpeech" xml:space="preserve">
+    <value>የንግግር ክፍሎች</value>
+  </data>
+  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
+    <value>ይዘቱን እስከ 100% ሚዛን</value>
+  </data>
+  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
+    <value>መደበኛ አቀማመጦች</value>
+  </data>
+  <data name="ProjectPicker_StartParatext" xml:space="preserve">
+    <value>የጥቃቅን ጥቆማ ለመጀመር እዚህ ጠቅ ያድርጉ</value>
+  </data>
+  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
+    <value>ይህን lxememer ሰርዝ</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="ProperCase_Philippians" xml:space="preserve">
+    <value>ፊልጵስዩስ</value>
+  </data>
+  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
+    <value>ወሰን</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>የአሁኑ ፕሮጀክት ተጠቃሚዎች</value>
+  </data>
+  <data name="ProperCase_Mark" xml:space="preserve">
+    <value>ማርክ</value>
+  </data>
+  <data name="SlackMessageView_Title" xml:space="preserve">
+    <value>የግርግር መልእክት ይላኩ</value>
+  </data>
+  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
+    <value>ጥናት ሊተገበር</value>
+  </data>
+  <data name="ProperCase_Philemon" xml:space="preserve">
+    <value>ፊልሞና</value>
+  </data>
+  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
+    <value>የተሰጠው ቁልፍ ስህተት ነው. ዲክሪፕት በሚሆንበት ጊዜ የተወሰኑ የ JSON ነገሮች ሊገኙ አልቻሉም.</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
+    <value>የጅምላ ምደባ ግምገማ</value>
+  </data>
+  <data name="Pins_Suffix" xml:space="preserve">
+    <value>ቅጥያ</value>
+  </data>
+  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
+    <value>ማህበራት</value>
+  </data>
+  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
+    <value>የተጠቃሚ ተገኝነትን ያረጋግጡ</value>
+  </data>
+  <data name="1SA" xml:space="preserve">
+    <value>1SA</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
+    <value>ስህተቶች ብዛት: -</value>
+  </data>
+  <data name="Marble_SearchHebrew" xml:space="preserve">
+    <value>በዕብራይስጥ / ግሪክ ፍለጋ</value>
+  </data>
+  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
+    <value>ሲምሞዚድ ሞዴልን ያሠለጥኑ?</value>
+  </data>
+  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
+    <value>መክብብ</value>
+  </data>
+  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
+    <value>ይህን መለያ ቡድን ያስወግዱ</value>
+  </data>
+  <data name="Landing_Settings" xml:space="preserve">
+    <value>ቅንብሮች</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
+    <value>ዛፎች; ሽቶዎች እና ቅመሞች</value>
+  </data>
+  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
+    <value>ጸድቋል</value>
+  </data>
+  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ይህን አስከሬን መሰረዝ ይፈልጋሉ? ከዚህ አስከሬኖች ጋር የተዛመዱ ሁሉም ማስታወሻዎች, ቅጥር እና ፓውያኖች ይሰረዛሉ እና መልሶ ማግኘት አይቻልም.</value>
+  </data>
+  <data name="MainView_WindowsTextCollections" xml:space="preserve">
+    <value>የጽሑፍ ስብስቦች</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>ሰርዝ</value>
+  </data>
+  <data name="MainView_LayoutsSave" xml:space="preserve">
+    <value>የአሁኑን አቀማመጥ ይቆጥቡ</value>
+  </data>
+  <data name="ProperCase_Obadiah" xml:space="preserve">
+    <value>አብድዩ</value>
+  </data>
+  <data name="BulkAlignmentReview_Target" xml:space="preserve">
+    <value>Target ላማ</value>
+  </data>
+  <data name="ProperCase_2_Samuel" xml:space="preserve">
+    <value>2 ሳሙኤል</value>
+  </data>
+  <data name="ProperCase_Amos" xml:space="preserve">
+    <value>አሞጽ</value>
+  </data>
+  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
+    <value>ሪኮርዶች</value>
+  </data>
+  <data name="NewCollabUserView_LastName" xml:space="preserve">
+    <value>የአያት ስም</value>
+  </data>
+  <data name="Pds_Dictionary" xml:space="preserve">
+    <value>መዝገበ ቃላት</value>
+  </data>
+  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
+    <value>የተሻሻለ እይታን ለማተኮር ቁጥር እይታን ያክሉ</value>
+  </data>
+  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
+    <value>ይህንን ትርጉም ይሰርዙ</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>የመገናኛ ተጠቃሚን መልሶ መመለስ</value>
+  </data>
+  <data name="Notes_FilterStatus_Any" xml:space="preserve">
+    <value>ማናቸውም</value>
+  </data>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
+  </data>
+  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
+    <value>እርሻ</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
+    <value>አዲስ ትርጉም ያስገቡ</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>ዕዝራ</value>
+  </data>
+  <data name="ProjectPicker_DeleteError" xml:space="preserve">
+    <value>ያንን ፕሮጀክት መሰረዝ አይችሉም, ሌላ ትግበራ አሁንም እየተጠቀመ ነው.</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>ትርጉሞች</value>
+  </data>
+  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
+    <value>2 ተሰሎንቄ</value>
+  </data>
+  <data name="RegistrationView_FirstName" xml:space="preserve">
+    <value>እባክዎን የመጀመሪያ ስምዎን ያስገቡ</value>
+  </data>
+  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
+    <value>CRPOPOS ማስኬዶች</value>
+  </data>
+  <data name="Pds_ShowVersesMenu" xml:space="preserve">
+    <value>የተሻሻለ ኮርፖስ ጽሑፍ ወደ አዲስ የተሻሻለ መስኮት ያክሉ</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
+    <value>የማሽን ቃል አሰላለፍ ስልተ ቀመር</value>
+  </data>
+  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
+    <value>ኮርተሮች ኮርፖሬሽን ጥቅሶች</value>
+  </data>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>መግለጫ</value>
+  </data>
+  <data name="ProperCase_Proverbs" xml:space="preserve">
+    <value>ምሳሌዎች</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
+    <value>አሰላለፍ ሰርዝ?</value>
+  </data>
+  <data name="Pds_SourceLanguage" xml:space="preserve">
+    <value>አስተናጋጅ ቋንቋ</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
+  </data>
+  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
+    <value>በአገልጋይ ላይ ተጠቃሚን መፍጠር ስህተት</value>
+  </data>
+  <data name="Marble_Glosses" xml:space="preserve">
+    <value>ጦሮች:</value>
+  </data>
+  <data name="EnhancedView_Alignment" xml:space="preserve">
+    <value>አሰላለፍ</value>
+  </data>
+  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
+    <value>የኢሜል ማረጋገጫ ኮድ:</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>የፕሮጀክት አባል</value>
+  </data>
+  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
+    <value>1 ተሰሎንቄ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
+    <value>ማህበር</value>
+  </data>
+  <data name="Pins_Filter" xml:space="preserve">
+    <value>ማጣሪያ:</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
+    <value>Lemma ለአዲሱ Lexteme</value>
+  </data>
+  <data name="Pins_Prefix" xml:space="preserve">
+    <value>ቅድመ ቅጥያ</value>
+  </data>
+  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
+    <value>ቁጥር ጽሑፍ</value>
+  </data>
+  <data name="Pds_PropertiesMenu" xml:space="preserve">
+    <value>ንብረቶች</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
+    <value>ማጽደቅ</value>
+  </data>
+  <data name="ProperCase_Revelation" xml:space="preserve">
+    <value>ራዕይ</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
+  </data>
+  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
+    <value>የዲክሪፕት የፈቃድ ቁልፍ ይዘቶች ከሰጡት መረጃ ጋር አይዛመድም.</value>
+  </data>
+  <data name="FontSettings_Title" xml:space="preserve">
+    <value>ርዕስ</value>
+  </data>
+  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
+    <value>አዲስ የኮርፒየስ ማስመሰያ ይፍጠሩ</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
+    <value>እንዲዘጋጁ መጽሐፍ ይምረጡ</value>
+  </data>
+  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
+    <value>ሥራ ይቅር</value>
+  </data>
+  <data name="ProperCase_Zechariah" xml:space="preserve">
+    <value>ዘካርያስ</value>
+  </data>
+  <data name="Notes_Word" xml:space="preserve">
+    <value>ቃል</value>
   </data>
   <data name="JER" xml:space="preserve">
     <value>JER</value>
   </data>
-  <data name="WordMeaningsView_Domain" xml:space="preserve">
-    <value>ጎራ</value>
+  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
+    <value>አካባቢ; ተፈጥሮ</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="ProperCase_Lamentations" xml:space="preserve">
+    <value>ሰቆሚዎች</value>
+  </data>
+  <data name="MainView_GatherLogs" xml:space="preserve">
+    <value>ለማፅዳት መልእክት ይላኩ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
+    <value>መሣሪያዎች</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>አርትዕ</value>
+  </data>
+  <data name="BulkAlignmentReview_Count" xml:space="preserve">
+    <value>ቆጠራ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
+    <value>አካባቢ</value>
+  </data>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>የማረጋገጫ ኢሜል ይላኩ</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
+    <value>ምልክት ልክ ያልሆነ "</value>
+  </data>
+  <data name="Pds_BackTranslation" xml:space="preserve">
+    <value>የኋላ መመለሻ</value>
+  </data>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="Settings_TextCollections" xml:space="preserve">
+    <value>የጽሑፍ ስብስብ</value>
+  </data>
+  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
+    <value>ተቀባይነት ያለው</value>
+  </data>
+  <data name="ProperCase_Hebrews" xml:space="preserve">
+    <value>ዕብራውያን</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>ስም</value>
+  </data>
+  <data name="TargetContextView_ZoomIn" xml:space="preserve">
+    <value>አቅርብ</value>
+  </data>
+  <data name="RegistrationDialogView_Register" xml:space="preserve">
+    <value>ይመዝገቡ</value>
+  </data>
+  <data name="ProperCase_Romans" xml:space="preserve">
+    <value>ሮማውያን</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>ቃል: -</value>
+  </data>
+  <data name="Pins_ClearFilter" xml:space="preserve">
+    <value>ማጣሪያ ማጣሪያ</value>
+  </data>
+  <data name="FontSettings_ParagraphMode" xml:space="preserve">
+    <value>የአንቀጽ ሁኔታ</value>
+  </data>
+  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
+    <value>ለቋንቋ ጥንድ መርፌዎችን ይቀላቀሉ</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>ቅጂ</value>
+  </data>
+  <data name="Notes_TokenizedCorpus" xml:space="preserve">
+    <value>የታሸገ ኮርፖስ</value>
+  </data>
+  <data name="UseDefaults" xml:space="preserve">
+    <value>ነባሪዎች በመጠቀም ይፍጠሩ</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>ጀምር</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>አዎ</value>
+  </data>
+  <data name="Pds_Daughter" xml:space="preserve">
+    <value>ሴት ልጅ</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>ፕሮጄክቶች</value>
+  </data>
+  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
+    <value>እንስሳት</value>
+  </data>
+  <data name="ShellView_ShowPreReleases" xml:space="preserve">
+    <value>ቅድመ-ቅናሾችን አሳይ</value>
+  </data>
+  <data name="Notes_NoteLabelGroups" xml:space="preserve">
+    <value>መለያዎች</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="Notes_LabelGroupExists" xml:space="preserve">
+    <value>አንድ የመለያ ቡድን ቀድሞውኑ ከስም ጋር ይገኛል</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>አስቀምጥ</value>
+  </data>
+  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
+    <value>የቅርብ ጊዜ ክፍት ነው</value>
+  </data>
+  <data name="MainView_WindowsNotes" xml:space="preserve">
+    <value>ማስታወሻዎች</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
+    <value>"ተቀባይነት ያለው" የሚል ምልክት ምልክት</value>
+  </data>
+  <data name="MainView_FileNew" xml:space="preserve">
+    <value>አዲስ</value>
+  </data>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>ቅንብሮችን ያስቀምጡ</value>
+  </data>
+  <data name="Bcv_Sync" xml:space="preserve">
+    <value>ማመሳሰል</value>
+  </data>
+  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
+    <value>ሀዘን</value>
+  </data>
+  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
+    <value>ፍቅር</value>
+  </data>
+  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
+    <value>ዓላማ</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="Pins_Occurences" xml:space="preserve">
+    <value>የተከሰሱ ናቸው</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
+    <value>ሁሉንም ምረጥ</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
+    <value>ክፈት</value>
+  </data>
+  <data name="Lexicon_LexemeExists" xml:space="preserve">
+    <value>ለሎማ ቀድሞውኑ ለመጨረሻ ጊዜ ለመኖር</value>
+  </data>
+  <data name="EnhancedView_Interlinear" xml:space="preserve">
+    <value>ኢንተርናሽናል</value>
+  </data>
+  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
+    <value>የተሻሻለ ኮርፕስ ጽሑፍ ወደ አዲስ የተሻሻለ እይታ ያክሉ</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>ዓይነት</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="Lexicon_RemoveForm" xml:space="preserve">
+    <value>ከዚህ ሎማ ውስጥ ይህን ሌክሳይክ ቅፅ ያስወግዱ</value>
+  </data>
+  <data name="ProperCase_Nahum" xml:space="preserve">
+    <value>ናሆም</value>
+  </data>
+  <data name="Marble_GeneralInformation" xml:space="preserve">
+    <value>አጠቃላይ መረጃ</value>
+  </data>
+  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
+    <value>ኢንተርሊንሰር ሰርዝ</value>
+  </data>
+  <data name="Windows_PINS" xml:space="preserve">
+    <value>ፓይዶች</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="ProperCase_Daniel" xml:space="preserve">
+    <value>ዳንኤል</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>የተፈጠረ</value>
+  </data>
+  <data name="MainView_WindowsDashboard" xml:space="preserve">
+    <value>ዳሽቦርድ</value>
+  </data>
+  <data name="LicenseValidator_LastMissing" xml:space="preserve">
+    <value>የአያት ስም ያስፈልጋል</value>
+  </data>
+  <data name="TargetContextView_ZoomOut" xml:space="preserve">
+    <value>ማጉላት</value>
+  </data>
+  <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
+    <value>መለያ ቡድን ያክሉ</value>
+  </data>
+  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Cleardashሽርቦርድ ኢሜል የማረጋገጫ ኮድ</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>ኢሜልዎን ይመልከቱ እና በማረጋገጫ ኮድ ውስጥ ያስገቡ</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>Gitlab ተጠቃሚን ለአገልጋይ ያኑሩ</value>
+  </data>
+  <data name="ProperCase_Leviticus" xml:space="preserve">
+    <value>ዘሌዋውያን</value>
+  </data>
+  <data name="Notes_LabelAdd" xml:space="preserve">
+    <value>መለያ ያክሉ</value>
+  </data>
+  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
+    <value>ቆጠራዎች</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
+    <value>ተቀባይነት አላገኘም</value>
+  </data>
+  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
+    <value>በርቀት አገልጋይ የተቀመጠ</value>
+  </data>
+  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
+    <value>የፍቃድ ቁልፍ ያስፈልጋል</value>
+  </data>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>የ &lt;SELMACE&gt; ጎራ ያክሉ</value>
+  </data>
+  <data name="ProperCase_Ruth" xml:space="preserve">
+    <value>ሩት</value>
+  </data>
+  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
+    <value>ምንጭ ክፍል</value>
+  </data>
+  <data name="WordMeaningsView_Sense" xml:space="preserve">
+    <value>ስሜት: -</value>
+  </data>
+  <data name="Notes_NoteReplies" xml:space="preserve">
+    <value>ምላሾች</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
+    <value>ሥነ ምግባር እና ሥነምግባር</value>
+  </data>
+  <data name="ClockUserControl_Add" xml:space="preserve">
+    <value>ጨምር</value>
+  </data>
+  <data name="Lexicon_AddLexeme" xml:space="preserve">
+    <value>Lexeme ያክሉ</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>አዲስ የመተባበር ተጠቃሚን ያክሉ</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
+    <value>ዝግ</value>
+  </data>
+  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
+    <value>ዝግ</value>
+  </data>
+  <data name="ProperCase_Isaiah" xml:space="preserve">
+    <value>ኢሳይያስ</value>
+  </data>
+  <data name="Notes_FilterStatus_Open" xml:space="preserve">
+    <value>ክፈት</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="ProperCase_1_Corinthians" xml:space="preserve">
+    <value>1 ኛ ቆሮንቶስ</value>
+  </data>
+  <data name="ProperCase_Luke" xml:space="preserve">
+    <value>ሉቃስ</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>መጠሪያው ስም</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="Notes_Note_Created" xml:space="preserve">
+    <value>ተፈጠረ</value>
+  </data>
+  <data name="Pins_Word" xml:space="preserve">
+    <value>ቃል</value>
+  </data>
+  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Cleardashሽርቦርድ ኢሜል የማረጋገጫ ኮድ</value>
+  </data>
+  <data name="MainView_Layouts" xml:space="preserve">
+    <value>አቀማመጦች</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="Pins_Gloss" xml:space="preserve">
+    <value>ግንድ</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="Marble_RelatedLemmas" xml:space="preserve">
+    <value>ተዛማጅ Lemmas</value>
+  </data>
+  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
+    <value>ማካካ የዕብራይስጥ</value>
+  </data>
+  <data name="ShellView_Loading" xml:space="preserve">
+    <value>በመጫን ላይ ...</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
+    <value>አዲስ ፕሮጀክት ይፍጠሩ</value>
+  </data>
+  <data name="ProperCase_2_Kings" xml:space="preserve">
+    <value>2 ነገሥታት</value>
+  </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>ክፍል</value>
+  </data>
+  <data name="Windows_AlignmentTool" xml:space="preserve">
+    <value>አሰላለፍ መሣሪያ</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
+    <value>ምልክቶች እና ድንቆች</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>የሚገኙ የትራንስፖርት ተጠቃሚዎች</value>
+  </data>
+  <data name="Marble_Sense" xml:space="preserve">
+    <value>ስሜት</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
+    <value>ሁሉንም አሰጣጦች ይሰርዙ?</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
+    <value>ይህን ሌክሴም ሰርዝ?</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="Pds_ConsultantNotes" xml:space="preserve">
+    <value>አማካሪዎች</value>
+  </data>
+  <data name="FontSettings_Target" xml:space="preserve">
+    <value>Target ላማ ጽሑፍ</value>
+  </data>
+  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
+    <value>የትብብር ተጠቃሚ ይፍጠሩ</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
+    <value>ምልክት እንደ &lt;ትክክለኛ&gt; የተመረጠ ምልክት ተደርጎበታል</value>
+  </data>
+  <data name="Notes_UnreadReplies" xml:space="preserve">
+    <value>ያልተነበቡ ምላሾች</value>
+  </data>
+  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
+    <value>የቅርብ ጊዜ ፍለጋ</value>
+  </data>
+  <data name="Marble_DefinitionLong" xml:space="preserve">
+    <value>ፍቺው ረጅም</value>
+  </data>
+  <data name="TargetContextView_Formatted" xml:space="preserve">
+    <value>ቅርጸት ተደርጓል</value>
+  </data>
+  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
+    <value>የባቡር ማሽን ቃሉ ሹክነር</value>
+  </data>
+  <data name="Marble_Definition" xml:space="preserve">
+    <value>ፍቺ</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
+    <value>ምልክት እንደ &lt;ፍላጎት ግምገማ&gt; የተመረጠውን ምልክት</value>
+  </data>
+  <data name="Notes_LabelRemove" xml:space="preserve">
+    <value>ይህን መለያ ያስወግዱ</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>የ ኢሜል አድራሻ</value>
+  </data>
+  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
+    <value>በጽሑፍ ጥቅስ ይቁጠሩ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
+    <value>ፍራፍሬዎች</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>ተመለስ</value>
+  </data>
+  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
+    <value>ተጠቃሚ</value>
+  </data>
+  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
+    <value>የፕሮጀክት አቀማመጥ</value>
+  </data>
+  <data name="Notes_SendConfirmation" xml:space="preserve">
+    <value>ይህንን ማስታወሻ ለማቃጠል ይላኩ?</value>
+  </data>
+  <data name="BulkAlignmentReview_Source" xml:space="preserve">
+    <value>ምንጭ</value>
+  </data>
+  <data name="Landing_NewProject" xml:space="preserve">
+    <value>አዲስ ፕሮጀክት</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
+    <value>የዋስትና ዓይነት</value>
+  </data>
+  <data name="Pds_Xml" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
+    <value>ሪኮርዶች</value>
+  </data>
+  <data name="EnhancedView_AddAlignment" xml:space="preserve">
+    <value>አሰላለፍ ይጨምሩ?</value>
+  </data>
+  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
+    <value>የመጀመሪያ ስም ያስፈልጋል</value>
+  </data>
+  <data name="ProperCase_Jonah" xml:space="preserve">
+    <value>ዮናስ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
+    <value>ቡድን</value>
+  </data>
+  <data name="Pds_Standard" xml:space="preserve">
+    <value>ደረጃ</value>
+  </data>
+  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
+    <value>Translalitewitherwenceocker</value>
+  </data>
+  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
+    <value>ጥቁሩ ካርታዎችን በትላልቅ ኮርፖሬሽን መካከል ያዘጋጁ</value>
+  </data>
+  <data name="ProjectPicker_GetStarted" xml:space="preserve">
+    <value>እንጀምር</value>
+  </data>
+  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
+    <value>የትብብር ፕሮጄክቶችን ያቀናብሩ</value>
+  </data>
+  <data name="ProperCase_Jude" xml:space="preserve">
+    <value>ይሁዳ</value>
+  </data>
+  <data name="ProperCase_2_Corinthians" xml:space="preserve">
+    <value>2 ኛ ቆሮንቶስ</value>
+  </data>
+  <data name="Settings_Plugins" xml:space="preserve">
+    <value>ተሰኪዎች</value>
+  </data>
+  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
+    <value>መድረሻ ማስነሻ</value>
+  </data>
+  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
+    <value>መተግበሪያ</value>
+  </data>
+  <data name="NewCollabUserView_Email" xml:space="preserve">
+    <value>ኢሜል:</value>
+  </data>
+  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
+    <value>ጥበቃዎች አልተጫነም. እባክዎን የጥቃቅን ጠቅ ያድርጉ እና CleardardHobodbobod መተግበሪያን እንደገና ይደግፉ.</value>
+  </data>
+  <data name="Notes_FilterLabels" xml:space="preserve">
+    <value>በመሰየም</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="Pins_LexemeType" xml:space="preserve">
+    <value>Lexyeme ዓይነት</value>
+  </data>
+  <data name="ProperCase_Ezekiel" xml:space="preserve">
+    <value>ሕዝቅኤል</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="ProperCase_Nehemiah" xml:space="preserve">
+    <value>ነህምያ</value>
+  </data>
+  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
+    <value>አሰላለፍ ፍጠር</value>
+  </data>
+  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
+    <value>ተፈጥሮ</value>
+  </data>
+  <data name="ProperCase_John" xml:space="preserve">
+    <value>ጆን</value>
+  </data>
+  <data name="Notes_NoteText" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
+    <value>ሁሉንም አይምረጡ</value>
+  </data>
+  <data name="EnhancedView_CreateNote" xml:space="preserve">
+    <value>ማስታወሻዎችን ይመልከቱ / ይፍጠሩ</value>
+  </data>
+  <data name="Lexicon_SetTranslation" xml:space="preserve">
+    <value>ትርጉም ያዘጋጁ</value>
+  </data>
+  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
+    <value>አዲስ ግለሰብ</value>
+  </data>
+  <data name="ProperCase_Jeremiah" xml:space="preserve">
+    <value>ኤርምያስ</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>USFM ን በመፈተሽ ላይ</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
+    <value>Target ላማው</value>
+  </data>
+  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
+    <value>መስዋትነቶች እና መባዎች</value>
+  </data>
+  <data name="ProjectPicker_Project" xml:space="preserve">
+    <value>ፕሮጀክት:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>እገዛ</value>
+  </data>
+  <data name="Migrate_Header2" xml:space="preserve">
+    <value>የቁጥር ካርታዎችን ወደ ነባሪ አቀራረብን ዳግም ያስጀምሩ</value>
+  </data>
+  <data name="Marble_Book" xml:space="preserve">
+    <value>መጽሐፍ</value>
+  </data>
+  <data name="Marble_SubDomains" xml:space="preserve">
+    <value>ንዑስ ጎራዎች:</value>
+  </data>
+  <data name="MainView_WindowsMarble" xml:space="preserve">
+    <value>እብጠት</value>
+  </data>
+  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
+    <value>'{0}' ጋር '{1}'?</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="Pds_Source" xml:space="preserve">
+    <value>ምንጭ</value>
+  </data>
+  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
+    <value>ቡድን; አካባቢ</value>
+  </data>
+  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
+    <value>ቁጥር</value>
+  </data>
+  <data name="ProperCase_1_Chronicles" xml:space="preserve">
+    <value>1 ዜና መዋዕል</value>
+  </data>
+  <data name="NewCollabUserView_Group" xml:space="preserve">
+    <value>ቡድን</value>
+  </data>
+  <data name="ClockUserControl_Select" xml:space="preserve">
+    <value>To ሰዓት ይምረጡ</value>
+  </data>
+  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
+    <value>የ Unijoie Commonite ማስመሰያ</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>ሁኔታ</value>
+  </data>
+  <data name="Pds_FitNodesToViewport" xml:space="preserve">
+    <value>ሁሉንም አንጓዎች ወደ የእይታ መረብ ይግባኝ</value>
+  </data>
+  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
+    <value>የተሻሻለ እይታ</value>
+  </data>
+  <data name="ProperCase_Galatians" xml:space="preserve">
+    <value>ገላትያ ሰዎች</value>
+  </data>
+  <data name="Windows_BiblicalTerms" xml:space="preserve">
+    <value>መጽሐፍ ቅዱሳዊ ቃላት</value>
+  </data>
+  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
+    <value>ንዑስ</value>
+  </data>
+  <data name="ProperCase_Matthew" xml:space="preserve">
+    <value>ማቲው</value>
+  </data>
+  <data name="Bcv_PreviousVerse" xml:space="preserve">
+    <value>ቀዳሚው ጥቅስ</value>
+  </data>
+  <data name="FontSettings_NoteIndicators" xml:space="preserve">
+    <value>ማስታወሻ አመልካቾች</value>
+  </data>
+  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
+    <value>ይህን ትርጉም ይሰርዙ</value>
+  </data>
+  <data name="Pins_ShowBackTranslation" xml:space="preserve">
+    <value>የኋላ መመለሻን አሳይ</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>ተግባር ተሰር was ል</value>
+  </data>
+  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
+    <value>ልክ ያልሆነ</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
+  </data>
+  <data name="Notes_LabelGroupAdd" xml:space="preserve">
+    <value>መለያ ቡድን ያክሉ</value>
+  </data>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>ጥበቃዎች ማካሄድ አይደለም</value>
+  </data>
+  <data name="BiblicalTermsForm_Category" xml:space="preserve">
+    <value>ምድብ</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
+    <value>የተስተካከሉ ቃላት</value>
+  </data>
+  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
+    <value>ኮርፕስን ያስወግዱ</value>
+  </data>
+  <data name="ProperCase_Hosea" xml:space="preserve">
+    <value>ሆሴዕ</value>
+  </data>
+  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
+    <value>ድርጅት ይምረጡ</value>
+  </data>
+  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
+    <value>የፕሮጀክት ንድፍ ወለል</value>
+  </data>
+  <data name="ProperCase_Exodus" xml:space="preserve">
+    <value>ዘፀአት</value>
+  </data>
+  <data name="TargetContextView_Unformatted" xml:space="preserve">
+    <value>ያልተስተካከለ</value>
+  </data>
+  <data name="Language [UID_Key]" xml:space="preserve">
+    <value>Amharic [am]</value>
+  </data>
+  <data name="Pins_Origin" xml:space="preserve">
+    <value>አመጣጥ</value>
+  </data>
+  <data name="Windows_WordMeanings" xml:space="preserve">
+    <value>የቃላት ትርጉም</value>
+  </data>
+  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
+    <value>ምንም ስህተቶች የሉም</value>
   </data>
 </root>
