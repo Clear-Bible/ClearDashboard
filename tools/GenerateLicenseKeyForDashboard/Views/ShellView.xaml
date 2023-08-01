@@ -473,6 +473,17 @@
                             Margin="10,50,0,0"
                             Orientation="Vertical">
 
+                            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Name="DecryptedCollabConfigBlock"
+                                    Margin="10"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Text="Decrypted Collab Config" />
+                                <Button Name="CopyDecryptedCollabConfig" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
+                                    <materialDesign:PackIcon Kind="ContentCopy" />
+                                </Button>
+                            </StackPanel>
+
                             <TextBlock>
                                 <Run Text="UserId: " />
                                 <Run Text="{Binding CollabUser.UserId}" />

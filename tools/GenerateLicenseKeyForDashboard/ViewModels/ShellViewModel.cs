@@ -892,6 +892,15 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                     case "CopyDecryptedLicenseVersion":
                         Clipboard.SetText(DashboardUser.LicenseVersion.ToString());
                         break;
+                    case "CopyDecryptedCollabConfig":
+                        Clipboard.SetText($"UserId: {CollabUser.UserId}\n" +
+                                          $"RemoteUserName: {CollabUser.RemoteUserName}\n" +
+                                          $"RemoteEmail: {CollabUser.RemoteEmail}\n" +
+                                          $"Organization: {CollabUser.Group}\n" +
+                                          $"RemotePersonalAccessToken: {CollabUser.RemotePersonalAccessToken}\n" +
+                                          $"RemotePersonalPassword: {CollabUser.RemotePersonalPassword}\n" +
+                                          $"NamespaceId: {CollabUser.NamespaceId}");
+                        break;
                     case "CopyFetchedEmail":
                         Clipboard.SetText(FetchedEmailBox);
                         break;
