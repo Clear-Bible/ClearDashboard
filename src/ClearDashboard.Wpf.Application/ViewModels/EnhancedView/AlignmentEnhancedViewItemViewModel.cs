@@ -8,6 +8,7 @@ using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Threading;
+using ClearDashboard.Wpf.Application.Extensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -389,7 +390,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         var alignmentsToSave = new List<Alignment>();
                         if (alignmentsToUpdate.Any())
                         {
-                            var verification = DetermineAlignmentVerificationStatus(approvalType);
+                            var verification = approvalType.DetermineAlignmentVerificationStatus();
                             alignmentsToSave.AddRange(alignmentsToUpdate.Select(alignment =>
                                 new Alignment(alignment.AlignedTokenPair, verification)));
                             await AlignmentSet.PutAlignments(alignmentsToSave, CancellationToken.None);
@@ -408,9 +409,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             switch (approvalType)
             {
-                case BulkAlignmentReviewTags.ApproveSelected:
+                case BulkAlignmentReviewTags.MarkSelectedAsValid:
                     return AlignmentVerificationStatus.Verified;
-                case BulkAlignmentReviewTags.DisapproveSelected:
+                case BulkAlignmentReviewTags.MarkSelectedAsInvalid:
                     return AlignmentVerificationStatus.Invalid;
                 case BulkAlignmentReviewTags.MarkSelectedAsNeedsReview:
                     return AlignmentVerificationStatus.Unverified;
@@ -585,9 +586,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             AlignmentTypesMap = new Dictionary<AlignmentTypes, string>
             {
                 { AlignmentTypes.FromAlignmentModel_Unverified_Not_Otherwise_Included, LocalizationService.Get("BulkAlignmentReview_Machine") },
-                { AlignmentTypes.Assigned_Verified, LocalizationService.Get("BulkAlignmentReview_Approved") },
-                { AlignmentTypes.Assigned_Invalid, LocalizationService.Get("BulkAlignmentReview_Disapproved") },
-                { AlignmentTypes.Assigned_Unverified, LocalizationService.Get("BulkAlignmentReview_NeedsApproval") },
+                { AlignmentTypes.Assigned_Verified, LocalizationService.Get("BulkAlignmentReview_Valid") },
+                { AlignmentTypes.Assigned_Invalid, LocalizationService.Get("BulkAlignmentReview_Invalid") },
+                { AlignmentTypes.Assigned_Unverified, LocalizationService.Get("BulkAlignmentReview_NeedsReview") },
             };
         }
     }

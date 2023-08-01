@@ -1,44 +1,17 @@
-﻿using System;
-using System.CodeDom;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
-using ClearBible.Engine.Corpora;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Popups;
-
-public static class TokenExtensions
-{
-    public static string GetDisplayText(this Token token)
-    {
-        switch (token.GetType().Name)
-        {
-            case "Token":
-                return token.SurfaceText;
-
-            case "CompositeToken":
-                var compositeToken = (CompositeToken)token;
-                var orderedTokens = compositeToken.Tokens.OrderBy(t => t.Position).ToArray();
-                var builder = new StringBuilder(orderedTokens.First().SurfaceText);
-                foreach (var tokenMember in orderedTokens.Skip(1))
-                {
-                    builder.Append($" {tokenMember.SurfaceText}");
-                }
-                return builder.ToString();
-            default:
-                throw new NotImplementedException("Invalid switch case!");
-
-        }
-    }
-}
 
 public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
 {
@@ -65,7 +38,7 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
 
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
-
+        Verification = AlignmentVerificationStatus.Verified;
         return base.OnInitializeAsync(cancellationToken);
     }
 
@@ -84,6 +57,8 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
             }
         }
     }
+
+    public string Verification { get; private set; }
 
     public TokenDisplayViewModel? SourceTokenDisplay
     {
@@ -121,9 +96,10 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
                 {
                     return "Please set 'TargetTokenDisplay and SourceTokenDisplay";
                 }
+                
 
                 return string.Format(LocalizationService!["EnhancedView_AddAlignmentTemplate"],
-                    TargetTokenDisplay!.AlignmentToken.GetDisplayText(), SourceTokenDisplay!.AlignmentToken.GetDisplayText());
+                    TargetTokenDisplay!.GetDisplayText(), SourceTokenDisplay!.GetDisplayText());
                
             }
             case SimpleMessagePopupMode.Delete:
@@ -134,13 +110,13 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
                     if (alignments.Count() > 1)
                     {
                         SecondaryMessage =
-                            string.Format(LocalizationService!["EnhancedView_DeleteAllAlignmentsTemplate"], TargetTokenDisplay!.AlignmentToken.GetDisplayText(), OkLabel);
+                            string.Format(LocalizationService!["EnhancedView_DeleteAllAlignmentsTemplate"], TargetTokenDisplay!.GetDisplayText(), OkLabel);
                         return LocalizationService!["EnhancedView_DeleteAllAlignments"];
                     }
                 }
 
                 return string.Format(LocalizationService!["EnhancedView_DeleteAlignmentTemplate"],
-                    TargetTokenDisplay!.AlignmentToken.GetDisplayText());
+                    TargetTokenDisplay!.GetDisplayText());
 
                 }
             default:
@@ -155,8 +131,8 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
         if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
         {
             var approvalType = (item.Tag as string);
-            //_debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
 
+            Verification = approvalType.DetermineAlignmentVerificationStatus();
         }
     }
 }

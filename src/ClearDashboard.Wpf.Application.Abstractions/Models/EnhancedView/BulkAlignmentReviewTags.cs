@@ -186,10 +186,10 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView
         public const string Target = "Target";
         public const string Machine = "Machine";
         public const string NeedsReview = "NeedsReview";
-        public const string Disapproved = "Disapproved";
-        public const string Approved = "Approved";
-        public const string ApproveSelected = "ApproveSelected";
-        public const string DisapproveSelected = "DisapproveSelected";
+        public const string Invalid = "Invalid";
+        public const string Valid = "Valid";
+        public const string MarkSelectedAsValid = "MarkSelectedAsValid";
+        public const string MarkSelectedAsInvalid = "MarkSelectedAsInvalid";
         public const string MarkSelectedAsNeedsReview = "MarkSelectedAsNeedsReview";
     }
 }

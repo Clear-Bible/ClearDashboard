@@ -66,14 +66,14 @@
                                  Path=AlignmentTypes,
                                  Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
                                  ConverterParameter={x:Static translation:AlignmentTypes.Assigned_Unverified}, Mode=TwoWay}"></ListBoxItem>
-                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Disapprove}" 
-                                 Tag="{x:Static a:BulkAlignmentReviewTags.Disapproved}"
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Invalid}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.Invalid}"
                                  IsSelected="{Binding 
                                  Path=AlignmentTypes,
                                  Converter={StaticResource AlignmentTypesEnumToBooleanConverter},
                                  ConverterParameter={x:Static translation:AlignmentTypes.Assigned_Invalid}, Mode=TwoWay}"></ListBoxItem>
-                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Approve}" 
-                                 Tag="{x:Static a:BulkAlignmentReviewTags.Approved}"
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_Valid}" 
+                                 Tag="{x:Static a:BulkAlignmentReviewTags.Valid}"
                                  IsSelected="{Binding 
                                  Path=AlignmentTypes,
                                  Converter={StaticResource AlignmentTypesEnumToBooleanConverter},

@@ -48,6 +48,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public string Tooltip
+        {
+            get
+            {
+                return "Hi ya!";
+            }
+        }
+
         /// <summary>
         /// Gets or sets whether this is a source token.
         /// </summary>
@@ -60,7 +68,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                          && VerseDisplay.AlignmentManager is { Alignments: { } } 
                                          && VerseDisplay.AlignmentManager.Alignments.Any(a => 
                                                                                          (a.AlignedTokenPair.SourceToken.TokenId.Id == AlignmentToken.TokenId.Id || a.AlignedTokenPair.TargetToken.TokenId.Id == AlignmentToken.TokenId.Id)
-                                                                                         && a.OriginatedFrom == "Assigned");
+                                                                                         && a.OriginatedFrom == "Assigned" );
+
+        public bool IsValidAlignment => VerseDisplay is AlignmentDisplayViewModel
+                                         && VerseDisplay.AlignmentManager is { Alignments: { } }
+                                         && VerseDisplay.AlignmentManager.Alignments.Any(a =>
+                                             (a.AlignedTokenPair.SourceToken.TokenId.Id == AlignmentToken.TokenId.Id || a.AlignedTokenPair.TargetToken.TokenId.Id == AlignmentToken.TokenId.Id)
+                                             && a.OriginatedFrom == "Assigned" && a.Verification == AlignmentVerificationStatus.Verified);
+
+        public bool IsInvalidAlignment => VerseDisplay is AlignmentDisplayViewModel
+                                        && VerseDisplay.AlignmentManager is { Alignments: { } }
+                                        && VerseDisplay.AlignmentManager.Alignments.Any(a =>
+                                            (a.AlignedTokenPair.SourceToken.TokenId.Id == AlignmentToken.TokenId.Id || a.AlignedTokenPair.TargetToken.TokenId.Id == AlignmentToken.TokenId.Id)
+                                            && a.OriginatedFrom == "Assigned" && a.Verification == AlignmentVerificationStatus.Invalid);
+
+        public bool IsNeedReviewAlignment => VerseDisplay is AlignmentDisplayViewModel
+                                          && VerseDisplay.AlignmentManager is { Alignments: { } }
+                                          && VerseDisplay.AlignmentManager.Alignments.Any(a =>
+                                              (a.AlignedTokenPair.SourceToken.TokenId.Id == AlignmentToken.TokenId.Id || a.AlignedTokenPair.TargetToken.TokenId.Id == AlignmentToken.TokenId.Id)
+                                              && a.OriginatedFrom == "Assigned" && a.Verification == AlignmentVerificationStatus.Unverified);
 
         private CompositeToken? _compositeToken;
         /// <summary>

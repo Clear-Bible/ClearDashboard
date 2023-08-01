@@ -29,8 +29,8 @@
                             Height="28"
                             IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
                             cm:Message.Attach="[Event SelectionChanged] = [Action OnAlignmentApprovalChanged($eventArgs)]">
-                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_ApproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.ApproveSelected}"></ListBoxItem>
-                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_DisapproveSelected}" Tag="{x:Static a:BulkAlignmentReviewTags.DisapproveSelected}"></ListBoxItem>
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_MarkSelectedAsValid}" Tag="{x:Static a:BulkAlignmentReviewTags.MarkSelectedAsValid}"></ListBoxItem>
+                <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_MarkSelectedAsInvalid}" Tag="{x:Static a:BulkAlignmentReviewTags.MarkSelectedAsInvalid}"></ListBoxItem>
                 <ListBoxItem Content="{helpers:Localization BulkAlignmentReview_MarkSelectedAsNeedsReview}" Tag="{x:Static a:BulkAlignmentReviewTags.MarkSelectedAsNeedsReview}"></ListBoxItem>
             </ListBox>
             <ListBox Grid.Row="1" 

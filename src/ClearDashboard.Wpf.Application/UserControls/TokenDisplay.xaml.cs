@@ -148,6 +148,29 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Brushes.MediumOrchid));
 
         /// <summary>
+        /// Identifies the HighlightedTokenValidBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenValidBackgroundProperty = DependencyProperty.Register(
+            nameof(HighlightedTokenValidBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.DarkTurquoise));
+
+        /// <summary>
+        /// Identifies the HighlightedTokenInvalidBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenInvalidBackgroundProperty = DependencyProperty.Register(
+            nameof(HighlightedTokenInvalidBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Fuchsia));
+
+
+        /// <summary>
+        /// Identifies the HighlightedTokenNeedsReviewBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenNeedsReviewBackgroundProperty = DependencyProperty.Register(
+            nameof(HighlightedTokenNeedsReviewBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Coral));
+
+
+        /// <summary>
         /// Identifies the HighlightedTokenBackground dependency property.
         /// </summary>
         public static readonly DependencyProperty HighlightedTokenBackgroundProperty = DependencyProperty.Register(
@@ -1561,6 +1584,33 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the  <see cref="Brush"/> used to draw the token background for valid alignments when it is highlighted.
+        /// </summary>
+        public Brush HighlightedTokenValidBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenValidBackgroundProperty);
+            set => SetValue(HighlightedTokenValidBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the  <see cref="Brush"/> used to draw the token background for invalid alignments when it is highlighted.
+        /// </summary>
+        public Brush HighlightedTokenInvalidBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenInvalidBackgroundProperty);
+            set => SetValue(HighlightedTokenInvalidBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the  <see cref="Brush"/> used to draw the token background for alignments marked as 'needs review' when it is highlighted.
+        /// </summary>
+        public Brush HighlightedTokenNeedsReviewBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenNeedsReviewBackgroundProperty);
+            set => SetValue(HighlightedTokenNeedsReviewBackgroundProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the token background when it is highlighted.
         /// </summary>
         public Brush HighlightedTokenBackground
@@ -1858,6 +1908,31 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
         #endregion Public Properties
 
+        private Brush GetTokenBorderBrush()
+        {
+            if (!TokenDisplayViewModel.IsManualAlignment)
+            {
+                return HighlightedTokenBackground;
+            }
+
+            if (TokenDisplayViewModel.IsValidAlignment)
+            {
+                return HighlightedTokenValidBackground;
+            }
+
+            if (TokenDisplayViewModel.IsInvalidAlignment)
+            {
+                return HighlightedTokenInvalidBackground;
+            }
+
+            if (TokenDisplayViewModel.IsNeedReviewAlignment)
+            {
+                return HighlightedTokenNeedsReviewBackground;
+            }
+
+            return HighlightedTokenBackground;
+        }
+
         protected override void CalculateLayout()
         {
             var tokenLeftMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingBefore.Length * HorizontalSpacing : 0;
@@ -1871,7 +1946,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeTokenMember ? Visibility.Visible : Visibility.Hidden;
             CompositeIndicatorComputedColor = TokenDisplayViewModel.CompositeIndicatorColor;
 
-            TokenBorder = TokenDisplayViewModel.IsHighlighted ? TokenDisplayViewModel.IsManualAlignment ? HighlightedTokenAlternateBackground : HighlightedTokenBackground : Brushes.Transparent;
+            //GetTokenBorderBrush
+
+            TokenBorder = TokenDisplayViewModel.IsHighlighted ? GetTokenBorderBrush() : Brushes.Transparent;
+
+            //TokenBorder = TokenDisplayViewModel.IsHighlighted ? (TokenDisplayViewModel.IsManualAlignment ? HighlightedTokenAlternateBackground : HighlightedTokenBackground) : Brushes.Transparent;
             TokenBackground = TokenDisplayViewModel.IsTokenSelected ? SelectedTokenBackground : Brushes.Transparent;
             TokenForeground = TokenDisplayViewModel.VerseDisplay is AlignmentDisplayViewModel
                 ? TokenDisplayViewModel.IsAligned ? TokenColor : TokenAlternateColor
