@@ -1,35 +1,33 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<RootNamespace>ClearDashboard.DataAccessLayer.Models</RootNamespace>
-		<LangVersion>Latest</LangVersion>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>1.0.0-alpha</Version>
-		<Copyright></Copyright>
-		<PackageProjectUrl>https://github.com/Clear-Bible/ClearDashboard</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/Clear-Bible/ClearDashboard</RepositoryUrl>
-	</PropertyGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Common\SelectedBook.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
-	  <PackageReference Include="Clear.SIL.Machine" Version="2.5.14" />
-	  <PackageReference Include="MediatR" Version="9.0.0" />
-	  <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-	  <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-	  <PackageReference Include="System.Text.Json" Version="7.0.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Reference Include="PresentationFramework">
-	    <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\PresentationFramework\v4.0_4.0.0.0__31bf3856ad364e35\PresentationFramework.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>ClearDashboard.DataAccessLayer.Models</RootNamespace>
+    <LangVersion>Latest</LangVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.1.0.0</Version>
+    <Copyright>
+    </Copyright>
+    <PackageProjectUrl>https://github.com/Clear-Bible/ClearDashboard</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Clear-Bible/ClearDashboard</RepositoryUrl>
+    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Common\SelectedBook.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
+    <PackageReference Include="Clear.SIL.Machine" Version="2.5.14" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="System.Text.Json" Version="7.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework">
+      <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\PresentationFramework\v4.0_4.0.0.0__31bf3856ad364e35\PresentationFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
