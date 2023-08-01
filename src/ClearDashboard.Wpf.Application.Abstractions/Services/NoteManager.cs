@@ -27,17 +27,18 @@ namespace ClearDashboard.Wpf.Application.Services
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
         private IUserProvider UserProvider { get; }
+        private ILocalizationService LocalizationService { get; }
 
+        private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
 
-        // TODO: localize
-        private static string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
+        private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
             if (associatedEntityId is TokenId)
             {
                 var sb = new StringBuilder();
-                sb.Append($"Tokenized Corpus {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
+                sb.Append($"{LocalizationService["Notes_TokenizedCorpus"]} {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
-                sb.Append($" word {entityContext[EntityContextKeys.TokenId.WordNumber]} part {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
+                sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
                 return sb.ToString();
             }
 
@@ -84,9 +85,10 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <remarks>
         /// This returns a dictionary of note IDs, which indicate the presence of notes on the entities.  To retrieve the details
-        /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId)"/>.
+        /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId,bool)"/>.
         /// </remarks>
         /// <param name="entityIds">A collection of entity IDs for which to retrieve note IDs.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the async operation.</param>
         /// <returns>A <see cref="EntityNoteIdDictionary"/> containing the note IDs.</returns>
         public async Task<EntityNoteIdDictionary> GetNoteIdsAsync(IEnumerable<IId>? entityIds = null, CancellationToken cancellationToken = default)
         {
@@ -114,25 +116,32 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <remarks>
         /// This returns a collection of note IDs, which indicate the presence of notes on the entities.  To retrieve the details
-        /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId)"/>.
+        /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId,bool)"/>.
         /// </remarks>
         /// <param name="entityId">An entity IDs for which to retrieve note IDs.</param>
         /// <returns>A <see cref="NoteIdCollection"/> containing the note IDs.</returns>
         public async Task<NoteIdCollection> GetNoteIdsAsync(IId entityId)
         {
             var dictionary = await GetNoteIdsAsync(entityId.ToEnumerable());
-            return dictionary.ContainsKey(entityId) ? dictionary[entityId] : new NoteIdCollection();
+            return dictionary.TryGetValue(entityId, out var noteIds) ? noteIds : new NoteIdCollection();
         }
 
         /// <summary>
         /// Gets the note details for a specific note ID.
         /// </summary>
         /// <param name="noteId">A note ID for which to retrieve the note details.</param>
+        /// <param name="doGetParatextSendNoteInformation">If true, also retrieve information needed for sending the note to Paratext.</param>
         /// <returns>A <see cref="NoteViewModel"/> containing the note details.</returns>
         public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true)
         {
             try
             {
+                if (NotesCache.TryGetValue(noteId.Id, out var noteDetails))
+                {
+                    Logger?.LogInformation($"Returning cached details for note \"{noteDetails.Text}\" ({noteId.Id})");
+                    return noteDetails;
+                }
+
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -148,9 +157,9 @@ namespace ClearDashboard.Wpf.Application.Services
                     {
                         AssociatedEntityId = associatedEntityId
                     };
-                    if (domainEntityContexts.ContainsKey(associatedEntityId))
+                    if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
                     {
-                        association.Description = GetNoteAssociationDescription(associatedEntityId, domainEntityContexts[associatedEntityId]);
+                        association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
                     }
                     noteViewModel.Associations.Add(association);
                 }
@@ -161,6 +170,8 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
+
+                NotesCache[noteId.Id] = noteViewModel;
 
                 return noteViewModel;
             }
@@ -265,7 +276,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task UpdateNoteAsync(Note note)
+        private async Task UpdateNoteAsync(Note note)
         {
             try
             {
@@ -298,6 +309,16 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task UpdateNoteAsync(NoteViewModel noteViewModel)
         {
             await UpdateNoteAsync(noteViewModel.Entity);
+            NotesCache[noteViewModel.NoteId!.Id] = noteViewModel;
+        }
+
+        public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
+        {
+            var replyNote = new Note(parentNote.Entity) { Text = replyText };
+            await UpdateNoteAsync(replyNote);
+
+            parentNote.Replies.Add(new NoteViewModel(replyNote));
+            NotesCache[parentNote.NoteId!.Id] = parentNote;
         }
 
         /// <summary>
@@ -473,8 +494,9 @@ namespace ClearDashboard.Wpf.Application.Services
             CurrentNotes = await GetNoteDetailsAsync(message.SelectedTokens.NoteIds);
         }
 
-        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider)
+        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider, ILocalizationService localizationService)
         {
+            LocalizationService = localizationService;
             EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
