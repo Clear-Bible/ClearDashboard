@@ -262,9 +262,9 @@ namespace ClearDashboard.Wpf.Application
                     RemoteUrl = section["RemoteUrl"],
                     RemoteEmail = section["RemoteEmail"],
                     RemoteUserName = section["RemoteUserName"],
-                    RemotePersonalAccessToken = section["RemotePersonalAccessToken"],
+                    RemotePersonalAccessToken = Encryption.Decrypt(section["RemotePersonalAccessToken"]),
                     Group  = section["Group"],
-                    RemotePersonalPassword = section["RemotePersonalPassword"], 
+                    RemotePersonalPassword = Encryption.Decrypt(section["RemotePersonalPassword"]), 
                     UserId = userId,
                     NamespaceId = nameSpaceId
                 };
