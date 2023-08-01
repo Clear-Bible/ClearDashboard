@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using GenerateLicenseKeyForDashboard.Models;
+using GenerateLicenseKeyForDashboard.ViewModels;
 
 namespace GenerateLicenseKeyForDashboard.Views
 {
@@ -138,6 +140,45 @@ namespace GenerateLicenseKeyForDashboard.Views
             Clipboard.SetText(copyText);
         }
 
+        private void CopyProjectUserConnection_OnClick(object sender, RoutedEventArgs e)
+        {
+            string copyText = String.Empty;
+
+            if (sender is MenuItem menuItem)
+            {
+                var parent = menuItem.Parent;
+                var contextMenu = (ContextMenu)parent;
+                sender = contextMenu.PlacementTarget;
+            }
+
+            if (sender is DataGrid grid)
+            {
+                var columnIndex = grid.CurrentColumn != null ? grid.CurrentColumn.DisplayIndex : 6;
+
+                var cells = grid.SelectedCells;
+                if (cells.Count != 0)
+                {
+                    var selectedItem = cells[0].Item;
+                    var dashboardUser = (ProjectUserConnection)selectedItem;
+
+                    switch (columnIndex)
+                    {
+                        case (0):
+                            copyText = dashboardUser.UserName;
+                            break;
+                        case (1):
+                            copyText = dashboardUser.ProjectName;
+                            break;
+                        case (2):
+                            copyText = dashboardUser.AccessLevel.ToString();
+                            break;
+                    }
+                }
+            }
+
+            Clipboard.SetText(copyText);
+        }
+
         /// <summary>
         /// Handle the GitLab Users Grid
         /// </summary>
@@ -214,6 +255,40 @@ namespace GenerateLicenseKeyForDashboard.Views
             var textBlock = column.DataContext as TextBlock;
 
             ICollectionView cvTasks = CollectionViewSource.GetDefaultView(GridDashboardUsers.ItemsSource);
+            if (cvTasks != null && cvTasks.CanSort == true)
+            {
+                cvTasks.SortDescriptions.Clear();
+
+                if (_lastHeaderClickedDashboard == textBlock.Text)
+                {
+                    if (_lastDirectionDashboard == ListSortDirection.Ascending)
+                    {
+                        _lastDirectionDashboard = ListSortDirection.Descending;
+                    }
+                    else
+                    {
+                        _lastDirectionDashboard = ListSortDirection.Ascending;
+                    }
+                }
+
+                cvTasks.SortDescriptions.Add(new SortDescription(textBlock.Text, _lastDirectionDashboard));
+            }
+
+            _lastHeaderClickedDashboard = textBlock.Text;
+        }
+
+        private void ConnectionGridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
+        {
+            var column = e.OriginalSource as DataGridColumnHeader;
+
+            if (column == null)
+            {
+                return;
+            }
+
+            var textBlock = column.DataContext as TextBlock;
+
+            ICollectionView cvTasks = CollectionViewSource.GetDefaultView(ProjectUserConnectionGrid.ItemsSource);
             if (cvTasks != null && cvTasks.CanSort == true)
             {
                 cvTasks.SortDescriptions.Clear();
