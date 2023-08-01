@@ -273,13 +273,15 @@
 
             <!--  The connection is represented by a curved arrow.  -->
             <projectDesignSurface:CurvedArrow
+                ArrowHeadLength="14"
+                ArrowHeadWidth="14"
                 ConnectionId="{Binding Path=Id}"
                 Fill="{StaticResource ConnectionBrush}"
                 NodeSource="{Binding Path=SourceConnector}"
                 NodeTarget="{Binding Path=DestinationConnector}"
                 Points="{Binding Points}"
                 Stroke="{StaticResource ConnectionBrush}"
-                StrokeThickness="3">
+                StrokeThickness="6">
                 <projectDesignSurface:CurvedArrow.ContextMenu>
                     <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
                         <ContextMenu.Resources>
@@ -355,6 +357,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top">
                     <Line
+                        IsHitTestVisible="False"
                         Stroke="Black"
                         StrokeThickness="1"
                         X1="0"
