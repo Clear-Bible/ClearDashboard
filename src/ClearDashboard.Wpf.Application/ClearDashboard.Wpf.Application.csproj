@@ -38,7 +38,9 @@
   <ItemGroup>
     <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
     <Compile Remove="ViewModels\ParatextViews\WordMeaningsViewModel.cs" />
+    <Compile Remove="ViewModels\PopUps\AccountInfoViewModel.cs" />
     <Compile Remove="Views\ParatextViews\WordMeaningsView.xaml.cs" />
+    <Compile Remove="Views\PopUps\AccountInfoView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -93,6 +95,7 @@
 
   <ItemGroup>
     <Page Remove="Views\ParatextViews\WordMeaningsView.xaml" />
+    <Page Remove="Views\PopUps\AccountInfoView.xaml" />
   </ItemGroup>
 
   <ItemGroup>

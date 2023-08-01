@@ -1159,17 +1159,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             var localizedString = _localizationService!["MainView_AccountInfo"];
 
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.NoResize;
-            settings.MinWidth = 500;
-            settings.MinHeight = 500;
-            settings.Title = $"{localizedString}";
+            //dynamic settings = new ExpandoObject();
+            //settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //settings.ResizeMode = ResizeMode.NoResize;
+            //settings.MinWidth = 500;
+            //settings.MinHeight = 500;
+            //settings.Title = $"{localizedString}";
 
-            var viewModel = IoC.Get<AccountInfoViewModel>();
+            //var viewModel = IoC.Get<AccountInfoViewModel>();
 
-            IWindowManager manager = new WindowManager();
-            manager.ShowDialogAsync(viewModel, null, settings);
+            //IWindowManager manager = new WindowManager();
+            //manager.ShowDialogAsync(viewModel, null, settings);
         }
 
         private async Task AddNewEnhancedView()
