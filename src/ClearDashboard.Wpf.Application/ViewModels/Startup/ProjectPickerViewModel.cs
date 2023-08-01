@@ -619,8 +619,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     UserId =collaborationUser.UserId,
                     RemoteUserName =collaborationUser.RemoteUserName,
                     RemoteEmail =collaborationUser.RemoteEmail,
-                    RemotePersonalAccessToken =collaborationUser.RemotePersonalAccessToken,
-                    RemotePersonalPassword =collaborationUser.RemotePersonalPassword,
+                    RemotePersonalAccessToken =Encryption.Decrypt(collaborationUser.RemotePersonalAccessToken),
+                    RemotePersonalPassword = Encryption.Decrypt(collaborationUser.RemotePersonalPassword),
                     Group =collaborationUser.GroupName,
                     NamespaceId=collaborationUser.NamespaceId
                 };
