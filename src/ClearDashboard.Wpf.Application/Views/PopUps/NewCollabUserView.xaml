@@ -261,7 +261,8 @@
             Grid.Column="1"
             Margin="5"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource TransparentStyle}"
+            Visibility="{Binding CloseVisibility}" />
 
     </Grid>
 </Window>
