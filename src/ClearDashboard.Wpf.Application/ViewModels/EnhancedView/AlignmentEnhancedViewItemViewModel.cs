@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.ViewModels;
 using Alignment = ClearDashboard.DAL.Alignment.Translation.Alignment;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Token = ClearBible.Engine.Corpora.Token;
@@ -66,6 +68,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             CreateAlignmentTypesMap();
 
+        }
+
+
+        protected override string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum,
+            string localizationKey, int rowCount)
+        {
+            if (EditMode == EditMode.EditorViewOnly)
+            {
+
+                return $"{metadatum.ParallelCorpusDisplayName ?? string.Empty} {LocalizationService.Get("BulkAlignmentReview_BulkAlignmentEditor")}";
+            }
+            return base.CreateParallelCorpusItemTitle(metadatum, localizationKey, rowCount);
+       
+        }
+
+        protected override string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
+        {
+            if (EditMode == EditMode.EditorViewOnly)
+            {
+                return $"{metadatum.ParallelCorpusDisplayName} {LocalizationService.Get("BulkAlignmentReview_BulkAlignmentEditor")}";
+            }
+            
+            return base.CreateNoVerseDataTitle(metadatum);
+        }
+
+        public override void CreateTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum, IReadOnlyList<TokensTextRow>? tokensTextRowsRange,
+            BookChapterVerseViewModel? currentBcv, bool versesInRange = true)
+        {
+            if (EditMode != EditMode.MainViewOnly)
+            {
+                Title = $"{CreateBaseTitle(metadatum)} Bulk Alignment Editor";
+            }
+            else
+            {
+                base.CreateTitle(metadatum, tokensTextRowsRange, currentBcv, versesInRange);
+            }
+            
         }
 
         public FontFamily? SelectedFontFamily

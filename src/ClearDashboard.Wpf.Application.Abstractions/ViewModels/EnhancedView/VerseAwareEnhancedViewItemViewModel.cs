@@ -8,8 +8,10 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Converters;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -18,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -25,14 +28,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Token = ClearBible.Engine.Corpora.Token;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
-using SIL.Machine.Corpora;
-using ClearDashboard.Wpf.Application.Converters;
 
 // ReSharper disable InconsistentNaming
 
@@ -363,17 +362,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
                         }
                     }
-                    OnUIThread(() =>
-                    {
-                        Title = CreateTitle(metadatum, tokensTextRowsRange, currentBcv);
+                    //OnUIThread(() =>
+                    //{
+                    //    Title = CreateTitle(metadatum, tokensTextRowsRange, currentBcv);
 
-                        Verses = verses;
-                    });
+                    //    Verses = verses;
+                    //});
                 }
-                else
-                {
-                    OnUIThread(() => { Title = CreateNoVerseDataTitle(metadatum); });
-                }
+                //else
+                //{
+                //    OnUIThread(() => { Title = CreateNoVerseDataTitle(metadatum); });
+                //}
+
+                CreateTitle(metadatum, tokensTextRowsRange, currentBcv, bookFound);
             }
             catch (Exception ex)
             {
@@ -394,17 +395,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return $"{metadatum.ProjectName} - {metadatum.TokenizationType}    {localizedMessage}";
         }
 
-        private string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
+        protected virtual string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
         {
             var localizedMessage = LocalizationService.Get("EnhancedView_NoVerseData"); 
             return $"{metadatum.ParallelCorpusDisplayName}   {localizedMessage}";
         }
 
-        private static string CreateTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum,
+        public virtual void CreateTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum,
+            IReadOnlyList<TokensTextRow>? tokensTextRowsRange, BookChapterVerseViewModel? currentBcv,
+            bool versesInRange = true)
+        {
+            if (versesInRange)
+            {
+                OnUIThread(() =>
+                {
+                    Title = CreateFullTitle(metadatum, tokensTextRowsRange, currentBcv);
+                });
+            }
+            else
+            {
+                OnUIThread(() =>
+                {
+                    Title = CreateNoVerseDataTitle(metadatum);
+                });
+            }
+        }
+
+
+        protected static string CreateBaseTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum)
+        {
+            return $"{metadatum.ProjectName} - {metadatum.TokenizationType}";
+        }
+        private static string CreateFullTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum,
             IReadOnlyList<TokensTextRow>? tokensTextRowsRange, BookChapterVerseViewModel? currentBcv)
         {
 
-            var title = $"{metadatum.ProjectName} - {metadatum.TokenizationType}";
+            var title = CreateBaseTitle(metadatum);
 
             // set the title to include the verse range
             if (tokensTextRowsRange!.Count == 1)
@@ -532,7 +558,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
+        protected virtual string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
         {
             var title = $"{metadatum.ParallelCorpusDisplayName ?? string.Empty} {LocalizationService.Get(localizationKey)}";
 
