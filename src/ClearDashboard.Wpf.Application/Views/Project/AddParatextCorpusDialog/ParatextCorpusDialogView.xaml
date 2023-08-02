@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{helpers:Localization AddParatextCorpusDialog_Title}"
     Width="800"

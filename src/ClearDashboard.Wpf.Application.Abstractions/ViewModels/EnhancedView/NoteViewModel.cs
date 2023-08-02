@@ -19,7 +19,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private NoteAssociationViewModelCollection _associations = new();
         private NoteViewModelCollection _replies = new();
 
-        public Note Entity { get; }
+        public Note Entity { get; set; }
         public NoteId? NoteId => Entity.NoteId;
         public EntityId<NoteId>? ThreadId => Entity.ThreadId;
 

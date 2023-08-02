@@ -1,20 +1,25 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using System.Threading.Tasks;
+using ClearDashboard.DAL.Alignment.Notes;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public class CollaborationHttpClientServices
+    public class CollaborationServerHttpClientServices
     {
         #region Member Variables   
 
@@ -26,7 +31,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         #region Constructor
 
-        public CollaborationHttpClientServices(CollaborationClient collaborationClient)
+        public CollaborationServerHttpClientServices(CollaborationClient collaborationClient)
         {
             _collaborationClient = collaborationClient;
         }
@@ -43,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             if (_logger is null)
             {
-                _logger = IoC.Get<ILogger<CollaborationHttpClientServices>>();
+                _logger = IoC.Get<ILogger<CollaborationServerHttpClientServices>>();
             }
         }
 
@@ -53,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Gets a list of all the GitLab projects
         /// </summary>
         /// <returns></returns>
-        public async Task<CollaborationUser> GetUserExistsById(int userId)
+        public async Task<CollaborationUser> GetCollabUserExistsById(int userId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/{userId}");
 
@@ -83,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
 
-        public async Task<CollaborationUser> GetUserExistsByEmail(string email)
+        public async Task<CollaborationUser> GetCollabUserExistsByEmail(string email)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
 
@@ -119,9 +124,48 @@ namespace ClearDashboard.Wpf.Application.Services
             return new CollaborationUser { UserId = -1 };
         }
 
+        public async Task<List<CollaborationUser>> GetAllCollabUsers()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
+
+            try
+            {
+                var response = await _collaborationClient.Client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+                
+                var users = JsonSerializer.Deserialize<List<CollaborationUser>>(result);
+                //decrypt 
+                foreach (var user in users)
+                {
+                    if (user.NamespaceId == 161)
+                    {
+                        var two = 1 + 1;
+                    }
+                    user.RemotePersonalAccessToken = Encryption.Decrypt(user.RemotePersonalAccessToken);
+                    user.RemotePersonalPassword = Encryption.Decrypt(user.RemotePersonalPassword);
+                }
+                return users;
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return new List<CollaborationUser>();
+        }
+
         public async Task<DashboardUser> GetDashboardUserExistsById(Guid userId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers/{userId.ToString()}");
+            var query = new Dictionary<string, string>()
+            {
+                ["api-version"] = "2.0",
+            };
+            var uri = QueryHelpers.AddQueryString($"/api/extendedusers/{userId.ToString()}", query);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
@@ -147,7 +191,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<DashboardUser> GetDashboardUserExistsByEmail(string email)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers/search/{email}");
+            var query = new Dictionary<string, string>()
+            {
+                ["api-version"] = "2.0",
+            };
+            var uri = QueryHelpers.AddQueryString($"/api/extendedusers/search/{email}", query);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
@@ -174,7 +224,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<DashboardUser>> GetAllDashboardUsers()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/dashboardusers");
+            var query = new Dictionary<string, string>()
+            {
+                ["api-version"] = "2.0",
+            };
+            var uri = QueryHelpers.AddQueryString($"/api/extendedusers", query);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
             try
             {
@@ -206,7 +262,67 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-                var response = await _collaborationClient.Client.DeleteAsync($"/api/dashboardusers/{userId}");
+                var query = new Dictionary<string, string>()
+                {
+                    ["api-version"] = "2.0",
+                };
+                var uri = QueryHelpers.AddQueryString($"/api/extendedusers/{userId}", query);
+                var response = await _collaborationClient.Client.DeleteAsync(uri);
+                response.EnsureSuccessStatusCode();
+
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteCollaborationUserById(int userId)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/users/{userId}");
+
+            try
+            {
+                var response = await _collaborationClient.Client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (result.Contains("Deleted Successfully"))
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return false;
+        }
+
+        #endregion //DELETE Requests
+
+        #region PUT Requests
+
+        public async Task<bool> UpdateDashboardUser(DashboardUser user)
+        {
+            string jsonUser = JsonSerializer.Serialize(user);
+            var content = new System.Net.Http.StringContent(jsonUser, Encoding.UTF8, "application/json");
+
+            try
+            {
+                // add in the query to the URL
+                var query = new Dictionary<string, string>()
+                {
+                    ["api-version"] = "2.0",
+                };
+                var uri = QueryHelpers.AddQueryString("/api/extendedusers", query);
+
+                var response = await _collaborationClient.Client.PutAsync(uri, content);
                 response.EnsureSuccessStatusCode();
 
                 return true;
@@ -220,7 +336,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
 
 
-        #endregion // DELETE Requests
+        #endregion // PUT Requests
 
 
         #region POST Requests
@@ -231,7 +347,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="user"></param>
         /// <param name="accessToken"></param>
         /// <returns></returns>
-        public async Task<bool> CreateNewUser(GitLabUser user, string accessToken)
+        public async Task<bool> CreateNewCollabUser(GitLabUser user, string accessToken)
         {
             var encryptedPassword = Encryption.Encrypt(user.Password);
             var encryptedPersonalAccessToken = Encryption.Encrypt(accessToken);
@@ -274,7 +390,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
             try
             {
-                var response = await _collaborationClient.Client.PostAsync("/api/dashboardusers", content);
+                var query = new Dictionary<string, string>()
+                {
+                    ["api-version"] = "2.0",
+                };
+                var uri = QueryHelpers.AddQueryString("/api/extendedusers", query);
+
+                var response = await _collaborationClient.Client.PostAsync(uri, content);
                 response.EnsureSuccessStatusCode();
 
                 return true;
@@ -285,7 +407,6 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
         }
-
 
         #endregion // POST Requests
 

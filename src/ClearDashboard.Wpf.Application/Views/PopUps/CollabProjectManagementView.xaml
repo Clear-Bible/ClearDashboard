@@ -10,7 +10,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{helpers:Localization CollabProjectManagementView_CollaborationManagement}"
     Width="700"
     Height="550"
@@ -208,6 +208,25 @@
                         HorizontalAlignment="Center"
                         Kind="ArrowLeftDropCircleOutline" />
                     <TextBlock Grid.Row="1" Text="Read-Only" />
+                </Grid>
+            </Button>
+
+            <Button
+                x:Name="AddOwner"
+                Height="60"
+                Margin="0,5,0,0"
+                Style="{StaticResource PurpleMidButton}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Center"
+                        Kind="ArrowLeftDropCircleOutline" />
+                    <TextBlock Grid.Row="1" Text="Owner" />
                 </Grid>
             </Button>
 

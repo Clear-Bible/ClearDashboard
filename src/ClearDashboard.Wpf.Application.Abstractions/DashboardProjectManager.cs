@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application;
 
@@ -167,11 +168,23 @@ public class DashboardProjectManager : ProjectManager
         {
             project = GetParatextProjectDirectoryPath(project);
 
-
-            CurrentParatextProject = project;
-            await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
+            if (CurrentParatextProject == null || CurrentParatextProject.Guid != project.Guid)
+            {
+                CurrentParatextProject = project;
+                EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
+                //if the message isn't making it from paratext to here try commenting out the line above (important to leave unawaited)
+            }
         });
 
+
+        //HubProxy.On<ParatextProject>("sendCurrentProject", async (project) =>
+        //{
+        //    project = GetParatextProjectDirectoryPath(project);
+
+        //    CurrentParatextProject = project;
+        //    await EventAggregator.PublishOnUIThreadAsync(new ProjectChangedMessage(project));
+        //});
+        
         HubProxy.On<List<TextCollection>>("textCollections", async (textCollection) =>
         {
             await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollection));

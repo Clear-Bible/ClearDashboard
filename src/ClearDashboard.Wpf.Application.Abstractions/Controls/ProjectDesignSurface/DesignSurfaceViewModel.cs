@@ -795,27 +795,22 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
                     var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
 
-                    if (!isResource)
+                    AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
+
+                    corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
                     {
-                        AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
+                        // Show Verses in New Windows
+                        Header = LocalizationService.Get("Update"),
+                        Id = DesignSurfaceMenuIds.UpdateParatextCorpus,
+                        ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                        IconKind = PackIconPicolIconsKind.Edit.ToString(),
+                        CorpusNodeViewModel = corpusNodeViewModel,
+                        Tokenizer = tokenizer.ToString(),
+                    });
 
-                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
-                        {
-                            // Show Verses in New Windows
-                            Header = LocalizationService.Get("Update"),
-                            Id = DesignSurfaceMenuIds.UpdateParatextCorpus,
-                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                            IconKind = PackIconPicolIconsKind.Edit.ToString(),
-                            CorpusNodeViewModel = corpusNodeViewModel,
-                            Tokenizer = tokenizer.ToString(),
-                        });
-
-
-
-                        foreach (var menuBuilder in menuBuilders)
-                        {
-                            menuBuilder.CreateOnlyForNonResouceCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
-                        }
+                    foreach (var menuBuilder in menuBuilders)
+                    {
+                        menuBuilder.CreateOnlyForNonResouceCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
                     }
 
                     foreach (var menuBuilder in menuBuilders)

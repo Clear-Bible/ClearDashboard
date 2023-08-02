@@ -8,9 +8,9 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.0.6.7</AssemblyVersion>
-    <FileVersion>1.0.6.7</FileVersion>
-    <Version>1.0.6.7</Version>
+    <AssemblyVersion>1.0.6.10</AssemblyVersion>
+    <FileVersion>1.0.6.10</FileVersion>
+    <Version>1.0.6.10</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
 	<UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
 	<Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
@@ -143,7 +143,7 @@
     <PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.5" />
-    <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.4.0" />
+    <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />
     <PackageReference Include="FuzzyString" Version="1.0.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />

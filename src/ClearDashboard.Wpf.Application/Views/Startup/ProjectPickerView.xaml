@@ -11,7 +11,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Name="UserControl"
@@ -117,7 +117,10 @@
             HorizontalAlignment="Left"
             Orientation="Horizontal"
             Visibility="{Binding IsParatextInstalled, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
-            <Image>
+            <Image
+                Width="36"
+                Height="36"
+                Margin="0,0,5,0">
                 <Image.Style>
                     <Style>
                         <Style.Triggers>
@@ -132,9 +135,9 @@
                 </Image.Style>
             </Image>
             <TextBlock
-                Width="400"
-                Margin="15"
-                FontWeight="Bold"
+                Width="490"
+                Margin="0,0,5,0"
+                VerticalAlignment="Center"
                 Text="{helpers:Localization ProjectPicker_NotInstalled}"
                 TextWrapping="Wrap" />
         </StackPanel>

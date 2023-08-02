@@ -11,7 +11,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DataContext="{d:DesignInstance Type=paratextViews:TextCollectionsViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -20,6 +20,12 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
 
     <UserControl.CommandBindings>
         <CommandBinding Command="Find" Executed="FindText_OnClick" />
@@ -145,6 +151,16 @@
                 Style="{StaticResource SmallTransparentStyle}">
                 <Path Data="M 0 0 L 6 6 L 12 0 Z" Fill="Black" />
             </Button>
+            <ProgressBar
+                Width="25"
+                Height="25"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Foreground="{DynamicResource SecondaryHueMidBrush}"
+                IsIndeterminate="True"
+                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                Visibility="{Binding TextCollectionCallInProgress, Converter={StaticResource BoolToVisibilityConverter}}"
+                Value="0" />
         </StackPanel>
 
         <StackPanel

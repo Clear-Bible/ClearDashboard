@@ -11,7 +11,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
     xmlns:validatorsAbstracted="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{helpers:Localization NewCollabUserView_CreateACollabUser}"
@@ -72,7 +72,7 @@
                     cm:Message.Attach="GroupSelected"
                     materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_SelectOrganization}"
                     FontSize="16"
-                    IsEnabled="True"
+                    IsEnabled="{Binding SelectedGroupEnabled}"
                     ItemsSource="{Binding Groups}"
                     ScrollViewer.CanContentScroll="False"
                     SelectedItem="{Binding SelectedGroup}"
@@ -94,6 +94,7 @@
                     materialDesign:HintAssist.Foreground="Green"
                     materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_FirstName}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                    IsEnabled="{Binding FirstNameEnabled}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
 
@@ -104,6 +105,7 @@
                     materialDesign:HintAssist.Foreground="Green"
                     materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_LastName}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                    IsEnabled="{Binding LastNameEnabled}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                 <!--  Email  -->
@@ -113,6 +115,7 @@
                     materialDesign:HintAssist.Foreground="Green"
                     materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_EmailAddress}"
                     materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                    IsEnabled="{Binding EmailEnabled}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                     <TextBox.Text>
                         <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
@@ -258,7 +261,8 @@
             Grid.Column="1"
             Margin="5"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource TransparentStyle}"
+            Visibility="{Binding CloseVisibility}" />
 
     </Grid>
 </Window>

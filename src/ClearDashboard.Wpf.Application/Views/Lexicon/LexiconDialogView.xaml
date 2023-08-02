@@ -10,7 +10,7 @@
     xmlns:lexiconViewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d"
     >

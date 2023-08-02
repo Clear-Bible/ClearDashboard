@@ -13,7 +13,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project;assembly=ClearDashboard.Wpf.Application.Abstractions"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:AddParatextCorpusStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="500"

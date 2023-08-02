@@ -28,7 +28,8 @@ namespace ClearDashboard.WebApiParatextPlugin
         public static IServiceProvider ServiceProvider { get; private set; }
 
 
-        public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IPluginHost pluginHost, IPluginChildWindow parent, IPluginLogger pluginLogger)
+        public WebHostStartup(IProject project, IVerseRef verseRef, MainWindow mainWindow, IPluginHost pluginHost,
+            IPluginChildWindow parent, IPluginLogger pluginLogger)
         {
             _project = project;
             _verseRef = verseRef;
@@ -118,7 +119,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddMediatR(typeof(GetCurrentProjectQueryHandler));
 
 
-            services.AddSingleton<IProject>(sp => _project);
+            services.AddTransient<IProject>(sp => _project);
             services.AddTransient<IVerseRef>(sp => _verseRef);
             services.AddSingleton<IPluginHost>(sp => _pluginHost);
             services.AddSingleton<IPluginChildWindow>(sp => _parent);
@@ -138,6 +139,11 @@ namespace ClearDashboard.WebApiParatextPlugin
             _verseRef = verse;
         }
 
+
+        public void ChangeProject(IProject project)
+        {
+            _project = project;
+        }
     }
 
     public static class ServiceProviderExtensions

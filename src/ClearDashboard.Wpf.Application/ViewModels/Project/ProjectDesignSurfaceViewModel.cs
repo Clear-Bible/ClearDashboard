@@ -24,6 +24,7 @@ using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
@@ -71,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public readonly BackgroundTasksViewModel BackgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
-        private readonly SystemPowerModes _systemPowerModes;
+        private readonly SystemPowerModes _systemPowerModes; 
         #endregion //Member Variables
 
         #region Observable Properties
@@ -1647,6 +1648,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
+            //warn users 
+            var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<DeletingCorpusNodePopupViewModel>();
+
+            var result = await _windowManager!.ShowDialogAsync(
+                deletingCorpusNodePopupViewModel, 
+                null,
+                SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
+
+            if (!result)
+            {
+                return;
+            }
+
             // check to see if is in the middle of working or not by tokenizing
             var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)

@@ -23,7 +23,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class CollabProjectManagementViewModel : DashboardApplicationScreen
     {
-        private readonly HttpClientServices _httpClientServices;
+        private readonly GitLabHttpClientServices _gitLabHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private readonly CollaborationConfiguration _collaborationConfiguration;
 
@@ -31,6 +31,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private List<GitUser> _gitLabUsers = new();
         
+
 
         #endregion //Member Variables
 
@@ -49,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             get => _projects;
             set
             {
-                _projects = value; 
+                _projects = value;
                 NotifyOfPropertyChange(() => Projects);
             }
         }
@@ -70,7 +71,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
                 else
                 {
-                    IsGitLabUserListEnabled= false;
+                    IsGitLabUserListEnabled = false;
                 }
 
                 _ = GetUsersForProject();
@@ -78,7 +79,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         private ObservableCollection<GitLabProjectUser> _projectUsers = new();
-        public ObservableCollection<GitLabProjectUser>  ProjectUsers
+        public ObservableCollection<GitLabProjectUser> ProjectUsers
         {
             get => _projectUsers;
             set
@@ -144,8 +145,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             get => _isGitLabUserListEnabled;
             set
             {
-                _isGitLabUserListEnabled = value; 
-                NotifyOfPropertyChange(()=> IsGitLabUserListEnabled);
+                _isGitLabUserListEnabled = value;
+                NotifyOfPropertyChange(() => IsGitLabUserListEnabled);
             }
         }
 
@@ -166,7 +167,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
             }
         }
-
 
         private string _selectedOrganization;
         public string SelectedOrganization
@@ -213,12 +213,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService,
-            HttpClientServices httpClientServices,
+            GitLabHttpClientServices gitLabHttpClientServices,
             CollaborationManager collaborationManager,
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
-            _httpClientServices = httpClientServices;
+            _gitLabHttpClientServices = gitLabHttpClientServices;
             _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
         }
@@ -228,9 +228,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
-            Projects = await _httpClientServices.GetProjectsForUserWhereOwner(ProjectOwner);
-            
-            _gitLabUsers = await _httpClientServices.GetAllUsers();
+            Projects = await _gitLabHttpClientServices.GetProjectsForUserWhereOwner(ProjectOwner);
+            _gitLabUsers = await _gitLabHttpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
 
             CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
@@ -270,7 +269,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             if (obj is GitUser user)
             {
                 if (user.Name!.ToUpper().Contains(FilterText.ToUpper()) || user.Organization.ToUpper().Contains(FilterText.ToUpper()))
-                { 
+                {
                     return true;
                 }
             }
@@ -286,7 +285,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             ShowProgressBar = Visibility.Visible;
 
-            var users = await _httpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);
+            var users = await _gitLabHttpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);
             ProjectUsers = new ObservableCollection<GitLabProjectUser>(users);
 
             // remove existing users from the selectable list
@@ -295,7 +294,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var ids = ProjectUsers.Select(u => u.Id).ToList();
             //
             _collabUsers.RemoveAll(x => ids.Contains(x.Id));
-            NotifyOfPropertyChange(() =>  CollabUsers);
+            NotifyOfPropertyChange(() => CollabUsers);
 
             CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
             CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
@@ -313,7 +312,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var user = CollabUsers[i];
                 if (user.IsSelected)
                 {
-                    _ = await _httpClientServices.AddUserToProject(user, SelectedProject, permissionLevel);
+                    _ = await _gitLabHttpClientServices.AddUserToProject(user, SelectedProject, permissionLevel);
                     CollabUsers.RemoveAt(i);
                     await Task.Delay(500);
                     await GetUsersForProject();
@@ -331,18 +330,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             AddUsers(PermissionLevel.ReadWrite);
         }
 
+        public void AddOwner()
+        {
+            AddUsers(PermissionLevel.Owner);
+        }
+
 
         public async void RemoveUser()
         {
             ShowProgressBar = Visibility.Visible;
             if (SelectedCurrentUser is not null)
             {
-                // only remove users who are not the owner
-                if (SelectedCurrentUser.IsOwner == false)
+                // you cannot remove yourself
+                if (SelectedCurrentUser.UserName != ProjectOwner.RemoteUserName)
                 {
-                    await _httpClientServices.RemoveUserFromProject(SelectedCurrentUser, SelectedProject);
-                    await Task.Delay(500);
-                    await GetUsersForProject();
+                    // you cannot delete the project's true owner
+                    if (SelectedCurrentUser.UserName != SelectedProject.RemoteOwner.Username)
+                    {
+                        await _gitLabHttpClientServices.RemoveUserFromProject(SelectedCurrentUser, SelectedProject);
+                        await Task.Delay(500);
+                        await GetUsersForProject();
+                    }
                 }
             }
 

@@ -9,6 +9,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     d:DesignHeight="55"
     d:DesignWidth="515"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"

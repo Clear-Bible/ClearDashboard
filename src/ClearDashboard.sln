@@ -102,6 +102,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.WPF.Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompressTreeXML", "..\tools\CompressXML\CompressXML\CompressTreeXML.csproj", "{877AB7C9-8AE4-4C85-80F2-9ECE120D92A3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SetVersionInfo", "..\tools\SetVersionInfo\SetVersionInfo.csproj", "{B82B5AFC-27F1-40DC-8D34-714465D30761}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Collab_Debug|Any CPU = Collab_Debug|Any CPU
@@ -538,6 +540,22 @@ Global
 		{877AB7C9-8AE4-4C85-80F2-9ECE120D92A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{877AB7C9-8AE4-4C85-80F2-9ECE120D92A3}.Release|x64.ActiveCfg = Release|Any CPU
 		{877AB7C9-8AE4-4C85-80F2-9ECE120D92A3}.Release|x64.Build.0 = Release|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Collab_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Collab_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Collab_Debug|x64.ActiveCfg = Debug|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Collab_Debug|x64.Build.0 = Debug|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Collab_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Collab_Release|Any CPU.Build.0 = Release|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Collab_Release|x64.ActiveCfg = Release|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Collab_Release|x64.Build.0 = Release|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Debug|x64.Build.0 = Debug|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Release|x64.ActiveCfg = Release|Any CPU
+		{B82B5AFC-27F1-40DC-8D34-714465D30761}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -574,6 +592,7 @@ Global
 		{1521C1D6-1969-490C-90BC-855D3EBD8FC1} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 		{AE0E4887-52F3-4A82-B6E7-F36D3D71DC48} = {2EB29F80-FFFD-471C-B22D-8BE8FBB2B406}
 		{877AB7C9-8AE4-4C85-80F2-9ECE120D92A3} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
+		{B82B5AFC-27F1-40DC-8D34-714465D30761} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}

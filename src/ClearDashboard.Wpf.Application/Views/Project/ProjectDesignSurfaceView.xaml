@@ -13,7 +13,7 @@
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
