@@ -410,6 +410,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
                                     <!--<StackPanel
@@ -531,9 +532,13 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Button.Style>
-
-
                                     </Button>
+
+                                    <TextBlock Grid.Row="4" Grid.Column="1">
+                                        <Run Text="Remote Update Available: " />
+                                        <Run Text="{Binding GitLabUpdateNeeded}" />
+                                    </TextBlock>
+
                                 </Grid>
 
                             </StackPanel>

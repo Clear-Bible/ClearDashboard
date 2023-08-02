@@ -11,6 +11,7 @@ using LibGit2Sharp.Handlers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
+using System.Diagnostics;
 using System.Text.Json;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -226,6 +227,24 @@ public class CollaborationManager
         return false;
     }
 
+    public string GetRemoteSha(string? dashboardProjectFullFilePath, Guid dashboardProjectId)
+    {
+        var path =Path.Combine( _repositoryBasePath, "P_" + dashboardProjectId);
+
+        if (Directory.Exists(path))
+        {
+            _repositoryPath = path;
+            var result = FindRemoteHeadCommitSha();
+
+            if (result != null)
+            {
+                return result;
+            }
+        }
+
+        return string.Empty;
+    }
+
     protected string? FindRemoteHeadCommitSha()
     {
         using (var repo = new Repository(_repositoryPath))
@@ -241,12 +260,19 @@ public class CollaborationManager
             {
                 if (remote.Name == RemoteOrigin)
                 {
-                    var references = repo.Network.ListReferences(remote, credentialsProvider);
-                    var headRef = references.Where(e => e.CanonicalName == "HEAD").FirstOrDefault();
-                    if (headRef is not null)
+                    try
                     {
-                        var headCommitSha = headRef.ResolveToDirectReference().TargetIdentifier;
-                        return headCommitSha;
+                        var references = repo.Network.ListReferences(remote, credentialsProvider);
+                        var headRef = references.Where(e => e.CanonicalName == "HEAD").FirstOrDefault();
+                        if (headRef is not null)
+                        {
+                            var headCommitSha = headRef.ResolveToDirectReference().TargetIdentifier;
+                            return headCommitSha;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
                     }
                 }
             }
