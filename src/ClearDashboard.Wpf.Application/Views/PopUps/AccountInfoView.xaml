@@ -1,9 +1,10 @@
-<Window
+﻿<Window
     x:Class="ClearDashboard.Wpf.Application.Views.PopUps.AccountInfoView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="AccountInfoView"
     Width="500"
     Height="450"
@@ -16,7 +17,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!--<StackPanel Grid.Row="0" Orientation="Vertical">
+        <StackPanel Grid.Row="0" Orientation="Vertical">
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Run FontWeight="Bold" Text="Paratext Username:" />
                 <Run Text="{Binding ParatextUsername}" />
@@ -54,6 +55,6 @@
             Height="40"
             Margin="3,0,3,5"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />-->
+            Style="{StaticResource TransparentStyle}" />
     </Grid>
 </Window>
