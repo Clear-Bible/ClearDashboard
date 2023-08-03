@@ -534,9 +534,23 @@
                                         </Button.Style>
                                     </Button>
 
-                                    <TextBlock Grid.Row="4" Grid.Column="1">
-                                        <Run Text="Remote Update Available: " />
-                                        <Run Text="{Binding GitLabUpdateNeeded}" />
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        Background="{StaticResource GreenLightBrush}"
+                                        TextAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                        <Run Text="Remote Update Available" />
                                     </TextBlock>
 
                                 </Grid>
