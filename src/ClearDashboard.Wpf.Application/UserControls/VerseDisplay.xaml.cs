@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.Wpf.Application.Events.Notes;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {

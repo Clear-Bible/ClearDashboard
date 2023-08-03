@@ -33,6 +33,7 @@ using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
 using TranslationCollection = ClearDashboard.Wpf.Application.Collections.Lexicon.TranslationCollection;
 using TranslationId = ClearDashboard.DAL.Alignment.Lexicon.TranslationId;
 using ClearDashboard.Wpf.Application.ViewModels.Popups;
+using ClearDashboard.Wpf.Application.Events.Notes;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo

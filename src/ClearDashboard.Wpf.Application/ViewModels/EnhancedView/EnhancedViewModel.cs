@@ -26,11 +26,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.UserControls.Notes;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
+    using ClearDashboard.Wpf.Application.Events.Notes;
 
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
@@ -383,6 +385,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
+            LabelsEditor.EventAggregator = eventAggregator;
             PaneId = Guid.NewGuid();
 
             
@@ -1058,6 +1061,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 await NoteManager.DetachNoteLabel(e.Note, e.Label);
             }
             Message = $"Label '{e.Label.Text}' removed for note";
+        }
+
+        public void LabelGroupAdded(object sender, LabelGroupAddedEventArgs e)
+        {
+            Task.Run(() => LabelGroupAddedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelGroupAddedAsync(LabelGroupAddedEventArgs e)
+        {
+            if (e.LabelGroup.LabelGroupId == null)
+            {
+                await NoteManager.CreateLabelGroupAsync(e.LabelGroup, e.SourceLabelGroup);
+            }
+            Message = $"Label group '{e.LabelGroup.Name}' added";
+        }
+
+        public void LabelGroupSelected(object sender, LabelGroupEventArgs e)
+        {
+            NoteManager.SaveLabelGroupDefault(e.LabelGroup);
         }
 
         public void CloseNotePaneRequested(object sender, RoutedEventArgs args)

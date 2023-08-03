@@ -625,7 +625,7 @@
             <controls:SidebarExpander
                 x:Name="NotesExpander"
                 Grid.Row="0"
-                Grid.Column="2"
+                Grid.Column="1"
                 mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
@@ -651,16 +651,20 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <notes:NoteCollectionDisplay
                         x:Name="NotesControl"
-                        Margin="0,0"
+                        CurrentUserId="{Binding NoteManager.CurrentUserId}"
+                        DefaultLabelGroup="{Binding NoteManager.DefaultLabelGroup}"
                         EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
                         LabelBackground="BlanchedAlmond"
                         LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        LabelFontSize="14"
+                        LabelGroups="{Binding NoteManager.LabelGroups}"
+                        LabelPadding="10,6,10,5"
                         LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
-                        NoteMargin="0,0,0,10"
+                        Margin="0,-20"
+                        NoteMargin="0,0,0,0"
                         NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         Notes="{Binding NoteManager.CurrentNotes}"
-                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        UserFontStyle="Italic"
                         Visibility="{Binding NoteControlVisibility}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="NoteIndicatorMouseEnter">
@@ -689,6 +693,9 @@
                             </i:EventTrigger>
                             <i:EventTrigger EventName="LabelAdded">
                                 <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupAdded">
+                                <i:CallMethodAction MethodName="LabelGroupAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
                             <i:EventTrigger EventName="LabelRemoved">
                                 <i:CallMethodAction MethodName="LabelRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />

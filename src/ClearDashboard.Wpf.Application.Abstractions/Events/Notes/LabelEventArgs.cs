@@ -2,7 +2,7 @@
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
-namespace ClearDashboard.Wpf.Application.Events
+namespace ClearDashboard.Wpf.Application.Events.Notes
 {
     public class LabelEventArgs : RoutedEventArgs
     {

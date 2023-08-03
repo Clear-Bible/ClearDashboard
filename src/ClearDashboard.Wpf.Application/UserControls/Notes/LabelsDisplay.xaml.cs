@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Collections.Notes;
-using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 

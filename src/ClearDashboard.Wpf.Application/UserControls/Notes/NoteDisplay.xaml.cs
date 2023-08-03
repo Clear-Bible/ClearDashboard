@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -7,10 +6,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Collections.Notes;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -29,103 +31,133 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the LabelAddedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
-            ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(LabelAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the LabelGroupAddedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupAddedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the LabelGroupLabelAddedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupLabelAddedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupLabelAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the LabelGroupLabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupLabelRemovedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupLabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the LabelGroupRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupRemovedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the LabelGroupSelectedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupSelectedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the LabelRemovedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
-            ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(LabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the LabelSelectedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
-            ("LabelSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(LabelSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAdded routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAddedEvent = EventManager.RegisterRoutedEvent
-            ("NoteAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAssociationClicked routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAssociationClickedEvent = EventManager.RegisterRoutedEvent
-            ("NoteAssociationClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAssociationClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAssociationDoubleClicked routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAssociationDoubleClickedEvent = EventManager.RegisterRoutedEvent
-            ("NoteAssociationDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAssociationDoubleClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAssociationLeftButtonDown routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAssociationLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteAssociationLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAssociationLeftButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAssociationLeftButtonUp routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAssociationLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteAssociationLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAssociationLeftButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAssociationRightButtonDown routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAssociationRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteAssociationRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAssociationRightButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAssociationRightButtonUp routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAssociationRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteAssociationRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAssociationRightButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAssociationMouseEnter routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAssociationMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("NoteAssociationMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAssociationMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteAssociationMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAssociationMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("NoteAssociationMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteAssociationMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteDeleted routed event.
         /// </summary>
         public static readonly RoutedEvent NoteDeletedEvent = EventManager.RegisterRoutedEvent
-            ("NoteDeleted", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteEditorMouseEnter routed event.
         /// </summary>
         public static readonly RoutedEvent NoteEditorMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("NoteEditorMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteEditorMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteEditorMouseLeave routed event.
         /// </summary>
         public static readonly RoutedEvent NoteEditorMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("NoteEditorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteEditorMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteSendToParatext routed event.
         /// </summary>
         public static readonly RoutedEvent NoteSendToParatextEvent = EventManager.RegisterRoutedEvent
-            ("NoteSendToParatext", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteSendToParatext), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteUpdated routed event.
         /// </summary>
         public static readonly RoutedEvent NoteUpdatedEvent = EventManager.RegisterRoutedEvent
-            ("NoteUpdated", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+            (nameof(NoteUpdated), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         #endregion Static Routed Events
         #region Static Dependency Properties
@@ -135,6 +167,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly DependencyProperty AddModeProperty = DependencyProperty.Register(nameof(AddMode), typeof(bool), typeof(NoteDisplay),
             new PropertyMetadata(false, OnAddModeChanged));
+
+        /// <summary>
+        /// Identifies the CurrentUserId dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CurrentUserIdProperty = DependencyProperty.Register(nameof(CurrentUserId), typeof(UserId), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the DefaultLabelGroup dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DefaultLabelGroupProperty = DependencyProperty.Register(nameof(DefaultLabelGroup), typeof(LabelGroupViewModel), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the EntityId dependency property.
@@ -160,6 +202,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             new PropertyMetadata(14d));
 
         /// <summary>
+        /// Identifies the LabelGroups dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelGroupsProperty = DependencyProperty.Register(nameof(LabelGroups), typeof(LabelGroupViewModelCollection), typeof(NoteDisplay));
+
+        /// <summary>
         /// Identifies the LabelMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelMarginProperty = DependencyProperty.Register(nameof(LabelMargin), typeof(Thickness), typeof(NoteDisplay),
@@ -174,7 +221,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Identifies the LabelSuggestions dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register(nameof(LabelSuggestions), typeof(IEnumerable<NotesLabel>), typeof(NoteDisplay));
+        public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register(nameof(LabelSuggestions), typeof(LabelCollection), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the Note dependency property.
@@ -429,11 +476,44 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        private void RaiseLabelGroupAddedEvent(RoutedEvent routedEvent, LabelGroupAddedEventArgs args)
+        {
+            RaiseEvent(new LabelGroupAddedEventArgs
+            {
+                RoutedEvent = routedEvent,
+                LabelGroup = args.LabelGroup,
+                SourceLabelGroup = args.SourceLabelGroup
+            });
+        }        
+        
+        private void RaiseLabelGroupEvent(RoutedEvent routedEvent, LabelGroupEventArgs args)
+        {
+            RaiseEvent(new LabelGroupEventArgs
+            {
+                RoutedEvent = routedEvent,
+                LabelGroup = args.LabelGroup
+            });
+        }
+
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
             var labelEventArgs = e as LabelEventArgs;
 
             RaiseLabelEvent(LabelAddedEvent, labelEventArgs!);
+        }
+
+        private void OnLabelGroupAdded(object sender, RoutedEventArgs e)
+        {
+            var labelGroupAddedEventArgs = e as LabelGroupAddedEventArgs;
+
+            RaiseLabelGroupAddedEvent(LabelGroupAddedEvent, labelGroupAddedEventArgs!);
+        }
+
+        private void OnLabelGroupSelected(object sender, RoutedEventArgs e)
+        {
+            var labelGroupEventArgs = e as LabelGroupEventArgs;
+
+            RaiseLabelGroupEvent(LabelGroupSelectedEvent, labelGroupEventArgs!);
         }
 
         private void OnLabelSelected(object sender, RoutedEventArgs e)
@@ -637,6 +717,25 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
         public Visibility ParatextSendVisibility => !AddMode && Note.EnableParatextSend ? Visibility.Visible : Visibility.Hidden;
         private bool IsAssociationButtonClicked { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="UserId"/> for the current user.
+        /// </summary>
+        public UserId CurrentUserId
+        {
+            get => (UserId)GetValue(CurrentUserIdProperty);
+            set => SetValue(CurrentUserIdProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the default <see cref="LabelGroupViewModel"/> for the user.
+        /// </summary>
+        public LabelGroupViewModel DefaultLabelGroup
+        {
+            get => (LabelGroupViewModel)GetValue(DefaultLabelGroupProperty);
+            set => SetValue(DefaultLabelGroupProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the collection of <see cref="EntityId{T}"/> associated with the note.
         /// </summary>
@@ -674,6 +773,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Gets or sets a collection of <see cref="LabelGroupViewModel"/> objects that the user can select from.
+        /// </summary>
+        public LabelGroupViewModelCollection LabelGroups
+        {
+            get => (LabelGroupViewModelCollection)GetValue(LabelGroupsProperty);
+            set => SetValue(LabelGroupsProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the margin for individual label boxes.
         /// </summary>
         public Thickness LabelMargin
@@ -692,11 +800,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="DAL.Alignment.Notes.Label"/> objects for auto selection in the control.
+        /// Gets or sets a collection of <see cref="NotesLabel"/> objects for auto selection in the control.
         /// </summary>
-        public IEnumerable<NotesLabel> LabelSuggestions
+        public LabelCollection LabelSuggestions
         {
-            get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
+            get => (LabelCollection)GetValue(LabelSuggestionsProperty);
             set => SetValue(LabelSuggestionsProperty, value);
         }
 
@@ -980,6 +1088,51 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             remove => RemoveHandler(LabelAddedEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when an new label group is added.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupAdded
+        {
+            add => AddHandler(LabelGroupAddedEvent, value);
+            remove => RemoveHandler(LabelGroupAddedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a label is added to a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupLabelAdded
+        {
+            add => AddHandler(LabelGroupLabelAddedEvent, value);
+            remove => RemoveHandler(LabelGroupLabelAddedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a label is removed from a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupLabelRemoved
+        {
+            add => AddHandler(LabelGroupLabelRemovedEvent, value);
+            remove => RemoveHandler(LabelGroupLabelRemovedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an existing label group is removed.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupRemoved
+        {
+            add => AddHandler(LabelGroupRemovedEvent, value);
+            remove => RemoveHandler(LabelGroupRemovedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an existing label group is selected.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupSelected
+        {
+            add => AddHandler(LabelGroupSelectedEvent, value);
+            remove => RemoveHandler(LabelGroupSelectedEvent, value);
+        }
+        
         /// <summary>
         /// Occurs when a label is removed.
         /// </summary>

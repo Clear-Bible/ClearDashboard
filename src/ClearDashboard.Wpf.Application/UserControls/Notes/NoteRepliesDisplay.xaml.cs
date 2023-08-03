@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes

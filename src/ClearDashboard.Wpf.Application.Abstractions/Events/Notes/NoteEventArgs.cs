@@ -2,7 +2,7 @@
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using System.Windows;
 
-namespace ClearDashboard.Wpf.Application.Events
+namespace ClearDashboard.Wpf.Application.Events.Notes
 {
     public class NoteEventArgs : RoutedEventArgs
     {

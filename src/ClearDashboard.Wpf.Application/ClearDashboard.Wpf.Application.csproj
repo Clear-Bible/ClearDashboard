@@ -271,7 +271,7 @@
     <Compile Update="UserControls\Lexicon\MeaningEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\Notes\LabelEditor.xaml.cs">
+    <Compile Update="UserControls\Notes\LabelsEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\Notes\NoteCollectionDisplay.xaml.cs">
@@ -498,7 +498,7 @@
     <Page Update="UserControls\Lexicon\MeaningEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\Notes\LabelEditor.xaml">
+    <Page Update="UserControls\Notes\LabelsEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\Notes\NoteAssociationsDisplay.xaml">

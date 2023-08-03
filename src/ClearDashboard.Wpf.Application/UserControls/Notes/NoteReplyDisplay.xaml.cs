@@ -10,6 +10,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using TimeZoneNames;

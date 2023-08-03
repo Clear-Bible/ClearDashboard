@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,7 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ClearDashboard.DataAccessLayer.Annotations;
-using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Collections.Notes;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
@@ -19,24 +19,27 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
     public partial class LabelSelector : UserControl, INotifyPropertyChanged
     {
         #region Static Routed Events
-        /// <summary>
-        /// Identifies the LabelSelectedEvent routed event.
-        /// </summary>
-        public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
-            ("LabelSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
 
         /// <summary>
         /// Identifies the LabelAddedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
-            ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
+            (nameof(LabelAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
+        
+        /// <summary>
+        /// Identifies the LabelSelectedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
+
         #endregion
         #region Static Dependency Properties
 
         /// <summary>
         /// Identifies the LabelSuggestions dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register("LabelSuggestions", typeof(IEnumerable<NotesLabel>), typeof(LabelSelector));
+        public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register(nameof(LabelSuggestions), typeof(LabelCollection), typeof(LabelSelector));
+        
         #endregion
         #region Private event handlers
 
@@ -100,7 +103,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Keyboard.Focus(LabelTextBox);
         }
 
-        private void AddButtonClicked(object sender, RoutedEventArgs e)
+        private void AddLabelButtonClicked(object sender, RoutedEventArgs e)
         {
             TextBoxVisibility = Visibility.Visible;
             OnPropertyChanged(nameof(TextBoxVisibility));
@@ -121,9 +124,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Gets or sets a collection of <see cref="Label"/> objects for auto selection in the control.
         /// </summary>
-        public IEnumerable<NotesLabel> LabelSuggestions
+        public LabelCollection LabelSuggestions
         {
-            get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
+            get => (LabelCollection)GetValue(LabelSuggestionsProperty);
             set => SetValue(LabelSuggestionsProperty, value);
         }
 
@@ -132,6 +135,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #endregion
 
         #region Public events
+
+        /// <summary>
+        /// Occurs when an new label is added.
+        /// </summary>
+        public event RoutedEventHandler LabelAdded
+        {
+            add => AddHandler(LabelAddedEvent, value);
+            remove => RemoveHandler(LabelAddedEvent, value);
+        }
 
         /// <summary>
         /// Occurs when an existing label suggestion is selected.
@@ -143,14 +155,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
-        /// Occurs when an new label is added.
+        /// Occurs when a property value changes.
         /// </summary>
-        public event RoutedEventHandler LabelAdded
-        {
-            add => AddHandler(LabelAddedEvent, value);
-            remove => RemoveHandler(LabelAddedEvent, value);
-        }
-
         public event PropertyChangedEventHandler? PropertyChanged;
 
         #endregion
