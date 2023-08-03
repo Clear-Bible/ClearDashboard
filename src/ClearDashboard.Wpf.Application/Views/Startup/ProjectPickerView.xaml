@@ -550,7 +550,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
-                                        <Run Text="Remote Update Available" />
+                                        <Run Text="{helpers:Localization MainView_RemoteUpdateAvailable}" />
                                     </TextBlock>
 
                                 </Grid>

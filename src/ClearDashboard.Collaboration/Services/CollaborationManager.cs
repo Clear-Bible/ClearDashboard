@@ -283,6 +283,11 @@ public class CollaborationManager
 
     public bool AreUnmergedChanges()
     {
+        if (_repositoryPath == "LocalOnly")
+        {
+            return false;
+        }
+
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 
