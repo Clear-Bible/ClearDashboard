@@ -1049,15 +1049,15 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             IMediator mediator,
             IEventAggregator eventAggregator,
             TranslationCommands translationCommands,
-            LongRunningTaskManager longRunningTaskManager /*,
-            SystemPowerModes systemPowerModes */)
+            LongRunningTaskManager longRunningTaskManager,
+            SystemPowerModes systemPowerModes)
         {
             Logger = logger;
             Mediator = mediator;
             EventAggregator = eventAggregator;
             TranslationCommands = translationCommands;
             LongRunningTaskManager = longRunningTaskManager;
-            //SystemPowerModes = systemPowerModes;
+            SystemPowerModes = systemPowerModes;
         }
 
         public class LongRunningProgressReporter : ILongRunningProgress<ProgressStatus>

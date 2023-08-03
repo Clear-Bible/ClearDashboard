@@ -179,7 +179,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 ParatextLwcProjects = GetSelectableParatextLwcProjects();
             }
 
-            CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName));
+            ValidationResult = Validator!.Validate(this);
+            CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName) && ValidationResult.IsValid);
 
             if (SelectedParatextBtProject == null)
             {
@@ -273,13 +274,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 ParatextLwcProjects = new(Projects);
             }
 
-            CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName));
+            _projectName = ProjectManager!.CurrentDashboardProject?.ProjectName ?? string.Empty;
 
-            ProjectName = string.Empty;
-            SelectedParatextProject = null;
-            SelectedParatextBtProject = null;
-            SelectedParatextLwcProject = null;
-            ShowBiblicalTexts = true;
+            SelectedParatextProject = ParentViewModel!.SelectedParatextProject;
+            SelectedParatextBtProject = ParentViewModel!.SelectedParatextBtProject;
+            SelectedParatextLwcProject = ParentViewModel!.SelectedParatextLwcProject;
+            ShowBiblicalTexts = ParentViewModel!.ShowBiblicalTexts;
+
+            ValidationResult = Validator!.Validate(this);
+            CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName) && ValidationResult.IsValid);
 
             await base.OnActivateAsync(cancellationToken);
         }
@@ -308,7 +311,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public override async Task MoveBackwardsAction()
         {
-            await ParentViewModel!.GoToStep(3);
+            await ParentViewModel!.GoToStep(1);
         }
 
         public override async Task MoveForwardsAction()
@@ -319,6 +322,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ParentViewModel!.SelectedParatextBtProject = SelectedParatextBtProject;
             ParentViewModel!.SelectedParatextLwcProject = SelectedParatextLwcProject;
             ParentViewModel!.ShowBiblicalTexts = ShowBiblicalTexts;
+
+            ParentViewModel!.SelectedBookIds = null;
 
             await base.MoveForwardsAction();
         }

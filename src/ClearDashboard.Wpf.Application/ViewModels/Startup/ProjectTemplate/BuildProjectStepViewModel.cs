@@ -1,42 +1,37 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Features;
-using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
-using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Utils;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
-using static ClearBible.Engine.Persistence.FileGetBookIds;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
     public class BuildProjectStepViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>, IHandle<BackgroundTaskChangedMessage>
     {
         private readonly ProjectTemplateProcessRunner _processRunner;
-        private Task? _runningTask;
+        private Task _runningTask = Task.CompletedTask;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationToken? _cancellationToken = null;
         private ProjectDbContextFactory _projectNameDbContextFactory;
 
+        private object lockObject = new();
+
         private string _createAction;
-        private string _closeAction;
         private string _backAction;
         private string _cancelAction;
 
@@ -68,11 +63,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _processRunner = processRunner;
-            _runningTask = null;
             _projectNameDbContextFactory = projectNameDbContextFactory;
 
             _createAction = LocalizationService!.Get("Create");
-            _closeAction = LocalizationService!.Get("Close");
             _backAction = LocalizationService!.Get("Back");
             _cancelAction = LocalizationService!.Get("Cancel");
 
@@ -81,7 +74,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         }
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            _runningTask = null;
+            _runningTask = Task.CompletedTask;
+            _cancellationToken = null;
 
             BackOrCancelAction = _backAction;
             CreateOrCloseAction = _createAction;
@@ -90,13 +84,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             CanMoveBackwards = true;
             EnableControls = true;
 
-            CanMoveForwards = ParentViewModel!.SelectedParatextProject != null && ParentViewModel!.SelectedBookIds.Any();
+            CanMoveForwards = ParentViewModel!.SelectedParatextProject != null && (ParentViewModel!.SelectedBookIds?.Any() ?? false);
             await base.OnActivateAsync(cancellationToken);
         }
 
         public async Task CreateOrClose()
         {
-            if (!ParentViewModel!.SelectedBookIds.Any() || ParentViewModel!.SelectedParatextProject is null)
+            if (!(ParentViewModel!.SelectedBookIds?.Any() ?? false) || ParentViewModel!.SelectedParatextProject is null)
             {
                 // FIXME:  
                 await ParentViewModel!.GoToStep(1);
@@ -105,6 +99,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             Stopwatch sw = new();
             sw.Start();
+
+            _cancellationToken = _cancellationTokenSource.Token;
 
             Action<ILogger>? errorCleanupAction = null;
             BackOrCancelAction = _cancelAction;
@@ -170,11 +166,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             }
 
             ProjectManager!.PauseDenormalization = true;
-
-            // This should throw if the project wasn't successfully created:
-            await Task.Run(async () => await ProjectManager!.CreateNewProject(ProjectManager!.CurrentDashboardProject.ProjectName));
             try
             {
+                _cancellationToken?.ThrowIfCancellationRequested();
+
+                _runningTask = Task.Run(async () => await ProjectManager!.CreateNewProject(ProjectManager!.CurrentDashboardProject.ProjectName));
+                await _runningTask;
+
+                _cancellationToken?.ThrowIfCancellationRequested();
+
                 _runningTask = _processRunner.RunRegisteredTasks(sw);
                 await _runningTask;
 
@@ -184,6 +184,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             catch (OperationCanceledException)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ProjectManager!.CurrentDashboardProject.ProjectName!);
+                ProjectManager!.CurrentDashboardProject.ProjectName = null;
                 ProjectManager!.CurrentProject = null;
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
@@ -193,6 +194,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             catch (Exception)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ProjectManager!.CurrentDashboardProject.ProjectName!);
+                ProjectManager!.CurrentDashboardProject.ProjectName = null;
                 ProjectManager!.CurrentProject = null;
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
@@ -201,8 +203,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             }
             finally
             {
-                _runningTask?.Dispose();
-                _runningTask = null;
+                _runningTask.Dispose();
+                _runningTask = Task.CompletedTask;
+
+                _cancellationToken = null;
 
                 ProgressIndicatorVisibility = Visibility.Hidden;
                 CanMoveForwards = false;
@@ -211,6 +215,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 errorCleanupAction?.Invoke(Logger!);
 
                 ProjectManager!.PauseDenormalization = false;
+
+                // Reset everything in case the wizard is activated again:
+                ParentViewModel!.SelectedParatextProject = null;
+                ParentViewModel!.SelectedParatextBtProject = null;
+                ParentViewModel!.SelectedParatextLwcProject = null;
+                ParentViewModel!.ShowBiblicalTexts = true;
+                ParentViewModel!.SelectedBookIds = null;
 
                 sw.Stop();
             }
@@ -233,10 +244,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public async Task BackOrCancel()
         {
-            if (_runningTask is not null)
+            if (_cancellationToken is not null && !(_cancellationToken?.IsCancellationRequested ?? false))
             {
+                CanMoveBackwards = false;
+
+                _cancellationTokenSource?.Cancel();
                 _processRunner.Cancel();
+
                 await Task.WhenAny(tasks: new Task[] { _runningTask, Task.Delay(30000) });
+            }
+            else
+            {
+                await ParentViewModel!.GoToStep(4);
             }
         }
 

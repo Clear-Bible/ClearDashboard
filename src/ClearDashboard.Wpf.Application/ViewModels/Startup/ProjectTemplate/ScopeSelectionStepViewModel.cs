@@ -13,6 +13,7 @@ using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,7 +54,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            SelectedBookManager.UnselectAllBooks();
+            if (ParentViewModel!.SelectedBookIds is not null)
+            {
+                ContinueEnabled = true;
+                await base.OnActivateAsync(cancellationToken);
+                return;
+            }
+
             ProgressIndicatorVisibility = Visibility.Visible;
 
             var usfmErorsByParatextProjectId = new Dictionary<string, IEnumerable<UsfmError>>();
@@ -101,8 +108,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public override async Task MoveForwardsAction()
         {
-            ParentViewModel!.SelectedBookIds = SelectedBookManager.SelectedBooks.Where(e => e.IsSelected).Select(e => e.Abbreviation).ToList();
-            await ParentViewModel!.GoToStep(4);
+            ParentViewModel!.SelectedBookIds = SelectedBookManager.SelectedAndEnabledBookAbbreviations;
+            await ParentViewModel!.GoToStep(5);
         }
 
         // ReSharper disable once UnusedMember.Global
