@@ -9,12 +9,16 @@ using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
+using GenerateLicenseKeyForDashboard.Models;
+using LicenseManager = ClearDashboard.DataAccessLayer.LicenseManager;
 
 
 namespace GenerateLicenseKeyForDashboard.ViewModels
@@ -423,6 +427,38 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             set => Set(ref _collabUser, value);
         }
 
+        public ICollectionView ProjectUserConnectionsCollectionView { get; set; }
+
+        private List<ProjectUserConnection> _projectUserConnections;
+        public List<ProjectUserConnection> ProjectUserConnections
+        {
+            get => _projectUserConnections;
+            set => Set(ref _projectUserConnections, value);
+        }
+
+        private string _userFilterString = string.Empty;
+        public string UserFilterString
+        {
+            get => _userFilterString;
+            set
+            {
+                _userFilterString = value ?? string.Empty;
+                CheckAndRefreshGrid();
+            }
+        }
+
+        private string _projectFilterString = string.Empty;
+
+        public string ProjectFilterString
+        {
+            get => _projectFilterString;
+            set
+            {
+                _projectFilterString = value ?? string.Empty;
+                CheckAndRefreshGrid();
+            }
+    }
+
         #endregion //Observable Properties
 
 
@@ -463,6 +499,12 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
             var gitUsers = await _gitLabServices.GetAllUsers();
             GitLabUsers = gitUsers.OrderBy(s => s.UserName).ToList();
+
+            await RefreshProjectUserConnectionGrid();
+
+            ProjectUserConnectionsCollectionView  = CollectionViewSource.GetDefaultView(ProjectUserConnections);
+            ProjectUserConnectionsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("ProjectName"));
+            ProjectUserConnectionsCollectionView.Filter += ConnectionCollection_Filter;
 
             base.OnViewReady(view);
         }
@@ -527,6 +569,50 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         {
             var gitUsers = await _gitLabServices.GetAllUsers();
             GitLabUsers = gitUsers.OrderBy(s => s.UserName).ToList();
+
+        }
+
+        public async Task RefreshProjectUserConnectionGrid()
+        {
+            var projectUserConnection = new List<ProjectUserConnection>();
+            var projects = await _gitLabServices.GetAllProjects();
+
+            foreach (var project in projects)
+            {
+                var users = await _gitLabServices.GetUsersForProject(null, project.Id);
+
+                foreach (var user in users)
+                {
+                    projectUserConnection.Add(new ProjectUserConnection
+                    {
+                        UserName = user.Name,
+                        ProjectName = project.Description.ToString()!,
+                        AccessLevel = user.GetPermissionLevel
+                    });
+                }
+            }
+            ProjectUserConnections = projectUserConnection;
+        }
+
+        private bool ConnectionCollection_Filter(object obj)
+        {
+            if (obj is ProjectUserConnection connection)
+            {
+                if (connection.UserName.ToLower().Contains(UserFilterString.ToLower()) &&
+                    connection.ProjectName.ToLower().Contains(ProjectFilterString.ToLower()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void CheckAndRefreshGrid()
+        {
+            if (ProjectUserConnections != null && ProjectUserConnectionsCollectionView is not null)
+            {
+                ProjectUserConnectionsCollectionView.Refresh();
+            }
         }
 
         public void ValidateCreateButton()
@@ -805,6 +891,15 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                         break;
                     case "CopyDecryptedLicenseVersion":
                         Clipboard.SetText(DashboardUser.LicenseVersion.ToString());
+                        break;
+                    case "CopyDecryptedCollabConfig":
+                        Clipboard.SetText($"UserId: {CollabUser.UserId}\n" +
+                                          $"RemoteUserName: {CollabUser.RemoteUserName}\n" +
+                                          $"RemoteEmail: {CollabUser.RemoteEmail}\n" +
+                                          $"Organization: {CollabUser.Group}\n" +
+                                          $"RemotePersonalAccessToken: {CollabUser.RemotePersonalAccessToken}\n" +
+                                          $"RemotePersonalPassword: {CollabUser.RemotePersonalPassword}\n" +
+                                          $"NamespaceId: {CollabUser.NamespaceId}");
                         break;
                     case "CopyFetchedEmail":
                         Clipboard.SetText(FetchedEmailBox);

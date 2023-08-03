@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.Collaboration.Util;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
@@ -12,6 +13,7 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
@@ -32,10 +34,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using ClearDashboard.Collaboration.Util;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
-using System.Net;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -430,12 +430,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             EventAggregator.Subscribe(this);
 
-           IsParatextInstalled = _paratextProxy.IsParatextInstalled();
+            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
 
-            await GetRemoteUser();
             await GetProjectsVersion().ConfigureAwait(false);
 
-            if(Pinger.PingHost())
+            if (Pinger.PingHost())
                 await GetCollabProjects().ConfigureAwait(false);
 
 
@@ -459,6 +458,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             if (Pinger.PingHost())
                 await FinishAccountSetup();
+            await GetRemoteUser();
 
             base.OnViewLoaded(view);
         }
@@ -559,10 +559,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             bool collaborationUserSet = false;
             if (_collaborationManager.HasRemoteConfigured())
             {
-                
+
                 CollaborationConfig = _collaborationManager.GetConfig();
 
                 collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(CollaborationConfig.UserId);
+                if (collaborationUser.UserId < 1)
+                {
+                    var user = new GitLabUser
+                    {
+                        Id = CollaborationConfig.UserId,
+                        UserName = CollaborationConfig.RemoteUserName!,
+                        Email = CollaborationConfig.RemoteEmail!,
+                        Password = CollaborationConfig.RemotePersonalPassword!,
+                        Organization = CollaborationConfig.Group!,
+                        NamespaceId = CollaborationConfig.NamespaceId
+                    };
+
+                    await _collaborationHttpClientServices.CreateNewCollabUser(user, user.Password);
+
+                }
 
                 if (dashboardUser.Id == Guid.Empty) //make a DashboardUser
                 {
@@ -585,7 +600,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     dashboardUser.GitLabUserId = collaborationUser.UserId;
                     dashboardUser.AppVersionNumber = Assembly.GetEntryAssembly()?.GetName().Version.ToString();
                     dashboardUser.AppLastDate = DateTime.Today.Date;
-                    
+
                     dashboardUserChanged = await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
                 }
             }
@@ -603,6 +618,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     await InitializeCollaborationUser();
                 });
 
+            }
+            else
+            {
+                var gitLabUser = new CollaborationConfiguration
+                {
+                    UserId =collaborationUser.UserId,
+                    RemoteUserName =collaborationUser.RemoteUserName,
+                    RemoteEmail =collaborationUser.RemoteEmail,
+                    RemotePersonalAccessToken =Encryption.Decrypt(collaborationUser.RemotePersonalAccessToken),
+                    RemotePersonalPassword = Encryption.Decrypt(collaborationUser.RemotePersonalPassword),
+                    Group =collaborationUser.GroupName,
+                    NamespaceId=collaborationUser.NamespaceId
+                };
+                _collaborationManager.SaveCollaborationLicense(gitLabUser);
             }
         }
 

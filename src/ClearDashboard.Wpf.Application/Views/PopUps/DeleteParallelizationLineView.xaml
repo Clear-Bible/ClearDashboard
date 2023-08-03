@@ -7,13 +7,13 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
-    xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{Binding Title}"
     Width="500"
     Height="650"
     d:DataContext="{d:DesignInstance Type=popUps:DeleteParallelizationLineViewModel,
                                      IsDesignTimeCreatable=True}"
-    helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     IsEnabled="{Binding IsWindowEnabled}"
     mc:Ignorable="d">
 

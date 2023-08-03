@@ -60,18 +60,20 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Gets a list of all the GitLab projects
         /// </summary>
         /// <returns></returns>
-        public async Task<List<string>> GetAllProjects()
+        public async Task<List<GitLabProject>> GetAllProjects()
         {
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
-            var list = new List<string>();
+            var list = new List<GitLabProject>();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/projects");
             var response = await _gitLabClient.Client.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
+
+            list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
 
             return list;
         }

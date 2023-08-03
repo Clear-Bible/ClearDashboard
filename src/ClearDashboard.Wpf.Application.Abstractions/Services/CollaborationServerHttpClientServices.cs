@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.Alignment.Notes;
 using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -121,6 +122,39 @@ namespace ClearDashboard.Wpf.Application.Services
             }
 
             return new CollaborationUser { UserId = -1 };
+        }
+
+        public async Task<List<CollaborationUser>> GetAllCollabUsers()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
+
+            try
+            {
+                var response = await _collaborationClient.Client.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+                
+                var users = JsonSerializer.Deserialize<List<CollaborationUser>>(result);
+                //decrypt 
+                foreach (var user in users)
+                {
+                    if (user.NamespaceId == 161)
+                    {
+                        var two = 1 + 1;
+                    }
+                    user.RemotePersonalAccessToken = Encryption.Decrypt(user.RemotePersonalAccessToken);
+                    user.RemotePersonalPassword = Encryption.Decrypt(user.RemotePersonalPassword);
+                }
+                return users;
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return new List<CollaborationUser>();
         }
 
         public async Task<DashboardUser> GetDashboardUserExistsById(Guid userId)

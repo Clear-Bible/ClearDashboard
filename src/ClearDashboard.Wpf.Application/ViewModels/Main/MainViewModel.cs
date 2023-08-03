@@ -7,16 +7,19 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.Framework.Input;
 using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Exceptions;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -35,6 +38,7 @@ using Dahomey.Json.Serialization.Conventions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -46,11 +50,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ClearDashboard.Collaboration.Services;
-using ClearDashboard.Wpf.Application.Helpers;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
-using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -60,12 +61,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ProgressBarVisibilityMessage>,
                 IHandle<ProgressBarMessage>,
                 IHandle<UiLanguageChangedMessage>,
+                IHandle<RebuildMainMenuMessage>,
                 IHandle<ActiveDocumentMessage>,
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
                 IHandle<FilterPinsMessage>,
                 IHandle<BackgroundTaskChangedMessage>,
-                IHandle<ReloadProjectMessage>
+                IHandle<ReloadProjectMessage>,
+                IHandle<ProjectChangedMessage>
     {
         #region Member Variables
 
@@ -412,7 +415,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #pragma warning restore CA1416 // Validate platform compatibility
 
             this.SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
-
         }
 
 
@@ -498,7 +500,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 await screen.DeactivateAsync(true, cancellationToken);
             }
-
+            
             // Clear the items in the event the user is switching projects.
             Items.Clear();
 
@@ -821,7 +823,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>(cancellationToken);
-            PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+
+            _ = await Task.Factory.StartNew(async () =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+                    await PinsViewModel.Initialize(cancellationToken);
+                });
+            }, cancellationToken);
+            //PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+            
             await ActivateItemAsync<TextCollectionsViewModel>(cancellationToken);
             //await ActivateItemAsync<WordMeaningsViewModel>();
             await ActivateItemAsync<MarbleViewModel>(cancellationToken);
@@ -844,7 +856,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
 
-            await Task.Delay(1000, cancellationToken);
+            await Task.Delay(1000, cancellationToken);//why is this delay here?
         }
 
         private async Task LoadAvalonDockLayout()
@@ -1139,6 +1151,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<AboutViewModel>();
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
+        }
+        private void ShowAccountInfoWindow()
+        {
+            var localizedString = _localizationService!["MainView_AccountInfo"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<AccountInfoViewModel>();
 
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
@@ -1438,7 +1466,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_GatherLogs"), Id = MenuIds.GatherLogs, ViewModel = this, },
                         // About
                         new() { Header = _localizationService!.Get("MainView_About"), Id = MenuIds.About, ViewModel = this, },
-
+                        //AccountInfo
+                        new() { Header = _localizationService!.Get("MainView_AccountInfo"), Id = MenuIds.AccountInfo, ViewModel = this, },
                         // Test reloading a project.
                         //ViewModel merge
                         //new() { Header = "Test reload project ", Id = MenuIds.ReloadProject, ViewModel = this, },
@@ -2019,6 +2048,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         ShowAboutWindow();
                         break;
                     }
+                case MenuIds.AccountInfo:
+                {
+                    ShowAccountInfoWindow();
+                    break;
+                }
 
                 case MenuIds.GettingStartedGuide:
                     {
@@ -2209,6 +2243,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await RebuildMainMenu();
         }
 
+        public async Task HandleAsync(RebuildMainMenuMessage message, CancellationToken cancellationToken)
+        {
+            await RebuildMainMenu();
+        }
+
 
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {
@@ -2320,5 +2359,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
         #endregion
+
+        public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            Logger.LogInformation($"Reloading panels due to the Paratext project being switched.");
+
+            await OnDeactivateAsync(false, CancellationToken.None);
+            //await OnInitializeAsync(cancellationToken);
+            await LoadParatextProjectMetadata(cancellationToken);
+            //await LoadProject();
+            //ProjectManager.CheckForCurrentUser();
+            //await NoteManager!.InitializeAsync();
+            //await RebuildMainMenu();
+
+            await ActivateDockedWindowViewModels(cancellationToken);
+
+            await LoadAvalonDockLayout();
+
+           
+
+            await LoadEnhancedViewTabs(cancellationToken);
+            
+            await OnActivateAsync(CancellationToken.None);
+        }
     }
 }

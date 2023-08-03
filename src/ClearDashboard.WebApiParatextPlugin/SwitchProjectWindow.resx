@@ -117,7 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="language" xml:space="preserve">
-    <value>the plane jane resources.resx file</value>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>To change the plugin window's assocated project:
+
+- Select the Plugin Window with your mouse by clicking in it
+- From the Paratext Toolbar, select the project that you want to change to
+- Select the Verse Group you want the plugin to follow.</value>
   </data>
 </root>

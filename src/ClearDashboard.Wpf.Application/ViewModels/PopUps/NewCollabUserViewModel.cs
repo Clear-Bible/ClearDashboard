@@ -4,6 +4,7 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models;
@@ -20,6 +21,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
@@ -38,6 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private CollaborationConfiguration _collaborationConfiguration;
         private DashboardUser _dashboardUser;
         private User _licenseUser;
+        private readonly ParatextProxy _paratextProxy;
 
         private string _emailValidationString = "";
 
@@ -281,6 +284,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private Visibility _closeVisibility = Visibility.Hidden;
+        public Visibility CloseVisibility
+        {
+            get => _closeVisibility;
+            set
+            {
+                _closeVisibility = value;
+                NotifyOfPropertyChange(() => CloseVisibility);
+            }
+        }
+
 
         #endregion //Observable Properties
 
@@ -303,7 +317,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             GitLabHttpClientServices gitLabHttpClientServices,
             CollaborationServerHttpClientServices collaborationHttpClientServices,
             CollaborationManager collaborationManager,
-            CollaborationConfiguration collaborationConfiguration)
+            CollaborationConfiguration collaborationConfiguration,
+            ParatextProxy paratextProxy)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _logger = logger;
@@ -313,6 +328,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
+            _paratextProxy=paratextProxy;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -333,8 +349,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             _licenseUser = LicenseManager.GetUserFromLicense();
-            _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_licenseUser.Id); 
-            GetParatextRegistrationData();
+            _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_licenseUser.Id);
+            _registration = _paratextProxy.GetParatextRegistrationData();
             if (!string.IsNullOrWhiteSpace(_dashboardUser.Email))
             {
                 Email = _dashboardUser.Email ?? string.Empty;
@@ -366,7 +382,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             if (!orgFound)
             {
-                var orgName = GetOrganizationNameFromEmail();
+                var orgName = _paratextProxy.GetOrganizationNameFromEmail();
                 foreach (var group in Groups)
                 {
                     if (group.Name ==orgName)
@@ -397,54 +413,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         #region Methods
-        private void GetParatextRegistrationData()
-        {
-            var fileName = Path.Combine(Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData), @"Paratext93\RegistrationInfo.xml");
-
-            if (File.Exists(fileName))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(RegistrationData));
-                var xml = File.ReadAllText(fileName);
-                using (StringReader reader = new StringReader(xml))
-                {
-                    _registration = (RegistrationData)serializer.Deserialize(reader);
-                }
-            }
-        }
-
-        private string GetOrganizationNameFromEmail()
-        {
-            string resultString = string.Empty;
-            try
-            {
-                resultString = Regex.Match(_registration.Email, "(?<=@)[^.]+", RegexOptions.IgnoreCase).Value;
-            }
-            catch (ArgumentException ex)
-            {
-                // Syntax error in the regular expression
-            }
-
-            if (resultString == string.Empty)
-            {
-                return string.Empty;
-            }
-
-            switch (resultString.ToLower())
-            {
-                case "tsco":
-                    return "SeedCo";
-                case "sil":
-                    return "SIL";
-                case "clear":
-                    return "Clear-Bible";
-                case "wycliffe":
-                    return "Wycliffe";
-            }
-
-            return resultString;
-        }
-
         /// <summary>
         /// Function to generate a user name from first & lastnames
         /// </summary>
@@ -599,6 +567,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             ShowGenerateUserButtonEnabled = false;
+
+            CloseVisibility = Visibility.Visible;
         }
 
         public async Task CreateDashboardUser()
