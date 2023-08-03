@@ -37,7 +37,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         IHandle<UiLanguageChangedMessage>,
         IHandle<PerformanceModeMessage>,
         IHandle<DashboardProjectNameMessage>,
-        IHandle<ProjectChangedMessage>
+        IHandle<ProjectChangedMessage>,
+        IHandle<RefreshCheckGitLab>
     {
 
         //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
@@ -637,6 +638,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             DashboardProjectName = message.projectName;
             await Task.CompletedTask;
+        }
+
+        public Task HandleAsync(RefreshCheckGitLab message, CancellationToken cancellationToken)
+        {
+            OnTimedEvent(null, null);
+
+            return Task.CompletedTask;
         }
 
         #endregion

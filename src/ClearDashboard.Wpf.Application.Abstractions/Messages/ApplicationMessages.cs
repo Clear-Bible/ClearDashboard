@@ -36,6 +36,8 @@ namespace ClearDashboard.Wpf.Application.Messages
 
     public record ReloadProjectMessage();
 
+    public record RefreshCheckGitLab();
+
     public record ProjectsMetadataChangedMessage(List<ParatextProjectMetadata> ProjectsMetadata);
 
     public record RefreshTextCollectionsMessage();
