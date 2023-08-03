@@ -20,7 +20,6 @@ using Microsoft.Extensions.Logging;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -47,8 +46,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
      
         public VerseAwareConductorOneActive ParentViewModel => (VerseAwareConductorOneActive)Parent;
-
-        //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 
         private Guid _corpusId;
         public Guid CorpusId
@@ -93,13 +90,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        //private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
-        //public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
-        //{
-        //    get => _enhancedViewItemMetadatum;
-        //    set => Set(ref _enhancedViewItemMetadatum, value);
-        //}
-
+ 
         #region FontFamily
 
         private FontFamily? _targetFontFamily;
@@ -167,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
       
         public async void VerseSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems != null && e.AddedItems.Count > 0)
+            if (e.AddedItems is { Count: > 0 })
             {
                 if (e.AddedItems[0] is VerseDisplayViewModel verseDisplayViewModel)
                 {
@@ -176,8 +167,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             }
         }
-
-
 
         public async  void TranslationClicked(object sender, TranslationEventArgs args)
         {
@@ -295,12 +284,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     if (result.Success && result.HasData)
                     {
                         metadata = result.Data!.FirstOrDefault(b =>
-                            b.Id == metadatum.ParatextProjectId!.Replace("-", ""));
+                            b.Id == metadatum.ParatextProjectId!.Replace("-", ""))!;
                         if (metadata is null)
                         {
                             Logger?.LogWarning("The Paratext project's metadata is null.");
-                            metadata =  new ParatextProjectMetadata();
-                            metadata.AvailableBooks = BookInfo.GenerateScriptureBookList();
+                            metadata =  new ParatextProjectMetadata
+                            {
+                                AvailableBooks = BookInfo.GenerateScriptureBookList()
+                            };
                         }
                     }
                     else
@@ -314,12 +305,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 if (reloadType == ReloadType.Force)
                 {
                     metadatum.TokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
-                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true);
+                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value),true, cancellationToken);
                 }
                 else
                 {
                     metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!,
-                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true);
+                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true, cancellationToken);
                 }
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;
@@ -362,17 +353,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
                         }
                     }
-                    //OnUIThread(() =>
-                    //{
-                    //    Title = CreateTitle(metadatum, tokensTextRowsRange, currentBcv);
-
-                    //    Verses = verses;
-                    //});
+                    OnUIThread(() =>
+                    {
+                        Verses = verses;
+                    });
                 }
-                //else
-                //{
-                //    OnUIThread(() => { Title = CreateNoVerseDataTitle(metadatum); });
-                //}
+               
 
                 CreateTitle(metadatum, tokensTextRowsRange, currentBcv, bookFound);
             }
