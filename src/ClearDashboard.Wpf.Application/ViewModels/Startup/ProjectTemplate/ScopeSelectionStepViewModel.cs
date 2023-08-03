@@ -1,11 +1,15 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -13,6 +17,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
@@ -48,6 +53,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            SelectedBookManager.UnselectAllBooks();
             ProgressIndicatorVisibility = Visibility.Visible;
 
             var usfmErorsByParatextProjectId = new Dictionary<string, IEnumerable<UsfmError>>();
@@ -93,15 +99,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await base.OnActivateAsync(cancellationToken);
         }
 
-        public async Task CreateProjectTemplate()
+        public override async Task MoveForwardsAction()
         {
-            // FIXME
-            await ParentViewModel!.GoToStep(1);
-            //ParentViewModel?.Ok();
-
-
-            //await ProjectManager!.CreateNewProject(ProjectManager!.CurrentDashboardProject.ProjectName);
-            //DoLongRunningProcesses()
+            ParentViewModel!.SelectedBookIds = SelectedBookManager.SelectedBooks.Where(e => e.IsSelected).Select(e => e.Abbreviation).ToList();
+            await ParentViewModel!.GoToStep(4);
         }
 
         // ReSharper disable once UnusedMember.Global

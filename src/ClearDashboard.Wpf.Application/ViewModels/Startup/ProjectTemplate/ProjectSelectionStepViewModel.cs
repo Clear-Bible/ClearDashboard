@@ -275,6 +275,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName));
 
+            ProjectName = string.Empty;
+            SelectedParatextProject = null;
+            SelectedParatextBtProject = null;
+            SelectedParatextLwcProject = null;
+            ShowBiblicalTexts = true;
+
             await base.OnActivateAsync(cancellationToken);
         }
 
@@ -302,7 +308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public override async Task MoveBackwardsAction()
         {
-            await ParentViewModel!.GoToStep(1);
+            await ParentViewModel!.GoToStep(3);
         }
 
         public override async Task MoveForwardsAction()

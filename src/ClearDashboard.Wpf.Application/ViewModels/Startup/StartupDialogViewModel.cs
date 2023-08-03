@@ -69,6 +69,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _usfmErrors, value);
         }
 
+        private List<string> _selectedBookIds;
+        public List<string> SelectedBookIds
+        {
+            get => _selectedBookIds;
+            set => Set(ref _selectedBookIds, value);
+        }
 
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
