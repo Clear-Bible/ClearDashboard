@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interlinear="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear"
-        xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+        xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
         xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls;assembly=ClearDashboard.Wpf.Application.Abstractions"

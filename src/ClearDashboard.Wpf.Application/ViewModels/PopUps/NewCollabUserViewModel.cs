@@ -21,6 +21,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
@@ -283,6 +284,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private Visibility _closeVisibility = Visibility.Hidden;
+        public Visibility CloseVisibility
+        {
+            get => _closeVisibility;
+            set
+            {
+                _closeVisibility = value;
+                NotifyOfPropertyChange(() => CloseVisibility);
+            }
+        }
+
 
         #endregion //Observable Properties
 
@@ -338,7 +350,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             _licenseUser = LicenseManager.GetUserFromLicense();
             _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_licenseUser.Id);
-            _paratextProxy.GetParatextRegistrationData();
+            _registration = _paratextProxy.GetParatextRegistrationData();
             if (!string.IsNullOrWhiteSpace(_dashboardUser.Email))
             {
                 Email = _dashboardUser.Email ?? string.Empty;
@@ -555,6 +567,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             ShowGenerateUserButtonEnabled = false;
+
+            CloseVisibility = Visibility.Visible;
         }
 
         public async Task CreateDashboardUser()

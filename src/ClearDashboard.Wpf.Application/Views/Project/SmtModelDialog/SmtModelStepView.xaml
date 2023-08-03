@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.SmtModelDialog"
              xmlns:cm="http://caliburnmicro.com"
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
              xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
              xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"

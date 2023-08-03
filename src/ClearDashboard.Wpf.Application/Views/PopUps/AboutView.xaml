@@ -6,11 +6,11 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="AboutView"
     Width="500"
     Height="450"
-    helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>

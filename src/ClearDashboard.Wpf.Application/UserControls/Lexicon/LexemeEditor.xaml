@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;assembly=ClearDashboard.Wpf.Application.Abstractions"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     d:DesignHeight="450"
