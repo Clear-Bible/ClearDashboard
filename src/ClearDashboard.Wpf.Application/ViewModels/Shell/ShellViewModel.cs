@@ -360,7 +360,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private void StartTimer()
         {
-            _timer = new System.Timers.Timer(60000);
+            _timer = new System.Timers.Timer(15000);
             _timer.Elapsed += OnTimedEvent;
             _timer.Enabled = true;
             _timer.AutoReset = true;
