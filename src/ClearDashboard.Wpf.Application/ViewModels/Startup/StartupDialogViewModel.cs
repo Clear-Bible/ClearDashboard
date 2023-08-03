@@ -6,6 +6,7 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -62,13 +63,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _showBiblicalTexts, value);
         }
 
-        private Dictionary<string, List<UsfmError>> _usfmErrors;
-        public Dictionary<string, List<UsfmError>> UsfmErrors
+        private IEnumerable<string>? _selectedBookIds = null;
+        public IEnumerable<string>? SelectedBookIds
         {
-            get => _usfmErrors;
-            set => Set(ref _usfmErrors, value);
+            get => _selectedBookIds;
+            set => Set(ref _selectedBookIds, value);
         }
-
 
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)

@@ -167,7 +167,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
         }
     }
 
-    private static Action<ILogger>? GetErrorCleanupAction(ProjectDbContext? projectContext, ILogger logger)
+    public static Action<ILogger>? GetErrorCleanupAction(ProjectDbContext? projectContext, ILogger logger)
     {
         if (projectContext is not null)
         {

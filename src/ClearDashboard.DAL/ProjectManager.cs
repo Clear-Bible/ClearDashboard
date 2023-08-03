@@ -36,6 +36,8 @@ namespace ClearDashboard.DataAccessLayer
         public Project CurrentProject { get; set; }
         public ParatextProject CurrentParatextProject { get; set; }
         public bool HasCurrentProject => CurrentProject != null;
+        public bool CanRunDenormalization => (CurrentProject != null && !PauseDenormalization);
+        public bool PauseDenormalization { get; set; }
         public bool HasCurrentParatextProject => CurrentParatextProject != null;
 
         private string _currentVerse;

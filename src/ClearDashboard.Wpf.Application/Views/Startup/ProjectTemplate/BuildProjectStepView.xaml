@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate.ScopeSelectionStepView"
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate.BuildProjectStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:addParatextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog"
     xmlns:addParatextCorpusDialog1="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -31,31 +31,29 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <userControls:SelectBooksControl Grid.Row="0" />
-
         <StackPanel
             Grid.Row="1"
             Margin="10,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
-            <Button x:Name="MoveBackwards"
+            <Button x:Name="BackOrCancel"
                 Width="90"
                 Margin="0,0,15,15"
                 HorizontalAlignment="Right"
-                cm:Message.Attach="MoveBackwards()"
-                Content="{helpers:Localization Back}"
+                cm:Message.Attach="BackOrCancel()"
+                Content="{Binding BackOrCancelAction}"
                 FontSize="12"
+                IsEnabled="{Binding CanMoveBackwards}"
                 Style="{StaticResource TransparentStyle}" />
-            <Button x:Name="MoveForwards"
+            <Button x:Name="CreateOrClose"
                 Width="90"
                 Margin="0,0,15,15"
                 HorizontalAlignment="Right"
-                cm:Message.Attach="MoveForwards()"
-                Content="{helpers:Localization Next}"
+                cm:Message.Attach="CreateOrClose()"
+                Content="{Binding CreateOrCloseAction}"
                 FontSize="12"
-                IsEnabled="{Binding ContinueEnabled}"
-                Style="{StaticResource TransparentStyle}"
-                Visibility="{Binding OkVisibility}" />
+                IsEnabled="{Binding CanMoveForwards}"
+                Style="{StaticResource TransparentStyle}"/>
         </StackPanel>
         <ProgressBar
             Grid.Row="0"
