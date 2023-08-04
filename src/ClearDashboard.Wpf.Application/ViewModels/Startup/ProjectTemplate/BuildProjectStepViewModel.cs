@@ -60,8 +60,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         /// This is the design surface that is displayed in the window.
         /// It is the main part of the view-model.
         /// </summary>
-        private DesignSurfaceViewModel? _designSurfaceViewModel;
-        public DesignSurfaceViewModel? DesignSurfaceViewModel
+        private ReadonlyProjectDesignSurfaceViewModel? _designSurfaceViewModel;
+        public ReadonlyProjectDesignSurfaceViewModel? ProjectDesignSurfaceViewModel
         {
             get => _designSurfaceViewModel;
             private set => Set(ref _designSurfaceViewModel, value);
@@ -97,15 +97,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             CanMoveForwards = ParentViewModel!.SelectedParatextProject != null && (ParentViewModel!.SelectedBookIds?.Any() ?? false);
 
-            DesignSurfaceViewModel = LifetimeScope!.Resolve<DesignSurfaceViewModel>();
-            await ScreenExtensions.TryActivateAsync(DesignSurfaceViewModel, cancellationToken);
+
+          
+
+            ProjectDesignSurfaceViewModel = LifetimeScope!.Resolve<ReadonlyProjectDesignSurfaceViewModel>();
+
+            await ProjectDesignSurfaceViewModel.Initialize(cancellationToken);
+
+            ProjectDesignSurfaceViewModel.Parent = this;
+            ProjectDesignSurfaceViewModel.ConductWith(this);
+            var view = ViewLocator.LocateForModel(ProjectDesignSurfaceViewModel, null, null);
+            ViewModelBinder.Bind(ProjectDesignSurfaceViewModel, view, null);
+            await ScreenExtensions.TryActivateAsync(ProjectDesignSurfaceViewModel, cancellationToken);
             //await DesignSurfaceViewModel.ActivateAsync();
 
-            var corpus1 = new Corpus(new CorpusId(Guid.NewGuid()));
-            DesignSurfaceViewModel.CreateCorpusNode(corpus1, new Point(100, 100));
+            Execute.OnUIThread(() =>
+            {
+                var corpus1 = new Corpus(new CorpusId(Guid.NewGuid()));
+                ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus1, new Point(100, 100));
 
-            var corpus2 = new Corpus(new CorpusId(Guid.NewGuid()));
-            DesignSurfaceViewModel.CreateCorpusNode(corpus2, new Point(100, 500));
+                var corpus2 = new Corpus(new CorpusId(Guid.NewGuid()));
+                ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus2, new Point(100, 200));
+            });
+          
 
             await base.OnActivateAsync(cancellationToken);
         }
