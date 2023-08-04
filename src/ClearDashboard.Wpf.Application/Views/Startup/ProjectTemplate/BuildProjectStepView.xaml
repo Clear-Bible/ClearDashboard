@@ -8,8 +8,8 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:addParatextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog"
     xmlns:addParatextCorpusDialog1="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls" xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.Views.Project" xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
+             d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -31,6 +31,23 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <controls:ProjectDesignSurface Grid.Column="0" Width="400"
+                x:Name="ProjectDesignSurface"
+                cm:Action.TargetWithoutContext="{Binding ElementName=ProjectDesignSurface, Path=DataContext.DesignSurfaceViewModel}"
+                cm:Message.Attach="[Event NodeDragCompleted] = [Action OnCorpusNodeDragCompleted($this,$eventArgs)];                                                    [Event ConnectionDragCompleted] = [Action OnParallelCorpusConnectionDragCompleted($this, $eventArgs)];                                                    [Event ConnectionDragStarted] = [Action OnParallelCorpusConnectionDragStarted($this, $eventArgs)];                                                    [Event QueryConnectionFeedback] = [Action OnProjectDesignSurfaceQueryConnectionFeedback($this, $eventArgs)];"
+                ConnectionsSource="{Binding Path=DesignSurfaceViewModel.ParallelCorpusConnections}"
+                NodesSource="{Binding DesignSurfaceViewModel.CorpusNodes}" />
+            <!--ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
+                MouseDown="OnDesignSurfaceMouseDown"
+                MouseMove="OnDesignSurfaceMouseMove"
+                MouseUp="OnDesignSurfaceMouseUp"
+                MouseWheel="OnMouseWheel"-->
+        </Grid>
         <StackPanel
             Grid.Row="1"
             Margin="10,0"

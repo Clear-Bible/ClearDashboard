@@ -1,15 +1,17 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Features;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
+using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -54,6 +56,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _progressIndicatorVisibility, value);
         }
 
+        /// <summary>
+        /// This is the design surface that is displayed in the window.
+        /// It is the main part of the view-model.
+        /// </summary>
+        private DesignSurfaceViewModel? _designSurfaceViewModel;
+        public DesignSurfaceViewModel? DesignSurfaceViewModel
+        {
+            get => _designSurfaceViewModel;
+            private set => Set(ref _designSurfaceViewModel, value);
+        }
+
         public BuildProjectStepViewModel(DashboardProjectManager projectManager, ProjectTemplateProcessRunner processRunner,
             INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, ILocalizationService localizationService,
@@ -83,6 +96,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             EnableControls = true;
 
             CanMoveForwards = ParentViewModel!.SelectedParatextProject != null && (ParentViewModel!.SelectedBookIds?.Any() ?? false);
+
+            DesignSurfaceViewModel = LifetimeScope!.Resolve<DesignSurfaceViewModel>();
+            await ScreenExtensions.TryActivateAsync(DesignSurfaceViewModel, cancellationToken);
+            //await DesignSurfaceViewModel.ActivateAsync();
+
+            var corpus1 = new Corpus(new CorpusId(Guid.NewGuid()));
+            DesignSurfaceViewModel.CreateCorpusNode(corpus1, new Point(100, 100));
+
+            var corpus2 = new Corpus(new CorpusId(Guid.NewGuid()));
+            DesignSurfaceViewModel.CreateCorpusNode(corpus2, new Point(100, 500));
+
             await base.OnActivateAsync(cancellationToken);
         }
 
