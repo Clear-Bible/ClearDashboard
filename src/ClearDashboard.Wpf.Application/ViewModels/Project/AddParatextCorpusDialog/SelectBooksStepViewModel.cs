@@ -197,7 +197,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             {
                 var booksTokenized = tokenizedBookRequest.Data;
 
-                if (tokenizedBookRequest.Data.Count == 0)
+                if (tokenizedBookRequest.Data.Count == 0)  // TODO : this section is a hack to deal with the fact that some duplicate projects have upper case project ids - you can remove this once the duplicate program is fixed
                 {
                     // try again with upper case    
                     tokenizedBookRequest = await _projectManager?.ExecuteRequest(new GetBooksFromTokenizedCorpusQuery(ParentViewModel.SelectedProject.Id.ToUpper()), cancellationTokenProject);
