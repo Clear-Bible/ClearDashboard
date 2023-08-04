@@ -508,6 +508,7 @@
             Grid.ColumnSpan="3"
             VerticalAlignment="Center"
             CloseOnClickAway="False"
+            DialogOpened="DialogHost_OnDialogOpened"
             DialogTheme="Inherit"
             IsOpen="{Binding VerseRefDialogOpen}"
             OverlayBackground="{DynamicResource PrimaryHueMidBrush}">
@@ -677,6 +678,7 @@
                                                         FontStyle="Italic"
                                                         Foreground="Green"
                                                         Text="{Binding BackTranslation}"
+                                                        TextWrapping="Wrap"
                                                         Visibility="{Binding ShowBackTranslation, Converter={BoolToVisibilityConverter}}" />
                                                 </StackPanel>
 
