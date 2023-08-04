@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
-    <PackageReference Include="MySqlConnector" Version="2.2.6" />
+    <PackageReference Include="MySqlConnector" Version="2.2.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />

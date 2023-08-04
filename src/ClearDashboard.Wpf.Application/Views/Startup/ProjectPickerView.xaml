@@ -410,6 +410,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
                                     <!--<StackPanel
@@ -531,9 +532,28 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Button.Style>
-
-
                                     </Button>
+
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        Padding="2"
+                                        Background="{StaticResource GreenLightBrush}"
+                                        TextAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                        <Run Text="{helpers:Localization MainView_RemoteUpdateAvailable}" />
+                                    </TextBlock>
+
                                 </Grid>
 
                             </StackPanel>

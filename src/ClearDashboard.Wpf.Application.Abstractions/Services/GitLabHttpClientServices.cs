@@ -4,12 +4,15 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using Microsoft.Extensions.Logging;
+using SIL.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using StringContent = System.Net.Http.StringContent;
 
@@ -67,13 +70,44 @@ namespace ClearDashboard.Wpf.Application.Services
 
 
             var list = new List<GitLabProject>();
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/projects");
-            var response = await _gitLabClient.Client.SendAsync(request);
 
-            response.EnsureSuccessStatusCode();
-            var result = await response.Content.ReadAsStringAsync();
+            var pageNum = 0;
+            var totalPages = 1;
 
-            list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
+            try
+            {
+                do
+                {
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/projects");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
 
             return list;
         }
@@ -90,16 +124,43 @@ namespace ClearDashboard.Wpf.Application.Services
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             var list = new List<GitLabGroup>();
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/groups");
+
+
             try
             {
-                var response = await _gitLabClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
+                var pageNum = 0;
+                var totalPages = 1;
 
-                list = JsonSerializer.Deserialize<List<GitLabGroup>>(result)!;
+                do
+                {
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/groups");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitLabGroup>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
+
             }
             catch (Exception e)
             {
@@ -115,16 +176,46 @@ namespace ClearDashboard.Wpf.Application.Services
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
-
             var list = new List<GitUser>();
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/users");
+
             try
             {
-                var response = await _gitLabClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
+                var pageNum = 0;
+                var totalPages = 1;
 
-                list = JsonSerializer.Deserialize<List<GitUser>>(result)!;
+                do
+                {
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/users");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    //foreach (var header in response.Headers)
+                    //{
+                    //    Debug.WriteLine(header.Key, header.Value.First());
+                    //}
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitUser>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+
+                // remove all Admin users as they don't have an organization
                 list = list.Where(c => c.Organization != "").ToList();
 
                 // sort the list

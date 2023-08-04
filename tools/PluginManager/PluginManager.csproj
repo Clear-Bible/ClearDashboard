@@ -20,9 +20,9 @@
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
     <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-    <PackageReference Include="MaterialDesignColors" Version="2.1.2" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
   </ItemGroup>
 
 </Project>

@@ -19,11 +19,13 @@ using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ClearDashboard.Collaboration.Services;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
@@ -35,7 +37,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         IHandle<UiLanguageChangedMessage>,
         IHandle<PerformanceModeMessage>,
         IHandle<DashboardProjectNameMessage>,
-        IHandle<ProjectChangedMessage>
+        IHandle<ProjectChangedMessage>,
+        IHandle<RefreshCheckGitLab>
     {
 
         //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
@@ -50,6 +53,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region Properties
 
+        private System.Timers.Timer _timer;
+        private long _elapsedSeconds;
+
         public BackgroundTasksViewModel BackgroundTasksViewModel { get; }
 
         private readonly TranslationSource? _translationSource;
@@ -57,6 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private UpdateFormat? _updateData;
 
         private readonly ILocalizationService _localizationServices;
+        private readonly CollaborationManager _collaborationManager;
 
         private bool _verseChangeInProgress;
 
@@ -188,6 +195,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             set => Set(ref _message, value);
         }
 
+
+        //public bool GitLabUpdateNeeded
+        //{
+        //    get => ProjectManager != null && ProjectManager.CurrentDashboardProject != null && ProjectManager.CurrentDashboardProject.GitLabUpdateNeeded;
+        //}
+
+
+        private bool _gitLabUpdateNeeded;
+        public bool GitLabUpdateNeeded
+        {
+            get => _gitLabUpdateNeeded;
+            set => Set(ref _gitLabUpdateNeeded, value);
+        }
+
+
+
+
         #endregion
 
         #region Commands
@@ -270,12 +294,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
             ILogger<ShellViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
-            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, BackgroundTasksViewModel backgroundTasksViewModel, ILocalizationService localizationService)
+            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, BackgroundTasksViewModel backgroundTasksViewModel, 
+            ILocalizationService localizationService, CollaborationManager collaborationManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             BackgroundTasksViewModel = backgroundTasksViewModel;
             _translationSource = translationSource;
             _localizationServices = localizationService;
+            _collaborationManager = collaborationManager;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
@@ -319,7 +345,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             DeterminePopupHorizontalOffset((ShellView)view);
             SetLanguage();
+
             base.OnViewReady(view);
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            OnTimedEvent(null, null);
+
+            StartTimer();
+
+            base.OnViewLoaded(view);
+        }
+
+
+        private void StartTimer()
+        {
+            _timer = new System.Timers.Timer(15000);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.Enabled = true;
+            _timer.AutoReset = true;
+        }
+
+        private void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        {
+            if (ProjectManager!.CurrentProject is null)
+            {
+                return;
+            }
+
+            var changeNeeded =  _collaborationManager.AreUnmergedChanges();
+
+            ProjectManager.CurrentDashboardProject.GitLabUpdateNeeded = changeNeeded;
+            GitLabUpdateNeeded = changeNeeded;
         }
 
         private double _popupHorizontalOffset;
@@ -389,6 +447,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             await base.OnActivateAsync(cancellationToken);
         }
 
+        
         private void InitializeProjectManager()
         {
             // delay long enough for the application to be rendered before 
@@ -579,6 +638,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             DashboardProjectName = message.projectName;
             await Task.CompletedTask;
+        }
+
+        public Task HandleAsync(RefreshCheckGitLab message, CancellationToken cancellationToken)
+        {
+            OnTimedEvent(null, null);
+
+            return Task.CompletedTask;
         }
 
         #endregion
