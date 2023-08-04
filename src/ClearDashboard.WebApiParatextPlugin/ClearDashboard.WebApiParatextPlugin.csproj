@@ -4,9 +4,9 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <Version>1.1.0.0</Version>
-    <FileVersion>1.1.0.0</FileVersion>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <Version>1.1.0.1</Version>
+    <FileVersion>1.1.0.1</FileVersion>
+    <AssemblyVersion>1.1.0.1</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>9</LangVersion>
@@ -42,8 +42,8 @@
     <!--<PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.1" />
     <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.1" />-->
     <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.6.40" />
-	  <PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.23" />
-	  <PackageReference Include="ParatextPluginInterfaces" Version="2.0.23" />
+    <PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.23" />
+    <PackageReference Include="ParatextPluginInterfaces" Version="2.0.23" />
     <PackageReference Include="Serilog" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />

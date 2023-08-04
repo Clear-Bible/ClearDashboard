@@ -12,10 +12,10 @@
     <PackageIcon>ClearDashboard_logo_100.png</PackageIcon>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.1.0.0</Version>
+    <Version>1.1.0.1</Version>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <FileVersion>1.1.0.0</FileVersion>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.1</FileVersion>
+    <AssemblyVersion>1.1.0.1</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\ClearDashboard.Wpf.Application\Assets\ClearDashboard_logo_100.png">
@@ -67,59 +67,75 @@
   <ItemGroup>
     <EmbeddedResource Update="Strings\Resources.am.resx">
       <SubType>Designer</SubType>
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.ar.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.de.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.en.resx">
       <SubType>Designer</SubType>
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.es.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.fr.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.hi.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.id.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.km.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.pt-BR.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.pt.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.ro.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.ru.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.vi.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.zh-cn.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.zh-tw.resx">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
