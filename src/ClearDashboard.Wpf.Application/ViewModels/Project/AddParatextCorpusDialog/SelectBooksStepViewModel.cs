@@ -197,6 +197,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             {
                 var booksTokenized = tokenizedBookRequest.Data;
 
+                if (tokenizedBookRequest.Data.Count == 0)
+                {
+                    // try again with upper case    
+                    tokenizedBookRequest = await _projectManager?.ExecuteRequest(new GetBooksFromTokenizedCorpusQuery(ParentViewModel.SelectedProject.Id.ToUpper()), cancellationTokenProject);
+
+                    if (tokenizedBookRequest.Success && tokenizedBookRequest.HasData)
+                    {
+                        booksTokenized = tokenizedBookRequest.Data;
+                    }   
+                }
+
+
                 // iterate through and enable those books which have text
                 foreach (var book in booksTokenized)
                 {

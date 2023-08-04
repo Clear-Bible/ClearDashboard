@@ -172,13 +172,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 {
                     SelectedProject = result.Data!.FirstOrDefault(b =>
                     {
-                        return b.Id == _paratextProjectId!.Replace("-", "");
+                        return b.Id == _paratextProjectId!.ToLower().Replace("-", "");
                     });
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
-                    throw;
+                    _logger.LogError(e, "Error retrieving Paratext project metadata");
                 }
             }
             else
