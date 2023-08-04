@@ -29,8 +29,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private CancellationToken? _cancellationToken = null;
         private ProjectDbContextFactory _projectNameDbContextFactory;
 
-        private object lockObject = new();
-
         private string _createAction;
         private string _backAction;
         private string _cancelAction;

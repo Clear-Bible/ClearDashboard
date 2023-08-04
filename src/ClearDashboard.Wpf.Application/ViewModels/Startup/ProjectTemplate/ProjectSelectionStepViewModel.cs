@@ -6,19 +6,16 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Paratext.PluginInterfaces;
-using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
@@ -123,6 +120,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             }
         }
 
+        private bool _selectionChanging = false;
+
         private BindableCollection<ParatextProjectMetadata>? GetSelectableParatextProjects()
         {
             if (Projects != null)
@@ -173,10 +172,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public async void ParatextProjectSelected()
         {
+            if (_selectionChanging) return;
+
             if (Projects != null)
             {
-                ParatextBtProjects = GetSelectableParatextBtProjects();
-                ParatextLwcProjects = GetSelectableParatextLwcProjects();
+                try
+                {
+                    _selectionChanging = true;
+
+                    ParatextBtProjects = GetSelectableParatextBtProjects();
+                    ParatextLwcProjects = GetSelectableParatextLwcProjects();
+                }
+                finally
+                {
+                    _selectionChanging = false;
+                }
             }
 
             ValidationResult = Validator!.Validate(this);
@@ -199,21 +209,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public async void ParatextBtProjectSelected()
         {
+            if (_selectionChanging) return;
+
             if (Projects != null)
             {
-                ParatextProjects = GetSelectableParatextProjects();
-                ParatextLwcProjects = GetSelectableParatextLwcProjects();
-            }
+                try
+                {
+                    _selectionChanging = true;
 
-            await Task.CompletedTask;
+                    ParatextProjects = GetSelectableParatextProjects();
+                    ParatextLwcProjects = GetSelectableParatextLwcProjects();
+                }
+                    finally
+                    {
+                    _selectionChanging = false;
+                }
+        }
+
+        await Task.CompletedTask;
         }
 
         public async void ParatextLwcProjectSelected()
         {
+            if (_selectionChanging) return;
+
             if (Projects != null)
             {
-                ParatextProjects = GetSelectableParatextProjects();
-                ParatextBtProjects = GetSelectableParatextBtProjects();
+                try
+                {
+                    _selectionChanging = true;
+
+                    ParatextProjects = GetSelectableParatextProjects();
+                    ParatextBtProjects = GetSelectableParatextBtProjects();
+                }
+                finally
+                {
+                    _selectionChanging = false;
+                }
             }
 
             await Task.CompletedTask;

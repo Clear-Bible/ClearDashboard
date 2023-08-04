@@ -69,8 +69,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
 
-        private ObservableCollection<DashboardProject> _dashboardProjects = new();
-        public ObservableCollection<DashboardProject> DashboardProjects
+        private BindableCollection<DashboardProject> _dashboardProjects = new();
+        public BindableCollection<DashboardProject> DashboardProjects
         {
             get => _dashboardProjects;
             set
@@ -80,8 +80,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardCollabProject> _dashboardCollabProjects = new();
-        public ObservableCollection<DashboardCollabProject> DashboardCollabProjects
+        private BindableCollection<DashboardCollabProject> _dashboardCollabProjects = new();
+        public BindableCollection<DashboardCollabProject> DashboardCollabProjects
         {
             get => _dashboardCollabProjects;
             set
@@ -293,13 +293,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if (SearchText == string.Empty || SearchText is null)
                 {
-                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
                     SearchBlankVisibility = Visibility.Collapsed;
                     NoProjectVisibility = Visibility.Visible;
                 }
                 else
                 {
-                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
                     _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ', '_')));
                 }
 
@@ -322,8 +322,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay = new();
-        public ObservableCollection<DashboardProject>? DashboardProjectsDisplay
+        private BindableCollection<DashboardProject> _dashboardProjectsDisplay = new();
+        public BindableCollection<DashboardProject> DashboardProjectsDisplay
         {
             get => _dashboardProjectsDisplay;
             set
@@ -333,9 +333,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardCollabProject>? _dashboardCollabProjectsDisplay;
+        private BindableCollection<DashboardCollabProject> _dashboardCollabProjectsDisplay = new();
 
-        public ObservableCollection<DashboardCollabProject>? DashboardCollabProjectsDisplay
+        public BindableCollection<DashboardCollabProject> DashboardCollabProjectsDisplay
         {
             get => _dashboardCollabProjectsDisplay;
             set
@@ -731,7 +731,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             DashboardProjectsDisplay.Clear();
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
 
             NotifyOfPropertyChange(() => DashboardProjectsDisplay);
         }
@@ -838,7 +838,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CollabButtonsEnabled = true;
             }
 
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
 
             NotifyOfPropertyChange(nameof(DashboardProjectsDisplay));
         }
@@ -883,22 +883,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        public ObservableCollection<DashboardProject>? CopyDashboardProjectsToAnother(ObservableCollection<DashboardProject> original, ObservableCollection<DashboardProject>? copy)
+        public BindableCollection<DashboardProject> CopyDashboardProjectsToAnother(BindableCollection<DashboardProject> original)
         {
-            copy.Clear();
+            BindableCollection<DashboardProject> copy = new();
+
             foreach (var project in original)
             {
                 copy.Add(project);
             }
+
             return copy;
         }
-        public ObservableCollection<DashboardCollabProject>? CopyDashboardCollabProjectsToAnother(ObservableCollection<DashboardCollabProject> original, ObservableCollection<DashboardCollabProject>? copy)
+        public BindableCollection<DashboardCollabProject> CopyDashboardCollabProjectsToAnother(BindableCollection<DashboardCollabProject> original)
         {
-            copy.Clear();
+            BindableCollection<DashboardCollabProject> copy = new();
+
             foreach (var project in original)
             {
                 copy.Add(project);
             }
+
             return copy;
         }
         public void AlertClose()
