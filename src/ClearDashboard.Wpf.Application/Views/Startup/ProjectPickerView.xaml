@@ -538,6 +538,7 @@
                                         Grid.Row="4"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2"
+                                        Padding="2"
                                         Background="{StaticResource GreenLightBrush}"
                                         TextAlignment="Center">
                                         <TextBlock.Style>
