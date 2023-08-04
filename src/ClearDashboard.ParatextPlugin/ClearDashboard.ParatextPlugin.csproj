@@ -1,21 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-	<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-	<PlatformTarget>x64</PlatformTarget>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <PlatformTarget>x64</PlatformTarget>
+    <FileVersion>1.1.0.1</FileVersion>
+    <Version>1.1.0.1</Version>
+    <AssemblyVersion>1.1.0.1</AssemblyVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Plugin.bmp" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Plugin.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.1.46" />
@@ -27,11 +26,9 @@
     <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
     <PackageReference Include="System.Text.Json" Version="6.0.3" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.ParatextPlugin.Data\ClearDashboard.ParatextPlugin.Data.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="H.Formatters">
       <HintPath>..\Reference Assemblies\H.Pipes\H.Formatters.dll</HintPath>
@@ -43,7 +40,6 @@
       <HintPath>..\Reference Assemblies\H.Pipes\H.Pipes.dll</HintPath>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -56,14 +52,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -73,9 +67,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call $(ProjectDir)postbuild.bat" />
   </Target>
-
 </Project>
