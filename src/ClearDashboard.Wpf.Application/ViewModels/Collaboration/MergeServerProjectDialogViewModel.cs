@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
@@ -340,6 +341,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 progress.Report(new ProgressStatus(0, "Operation Finished!"));
                 PlaySound.PlaySoundFromResource();
+
+                
+                await EventAggregator.PublishOnUIThreadAsync(new RefreshCheckGitLab(), CancellationToken.None).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {

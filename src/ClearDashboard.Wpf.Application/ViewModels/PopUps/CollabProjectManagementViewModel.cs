@@ -65,7 +65,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 _selectedProject = value;
                 NotifyOfPropertyChange(() => SelectedProject);
 
-                if (_selectedProject.Name != "")
+                if (_selectedProject != null && _selectedProject.Name != "")
                 {
                     IsGitLabUserListEnabled = true;
                 }
@@ -239,15 +239,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var org = _gitLabUsers.Select(x => x.Organization).Distinct().ToList();
             Organization = new ObservableCollection<string>(org);
 
-
-            ShowProgressBar = Visibility.Hidden;
-
             AttemptToSelectCurrentProject();
 
-            if (SelectedProject.Name is null || SelectedProject.Name == "")
+            if (SelectedProject is null )
             {
                 IsGitLabUserListEnabled = false;
             }
+            else
+            {
+                if (SelectedProject.Name == string.Empty)
+                {
+                    IsGitLabUserListEnabled = false;
+                }
+            }
+
+
+            ShowProgressBar = Visibility.Hidden;
 
             base.OnViewLoaded(view);
         }
@@ -283,6 +290,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private async Task GetUsersForProject()
         {
+            if (SelectedProject is null)
+            {
+                return;
+            }
+
+
             ShowProgressBar = Visibility.Visible;
 
             var users = await _gitLabHttpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);

@@ -1,547 +1,548 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <Platforms>AnyCPU;x64</Platforms>
-    <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
-    <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.0.6.10</AssemblyVersion>
-    <FileVersion>1.0.6.10</FileVersion>
-    <Version>1.0.6.10</Version>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-	<UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
-	<Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<Platforms>AnyCPU;x64</Platforms>
+		<ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
+		<Copyright>Clear Bible, 2023</Copyright>
+		<AssemblyVersion>1.0.6.10</AssemblyVersion>
+		<FileVersion>1.0.6.10</FileVersion>
+		<Version>1.0.6.10</Version>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
+		<Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Interfaces\**" />
-    <Compile Remove="Models\EnhancedView\**" />
-    <Compile Remove="ViewModels\About\**" />
-    <Compile Remove="Views\DesignSurface\**" />
-    <EmbeddedResource Remove="Interfaces\**" />
-    <EmbeddedResource Remove="Models\EnhancedView\**" />
-    <EmbeddedResource Remove="ViewModels\About\**" />
-    <EmbeddedResource Remove="Views\DesignSurface\**" />
-    <None Remove="Interfaces\**" />
-    <None Remove="Models\EnhancedView\**" />
-    <None Remove="ViewModels\About\**" />
-    <None Remove="Views\DesignSurface\**" />
-    <Page Remove="Interfaces\**" />
-    <Page Remove="Models\EnhancedView\**" />
-    <Page Remove="ViewModels\About\**" />
-    <Page Remove="Views\DesignSurface\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Interfaces\**" />
+		<Compile Remove="Models\EnhancedView\**" />
+		<Compile Remove="ViewModels\About\**" />
+		<Compile Remove="Views\DesignSurface\**" />
+		<EmbeddedResource Remove="Interfaces\**" />
+		<EmbeddedResource Remove="Models\EnhancedView\**" />
+		<EmbeddedResource Remove="ViewModels\About\**" />
+		<EmbeddedResource Remove="Views\DesignSurface\**" />
+		<None Remove="Interfaces\**" />
+		<None Remove="Models\EnhancedView\**" />
+		<None Remove="ViewModels\About\**" />
+		<None Remove="Views\DesignSurface\**" />
+		<Page Remove="Interfaces\**" />
+		<Page Remove="Models\EnhancedView\**" />
+		<Page Remove="ViewModels\About\**" />
+		<Page Remove="Views\DesignSurface\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
-    <Compile Remove="ViewModels\ParatextViews\WordMeaningsViewModel.cs" />
-    <Compile Remove="Views\ParatextViews\WordMeaningsView.xaml.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
+		<Compile Remove="ViewModels\ParatextViews\WordMeaningsViewModel.cs" />
+		<Compile Remove="Views\ParatextViews\WordMeaningsView.xaml.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Assets\ClearCollabIcon.png" />
-    <None Remove="Assets\ClearDashboard_logo.ico" />
-    <None Remove="Assets\ClearDashboard_logo_100.png" />
-    <None Remove="Assets\ClearDashboard_logo_128.png" />
-    <None Remove="Assets\ClearDashboard_logo_200.png" />
-    <None Remove="Assets\ClearDashboard_logo_250.png" />
-    <None Remove="Assets\ClearDashboard_logo_50.png" />
-    <None Remove="Assets\newproject.png" />
-    <None Remove="Assets\splash_screen.png" />
-    <None Remove="Resources\add16.png" />
-    <None Remove="Resources\add24.png" />
-    <None Remove="Resources\add32.png" />
-    <None Remove="Resources\add512.png" />
-    <None Remove="Resources\BiblicalTerms_logo_32.png" />
-    <None Remove="Resources\block_16.png" />
-    <None Remove="Resources\CautionTape.bmp" />
-    <None Remove="Resources\ClearDashboard_logo_128.png" />
-    <None Remove="Resources\close16.png" />
-    <None Remove="Resources\close24.png" />
-    <None Remove="Resources\close32.png" />
-    <None Remove="Resources\close512.png" />
-    <None Remove="Resources\Crystal Click 2.wav" />
-    <None Remove="Resources\DashboardFailure.wav" />
-    <None Remove="Resources\donut_icon.ico" />
-    <None Remove="Resources\GalSILB.ttf" />
-    <None Remove="Resources\GalSILR.ttf" />
-    <None Remove="Resources\GentiumPlus-Bold.ttf" />
-    <None Remove="Resources\GentiumPlus-BoldItalic.ttf" />
-    <None Remove="Resources\GentiumPlus-Italic.ttf" />
-    <None Remove="Resources\GentiumPlus-Regular.ttf" />
-    <None Remove="Resources\KadmosU.ttf" />
-    <None Remove="Resources\logos_icon.png" />
-    <None Remove="Resources\NewProject_Icon_128.png" />
-    <None Remove="Resources\NewProject_Icon_96.png" />
-    <None Remove="Resources\OpenBook50.png" />
-    <None Remove="Resources\Paratext_Connected32.png" />
-    <None Remove="Resources\Paratext_Disconnected32.png" />
-    <None Remove="Resources\Paratext_Send32.png" />
-    <None Remove="Resources\Paratext_white_Icon48.png" />
-    <None Remove="Resources\plugin_disconnect.wav" />
-    <None Remove="Resources\SBL_grk.ttf" />
-    <None Remove="Resources\SBL_Hbrw.ttf" />
-    <None Remove="Resources\scissors.png" />
-    <None Remove="Resources\settings_logo_128.png" />
-    <None Remove="Resources\settings_logo_96.png" />
-    <None Remove="Resources\SILEOTSR.ttf" />
-    <None Remove="Resources\tick_16.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Assets\ClearCollabIcon.png" />
+		<None Remove="Assets\ClearDashboard_logo.ico" />
+		<None Remove="Assets\ClearDashboard_logo_100.png" />
+		<None Remove="Assets\ClearDashboard_logo_128.png" />
+		<None Remove="Assets\ClearDashboard_logo_200.png" />
+		<None Remove="Assets\ClearDashboard_logo_250.png" />
+		<None Remove="Assets\ClearDashboard_logo_50.png" />
+		<None Remove="Assets\newproject.png" />
+		<None Remove="Assets\splash_screen.png" />
+		<None Remove="Resources\add16.png" />
+		<None Remove="Resources\add24.png" />
+		<None Remove="Resources\add32.png" />
+		<None Remove="Resources\add512.png" />
+		<None Remove="Resources\BiblicalTerms_logo_32.png" />
+		<None Remove="Resources\block_16.png" />
+		<None Remove="Resources\CautionTape.bmp" />
+		<None Remove="Resources\ClearDashboard_logo_128.png" />
+		<None Remove="Resources\close16.png" />
+		<None Remove="Resources\close24.png" />
+		<None Remove="Resources\close32.png" />
+		<None Remove="Resources\close512.png" />
+		<None Remove="Resources\Crystal Click 2.wav" />
+		<None Remove="Resources\DashboardFailure.wav" />
+		<None Remove="Resources\donut_icon.ico" />
+		<None Remove="Resources\GalSILB.ttf" />
+		<None Remove="Resources\GalSILR.ttf" />
+		<None Remove="Resources\GentiumPlus-Bold.ttf" />
+		<None Remove="Resources\GentiumPlus-BoldItalic.ttf" />
+		<None Remove="Resources\GentiumPlus-Italic.ttf" />
+		<None Remove="Resources\GentiumPlus-Regular.ttf" />
+		<None Remove="Resources\KadmosU.ttf" />
+		<None Remove="Resources\logos_icon.png" />
+		<None Remove="Resources\NewProject_Icon_128.png" />
+		<None Remove="Resources\NewProject_Icon_96.png" />
+		<None Remove="Resources\OpenBook50.png" />
+		<None Remove="Resources\Paratext_Connected32.png" />
+		<None Remove="Resources\Paratext_Disconnected32.png" />
+		<None Remove="Resources\Paratext_Send32.png" />
+		<None Remove="Resources\Paratext_white_Icon48.png" />
+		<None Remove="Resources\plugin_disconnect.wav" />
+		<None Remove="Resources\SBL_grk.ttf" />
+		<None Remove="Resources\SBL_Hbrw.ttf" />
+		<None Remove="Resources\scissors.png" />
+		<None Remove="Resources\settings_logo_128.png" />
+		<None Remove="Resources\settings_logo_96.png" />
+		<None Remove="Resources\SILEOTSR.ttf" />
+		<None Remove="Resources\tick_16.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Remove="Views\ParatextViews\WordMeaningsView.xaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<Page Remove="Views\ParatextViews\WordMeaningsView.xaml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Assets\ClearCollabIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\ClearDashboard_Icon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\ClearDashboard_logo.ico" />
-    <Content Include="Assets\ClearDashboard_logo_100.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\ClearDashboard_logo_128.png">
-      <PackagePath>\</PackagePath>
-      <Pack>True</Pack>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\ClearDashboard_logo_200.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\ClearDashboard_logo_250.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\ClearDashboard_logo_50.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\newproject.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Assets\ClearCollabIcon.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\ClearDashboard_Icon.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\ClearDashboard_logo.ico" />
+		<Content Include="Assets\ClearDashboard_logo_100.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\ClearDashboard_logo_128.png">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\ClearDashboard_logo_200.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\ClearDashboard_logo_250.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\ClearDashboard_logo_50.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\newproject.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Crystal Click 2.wav" />
-    <EmbeddedResource Include="Resources\DashboardFailure.wav" />
-    <EmbeddedResource Include="Resources\plugin_disconnect.wav" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Crystal Click 2.wav" />
+		<EmbeddedResource Include="Resources\DashboardFailure.wav" />
+		<EmbeddedResource Include="Resources\plugin_disconnect.wav" />
+	</ItemGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
-	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="109.1.110" />
-	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.5" />
-    <PackageReference Include="Dahomey.Json" Version="1.12.2" />
-    <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.6" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.5" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.5" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.5" />
-    <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />
-    <PackageReference Include="FuzzyString" Version="1.0.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" Version="2.21.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
-	<PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="7.0.0" />
-    <PackageReference Include="TimeZoneNames" Version="6.0.0" /><PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
-	  <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Autofac.Configuration" Version="6.0.0" />
+		<PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
+		<PackageReference Include="ClearApplicationFoundation" Version="2.0.5" />
+		<PackageReference Include="Dahomey.Json" Version="1.12.2" />
+		<PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
+		<PackageReference Include="Dirkster.AvalonDock" Version="4.70.6" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.5" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.5" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.5" />
+		<PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />
+		<PackageReference Include="FuzzyString" Version="1.0.0" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.51" />
+		<PackageReference Include="MahApps.Metro" Version="2.4.10" />
+		<PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" Version="2.21.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+		<PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
+		<PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+		<PackageReference Include="System.Management" Version="7.0.2" />
+		<PackageReference Include="TimeZoneNames" Version="6.0.0" />
+		<PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
+		<PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
-    <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
-    <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
-    <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
+		<ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
+		<ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
+		<ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\add16.png" />
-    <Resource Include="Resources\add24.png" />
-    <Resource Include="Resources\add32.png" />
-    <Resource Include="Resources\add512.png" />
-    <Resource Include="Resources\BiblicalTerms_logo_32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\block_16.png" />
-    <Resource Include="Resources\CautionTape.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\ClearDashboard_logo_128.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\close16.png" />
-    <Resource Include="Resources\close24.png" />
-    <Resource Include="Resources\close32.png" />
-    <Resource Include="Resources\close512.png" />
-    <Resource Include="Resources\donut_icon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GalSILB.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GalSILR.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GentiumPlus-Bold.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GentiumPlus-BoldItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GentiumPlus-Italic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GentiumPlus-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\KadmosU.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\logos_icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\NewProject_Icon_128.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\NewProject_Icon_96.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\OpenBook50.png" />
-    <Resource Include="Resources\Paratext_Connected32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Paratext_Disconnected32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Paratext_Send32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Paratext_white_Icon48.png" />
-    <Resource Include="Resources\SBL_grk.ttf" />
-    <Resource Include="Resources\SBL_Hbrw.ttf" />
-    <Resource Include="Resources\scissors.png" />
-    <Resource Include="Resources\settings_logo_128.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\settings_logo_96.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\SILEOTSR.ttf" />
-    <Resource Include="Resources\tick_16.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\add16.png" />
+		<Resource Include="Resources\add24.png" />
+		<Resource Include="Resources\add32.png" />
+		<Resource Include="Resources\add512.png" />
+		<Resource Include="Resources\BiblicalTerms_logo_32.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\block_16.png" />
+		<Resource Include="Resources\CautionTape.bmp">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\ClearDashboard_logo_128.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\close16.png" />
+		<Resource Include="Resources\close24.png" />
+		<Resource Include="Resources\close32.png" />
+		<Resource Include="Resources\close512.png" />
+		<Resource Include="Resources\donut_icon.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GalSILB.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GalSILR.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GentiumPlus-Bold.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GentiumPlus-BoldItalic.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GentiumPlus-Italic.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\GentiumPlus-Regular.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\KadmosU.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\logos_icon.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\NewProject_Icon_128.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\NewProject_Icon_96.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\OpenBook50.png" />
+		<Resource Include="Resources\Paratext_Connected32.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Paratext_Disconnected32.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Paratext_Send32.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Paratext_white_Icon48.png" />
+		<Resource Include="Resources\SBL_grk.ttf" />
+		<Resource Include="Resources\SBL_Hbrw.ttf" />
+		<Resource Include="Resources\scissors.png" />
+		<Resource Include="Resources\settings_logo_128.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\settings_logo_96.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\SILEOTSR.ttf" />
+		<Resource Include="Resources\tick_16.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <SplashScreen Include="Assets\splash_screen.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<SplashScreen Include="Assets\splash_screen.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="UserControls\Lexicon\ConcordanceDisplay.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="UserControls\Lexicon\MeaningEditor.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="UserControls\NoteCollectionDisplay.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="UserControls\Lexicon\LexemeEditor.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="UserControls\NoteReplyDisplay.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="UserControls\NoteDisplay.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Properties\Settings.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<DependentUpon>Settings.settings</DependentUpon>
+			<AutoGen>True</AutoGen>
+		</Compile>
+		<Compile Update="UserControls\Lexicon\ConcordanceDisplay.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="UserControls\Lexicon\MeaningEditor.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="UserControls\NoteCollectionDisplay.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="UserControls\Lexicon\LexemeEditor.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="UserControls\NoteReplyDisplay.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="UserControls\NoteDisplay.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Data\usfm\Tes\41MATTes.SFM">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\usfm\Tes\42MRKTes.SFM">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\usfm\Tes\custom.vrs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\usfm\Tes\Settings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Properties\Settings.settings">
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-      <Generator>SettingsSingleFileGenerator</Generator>
-    </None>
-    <None Update="Resources\Layouts\Dashboard.Layout.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Paratext_Send32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\Dragablz.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\Dragablz.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\Dragablz.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\DynamicData.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\DynamicData.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\Log4Net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\log4net.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\log4net.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\MahApps.Metro.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\MahApps.Metro.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\MahApps.Metro.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\MaterialDesignColors.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\MaterialDesignThemes.Wpf.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\MaterialDesignThemes.Wpf.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\MaterialDesignThemes.Wpf.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\StructureMap.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\StructureMap.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.Core.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.Core.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.Interfaces.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.Interfaces.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.Linq.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.Linq.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.PlatformServices.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.PlatformServices.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.Windows.Threading.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Reactive.Windows.Threading.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\System.Windows.Interactivity.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\TailBlazer.Domain.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\TailBlazer.Domain.dll.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\TailBlazer.Domain.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\TailBlazer.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\TailBlazer.exe.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\TailBlazor\TailBlazer.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\usx.xslt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="Data\usfm\Tes\41MATTes.SFM">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\usfm\Tes\42MRKTes.SFM">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\usfm\Tes\custom.vrs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\usfm\Tes\Settings.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Properties\Settings.settings">
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+			<Generator>SettingsSingleFileGenerator</Generator>
+		</None>
+		<None Update="Resources\Layouts\Dashboard.Layout.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\Paratext_Send32.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\Dragablz.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\Dragablz.pdb">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\Dragablz.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\DynamicData.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\DynamicData.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\Log4Net.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\log4net.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\log4net.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\MahApps.Metro.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\MahApps.Metro.pdb">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\MahApps.Metro.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\MaterialDesignColors.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\MaterialDesignThemes.Wpf.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\MaterialDesignThemes.Wpf.pdb">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\MaterialDesignThemes.Wpf.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\StructureMap.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\StructureMap.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.Core.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.Core.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.Interfaces.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.Interfaces.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.Linq.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.Linq.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.PlatformServices.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.PlatformServices.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.Windows.Threading.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Reactive.Windows.Threading.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\System.Windows.Interactivity.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\TailBlazer.Domain.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\TailBlazer.Domain.dll.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\TailBlazer.Domain.pdb">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\TailBlazer.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\TailBlazer.exe.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TailBlazor\TailBlazer.pdb">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\usx.xslt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Assets\ClearLogo.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\BcvUserControl.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\ClockUserControl.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\Lexicon\ConcordanceDisplay.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\Lexicon\MeaningEditor.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\NoteAssociationsDisplay.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\NoteCollectionDisplay.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControls\Lexicon\LexemeEditor.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\NoteReplyDisplay.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\TimerUserControl.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\NoteDisplay.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControls\WorkflowFooter.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Views\MirrorView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Views\Startup\RegistrationDialogView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Startup\RegistrationView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Shell\ShellView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Views\Project\SmtModelDialog\SmtModelStepView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Update="Assets\ClearLogo.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\BcvUserControl.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\ClockUserControl.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\Lexicon\ConcordanceDisplay.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\Lexicon\MeaningEditor.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\NoteAssociationsDisplay.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\NoteCollectionDisplay.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="UserControls\Lexicon\LexemeEditor.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\NoteReplyDisplay.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\TimerUserControl.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="UserControls\NoteDisplay.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="UserControls\WorkflowFooter.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="Views\MirrorView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="Views\Startup\RegistrationDialogView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\Startup\RegistrationView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\Shell\ShellView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="Views\Project\SmtModelDialog\SmtModelStepView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Resources\TailBlazor\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Resources\TailBlazor\" />
+	</ItemGroup>
 
-  <PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
-    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x86</RuntimeIdentifier>
-    <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
+		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x86</RuntimeIdentifier>
+		<SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(PlatformTarget)' == 'x64'">
-    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
-    <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(PlatformTarget)' == 'x64'">
+		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+		<SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(PlatformTarget)' == 'arm64'">
-    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-arm64</RuntimeIdentifier>
-    <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(PlatformTarget)' == 'arm64'">
+		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-arm64</RuntimeIdentifier>
+		<SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|x64'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|x64'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|x64'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|x64'">
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />
-  </Target>
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />
+	</Target>
 
-  <ItemGroup>
-    <PackageReference Update="chromiumembeddedframework.runtime.win-arm64" Version="109.1.11" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Update="chromiumembeddedframework.runtime.win-arm64" Version="115.3.11" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="109.1.11" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="115.3.11" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="109.1.11" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="115.3.11" />
+	</ItemGroup>
 </Project>

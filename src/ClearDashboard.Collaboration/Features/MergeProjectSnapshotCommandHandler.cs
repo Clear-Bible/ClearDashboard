@@ -1,24 +1,15 @@
 ﻿using ClearDashboard.Collaboration.Builder;
-using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Merge;
-using ClearDashboard.Collaboration.Services;
-using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Events;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.Alignment.Features.Events;
+using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Features;
 public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler<
