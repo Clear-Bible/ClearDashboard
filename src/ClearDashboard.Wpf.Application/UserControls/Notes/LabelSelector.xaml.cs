@@ -77,23 +77,36 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             LabelTextBox.Text = string.Empty;
             LabelSuggestionListBox.SelectedIndex = -1;
             TextBoxVisibility = Visibility.Hidden;
+            AddButtonVisibility = Visibility.Visible;
             OnPropertyChanged(nameof(TextBoxVisibility));
+            OnPropertyChanged(nameof(AddButtonVisibility));
         }
 
         private void OnLabelTextBoxKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && !String.IsNullOrWhiteSpace(LabelTextBox.Text))
+            if (e.Key == Key.Enter)
             {
-                var matchingLabel = LabelSuggestions?.FirstOrDefault(ls => ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
-                if (matchingLabel != null)
+                if (!String.IsNullOrWhiteSpace(LabelTextBox.Text))
                 {
-                    RaiseLabelEvent(LabelSelectedEvent, matchingLabel);
+                    var matchingLabel = LabelSuggestions?.FirstOrDefault(ls => ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                    if (matchingLabel != null)
+                    {
+                        RaiseLabelEvent(LabelSelectedEvent, matchingLabel);
+                    }
+                    else
+                    {
+                        RaiseLabelEvent(LabelAddedEvent, new NotesLabel { Text = LabelTextBox.Text });
+                    }
                 }
-                else
-                {
-                    RaiseLabelEvent(LabelAddedEvent, new NotesLabel {Text = LabelTextBox.Text});
-                }
+
                 CloseTextBox();
+                CloseSuggestionPopup();
+            }
+
+            if (e.Key == Key.Escape)
+            {
+                CloseTextBox();
+                CloseSuggestionPopup();
             }
         }
 
@@ -106,7 +119,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void AddLabelButtonClicked(object sender, RoutedEventArgs e)
         {
             TextBoxVisibility = Visibility.Visible;
+            AddButtonVisibility = Visibility.Hidden;
             OnPropertyChanged(nameof(TextBoxVisibility));
+            OnPropertyChanged(nameof(AddButtonVisibility));
 
             System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
         }
@@ -130,6 +145,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(LabelSuggestionsProperty, value);
         }
 
+        public Visibility AddButtonVisibility { get; set; } = Visibility.Visible;
         public Visibility TextBoxVisibility { get; set; } = Visibility.Hidden;
 
         #endregion
