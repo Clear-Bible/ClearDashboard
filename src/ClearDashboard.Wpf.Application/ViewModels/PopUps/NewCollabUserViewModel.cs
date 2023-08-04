@@ -7,7 +7,6 @@ using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
@@ -17,13 +16,11 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System.Xml.Serialization;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -498,7 +495,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                ErrorMessage = _localizationService["NewCollabUserView_EmailValidationCode"]; //"User is already on the system!";
+                ErrorMessage = _localizationService["NewCollabUserView_UserAlreadyExists"]; //"User is already on the system!";
             }
 
 
