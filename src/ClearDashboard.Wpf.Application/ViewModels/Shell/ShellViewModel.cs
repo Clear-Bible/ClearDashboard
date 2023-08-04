@@ -369,7 +369,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private void OnTimedEvent(object? sender, ElapsedEventArgs e)
         {
-            if (ProjectManager!.CurrentDashboardProject is null)
+            if (ProjectManager!.CurrentProject is null)
             {
                 return;
             }
