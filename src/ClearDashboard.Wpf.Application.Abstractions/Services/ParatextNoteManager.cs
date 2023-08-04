@@ -72,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     else
                     {
                         logger?.LogCritical($"Error checking can add note for project {result.Value.paratextId} and user {paratextUserName}: {r.Message}");
-                        throw new MediatorErrorEngineException(r.Message);
+                        //throw new MediatorErrorEngineException(r.Message);
                     }
                 }
 
