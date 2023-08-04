@@ -294,7 +294,7 @@ public class CollaborationManager
         try
         {
             var remoteHeadCommitSha = FindRemoteHeadCommitSha();
-            return project.LastMergedCommitSha != remoteHeadCommitSha;
+            return project.LastMergedCommitSha != null && project.LastMergedCommitSha != remoteHeadCommitSha;
         }
         catch (Exception ex)
         {
