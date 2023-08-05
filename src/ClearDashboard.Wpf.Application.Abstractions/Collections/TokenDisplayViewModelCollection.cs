@@ -49,9 +49,24 @@ namespace ClearDashboard.Wpf.Application.Collections
 
         public TokenCollection TokenCollection => new(Items.Select(t => t.Token));
 
+        public void AddDistinct(TokenDisplayViewModel tokenDisplay)
+        {
+            if (!Contains(tokenDisplay.Token.TokenId))
+            {
+                Add(tokenDisplay);
+            }
+            RecalculateEntityIds();
+        }
+
+        public void AddRangeDistinct(IEnumerable<TokenDisplayViewModel> tokenDisplays)
+        {
+            AddRange(tokenDisplays.Where(t => !Contains(t.Token.TokenId)));
+            RecalculateEntityIds();
+        }
+
         public bool Contains(TokenId tokenId)
         {
-            return Items.Any(i => i.Token.TokenId.IdEquals(tokenId.Id));
+            return Items.Any(i => i.Token.TokenId.IdEquals(tokenId));
         }
 
         public bool Contains(Token token)
@@ -83,12 +98,28 @@ namespace ClearDashboard.Wpf.Application.Collections
             }
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(CombinedNotes)));
 
-            CombinedSurfaceText = string.Join(", ", Items.Select(t => t.SurfaceText));
+
+            CombinedSurfaceText = string.Join(", ", Items.Distinct().Select(t => t.SurfaceText));
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(CombinedSurfaceText)));
 
-            EntityIds = new EntityIdCollection(Items.Select(t => t.Token.TokenId));
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(EntityIds)));
+            RecalculateEntityIds();
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(NoteIds)));
+        }
+
+        private void RecalculateEntityIds()
+        {
+            var previousEntityIds = EntityIds.Select(t => t.Id);
+
+            EntityIds = new EntityIdCollection(Items.Where(t => t.IsTokenSelected).Select(t => t.Token.TokenId).Distinct());
+            EntityIds.AddRange(Items
+                .Where(t => t.IsTranslationSelected && t.Translation != null && t.Translation.TranslationId != null)
+                .Select(t => t.Translation!.TranslationId!)
+                .Distinct());
+
+            if (!previousEntityIds.All(o => EntityIds.Any(w => w.Id == o)))
+            {
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(EntityIds)));
+            }
         }
 
         private IEnumerable<TokenDisplayViewModel> SelectedTokens => Items.Where(i => i.IsTokenSelected);

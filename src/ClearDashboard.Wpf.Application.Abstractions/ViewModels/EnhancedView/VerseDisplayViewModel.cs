@@ -266,7 +266,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            NonMatchingTokenAction(message.SelectedTokens.TokenIds, t => t.IsTokenSelected = false);
+            NonMatchingTokenAction(message.SelectedTokens.TokenIds, t =>
+            {
+                t.IsTokenSelected = false;
+                t.IsTranslationSelected = false;
+            });
             await Task.CompletedTask;
         }
 

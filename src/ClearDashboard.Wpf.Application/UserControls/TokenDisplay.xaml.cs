@@ -13,6 +13,7 @@ using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using System.Linq;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -506,6 +507,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteIndicatorMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TranslationSetEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationSetEvent = EventManager.RegisterRoutedEvent
+            ("TranslationSet", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the NoteCreateEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteCreateEvent = EventManager.RegisterRoutedEvent
@@ -810,6 +817,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the user requests to create or modify a translation.
+        /// </summary>
+        public event RoutedEventHandler TranslationSet
+        {
+            add => AddHandler(TranslationSetEvent, value);
+            remove => RemoveHandler(TranslationSetEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when the user requests to create a new note.
         /// </summary>
         public event RoutedEventHandler NoteCreate
@@ -909,12 +925,72 @@ namespace ClearDashboard.Wpf.Application.UserControls
             var tokenDisplay = (TokenDisplayViewModel)DataContext;
             if (AllSelectedTokens != null)
             {
-                JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
-                JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
-                UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
-                FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
-                CreateAlignmentMenuItem.Visibility = tokenDisplay.VerseDisplay is AlignmentDisplayViewModel && AllSelectedTokens.CanCreateAlignment ? Visibility.Visible : Visibility.Collapsed;
-                DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned && AllSelectedTokens.SelectedTokenCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+                var selectedTokenCount = AllSelectedTokens.Count(t => t.IsTokenSelected);
+                var selectedAssignedTranslationCount = AllSelectedTokens
+                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId != null);
+                var selectedUnassignedTranslationCount = AllSelectedTokens
+                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId == null);
+
+                if (selectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || selectedAssignedTranslationCount > 0))
+                {
+                    CreateNoteMenuItem.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    CreateNoteMenuItem.Visibility = Visibility.Collapsed;
+                }
+
+                if (selectedTokenCount > 0 && selectedAssignedTranslationCount == 0 && selectedUnassignedTranslationCount == 0)
+                {
+                    CopyMenuItem.Visibility = Visibility.Visible;
+                    JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
+                    JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
+                    UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
+                    FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
+                    CreateAlignmentMenuItem.Visibility = tokenDisplay.VerseDisplay is AlignmentDisplayViewModel && AllSelectedTokens.CanCreateAlignment ? Visibility.Visible : Visibility.Collapsed;
+                    DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned && AllSelectedTokens.SelectedTokenCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+                }
+                else
+                {
+                    CopyMenuItem.Visibility = Visibility.Collapsed;
+                    JoinTokensMenuItem.Visibility = Visibility.Collapsed;
+                    JoinTokensLanguagePairMenuItem.Visibility = Visibility.Collapsed;
+                    UnjoinTokenMenuItem.Visibility = Visibility.Collapsed;
+                    FilterPinsMenuItem.Visibility = Visibility.Collapsed;
+                    CreateAlignmentMenuItem.Visibility = Visibility.Collapsed;
+                    DeleteAlignmentMenuItem.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private void OnTranslationContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var tokenDisplay = (TokenDisplayViewModel)DataContext;
+            if (AllSelectedTokens != null)
+            {
+                var selectedTokenCount = AllSelectedTokens.Count(t => t.IsTokenSelected);
+                var selectedAssignedTranslationCount = AllSelectedTokens
+                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId != null);
+                var selectedUnassignedTranslationCount = AllSelectedTokens
+                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId == null);
+
+                if (selectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || selectedAssignedTranslationCount > 0))
+                {
+                    CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
+                }
+
+                if (selectedTokenCount == 0 && selectedAssignedTranslationCount + selectedUnassignedTranslationCount == 1)
+                {
+                    SetTranslationMenuItem.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SetTranslationMenuItem.Visibility = Visibility.Collapsed;
+                }
             }
         }
 
@@ -1011,12 +1087,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var control = e.Source as FrameworkElement;
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            RaiseEvent(new TranslationEventArgs
+
+            if (tokenDisplay is not null && tokenDisplay.Translation is not null)
             {
-                RoutedEvent = routedEvent,
-                TokenDisplay = tokenDisplay!,
-                Translation = tokenDisplay?.Translation
-            });
+                RaiseEvent(new TranslationEventArgs
+                {
+                    RoutedEvent = routedEvent,
+                    TokenDisplay = tokenDisplay!,
+                    Translation = tokenDisplay!.Translation,
+                    ModifierKeys = Keyboard.Modifiers
+                });
+            }
         }
 
         private void OnTranslationClicked(object sender, RoutedEventArgs e)
@@ -1064,6 +1145,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTranslationEvent(TranslationMouseWheelEvent, e);
         }
 
+        private void OnTranslationSet(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationSetEvent, e);
+        }
+
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
@@ -1108,6 +1194,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(NoteIndicatorMouseWheelEvent, e);
+        }
+
+        private void OnSetTranslation(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationSetEvent, e);
         }
 
         private void OnCreateNote(object sender, RoutedEventArgs e)

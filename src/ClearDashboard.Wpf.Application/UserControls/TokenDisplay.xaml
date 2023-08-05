@@ -59,36 +59,50 @@
             ToolTipOpening="OnToolTipOpening">
             <Button.ContextMenu>
                 <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
-                    <MenuItem Click="OnCreateNote" Header="{helpers:Localization EnhancedView_CreateNote}" />
+                    <MenuItem 
+                        x:Name="CreateNoteMenuItem" 
+                        Click="OnCreateNote" 
+                        Header="{helpers:Localization EnhancedView_CreateNote}" 
+                        Visibility="Collapsed" />
                     <MenuItem
                         x:Name="CreateAlignmentMenuItem"
                         Click="OnTokenCreateAlignment"
-                        Header="{helpers:Localization EnhancedView_CreateAlignment}" />
+                        Header="{helpers:Localization EnhancedView_CreateAlignment}"
+                        Visibility="Collapsed"/>
                     <MenuItem
                         x:Name="DeleteAlignmentMenuItem"
                         Click="OnTokenDeleteAlignment"
-                        Header="{helpers:Localization EnhancedView_DeleteAlignmentMenu}" />
+                        Header="{helpers:Localization EnhancedView_DeleteAlignmentMenu}"
+                        Visibility="Collapsed"/>
                     <MenuItem
                         x:Name="JoinTokensMenuItem"
                         Click="OnTokenJoin"
-                        Header="{helpers:Localization EnhancedView_JoinTokens}" />
+                        Header="{helpers:Localization EnhancedView_JoinTokens}"
+                        Visibility="Collapsed"/>
                     <MenuItem
                         x:Name="JoinTokensLanguagePairMenuItem"
                         Click="OnTokenJoinLanguagePair"
-                        Header="{helpers:Localization EnhancedView_JoinTokensForLanguagePair}" />
+                        Header="{helpers:Localization EnhancedView_JoinTokensForLanguagePair}"
+                        Visibility="Collapsed"/>
                     <MenuItem
                         x:Name="UnjoinTokenMenuItem"
                         Click="OnTokenUnjoin"
                         Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
-                    <MenuItem Click="OnCopy" Header="{helpers:Localization Copy}" />
+                    <MenuItem 
+                        x:Name="CopyMenuItem" 
+                        Click="OnCopy" 
+                        Header="{helpers:Localization Copy}" 
+                        Visibility="Collapsed" />
                     <MenuItem
                         x:Name="FilterPinsMenuItem"
                         Click="OnFilterPins"
-                        Header="{helpers:Localization EnhancedView_FilterPins}" />
+                        Header="{helpers:Localization EnhancedView_FilterPins}"
+                        Visibility="Collapsed"/>
                     <MenuItem 
                         x:Name="FilterPinsByBiblicalTermsMenuItem"
                         Click="OnFilterPinsByBiblicalTerms" 
-                        Header="{helpers:Localization EnhancedView_FilterPinsByKeyTerms}" />
+                        Header="{helpers:Localization EnhancedView_FilterPinsByKeyTerms}"
+                        Visibility="Collapsed"/>
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock
@@ -132,6 +146,7 @@
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationBackground}"
             BorderThickness="0"
             Click="OnTranslationClicked"
+            ContextMenuOpening="OnTranslationContextMenuOpening"
             FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
             FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
@@ -148,6 +163,20 @@
             MouseWheel="OnTranslationMouseWheel"
             PreviewMouseLeftButtonDown="OnTranslationLeftButtonDown"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVisibility}">
+            <Button.ContextMenu>
+                <ContextMenu x:Name="TranslationDisplayContextMenu" FlowDirection="LeftToRight">
+                    <MenuItem 
+                        x:Name="SetTranslationMenuItem" 
+                        Click="OnSetTranslation" 
+                        Header="Set Translation" 
+                        Visibility="Collapsed" />
+                    <MenuItem 
+                        x:Name="CreateTranslationNoteMenuItem" 
+                        Click="OnCreateNote" 
+                        Header="{helpers:Localization EnhancedView_CreateNote}" 
+                        Visibility="Collapsed" />
+                </ContextMenu>
+            </Button.ContextMenu>
             <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />
         </Button>
     </StackPanel>
