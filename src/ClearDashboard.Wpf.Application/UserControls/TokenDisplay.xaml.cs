@@ -109,10 +109,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
-        /// Identifies the NoteIndicatorVisibility dependency property.
+        /// Identifies the TokenNoteIndicatorVisibility dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register(
-            nameof(NoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
+        public static readonly DependencyProperty TokenNoteIndicatorVisibilityProperty = DependencyProperty.Register(
+            nameof(TokenNoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
+            new PropertyMetadata(Visibility.Visible));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationNoteIndicatorVisibilityProperty = DependencyProperty.Register(
+            nameof(TranslationNoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
             new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
@@ -1408,13 +1415,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Visibility"/> of the note indicator.
+        /// Gets or sets the <see cref="Visibility"/> of the note indicator on a token.
         /// </summary>
         /// <remarks>This should not be set explicitly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
-        public Visibility NoteIndicatorVisibility
+        public Visibility TokenNoteIndicatorVisibility
         {
-            get => (Visibility)GetValue(NoteIndicatorVisibilityProperty);
-            private set => SetValue(NoteIndicatorVisibilityProperty, value);
+            get => (Visibility)GetValue(TokenNoteIndicatorVisibilityProperty);
+            private set => SetValue(TokenNoteIndicatorVisibilityProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Visibility"/> of the note indicator on a translation/gloss.
+        /// </summary>
+        /// <remarks>This should not be set explicitly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
+        public Visibility TranslationNoteIndicatorVisibility
+        {
+            get => (Visibility)GetValue(TranslationNoteIndicatorVisibilityProperty);
+            private set => SetValue(TranslationNoteIndicatorVisibilityProperty, value);
         }
 
         /// <summary>
@@ -1741,7 +1758,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
 
             NoteIndicatorMargin = new Thickness(tokenLeftMargin, 1, 0, TokenVerticalSpacing);
-            NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
+            TokenNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote) ? Visibility.Visible : Visibility.Hidden;
+            TranslationNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote) ? Visibility.Visible : Visibility.Hidden;
             NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
 
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);

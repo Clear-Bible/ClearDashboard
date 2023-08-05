@@ -24,7 +24,11 @@ namespace ClearDashboard.Wpf.Application.Collections
             get
             {
                 var result = new NoteIdCollection();
-                foreach (var ids in Items.Select(i => i.NoteIds))
+                foreach (var ids in Items.Select(i => i.TokenNoteIds))
+                {
+                    result.AddDistinct(ids);
+                }
+                foreach (var ids in Items.Select(i => i.TranslationNoteIds))
                 {
                     result.AddDistinct(ids);
                 }
@@ -88,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.Collections
             CombinedNotes = new NoteViewModelCollection();
             foreach (var token in Items)
             {
-                foreach (var note in token.Notes)
+                foreach (var note in token.TokenNotes)
                 {
                     if (!CombinedNotes.Contains(note))
                     {

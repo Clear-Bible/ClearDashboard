@@ -233,7 +233,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
             //UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
             //await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
-            NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
+            NotePaneVisibility = SelectedTokens.Any(t => t.TokenHasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
         }
 

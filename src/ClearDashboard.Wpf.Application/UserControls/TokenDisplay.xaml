@@ -135,8 +135,9 @@
             MouseRightButtonDown="OnNoteRightButtonDown"
             MouseRightButtonUp="OnNoteRightButtonUp"
             MouseWheel="OnNoteMouseWheel"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorVisibility}" />
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
         <Button
+            x:Name="TranslationButton"
             Height="Auto"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
             Padding="0"
@@ -179,5 +180,19 @@
             </Button.ContextMenu>
             <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />
         </Button>
+        <Rectangle
+            Width="{Binding Path=ActualWidth, ElementName=TranslationButton}"
+            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
+            MouseEnter="OnNoteMouseEnter"
+            MouseLeave="OnNoteMouseLeave"
+            MouseLeftButtonDown="OnNoteLeftButtonDown"
+            MouseLeftButtonUp="OnNoteLeftButtonUp"
+            MouseRightButtonDown="OnNoteRightButtonDown"
+            MouseRightButtonUp="OnNoteRightButtonUp"
+            MouseWheel="OnNoteMouseWheel"
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorVisibility}" />
     </StackPanel>
 </UserControl>
