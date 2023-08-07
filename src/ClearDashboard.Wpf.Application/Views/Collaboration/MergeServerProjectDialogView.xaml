@@ -117,21 +117,6 @@
         </ListView>
 
 
-        <StackPanel
-            Grid.Row="3"
-            Grid.Column="0"
-            Margin="20"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-
-            <Button
-                x:Name="Cancel"
-                Margin="5,5,5,5"
-                cal:Message.Attach="Cancel"
-                Content="{Binding CancelAction}"
-                IsEnabled="{Binding CanCancelAction}"
-                Style="{StaticResource TransparentStyle}" />
-        </StackPanel>
         <ProgressBar
             Grid.Row="2"
             Width="76"
@@ -143,6 +128,35 @@
             Style="{StaticResource MaterialDesignCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
+
+        <Grid
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Margin="0,0,10,0"
+                HorizontalAlignment="Left"
+                FontSize ="20"
+                VerticalAlignment="Center"
+                Foreground="{Binding StatusMessageColor}"
+                Text="{Binding StatusMessage}" />
+
+            <Button
+                x:Name="Cancel"
+                Grid.Column="2"
+                Margin="5,5,5,5"
+                cal:Message.Attach="Cancel"
+                Content="{Binding CancelAction}"
+                IsEnabled="{Binding CanCancelAction}"
+                Style="{StaticResource TransparentStyle}" />
+        </Grid>
+
 
     </Grid>
 
