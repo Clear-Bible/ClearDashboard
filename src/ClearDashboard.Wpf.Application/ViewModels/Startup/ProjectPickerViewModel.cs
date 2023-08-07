@@ -20,7 +20,6 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using System;
