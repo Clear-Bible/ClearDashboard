@@ -2285,20 +2285,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 foreach (var pane in dockableWindows)
                 {
-                    var content = pane.Content as EnhancedViewModel;
-                    // ReSharper disable once PossibleNullReferenceException
-                    if (content.PaneId == windowGuid)
+                    if (pane.Content is not null)
                     {
-                        var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
-
-                        var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
-                            SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
-
-                        if (result == true)
+                        var content = pane.Content as EnhancedViewModel;
+                        // ReSharper disable once PossibleNullReferenceException
+                        if (content.PaneId == windowGuid)
                         {
-                            pane.Close();
+                            var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
+
+                            var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
+                                SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
+
+                            if (result == true)
+                            {
+                                pane.Close();
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }

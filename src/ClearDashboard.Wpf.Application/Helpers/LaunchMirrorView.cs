@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -37,8 +41,40 @@ namespace ClearDashboard.Wpf.Application.Helpers
             // create instance of MirrorView
             var mirror = new MirrorView
             {
-                WindowState = WindowState.Maximized
+                //WindowState = WindowState.Maximized
             };
+
+
+            // get the number and sizes of the monitors on the system
+            var monitors = Monitor.AllMonitors.ToList();
+
+            if (monitors.Count > 2)
+            {
+                // throw on third monitor
+                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
+                mirror.Left = monitors[2].Bounds.Left;
+                mirror.Top = monitors[2].Bounds.Top;
+            }
+            else
+            {
+                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
+
+                // get this applications position on the screen
+                var thisApp = App.Current.MainWindow;
+
+                if (thisApp.Left < monitors[0].Bounds.Right)
+                {
+                    // throw on second monitor
+                    mirror.Left = monitors[1].Bounds.Left;
+                    mirror.Top = monitors[1].Bounds.Top;
+                }
+                else
+                {
+                    // throw on first monitor
+                    mirror.Left = monitors[0].Bounds.Left;
+                    mirror.Top = monitors[0].Bounds.Top;
+                }    
+            }
 
             var mirroredView = new TView();
 
@@ -64,6 +100,9 @@ namespace ClearDashboard.Wpf.Application.Helpers
             }
             // force the MirrorView to show
             mirror.Show();
+            mirror.WindowState = WindowState.Maximized;
+
+
             // now that it is shown, we can get it's actual size
             var newWidth = mainGrid.ActualWidth;
             var newHeight = mainGrid.ActualHeight;
