@@ -342,6 +342,62 @@
 
 
             </TabItem>
+
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconMaterial
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="MonitorMultiple" />
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Text="{helpers:Localization Settings_MultiMonitorSupport}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <GroupBox Margin="16" Header="{helpers:Localization Settings_MultiMonitorSupport}">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+
+
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="{helpers:Localization Settings_ShowMirrorViewOnDifferentMonitor}"
+                            IsChecked="{Binding DifferentMonitor}" />
+
+                        <CheckBox
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="{helpers:Localization Settings_ShowMirrorViewOnThirdMonitor}"
+                            IsChecked="{Binding ThirdMonitor}" />
+
+                        <Button
+                            x:Name="SaveMultiMonitorSettings"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="{helpers:Localization Settings_SaveSettings}" />
+
+                    </Grid>
+                </GroupBox>
+
+            </TabItem>
+
         </TabControl>
 
         <Button
