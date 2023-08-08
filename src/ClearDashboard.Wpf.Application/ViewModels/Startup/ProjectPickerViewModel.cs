@@ -18,9 +18,9 @@ using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using System;
@@ -1064,9 +1064,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
 
             // confirm the user wants to delete the project
-            var result = MessageBox.Show(_localizationService["Delete_Project_Confirmation"], _localizationService["Delete_Project"],
-                MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.No)
+            var deletingProjectPopupViewModel = LifetimeScope!.Resolve<DeletingProjectPopupViewModel>();
+
+            bool result = false;
+            OnUIThread(async () =>
+            {
+                result = await _windowManager!.ShowDialogAsync(
+                    deletingProjectPopupViewModel,
+                    null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(deletingProjectPopupViewModel.Title));
+            });
+
+            if (!result)
             {
                 return;
             }
