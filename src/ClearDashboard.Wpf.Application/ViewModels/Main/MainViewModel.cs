@@ -180,7 +180,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             var viewModel = IoC.Get<CollabProjectManagementViewModel>();
 
-
             IWindowManager manager = new WindowManager();
             await manager.ShowDialogAsync(viewModel, null, settings);
         }
@@ -1964,8 +1963,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 case MenuIds.Settings:
                     {
+                        dynamic settings = new ExpandoObject();
+                        settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                        settings.ResizeMode = ResizeMode.NoResize;
+                        settings.MinWidth = 500;
+                        settings.MinHeight = 500;
+
+                        // get this applications position on the screen
+                        var thisApp = App.Current.MainWindow;
+                        settings.Left = thisApp.Left + 150;
+                        settings.Top = thisApp.Top + 100;
+
                         var viewmodel = IoC.Get<DashboardSettingsViewModel>();
-                        await this.WindowManager.ShowWindowAsync(viewmodel, null, null);
+                        await this.WindowManager.ShowWindowAsync(viewmodel, null, settings);
                         break;
                     }
 
@@ -2285,20 +2295,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 foreach (var pane in dockableWindows)
                 {
-                    var content = pane.Content as EnhancedViewModel;
-                    // ReSharper disable once PossibleNullReferenceException
-                    if (content.PaneId == windowGuid)
+                    if (pane.Content is not null)
                     {
-                        var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
-
-                        var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
-                            SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
-
-                        if (result == true)
+                        var content = pane.Content as EnhancedViewModel;
+                        // ReSharper disable once PossibleNullReferenceException
+                        if (content.PaneId == windowGuid)
                         {
-                            pane.Close();
+                            var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
+
+                            var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
+                                SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
+
+                            if (result == true)
+                            {
+                                pane.Close();
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
