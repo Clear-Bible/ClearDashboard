@@ -18,9 +18,9 @@ using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using System;
@@ -1061,6 +1061,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
+
+
+            // confirm the user wants to delete the project
+            var deletingProjectPopupViewModel = LifetimeScope!.Resolve<DeletingProjectPopupViewModel>();
+
+            bool result = false;
+            OnUIThread(async () =>
+            {
+                result = await _windowManager!.ShowDialogAsync(
+                    deletingProjectPopupViewModel,
+                    null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(deletingProjectPopupViewModel.Title));
+            });
+
+            if (!result)
+            {
+                return;
+            }
+
+
             var fileInfo = new FileInfo(project.FullFilePath ?? throw new InvalidOperationException("Project full file path is null."));
 
             try
