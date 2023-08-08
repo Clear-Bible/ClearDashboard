@@ -67,17 +67,31 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
                 if (differentMonitor)
                 {
-                    if (thisApp.Left < monitors[0].Bounds.Right)
+                    Monitor leftMonitor = monitors.FirstOrDefault();
+                    Monitor rightMonitor = monitors.LastOrDefault();
+                    foreach (var monitor in monitors)
+                    {
+                        if (monitor.Bounds.TopLeft == new Point(0,0))
+                        {
+                            leftMonitor = monitor;
+                        }
+                        else
+                        {
+                            rightMonitor = monitor;
+                        }
+                    }
+
+                    if ((thisApp.RestoreBounds.Left + thisApp.RestoreBounds.Right)/2 < leftMonitor.Bounds.Right)
                     {
                         // throw on second monitor
-                        mirror.Left = monitors[1].Bounds.Left;
-                        mirror.Top = monitors[1].Bounds.Top;
+                        mirror.Left = rightMonitor.Bounds.Left;
+                        mirror.Top = rightMonitor.Bounds.Top;
                     }
                     else
                     {
                         // throw on first monitor
-                        mirror.Left = monitors[0].Bounds.Left;
-                        mirror.Top = monitors[0].Bounds.Top;
+                        mirror.Left = leftMonitor.Bounds.Left;
+                        mirror.Top = leftMonitor.Bounds.Top;
                     }
                 }
                 else
