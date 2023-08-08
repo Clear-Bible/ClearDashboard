@@ -45,10 +45,13 @@ namespace ClearDashboard.Wpf.Application.Helpers
             };
 
 
+            // load in the monitor settings
+            var differentMonitor = Settings.Default.DifferentMonitor;
+            var thirdMonitor = Settings.Default.ThirdMonitor;
             // get the number and sizes of the monitors on the system
             var monitors = Monitor.AllMonitors.ToList();
 
-            if (monitors.Count > 2)
+            if (monitors.Count > 2 && thirdMonitor)
             {
                 // throw on third monitor
                 mirror.WindowStartupLocation = WindowStartupLocation.Manual;
@@ -62,18 +65,26 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 // get this applications position on the screen
                 var thisApp = App.Current.MainWindow;
 
-                if (thisApp.Left < monitors[0].Bounds.Right)
+                if (differentMonitor)
                 {
-                    // throw on second monitor
-                    mirror.Left = monitors[1].Bounds.Left;
-                    mirror.Top = monitors[1].Bounds.Top;
+                    if (thisApp.Left < monitors[0].Bounds.Right)
+                    {
+                        // throw on second monitor
+                        mirror.Left = monitors[1].Bounds.Left;
+                        mirror.Top = monitors[1].Bounds.Top;
+                    }
+                    else
+                    {
+                        // throw on first monitor
+                        mirror.Left = monitors[0].Bounds.Left;
+                        mirror.Top = monitors[0].Bounds.Top;
+                    }
                 }
                 else
                 {
-                    // throw on first monitor
-                    mirror.Left = monitors[0].Bounds.Left;
-                    mirror.Top = monitors[0].Bounds.Top;
-                }    
+                    mirror.Left = thisApp.Left;
+                    mirror.Top = thisApp.Top;
+                }
             }
 
             var mirroredView = new TView();
