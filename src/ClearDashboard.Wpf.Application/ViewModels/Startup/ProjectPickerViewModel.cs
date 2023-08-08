@@ -1061,6 +1061,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
+
+
+            // confirm the user wants to delete the project
+            var result = MessageBox.Show(_localizationService["Delete_Project_Confirmation"], _localizationService["Delete_Project"],
+                MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.No)
+            {
+                return;
+            }
+
+
             var fileInfo = new FileInfo(project.FullFilePath ?? throw new InvalidOperationException("Project full file path is null."));
 
             try
