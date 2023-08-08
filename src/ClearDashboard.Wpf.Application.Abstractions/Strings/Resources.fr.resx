@@ -58,395 +58,1403 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Name" xml:space="preserve">
-    <value>Nom</value>
+  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
+    <value>Recherche récente</value>
   </data>
-  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>outils; accouchement</value>
+  <data name="Settings_Plugins" xml:space="preserve">
+    <value>Plugins</value>
   </data>
-  <data name="Copy" xml:space="preserve">
-    <value>Copie</value>
+  <data name="FontSettings_TargetFontSize" xml:space="preserve">
+    <value>Taille de la police cible:</value>
   </data>
-  <data name="Pins_Code" xml:space="preserve">
-    <value>Code</value>
+  <data name="ProjectPicker_Project" xml:space="preserve">
+    <value>Projet:</value>
   </data>
-  <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Remarques</value>
+  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
+    <value>lieu</value>
   </data>
-  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Sélectionner le projet</value>
+  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
+    <value>Les associations</value>
   </data>
-  <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>Chant des chansons</value>
-  </data>
-  <data name="Settings_ReservedCaption" xml:space="preserve">
-    <value>Réservé à l'expansion future</value>
-  </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
-  </data>
-  <data name="ProperCase_Daniel" xml:space="preserve">
-    <value>Daniel</value>
-  </data>
-  <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentation</value>
-  </data>
-  <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Macula grec</value>
-  </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>LIVRE</value>
-  </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Ajoutez un domaine sémantique à ce sens</value>
-  </data>
-  <data name="Windows_PINS" xml:space="preserve">
-    <value>Broches</value>
-  </data>
-  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>signes et merveilles</value>
-  </data>
-  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer l'alignement</value>
-  </data>
-  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>TOUT DÉSELECTIONNER</value>
-  </data>
-  <data name="SlackMessageView_Send" xml:space="preserve">
-    <value>Envoyer</value>
-  </data>
-  <data name="Windows_TextCollection" xml:space="preserve">
-    <value>Collection de texte</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
-    <value>des arbres; parfums et épices</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Le jeton '{0}' a plusieurs alignements définis. Cliquez sur '{1}' supprimera tous les alignements.</value>
-  </data>
-  <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Par étiquettes</value>
-  </data>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
-  </data>
-  <data name="ProperCase_Amos" xml:space="preserve">
-    <value>Amos</value>
-  </data>
-  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
-    <value>Utilisateurs de collaboration disponibles:</value>
-  </data>
-  <data name="ProperCase_Haggai" xml:space="preserve">
-    <value>Haggai</value>
-  </data>
-  <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>Dézoomer</value>
-  </data>
-  <data name="Settings_SaveSettings" xml:space="preserve">
-    <value>Enregistrer les paramètres</value>
-  </data>
-  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
-    <value>Vue améliorée</value>
-  </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>Approuver sélectionné</value>
-  </data>
-  <data name="Pins_Filter" xml:space="preserve">
-    <value>Filtre:</value>
-  </data>
-  <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Supprimer ce domaine sémantique de ce sens</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>Retirez cette forme lexicale de ce lemme</value>
-  </data>
-  <data name="ProperCase_1_Peter" xml:space="preserve">
-    <value>1 Pierre</value>
-  </data>
-  <data name="ExpandView" xml:space="preserve">
-    <value>Développer la vue</value>
-  </data>
-  <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timothée</value>
-  </data>
-  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>Créer un nouveau projet</value>
-  </data>
-  <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>Veuillez entrer votre nom de famille</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Sélectionnez des livres à traiter</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>La tâche a été annulée</value>
-  </data>
-  <data name="FontSettings_Horizontal" xml:space="preserve">
-    <value>Espacement horizontal:</value>
-  </data>
-  <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Afficher les pré-sorties</value>
-  </data>
-  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
-    <value>Erreur de création de l'utilisateur sur le serveur</value>
-  </data>
-  <data name="Pds_Target" xml:space="preserve">
-    <value>Cible</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Interlinéaire</value>
-  </data>
-  <data name="ProperCase_Matthew" xml:space="preserve">
-    <value>Matthieu</value>
-  </data>
-  <data name="1SA" xml:space="preserve">
-    <value>1SA</value>
-  </data>
-  <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Philémon</value>
-  </data>
-  <data name="ClockUserControl_LocalTime" xml:space="preserve">
-    <value>Heure locale</value>
-  </data>
-  <data name="MainView_ShowLog" xml:space="preserve">
-    <value>Afficher le journal</value>
-  </data>
-  <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Supprimer cette note?</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Bienvenue à Cleardashboard! Veuillez saisir vos informations d'inscription.</value>
-  </data>
-  <data name="NewCollabUserView_Email" xml:space="preserve">
-    <value>E-mail:</value>
-  </data>
-  <data name="Created" xml:space="preserve">
-    <value>Créé</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
-    <value>Compter par texte de formation</value>
-  </data>
-  <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Étiquettes</value>
-  </data>
-  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>Fermer l'application</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
-    <value>Membre du projet</value>
-  </data>
-  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
-    <value>Code de validation par e-mail de ClearDashboard</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>Votre clé de licence est manquante ou cassée.</value>
-  </data>
-  <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>Termes bibliques</value>
-  </data>
-  <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>les proverbes</value>
-  </data>
-  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>deuil</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="WordMeaningsView_Domain" xml:space="preserve">
-    <value>Domaine:</value>
-  </data>
-  <data name="TargetContextView_ZoomIn" xml:space="preserve">
-    <value>Agrandir</value>
-  </data>
-  <data name="EnhancedView_AddAlignment" xml:space="preserve">
-    <value>Ajouter l'alignement?</value>
-  </data>
-  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
-    <value>Valide</value>
-  </data>
-  <data name="Notes_NoteReplies_Read" xml:space="preserve">
-    <value>Vu</value>
-  </data>
-  <data name="Pds_Standard" xml:space="preserve">
-    <value>Standard</value>
-  </data>
-  <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Timothée</value>
-  </data>
-  <data name="ProjectPicker_GetStarted" xml:space="preserve">
-    <value>Commencer</value>
-  </data>
-  <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Modifié</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Créer</value>
-  </data>
-  <data name="ProperCase_Job" xml:space="preserve">
-    <value>Emploi</value>
+  <data name="Notes_TokenizedCorpus" xml:space="preserve">
+    <value>Corpus tokenisé</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>herbes</value>
   </data>
-  <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>Notes de version</value>
+  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
+    <value>Ajouter une vue d'approbation en vrac à une vue améliorée focalisée</value>
   </data>
-  <data name="BiblicalTermsForm_Note" xml:space="preserve">
-    <value>Note</value>
+  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Code de validation par e-mail de ClearDashboard</value>
   </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>Psaumes</value>
+  <data name="ProperCase_Nehemiah" xml:space="preserve">
+    <value>Néhémie</value>
   </data>
-  <data name="Notes_NoteText" xml:space="preserve">
-    <value>Texte</value>
+  <data name="Marble_RelatedLemmas" xml:space="preserve">
+    <value>Lemmes connexes</value>
   </data>
-  <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Codes forts</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>êtres et pouvoirs surnaturels</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>Taper</value>
-  </data>
-  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Nombre d'erreurs:</value>
-  </data>
-  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>Métadonnées JSON</value>
-  </data>
-  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>conteneurs; élevage</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Supprimer</value>
-  </data>
-  <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>Nombres</value>
-  </data>
-  <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>Adresse e-mail</value>
+  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
+    <value>groupe; zone</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
     <value>Copier dans le presse-papier</value>
   </data>
-  <data name="Marble_Verse" xml:space="preserve">
-    <value>Verset</value>
+  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
+    <value>Désapprouvé</value>
   </data>
-  <data name="Marble_Senses" xml:space="preserve">
-    <value>Sens</value>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>Adresse e-mail</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="Marble_GeneralInformation" xml:space="preserve">
+    <value>Informations générales</value>
+  </data>
+  <data name="Pds_ManuscriptGreek" xml:space="preserve">
+    <value>Macula grec</value>
+  </data>
+  <data name="OldTestament" xml:space="preserve">
+    <value>L'Ancien Testament</value>
+  </data>
+  <data name="MergeDialog_OperationComplete" xml:space="preserve">
+    <value>Opération complète!</value>
+  </data>
+  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
+    <value>Supprimer ce groupe d'étiquettes</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Besoin d'examen</value>
   </data>
-  <data name="Bcv_NextChapter" xml:space="preserve">
-    <value>Chapitre suivant</value>
+  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
+    <value>Créer un nouvel alignement Word</value>
   </data>
-  <data name="Landing_NewProject" xml:space="preserve">
-    <value>Nouveau projet</value>
+  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
+    <value>Gérer les projets de collaboration</value>
   </data>
-  <data name="ProperCase_Philippians" xml:space="preserve">
-    <value>Philippiens</value>
+  <data name="NewTestament" xml:space="preserve">
+    <value>Nouveau Testament</value>
   </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
   </data>
-  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
-  </data>
-  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
+  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
     <value>Créer un utilisateur de collaboration</value>
   </data>
-  <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Révélation</value>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
   </data>
-  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
-    <value>des fruits</value>
+  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
+    <value>paganisme</value>
   </data>
-  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
-    <value>Organisation sélectionnée</value>
+  <data name="Lexicon_Concordance" xml:space="preserve">
+    <value>Concordance</value>
   </data>
-  <data name="Pins_Match" xml:space="preserve">
-    <value>Correspondre</value>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>Erreur d'envoi par e-mail</value>
   </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
+  <data name="MainView_WindowsTextCollections" xml:space="preserve">
+    <value>Collections de texte</value>
   </data>
-  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>Nouveau individu</value>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>Psaumes</value>
   </data>
-  <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>Colossiens</value>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
   </data>
-  <data name="ProperCase_2_Samuel" xml:space="preserve">
-    <value>2 Samuel</value>
+  <data name="Landing_Projects" xml:space="preserve">
+    <value>Projets</value>
   </data>
-  <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Entrez votre prénom s'il vous plait</value>
+  <data name="ClockUserControl_Select" xml:space="preserve">
+    <value>Sélectionnez le fuseau horaire</value>
   </data>
-  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Désapprouver sélectionné</value>
+  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
+    <value>PARATEXT n'est pas installé. Veuillez installer PARATEXT et relancer l'application ClearDashboard.</value>
   </data>
-  <data name="Status" xml:space="preserve">
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
+    <value>activités religieuses</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
+    <value>Marquez l'alignement comme «non valide»</value>
+  </data>
+  <data name="Lexicon_AddForm" xml:space="preserve">
+    <value>Ajouter une forme lexicale à ce lemme</value>
+  </data>
+  <data name="ProperCase_1_Timothy" xml:space="preserve">
+    <value>1 Timothée</value>
+  </data>
+  <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Statut</value>
   </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
+  <data name="Notes_LabelGroupInitialize" xml:space="preserve">
+    <value>Initialiser le groupe d'étiquettes</value>
   </data>
-  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>sacrifices et offrandes</value>
+  <data name="Yes" xml:space="preserve">
+    <value>Oui</value>
   </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1CO</value>
+  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
+    <value>Entrez une nouvelle traduction</value>
   </data>
-  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
-    <value>artisanat; chiffon</value>
+  <data name="ProjectPicker_Database" xml:space="preserve">
+    <value>Base de données:</value>
+  </data>
+  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
+    <value>Compter par texte de formation</value>
+  </data>
+  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
+    <value>Outil d'alignement</value>
+  </data>
+  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
+    <value>animaux</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Mise à jour</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>Nombre de tokennisations différentes</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
+    <value>Ajoutez un sens pour ce lemme</value>
+  </data>
+  <data name="WordMeaningsView_Domain" xml:space="preserve">
+    <value>Domaine:</value>
+  </data>
+  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
+    <value>Fermer l'application</value>
+  </data>
+  <data name="FontSettings_Height" xml:space="preserve">
+    <value>Hauteur:</value>
+  </data>
+  <data name="MainView_Windows" xml:space="preserve">
+    <value>les fenêtres</value>
+  </data>
+  <data name="BiblicalTermsForm_Category" xml:space="preserve">
+    <value>Catégorie</value>
+  </data>
+  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
+    <value>Ajouter à une nouvelle vue améliorée</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
+    <value>mammifères; animaux sauvages</value>
+  </data>
+  <data name="BiblicalTermsDomains_All" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>Propriétaire du projet</value>
+  </data>
+  <data name="ClockUserControl_LocalTime" xml:space="preserve">
+    <value>Heure locale</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="Lexicon_Lemma" xml:space="preserve">
+    <value>Lemme</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>constructions; élevage</value>
+  </data>
+  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="ProperCase_Exodus" xml:space="preserve">
+    <value>Exode</value>
+  </data>
+  <data name="Notes_NoteReplies" xml:space="preserve">
+    <value>réponses</value>
+  </data>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
+    <value>Supprimer le projet</value>
+  </data>
+  <data name="ProperCase_Job" xml:space="preserve">
+    <value>Emploi</value>
+  </data>
+  <data name="Bcv_Offset" xml:space="preserve">
+    <value>COMPENSER</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titre:</value>
   </data>
+  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
+    <value>des arbres; des fruits</value>
+  </data>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>Enregistrer les paramètres</value>
+  </data>
+  <data name="Bcv_Verse" xml:space="preserve">
+    <value>VERSET</value>
+  </data>
+  <data name="TargetContextView_Unformatted" xml:space="preserve">
+    <value>Non formaté</value>
+  </data>
+  <data name="ProperCase_Ephesians" xml:space="preserve">
+    <value>Éphésiens</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
+    <value>Jetons de corpus</value>
+  </data>
+  <data name="Windows_EnhancedView" xml:space="preserve">
+    <value>Vue améliorée</value>
+  </data>
+  <data name="ProperCase_Mark" xml:space="preserve">
+    <value>Marquer</value>
+  </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>Utilisateurs de collaboration disponibles:</value>
+  </data>
+  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
+    <value>TOUT DÉSELECTIONNER</value>
+  </data>
+  <data name="Marble_DefinitionShort" xml:space="preserve">
+    <value>Définition courte:</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Dos</value>
+  </data>
+  <data name="Marble_DefinitionLong" xml:space="preserve">
+    <value>Définition longue:</value>
+  </data>
+  <data name="MergeDialog_OperationCancelled" xml:space="preserve">
+    <value>Opération annulée</value>
+  </data>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
+  </data>
+  <data name="ProperCase_Micah" xml:space="preserve">
+    <value>Mica</value>
+  </data>
+  <data name="Pds_Daughter" xml:space="preserve">
+    <value>Fille</value>
+  </data>
+  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
+    <value>Supprimer ce sens</value>
+  </data>
+  <data name="Pins_LoadReferences" xml:space="preserve">
+    <value>Références de chargement</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Fermer</value>
+  </data>
+  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
+    <value>Appliquer la traduction</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
+    <value>outils; lester; Commerce</value>
+  </data>
+  <data name="SlackMessageView_Title" xml:space="preserve">
+    <value>Envoyer un message Slack</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
+    <value>Nombre d'erreurs:</value>
+  </data>
+  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
+    <value>Supprimer ce lexème</value>
+  </data>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>LIVRE</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="FontSettings_Horizontal" xml:space="preserve">
+    <value>Espacement horizontal:</value>
+  </data>
+  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
+    <value>Mode d'alimentation activé</value>
+  </data>
+  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
+    <value>Macula Hebrew</value>
+  </data>
+  <data name="ProjectSetup_Title" xml:space="preserve">
+    <value>Créez votre nouveau projet</value>
+  </data>
+  <data name="EnhancedView_NoVerseData" xml:space="preserve">
+    <value>Pas de données de vers dans cette plage de vers.</value>
+  </data>
+  <data name="ProperCase_Luke" xml:space="preserve">
+    <value>Luck</value>
+  </data>
+  <data name="Marble_SubDomains" xml:space="preserve">
+    <value>Sous-domaines:</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Code de validation par e-mail de ClearDashboard</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Modifier</value>
   </data>
-  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Train Modèle symétrisé?</value>
+  <data name="ProperCase_Philemon" xml:space="preserve">
+    <value>Philémon</value>
   </data>
-  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Créer une parallélisation des versets de corpus</value>
+  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
+    <value>deuil</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
+    <value>Sélectionnez des livres à traiter</value>
+  </data>
+  <data name="ProperCase_Genesis" xml:space="preserve">
+    <value>Genèse</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
+    <value>Retirer le corpus</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>Valider le code e-mail</value>
+  </data>
+  <data name="Windows_Dashboard" xml:space="preserve">
+    <value>TABLEAU DE BORD</value>
+  </data>
+  <data name="Pds_ResetVerseVersification" xml:space="preserve">
+    <value>Réinitialiser les mappages des vers à la versification par défaut</value>
+  </data>
+  <data name="Marble_FrequencyGraph" xml:space="preserve">
+    <value>Graphique de fréquence</value>
+  </data>
+  <data name="Notes_NoteReplies_Read" xml:space="preserve">
+    <value>Vu</value>
+  </data>
+  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
+    <value>Lemme pour le nouveau lexème:</value>
+  </data>
+  <data name="Marble_SearchEnglish" xml:space="preserve">
+    <value>Recherche par un gloss anglais</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
+    <value>Algorithme d'alignement de mot machine</value>
+  </data>
+  <data name="SlackMessageView_NoInternet" xml:space="preserve">
+    <value>Pas d'Internet</value>
+  </data>
+  <data name="Pds_SourceLanguage" xml:space="preserve">
+    <value>Langue originelle</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>N'importe quel</value>
   </data>
-  <data name="ProperCase_Ruth" xml:space="preserve">
-    <value>Ruth</value>
+  <data name="ProjectPicker_GetStarted" xml:space="preserve">
+    <value>Commencer</value>
   </data>
-  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
+    <value>association</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
+    <value>Créer Interlinear</value>
+  </data>
+  <data name="MergeDialog_OperationErrored" xml:space="preserve">
+    <value>Erreur rencontrée</value>
+  </data>
+  <data name="Marble_Scope" xml:space="preserve">
+    <value>Portée:</value>
+  </data>
+  <data name="ProperCase_2_Samuel" xml:space="preserve">
+    <value>2 Samuel</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>La tâche a été annulée</value>
+  </data>
+  <data name="ProperCase_Judges" xml:space="preserve">
+    <value>Juges</value>
+  </data>
+  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
+    <value>Organisation sélectionnée</value>
+  </data>
+  <data name="ProperCase_Haggai" xml:space="preserve">
+    <value>Haggai</value>
+  </data>
+  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
+    <value>Valide</value>
+  </data>
+  <data name="Pds_MarbleResource" xml:space="preserve">
+    <value>Marbrersource</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
+    <value>mammifères; animaux domestiques</value>
+  </data>
+  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
+    <value>Métadonnées JSON</value>
+  </data>
+  <data name="Windows_CorpusTokens" xml:space="preserve">
+    <value>Jetons de corpus</value>
+  </data>
+  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
+    <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
+  </data>
+  <data name="SlackMessageView_Send" xml:space="preserve">
+    <value>Envoyer</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>Valider le code e-mail</value>
+  </data>
+  <data name="MainView_Layouts" xml:space="preserve">
+    <value>Disposition</value>
+  </data>
+  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
+    <value>zone</value>
+  </data>
+  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
+    <value>Par associations</value>
+  </data>
+  <data name="Marble_SearchHebrew" xml:space="preserve">
+    <value>Recherche par hébreu / grec</value>
+  </data>
+  <data name="ProperCase_Lamentations" xml:space="preserve">
+    <value>Lamentation</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="EnhancedView_JoinTokens" xml:space="preserve">
+    <value>Rejoignez des jetons</value>
+  </data>
+  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
+    <value>Code de vérification par e-mail:</value>
+  </data>
+  <data name="NewCollabUserView_LastName" xml:space="preserve">
+    <value>Nom de famille</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
+    <value>personnes; autorité</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>Groupe</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="RegistrationView_LicenseKey" xml:space="preserve">
+    <value>S'il vous plaît entrer votre clé de licence</value>
+  </data>
+  <data name="ShellView_Loading" xml:space="preserve">
+    <value>Chargement...</value>
+  </data>
+  <data name="ProjectPicker_Version" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Marble_All" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="ProperCase_Hebrews" xml:space="preserve">
+    <value>Hébreux</value>
+  </data>
+  <data name="MainView_LayoutsSave" xml:space="preserve">
+    <value>Enregistrer la disposition actuelle</value>
+  </data>
+  <data name="NewCollabUserView_Email" xml:space="preserve">
+    <value>E-mail:</value>
+  </data>
+  <data name="ProperCase_Song of Songs" xml:space="preserve">
+    <value>Chant des chansons</value>
+  </data>
+  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
+    <value>Filtre les broches par des termes clés</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
+    <value>Marquez l'alignement comme «Revue des besoins»</value>
+  </data>
+  <data name="Bcv_Sync" xml:space="preserve">
+    <value>Synchronisation</value>
+  </data>
+  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
+    <value>affection</value>
+  </data>
+  <data name="MainView_WindowsMarble" xml:space="preserve">
+    <value>MARBRE</value>
+  </data>
+  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
+    <value>pierres précieuses</value>
+  </data>
+  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
+    <value>Surface de conception du projet</value>
+  </data>
+  <data name="Settings_ReservedCaption" xml:space="preserve">
+    <value>Réservé à l'expansion future</value>
+  </data>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>INCORTÉE SUR LE SYSTÈME!</value>
+  </data>
+  <data name="BulkAlignmentReview_Target" xml:space="preserve">
+    <value>Cible</value>
+  </data>
+  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
+    <value>Aucune tâche de fond en marche</value>
+  </data>
+  <data name="Marble_VerseSense" xml:space="preserve">
+    <value>Sens du verset</value>
+  </data>
+  <data name="ProperCase_Esther" xml:space="preserve">
+    <value>Esther</value>
+  </data>
+  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
+    <value>Supprimer cette traduction</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
+    <value>but</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
+    <value>règlement</value>
+  </data>
+  <data name="Pins_Notes" xml:space="preserve">
+    <value>Remarques</value>
+  </data>
+  <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
+    <value>Ajouter un groupe d'étiquettes</value>
+  </data>
+  <data name="Settings_PowerModes" xml:space="preserve">
+    <value>Modes d'alimentation</value>
+  </data>
+  <data name="Bcv_NextChapter" xml:space="preserve">
+    <value>Chapitre suivant</value>
+  </data>
+  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
+    <value>Train Modèle symétrisé?</value>
+  </data>
+  <data name="Bcv_Chapter" xml:space="preserve">
+    <value>CHAPITRE</value>
+  </data>
+  <data name="RegistrationView_FirstName" xml:space="preserve">
+    <value>Entrez votre prénom s'il vous plait</value>
+  </data>
+  <data name="ProjectPicker_Paratext" xml:space="preserve">
+    <value>Paratext</value>
+  </data>
+  <data name="ProperCase_Obadiah" xml:space="preserve">
+    <value>Obadiah</value>
+  </data>
+  <data name="ProperCase_Jude" xml:space="preserve">
+    <value>Faire un coup de fouet</value>
+  </data>
+  <data name="BiblicalTermsForm_All" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="Pins_Origin" xml:space="preserve">
+    <value>Origine</value>
+  </data>
+  <data name="Lexicon_Meanings" xml:space="preserve">
+    <value>Significations:</value>
+  </data>
+  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
+    <value>Jeton composite non joint</value>
+  </data>
+  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
+    <value>Aligneur de la machine à train</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>Adresse e-mail</value>
+  </data>
+  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
+    <value>StudyBibleadditions</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
+    <value>des arbres; parfums et épices</value>
+  </data>
+  <data name="Pins_Match" xml:space="preserve">
+    <value>Correspondre</value>
+  </data>
+  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
+    <value>Jeton d'accès:</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
+    <value>Éditeur d'alignement en vrac</value>
+  </data>
+  <data name="FontSettings_Source" xml:space="preserve">
+    <value>Texte source:</value>
+  </data>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>Paratext ne fonctionne pas</value>
+  </data>
+  <data name="Lexicon_Lexeme" xml:space="preserve">
+    <value>Lexème</value>
+  </data>
+  <data name="LicenseValidator_LastMissing" xml:space="preserve">
+    <value>Le nom de famille est requis</value>
+  </data>
+  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
+    <value>Erreur de création de l'utilisateur sur le serveur</value>
+  </data>
+  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
+    <value>personne</value>
+  </data>
+  <data name="Landing_Project" xml:space="preserve">
+    <value>Projet</value>
+  </data>
+  <data name="Marble_Senses" xml:space="preserve">
+    <value>Sens</value>
+  </data>
+  <data name="BulkAlignmentReview_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
+    <value>Créer un utilisateur de collaboration</value>
+  </data>
+  <data name="ProperCase_Zephaniah" xml:space="preserve">
+    <value>Zéphanie</value>
+  </data>
+  <data name="MainView_WindowsPINS" xml:space="preserve">
+    <value>PINS</value>
+  </data>
+  <data name="Pds_Auxiliary" xml:space="preserve">
+    <value>Auxiliaire</value>
+  </data>
+  <data name="ProperCase_Titus" xml:space="preserve">
+    <value>Tirus</value>
+  </data>
+  <data name="ProperCase_1_Kings" xml:space="preserve">
+    <value>1 rois</value>
+  </data>
+  <data name="ProperCase_John" xml:space="preserve">
+    <value>John</value>
+  </data>
+  <data name="ProperCase_James" xml:space="preserve">
+    <value>James</value>
+  </data>
+  <data name="ProperCase_Hosea" xml:space="preserve">
+    <value>Osée</value>
+  </data>
+  <data name="Marble_VerseTotal" xml:space="preserve">
+    <value>Verset total</value>
+  </data>
+  <data name="Marble_Sense" xml:space="preserve">
+    <value>Sens</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
+    <value>Interlinéaire</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
+    <value>Créer une parallélisation des versets de corpus</value>
+  </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>Partie</value>
+  </data>
+  <data name="MainView_ShowLog" xml:space="preserve">
+    <value>Afficher le journal</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
+  </data>
+  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
+    <value>Ajouter un lexème</value>
+  </data>
+  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
+    <value>Sagesse, compréhension</value>
+  </data>
+  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
+    <value>Comptes</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>Enregistrer l'utilisateur de GitLab sur le serveur</value>
+  </data>
+  <data name="ProperCase_Acts" xml:space="preserve">
+    <value>Actes</value>
+  </data>
+  <data name="EnhancedView_AddAlignment" xml:space="preserve">
+    <value>Ajouter l'alignement?</value>
+  </data>
+  <data name="ClockUserControl_Name" xml:space="preserve">
+    <value>Nommez l'article</value>
+  </data>
+  <data name="Notes_AddNewNote" xml:space="preserve">
+    <value>Ajouter une nouvelle note</value>
+  </data>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>Annuler la traduction</value>
+  </data>
+  <data name="Marble_Verse" xml:space="preserve">
+    <value>Verset</value>
+  </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>Sélectionner le projet</value>
+  </data>
+  <data name="ProperCase_Revelation" xml:space="preserve">
+    <value>Révélation</value>
+  </data>
+  <data name="SlackMessageView_Message" xml:space="preserve">
+    <value>Message:</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>Projets de collaboration</value>
+  </data>
+  <data name="Notes_DeleteConfirmation" xml:space="preserve">
+    <value>Supprimer cette note?</value>
+  </data>
+  <data name="Lexicon_LexemeExists" xml:space="preserve">
+    <value>Un lexème pour déjà existe pour le lemme</value>
+  </data>
+  <data name="Notes_NoteLabels" xml:space="preserve">
+    <value>Étiquettes</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>Restaurer l'utilisateur de la collaboration</value>
+  </data>
+  <data name="ProperCase_Leviticus" xml:space="preserve">
+    <value>Lévitique</value>
+  </data>
+  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
+    <value>Utilisateur</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Commencer</value>
+  </data>
+  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
+    <value>Domaine sémantique:</value>
+  </data>
+  <data name="EnhancedView_Notes" xml:space="preserve">
+    <value>Remarques</value>
+  </data>
+  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
+    <value>Vue améliorée</value>
+  </data>
+  <data name="ProperCase_2_Peter" xml:space="preserve">
+    <value>2 Pierre</value>
+  </data>
+  <data name="ShellView_UpdateFound" xml:space="preserve">
+    <value>Mise à jour de la nouvelle version de Cleardashboard</value>
+  </data>
+  <data name="Marble_Verses" xml:space="preserve">
+    <value>Versets</value>
+  </data>
+  <data name="Notes_SendToParatext" xml:space="preserve">
+    <value>Envoyer cette note à PARATEXT</value>
+  </data>
+  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
+    <value>La clé fournie est défectueuse. Lorsqu'ils sont décryptés, certains éléments JSON n'ont pas pu être trouvés.</value>
+  </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>Projet d'importation du serveur</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
+    <value>L'utilisateur est déjà sur le système!</value>
+  </data>
+  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
+    <value>Verset</value>
+  </data>
+  <data name="Landing_Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
+    <value>conteneurs; élevage</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
+    <value>Alignements</value>
+  </data>
+  <data name="RegistrationView_LastName" xml:space="preserve">
+    <value>Veuillez entrer votre nom de famille</value>
+  </data>
+  <data name="ProperCase_Habakkuk" xml:space="preserve">
+    <value>Habakkuk</value>
+  </data>
+  <data name="Settings_TextCollections" xml:space="preserve">
+    <value>Collection de texte</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="ProperCase_2_Chronicles" xml:space="preserve">
+    <value>2 Chroniques</value>
+  </data>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>Ajouter un nouvel utilisateur de collaboration</value>
+  </data>
+  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
+    <value>Créer l'alignement</value>
+  </data>
+  <data name="Pds_Target" xml:space="preserve">
+    <value>Cible</value>
+  </data>
+  <data name="ShellView_ShowNotes" xml:space="preserve">
+    <value>Notes de version</value>
+  </data>
+  <data name="ShellView_ShowPreReleases" xml:space="preserve">
+    <value>Afficher les pré-sorties</value>
+  </data>
+  <data name="EnhancedView_CreateNote" xml:space="preserve">
+    <value>Afficher / créer des notes</value>
+  </data>
+  <data name="ProperCase_2_Kings" xml:space="preserve">
+    <value>2 rois</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
+    <value>Votre clé de licence est manquante ou cassée.</value>
+  </data>
+  <data name="ClockUserControl_NewGroup" xml:space="preserve">
+    <value>nouveau groupe</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
+    <value>Mark sélectionné comme «non valide»</value>
+  </data>
+  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
+    <value>Nouvel utilisateur de collaboration</value>
+  </data>
+  <data name="ProperCase_Joshua" xml:space="preserve">
+    <value>Joshua</value>
+  </data>
+  <data name="Lexicon_ChangeAll" xml:space="preserve">
+    <value>Changer toutes les occurrences non définies</value>
+  </data>
+  <data name="Pds_Resource" xml:space="preserve">
+    <value>Ressource</value>
+  </data>
+  <data name="Pins_Word" xml:space="preserve">
+    <value>Mot</value>
+  </data>
+  <data name="Bcv_NextBook" xml:space="preserve">
+    <value>Livre suivant</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
+    <value>Fermé</value>
+  </data>
+  <data name="Pds_ChangeZoom" xml:space="preserve">
+    <value>Modifier le niveau de zoom du contenu</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>Approuver sélectionné</value>
+  </data>
+  <data name="FontSettings_Vertical" xml:space="preserve">
+    <value>Espacement vertical:</value>
+  </data>
+  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Supprimer l'alignement</value>
+  </data>
+  <data name="Settings_AquaEnabled" xml:space="preserve">
+    <value>Activer le plugin aqua expérimental</value>
+  </data>
+  <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
+    <value>avec des étiquettes de</value>
+  </data>
+  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
+    <value>des fruits</value>
+  </data>
+  <data name="Bcv_PreviousBook" xml:space="preserve">
+    <value>Livre précédent</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
+  </data>
+  <data name="ProjectPicker_CreateLong" xml:space="preserve">
+    <value>Créez votre projet pour commencer.</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
+  </data>
+  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
+    <value>Rejoignez des jetons pour la paire de langues</value>
+  </data>
+  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
+    <value>Désapprouver sélectionné</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Rafraîchir</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>Vérifiez votre e-mail et entrez dans le code de validation:</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
+  </data>
+  <data name="ProjectPicker_StartParatext" xml:space="preserve">
+    <value>Cliquez ici pour démarrer paratext</value>
+  </data>
+  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
+    <value>Approuver</value>
+  </data>
+  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
+    <value>Chapitre</value>
+  </data>
+  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
+    <value>Nouveau individu</value>
+  </data>
+  <data name="ProperCase_Daniel" xml:space="preserve">
+    <value>Daniel</value>
+  </data>
+  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
+    <value>Réponses non lues présentes</value>
+  </data>
+  <data name="BiblicalTermsForm_Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
+    <value>Paralléliser les versets des corpus</value>
+  </data>
+  <data name="Pds_FitNodesToViewport" xml:space="preserve">
+    <value>Ajustez tous les nœuds à la fenêtre</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
+    <value>Mark sélectionné comme «Revue des besoins»</value>
+  </data>
+  <data name="Pds_AddCorpora" xml:space="preserve">
+    <value>Ajouter des corpus</value>
+  </data>
+  <data name="WordMeaningsView_Sense" xml:space="preserve">
+    <value>Sens:</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
+    <value>Sélectionnez Corpus</value>
+  </data>
+  <data name="ShellView_User" xml:space="preserve">
+    <value>Utilisateur</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
+    <value>Créer l'alignement des mots</value>
+  </data>
+  <data name="ProjectValidator_SameName" xml:space="preserve">
+    <value>Un projet avec le même nom existe déjà. Veuillez choisir un nom unique.</value>
+  </data>
+  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
+    <value>groupe</value>
+  </data>
+  <data name="Lexicon_SetTranslation" xml:space="preserve">
+    <value>Définir une traduction pour</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
+    <value>Bienvenue à Cleardashboard! Veuillez saisir vos informations d'inscription.</value>
+  </data>
+  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
+    <value>Significations des mots</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>Traductions:</value>
+  </data>
+  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
+    <value>1 Thessaloniciens</value>
+  </data>
+  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
+    <value>Invalide</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="MainView_AccountInfo" xml:space="preserve">
+    <value>Information sur le compte</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="Notes_Note_Modified" xml:space="preserve">
+    <value>Modifié</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Aider</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
+    <value>nature</value>
+  </data>
+  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
+    <value>signes et merveilles</value>
+  </data>
+  <data name="ClockUserControl_Include" xml:space="preserve">
+    <value>Inclure dans la rotation de l'affichage de l'horloge</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Créé</value>
+  </data>
+  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
+    <value>agriculture</value>
+  </data>
+  <data name="UseDefaults" xml:space="preserve">
+    <value>Créer à l'aide de valeurs par défaut</value>
   </data>
   <data name="ProperCase_2_Corinthians" xml:space="preserve">
     <value>2 Corinthiens</value>
   </data>
-  <data name="Bcv_Sync" xml:space="preserve">
-    <value>Synchronisation</value>
+  <data name="EnhancedView_Interlinear" xml:space="preserve">
+    <value>Interlinéaire</value>
+  </data>
+  <data name="Bcv_PreviousChapter" xml:space="preserve">
+    <value>Chapitre précédent</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
+    <value>construction; activités religieuses</value>
+  </data>
+  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
+    <value>Vérifiez votre e-mail et entrez dans le code de validation:</value>
+  </data>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>Préférences</value>
+  </data>
+  <data name="ProperCase_1_John" xml:space="preserve">
+    <value>1 John</value>
+  </data>
+  <data name="ProperCase_Deuteronomy" xml:space="preserve">
+    <value>Deutéronomie</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
+    <value>Rendu</value>
+  </data>
+  <data name="Marble_Domains" xml:space="preserve">
+    <value>Domaines:</value>
+  </data>
+  <data name="ProperCase_Joel" xml:space="preserve">
+    <value>Joel</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
+    <value>Aligner '{0}' avec '{1}'?</value>
+  </data>
+  <data name="ClockUserControl_Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="ProjectPicker_AppName" xml:space="preserve">
+    <value>Cleardashboard</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
+    <value>Algorithme d'alignement de mot machine</value>
+  </data>
+  <data name="ProperCase_Zechariah" xml:space="preserve">
+    <value>Zécharia</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
+    <value>L'utilisateur existe déjà sur le serveur</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
+    <value>Ecclésiastes</value>
+  </data>
+  <data name="Notes_FilterUsers" xml:space="preserve">
+    <value>Par les utilisateurs</value>
+  </data>
+  <data name="MainView_LayoutsDelete" xml:space="preserve">
+    <value>Supprimer la disposition enregistrée</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>Former</value>
+  </data>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>Ajouter un nouveau Interlinear</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
+    <value>Le jeton '{0}' a plusieurs alignements définis. Cliquez sur '{1}' supprimera tous les alignements.</value>
+  </data>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Pds_BackTranslation" xml:space="preserve">
+    <value>Traduction arrière</value>
+  </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>Nouvelle vue améliorée</value>
+  </data>
+  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
+    <value>Supprimer ce groupe d'étiquettes?</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>L'utilisateur existe déjà sur le serveur</value>
+  </data>
+  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
+    <value>Dispositions standard</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>Afficher les tâches de fond</value>
+  </data>
+  <data name="FontSettings_ParagraphMode" xml:space="preserve">
+    <value>Mode paragraphe</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
+    <value>Marquez l'alignement comme «valide»</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
+    <value>Entrez une nouvelle traduction pour</value>
+  </data>
+  <data name="Marble_Book" xml:space="preserve">
+    <value>Livre</value>
+  </data>
+  <data name="MainView_WindowsDashboard" xml:space="preserve">
+    <value>Tableau de bord</value>
+  </data>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>Ajouter à la vue améliorée ciblée</value>
+  </data>
+  <data name="Pins_Filter" xml:space="preserve">
+    <value>Filtre:</value>
+  </data>
+  <data name="Notes_Part" xml:space="preserve">
+    <value>Partie</value>
+  </data>
+  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
+    <value>Termes bibliques</value>
+  </data>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
+  </data>
+  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
+    <value>Ouverte récente</value>
+  </data>
+  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
+    <value>Création de la base de données ...</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Créé par</value>
+  </data>
+  <data name="Pds_Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="TargetContextView_ZoomIn" xml:space="preserve">
+    <value>Agrandir</value>
+  </data>
+  <data name="Pins_Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
+    <value>Partie de la source</value>
+  </data>
+  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
+    <value>Ajouter du texte de corpus tokenisé à une nouvelle vue améliorée</value>
+  </data>
+  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
+    <value>S'il est vérifié, cela changera toutes les occurrences non définies de ce mot</value>
+  </data>
+  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
+    <value>Machine</value>
+  </data>
+  <data name="ProperCase_Amos" xml:space="preserve">
+    <value>Amos</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>D'accord</value>
+  </data>
+  <data name="Notes_Note_Created" xml:space="preserve">
+    <value>Créé</value>
+  </data>
+  <data name="Pins_Gloss" xml:space="preserve">
+    <value>Brillant</value>
+  </data>
+  <data name="EnhancedView_Alignment" xml:space="preserve">
+    <value>Alignement</value>
+  </data>
+  <data name="ProperCase_Ruth" xml:space="preserve">
+    <value>Ruth</value>
+  </data>
+  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
+    <value>Brillant:</value>
+  </data>
+  <data name="Pins_Occurences" xml:space="preserve">
+    <value>Événements</value>
+  </data>
+  <data name="Landing_NewProject" xml:space="preserve">
+    <value>Nouveau projet</value>
+  </data>
+  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
+    <value>monument</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="BiblicalTermsForm_Found" xml:space="preserve">
+    <value>Trouvé</value>
+  </data>
+  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
+    <value>Brillant</value>
+  </data>
+  <data name="Lexicon_NewTranslation" xml:space="preserve">
+    <value>Nouvelle traduction</value>
+  </data>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>Paramètres de collaboration</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
+    <value>Fusion complète ... Interface de rechargement</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
+    <value>Supprimer l'alignement</value>
+  </data>
+  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
+    <value>Sélectionnez comment tokensize le corpus</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
+    <value>Supprimer tous les alignements?</value>
+  </data>
+  <data name="ProjectPicker_CreateProject" xml:space="preserve">
+    <value>Créer un projet:</value>
+  </data>
+  <data name="TargetContextView_Formatted" xml:space="preserve">
+    <value>Formaté</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
+    <value>Livre</value>
+  </data>
+  <data name="NewCollabUserView_FirstName" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
+  <data name="1SA" xml:space="preserve">
+    <value>1SA</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
+    <value>Supprimer l'alignement?</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>Vérification USFM</value>
+  </data>
+  <data name="BiblicalTermsDomains_People" xml:space="preserve">
+    <value>personnes</value>
+  </data>
+  <data name="MainView_Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="Notes_LabelGroupAdd" xml:space="preserve">
+    <value>Ajouter un groupe d'étiquettes</value>
+  </data>
+  <data name="Pds_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
+    <value>Problèmes connus</value>
+  </data>
+  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
+    <value>REF SOURCE</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="FontSettings_NoteIndicators" xml:space="preserve">
+    <value>Indicateurs de note:</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
+    <value>Revue d'alignement en vrac</value>
+  </data>
+  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
+    <value>La clé de licence est requise</value>
+  </data>
+  <data name="MainView_FileNew" xml:space="preserve">
+    <value>Nouveau</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Déposer</value>
+  </data>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>Enregistré sur le serveur distant</value>
+  </data>
+  <data name="NewCollabUserView_Password" xml:space="preserve">
+    <value>Mot de passe:</value>
+  </data>
+  <data name="Windows_AlignmentTool" xml:space="preserve">
+    <value>Outil d'alignement</value>
+  </data>
+  <data name="Pins_VerseReferences" xml:space="preserve">
+    <value>Références en vers</value>
+  </data>
+  <data name="ProperCase_1_Peter" xml:space="preserve">
+    <value>1 Pierre</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>Taper</value>
+  </data>
+  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
+    <value>Portée:</value>
+  </data>
+  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
+    <value>Texte de vers</value>
+  </data>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>Ajouter un domaine sémantique</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
   </data>
   <data name="Pds_PropertiesMenu" xml:space="preserve">
     <value>Propriétés</value>
@@ -454,695 +1462,518 @@
   <data name="BiblicalTermsForm_Project" xml:space="preserve">
     <value>Projet</value>
   </data>
-  <data name="Pins_Notes" xml:space="preserve">
-    <value>Remarques</value>
-  </data>
-  <data name="ProjectValidator_SameName" xml:space="preserve">
-    <value>Un projet avec le même nom existe déjà. Veuillez choisir un nom unique.</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>Supprimer l'alignement pour '{0}'?</value>
-  </data>
-  <data name="ProperCase_Hosea" xml:space="preserve">
-    <value>Osée</value>
-  </data>
-  <data name="ProperCase_Joshua" xml:space="preserve">
-    <value>Joshua</value>
-  </data>
-  <data name="Settings_PowerModes" xml:space="preserve">
-    <value>Modes d'alimentation</value>
-  </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
-  </data>
-  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
-    <value>groupe</value>
-  </data>
-  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Ajouter à la vue améliorée ciblée</value>
-  </data>
-  <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>Jetons de corpus</value>
-  </data>
-  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
-    <value>zone; nature</value>
-  </data>
-  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
-    <value>personne</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Fermé</value>
-  </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>Traductions:</value>
-  </data>
-  <data name="Marble_All" xml:space="preserve">
-    <value>Tous</value>
-  </data>
-  <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jonie</value>
-  </data>
-  <data name="ProjectSetup_Title" xml:space="preserve">
-    <value>Créez votre nouveau projet</value>
-  </data>
-  <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Néhémie</value>
-  </data>
-  <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Lévitique</value>
-  </data>
-  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Recherche récente</value>
-  </data>
-  <data name="Notes_FilterStatus_Open" xml:space="preserve">
+  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
     <value>Ouvrir</value>
   </data>
-  <data name="Pins_Stem" xml:space="preserve">
-    <value>Tige</value>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>Ezra</value>
   </data>
-  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Activer l'affichage des collections de texte verset par verset</value>
+  <data name="TargetContextView_ZoomOut" xml:space="preserve">
+    <value>Dézoomer</value>
   </data>
-  <data name="MainView_WindowsMarble" xml:space="preserve">
-    <value>MARBRE</value>
-  </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
-  </data>
-  <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Envoyez cette note à PARATEXT?</value>
-  </data>
-  <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Interlinéaire</value>
-  </data>
-  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Enregistrer l'utilisateur de GitLab sur le serveur</value>
-  </data>
-  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
-    <value>Invalide</value>
-  </data>
-  <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>Montez l'ensemble de la zone de contenu à la fenêtre</value>
-  </data>
-  <data name="ProperCase_3_John" xml:space="preserve">
-    <value>3 John</value>
-  </data>
-  <data name="Landing_Projects" xml:space="preserve">
-    <value>Projets</value>
-  </data>
-  <data name="Notes_UnreadReplies" xml:space="preserve">
-    <value>Réponses non lues</value>
-  </data>
-  <data name="Marble_Definition" xml:space="preserve">
-    <value>Définition</value>
-  </data>
-  <data name="Notes_NoteReplies" xml:space="preserve">
-    <value>réponses</value>
-  </data>
-  <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Zoomer du contenu</value>
-  </data>
-  <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Nom d'utilisateur:</value>
-  </data>
-  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Ajouter à une nouvelle vue améliorée</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>construction; activités religieuses</value>
-  </data>
-  <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Nommez l'article</value>
-  </data>
-  <data name="Notes_FilterExpander" xml:space="preserve">
-    <value>Filtres</value>
-  </data>
-  <data name="MainView_FileOpen" xml:space="preserve">
-    <value>Ouvrir</value>
-  </data>
-  <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Modifications de collaboration disponibles</value>
-  </data>
-  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>règlement</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Annuler</value>
-  </data>
-  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Supprimer l'alignement</value>
-  </data>
-  <data name="NewCollabUserView_Group" xml:space="preserve">
-    <value>Groupe:</value>
-  </data>
-  <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>Taille de la police du titre:</value>
-  </data>
-  <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>Espacement vertical:</value>
-  </data>
-  <data name="Next" xml:space="preserve">
-    <value>Suivant</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendements manquants</value>
-  </data>
-  <data name="Notes_Note_Created" xml:space="preserve">
-    <value>Créé</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>Non</value>
-  </data>
-  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Partie de la source</value>
-  </data>
-  <data name="SlackMessageView_NoInternet" xml:space="preserve">
-    <value>Pas d'Internet</value>
-  </data>
-  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de la machine à train</value>
-  </data>
-  <data name="Notes_LabelRemove" xml:space="preserve">
-    <value>Supprimer cette étiquette</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
-    <value>Désapprouvé</value>
-  </data>
-  <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre e-mail et entrez dans le code de validation:</value>
-  </data>
-  <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Auxiliaire</value>
-  </data>
-  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Entrez une nouvelle traduction</value>
-  </data>
-  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
-    <value>Créer un nouvel alignement Word</value>
-  </data>
-  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
-    <value>agriculture</value>
-  </data>
-  <data name="EnhancedView_Notes" xml:space="preserve">
-    <value>Remarques</value>
-  </data>
-  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>Supprimer ce lexème?</value>
-  </data>
-  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>Partie cible</value>
-  </data>
-  <data name="REV" xml:space="preserve">
-    <value>REV</value>
-  </data>
-  <data name="BulkAlignmentReview_Source" xml:space="preserve">
-    <value>Source</value>
-  </data>
-  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>L'utilisateur est déjà sur le système!</value>
-  </data>
-  <data name="MainView_Settings" xml:space="preserve">
-    <value>Paramètres</value>
-  </data>
-  <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>Inclure dans la rotation de l'affichage de l'horloge</value>
-  </data>
-  <data name="BiblicalTermsForm_Category" xml:space="preserve">
-    <value>Catégorie</value>
-  </data>
-  <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>Chapitre précédent</value>
-  </data>
-  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
-  </data>
-  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>Significations des mots</value>
-  </data>
-  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
-    <value>Tous</value>
-  </data>
-  <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>Enregistrer</value>
-  </data>
-  <data name="Settings_Reserved" xml:space="preserve">
-    <value>Réservé</value>
-  </data>
-  <data name="UseDefaults" xml:space="preserve">
-    <value>Créer à l'aide de valeurs par défaut</value>
-  </data>
-  <data name="MainView_About" xml:space="preserve">
-    <value>À propos</value>
-  </data>
-  <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Ajouter un groupe d'étiquettes</value>
-  </data>
-  <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>Translittérationmanuelle</value>
-  </data>
-  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>Termes bibliques</value>
-  </data>
-  <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Un lexème pour déjà existe pour le lemme</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>Créer l'alignement des mots</value>
-  </data>
-  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Jeton composite non joint</value>
-  </data>
-  <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Créer un projet:</value>
-  </data>
-  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>Le prénom est requis</value>
-  </data>
-  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Créer un utilisateur de collaboration</value>
-  </data>
-  <data name="Pds_Unknown" xml:space="preserve">
-    <value>Inconnu</value>
-  </data>
-  <data name="Pins_Language" xml:space="preserve">
-    <value>Langue</value>
-  </data>
-  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>Projets</value>
-  </data>
-  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
-    <value>Rendu</value>
-  </data>
-  <data name="Lexicon_AddMeaning" xml:space="preserve">
-    <value>Ajouter un sens</value>
-  </data>
-  <data name="NewTestament" xml:space="preserve">
-    <value>Nouveau Testament</value>
-  </data>
-  <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>nouveau groupe</value>
-  </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>Adresse e-mail</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="Migrate_Header2" xml:space="preserve">
-    <value>Réinitialiser les mappages des vers à la versification par défaut</value>
-  </data>
-  <data name="ProperCase_Nahum" xml:space="preserve">
-    <value>Nahum</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>Vérification USFM</value>
-  </data>
-  <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Cliquez ici pour démarrer paratext</value>
-  </data>
-  <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
-    <value>avec des étiquettes de</value>
-  </data>
-  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Ajouter une vue verset à une vue améliorée focalisée</value>
-  </data>
-  <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>Non formaté</value>
-  </data>
-  <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Taille de la police cible:</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>PHM</value>
-  </data>
-  <data name="ProperCase_Joel" xml:space="preserve">
-    <value>Joel</value>
-  </data>
-  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>Alignements</value>
-  </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>Mot:</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
-  </data>
-  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
-    <value>zone</value>
-  </data>
-  <data name="Pds_Resource" xml:space="preserve">
-    <value>Ressource</value>
-  </data>
-  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
-    <value>Portée:</value>
-  </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>mammifères; animaux domestiques</value>
-  </data>
-  <data name="Notes_NoteLabelGroups" xml:space="preserve">
-    <value>Groupes d'étiquettes</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>Mode d'alimentation activé</value>
-  </data>
-  <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>Erreur d'envoi par e-mail</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
-    <value>Propriétaire du projet</value>
-  </data>
-  <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Par note texte</value>
-  </data>
-  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Ajoutez un sens pour ce lemme</value>
-  </data>
-  <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Version:</value>
-  </data>
-  <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Significations:</value>
-  </data>
-  <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Verset total</value>
-  </data>
-  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Supprimer ce sens</value>
-  </data>
-  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
-    <value>Supprimer cette traduction</value>
-  </data>
-  <data name="Settings_CollaborationSettings" xml:space="preserve">
-    <value>Paramètres de collaboration</value>
-  </data>
-  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>animaux</value>
-  </data>
-  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>S'il est vérifié, cela changera toutes les occurrences non définies de ce mot</value>
-  </data>
-  <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>Cleardashboard</value>
-  </data>
-  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Paralléliser les versets des corpus</value>
-  </data>
-  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Rejoignez des jetons pour la paire de langues</value>
-  </data>
-  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
-    <value>association</value>
-  </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Le nom de projet donné contient des caractères illégaux. Les caractères valides incluent «A-Z» (minuscules et majuscules), les nombres «0-9» et les caractères »-» et «_».</value>
-  </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
-  </data>
-  <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
-  </data>
-  <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>Références en vers</value>
-  </data>
-  <data name="ZEC" xml:space="preserve">
-    <value>ZEC</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Rafraîchir</value>
-  </data>
-  <data name="Bcv_Verse" xml:space="preserve">
-    <value>VERSET</value>
-  </data>
-  <data name="MainView_WindowsPINS" xml:space="preserve">
-    <value>PINS</value>
-  </data>
-  <data name="ProperCase_Genesis" xml:space="preserve">
-    <value>Genèse</value>
-  </data>
-  <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Épingles de filtre</value>
-  </data>
-  <data name="ProperCase_2_Kings" xml:space="preserve">
-    <value>2 rois</value>
-  </data>
-  <data name="BulkAlignmentReview_Target" xml:space="preserve">
-    <value>Cible</value>
-  </data>
-  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
-  </data>
-  <data name="Pds_Source" xml:space="preserve">
-    <value>Source</value>
-  </data>
-  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>Macula Hebrew</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>Commencer</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1JN</value>
-  </data>
-  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
-    <value>Code de validation par e-mail de ClearDashboard</value>
-  </data>
-  <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>Ésaïe</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Dispositions de projet</value>
-  </data>
-  <data name="ProperCase_Titus" xml:space="preserve">
-    <value>Tirus</value>
-  </data>
-  <data name="MainView_AccountInfo" xml:space="preserve">
-    <value>Information sur le compte</value>
-  </data>
-  <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Alignement</value>
-  </data>
-  <data name="MainView_LayoutsDelete" xml:space="preserve">
-    <value>Supprimer la disposition enregistrée</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>D'accord</value>
-  </data>
-  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Projet d'importation du serveur</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>Ajouter du texte de corpus tokenisé à une vue améliorée focalisée</value>
-  </data>
-  <data name="Lexicon_AddLexeme" xml:space="preserve">
-    <value>Ajouter Lexeme</value>
-  </data>
-  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>Supprimer ce lexème</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>Nombre de tokennisations différentes</value>
-  </data>
-  <data name="MainView_LayoutsSave" xml:space="preserve">
-    <value>Enregistrer la disposition actuelle</value>
-  </data>
-  <data name="AboutView_Version" xml:space="preserve">
-    <value>Version</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>NEH</value>
-  </data>
-  <data name="ProperCase_2_Chronicles" xml:space="preserve">
-    <value>2 Chroniques</value>
-  </data>
-  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Fermé</value>
-  </data>
-  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Création de la base de données ...</value>
-  </data>
-  <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Afficher la backtranslation</value>
-  </data>
-  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
-    <value>Supprimer ce groupe d'étiquettes</value>
-  </data>
-  <data name="Settings_ValidateEmailCode" xml:space="preserve">
-    <value>Valider le code e-mail</value>
-  </data>
-  <data name="ProperCase_Judges" xml:space="preserve">
-    <value>Juges</value>
-  </data>
-  <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Modifier le niveau de zoom du contenu</value>
-  </data>
-  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
-    <value>Jeton d'accès:</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
-  </data>
-  <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Rejoignez des jetons</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
-  </data>
-  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
-    <value>Machine</value>
-  </data>
-  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
-    <value>Créer un nouvel alignement Word</value>
-  </data>
-  <data name="BiblicalTermsDomains_People" xml:space="preserve">
-    <value>personnes</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Sélectionnez Corpus</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>Marquez l'alignement comme «valide»</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>TOUT SÉLECTIONNER</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Type d'alignement:</value>
-  </data>
-  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>monument</value>
-  </data>
-  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
-    <value>Rendu</value>
-  </data>
-  <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Sous-domaines:</value>
-  </data>
-  <data name="Settings_Email" xml:space="preserve">
-    <value>E-mail</value>
-  </data>
-  <data name="Marble_Sense" xml:space="preserve">
-    <value>Sens</value>
-  </data>
-  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Utilisateur</value>
-  </data>
-  <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Galates</value>
-  </data>
-  <data name="LUK" xml:space="preserve">
-    <value>LUK</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
-    <value>mammifères; animaux sauvages</value>
-  </data>
-  <data name="None" xml:space="preserve">
-    <value>Aucun</value>
-  </data>
-  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
-    <value>but</value>
-  </data>
-  <data name="MainView_File" xml:space="preserve">
-    <value>Déposer</value>
-  </data>
-  <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Nouvelle traduction</value>
-  </data>
-  <data name="ProperCase_Mark" xml:space="preserve">
-    <value>Marquer</value>
-  </data>
-  <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>Lexème</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Mise à jour</value>
-  </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>Paramètres de ClearDashboard</value>
-  </data>
-  <data name="Windows_AlignmentTool" xml:space="preserve">
-    <value>Outil d'alignement</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>HOS</value>
-  </data>
-  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Ajouter du texte de corpus tokenisé à une nouvelle vue améliorée</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>ZEP</value>
-  </data>
-  <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lemmes connexes</value>
-  </data>
-  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>StudyBibleadditions</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Oui</value>
-  </data>
-  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Ajouter une vue d'approbation en vrac à une vue améliorée focalisée</value>
+    <value>Rendages manquants</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>Ajouter du texte de corpus tokenisé à une nouvelle fenêtre améliorée</value>
   </data>
-  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
+  <data name="FontSettings_FontSize" xml:space="preserve">
+    <value>Taille de police:</value>
+  </data>
+  <data name="Pds_FitContentToViewport" xml:space="preserve">
+    <value>Montez l'ensemble de la zone de contenu à la fenêtre</value>
+  </data>
+  <data name="Lexicon_AddMeaning" xml:space="preserve">
+    <value>Ajouter un sens</value>
+  </data>
+  <data name="Pds_StudyBible" xml:space="preserve">
+    <value>Étude</value>
+  </data>
+  <data name="Pds_ZoomOut" xml:space="preserve">
+    <value>Zoomer du contenu</value>
+  </data>
+  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
+    <value>Supprimer ce lexème?</value>
+  </data>
+  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
+    <value>outils</value>
+  </data>
+  <data name="Lexicon_AddLexeme" xml:space="preserve">
+    <value>Ajouter Lexeme</value>
+  </data>
+  <data name="Pins_Forms" xml:space="preserve">
+    <value>Formes</value>
+  </data>
+  <data name="Notes_UnreadReplies" xml:space="preserve">
+    <value>Réponses non lues</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="ProjectSetup_Hint" xml:space="preserve">
+    <value>Veuillez saisir un nom pour votre projet</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>Ajouter du texte de corpus tokenisé à une vue améliorée focalisée</value>
+  </data>
+  <data name="ProperCase_3_John" xml:space="preserve">
+    <value>3 John</value>
+  </data>
+  <data name="Pds_Dictionary" xml:space="preserve">
+    <value>Dictionnaire</value>
+  </data>
+  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
+    <value>Translittération avec</value>
+  </data>
+  <data name="Notes_LabelGroupName" xml:space="preserve">
+    <value>Nom du groupe étiqueté</value>
+  </data>
+  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
+    <value>Un projet avec le nom '{0}' existe déjà. Veuillez choisir un nom unique. "</value>
+  </data>
+  <data name="Notes_LabelGroupExists" xml:space="preserve">
+    <value>Un groupe de label existe déjà avec nom</value>
+  </data>
+  <data name="EnhancedView_FilterPins" xml:space="preserve">
+    <value>Épingles de filtre</value>
+  </data>
+  <data name="Notes_SendConfirmation" xml:space="preserve">
+    <value>Envoyez cette note à PARATEXT?</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Afficher un nom</value>
+  </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>Paramètres de ClearDashboard</value>
+  </data>
+  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
+    <value>Le prénom est requis</value>
+  </data>
+  <data name="BiblicalTermsForm_Term" xml:space="preserve">
+    <value>Terme</value>
+  </data>
+  <data name="BulkAlignmentReview_Count" xml:space="preserve">
+    <value>Compter</value>
+  </data>
+  <data name="Notes_FilterNoteText" xml:space="preserve">
+    <value>Par note texte</value>
+  </data>
+  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
+    <value>Dispositions de projet</value>
+  </data>
+  <data name="ProperCase_Nahum" xml:space="preserve">
+    <value>Nahum</value>
+  </data>
+  <data name="Settings_PowerModesDescription" xml:space="preserve">
+    <value>Permettez à Cleardashboard de modifier les modes d'alimentation lors d'événements de calcul élevés</value>
+  </data>
+  <data name="Notes_Word" xml:space="preserve">
+    <value>Mot</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Ouvrir</value>
   </data>
-  <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Afficher / créer des notes</value>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>Membre du projet</value>
   </data>
-  <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1 Corinthiens</value>
+  <data name="ClockUserControl_Add" xml:space="preserve">
+    <value>Ajouter</value>
   </data>
-  <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Mise à jour de la nouvelle version de Cleardashboard</value>
+  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
+    <value>Approuvé</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbrersource</value>
+  <data name="NewProjectDialog_Title" xml:space="preserve">
+    <value>Créer un nouveau projet</value>
+  </data>
+  <data name="ProjectPicker_DeleteError" xml:space="preserve">
+    <value>Vous ne pouvez pas supprimer ce projet, une autre application l'utilise toujours.</value>
+  </data>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>Envoyer un e-mail de validation</value>
+  </data>
+  <data name="RegistrationDialogView_Register" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Notes_LabelAdd" xml:space="preserve">
+    <value>Ajouter une étiquette</value>
+  </data>
+  <data name="Language [UID_Key]" xml:space="preserve">
+    <value>French [fr]</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
+    <value>Alignement</value>
+  </data>
+  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
+    <value>Annuler la tâche</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
     <value>Lexème</value>
   </data>
-  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
-    <value>Texte de vers</value>
+  <data name="Lexicon_RemoveDomain" xml:space="preserve">
+    <value>Supprimer ce domaine sémantique de ce sens</value>
   </data>
-  <data name="SNG" xml:space="preserve">
-    <value>SNG</value>
+  <data name="Pins_LexemeType" xml:space="preserve">
+    <value>Type de lexème</value>
   </data>
-  <data name="Back" xml:space="preserve">
-    <value>Dos</value>
+  <data name="MainView_WindowsNotes" xml:space="preserve">
+    <value>Remarques</value>
   </data>
-  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
-    <value>Verset</value>
+  <data name="ProperCase_Jonah" xml:space="preserve">
+    <value>Jonie</value>
   </data>
-  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Ajouter un nouveau Interlinear</value>
+  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
+    <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
   </data>
-  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Alignement</value>
+  <data name="FontSettings_SourceFontSize" xml:space="preserve">
+    <value>Taille de la police source:</value>
+  </data>
+  <data name="FontSettings_TitleFontSize" xml:space="preserve">
+    <value>Taille de la police du titre:</value>
+  </data>
+  <data name="ProperCase_1_Chronicles" xml:space="preserve">
+    <value>1 Chroniques</value>
+  </data>
+  <data name="ProperCase_Philippians" xml:space="preserve">
+    <value>Philippiens</value>
+  </data>
+  <data name="NewCollabUserView_Username" xml:space="preserve">
+    <value>Nom d'utilisateur:</value>
+  </data>
+  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
+    <value>Vérifier la disponibilité des utilisateurs</value>
+  </data>
+  <data name="Notes_FilterExpander" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="Migrate_Header2" xml:space="preserve">
+    <value>Réinitialiser les mappages des vers à la versification par défaut</value>
+  </data>
+  <data name="Pins_Prefix" xml:space="preserve">
+    <value>Préfixe</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>êtres et pouvoirs surnaturels</value>
+  </data>
+  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
+    <value>zone; nature</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
+    <value>morale et éthique</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="ProperCase_Colossians" xml:space="preserve">
+    <value>Colossiens</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
+    <value>Créer un nouveau projet</value>
+  </data>
+  <data name="FontSettings_Target" xml:space="preserve">
+    <value>Texte cible:</value>
+  </data>
+  <data name="ProjectPicker_NoProject" xml:space="preserve">
+    <value>C'est seul ici. Veuillez créer un nouveau projet.</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>À propos</value>
+  </data>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>Code de vérification par e-mail</value>
+  </data>
+  <data name="Marble_Definition" xml:space="preserve">
+    <value>Définition</value>
+  </data>
+  <data name="Marble_Chapter" xml:space="preserve">
+    <value>Chapitre</value>
+  </data>
+  <data name="Marble_PartsOfSpeech" xml:space="preserve">
+    <value>Parties du discours</value>
+  </data>
+  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
+    <value>Mettez le contenu à 100%</value>
+  </data>
+  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
+    <value>Créer une nouvelle interlinéaire</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
+    <value>2 Thessaloniciens</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
+    <value>Désapprouver</value>
+  </data>
+  <data name="Pins_ClearFilter" xml:space="preserve">
+    <value>Filtre effacer</value>
+  </data>
+  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
+    <value>Mots pivotés</value>
+  </data>
+  <data name="MainView_FileOpen" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="ProperCase_1_Samuel" xml:space="preserve">
+    <value>1 Samuel</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="Windows_TextCollection" xml:space="preserve">
+    <value>Collection de texte</value>
+  </data>
+  <data name="Marble_Glosses" xml:space="preserve">
+    <value>Gloss:</value>
+  </data>
+  <data name="Lexicon_LemmaForms" xml:space="preserve">
+    <value>Lemme / formulaires:</value>
+  </data>
+  <data name="ProperCase_2_John" xml:space="preserve">
+    <value>2 John</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="Notes_NoteLabelGroups" xml:space="preserve">
+    <value>Groupes d'étiquettes</value>
+  </data>
+  <data name="ProperCase_Galatians" xml:space="preserve">
+    <value>Galates</value>
+  </data>
+  <data name="Pds_Unknown" xml:space="preserve">
+    <value>Inconnu</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="ProperCase_Malachi" xml:space="preserve">
+    <value>Malachi</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
+    <value>Mots alignés</value>
+  </data>
+  <data name="Pds_ConsultantNotes" xml:space="preserve">
+    <value>Consultant Notes</value>
+  </data>
+  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
+    <value>Enregistré sur le serveur distant</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
+  </data>
+  <data name="Pins_Phrase" xml:space="preserve">
+    <value>Phrase</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
+    <value>Supprimer l'interlinéaire</value>
+  </data>
+  <data name="Lexicon_RemoveForm" xml:space="preserve">
+    <value>Retirez cette forme lexicale de ce lemme</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>Gestion de la collaboration</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
+    <value>TOUT SÉLECTIONNER</value>
+  </data>
+  <data name="Bcv_PreviousVerse" xml:space="preserve">
+    <value>Verset précédent</value>
+  </data>
+  <data name="Notes_NoteText" xml:space="preserve">
+    <value>Texte</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="Notes_LabelRemove" xml:space="preserve">
+    <value>Supprimer cette étiquette</value>
+  </data>
+  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
+    <value>Activer l'affichage des collections de texte verset par verset</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
+    <value>Honneur, respect, statut</value>
+  </data>
+  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
+    <value>sacrifices et offrandes</value>
+  </data>
+  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
+    <value>Le contenu de la clé de licence décryptée ne correspond pas aux informations que vous avez fournies.</value>
+  </data>
+  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
+    <value>artisanat; chiffon</value>
+  </data>
+  <data name="Marble_DomainsTitle" xml:space="preserve">
+    <value>Domaines</value>
+  </data>
+  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
+    <value>Notes claires</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
+    <value>Type d'alignement:</value>
+  </data>
+  <data name="ProperCase_Romans" xml:space="preserve">
+    <value>Romains</value>
+  </data>
+  <data name="Notes_FilterLabels" xml:space="preserve">
+    <value>Par étiquettes</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
+    <value>Créer un nouveau tokenisation du corpus</value>
+  </data>
+  <data name="Pds_ZoomIn" xml:space="preserve">
+    <value>Zoomer sur le contenu</value>
+  </data>
+  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
+    <value>Supprimer cette vision améliorée?</value>
+  </data>
+  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
+    <value>Veuillez saisir un nom pour votre projet.</value>
+  </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>Ajoutez un domaine sémantique à ce sens</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="Notes_OpenClosed" xml:space="preserve">
+    <value>Ouvert fermé</value>
+  </data>
+  <data name="Pins_Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="Pins_Stem" xml:space="preserve">
+    <value>Tige</value>
+  </data>
+  <data name="Pds_TransliterationManual" xml:space="preserve">
+    <value>Translittérationmanuelle</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
+    <value>Supprimer l'alignement pour '{0}'?</value>
+  </data>
+  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
+    <value>Ajouter une vue verset à une vue améliorée focalisée</value>
+  </data>
+  <data name="Pins_Suffix" xml:space="preserve">
+    <value>Suffixe</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>Projets</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>êtres et pouvoirs surnaturels; titres</value>
+  </data>
+  <data name="Windows_BiblicalTerms" xml:space="preserve">
+    <value>Termes bibliques</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="MainView_GettingStartedGuide" xml:space="preserve">
+    <value>Guide de Démarrage</value>
+  </data>
+  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
+    <value>Le nom de projet donné contient des caractères illégaux. Les caractères valides incluent «A-Z» (minuscules et majuscules), les nombres «0-9» et les caractères »-» et «_».</value>
+  </data>
+  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
+    <value>Compter par texte de surface</value>
+  </data>
+  <data name="Marble_StrongCodes" xml:space="preserve">
+    <value>Codes forts</value>
+  </data>
+  <data name="Bcv_NextVerse" xml:space="preserve">
+    <value>Verset suivant</value>
+  </data>
+  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
+    <value>Rendu</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>Utilisateurs actuels du projet:</value>
+  </data>
+  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
+    <value>Créer un nouvel alignement Word</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
+    <value>Mark sélectionné comme «valide»</value>
+  </data>
+  <data name="ProperCase_1_Corinthians" xml:space="preserve">
+    <value>1 Corinthiens</value>
+  </data>
+  <data name="ProperCase_Jeremiah" xml:space="preserve">
+    <value>Jérémie</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>Mot:</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>Définition indisponible</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="ExpandView" xml:space="preserve">
+    <value>Développer la vue</value>
+  </data>
+  <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
+    <value>Modifications de collaboration disponibles</value>
+  </data>
+  <data name="ProperCase_Numbers" xml:space="preserve">
+    <value>Nombres</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>Rafraîchir la liste des projets de collaboration</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
+    <value>outils; accouchement</value>
+  </data>
+  <data name="Pins_ShowBackTranslation" xml:space="preserve">
+    <value>Afficher la backtranslation</value>
+  </data>
+  <data name="EnhancedView_ShowControls" xml:space="preserve">
+    <value>Afficher les commandes de vue améliorées</value>
+  </data>
+  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
+    <value>Sous-domaine:</value>
+  </data>
+  <data name="ProperCase_Proverbs" xml:space="preserve">
+    <value>les proverbes</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
+    <value>personnes; Honneur, respect, statut</value>
+  </data>
+  <data name="ProperCase_2_Timothy" xml:space="preserve">
+    <value>2 Timothée</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
     <value>Calculer le nouveau modèle de traduction</value>
@@ -1150,877 +1981,55 @@
   <data name="MainView_GatherLogs" xml:space="preserve">
     <value>Envoyer un message à Clear</value>
   </data>
-  <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Ajouter des corpus</value>
-  </data>
-  <data name="ProperCase_2_John" xml:space="preserve">
-    <value>2 John</value>
-  </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
-  </data>
-  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
-    <value>Chapitre</value>
-  </data>
-  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
-    <value>L'utilisateur existe déjà sur le serveur</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Erreur</value>
-  </data>
-  <data name="Language [UID_Key]" xml:space="preserve">
-    <value>French [fr]</value>
-  </data>
-  <data name="2KI" xml:space="preserve">
-    <value>2KI</value>
-  </data>
-  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>Créer une nouvelle interlinéaire</value>
-  </data>
-  <data name="Settings_UserName" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
-  </data>
-  <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Habakkuk</value>
-  </data>
-  <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Permettez à Cleardashboard de modifier les modes d'alimentation lors d'événements de calcul élevés</value>
-  </data>
-  <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>C'est seul ici. Veuillez créer un nouveau projet.</value>
-  </data>
-  <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>Le nom de famille est requis</value>
-  </data>
-  <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sens du verset</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Revue d'alignement en vrac</value>
-  </data>
-  <data name="EZR" xml:space="preserve">
-    <value>EZR</value>
-  </data>
-  <data name="Settings_TextCollections" xml:space="preserve">
-    <value>Collection de texte</value>
-  </data>
-  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Par associations</value>
-  </data>
-  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Le contenu de la clé de licence décryptée ne correspond pas aux informations que vous avez fournies.</value>
-  </data>
-  <data name="Marble_Chapter" xml:space="preserve">
-    <value>Chapitre</value>
-  </data>
-  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Gestion de la collaboration</value>
-  </data>
-  <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Traduction arrière</value>
-  </data>
-  <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 John</value>
-  </data>
-  <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Romains</value>
-  </data>
-  <data name="ShellView_User" xml:space="preserve">
-    <value>Utilisateur</value>
-  </data>
-  <data name="Notes_LabelGroupInitialize" xml:space="preserve">
-    <value>Initialiser le groupe d'étiquettes</value>
-  </data>
-  <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Références de chargement</value>
-  </data>
-  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>Créer un nouveau tokenisation du corpus</value>
-  </data>
-  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>Sous-domaine:</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
-    <value>Mots alignés</value>
-  </data>
-  <data name="Pins_Prefix" xml:space="preserve">
-    <value>Préfixe</value>
-  </data>
-  <data name="AMO" xml:space="preserve">
-    <value>AMO</value>
-  </data>
-  <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Formaté</value>
-  </data>
-  <data name="NewCollabUserView_FirstName" xml:space="preserve">
-    <value>Prénom</value>
-  </data>
-  <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>Veuillez saisir un nom pour votre projet</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>Ajouter</value>
-  </data>
-  <data name="Settings_EmailVerificationCode" xml:space="preserve">
-    <value>Code de vérification par e-mail</value>
-  </data>
-  <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>Obadiah</value>
-  </data>
-  <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>Taille de police:</value>
-  </data>
-  <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>Consultant Notes</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
-    <value>Supprimer l'alignement?</value>
-  </data>
-  <data name="MainView_Windows" xml:space="preserve">
-    <value>les fenêtres</value>
-  </data>
-  <data name="ProperCase_Micah" xml:space="preserve">
-    <value>Mica</value>
-  </data>
-  <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>Recherche par un gloss anglais</value>
-  </data>
-  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Sélectionnez comment tokensize le corpus</value>
-  </data>
-  <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Livre suivant</value>
-  </data>
-  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>Supprimer l'interlinéaire</value>
-  </data>
-  <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Nom du groupe étiqueté</value>
-  </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Nouvelle vue améliorée</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="Pins_Forms" xml:space="preserve">
-    <value>Formes</value>
-  </data>
-  <data name="WordMeaningsView_Sense" xml:space="preserve">
-    <value>Sens:</value>
-  </data>
-  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
-    <value>Brillant:</value>
-  </data>
-  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
-    <value>Utilisateurs actuels du projet:</value>
-  </data>
-  <data name="Pins_Phrase" xml:space="preserve">
-    <value>Phrase</value>
-  </data>
-  <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Par les utilisateurs</value>
-  </data>
-  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemme pour le nouveau lexème:</value>
-  </data>
-  <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Ajouter une forme lexicale à ce lemme</value>
-  </data>
-  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>Jetons de corpus</value>
-  </data>
-  <data name="ProperCase_1_Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>Éditeur d'alignement en vrac</value>
-  </data>
-  <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>Graphique de fréquence</value>
-  </data>
-  <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Étude</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
-  </data>
-  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
-    <value>INCORTÉE SUR LE SYSTÈME!</value>
-  </data>
-  <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Base de données:</value>
-  </data>
-  <data name="Pins_Suffix" xml:space="preserve">
-    <value>Suffixe</value>
-  </data>
-  <data name="FontSettings_Target" xml:space="preserve">
-    <value>Texte cible:</value>
-  </data>
-  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>Ouverte récente</value>
-  </data>
-  <data name="FontSettings_Source" xml:space="preserve">
-    <value>Texte source:</value>
-  </data>
-  <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>Définition longue:</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="OldTestament" xml:space="preserve">
-    <value>L'Ancien Testament</value>
-  </data>
-  <data name="ProperCase_1_Chronicles" xml:space="preserve">
-    <value>1 Chroniques</value>
-  </data>
-  <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Zoomer sur le contenu</value>
-  </data>
-  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
-    <value>Livre</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Créer Interlinear</value>
-  </data>
-  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>Comptes</value>
-  </data>
-  <data name="Pins_Origin" xml:space="preserve">
-    <value>Origine</value>
-  </data>
-  <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>Corpus tokenisé</value>
-  </data>
-  <data name="BiblicalTermsForm_Found" xml:space="preserve">
-    <value>Trouvé</value>
-  </data>
-  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre e-mail et entrez dans le code de validation:</value>
-  </data>
-  <data name="Landing_Settings" xml:space="preserve">
-    <value>Paramètres</value>
-  </data>
-  <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Mot de passe:</value>
-  </data>
-  <data name="Bcv_Chapter" xml:space="preserve">
-    <value>CHAPITRE</value>
-  </data>
-  <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 rois</value>
-  </data>
-  <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Un groupe de label existe déjà avec nom</value>
-  </data>
-  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
-    <value>Enregistré sur le serveur distant</value>
-  </data>
-  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
-    <value>outils</value>
-  </data>
-  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>affection</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>Afficher les tâches de fond</value>
-  </data>
-  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
-    <value>lieu</value>
-  </data>
-  <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>Concordance</value>
-  </data>
-  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>La clé de licence est requise</value>
-  </data>
-  <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Afficher les commandes de vue améliorées</value>
-  </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>Partie</value>
-  </data>
-  <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Recherche par hébreu / grec</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>êtres et pouvoirs surnaturels; titres</value>
-  </data>
-  <data name="Marble_Scope" xml:space="preserve">
-    <value>Portée:</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
-  </data>
-  <data name="Windows_Dashboard" xml:space="preserve">
-    <value>TABLEAU DE BORD</value>
-  </data>
-  <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Nom de famille</value>
-  </data>
-  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
-    <value>groupe; zone</value>
-  </data>
-  <data name="Notes_Word" xml:space="preserve">
-    <value>Mot</value>
-  </data>
-  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>Aucune tâche de fond en marche</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Aucune erreur</value>
-  </data>
-  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Retirer le corpus</value>
-  </data>
-  <data name="MainView_FileNew" xml:space="preserve">
-    <value>Nouveau</value>
-  </data>
-  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Rafraîchir la liste des projets de collaboration</value>
-  </data>
-  <data name="Pins_Gloss" xml:space="preserve">
-    <value>Brillant</value>
-  </data>
-  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
-    <value>Projets de collaboration</value>
-  </data>
-  <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>Définition courte:</value>
-  </data>
-  <data name="ClockUserControl_Delete" xml:space="preserve">
-    <value>Supprimer</value>
-  </data>
-  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>PARATEXT n'est pas installé. Veuillez installer PARATEXT et relancer l'application ClearDashboard.</value>
-  </data>
-  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
-    <value>Outil d'alignement</value>
-  </data>
-  <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Vous ne pouvez pas supprimer ce projet, une autre application l'utilise toujours.</value>
-  </data>
-  <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Changer toutes les occurrences non définies</value>
-  </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>Tous</value>
-  </data>
-  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
-    <value>Vérifier la disponibilité des utilisateurs</value>
-  </data>
-  <data name="MRK" xml:space="preserve">
-    <value>MRK</value>
-  </data>
-  <data name="Settings_Group" xml:space="preserve">
-    <value>Groupe</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="Bcv_NextVerse" xml:space="preserve">
-    <value>Verset suivant</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Désapprouver</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Mark sélectionné comme «Revue des besoins»</value>
-  </data>
-  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>Entrez une nouvelle traduction pour</value>
-  </data>
-  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>REF SOURCE</value>
-  </data>
-  <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Activer le plugin aqua expérimental</value>
-  </data>
-  <data name="ProperCase_James" xml:space="preserve">
-    <value>James</value>
-  </data>
-  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
-    <value>Approuver</value>
-  </data>
-  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Aligner '{0}' avec '{1}'?</value>
-  </data>
-  <data name="ShellView_Loading" xml:space="preserve">
-    <value>Chargement...</value>
-  </data>
-  <data name="ProperCase_John" xml:space="preserve">
-    <value>John</value>
-  </data>
-  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
-    <value>Enregistré sur le serveur distant</value>
-  </data>
-  <data name="CreatedBy" xml:space="preserve">
-    <value>Créé par</value>
-  </data>
-  <data name="Marble_Glosses" xml:space="preserve">
-    <value>Gloss:</value>
-  </data>
-  <data name="Pds_Daughter" xml:space="preserve">
-    <value>Fille</value>
-  </data>
-  <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Ajouter une nouvelle note</value>
-  </data>
-  <data name="Marble_Domains" xml:space="preserve">
-    <value>Domaines:</value>
-  </data>
-  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>Mettez le contenu à 100%</value>
-  </data>
-  <data name="Notes_LabelAdd" xml:space="preserve">
-    <value>Ajouter une étiquette</value>
-  </data>
-  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Gérer les projets de collaboration</value>
-  </data>
-  <data name="Notes_Note_NoteStatus" xml:space="preserve">
-    <value>Statut</value>
-  </data>
-  <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Lemme / formulaires:</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
-    <value>personnes; autorité</value>
-  </data>
-  <data name="MainView_Help" xml:space="preserve">
-    <value>Aider</value>
-  </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>Valider le code e-mail</value>
-  </data>
-  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer ce corpus? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne peuvent pas être récupérés.</value>
-  </data>
-  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>Dispositions standard</value>
-  </data>
-  <data name="Marble_DomainsTitle" xml:space="preserve">
-    <value>Domaines</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>constructions; élevage</value>
-  </data>
-  <data name="ProperCase_Acts" xml:space="preserve">
-    <value>Actes</value>
-  </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Définition indisponible</value>
-  </data>
-  <data name="Pds_Dictionary" xml:space="preserve">
-    <value>Dictionnaire</value>
-  </data>
-  <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>Indicateurs de note:</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="Notes_LabelGroupAdd" xml:space="preserve">
-    <value>Ajouter un groupe d'étiquettes</value>
-  </data>
-  <data name="Settings_Plugins" xml:space="preserve">
-    <value>Plugins</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="Marble_Book" xml:space="preserve">
-    <value>Livre</value>
-  </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Annuler la traduction</value>
-  </data>
-  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Supprimer le projet</value>
-  </data>
-  <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Faire un coup de fouet</value>
-  </data>
-  <data name="Landing_Project" xml:space="preserve">
-    <value>Projet</value>
-  </data>
-  <data name="Windows_EnhancedView" xml:space="preserve">
-    <value>Vue améliorée</value>
-  </data>
-  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>Mots pivotés</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Mark sélectionné comme «valide»</value>
-  </data>
-  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
-    <value>Domaine sémantique:</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
-  <data name="ProperCase_Deuteronomy" xml:space="preserve">
-    <value>Deutéronomie</value>
-  </data>
-  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Appliquer la traduction</value>
-  </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>La clé fournie est défectueuse. Lorsqu'ils sont décryptés, certains éléments JSON n'ont pas pu être trouvés.</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
-    <value>des arbres; des fruits</value>
-  </data>
-  <data name="Pds_Xml" xml:space="preserve">
-    <value>Xml</value>
-  </data>
-  <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Filtre effacer</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Langue originelle</value>
-  </data>
-  <data name="ProperCase_Exodus" xml:space="preserve">
-    <value>Exode</value>
-  </data>
-  <data name="Pins_Occurences" xml:space="preserve">
-    <value>Événements</value>
-  </data>
-  <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Définir une traduction pour</value>
-  </data>
-  <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>Sélectionnez le fuseau horaire</value>
-  </data>
-  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
-    <value>Brillant</value>
-  </data>
-  <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>Hébreux</value>
-  </data>
-  <data name="Pins_Word" xml:space="preserve">
-    <value>Mot</value>
-  </data>
-  <data name="ClockUserControl_Add" xml:space="preserve">
-    <value>Ajouter</value>
-  </data>
-  <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>S'il vous plaît entrer votre clé de licence</value>
-  </data>
-  <data name="JER" xml:space="preserve">
-    <value>JER</value>
-  </data>
-  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
-    <value>Code de vérification par e-mail:</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
-  </data>
-  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
-    <value>Réponses non lues présentes</value>
-  </data>
-  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>Nouvel utilisateur de collaboration</value>
-  </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>Ajouter un domaine sémantique</value>
-  </data>
-  <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Éphésiens</value>
-  </data>
-  <data name="ProperCase_2_Peter" xml:space="preserve">
-    <value>2 Pierre</value>
-  </data>
-  <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Type de lexème</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>Un projet avec le nom '{0}' existe déjà. Veuillez choisir un nom unique. "</value>
-  </data>
-  <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Projet:</value>
-  </data>
-  <data name="BiblicalTermsForm_Term" xml:space="preserve">
-    <value>Terme</value>
-  </data>
-  <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>Significations des mots</value>
-  </data>
-  <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envoyer cette note à PARATEXT</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithme d'alignement de mot machine</value>
-  </data>
-  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de la collaboration</value>
-  </data>
-  <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>Lemme</value>
-  </data>
-  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
-    <value>2 Thessaloniciens</value>
-  </data>
-  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>pierres précieuses</value>
-  </data>
-  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Annuler la tâche</value>
-  </data>
-  <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Ouvert fermé</value>
-  </data>
-  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Ajouter un nouvel utilisateur de collaboration</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>JON</value>
-  </data>
-  <data name="Marble_Verses" xml:space="preserve">
-    <value>Versets</value>
-  </data>
-  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
-    <value>Notes claires</value>
-  </data>
-  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>Surface de conception du projet</value>
-  </data>
-  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>Supprimer ce groupe d'étiquettes?</value>
-  </data>
-  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>activités religieuses</value>
-  </data>
-  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>Honneur, respect, statut</value>
-  </data>
-  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
-    <value>Ajouter un lexème</value>
-  </data>
-  <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>Créer un nouveau projet</value>
-  </data>
-  <data name="MainView_GettingStartedGuide" xml:space="preserve">
-    <value>Guide de Démarrage</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithme d'alignement de mot machine</value>
-  </data>
-  <data name="CollabProjectManagementView_Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
-    <value>nature</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Sauvegarder</value>
-  </data>
-  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Filtre les broches par des termes clés</value>
-  </data>
-  <data name="Notes_Part" xml:space="preserve">
-    <value>Partie</value>
-  </data>
-  <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Envoyer un e-mail de validation</value>
-  </data>
-  <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Ajustez tous les nœuds à la fenêtre</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="Marble_GeneralInformation" xml:space="preserve">
-    <value>Informations générales</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Translittération avec</value>
-  </data>
-  <data name="BulkAlignmentReview_Count" xml:space="preserve">
-    <value>Compter</value>
-  </data>
-  <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>Envoyer un message Slack</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>personnes; Honneur, respect, statut</value>
-  </data>
-  <data name="FontSettings_SourceFontSize" xml:space="preserve">
-    <value>Taille de la police source:</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
-  </data>
-  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
-    <value>Veuillez saisir un nom pour votre projet.</value>
-  </data>
-  <data name="MainView_Layouts" xml:space="preserve">
-    <value>Disposition</value>
-  </data>
-  <data name="FontSettings_ParagraphMode" xml:space="preserve">
-    <value>Mode paragraphe</value>
-  </data>
-  <data name="BiblicalTermsForm_All" xml:space="preserve">
-    <value>Tous</value>
-  </data>
-  <data name="ProperCase_Esther" xml:space="preserve">
-    <value>Esther</value>
-  </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>Former</value>
-  </data>
-  <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>Livre précédent</value>
-  </data>
-  <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Parties du discours</value>
-  </data>
-  <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Tableau de bord</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Supprimer tous les alignements?</value>
-  </data>
-  <data name="GEN" xml:space="preserve">
-    <value>GEN</value>
-  </data>
-  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Fusion complète ... Interface de rechargement</value>
-  </data>
-  <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jérémie</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>Marquez l'alignement comme «Revue des besoins»</value>
-  </data>
-  <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Zéphanie</value>
-  </data>
-  <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>Créez votre projet pour commencer.</value>
-  </data>
-  <data name="Settings_UserAlreadyExists" xml:space="preserve">
-    <value>L'utilisateur existe déjà sur le serveur</value>
-  </data>
-  <data name="FontSettings_Height" xml:space="preserve">
-    <value>Hauteur:</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
-    <value>outils; lester; Commerce</value>
-  </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>Préférences</value>
-  </data>
-  <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
-  </data>
-  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>Compter par texte de surface</value>
-  </data>
-  <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>Ézéchiel</value>
-  </data>
-  <data name="Bcv_PreviousVerse" xml:space="preserve">
-    <value>Verset précédent</value>
-  </data>
-  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
-    <value>Les associations</value>
-  </data>
-  <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Réinitialiser les mappages des vers à la versification par défaut</value>
-  </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext ne fonctionne pas</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2PE</value>
-  </data>
-  <data name="Bcv_Offset" xml:space="preserve">
-    <value>COMPENSER</value>
-  </data>
-  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
-    <value>morale et éthique</value>
-  </data>
-  <data name="DisplayName" xml:space="preserve">
-    <value>Afficher un nom</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
-  </data>
-  <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharia</value>
-  </data>
-  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>Problèmes connus</value>
-  </data>
-  <data name="BiblicalTermsDomains_All" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Pas de données de vers dans cette plage de vers.</value>
-  </data>
-  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
-    <value>Supprimer cette vision améliorée?</value>
-  </data>
-  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
-    <value>Approuvé</value>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="Windows_PINS" xml:space="preserve">
+    <value>Broches</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Pas de correspondance.</value>
   </data>
-  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Sagesse, compréhension</value>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
   </data>
-  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
-    <value>1 Thessaloniciens</value>
+  <data name="ProperCase_Matthew" xml:space="preserve">
+    <value>Matthieu</value>
   </data>
-  <data name="MainView_WindowsTextCollections" xml:space="preserve">
-    <value>Collections de texte</value>
+  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
+    <value>Partie cible</value>
   </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Mark sélectionné comme «non valide»</value>
+  <data name="Pds_Xml" xml:space="preserve">
+    <value>Xml</value>
   </data>
-  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>paganisme</value>
+  <data name="Settings_Reserved" xml:space="preserve">
+    <value>Réservé</value>
   </data>
-  <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luck</value>
+  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer ce corpus? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne peuvent pas être récupérés.</value>
   </data>
-  <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>Message:</value>
+  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
+    <value>Fermé</value>
   </data>
-  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
-    <value>Marquez l'alignement comme «non valide»</value>
+  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
+    <value>Aucune erreur</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="ProperCase_Isaiah" xml:space="preserve">
+    <value>Ésaïe</value>
+  </data>
+  <data name="ProperCase_Ezekiel" xml:space="preserve">
+    <value>Ézéchiel</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="Windows_WordMeanings" xml:space="preserve">
+    <value>Significations des mots</value>
+  </data>
+  <data name="NewCollabUserView_Group" xml:space="preserve">
+    <value>Groupe:</value>
   </data>
 </root>

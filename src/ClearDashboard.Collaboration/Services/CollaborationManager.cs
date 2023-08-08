@@ -849,6 +849,12 @@ public class CollaborationManager
         }
     }
 
+    public string GetRespositoryBasePath()
+    {
+        return _repositoryBasePath;
+    }
+
+
     public Models.CollaborationConfiguration GetConfig()
     {
         return new Models.CollaborationConfiguration

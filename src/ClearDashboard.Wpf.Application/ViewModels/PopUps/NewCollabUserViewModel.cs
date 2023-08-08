@@ -496,7 +496,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                ErrorMessage = _localizationService["NewCollabUserView_EmailValidationCode"]; //"User is already on the system!";
+                ErrorMessage = _localizationService["NewCollabUserView_UserAlreadyExists"]; //"User is already on the system!";
             }
 
 

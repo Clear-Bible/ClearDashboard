@@ -1067,6 +1067,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             try
             {
+                // remove the dashboard project from the list
                 var directoryInfo = new DirectoryInfo(fileInfo.DirectoryName ?? throw new InvalidOperationException("File directory name is null."));
 
                 foreach (var file in directoryInfo.GetFiles())
@@ -1086,6 +1087,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 var originalDatabaseCopyName = $"{project.ProjectName}_original.sqlite";
                 File.Delete(Path.Combine(directoryInfo.Parent.ToString(), originalDatabaseCopyName));
                 DeleteErrorVisibility = Visibility.Collapsed;
+
+                // remove the collaboration project directory
+                var path = Path.Combine(_collaborationManager.GetRespositoryBasePath(), "P_" + project.Id);
+                if (Directory.Exists(path))
+                {
+                    SetNormalFileAttributes(path);
+
+                    directoryInfo = new DirectoryInfo(path);
+                    foreach (var file in directoryInfo.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                    foreach (var directory in directoryInfo.GetDirectories())
+                    {
+                        directory.Delete(true);
+                    }
+
+                    directoryInfo.Delete();
+                }
+
             }
             catch (Exception e)
             {
@@ -1094,6 +1115,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+
+        // recursively iterate through all the files in a directory and set their attributes to normal
+        // so they can be deleted
+        private void SetNormalFileAttributes(string path)
+        {
+            var directoryInfo = new DirectoryInfo(path);
+            foreach (var file in directoryInfo.GetFiles())
+            {
+                // take off the read-only attribute
+                File.SetAttributes(file.FullName, FileAttributes.Normal);
+            }
+            foreach (var directory in directoryInfo.GetDirectories())
+            {
+                SetNormalFileAttributes(directory.FullName);
+            }
+        }
 
 
         public void SetLanguage()
