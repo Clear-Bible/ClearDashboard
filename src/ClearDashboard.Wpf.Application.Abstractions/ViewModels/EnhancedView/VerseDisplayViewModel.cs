@@ -271,14 +271,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            NonMatchingTokenAction(message.SelectedTokens.TokenIds, t =>
+            foreach (var token in SourceTokenDisplayViewModels.Union(TargetTokenDisplayViewModels))
             {
-                t.IsTokenSelected = false;
-            });
-            NonMatchingTokenAction(message.SelectedTokens.TranslationIds, t =>
-            {
-                t.IsTranslationSelected = false;
-            });
+                var matchingToken = message.SelectedTokens.FirstOrDefault(t => t.Token.TokenId.IdEquals(token.Token.TokenId));
+                if (matchingToken == null)
+                {
+                    token.IsTokenSelected = false;
+                    token.IsTranslationSelected = false;
+                }
+                else
+                {
+                    token.IsTokenSelected = matchingToken.IsTokenSelected;
+                    token.IsTranslationSelected = matchingToken.IsTranslationSelected;
+                }
+            }
             await Task.CompletedTask;
         }
 

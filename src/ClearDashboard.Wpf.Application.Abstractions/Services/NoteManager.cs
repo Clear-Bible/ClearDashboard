@@ -31,6 +31,10 @@ namespace ClearDashboard.Wpf.Application.Services
         private ILocalizationService LocalizationService { get; }
 
         private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
+        public void ClearNotesCache()
+        {
+            NotesCache.Clear();
+        }
 
         private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
