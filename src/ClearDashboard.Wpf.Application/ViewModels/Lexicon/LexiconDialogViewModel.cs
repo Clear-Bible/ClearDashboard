@@ -146,7 +146,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         {
             try
             {
-                OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+                OnUIThread(() =>
+                {
+                    ProgressBarVisibility = Visibility.Visible;
+                    ApplyEnabled = false;
+                    CancelEnabled = false;
+                });
 
                 async Task SaveTranslation()
                 {
@@ -157,7 +162,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     }
                 }
 #if !DEMO
-                await System.Windows.Application.Current.Dispatcher.InvokeAsync(SaveTranslation);
+                await Task.Run(async () => await SaveTranslation());
 #endif
             }
             finally
