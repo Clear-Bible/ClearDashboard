@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer.Models;
+using MaterialDesignThemes.Wpf;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
@@ -23,7 +24,7 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
                 var contextMenu = (ContextMenu)parent;
                 sender = contextMenu.PlacementTarget;
             }
-            
+
             var item = (DataGrid)sender;
 
             var columnIndex = item.SelectedCells[0].Column.DisplayIndex;
@@ -80,6 +81,14 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
         private void FindText_OnClick(object sender, ExecutedRoutedEventArgs e)
         {
             FilterBox.Focus();
+        }
+
+        private void DialogHost_OnDialogOpened(object sender, DialogOpenedEventArgs eventargs)
+        {
+            if (ListView.Items.Count > 0)
+            {
+                ListView.ScrollIntoView(ListView.Items[0]);
+            }
         }
     }
 }

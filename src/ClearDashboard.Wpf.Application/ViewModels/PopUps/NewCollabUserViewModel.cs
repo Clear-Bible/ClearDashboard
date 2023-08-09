@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private User _licenseUser;
         private readonly ParatextProxy _paratextProxy;
 
-        private string _emailValidationString = "";
+        private List<string> _emailValidationStringList = new List<string>();
 
         private RegistrationData _registration;
 
@@ -458,7 +459,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // not a user
             if (isAlreadyOnGitLab == false)
             {
-                _emailValidationString = GenerateRandomPassword.RandomNumber(1000, 9999).ToString();
+                _emailValidationStringList.Add(GenerateRandomPassword.RandomNumber(1000, 9999).ToString());
 
 
                 var mailMessage = new MimeMessage();
@@ -467,7 +468,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 mailMessage.Subject = _localizationService["NewCollabUserView_DashboardEmailValidationCode"]; //"ClearDashboard Email Validation Code";
                 mailMessage.Body = new TextPart("plain")
                 {
-                    Text = _localizationService["NewCollabUserView_EmailValidationCode"] + " " + _emailValidationString //Email Verification Code: 
+                    Text = _localizationService["NewCollabUserView_EmailValidationCode"] + " " + _emailValidationStringList.LastOrDefault() //Email Verification Code: 
                 };
 
                 try
@@ -603,7 +604,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// </summary>
         public void ValidateEmailCode()
         {
-            if (EmailCode == _emailValidationString)
+            if (_emailValidationStringList.Contains(EmailCode))
             {
                 BadEmailValidationCode = true;
                 ShowGenerateUserButtonEnabled = true;

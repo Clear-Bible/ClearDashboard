@@ -917,11 +917,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public ObservableCollection<DashboardProject>? CopyDashboardProjectsToAnother(ObservableCollection<DashboardProject> original, ObservableCollection<DashboardProject>? copy)
         {
-            copy.Clear();
-            foreach (var project in original)
+            OnUIThread(() =>
             {
-                copy.Add(project);
-            }
+                copy.Clear();
+                foreach (var project in original)
+                {
+                    copy.Add(project);
+                }
+            });
             return copy;
         }
         public ObservableCollection<DashboardCollabProject>? CopyDashboardCollabProjectsToAnother(ObservableCollection<DashboardCollabProject> original, ObservableCollection<DashboardCollabProject>? copy)

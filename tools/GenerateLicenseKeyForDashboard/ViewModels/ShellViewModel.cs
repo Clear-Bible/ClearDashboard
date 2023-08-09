@@ -502,10 +502,6 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
             await RefreshProjectUserConnectionGrid();
 
-            ProjectUserConnectionsCollectionView  = CollectionViewSource.GetDefaultView(ProjectUserConnections);
-            ProjectUserConnectionsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("ProjectName"));
-            ProjectUserConnectionsCollectionView.Filter += ConnectionCollection_Filter;
-
             base.OnViewReady(view);
         }
 
@@ -586,12 +582,17 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                     projectUserConnection.Add(new ProjectUserConnection
                     {
                         UserName = user.Name,
-                        ProjectName = project.Description.ToString()!,
+                        ProjectName = (project.Description ?? "Nameless").ToString(),
                         AccessLevel = user.GetPermissionLevel
                     });
                 }
             }
             ProjectUserConnections = projectUserConnection;
+
+            ProjectUserConnectionsCollectionView  = CollectionViewSource.GetDefaultView(ProjectUserConnections);
+            ProjectUserConnectionsCollectionView.GroupDescriptions.Clear();
+            ProjectUserConnectionsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("ProjectName"));
+            ProjectUserConnectionsCollectionView.Filter += ConnectionCollection_Filter;
         }
 
         private bool ConnectionCollection_Filter(object obj)

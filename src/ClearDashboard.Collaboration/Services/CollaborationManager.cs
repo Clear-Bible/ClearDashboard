@@ -124,6 +124,8 @@ public class CollaborationManager
             }
 
             File.WriteAllText(_secretsFilePath, jsonString);
+
+            _configuration = configuration;
         }
         catch (Exception e)
         {
