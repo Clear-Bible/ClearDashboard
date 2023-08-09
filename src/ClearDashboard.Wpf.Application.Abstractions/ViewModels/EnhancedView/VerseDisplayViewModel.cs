@@ -274,6 +274,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NonMatchingTokenAction(message.SelectedTokens.TokenIds, t =>
             {
                 t.IsTokenSelected = false;
+            });
+            NonMatchingTokenAction(message.SelectedTokens.TranslationIds, t =>
+            {
                 t.IsTranslationSelected = false;
             });
             await Task.CompletedTask;

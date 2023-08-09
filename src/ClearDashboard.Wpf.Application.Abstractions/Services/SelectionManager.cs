@@ -36,7 +36,9 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public EntityIdCollection SelectedEntityIds => SelectedTokens.EntityIds;
         public NoteIdCollection SelectedNoteIds => SelectedTokens.NoteIds;
-        public bool AnySelectedNotes => SelectedTokens.Any(t => t.TokenHasNote || t.TranslationHasNote);
+        public bool AnySelectedNotes => SelectedTokens.Any(t => 
+            (t.IsTokenSelected && t.TokenHasNote) || 
+            (t.IsTranslationSelected && t.TranslationHasNote));
 
         public void SelectionUpdated()
         {

@@ -7,6 +7,7 @@ using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Collections
@@ -24,14 +25,19 @@ namespace ClearDashboard.Wpf.Application.Collections
             get
             {
                 var result = new NoteIdCollection();
-                foreach (var ids in Items.Select(i => i.TokenNoteIds))
+
+                var tokenNoteIds = Items
+                    .Where(i => i.IsTokenSelected)
+                    .Select(i => i.TokenNoteIds);
+                var translationNoteIds = Items
+                    .Where(i => i.IsTranslationSelected)
+                    .Select(i => i.TranslationNoteIds);
+
+                foreach (var ids in tokenNoteIds.Union(translationNoteIds))
                 {
                     result.AddDistinct(ids);
                 }
-                foreach (var ids in Items.Select(i => i.TranslationNoteIds))
-                {
-                    result.AddDistinct(ids);
-                }
+
                 return result;
             }
         }
@@ -50,6 +56,9 @@ namespace ClearDashboard.Wpf.Application.Collections
         }
 
         public IEnumerable<TokenId> TokenIds => Items.Select(t => t.Token.TokenId);
+        public IEnumerable<TranslationId> TranslationIds => Items
+            .Where(t => t.Translation?.TranslationId != null)
+            .Select(t => t.Translation!.TranslationId!);
 
         public TokenCollection TokenCollection => new(Items.Select(t => t.Token));
 
@@ -99,6 +108,13 @@ namespace ClearDashboard.Wpf.Application.Collections
                         CombinedNotes.Add(note);
                     }
                 }
+                foreach (var note in token.TranslationNotes)
+                {
+                    if (!CombinedNotes.Contains(note))
+                    {
+                        CombinedNotes.Add(note);
+                    }
+                }
             }
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(CombinedNotes)));
 
@@ -116,7 +132,7 @@ namespace ClearDashboard.Wpf.Application.Collections
 
             EntityIds = new EntityIdCollection(Items.Where(t => t.IsTokenSelected).Select(t => t.Token.TokenId).Distinct());
             EntityIds.AddRange(Items
-                .Where(t => t.IsTranslationSelected && t.Translation != null && t.Translation.TranslationId != null)
+                .Where(t => t.IsTranslationSelected && t.Translation?.TranslationId != null)
                 .Select(t => t.Translation!.TranslationId!)
                 .Distinct());
 
@@ -134,7 +150,9 @@ namespace ClearDashboard.Wpf.Application.Collections
 
         public IEnumerable<TokenDisplayViewModel> MatchingTokens(IEnumerable<IId> entityIds)
         {
-            return Items.Where(t => entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()));
+            return Items.Where(t => 
+                entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()) || 
+                entityIds.Contains(t.Translation?.TranslationId, new IIdEqualityComparer()));
         }
 
         private IEnumerable<TokenDisplayViewModel> MatchingTokens(Func<TokenDisplayViewModel, bool> conditional)
@@ -144,7 +162,9 @@ namespace ClearDashboard.Wpf.Application.Collections
 
         private IEnumerable<TokenDisplayViewModel> NonMatchingTokens(IEnumerable<IId> entityIds)
         {
-            return Items.Where(t => ! entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()));
+            return Items.Where(t => 
+                ! entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()) &&
+                ! entityIds.Contains(t.Translation?.TranslationId, new IIdEqualityComparer()));
         }
 
         public void MatchingTokenAction(IEnumerable<IId> entityIds, Action<TokenDisplayViewModel> action)

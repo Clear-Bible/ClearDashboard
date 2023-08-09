@@ -222,13 +222,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public void TranslationNoteAdded(NoteViewModel note)
         {
             TranslationNoteIds.AddDistinct(note.NoteId!);
-            NotifyOfPropertyChange(nameof(TokenHasNote));
+            NotifyOfPropertyChange(nameof(TranslationHasNote));
         }
 
         public void TranslationNoteDeleted(NoteViewModel note)
         {
             TranslationNoteIds.RemoveIfExists(note.NoteId!);
-            NotifyOfPropertyChange(nameof(TokenHasNote));
+            NotifyOfPropertyChange(nameof(TranslationHasNote));
         }
 
         public void TranslationApplied(Translation translation)
