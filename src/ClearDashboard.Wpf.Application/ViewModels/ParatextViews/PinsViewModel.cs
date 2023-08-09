@@ -1099,7 +1099,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             if (_gridData != null && GridCollectionView is not null)
             {
-                GridCollectionView.Refresh();
+                try
+                {
+                    GridCollectionView.Refresh();
+                }
+                catch
+                {
+                    _logger.LogError("PINS Clear Filter failed.");
+                }
             }
         }
 
@@ -1141,13 +1148,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             if (itemDt.Gloss is null)
             {
                 return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                        || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
+                        || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                        || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
                     && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
             }
 
             return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
                     || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                    || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
+                    || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                    || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
                 && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
         }
 

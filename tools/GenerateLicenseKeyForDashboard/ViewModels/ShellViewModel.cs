@@ -590,6 +590,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             ProjectUserConnections = projectUserConnection;
 
             ProjectUserConnectionsCollectionView  = CollectionViewSource.GetDefaultView(ProjectUserConnections);
+            ProjectUserConnectionsCollectionView.GroupDescriptions.Clear();
             ProjectUserConnectionsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("ProjectName"));
             ProjectUserConnectionsCollectionView.Filter += ConnectionCollection_Filter;
         }
