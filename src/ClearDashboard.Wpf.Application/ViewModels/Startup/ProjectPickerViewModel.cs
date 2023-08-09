@@ -18,9 +18,9 @@ using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using System;
@@ -917,11 +917,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public ObservableCollection<DashboardProject>? CopyDashboardProjectsToAnother(ObservableCollection<DashboardProject> original, ObservableCollection<DashboardProject>? copy)
         {
-            copy.Clear();
-            foreach (var project in original)
+            OnUIThread(() =>
             {
-                copy.Add(project);
-            }
+                copy.Clear();
+                foreach (var project in original)
+                {
+                    copy.Add(project);
+                }
+            });
             return copy;
         }
         public ObservableCollection<DashboardCollabProject>? CopyDashboardCollabProjectsToAnother(ObservableCollection<DashboardCollabProject> original, ObservableCollection<DashboardCollabProject>? copy)
@@ -1061,10 +1064,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
+
+
+            // confirm the user wants to delete the project
+            var deletingProjectPopupViewModel = LifetimeScope!.Resolve<DeletingProjectPopupViewModel>();
+
+            bool result = false;
+            OnUIThread(async () =>
+            {
+                result = await _windowManager!.ShowDialogAsync(
+                    deletingProjectPopupViewModel,
+                    null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(deletingProjectPopupViewModel.Title));
+            });
+
+            if (!result)
+            {
+                return;
+            }
+
+
             var fileInfo = new FileInfo(project.FullFilePath ?? throw new InvalidOperationException("Project full file path is null."));
 
             try
             {
+                // remove the dashboard project from the list
                 var directoryInfo = new DirectoryInfo(fileInfo.DirectoryName ?? throw new InvalidOperationException("File directory name is null."));
 
                 foreach (var file in directoryInfo.GetFiles())
@@ -1084,6 +1108,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 var originalDatabaseCopyName = $"{project.ProjectName}_original.sqlite";
                 File.Delete(Path.Combine(directoryInfo.Parent.ToString(), originalDatabaseCopyName));
                 DeleteErrorVisibility = Visibility.Collapsed;
+
+                // remove the collaboration project directory
+                var path = Path.Combine(_collaborationManager.GetRespositoryBasePath(), "P_" + project.Id);
+                if (Directory.Exists(path))
+                {
+                    SetNormalFileAttributes(path);
+
+                    directoryInfo = new DirectoryInfo(path);
+                    foreach (var file in directoryInfo.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                    foreach (var directory in directoryInfo.GetDirectories())
+                    {
+                        directory.Delete(true);
+                    }
+
+                    directoryInfo.Delete();
+                }
+
             }
             catch (Exception e)
             {
@@ -1092,6 +1136,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+
+        // recursively iterate through all the files in a directory and set their attributes to normal
+        // so they can be deleted
+        private void SetNormalFileAttributes(string path)
+        {
+            var directoryInfo = new DirectoryInfo(path);
+            foreach (var file in directoryInfo.GetFiles())
+            {
+                // take off the read-only attribute
+                File.SetAttributes(file.FullName, FileAttributes.Normal);
+            }
+            foreach (var directory in directoryInfo.GetDirectories())
+            {
+                SetNormalFileAttributes(directory.FullName);
+            }
+        }
 
 
         public void SetLanguage()

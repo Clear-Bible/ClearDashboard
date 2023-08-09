@@ -124,6 +124,8 @@ public class CollaborationManager
             }
 
             File.WriteAllText(_secretsFilePath, jsonString);
+
+            _configuration = configuration;
         }
         catch (Exception e)
         {
@@ -846,6 +848,12 @@ public class CollaborationManager
             projectDifferences.Serialize(Path.Combine(_dumpsPath, folderName));
         }
     }
+
+    public string GetRespositoryBasePath()
+    {
+        return _repositoryBasePath;
+    }
+
 
     public Models.CollaborationConfiguration GetConfig()
     {

@@ -381,5 +381,29 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["EmailPass"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DifferentMonitor {
+            get {
+                return ((bool)(this["DifferentMonitor"]));
+            }
+            set {
+                this["DifferentMonitor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ThirdMonitor {
+            get {
+                return ((bool)(this["ThirdMonitor"]));
+            }
+            set {
+                this["ThirdMonitor"] = value;
+            }
+        }
     }
 }
