@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="AboutView"
-    Width="500"
-    Height="450"
+    Width="400"
+    Height="300"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
     <Grid>

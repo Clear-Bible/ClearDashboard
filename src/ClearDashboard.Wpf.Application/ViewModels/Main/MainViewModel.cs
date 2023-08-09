@@ -1161,8 +1161,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.NoResize;
-            settings.MinWidth = 500;
-            settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<AccountInfoViewModel>();
