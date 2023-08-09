@@ -1099,7 +1099,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             if (_gridData != null && GridCollectionView is not null)
             {
-                GridCollectionView.Refresh();
+                try
+                {
+                    GridCollectionView.Refresh();
+                }
+                catch
+                {
+                    _logger.LogError("PINS Clear Filter failed.");
+                }
             }
         }
 
