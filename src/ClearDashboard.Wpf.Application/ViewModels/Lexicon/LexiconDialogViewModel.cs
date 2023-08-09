@@ -128,6 +128,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             private set => Set(ref _applyEnabled, value);
         }
 
+        private bool _cancelEnabled = true;
+        public bool CancelEnabled
+        {
+            get => _cancelEnabled;
+            private set => Set(ref _cancelEnabled, value);
+        }
+
+        private bool _isLoaded = false;
+        public bool IsLoaded
+        {
+            get => _isLoaded;
+            private set => Set(ref _isLoaded, value);
+        }
+
         public async void ApplyTranslation()
         {
             try
@@ -294,7 +308,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             if (SelectedTranslation == null && TokenDisplay.TargetTranslationText != Translation.DefaultTranslationText)
             {
                 SelectedTranslation = new LexiconTranslationViewModel { Text = TokenDisplay.TargetTranslationText, IsSelected = true};
-                //Concordance.Insert(0, SelectedTranslation);
                 NewTranslation = SelectedTranslation;
                 NotifyOfPropertyChange(nameof(NewTranslation));
             }
@@ -302,12 +315,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             ApplyEnabled = SelectedTranslation != null;
         }
 
-        private async Task<string?> GetFontFamily(string paratextProjectId)
+        private async Task<string> GetFontFamily(string? paratextProjectId)
         {
-            var result = await Mediator.Send(new GetProjectFontFamilyQuery(paratextProjectId));
-            if (result is { HasData: true })
+            if (!string.IsNullOrEmpty(paratextProjectId))
             {
-                return result.Data;
+                var result = await Mediator!.Send(new GetProjectFontFamilyQuery(paratextProjectId));
+                if (result is { HasData: true })
+                {
+                    return result.Data;
+                }
             }
 
             return FontNames.DefaultFontFamily;
@@ -325,31 +341,47 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            await base.OnInitializeAsync(cancellationToken);
-            
-            Lexemes = await LexiconManager.GetLexemesAsync(TokenDisplay.TranslationSurfaceText, GetSourceLanguage(), GetTargetLanguage());
+            await base.OnInitializeAsync(cancellationToken);            
+        }
 
-            if (TokenDisplay?.Translation?.LexiconTranslationId != null)
+        protected override async void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+
+            OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+
+            await Task.Run(async () => {
+
+                SourceFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.ParatextGuid);
+                TargetFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.ParatextGuid);
+
+                Lexemes = await LexiconManager.GetLexemesAsync(TokenDisplay.TranslationSurfaceText, GetSourceLanguage(), GetTargetLanguage());
+
+                if (TokenDisplay?.Translation?.LexiconTranslationId != null)
+                {
+                    CurrentLexeme = Lexemes.GetLexemeWithTranslation(TokenDisplay.Translation.LexiconTranslationId);
+                }
+                CurrentLexeme ??= Lexemes.FirstOrDefault();
+
+                if (Concordance.Count == 0)
+                {
+                    await BuildConcordance();
+                }
+                SelectCurrentTranslation();
+
+                if (SemanticDomainSuggestions.Count == 0)
+                {
+                    SemanticDomainSuggestions = await LexiconManager.GetAllSemanticDomainsAsync();
+                }
+
+            });
+
+            OnUIThread(() =>
             {
-                CurrentLexeme = Lexemes.GetLexemeWithTranslation(TokenDisplay.Translation.LexiconTranslationId);
-            }
-            CurrentLexeme ??= Lexemes.FirstOrDefault();
+                ProgressBarVisibility = Visibility.Collapsed;
+                IsLoaded = true;
+            });
 
-            if (Concordance.Count == 0)
-            {
-                await BuildConcordance();
-            }
-            SelectCurrentTranslation();
-
-            if (SemanticDomainSuggestions.Count == 0)
-            {
-                SemanticDomainSuggestions = await LexiconManager.GetAllSemanticDomainsAsync();
-            }
-
-            SourceFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.ParatextGuid);
-            TargetFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.ParatextGuid);
-
-            OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
         }
 
         public dynamic DialogSettings()
