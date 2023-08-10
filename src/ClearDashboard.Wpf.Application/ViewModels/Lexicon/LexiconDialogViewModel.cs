@@ -397,7 +397,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             settings.WindowState = WindowState.Normal;
             settings.ResizeMode = ResizeMode.CanResizeWithGrip;
             settings.PopupAnimation = PopupAnimation.Fade;
-            settings.Placement = PlacementMode.Center;
+            settings.WindowStartupLocation = WindowStartupLocation.Manual;
+            settings.Top = 0;
+            settings.Left = App.Current.MainWindow.ActualWidth/2 - 258;
             settings.Width = 1000;
             settings.Height = 800;
             settings.Title = DialogTitle;
