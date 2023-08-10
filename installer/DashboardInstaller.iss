@@ -144,6 +144,9 @@ Source: "..\tools\PluginManager\bin\Release\net7.0-windows\publish\win-x64\*"; D
 Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencryption
 
+; Install ResetCurrentUser
+Source: "..\tools\ResetCurrentUser\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 ; Install Hebrew & Greek Fonts
@@ -175,7 +178,8 @@ Name: "{autoprograms}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsNam
 Name: "{autodesktop}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
+Filename: "{app}\ResetCurrentUser.exe";
+Filename: "{app}\..\Paratext 9\Paratext.exe"; Description: "{cm:LaunchProgram,{#StringChange("Paratext", '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 
 [InstallDelete]
 Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"
