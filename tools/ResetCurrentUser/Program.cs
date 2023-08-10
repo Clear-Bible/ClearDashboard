@@ -44,6 +44,17 @@ namespace ResetCurrentUser
                     SetFileOwnershipToUser(fileInfo, ntAccount);
                 }
             }
+
+            foreach (var dir in Directory.GetDirectories(collabDir, "*.*", SearchOption.AllDirectories))
+            {
+                var dirInfo = new DirectoryInfo(dir);
+                var dirOwner = dirInfo.GetAccessControl().GetOwner(typeof(NTAccount));
+                if (dirOwner.ToString() != loggedInUser)
+                {
+                    // if it is a different user, change the ownership to the current user
+                    SetDirectoryOwnershipToUser(dirInfo, ntAccount);
+                }
+            }
         }
 
 
@@ -88,6 +99,22 @@ namespace ResetCurrentUser
                 ntAccount, System.Security.AccessControl.FileSystemRights.FullControl, System.Security.AccessControl.AccessControlType.Allow));
 
             fileInfo.SetAccessControl(acl);
+        }
+
+        /// <summary>
+        /// Set the ownership of the directory to the current logged in user.
+        /// </summary>
+        /// <param name="dirInfo"></param>
+        /// <param name="ntAccount"></param>
+        private static void SetDirectoryOwnershipToUser(DirectoryInfo dirInfo, NTAccount ntAccount)
+        {
+            var acl = dirInfo.GetAccessControl(System.Security.AccessControl.AccessControlSections.All);
+
+            acl.SetOwner(ntAccount);
+            acl.AddAccessRule(new System.Security.AccessControl.FileSystemAccessRule(
+                ntAccount, System.Security.AccessControl.FileSystemRights.FullControl, System.Security.AccessControl.AccessControlType.Allow));
+
+            dirInfo.SetAccessControl(acl);
         }
     }
 }
