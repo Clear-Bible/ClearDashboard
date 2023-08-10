@@ -266,7 +266,7 @@
                 <ListView
                     Height="325"
                     Margin="5"
-                    cm:Message.Attach="[Event SelectionChanged] = [Action SetCheckBox($this, $eventArgs)]"
+                    cm:Message.Attach="[Event MouseLeftButtonUp] = [Action SetCheckBox($this)]"
                     BorderBrush="{StaticResource PrimaryHueMidBrush}"
                     BorderThickness="1"
                     IsEnabled="{Binding IsGitLabUserListEnabled}"
