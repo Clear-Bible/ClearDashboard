@@ -403,7 +403,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         }
 
-        public async void SetCheckBox(object sender, SelectionChangedEventArgs e)
+        public async void SetCheckBox(object sender)
         {
             if (sender is GitUser user)
             {

@@ -38,7 +38,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         IHandle<PerformanceModeMessage>,
         IHandle<DashboardProjectNameMessage>,
         IHandle<ProjectChangedMessage>,
-        IHandle<RefreshCheckGitLab>
+        IHandle<RefreshCheckGitLab>,
+        IHandle<DashboardProjectPermissionLevelMessage>
     {
 
         //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
@@ -107,6 +108,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #endregion
 
         #region ObservableProps
+
+        private PermissionLevel _permissionLevel = PermissionLevel.ReadOnly;
+        public PermissionLevel PermissionLevel
+        {
+            get => _permissionLevel;
+            set => Set(ref _permissionLevel, value);
+        }
+
 
         private string _elapsedTime = "";
         public string ElapsedTime
@@ -636,7 +645,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public async Task HandleAsync(DashboardProjectNameMessage message, CancellationToken cancellationToken)
         {
-            DashboardProjectName = message.projectName;
+            DashboardProjectName = message.ProjectName;
             await Task.CompletedTask;
         }
 
@@ -648,5 +657,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         #endregion
+
+        public Task HandleAsync(DashboardProjectPermissionLevelMessage message, CancellationToken cancellationToken)
+        {
+            PermissionLevel = message.PermissionLevel;
+            return Task.CompletedTask;
+        }
     }
 }

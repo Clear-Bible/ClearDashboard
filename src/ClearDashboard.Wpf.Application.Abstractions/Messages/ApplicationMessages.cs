@@ -28,7 +28,9 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record ParatextConnectedMessage(bool Connected);
 
     public record UserMessage(User User);
-    public record DashboardProjectNameMessage(string projectName);
+    public record DashboardProjectNameMessage(string ProjectName);
+
+    public record DashboardProjectPermissionLevelMessage(PermissionLevel PermissionLevel);
 
     public record FilterPinsMessage(string Message, XmlSource XmlSource = XmlSource.All);
 
