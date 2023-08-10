@@ -5,6 +5,7 @@ using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,14 +34,15 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 
         public async Task TranslationSetAsync(TranslationEventArgs args)
         {
-            if (!args.IsControlPressed)
+            if (args.SelectedTokens.Where(t => t.IsTranslationSelected).Count() == 1 &&
+                !args.SelectedTokens.Any(t => t.IsTokenSelected))
             {
                 async Task ShowTranslationSelectionDialog()
                 {
                     if (args.InterlinearDisplay != null)
                     {
                         var dialogViewModel = args.InterlinearDisplay.Resolve<LexiconDialogViewModel>();
-                        dialogViewModel.TokenDisplay = args.TokenDisplay;
+                        dialogViewModel.TokenDisplay = args.TokenDisplay!;
                         dialogViewModel.InterlinearDisplay = args.InterlinearDisplay;
                         _ = await args.InterlinearDisplay.WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
                     }

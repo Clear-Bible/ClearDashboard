@@ -48,9 +48,8 @@ namespace ClearDashboard.Wpf.Application.Services
             }
             else if (associatedEntityId is TranslationId)
             {
-                // FIXME:  add "Notes_TranslationSet" key to localizations
                 var sb = new StringBuilder();
-                sb.Append($"Translation Set {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
+                sb.Append($"{LocalizationService["Notes_TranslationSet"]} {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
                 sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
                 return sb.ToString();

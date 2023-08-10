@@ -1107,6 +1107,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
+        private void OnTranslationButtonKeyUp(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control) && (e.Key == Key.G || e.Key == Key.T))
+            {
+                RaiseTranslationEvent(TranslationSetEvent, e);
+            }
+        }
+
         private void OnTranslationClicked(object sender, RoutedEventArgs e)
         {
             RaiseTranslationEvent(TranslationClickedEvent, e);
@@ -1114,7 +1122,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTranslationDoubleClicked(object sender, RoutedEventArgs e)
         {
-            RaiseTranslationEvent(TranslationDoubleClickedEvent, e);
+            if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+            {
+                RaiseTranslationEvent(TranslationDoubleClickedEvent, e);
+            }
         }
 
         private void OnTranslationLeftButtonDown(object sender, RoutedEventArgs e)

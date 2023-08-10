@@ -155,6 +155,7 @@
             FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
             Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationColor}"
             IsDefault="False"
+            KeyUp="OnTranslationButtonKeyUp"
             MouseDoubleClick="OnTranslationDoubleClicked"
             MouseEnter="OnTranslationMouseEnter"
             MouseLeave="OnTranslationMouseLeave"
