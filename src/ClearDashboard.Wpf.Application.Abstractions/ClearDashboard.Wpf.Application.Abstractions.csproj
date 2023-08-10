@@ -28,7 +28,7 @@
     <PackageReference Include="ClearApplicationFoundation" Version="2.0.5" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.8" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.9" />
     <PackageReference Include="HttpClientToCurl" Version="1.9.0" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.701" />
     <PackageReference Include="MailKit" Version="4.1.0" />
