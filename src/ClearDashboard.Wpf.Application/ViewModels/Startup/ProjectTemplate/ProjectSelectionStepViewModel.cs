@@ -6,6 +6,7 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -307,6 +308,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             }
 
             _projectName = ProjectManager!.CurrentDashboardProject?.ProjectName ?? string.Empty;
+
+            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], _projectName);
 
             SelectedParatextProject = ParentViewModel!.SelectedParatextProject;
             SelectedParatextBtProject = ParentViewModel!.SelectedParatextBtProject;

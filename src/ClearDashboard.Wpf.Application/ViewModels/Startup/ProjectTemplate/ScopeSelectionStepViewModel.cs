@@ -101,6 +101,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await SelectedBookManager!.InitializeBooks(usfmErorsByParatextProjectId, false, CancellationToken.None);
             ContinueEnabled = SelectedBookManager.SelectedBooks.Any();
 
+            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ProjectManager!.CurrentDashboardProject.ProjectName);
+
             ProgressIndicatorVisibility = Visibility.Hidden;
 
             await base.OnActivateAsync(cancellationToken);

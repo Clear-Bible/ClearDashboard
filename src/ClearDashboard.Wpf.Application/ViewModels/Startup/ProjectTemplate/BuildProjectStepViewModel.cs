@@ -16,10 +16,16 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DAL.Alignment;
+using ClearDashboard.DataAccessLayer.Models;
+using System.IO.Packaging;
+using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
+using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
@@ -82,6 +88,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             _backOrCancelAction = _backAction;
             _createOrCloseAction = _createAction;
+
+            
         }
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
@@ -104,6 +112,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             await ProjectDesignSurfaceViewModel.Initialize(cancellationToken);
 
+         
+
             ProjectDesignSurfaceViewModel.Parent = this;
             ProjectDesignSurfaceViewModel.ConductWith(this);
             var view = ViewLocator.LocateForModel(ProjectDesignSurfaceViewModel, null, null);
@@ -113,11 +123,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             Execute.OnUIThread(() =>
             {
-                var corpus1 = new Corpus(new CorpusId(Guid.NewGuid()));
-                ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus1, new Point(100, 100));
+                ProjectDesignSurfaceViewModel.ProjectName = ProjectManager!.CurrentDashboardProject.ProjectName;
 
-                var corpus2 = new Corpus(new CorpusId(Guid.NewGuid()));
-                ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus2, new Point(100, 200));
+                DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ProjectDesignSurfaceViewModel.ProjectName);
+
+                var corpus1 = new Corpus(new CorpusId(Guid.NewGuid()) {Name = "Node1"});
+                var node1 = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus1, new Point(50, 50));
+
+                var corpus2 = new Corpus(new CorpusId(Guid.NewGuid()) { Name = "Node2" });
+                var node2 = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus2, new Point(300, 50));
+
+                if (node1 is not null && node2 is not null)
+                {
+                    var connection = new ParallelCorpusConnectionViewModel
+                    {
+                        SourceConnector = node1.OutputConnectors[0],
+                        DestinationConnector = node2.InputConnectors[0],
+                        ParallelCorpusDisplayName = "Test Connection",
+                        ParallelCorpusId = new ParallelCorpusId(Guid.NewGuid()),
+                        SourceFontFamily = FontFamily.Families[0].Name,
+                        TargetFontFamily = FontFamily.Families[0].Name,
+                    };
+                    ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
+                    // add in the context menu
+                    //ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connection, topLevelProjectIds);
+                }
             });
           
 
