@@ -226,7 +226,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                                 AddTokenComponentContext(e.SourceTokenComponent!, bookNumbersToAbbreviations, domainEntityContext);
                                 domainEntityContext.Add("URI", "TranslationId://");
 
-                                domainEntityContexts.Add(new EntityId<AlignmentId>() { Id = e.Id }, domainEntityContext);
+                                domainEntityContexts.Add(new EntityId<TranslationId>() { Id = e.Id }, domainEntityContext);
                             });
                         break;
 

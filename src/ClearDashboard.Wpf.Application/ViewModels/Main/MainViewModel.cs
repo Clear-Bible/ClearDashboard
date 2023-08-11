@@ -2221,6 +2221,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             if (result == true)
             {
+                NoteManager.ClearNotesCache();
+
                 await OnDeactivateAsync(false, CancellationToken.None);
                 NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
                 await OnInitializeAsync(CancellationToken.None);

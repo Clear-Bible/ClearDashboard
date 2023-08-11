@@ -1,8 +1,9 @@
 ﻿using ClearBible.Engine.Utils;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    public class IIdEqualityComparer : IEqualityComparer<IId>
+    public class IIdEqualityComparer : IEqualityComparer<IId?>
     {
         public bool Equals(IId? x, IId? y)
         {
@@ -10,6 +11,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             if (x is null || y is null) return false;
             return x.Id.Equals(y.Id);
         }
-        public int GetHashCode(IId iid) => iid.Id.GetHashCode();
+
+        public int GetHashCode([DisallowNull] IId? iid) => iid.Id.GetHashCode();
     }
 }
