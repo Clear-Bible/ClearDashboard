@@ -131,7 +131,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public bool IsCollabProject { get; set; }
 
         public string CollabOwner { get; set; }
-        public PermissionLevel PermissionLevel { get; set; } = PermissionLevel.Owner;
+        public PermissionLevel PermissionLevel { get; set; } = PermissionLevel.None;
         public Guid Id { get; set; }
     }
 }

@@ -507,6 +507,9 @@
                                                     <DataTrigger Binding="{Binding PermissionLevel}" Value="ReadWrite">
                                                         <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
                                                     </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="None">
+                                                        <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.Gray6}" />
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>

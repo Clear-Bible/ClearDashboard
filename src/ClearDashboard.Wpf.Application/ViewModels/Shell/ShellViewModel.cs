@@ -109,7 +109,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region ObservableProps
 
-        private PermissionLevel _permissionLevel = PermissionLevel.ReadOnly;
+        private PermissionLevel _permissionLevel = PermissionLevel.None;
         public PermissionLevel PermissionLevel
         {
             get => _permissionLevel;
@@ -660,6 +660,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public Task HandleAsync(DashboardProjectPermissionLevelMessage message, CancellationToken cancellationToken)
         {
+            ProjectManager.CurrentDashboardProject.PermissionLevel = message.PermissionLevel;
+            
             PermissionLevel = message.PermissionLevel;
             return Task.CompletedTask;
         }
