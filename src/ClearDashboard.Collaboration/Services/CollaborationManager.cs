@@ -204,6 +204,14 @@ public class CollaborationManager
         if (!Repository.IsValid(_repositoryPath))
         {
             Repository.Init(_repositoryPath);
+
+            var headPath = Path.Combine(_repositoryPath, ".git", "HEAD");
+            var fileText = File.ReadAllText(headPath);
+            if (fileText.Contains("heads/main"))
+            {
+                File.WriteAllText(headPath, "ref: refs/heads/master\n");
+            }
+
         }
 
         using (var repo = new Repository(_repositoryPath))
