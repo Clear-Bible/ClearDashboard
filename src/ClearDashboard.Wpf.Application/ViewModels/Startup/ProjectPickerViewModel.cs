@@ -1100,16 +1100,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
         }
 
-        public override async Task MoveForwardsAction()
+       
+        public async Task CreateProjectWithProjectTemplate()
         {
-            if (UseProjectTemplate)
-            {
-                await ParentViewModel!.GoToStep(3);
-            }
-            else
-            {
-                await base.MoveForwardsAction();
-            }
+            await ParentViewModel!.GoToStep(3);
         }
 
         #endregion  Methods
