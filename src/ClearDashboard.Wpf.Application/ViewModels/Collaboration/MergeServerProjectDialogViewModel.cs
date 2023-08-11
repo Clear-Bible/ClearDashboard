@@ -457,6 +457,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 });
 
                 await _runningTask;
+
+                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(PermissionLevel.Owner));
             }
             catch (OperationCanceledException)
             {

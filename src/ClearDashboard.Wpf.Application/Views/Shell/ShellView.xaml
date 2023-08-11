@@ -204,12 +204,11 @@
                     </TextBlock>
 
 
-                    <TextBlock
-                        Margin="15,0,5,0"
-                        VerticalAlignment="Center">
+                    <TextBlock Margin="15,0,5,0" VerticalAlignment="Center">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                <Setter Property="Visibility" Value="Visible" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding PermissionLevel}" Value="Owner">
                                         <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
@@ -217,11 +216,13 @@
                                     <DataTrigger Binding="{Binding PermissionLevel}" Value="ReadWrite">
                                         <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="None">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </TextBlock.Style>
-                        <Run
-                            Text="Access Level:" />
+                        <Run Text="Access Level:" />
                         <Run Text="{Binding PermissionLevel}" />
                     </TextBlock>
 

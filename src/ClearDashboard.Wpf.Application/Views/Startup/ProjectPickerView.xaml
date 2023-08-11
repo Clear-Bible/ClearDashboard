@@ -500,12 +500,16 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                <Setter Property="Visibility" Value="Visible" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding PermissionLevel}" Value="Owner">
                                                         <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding PermissionLevel}" Value="ReadWrite">
                                                         <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="None">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
