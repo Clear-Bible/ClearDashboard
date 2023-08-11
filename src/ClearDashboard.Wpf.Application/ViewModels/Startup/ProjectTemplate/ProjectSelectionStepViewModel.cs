@@ -6,7 +6,6 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -99,12 +98,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _isEnabledSelectedParatextLwcProject, value);
         }
 
-        private DataAccessLayer.Models.Project _project;
-        public DataAccessLayer.Models.Project Project
-        {
-            get => _project;
-            private init => Set(ref _project, value);
-        }
 
         private string _projectName;
         public string ProjectName
@@ -113,11 +106,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set
             {
                 Set(ref _projectName, value.Replace(' ', '_'));
-                ProjectManager!.CurrentDashboardProject.ProjectName = _projectName;
-                Project.ProjectName = _projectName;
                 ValidationResult = Validator!.Validate(this);
                 CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName) && ValidationResult.IsValid);
-                NotifyOfPropertyChange(nameof(Project));
             }
         }
 
@@ -273,12 +263,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
         {
-            if (!ProjectManager!.HasDashboardProject)
-            {
-                ProjectManager.CreateDashboardProject();
-            }
 
-            _project = new DataAccessLayer.Models.Project();
             _projectName = string.Empty;
 
             CanMoveForwards = true;
@@ -314,9 +299,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             SelectedParatextProject = ParentViewModel!.SelectedParatextProject;
             SelectedParatextBtProject = ParentViewModel!.SelectedParatextBtProject;
             SelectedParatextLwcProject = ParentViewModel!.SelectedParatextLwcProject;
-            ShowBiblicalTexts = ParentViewModel!.ShowBiblicalTexts;
+            ShowBiblicalTexts = ParentViewModel!.IncludeBiblicalTexts;
 
-            ValidationResult = Validator!.Validate(this);
+            ValidationResult = await Validator!.ValidateAsync(this, cancellationToken);
             CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName) && ValidationResult.IsValid);
 
             await base.OnActivateAsync(cancellationToken);
@@ -324,11 +309,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public async Task CreateAsync()
         {
-            if (ProjectManager!.HasCurrentParatextProject == false)
-            {
-                return;
-            }
-
+           
             var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
             if (currentlyOpenProjectsList.Contains(ProjectName))
             {
@@ -339,9 +320,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             OpenProjectManager.AddProjectToOpenProjectList(ProjectManager!);
 
-            ProjectManager!.CurrentDashboardProject.ProjectName = Project.ProjectName;
 
-            ParentViewModel!.ExtraData = ProjectManager.CurrentDashboardProject;
         }
 
         public override async Task MoveBackwardsAction()
@@ -356,7 +335,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ParentViewModel!.SelectedParatextProject = SelectedParatextProject;
             ParentViewModel!.SelectedParatextBtProject = SelectedParatextBtProject;
             ParentViewModel!.SelectedParatextLwcProject = SelectedParatextLwcProject;
-            ParentViewModel!.ShowBiblicalTexts = ShowBiblicalTexts;
+            ParentViewModel!.IncludeBiblicalTexts = ShowBiblicalTexts;
+            ParentViewModel!.ProjectName = ProjectName;
 
             ParentViewModel!.SelectedBookIds = null;
 

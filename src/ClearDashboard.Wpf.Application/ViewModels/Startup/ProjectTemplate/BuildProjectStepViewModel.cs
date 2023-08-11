@@ -11,20 +11,16 @@ using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
-using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DAL.Alignment;
-using ClearDashboard.DataAccessLayer.Models;
-using System.IO.Packaging;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
+using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
@@ -61,6 +57,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             get => _progressIndicatorVisibility;
             set => Set(ref _progressIndicatorVisibility, value);
         }
+
+        public BindableCollection<string> Messages = new BindableCollection<string>();
 
         /// <summary>
         /// This is the design surface that is displayed in the window.
@@ -105,53 +103,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             CanMoveForwards = ParentViewModel!.SelectedParatextProject != null && (ParentViewModel!.SelectedBookIds?.Any() ?? false);
 
+           
+            await ActivateProjectDesignSurface(cancellationToken);
 
+            await Execute.OnUIThreadAsync(async () =>
+            {
+                ProjectDesignSurfaceViewModel.ProjectName = ParentViewModel!.ProjectName;
+                DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ProjectDesignSurfaceViewModel.ProjectName);
+                await BuildProjectDesignSurface();
+            });
           
 
+            await base.OnActivateAsync(cancellationToken);
+        }
+
+        private async Task ActivateProjectDesignSurface(CancellationToken cancellationToken)
+        {
             ProjectDesignSurfaceViewModel = LifetimeScope!.Resolve<ReadonlyProjectDesignSurfaceViewModel>();
 
             await ProjectDesignSurfaceViewModel.Initialize(cancellationToken);
 
-         
 
             ProjectDesignSurfaceViewModel.Parent = this;
             ProjectDesignSurfaceViewModel.ConductWith(this);
             var view = ViewLocator.LocateForModel(ProjectDesignSurfaceViewModel, null, null);
             ViewModelBinder.Bind(ProjectDesignSurfaceViewModel, view, null);
             await ScreenExtensions.TryActivateAsync(ProjectDesignSurfaceViewModel, cancellationToken);
-            //await DesignSurfaceViewModel.ActivateAsync();
-
-            Execute.OnUIThread(() =>
-            {
-                ProjectDesignSurfaceViewModel.ProjectName = ProjectManager!.CurrentDashboardProject.ProjectName;
-
-                DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ProjectDesignSurfaceViewModel.ProjectName);
-
-                var corpus1 = new Corpus(new CorpusId(Guid.NewGuid()) {Name = "Node1"});
-                var node1 = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus1, new Point(50, 50));
-
-                var corpus2 = new Corpus(new CorpusId(Guid.NewGuid()) { Name = "Node2" });
-                var node2 = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus2, new Point(300, 50));
-
-                if (node1 is not null && node2 is not null)
-                {
-                    var connection = new ParallelCorpusConnectionViewModel
-                    {
-                        SourceConnector = node1.OutputConnectors[0],
-                        DestinationConnector = node2.InputConnectors[0],
-                        ParallelCorpusDisplayName = "Test Connection",
-                        ParallelCorpusId = new ParallelCorpusId(Guid.NewGuid()),
-                        SourceFontFamily = FontFamily.Families[0].Name,
-                        TargetFontFamily = FontFamily.Families[0].Name,
-                    };
-                    ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
-                    // add in the context menu
-                    //ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connection, topLevelProjectIds);
-                }
-            });
-          
-
-            await base.OnActivateAsync(cancellationToken);
         }
 
         public async Task CreateOrClose()
@@ -163,12 +140,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 return;
             }
 
-            Stopwatch sw = new();
-            sw.Start();
+           
 
             _cancellationToken = _cancellationTokenSource.Token;
 
-            Action<ILogger>? errorCleanupAction = null;
             BackOrCancelAction = _cancelAction;
             CreateOrCloseAction = _createAction;
             ProgressIndicatorVisibility = Visibility.Visible;
@@ -176,26 +151,119 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             CanMoveForwards = false;
             CanMoveBackwards = true;
 
+            await RegisterProjectCreationTasks();
+            await CreateProject(_cancellationToken);
+        }
+
+        private StartupDialogViewModel _startupDialogViewModel;
+
+        private async Task CreateProject(CancellationToken? cancellationToken)
+        {
+            Stopwatch sw = new();
+            sw.Start();
+
+            // NB:  need to store a reference to the Parent view model so we can clean up in the finally block below;
+            _startupDialogViewModel = ParentViewModel;
+
+            Action<ILogger>? errorCleanupAction = null;
+            ProjectManager!.PauseDenormalization = true;
+            try
+            {
+                cancellationToken?.ThrowIfCancellationRequested();
+
+                _runningTask = Task.Run(async () =>
+                    await ProjectManager!.CreateNewProject(ParentViewModel!.ProjectName));
+                await _runningTask;
+
+                cancellationToken?.ThrowIfCancellationRequested();
+
+                _runningTask = _processRunner.RunRegisteredTasks(sw);
+                await _runningTask;
+
+                PlaySound.PlaySoundFromResource();
+
+                await ProjectDesignSurfaceViewModel!.SaveDesignSurfaceData();
+
+                await TryCloseAsync(true);
+            }
+            catch (OperationCanceledException)
+            {
+                errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
+                ProjectManager!.CurrentDashboardProject.ProjectName = null;
+                ProjectManager!.CurrentProject = null;
+
+                PlaySound.PlaySoundFromResource(SoundType.Error);
+
+                await _startupDialogViewModel!.GoToStep(1);
+            }
+            catch (Exception)
+            {
+                errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
+                ProjectManager!.CurrentDashboardProject.ProjectName = null;
+                ProjectManager!.CurrentProject = null;
+
+                PlaySound.PlaySoundFromResource(SoundType.Error);
+
+                await _startupDialogViewModel!.GoToStep(1);
+            }
+            finally
+            {
+                _runningTask.Dispose();
+                _runningTask = Task.CompletedTask;
+
+                _cancellationToken = null;
+
+                ProgressIndicatorVisibility = Visibility.Hidden;
+                CanMoveForwards = false;
+                CanMoveBackwards = false;
+
+                errorCleanupAction?.Invoke(Logger!);
+
+                ProjectManager!.PauseDenormalization = false;
+              
+
+                // Reset everything in case the wizard is activated again:
+                _startupDialogViewModel!.SelectedParatextProject = null;
+                _startupDialogViewModel!.SelectedParatextBtProject = null;
+                _startupDialogViewModel!.SelectedParatextLwcProject = null;
+                _startupDialogViewModel!.IncludeBiblicalTexts = true;
+                _startupDialogViewModel!.SelectedBookIds = null;
+
+                await _startupDialogViewModel!.TryCloseAsync(true);
+
+                sw.Stop();
+            }
+        }
+
+        private async Task RegisterProjectCreationTasks()
+        {
             _processRunner.StartRegistration();
 
             string? manuscriptHebrewTaskName = null;
             string? manuscriptGreekTaskName = null;
-            if (ParentViewModel!.ShowBiblicalTexts)
+            if (ParentViewModel!.IncludeBiblicalTexts)
             {
                 manuscriptHebrewTaskName = _processRunner.RegisterManuscriptCorpusTask(CorpusType.ManuscriptHebrew);
                 manuscriptGreekTaskName = _processRunner.RegisterManuscriptCorpusTask(CorpusType.ManuscriptGreek);
             }
-            string? paratextTaskName = _processRunner.RegisterParatextProjectCorpusTask(ParentViewModel!.SelectedParatextProject, Tokenizers.LatinWordTokenizer, ParentViewModel!.SelectedBookIds);
+
+            var paratextTaskName = _processRunner.RegisterParatextProjectCorpusTask(
+                ParentViewModel!.SelectedParatextProject, Tokenizers.LatinWordTokenizer, ParentViewModel!.SelectedBookIds);
             string? paratextBtTaskName = null;
             string? paratextLwcTaskName = null;
 
             if (ParentViewModel!.SelectedParatextBtProject is not null)
             {
-                paratextBtTaskName = _processRunner.RegisterParatextProjectCorpusTask(ParentViewModel!.SelectedParatextBtProject, Tokenizers.LatinWordTokenizer, ParentViewModel!.SelectedBookIds);
+                paratextBtTaskName = _processRunner.RegisterParatextProjectCorpusTask(
+                    ParentViewModel!.SelectedParatextBtProject, Tokenizers.LatinWordTokenizer,
+                    ParentViewModel!.SelectedBookIds);
             }
+
             if (ParentViewModel!.SelectedParatextLwcProject is not null)
             {
-                paratextLwcTaskName = _processRunner.RegisterParatextProjectCorpusTask(ParentViewModel!.SelectedParatextLwcProject, Tokenizers.LatinWordTokenizer, ParentViewModel!.SelectedBookIds);
+                paratextLwcTaskName = _processRunner.RegisterParatextProjectCorpusTask(
+                    ParentViewModel!.SelectedParatextLwcProject, Tokenizers.LatinWordTokenizer,
+                    ParentViewModel!.SelectedBookIds);
 
                 var taskNameSetParatextLwc = _processRunner.RegisterParallelizationTasks(
                     paratextTaskName,
@@ -231,66 +299,87 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                     SmtModelType.FastAlign.ToString());
             }
 
-            ProjectManager!.PauseDenormalization = true;
-            try
+            await Task.CompletedTask;
+        }
+
+        private CorpusNodeViewModel BuildCorpusNode(Corpus corpus, Point designSurfaceLocation)
+        {
+
+           return ProjectDesignSurfaceViewModel!.DesignSurfaceViewModel!.CreateCorpusNode(corpus, designSurfaceLocation);
+
+            
+
+            //var corpus2 = new Corpus(new CorpusId(Guid.NewGuid()) { Name = "Node2" });
+            //var node2 = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.CreateCorpusNode(corpus2, new Point(300, 50));
+
+            //if (node1 is not null && node2 is not null)
+            //{
+            //    var connection = new ParallelCorpusConnectionViewModel
+            //    {
+            //        SourceConnector = node1.OutputConnectors[0],
+            //        DestinationConnector = node2.InputConnectors[0],
+            //        ParallelCorpusDisplayName = "Test Connection",
+            //        ParallelCorpusId = new ParallelCorpusId(Guid.NewGuid()),
+            //        SourceFontFamily = FontFamily.Families[0].Name,
+            //        TargetFontFamily = FontFamily.Families[0].Name,
+            //    };
+            //    ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
+            //    // add in the context menu
+            //    //ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connection, topLevelProjectIds);
+            //}
+        }
+
+        private async Task BuildProjectDesignSurface()
+        {
+  
+            CorpusNodeViewModel? paratextBackTranslationNode = null;
+            CorpusNodeViewModel? manuscriptHebrewNode = null;
+            CorpusNodeViewModel? manuscriptGreekNode = null;
+            CorpusNodeViewModel? paratextLwcNode = null;
+
+            if (ParentViewModel!.IncludeBiblicalTexts)
             {
-                _cancellationToken?.ThrowIfCancellationRequested();
-
-                _runningTask = Task.Run(async () => await ProjectManager!.CreateNewProject(ProjectManager!.CurrentDashboardProject.ProjectName));
-                await _runningTask;
-
-                _cancellationToken?.ThrowIfCancellationRequested();
-
-                _runningTask = _processRunner.RunRegisteredTasks(sw);
-                await _runningTask;
-
-                PlaySound.PlaySoundFromResource();
-                await TryCloseAsync(false);
+                manuscriptHebrewNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = MaculaCorporaNames.HebrewCorpusName }), new Point(50, 300)); ;
+                manuscriptGreekNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = MaculaCorporaNames.GreekCorpusName }), new Point(50, 450));
             }
-            catch (OperationCanceledException)
+
+
+            var paratextNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = ParentViewModel!.SelectedParatextProject.Name }) ,new Point(50, 50));
+
+            if (ParentViewModel!.SelectedParatextBtProject is not null)
             {
-                errorCleanupAction = await GetErrorCleanupAction(ProjectManager!.CurrentDashboardProject.ProjectName!);
-                ProjectManager!.CurrentDashboardProject.ProjectName = null;
-                ProjectManager!.CurrentProject = null;
-
-                PlaySound.PlaySoundFromResource(SoundType.Error);
-
-                await ParentViewModel!.GoToStep(1);
+                paratextBackTranslationNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = ParentViewModel!.SelectedParatextBtProject.Name }), new Point(300, 50));
             }
-            catch (Exception)
+
+            if (ParentViewModel!.SelectedParatextLwcProject is not null)
             {
-                errorCleanupAction = await GetErrorCleanupAction(ProjectManager!.CurrentDashboardProject.ProjectName!);
-                ProjectManager!.CurrentDashboardProject.ProjectName = null;
-                ProjectManager!.CurrentProject = null;
-
-                PlaySound.PlaySoundFromResource(SoundType.Error);
-
-                await ParentViewModel!.GoToStep(1);
+                paratextLwcNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = ParentViewModel!.SelectedParatextLwcProject.Name }), new Point(300, 150));
             }
-            finally
+
+            if (paratextLwcNode is not null && paratextBackTranslationNode is not null)
             {
-                _runningTask.Dispose();
-                _runningTask = Task.CompletedTask;
-
-                _cancellationToken = null;
-
-                ProgressIndicatorVisibility = Visibility.Hidden;
-                CanMoveForwards = false;
-                CanMoveBackwards = false;
-
-                errorCleanupAction?.Invoke(Logger!);
-
-                ProjectManager!.PauseDenormalization = false;
-
-                // Reset everything in case the wizard is activated again:
-                ParentViewModel!.SelectedParatextProject = null;
-                ParentViewModel!.SelectedParatextBtProject = null;
-                ParentViewModel!.SelectedParatextLwcProject = null;
-                ParentViewModel!.ShowBiblicalTexts = true;
-                ParentViewModel!.SelectedBookIds = null;
-
-                sw.Stop();
+               // TODO: create parallel connection here.
             }
+
+            //if (manuscriptHebrewTaskName is not null && paratextLwcTaskName is not null)
+            //{
+            //    var taskNameLwcHebrewBt = _processRunner.RegisterParallelizationTasks(
+            //        paratextLwcTaskName,
+            //        manuscriptHebrewTaskName,
+            //        false,
+            //        SmtModelType.FastAlign.ToString());
+            //}
+
+            //if (manuscriptGreekTaskName is not null)
+            //{
+            //    var taskNameParatextGreekBt = _processRunner.RegisterParallelizationTasks(
+            //        paratextTaskName,
+            //        manuscriptGreekTaskName,
+            //        false,
+            //        SmtModelType.FastAlign.ToString());
+            //}
+
+            await Task.CompletedTask;
         }
 
         private async Task<Action<ILogger>?> GetErrorCleanupAction(string projectName)

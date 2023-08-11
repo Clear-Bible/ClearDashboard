@@ -51,16 +51,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _selectedParatextLwcProject, value);
         }
 
+        public string ProjectName { get; set; }
+
         public List<string?> ParatextProjectIds => new() {
             SelectedParatextProject?.Id,
             SelectedParatextBtProject?.Id,
             SelectedParatextLwcProject?.Id};
 
-        private bool _showBiblicalTexts = true;
-        public bool ShowBiblicalTexts
+        private bool _includeBiblicalTexts = true;
+        public bool IncludeBiblicalTexts
         {
-            get => _showBiblicalTexts;
-            set => Set(ref _showBiblicalTexts, value);
+            get => _includeBiblicalTexts;
+            set => Set(ref _includeBiblicalTexts, value);
         }
 
         private IEnumerable<string>? _selectedBookIds = null;

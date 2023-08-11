@@ -1,24 +1,17 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
-using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using static ClearBible.Engine.Persistence.FileGetBookIds;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
@@ -101,7 +94,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await SelectedBookManager!.InitializeBooks(usfmErorsByParatextProjectId, false, CancellationToken.None);
             ContinueEnabled = SelectedBookManager.SelectedBooks.Any();
 
-            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ProjectManager!.CurrentDashboardProject.ProjectName);
+            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ParentViewModel.ProjectName);
 
             ProgressIndicatorVisibility = Visibility.Hidden;
 
