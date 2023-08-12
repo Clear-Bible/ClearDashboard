@@ -297,6 +297,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task SaveDesignSurfaceData()
         {
+
+            if (ProjectManager == null || ProjectManager!.CurrentProject == null)
+            {
+                Logger?.LogInformation("******************************* WARNING! - ProjectManager or its CurrentProject is null.  Cannot save layout. *****************************************");
+                return;
+            }
+
             _ = await Task.Factory.StartNew(async () =>
                 //_ = await Task.Run(async () =>
 

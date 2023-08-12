@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using Point = System.Windows.Point;
@@ -329,6 +330,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             //}
         }
 
+
+
         private async Task BuildProjectDesignSurface()
         {
   
@@ -336,48 +339,102 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             CorpusNodeViewModel? manuscriptHebrewNode = null;
             CorpusNodeViewModel? manuscriptGreekNode = null;
             CorpusNodeViewModel? paratextLwcNode = null;
+            CorpusNodeViewModel? paratextNode = null;
+
+            paratextNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
+            {
+                Name = ParentViewModel!.SelectedParatextProject.Name,
+                FontFamily = ParentViewModel!.SelectedParatextProject.FontFamily,
+                CorpusType = ParentViewModel!.SelectedParatextProject.CorpusTypeDisplay
+            }), new Point(50, 50));
 
             if (ParentViewModel!.IncludeBiblicalTexts)
             {
-                manuscriptHebrewNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = MaculaCorporaNames.HebrewCorpusName }), new Point(50, 300)); ;
-                manuscriptGreekNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = MaculaCorporaNames.GreekCorpusName }), new Point(50, 450));
+                manuscriptHebrewNode = BuildCorpusNode(new Corpus(new CorpusId(ManuscriptIds.HebrewManuscriptGuid)
+                {
+                    Name = MaculaCorporaNames.HebrewCorpusName, 
+                    FontFamily = FontNames.HebrewFontFamily, 
+                    CorpusType = CorpusType.ManuscriptHebrew.ToString()
+                }), new Point(300, 200)); ;
+                manuscriptGreekNode = BuildCorpusNode(new Corpus(new CorpusId(ManuscriptIds.GreekManuscriptGuid) { Name = MaculaCorporaNames.GreekCorpusName, FontFamily = FontNames.GreekFontFamily, CorpusType = CorpusType.ManuscriptGreek.ToString() }), new Point(300, 275));
             }
-
-
-            var paratextNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = ParentViewModel!.SelectedParatextProject.Name }) ,new Point(50, 50));
 
             if (ParentViewModel!.SelectedParatextBtProject is not null)
             {
-                paratextBackTranslationNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = ParentViewModel!.SelectedParatextBtProject.Name }), new Point(300, 50));
+                paratextBackTranslationNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
+                {
+                    Name = ParentViewModel!.SelectedParatextBtProject.Name, 
+                    FontFamily = ParentViewModel!.SelectedParatextBtProject.FontFamily, 
+                    CorpusType = ParentViewModel!.SelectedParatextBtProject.CorpusTypeDisplay
+                }), new Point(300, 50));
             }
 
             if (ParentViewModel!.SelectedParatextLwcProject is not null)
             {
-                paratextLwcNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid()) { Name = ParentViewModel!.SelectedParatextLwcProject.Name }), new Point(300, 150));
+                paratextLwcNode = BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
+                {
+                    Name = ParentViewModel!.SelectedParatextLwcProject.Name,
+                    FontFamily = ParentViewModel!.SelectedParatextLwcProject.FontFamily,
+                    CorpusType = ParentViewModel!.SelectedParatextLwcProject.CorpusTypeDisplay
+                }), new Point(300, 125));
             }
 
-            if (paratextLwcNode is not null && paratextBackTranslationNode is not null)
+            if (paratextNode is not null && paratextBackTranslationNode is not null)
             {
-               // TODO: create parallel connection here.
+                var connection = new ParallelCorpusConnectionViewModel
+                {
+                    SourceConnector = paratextNode.OutputConnectors[0],
+                    DestinationConnector = paratextBackTranslationNode.InputConnectors[0],
+                    ParallelCorpusDisplayName = $"{paratextNode.Name} - {paratextBackTranslationNode.Name}",
+                    ParallelCorpusId = new ParallelCorpusId(Guid.NewGuid()),
+                    SourceFontFamily = ParentViewModel!.SelectedParatextProject.FontFamily,
+                    TargetFontFamily = ParentViewModel!.SelectedParatextBtProject.FontFamily,
+                }; 
+                ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
             }
 
-            //if (manuscriptHebrewTaskName is not null && paratextLwcTaskName is not null)
-            //{
-            //    var taskNameLwcHebrewBt = _processRunner.RegisterParallelizationTasks(
-            //        paratextLwcTaskName,
-            //        manuscriptHebrewTaskName,
-            //        false,
-            //        SmtModelType.FastAlign.ToString());
-            //}
+            if (paratextNode != null && paratextLwcNode != null)
+            {
+                var connection = new ParallelCorpusConnectionViewModel
+                {
+                    SourceConnector = paratextNode.OutputConnectors[0],
+                    DestinationConnector = paratextLwcNode.InputConnectors[0],
+                    ParallelCorpusDisplayName = $"{paratextNode.Name} - {paratextLwcNode.Name}",
+                    ParallelCorpusId = new ParallelCorpusId(Guid.NewGuid()),
+                    SourceFontFamily = ParentViewModel!.SelectedParatextProject.FontFamily,
+                    TargetFontFamily = ParentViewModel!.SelectedParatextLwcProject.FontFamily,
+                };
+                ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
+            }
 
-            //if (manuscriptGreekTaskName is not null)
-            //{
-            //    var taskNameParatextGreekBt = _processRunner.RegisterParallelizationTasks(
-            //        paratextTaskName,
-            //        manuscriptGreekTaskName,
-            //        false,
-            //        SmtModelType.FastAlign.ToString());
-            //}
+            if (paratextNode != null && manuscriptHebrewNode != null)
+            {
+                var connection = new ParallelCorpusConnectionViewModel
+                {
+                    SourceConnector = paratextNode.OutputConnectors[0],
+                    DestinationConnector = manuscriptHebrewNode.InputConnectors[0],
+                    ParallelCorpusDisplayName = $"{paratextNode.Name} - {manuscriptHebrewNode.Name}",
+                    ParallelCorpusId = new ParallelCorpusId(Guid.NewGuid()),
+                    SourceFontFamily = ParentViewModel!.SelectedParatextProject.FontFamily,
+                    TargetFontFamily = FontNames.HebrewFontFamily,
+                };
+                ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
+            }
+
+            if (paratextNode != null && manuscriptGreekNode != null)
+            {
+                var connection = new ParallelCorpusConnectionViewModel
+                {
+                    SourceConnector = paratextNode.OutputConnectors[0],
+                    DestinationConnector = manuscriptGreekNode.InputConnectors[0],
+                    ParallelCorpusDisplayName = $"{paratextNode.Name} - {manuscriptGreekNode.Name}",
+                    ParallelCorpusId = new ParallelCorpusId(Guid.NewGuid()),
+                    SourceFontFamily = ParentViewModel!.SelectedParatextProject.FontFamily,
+                    TargetFontFamily = FontNames.GreekFontFamily,
+                };
+
+                ProjectDesignSurfaceViewModel.DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
+            }
 
             await Task.CompletedTask;
         }
