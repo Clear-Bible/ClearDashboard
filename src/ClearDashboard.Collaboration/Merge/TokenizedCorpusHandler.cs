@@ -160,13 +160,13 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
         var compositeChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.TokenComposite)].childName;
         if (childListDifferences.ContainsKey(compositeChildName))
         {
-            var tokenCompositeHandler = _mergeContext.FindMergeHandler< IModelSnapshot<TokenCompositeHandler>>();
+            var tokenCompositeHandler = (TokenCompositeHandler)_mergeContext.FindMergeHandler<IModelSnapshot<Models.TokenComposite>>();
 
             _mergeContext.Logger.LogInformation($"Starting handle composite token child list differences for tokenized corpus");
             await tokenCompositeHandler.MergeListDifferenceGroup(
                 childListDifferences[compositeChildName],
-                parentItemInCurrentSnapshot?.Children[compositeChildName],
-                parentItemInTargetCommitSnapshot?.Children[compositeChildName],
+                parentItemInCurrentSnapshot?.Children.GetValueOrDefault(compositeChildName),
+                parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(compositeChildName),
                 cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed handle composite token child list differences for tokenized corpus");
         }
