@@ -174,10 +174,18 @@
             VerticalAlignment="Center"
             Orientation="Vertical">
 
-            <Button
-                x:Name="AddUsersReadWrite"
-                Height="60"
-                Style="{StaticResource GreenMidButton}">
+            <Button x:Name="AddUsersReadWrite" Height="60">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource GreenMidButton}" TargetType="Button">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -195,8 +203,18 @@
             <Button
                 x:Name="AddUsers"
                 Height="60"
-                Margin="0,5,0,0"
-                Style="{StaticResource YellowMidButton}">
+                Margin="0,5,0,0">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource YellowMidButton}" TargetType="Button">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -214,8 +232,18 @@
             <Button
                 x:Name="AddOwner"
                 Height="60"
-                Margin="0,5,0,0"
-                Style="{StaticResource PurpleMidButton}">
+                Margin="0,5,0,0">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource PurpleMidButton}" TargetType="Button">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -234,8 +262,18 @@
                 x:Name="RemoveUser"
                 Height="40"
                 Margin="0,5,0,0"
-                VerticalAlignment="Center"
-                Style="{StaticResource RedMidButton}">
+                VerticalAlignment="Center">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource RedMidButton}" TargetType="Button">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
                 <materialDesign:PackIcon
                     Width="32"
                     Height="32"
