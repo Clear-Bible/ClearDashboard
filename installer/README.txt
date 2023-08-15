@@ -8,7 +8,8 @@
 
 5. Shut down Paratext
 8. SetVersionInfo tool
-7. Update the version number in the DashboardInstaller.iss file
+7. Update the version number in manifest.app
+8. Update the version number in the DashboardInstaller.iss file
 9. Change Visual Studio to Release mode
 
 
