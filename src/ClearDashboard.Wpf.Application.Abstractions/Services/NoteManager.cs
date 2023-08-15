@@ -145,11 +145,11 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="noteId">A note ID for which to retrieve the note details.</param>
         /// <param name="doGetParatextSendNoteInformation">If true, also retrieve information needed for sending the note to Paratext.</param>
         /// <returns>A <see cref="NoteViewModel"/> containing the note details.</returns>
-        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true)
+        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true, bool collabUpdate = false)
         {
             try
             {
-                if (NotesCache.TryGetValue(noteId.Id, out var noteDetails))
+                if (!collabUpdate && NotesCache.TryGetValue(noteId.Id, out var noteDetails))
                 {
                     Logger?.LogInformation($"Returning cached details for note \"{noteDetails.Text}\" ({noteId.Id})");
                     return noteDetails;

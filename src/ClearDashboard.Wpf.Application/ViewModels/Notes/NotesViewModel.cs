@@ -368,7 +368,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             NoteManager noteManager,
             CancellationToken cancellationToken,
             string taskName,
-            Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus)
+            Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus, bool collabUpdate)
         {
             HashSet<NoteId> noteIds = new HashSet<NoteId>(new IIdEqualityComparer());
 
@@ -387,7 +387,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Collecting note details for notes", null);
 
             return await noteIds
-                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false))
+                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false, collabUpdate))
                 .WhenAll();
         }
         private void UpdateSelectedNote(NoteViewModel? selectedNoteViewModel)
@@ -416,7 +416,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             if (selectedNoteViewModel != null)
                 SelectedNoteText = selectedNoteViewModel.Text;
         }
-        public async Task GetAllNotesAndSetNoteViewModelsAsync()
+        public async Task GetAllNotesAndSetNoteViewModelsAsync(bool collabUpdate = false)
         {
             try
             {
@@ -428,7 +428,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                 var taskName = "Get_notes";
                 var processStatus = await RunLongRunningTask(
                     taskName,
-                    (cancellationToken) => AssembleNotes(noteManager_!, cancellationToken, taskName, SendBackgroundStatus),
+                    (cancellationToken) => AssembleNotes(noteManager_!, cancellationToken, taskName, SendBackgroundStatus, collabUpdate),
                     (noteVms) =>
                     {
                         NoteViewModels.Clear();
@@ -668,7 +668,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
         {
-            await GetAllNotesAndSetNoteViewModelsAsync();
+            await GetAllNotesAndSetNoteViewModelsAsync(true);
         }
 
 
