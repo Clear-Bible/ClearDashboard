@@ -201,7 +201,7 @@
             </Button>
 
             <Button
-                x:Name="AddUsers"
+                x:Name="AddUsersReadOnly"
                 Height="60"
                 Margin="0,5,0,0">
                 <Button.Style>

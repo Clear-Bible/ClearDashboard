@@ -318,7 +318,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
 
-        public async void AddUsers(PermissionLevel permissionLevel = PermissionLevel.ReadOnly)
+        public async void AddUsers(PermissionLevel permissionLevel)
         {
             ShowProgressBar = Visibility.Visible;
             for (int i = CollabUsers.Count - 1; i >= 0; i--)
@@ -342,6 +342,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public void AddUsersReadWrite()
         {
             AddUsers(PermissionLevel.ReadWrite);
+        }
+
+        public void AddUsersReadOnly()
+        {
+            AddUsers(PermissionLevel.ReadOnly);
         }
 
         public void AddOwner()
