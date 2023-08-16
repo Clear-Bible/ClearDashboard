@@ -373,7 +373,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                 StatusMessageColor = System.Windows.Media.Brushes.Green;
                 
-                await EventAggregator.PublishOnUIThreadAsync(new RefreshCheckGitLab(), CancellationToken.None).ConfigureAwait(false);
+                await EventAggregator.PublishOnUIThreadAsync(new RefreshCheckGitLab(), CancellationToken.None);
             }
             catch (OperationCanceledException)
             {

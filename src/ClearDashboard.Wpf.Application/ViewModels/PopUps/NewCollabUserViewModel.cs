@@ -516,7 +516,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var password = GenerateRandomPassword.RandomPassword(16);
 
             GitLabUser user = await _gitLabHttpClientServices.CreateNewUser(FirstName, LastName, GetUserName(), password,
-                Email, SelectedGroup.Name).ConfigureAwait(false);
+                Email, SelectedGroup.Name);
 
             if (user.Id == 0)
             {
@@ -526,7 +526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                var accessToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(user).ConfigureAwait(false);
+                var accessToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(user);
 
                 CollaborationConfig = new CollaborationConfiguration
                 {
@@ -545,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 user.Password = password;
 
-                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken).ConfigureAwait(false);
+                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken);
 
                 if (results)
                 {

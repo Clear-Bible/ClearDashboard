@@ -287,7 +287,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     }
 
                 }
-            }).ConfigureAwait(false);
+            });
 
             // alphabetize the list by the short name
             projects.Sort((a, b) => a.Name.CompareTo(b.Name));
