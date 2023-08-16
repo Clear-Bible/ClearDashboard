@@ -898,7 +898,7 @@
                 <StackPanel>
                     <userControls:ReleaseNotesUserControl>
                         <!--  This DataTrigger was added to work around an issue where this control froze the UI.  See Jira DI 96  -->
-                        <userControls:ReleaseNotesUserControl.Style>
+                        <!--<userControls:ReleaseNotesUserControl.Style>
                             <Style TargetType="userControls:ReleaseNotesUserControl">
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Style.Triggers>
@@ -907,7 +907,7 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </userControls:ReleaseNotesUserControl.Style>
+                        </userControls:ReleaseNotesUserControl.Style>-->
                     </userControls:ReleaseNotesUserControl>
                 </StackPanel>
             </StatusBarItem>
