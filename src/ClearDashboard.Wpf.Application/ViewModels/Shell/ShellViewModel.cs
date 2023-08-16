@@ -575,7 +575,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             if (!SettingLanguage)
             {
-                await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
+                await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language));
             }
         }
 

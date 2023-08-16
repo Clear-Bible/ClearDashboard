@@ -5,10 +5,12 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -26,9 +28,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.UserControls;
-using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {

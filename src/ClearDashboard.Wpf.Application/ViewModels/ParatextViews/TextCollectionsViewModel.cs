@@ -2,34 +2,29 @@
 using Caliburn.Micro;
 using CefSharp;
 using CefSharp.Wpf;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using HtmlAgilityPack;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using AvalonDock.Properties;
-using ClearApplicationFoundation.Framework.Input;
-using ClearDashboard.Wpf.Application.Properties;
-using HtmlAgilityPack;
-using Serilog;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -247,7 +242,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             VerseChange = _projectManager.CurrentVerse;
 
 
-            await CallGetTextCollections().ConfigureAwait(false);
+            await CallGetTextCollections();
             base.OnViewAttached(view, context);
         }
 
@@ -265,7 +260,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 var showVerseByVerse = Settings.Default.VerseByVerseTextCollectionsEnabled;
                 try
                 {
-                    var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx, showVerseByVerse), CancellationToken.None).ConfigureAwait(false);
+                    var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx, showVerseByVerse), CancellationToken.None);
 
                     if (result.Success)
                     {
@@ -384,7 +379,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _currentVerse = incomingVerse;
             CurrentBcv.SetVerseFromId(_currentVerse);
 
-            CallGetTextCollections().ConfigureAwait(false);
+            await CallGetTextCollections();
         }
 
         #endregion // Methods

@@ -444,7 +444,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             };
 #pragma warning restore CA1416
 
-            var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
+            var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, _collaborationConfig.RemotePersonalAccessToken);
 
             if (results)
             {

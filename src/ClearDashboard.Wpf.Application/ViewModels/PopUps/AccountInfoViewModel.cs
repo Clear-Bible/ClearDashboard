@@ -1,15 +1,14 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
 using System.Reflection;
-using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {

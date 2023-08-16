@@ -282,7 +282,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
            try
            {
-               await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
+               await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
                await Task.Delay(250);
            }
            catch (Exception ex)

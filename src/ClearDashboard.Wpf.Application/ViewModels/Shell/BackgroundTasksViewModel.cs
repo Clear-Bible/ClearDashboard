@@ -1,15 +1,14 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Services;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {

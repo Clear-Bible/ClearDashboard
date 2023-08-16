@@ -7,12 +7,16 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
@@ -24,15 +28,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.Wpf.Application.Collections.Lexicon;
-using ClearDashboard.Wpf.Application.Dialogs;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
-using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
-using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
-using TranslationCollection = ClearDashboard.Wpf.Application.Collections.Lexicon.TranslationCollection;
 using TranslationId = ClearDashboard.DAL.Alignment.Lexicon.TranslationId;
-using ClearDashboard.Wpf.Application.ViewModels.Popups;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
