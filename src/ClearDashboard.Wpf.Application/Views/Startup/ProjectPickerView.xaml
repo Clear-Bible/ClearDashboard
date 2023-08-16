@@ -571,7 +571,9 @@
         <StackPanel
             Grid.Row="1"
             Grid.Column="1"
-            VerticalAlignment="Top">
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
             <ComboBox
                 x:Name="SelectedLanguage"
                 Width="200"
@@ -583,6 +585,22 @@
                 IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
                 SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+            <Button
+                Padding="-5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                cal:Message.Attach="[Event Click]=[Action OpenSettings()]"
+                Background="Transparent"
+                BorderBrush="Transparent">
+                <materialDesign:PackIcon
+                    Width="30"
+                    Height="30"
+                    Margin="5,5,20,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="{StaticResource PrimaryHueMidBrush}"
+                    Kind="Cog" />
+            </Button>
         </StackPanel>
         <!--<StackPanel
             Grid.Row="2"

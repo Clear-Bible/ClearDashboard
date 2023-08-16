@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
@@ -455,6 +456,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
+
+        public async Task OpenSettings()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+
+            // get this applications position on the screen
+            var window = App.Current.Windows.OfType<Window>().SingleOrDefault(w => w.DataContext == this.ParentViewModel);
+            settings.Left = window.Left + 150;
+            settings.Top = window.Top + 100;
+
+            var viewmodel = IoC.Get<DashboardSettingsViewModel>();
+            IWindowManager manager = new WindowManager();
+            await manager.ShowWindowAsync(viewmodel, null, settings);
+        }
 
         public async Task StartParatext()
         {
