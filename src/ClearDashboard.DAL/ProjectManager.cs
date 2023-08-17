@@ -60,12 +60,6 @@ namespace ClearDashboard.DataAccessLayer
 
         #endregion IProjectProvider
 
-
-       
-
-
-      
-
    
         #endregion
 
@@ -302,6 +296,11 @@ namespace ClearDashboard.DataAccessLayer
         {
             var result = await ExecuteRequest(new UpdateProjectCommand(project), CancellationToken.None);
             return result.Data;
+        }
+
+        public async Task<Project> UpdateCurrentProject()
+        {
+            return await UpdateProject(CurrentProject);
         }
     }
 }
