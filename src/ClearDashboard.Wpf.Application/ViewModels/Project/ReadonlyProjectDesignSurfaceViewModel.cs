@@ -298,33 +298,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async Task SaveDesignSurfaceData()
         {
 
-            if (ProjectManager == null || ProjectManager!.CurrentProject == null)
-            {
-                Logger?.LogInformation("******************************* WARNING! - ProjectManager or its CurrentProject is null.  Cannot save layout. *****************************************");
-                return;
-            }
+            //if (ProjectManager == null || ProjectManager!.CurrentProject == null)
+            //{
+            //    Logger?.LogInformation("******************************* WARNING! - ProjectManager or its CurrentProject is null.  Cannot save layout. *****************************************");
+            //    return;
+            //}
 
-            _ = await Task.Factory.StartNew(async () =>
-                //_ = await Task.Run(async () =>
+            //_ = await Task.Factory.StartNew(async () =>
+            //    //_ = await Task.Run(async () =>
 
-            {
-                var json = SerializeDesignSurface();
+            //{
+            //    var json = SerializeDesignSurface();
 
-                ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
+            //    ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
 
-                Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
+            //    Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
 
-                try
-                {
-                    await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
-                    await Task.Delay(250);
-                }
-                catch (Exception ex)
-                {
-                    Logger?.LogError(ex,
-                        $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
-                }
-            });
+            //    try
+            //    {
+            //        await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
+            //        await Task.Delay(250);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Logger?.LogError(ex,
+            //            $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
+            //    }
+            //});
 
         }
 

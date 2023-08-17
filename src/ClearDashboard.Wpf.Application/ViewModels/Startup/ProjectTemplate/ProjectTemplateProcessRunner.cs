@@ -681,7 +681,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             Logger!.LogInformation($"{nameof(AddManuscriptCorpusAsync)} '{metadata.CorpusType}' called.");
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Transforming syntax trees...", cancellationToken: cancellationToken,
+                description: $"Transforming syntax trees.", cancellationToken: cancellationToken,
                 backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             var syntaxTree = new SyntaxTrees();
@@ -698,7 +698,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 .ToList();
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken,
+                description: $"Creating '{metadata.Name}' corpus.", cancellationToken: cancellationToken,
                 backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             var corpus = await Corpus.Create(
@@ -715,7 +715,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             corpus.CorpusId.FontFamily = DataAccessLayer.FontNames.GreekFontFamily;
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
+                description: $"Creating tokenized text corpus for '{metadata.Name}' corpus",
                 cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             // ReSharper disable once UnusedVariable
@@ -727,7 +727,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 true);
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
+                description: $"Completed creation of tokenized text corpus for '{metadata.Name}' corpus.",
                 cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             return tokenizedTextCorpus;
@@ -757,7 +757,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             if (corpus is null)
             {
                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                    description: $"Creating corpus '{metadata.Name}'...", cancellationToken: cancellationToken,
+                    description: $"Creating corpus '{metadata.Name}'.", cancellationToken: cancellationToken,
                     backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                 corpus = await Corpus.Create(
@@ -776,7 +776,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             }
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Tokenizing and transforming '{metadata.Name}' corpus...", cancellationToken: cancellationToken,
+                description: $"Tokenizing and transforming '{metadata.Name}' corpus.", cancellationToken: cancellationToken,
                 backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             var textCorpus = tokenizer switch
@@ -804,7 +804,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             cancellationToken.ThrowIfCancellationRequested();
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
+                description: $"Creating tokenized text corpus for '{metadata.Name}' corpus.",
                 cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             // ReSharper disable once UnusedVariable
@@ -812,7 +812,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 metadata.Name!, tokenizer.ToString(), metadata.ScrVers, cancellationToken);
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
+                description: $"Completed creation of tokenized text corpus for '{metadata.Name}' corpus.",
                 cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             return tokenizedTextCorpus;
@@ -825,7 +825,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             await SendBackgroundStatus(taskName,
                 LongRunningTaskStatus.Running,
                 cancellationToken,
-                $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'...");
+                $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'.");
 
             var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, sourceTokenizedTextCorpusId);
             var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, targetTokenizedTextCorpusId);
@@ -833,7 +833,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             await SendBackgroundStatus(taskName,
                 LongRunningTaskStatus.Running,
                 cancellationToken,
-                $"Parallelizing source and target corpora for '{parallelCorpusDisplayName}'...");
+                $"Parallelizing source and target corpora for '{parallelCorpusDisplayName}'.");
 
             var engineParallelTextCorpus =
                 await Task.Run(() => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
@@ -848,7 +848,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             await SendBackgroundStatus(taskName,
                 LongRunningTaskStatus.Running,
                 cancellationToken,
-                $"Saving parallelization '{parallelCorpusDisplayName}'...");
+                $"Saving parallelization '{parallelCorpusDisplayName}'.");
 
             var parallelCorpus = await engineParallelTextCorpus.Create(parallelCorpusDisplayName, Mediator!, cancellationToken);
 
@@ -857,7 +857,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 cancellationToken,
                 $"Completed saving parallelization '{parallelCorpusDisplayName}'.");
 
-            Logger!.LogInformation($"Completed saving parallelization '{parallelCorpusDisplayName}'");
+            Logger!.LogInformation($"Completed saving parallelization '{parallelCorpusDisplayName}'.");
 
             return parallelCorpus;
         }
@@ -934,7 +934,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             Logger!.LogInformation($"{nameof(AddAlignmentSetAsync)} '{displayName}' on '{parallelCorpus.ParallelCorpusId.DisplayName}' called.");
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                cancellationToken, $"Aligning corpora and creating the AlignmentSet '{displayName}'...");
+                cancellationToken, $"Aligning corpora and creating the AlignmentSet '{displayName}'.");
 
             //IEnumerable<AlignedTokenPairs>? alignedTokenPairs = null;
             if (alignedTokenPairs == null)
@@ -998,7 +998,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             await SendBackgroundStatus(taskName,
                 LongRunningTaskStatus.Running,
                 cancellationToken,
-                $"Creating the TranslationSet '{displayName}'...");
+                $"Creating the TranslationSet '{displayName}'.");
 
             var translationModel = wordAlignmentModel.GetTranslationTable();
 

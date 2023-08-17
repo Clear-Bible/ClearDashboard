@@ -47,6 +47,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+
+            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ParentViewModel!.ProjectName);
+
             if (ParentViewModel!.SelectedBookIds is not null)
             {
                 ContinueEnabled = true;
@@ -94,7 +97,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await SelectedBookManager!.InitializeBooks(usfmErorsByParatextProjectId, false, CancellationToken.None);
             ContinueEnabled = SelectedBookManager.SelectedBooks.Any();
 
-            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ParentViewModel.ProjectName);
+         
 
             ProgressIndicatorVisibility = Visibility.Hidden;
 
