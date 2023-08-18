@@ -99,8 +99,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         }
 
 
-        private string _projectName;
-        public string ProjectName
+        private string? _projectName;
+        public string? ProjectName
         {
             get => _projectName;
             set
@@ -140,7 +140,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 }
                 .Where(p => p != null);
 
-                return new(Projects.Where(p => !otherSelectedIds.Contains(p.Id)));
+                return new(Projects.Where(project => project.CorpusType == CorpusType.BackTranslation && !otherSelectedIds.Contains(project.Id)));
             }
             return null;
         }
@@ -161,7 +161,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             return null;
         }
 
-        public async void ParatextProjectSelected()
+        public async void ParatextProjectSelected(SelectionChangedEventArgs args)
         {
             if (_selectionChanging) return;
 
@@ -170,6 +170,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 try
                 {
                     _selectionChanging = true;
+
+                    //if (args.AddedItems.Count > 0 && ((ParatextProjectMetadata)args.AddedItems[0]).Name != _selectedParatextProject.Name)
+                    //{
+                    //    ParentViewModel!.SelectedBookManager.Initialize();
+                    //}
+
+                    //if (args.RemovedItems.Count > 0)
+                    //{
+                    //    ParentViewModel!.SelectedBookManager.Initialize();
+                    //}
 
                     ParatextBtProjects = GetSelectableParatextBtProjects();
                     ParatextLwcProjects = GetSelectableParatextLwcProjects();
@@ -198,7 +208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await Task.CompletedTask;
         }
 
-        public async void ParatextBtProjectSelected()
+        public async void ParatextBtProjectSelected(SelectionChangedEventArgs args)
         {
             if (_selectionChanging) return;
 
@@ -207,20 +217,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 try
                 {
                     _selectionChanging = true;
+
+                    //if (args.AddedItems.Count > 0 && ((ParatextProjectMetadata)args.AddedItems[0]).Name != _selectedParatextBtProject.Name)
+                    //{
+                    //    ParentViewModel!.SelectedBookManager.Initialize();
+                    //}
+
+                    //if (args.RemovedItems.Count > 0)
+                    //{
+                    //    ParentViewModel!.SelectedBookManager.Initialize();
+                    //}
 
                     ParatextProjects = GetSelectableParatextProjects();
                     ParatextLwcProjects = GetSelectableParatextLwcProjects();
                 }
-                    finally
-                    {
+                finally
+                {
                     _selectionChanging = false;
                 }
+            }
+
+            await Task.CompletedTask;
         }
 
-        await Task.CompletedTask;
-        }
-
-        public async void ParatextLwcProjectSelected()
+        public async void ParatextLwcProjectSelected(SelectionChangedEventArgs args)
         {
             if (_selectionChanging) return;
 
@@ -230,7 +250,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 {
                     _selectionChanging = true;
 
-                    ParatextProjects = GetSelectableParatextProjects();
+                    //if (args.AddedItems.Count > 0 && ((ParatextProjectMetadata)args.AddedItems[0]).Name != _selectedParatextLwcProject.Name)
+                    //{
+                    //    ParentViewModel!.SelectedBookManager.Initialize();
+                    //}
+
+                    //if (args.RemovedItems.Count > 0)
+                    //{
+                    //    ParentViewModel!.SelectedBookManager.Initialize();
+                    //}
+
+                    WIP:  ParatextProjects = GetSelectableParatextProjects();
                     ParatextBtProjects = GetSelectableParatextBtProjects();
                 }
                 finally
@@ -259,19 +289,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public ProjectSelectionStepViewModel(DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ProjectSelectionStepViewModel> validator, 
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ProjectSelectionStepViewModel> validator,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
         {
-
-            _projectName = string.Empty;
-
+            ProjectName = string.Empty;
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        public override async Task Reset(CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
+            await base.Reset(cancellationToken);
+        }
+
+        public override async Task Initialize(CancellationToken cancellationToken)
         {
             if (Projects == null)
             {
@@ -279,22 +313,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 if (result.Success)
                 {
                     Projects = new(result.Data!.OrderBy(p => p.Name).ToList());
-
-                    // send new metadata results to the Main Window    
-                    //await EventAggregator.PublishOnUIThreadAsync(new ProjectsMetadataChangedMessage(result.Data), cancellationToken);
                 }
             }
 
             if (Projects != null)
             {
-                ParatextProjects = new(Projects);
-                ParatextBtProjects = new(Projects);
-                ParatextLwcProjects = new(Projects);
+                var backTranslationProjects =
+                    Projects.Where(project => project.CorpusType == CorpusType.BackTranslation);
+
+                var otherProjects = Projects.Where(project => project.CorpusType != CorpusType.BackTranslation);
+                ParatextProjects = new(otherProjects);
+                ParatextBtProjects = new(backTranslationProjects);
+                ParatextLwcProjects = new(otherProjects);
             }
 
-            _projectName = ProjectManager!.CurrentDashboardProject?.ProjectName ?? string.Empty;
-
-            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], _projectName);
+            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ProjectName);
 
             SelectedParatextProject = ParentViewModel!.SelectedParatextProject;
             SelectedParatextBtProject = ParentViewModel!.SelectedParatextBtProject;
@@ -303,13 +336,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             ValidationResult = await Validator!.ValidateAsync(this, cancellationToken);
             CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName) && ValidationResult.IsValid);
+            await base.Initialize(cancellationToken);
+        }
 
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
             await base.OnActivateAsync(cancellationToken);
         }
 
         public async Task CreateAsync()
         {
-           
+
             var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
             if (currentlyOpenProjectsList.Contains(ProjectName))
             {
@@ -325,6 +363,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         public override async Task MoveBackwardsAction()
         {
+            ProjectName = string.Empty;
+            ParentViewModel!.Reset();
             await ParentViewModel!.GoToStep(1);
         }
 
@@ -339,7 +379,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ParentViewModel!.ProjectName = ProjectName;
 
             ParentViewModel!.SelectedBookIds = null;
-
+            
             await base.MoveForwardsAction();
         }
 

@@ -140,6 +140,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         private async Task ActivateProjectDesignSurface(CancellationToken cancellationToken)
         {
+            await Initialize(cancellationToken);
+        }
+
+        public override async Task Reset(CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
+            await base.Reset(cancellationToken);
+        }
+
+        public override async Task Initialize(CancellationToken cancellationToken)
+        {
             ProjectDesignSurfaceViewModel = LifetimeScope!.Resolve<ReadonlyProjectDesignSurfaceViewModel>();
 
             if (ProjectDesignSurfaceViewModel is null)
@@ -156,6 +167,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             var view = ViewLocator.LocateForModel(ProjectDesignSurfaceViewModel, null, null);
             ViewModelBinder.Bind(ProjectDesignSurfaceViewModel, view, null);
             await ScreenExtensions.TryActivateAsync(ProjectDesignSurfaceViewModel, cancellationToken);
+
+            await base.Initialize(cancellationToken);
         }
 
         public async Task CreateOrClose()
@@ -183,9 +196,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         private async Task CreateProject(CancellationToken? cancellationToken)
         {
-            Stopwatch sw = new();
-            sw.Start();
-
+            var stopwatch = Stopwatch.StartNew();
             // NB:  need to store a reference to the Parent view model so we can clean up in the finally block below;
             _startupDialogViewModel = ParentViewModel;
 
@@ -203,12 +214,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 cancellationToken?.ThrowIfCancellationRequested();
 
-                _runningTask = _processRunner.RunRegisteredTasks(sw);
+                _runningTask = _processRunner.RunRegisteredTasks(stopwatch);
                 await _runningTask;
 
                 PlaySound.PlaySoundFromResource();
 
 
+                _startupDialogViewModel!.Reset();
                 await _startupDialogViewModel!.TryCloseAsync(true);
 
                 //await ProjectDesignSurfaceViewModel!.SaveDesignSurfaceData();
@@ -223,7 +235,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
 
-                await _startupDialogViewModel!.GoToStep(0);
+                await _startupDialogViewModel!.GoToStep(1);
             }
             catch (Exception)
             {
@@ -233,7 +245,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
 
-                await _startupDialogViewModel!.GoToStep(0);
+                await _startupDialogViewModel!.GoToStep(1);
             }
             finally
             {
@@ -249,18 +261,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 errorCleanupAction?.Invoke(Logger!);
 
                 ProjectManager!.PauseDenormalization = false;
-              
-
-                // Reset everything in case the wizard is activated again:
-                _startupDialogViewModel!.SelectedParatextProject = null;
-                _startupDialogViewModel!.SelectedParatextBtProject = null;
-                _startupDialogViewModel!.SelectedParatextLwcProject = null;
-                _startupDialogViewModel!.IncludeBiblicalTexts = true;
-                _startupDialogViewModel!.SelectedBookIds = null;
-
-               
-
-                sw.Stop();
+         
+                stopwatch.Stop();
             }
         }
 
@@ -289,21 +291,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             if (ParentViewModel!.IncludeBiblicalTexts)
             {
-                var manuscriptHebrewTaskName = _processRunner.RegisterManuscriptCorpusTask(CorpusType.ManuscriptHebrew);
+                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks)
+                {
+                    var manuscriptHebrewTaskName =
+                        _processRunner.RegisterManuscriptCorpusTask(CorpusType.ManuscriptHebrew);
 
-                _ = _processRunner.RegisterParallelizationTasks(
-                    paratextTaskName,
-                    manuscriptHebrewTaskName,
-                    false,
-                    SmtModelType.FastAlign.ToString());
+                    _ = _processRunner.RegisterParallelizationTasks(
+                        paratextTaskName,
+                        manuscriptHebrewTaskName,
+                        false,
+                        SmtModelType.FastAlign.ToString());
+                }
 
-                var manuscriptGreekTaskName = _processRunner.RegisterManuscriptCorpusTask(CorpusType.ManuscriptGreek);
+                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks)
+                {
+                    var manuscriptGreekTaskName =
+                        _processRunner.RegisterManuscriptCorpusTask(CorpusType.ManuscriptGreek);
 
-                _ = _processRunner.RegisterParallelizationTasks(
-                    paratextTaskName,
-                    manuscriptGreekTaskName,
-                    false,
-                    SmtModelType.FastAlign.ToString());
+                    _ = _processRunner.RegisterParallelizationTasks(
+                        paratextTaskName,
+                        manuscriptGreekTaskName,
+                        false,
+                        SmtModelType.FastAlign.ToString());
+                }
             }
 
             if (ParentViewModel!.SelectedParatextBtProject is not null)
@@ -351,11 +361,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             // If selected, build Macula Greek and Macula Hebrew nodes and associated connectors
             if (ParentViewModel!.IncludeBiblicalTexts)
             {
-                var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode();
-                BuildParatextProjectToMaculaHebrewConnector(paratextNode, manuscriptHebrewNode);
+                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks)
+                {
+                    var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode();
+                    BuildParatextProjectToMaculaHebrewConnector(paratextNode, manuscriptHebrewNode);
+                }
 
-                var manuscriptGreekNode = BuildMaculaGreekCorpusNode();
-                BuildParatextProjectToMaculaGreekConnector(paratextNode, manuscriptGreekNode);
+                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks)
+                {
+                    var manuscriptGreekNode = BuildMaculaGreekCorpusNode();
+                    BuildParatextProjectToMaculaGreekConnector(paratextNode, manuscriptGreekNode);
+                }
             }
 
             // if selected build the back translation node and associated connector

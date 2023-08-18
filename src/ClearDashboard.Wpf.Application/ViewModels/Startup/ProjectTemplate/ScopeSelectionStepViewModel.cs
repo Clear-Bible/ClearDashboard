@@ -8,6 +8,7 @@ using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,20 +34,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _progressIndicatorVisibility, value);
         }
 
-        public ScopeSelectionStepViewModel(DashboardProjectManager projectManager, SelectedBookManager selectedBookManager,
+        public ScopeSelectionStepViewModel(DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
-            SelectedBookManager = selectedBookManager;
-
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        private void OnSelectedBookManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            ContinueEnabled = SelectedBookManager.SelectedBooks.Any(book=>book.IsSelected);
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            SelectedBookManager.PropertyChanged -= OnSelectedBookManagerPropertyChanged;
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        public override async Task Initialize(CancellationToken cancellationToken)
+        {
+            SelectedBookManager = ParentViewModel!.SelectedBookManager;
+           
+            SelectedBookManager.PropertyChanged += OnSelectedBookManagerPropertyChanged;
 
             DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ParentViewModel!.ProjectName);
 
@@ -59,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             ProgressIndicatorVisibility = Visibility.Visible;
 
-            var usfmErorsByParatextProjectId = new Dictionary<string, IEnumerable<UsfmError>>();
+            var usfmErrorsByParatextProjectId = new Dictionary<string, IEnumerable<UsfmError>>();
 
             if (ParentViewModel!.SelectedParatextProject != null)
             {
@@ -69,7 +82,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                     Logger!.LogError($"Error checking USFM for Paratext project: '{ParentViewModel!.SelectedParatextProject.Name}': {result.Message}");
                 }
 
-                usfmErorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextProject.Id!, result.Data!.UsfmErrors);
+                usfmErrorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextProject.Id!, result.Data!.UsfmErrors);
             }
 
             if (ParentViewModel!.SelectedParatextBtProject != null)
@@ -80,7 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                     Logger!.LogError($"Error checking USFM for Paratext BT project: '{ParentViewModel!.SelectedParatextBtProject.Name}': {result.Message}");
                 }
 
-                usfmErorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextBtProject.Id!, result.Data!.UsfmErrors);
+                usfmErrorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextBtProject.Id!, result.Data!.UsfmErrors);
             }
 
             if (ParentViewModel!.SelectedParatextLwcProject != null)
@@ -91,16 +104,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                     Logger!.LogError($"Error checking USFM for Paratext LWC project: '{ParentViewModel!.SelectedParatextLwcProject.Name}': {result.Message}");
                 }
 
-                usfmErorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextLwcProject.Id!, result.Data!.UsfmErrors);
+                usfmErrorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextLwcProject.Id!, result.Data!.UsfmErrors);
             }
 
-            await SelectedBookManager!.InitializeBooks(usfmErorsByParatextProjectId, false, CancellationToken.None);
-            ContinueEnabled = SelectedBookManager.SelectedBooks.Any();
+            await SelectedBookManager!.InitializeBooks(usfmErrorsByParatextProjectId, false, cancellationToken);
 
-         
+
+
 
             ProgressIndicatorVisibility = Visibility.Hidden;
+            await base.Initialize(cancellationToken);
+        }
 
+        public override async Task Reset(CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
+            await base.Reset(cancellationToken);
+        }
+
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
             await base.OnActivateAsync(cancellationToken);
         }
 

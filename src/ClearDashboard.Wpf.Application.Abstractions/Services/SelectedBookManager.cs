@@ -1,34 +1,50 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using ClearDashboard.Wpf.Application.Models;
 using MediatR;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.Services;
 
 public class SelectedBookManager : PropertyChangedBase
 {
-    private ObservableCollection<SelectedBook> _selectedBooks = new(CreateBooks());
+    private ObservableCollection<SelectedBook> _selectedBooks;
 
     private readonly IMediator _mediator;
 
     public SelectedBookManager(IMediator mediator)
     {
         _mediator = mediator;
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        _selectedBooks = new(CreateBooks());
     }
 
     public ObservableCollection<SelectedBook> SelectedBooks
     {
         get => _selectedBooks;
-        set => Set(ref _selectedBooks, value);
+        set
+        {
+            Set(ref _selectedBooks, value);
+            _selectedBooks.HookItemPropertyChanged<SelectedBook>((item, e) =>
+            {
+                NotifyOfPropertyChange(() => SelectedBooks);
+            });
+        }
     }
 
     public async Task InitializeBooks(IDictionary<string, IEnumerable<UsfmError>> usfmErrorsByParatextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
@@ -43,7 +59,7 @@ public class SelectedBookManager : PropertyChangedBase
             foreach (var book in books.Where(book => book.HasUsfmError || !book.IsEnabled || !book.IsSelected))
             {
                 commonBooks[book.Abbreviation].HasUsfmError = commonBooks[book.Abbreviation].HasUsfmError || book.HasUsfmError;
-                commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled;
+                commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled; //&& (!commonBooks[book.Abbreviation].HasUsfmError || !book.HasUsfmError)
                 commonBooks[book.Abbreviation].IsSelected = commonBooks[book.Abbreviation].IsSelected && book.IsSelected;
             }
         }
@@ -55,7 +71,7 @@ public class SelectedBookManager : PropertyChangedBase
     public async Task InitializeBooks(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
     {
         var books = await InitializeBooksInternal(usfmErrors, paratextProjectId, enableTokenizedBooks, cancellationToken);
-
+         
         SelectedBooks = new(books);
         NotifyOfPropertyChange(() => SelectedBooks);
     }
@@ -121,6 +137,7 @@ public class SelectedBookManager : PropertyChangedBase
                 {
                     books[index - 1].BookColor = new SolidColorBrush(Colors.Red);
                     books[index - 1].HasUsfmError = true;
+                    books[index - 1].IsEnabled = false;
                 }
             }
         }
@@ -189,6 +206,10 @@ public class SelectedBookManager : PropertyChangedBase
     public List<SelectedBook> SelectedAndEnabledBooks => SelectedBooks.Where(b => b.IsEnabled && b.IsSelected).ToList();
 
     public IEnumerable<string> SelectedAndEnabledBookAbbreviations => SelectedAndEnabledBooks.Select(b => b.Abbreviation);
+
+    public bool HasSelectedAndEnabledOldTestamentBooks => SelectedAndEnabledBooks.Any(b => b.IsOldTestament);
+
+    public bool HasSelectedAndEnabledNewTestamentBooks => SelectedAndEnabledBooks.Any(b => !b.IsOldTestament);
 
     public static List<SelectedBook> CreateBooks(bool isEnabledDefault = false, bool isSelectedDefault = false)
     {

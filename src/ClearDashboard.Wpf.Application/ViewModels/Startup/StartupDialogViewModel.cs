@@ -72,11 +72,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _selectedBookIds, value);
         }
 
-        public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
+        public StartupDialogViewModel(SelectedBookManager selectedBookManager, INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             ProjectManager = projectManager;
+            SelectedBookManager = selectedBookManager;
 
             CanOk = true;
 
@@ -152,6 +153,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             await base.OnInitializeAsync(cancellationToken);
+        }
+
+        public SelectedBookManager SelectedBookManager { get; internal set; }
+
+        public void Reset()
+        {
+            // Reset everything in case the wizard is activated again:
+            SelectedParatextProject = null;
+            SelectedParatextBtProject = null;
+            SelectedParatextLwcProject = null;
+            IncludeBiblicalTexts = true;
+            SelectedBookIds = null;
+            SelectedBookManager.UnselectAllBooks();
         }
 
         public async Task GoToStep(int stepIndex, CancellationToken cancellationToken = default)

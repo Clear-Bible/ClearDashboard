@@ -122,9 +122,9 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
         ParentViewModel?.BookIds?.AddRange(SelectedBookManager.SelectedAndEnabledBookAbbreviations);
         await MoveForwards();
     }
-    public void Back()
+    public async void Back()
     {
-        MoveBackwards();
+       await MoveBackwards();
     }
 
     // ReSharper disable once UnusedMember.Global

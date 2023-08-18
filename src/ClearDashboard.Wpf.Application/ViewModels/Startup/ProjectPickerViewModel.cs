@@ -1094,15 +1094,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             Settings.Default.Save();
         }
 
-        public void Create()
+        public async void Create()
         {
-            MoveForwards();
-            EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
+            await MoveForwards();
+            await EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
         }
 
        
         public async Task CreateProjectWithProjectTemplate()
         {
+            var projectTemplateItems = ParentViewModel.Steps.Skip(3);
+            //foreach (var item in projectTemplateItems)
+            //{
+            //    await item.Reset(CancellationToken.None);
+            //}
+
             await ParentViewModel!.GoToStep(3);
         }
 

@@ -1,8 +1,10 @@
-﻿using System.Windows.Media;
+﻿using System.ComponentModel;
+using System.Windows.Media;
+using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
-    public class SelectedBook
+    public class SelectedBook : PropertyChangedBase, INotifyPropertyChanged
     {
         public enum BookColors
         {
@@ -19,7 +21,11 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public string? BookName { get; set; }
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => Set(ref _isSelected, value);
+        }
 
         public bool IsEnabled { get; set; }
 
@@ -33,6 +39,8 @@ namespace ClearDashboard.Wpf.Application.Models
 
 
         private BookColors _colorText;
+        private bool _isSelected;
+
         public BookColors ColorText
         {
             get => _colorText;

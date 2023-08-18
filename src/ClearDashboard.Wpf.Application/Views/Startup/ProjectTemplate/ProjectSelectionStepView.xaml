@@ -42,16 +42,16 @@
                 VerticalAlignment="Top"
                 Orientation="Vertical">
                     <TextBox
-                x:Name="ProjectName"
-                MinWidth="400"
-                VerticalAlignment="Center"
-                materialDesign:HintAssist.FloatingScale="0.60"
-                materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="20"
-                Foreground="{DynamicResource MaterialDesignBody}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        x:Name="ProjectName"
+                        MinWidth="400"
+                        VerticalAlignment="Center"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        FontSize="20"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                         <TextBox.Text>
                             <Binding
                         Mode="TwoWay"
@@ -85,7 +85,7 @@
                         Margin="15"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"
-                        cal:Message.Attach="ParatextProjectSelected"
+                        cal:Message.Attach="ParatextProjectSelected($eventArgs)"
                         materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextProject}"
                         FontSize="16"
                         IsEnabled="{Binding IsEnabledSelectedParatextProject}"
@@ -131,7 +131,7 @@
                     Margin="15"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left"
-                    cal:Message.Attach="ParatextBtProjectSelected"
+                    cal:Message.Attach="ParatextBtProjectSelected($eventArgs)"
                     materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextBackTranslation}"
                     FontSize="16"
                     IsEnabled="{Binding IsEnabledSelectedParatextBtProject}"
@@ -177,7 +177,7 @@
                     Width="400"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left"
-                    cal:Message.Attach="ParatextLwcProjectSelected"
+                    cal:Message.Attach="ParatextLwcProjectSelected($eventArgs)"
                     materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextInterlinearBible}"
                     FontSize="16"
                     IsEnabled="{Binding IsEnabledSelectedParatextLwcProject}"
@@ -222,7 +222,7 @@
                       FontSize="13"
                       IsChecked="{Binding ShowBiblicalTexts, Mode=TwoWay}"
                       Content="{helpers:Localization ProjectPicker_IncludeBiblicalTexts}">
-                    
+
                     <CheckBox.ToolTip>If checked, this will ...</CheckBox.ToolTip>
                 </CheckBox>
             </StackPanel>
