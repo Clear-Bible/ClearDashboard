@@ -59,7 +59,7 @@ public class SelectedBookManager : PropertyChangedBase
             foreach (var book in books.Where(book => book.HasUsfmError || !book.IsEnabled || !book.IsSelected))
             {
                 commonBooks[book.Abbreviation].HasUsfmError = commonBooks[book.Abbreviation].HasUsfmError || book.HasUsfmError;
-                commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled; //&& (!commonBooks[book.Abbreviation].HasUsfmError || !book.HasUsfmError)
+                commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled; 
                 commonBooks[book.Abbreviation].IsSelected = commonBooks[book.Abbreviation].IsSelected && book.IsSelected;
             }
         }
@@ -78,7 +78,7 @@ public class SelectedBookManager : PropertyChangedBase
 
     private async Task<IEnumerable<SelectedBook>> InitializeBooksInternal(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
     {
-        var books = CreateBooks();
+        var books = CreateBooks(true);
 
         // get those books which actually have text in them from Paratext
         var requestFromParatext = await _mediator.Send(new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId), cancellationToken);
@@ -96,11 +96,13 @@ public class SelectedBookManager : PropertyChangedBase
                     book.IsEnabled = true;
                     book.IsSelected = false; // set to false so that the end user doesn't automatically just select every book to enter
                 }
-                else
-                {
-                    book.IsEnabled = false;
-                    book.IsSelected = false;
-                }
+
+                // NB:  unremark to enable just the intersection of books
+                //else
+                //{
+                //    book.IsEnabled = false;
+                //    book.IsSelected = false;
+                //}
             }
         }
 
@@ -119,7 +121,7 @@ public class SelectedBookManager : PropertyChangedBase
                     {
                         if (int.TryParse(book, out var index))
                         {
-                            books[index - 1].IsEnabled = false;
+                            books[index - 1].IsEnabled = true;
                             books[index - 1].IsSelected = true;
                             books[index - 1].BookColor = new SolidColorBrush(Colors.Black);
                         }

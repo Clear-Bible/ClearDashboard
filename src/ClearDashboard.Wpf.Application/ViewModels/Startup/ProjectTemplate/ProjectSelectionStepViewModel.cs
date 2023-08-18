@@ -124,7 +124,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 }
                 .Where(p => p != null);
 
-                return new(Projects.Where(p => !otherSelectedIds.Contains(p.Id)));
+                return new(Projects.Where(project => project.CorpusType != CorpusType.BackTranslation && !otherSelectedIds.Contains(project.Id)));
             }
             return null;
         }
@@ -156,7 +156,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 }
                 .Where(p => p != null);
 
-                return new(Projects.Where(p => !otherSelectedIds.Contains(p.Id)));
+                return new(Projects.Where(project => project.CorpusType != CorpusType.BackTranslation && !otherSelectedIds.Contains(project.Id)));
             }
             return null;
         }
@@ -170,17 +170,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 try
                 {
                     _selectionChanging = true;
-
-                    //if (args.AddedItems.Count > 0 && ((ParatextProjectMetadata)args.AddedItems[0]).Name != _selectedParatextProject.Name)
-                    //{
-                    //    ParentViewModel!.SelectedBookManager.Initialize();
-                    //}
-
-                    //if (args.RemovedItems.Count > 0)
-                    //{
-                    //    ParentViewModel!.SelectedBookManager.Initialize();
-                    //}
-
                     ParatextBtProjects = GetSelectableParatextBtProjects();
                     ParatextLwcProjects = GetSelectableParatextLwcProjects();
                 }
@@ -218,16 +207,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 {
                     _selectionChanging = true;
 
-                    //if (args.AddedItems.Count > 0 && ((ParatextProjectMetadata)args.AddedItems[0]).Name != _selectedParatextBtProject.Name)
-                    //{
-                    //    ParentViewModel!.SelectedBookManager.Initialize();
-                    //}
-
-                    //if (args.RemovedItems.Count > 0)
-                    //{
-                    //    ParentViewModel!.SelectedBookManager.Initialize();
-                    //}
-
                     ParatextProjects = GetSelectableParatextProjects();
                     ParatextLwcProjects = GetSelectableParatextLwcProjects();
                 }
@@ -249,18 +228,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 try
                 {
                     _selectionChanging = true;
-
-                    //if (args.AddedItems.Count > 0 && ((ParatextProjectMetadata)args.AddedItems[0]).Name != _selectedParatextLwcProject.Name)
-                    //{
-                    //    ParentViewModel!.SelectedBookManager.Initialize();
-                    //}
-
-                    //if (args.RemovedItems.Count > 0)
-                    //{
-                    //    ParentViewModel!.SelectedBookManager.Initialize();
-                    //}
-
-                    WIP:  ParatextProjects = GetSelectableParatextProjects();
+                    
+                    ParatextProjects = GetSelectableParatextProjects();
                     ParatextBtProjects = GetSelectableParatextBtProjects();
                 }
                 finally
@@ -318,9 +287,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             if (Projects != null)
             {
-                var backTranslationProjects =
-                    Projects.Where(project => project.CorpusType == CorpusType.BackTranslation);
-
+                var backTranslationProjects = Projects.Where(project => project.CorpusType == CorpusType.BackTranslation);
                 var otherProjects = Projects.Where(project => project.CorpusType != CorpusType.BackTranslation);
                 ParatextProjects = new(otherProjects);
                 ParatextBtProjects = new(backTranslationProjects);

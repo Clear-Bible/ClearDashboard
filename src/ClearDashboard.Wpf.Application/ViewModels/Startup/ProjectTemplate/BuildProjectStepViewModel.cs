@@ -24,6 +24,7 @@ using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using Point = System.Windows.Point;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
+using ClearDashboard.DAL.Alignment;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
@@ -116,7 +117,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             CanMoveForwards = ParentViewModel!.SelectedParatextProject != null && (ParentViewModel!.SelectedBookIds?.Any() ?? false);
 
-           
             await ActivateProjectDesignSurface(cancellationToken);
 
             await Execute.OnUIThreadAsync(async () =>
@@ -183,7 +183,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             BackOrCancelAction = _cancelAction;
             CreateOrCloseAction = _createAction;
-            //ProgressIndicatorVisibility = Visibility.Visible;
 
             CanMoveForwards = false;
             CanMoveBackwards = true;
@@ -217,15 +216,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 _runningTask = _processRunner.RunRegisteredTasks(stopwatch);
                 await _runningTask;
 
-                PlaySound.PlaySoundFromResource();
 
+                await UpdateDesignSurfaceData();
 
                 _startupDialogViewModel!.Reset();
+
+                PlaySound.PlaySoundFromResource();
+
                 await _startupDialogViewModel!.TryCloseAsync(true);
 
-                //await ProjectDesignSurfaceViewModel!.SaveDesignSurfaceData();
-
-                
             }
             catch (OperationCanceledException)
             {
@@ -266,6 +265,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             }
         }
 
+        private async Task UpdateDesignSurfaceData()
+        {
+            //var readonlyProjectDesignSurfaceData =
+            //    ProjectDesignSurfaceViewModel!.GetProjectDesignSurfaceSerializationModel();
+
+            var projectDesignSurfaceData =
+                ProjectDesignSurfaceViewModel.LoadDesignSurfaceData(ProjectManager.CurrentProject);
+
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            foreach (var topLevelProjectId in topLevelProjectIds.CorpusIds)
+            {
+                var node = projectDesignSurfaceData!.CorpusNodeLocations.FirstOrDefault(l => l.CorpusName == topLevelProjectId.Name);
+
+                if (node != null)
+                {
+                    node.CorpusId = topLevelProjectId.Id;
+                    node.CorpusName = topLevelProjectId.Name;
+                }
+            }
+
+            ProjectManager.CurrentProject.DesignSurfaceLayout = ProjectDesignSurfaceViewModel.SerializeDesignSurface(projectDesignSurfaceData);
+            await ProjectManager.UpdateCurrentProject();
+        }
+
         private async Task CreateNewProject(CancellationToken cancellationToken)
         {
             var name = "Creating Project";
@@ -284,10 +308,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         {
             _processRunner.StartRegistration();
 
-   
             var paratextTaskName = _processRunner.RegisterParatextProjectCorpusTask(
                 ParentViewModel!.SelectedParatextProject!, Tokenizers.LatinWordTokenizer, ParentViewModel!.SelectedBookIds!);
-
 
             if (ParentViewModel!.IncludeBiblicalTexts)
             {
@@ -350,45 +372,83 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
            return ProjectDesignSurfaceViewModel!.DesignSurfaceViewModel!.CreateCorpusNode(corpus, designSurfaceLocation);
         }
 
+        private Point GetNextPoint(ref int index)
+        {
+            Point point = new Point();
+            switch (index)
+            {
+                case 0:
+                {
+                    index = index + 1;
+                    point = new Point(25, 50);
+                    break;
+                }
+                case 1:
+                {
+                    index = index + 1;
+                    point = new Point(275, 50);
+                    break;
+                }
+                case 2:
+                {
+                    index = index + 1;
+                    point = new Point(275, 125);
+                    break;
+                }
+                case 3:
+                {
+                    index = index + 1;
+                    point = new Point(275, 200);
+                    break;
+                }
+                case 4:
+                {
+                    index = index + 1;
+                    point = new Point(275, 275);
+                    break;
+                }
+            }
 
+            return point;
+        }
 
         private async Task BuildProjectDesignSurface()
         {
+            var index = 0;
 
             // Build the selected Paratext Project node
-            var paratextNode = BuildParatextProjectCorpusNode();
+            var paratextNode = BuildParatextProjectCorpusNode(GetNextPoint(ref index));
 
-            // If selected, build Macula Greek and Macula Hebrew nodes and associated connectors
-            if (ParentViewModel!.IncludeBiblicalTexts)
+            // if selected, build the LWC node and associated connector
+            if (ParentViewModel!.SelectedParatextLwcProject is not null)
             {
-                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks)
-                {
-                    var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode();
-                    BuildParatextProjectToMaculaHebrewConnector(paratextNode, manuscriptHebrewNode);
-                }
-
-                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks)
-                {
-                    var manuscriptGreekNode = BuildMaculaGreekCorpusNode();
-                    BuildParatextProjectToMaculaGreekConnector(paratextNode, manuscriptGreekNode);
-                }
+                var paratextLwcNode = BuildParatextLwcCorpusNode(GetNextPoint(ref index));
+                BuildParatextProjectToLwcConnector(paratextNode, paratextLwcNode);
             }
 
             // if selected build the back translation node and associated connector
             if (ParentViewModel!.SelectedParatextBtProject is not null)
             {
-                var paratextBackTranslationNode = BuildParatextBackTranslationCorpusNode();
+                var paratextBackTranslationNode = BuildParatextBackTranslationCorpusNode(GetNextPoint(ref index));
                 BuildParatextProjectToBackTranslationConnector(paratextNode, paratextBackTranslationNode);
             }
 
-            // if selected, build the LWC node and associated connector
-            if (ParentViewModel!.SelectedParatextLwcProject is not null)
+            // If selected, build Macula Greek and Macula Hebrew nodes and associated connectors
+            if (ParentViewModel!.IncludeBiblicalTexts)
             {
-                var paratextLwcNode = BuildParatextLwcCorpusNode();
-                BuildParatextProjectToLwcConnector(paratextNode, paratextLwcNode);
-            }
+              
+                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks)
+                {
+                    var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode(GetNextPoint(ref index));
+                    BuildParatextProjectToMaculaHebrewConnector(paratextNode, manuscriptHebrewNode);
+                }
 
-           
+                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks)
+                {
+                    var manuscriptGreekNode = BuildMaculaGreekCorpusNode(GetNextPoint(ref index));
+                    BuildParatextProjectToMaculaGreekConnector(paratextNode, manuscriptGreekNode);
+                }
+            }
             await Task.CompletedTask;
         }
 
@@ -451,57 +511,58 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ProjectDesignSurfaceViewModel!.DesignSurfaceViewModel!.ParallelCorpusConnections.Add(connection);
         }
 
-        private CorpusNodeViewModel BuildParatextLwcCorpusNode()
+        private CorpusNodeViewModel BuildParatextLwcCorpusNode(Point point)
         {
            return BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
             {
                 Name = ParentViewModel!.SelectedParatextLwcProject!.Name,
                 FontFamily = ParentViewModel!.SelectedParatextLwcProject.FontFamily,
                 CorpusType = ParentViewModel!.SelectedParatextLwcProject.CorpusTypeDisplay
-            }), new Point(300, 125));
+            }), point);
 
         }
 
-        private CorpusNodeViewModel BuildParatextBackTranslationCorpusNode()
+
+        private CorpusNodeViewModel BuildParatextBackTranslationCorpusNode(Point point)
         {
            return BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
             {
                 Name = ParentViewModel!.SelectedParatextBtProject!.Name,
                 FontFamily = ParentViewModel!.SelectedParatextBtProject.FontFamily,
                 CorpusType = ParentViewModel!.SelectedParatextBtProject.CorpusTypeDisplay
-            }), new Point(300, 50));
+            }), point);
            
         }
 
-        private CorpusNodeViewModel BuildMaculaGreekCorpusNode()
+        private CorpusNodeViewModel BuildMaculaGreekCorpusNode(Point point)
         {
             return BuildCorpusNode(new Corpus(new CorpusId(ManuscriptIds.GreekManuscriptGuid)
             {
                 Name = MaculaCorporaNames.GreekCorpusName, 
                 FontFamily = FontNames.GreekFontFamily, 
                 CorpusType = CorpusType.ManuscriptGreek.ToString()
-            }), new Point(300, 275));
+            }), point);
         }
 
-        private CorpusNodeViewModel BuildMaculaHebrewCorpusNode()
+        private CorpusNodeViewModel BuildMaculaHebrewCorpusNode(Point point)
         {
             return BuildCorpusNode(new Corpus(new CorpusId(ManuscriptIds.HebrewManuscriptGuid)
             {
                 Name = MaculaCorporaNames.HebrewCorpusName,
                 FontFamily = FontNames.HebrewFontFamily,
                 CorpusType = CorpusType.ManuscriptHebrew.ToString()
-            }), new Point(300, 200));
+            }), point);
            
         }
 
-        private CorpusNodeViewModel BuildParatextProjectCorpusNode()
+        private CorpusNodeViewModel BuildParatextProjectCorpusNode(Point point)
         {
             return BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
             {
                 Name = ParentViewModel!.SelectedParatextProject!.Name,
                 FontFamily = ParentViewModel!.SelectedParatextProject.FontFamily,
                 CorpusType = ParentViewModel!.SelectedParatextProject.CorpusTypeDisplay
-            }), new Point(50, 50));
+            }), point);
         }
 
         private async Task<Action<ILogger>?> GetErrorCleanupAction(string projectName)

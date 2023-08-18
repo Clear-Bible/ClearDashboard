@@ -330,6 +330,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public string SerializeDesignSurface()
         {
+            var surface = GetProjectDesignSurfaceSerializationModel();
+
+            return SerializeDesignSurface(surface);
+        }
+
+        public string SerializeDesignSurface(ProjectDesignSurfaceSerializationModel surface)
+        {
+            JsonSerializerOptions options = new()
+            {
+                IncludeFields = true,
+                WriteIndented = false,
+                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+            };
+
+            return JsonSerializer.Serialize(surface, options);
+        }
+
+        public ProjectDesignSurfaceSerializationModel GetProjectDesignSurfaceSerializationModel()
+        {
             var surface = new ProjectDesignSurfaceSerializationModel();
 
             // save all the nodes
@@ -340,18 +359,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     X = corpusNode.X,
                     Y = corpusNode.Y,
                     CorpusId = corpusNode.CorpusId,
+                    CorpusName = corpusNode.Name
                 });
             }
 
-            JsonSerializerOptions options = new()
-            {
-                IncludeFields = true,
-                WriteIndented = false,
-                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
-            };
-
-            return JsonSerializer.Serialize(surface, options);
-
+            return surface;
         }
 
         public async Task DrawDesignSurface()
@@ -370,7 +382,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 //_ = await Task.Factory.StartNew(async () =>
                 //{
-                var designSurfaceData = LoadDesignSurfaceData();
+                var designSurfaceData = LoadDesignSurfaceData(ProjectManager!.CurrentProject);
                 var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
                 // restore the nodes
@@ -462,7 +474,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        private ProjectDesignSurfaceSerializationModel? LoadDesignSurfaceData()
+        public ProjectDesignSurfaceSerializationModel? LoadDesignSurfaceData(DataAccessLayer.Models.Project project)
         {
             if (ProjectManager!.CurrentProject is null)
             {
@@ -473,8 +485,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 return null;
             }
 
-            var json = ProjectManager?.CurrentProject.DesignSurfaceLayout;
+            return DeserializeDesignSurfaceLayout(project.DesignSurfaceLayout);
+        }
 
+        public static ProjectDesignSurfaceSerializationModel? DeserializeDesignSurfaceLayout(string json)
+        {
+           
             if (string.IsNullOrEmpty(json))
             {
                 return null;
