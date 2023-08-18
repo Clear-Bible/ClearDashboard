@@ -73,6 +73,7 @@
                 TranslationMouseWheel="OnTranslationMouseWheel"
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
+                TranslationSet="OnTranslationSet"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
                 <userControls:TokenDisplay.CommandBindings>
                     <CommandBinding Command="Copy" Executed="OnCopy" />
@@ -144,6 +145,7 @@
                 TranslationMouseWheel="OnTranslationMouseWheel"
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
+                TranslationSet="OnTranslationSet"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
                 <userControls:TokenDisplay.CommandBindings>
                     <CommandBinding Command="Copy" Executed="OnCopy" />

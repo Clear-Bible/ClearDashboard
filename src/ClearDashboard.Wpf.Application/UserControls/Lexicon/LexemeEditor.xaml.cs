@@ -132,7 +132,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// <summary>
         /// Identifies the Lexemes dependency property.
         /// </summary>
-        public static readonly DependencyProperty LexemesProperty = DependencyProperty.Register(nameof(Lexemes), typeof(LexemeViewModelCollection), typeof(LexemeEditor));
+        public static readonly DependencyProperty LexemesProperty = DependencyProperty.Register(nameof(Lexemes), typeof(LexemeViewModelCollection), typeof(LexemeEditor), new PropertyMetadata(null, OnLexemesUpdated));
 
         /// <summary>
         /// Identifies the LemmaFontFamily dependency property.
@@ -686,6 +686,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             RaiseMeaningEvent(MeaningAddedEvent, meaning);
         }
 
+        private void UpdateLexemeControlsVisibility()
+        {
+            OnPropertyChanged(nameof(AddLexemeVisibility));
+            OnPropertyChanged(nameof(LexemeControlsVisibility));
+        }
+
+        private static void OnLexemesUpdated(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var display = d as LexemeEditor;
+            display?.UpdateLexemeControlsVisibility();
+        }
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             if (CurrentLexeme?.Lemma == "Lemma")
@@ -695,9 +707,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
                 LemmaTextBox.Focus();
             }
 
-
-            OnPropertyChanged(nameof(AddLexemeVisibility));
-            OnPropertyChanged(nameof(LexemeControlsVisibility));
+            UpdateLexemeControlsVisibility();
             
             Loaded -= OnLoaded;
         }

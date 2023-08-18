@@ -1340,7 +1340,10 @@
                             ItemsSource="{Binding ProjectUserConnections}"
                             RowBackground="LightYellow"
                             SelectionMode="Extended"
-                            VerticalScrollBarVisibility="Visible">
+                            VerticalScrollBarVisibility="Visible"
+                            VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                            VirtualizingPanel.ScrollUnit="Item"
+                            VirtualizingPanel.VirtualizationMode="Recycling">
 
                             <DataGrid.ContextMenu>
                                 <ContextMenu>

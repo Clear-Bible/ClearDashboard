@@ -387,7 +387,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 var cancellationToken2 = longRunningTask.CancellationTokenSource.Token;
 
 
-                var isDataGenerated = await GenerateInitialData(cancellationToken2);//.ConfigureAwait(false);
+                var isDataGenerated = await GenerateInitialData(cancellationToken2);
                 if (!isDataGenerated)
                 {
                     // send to the task started event aggregator for everyone else to hear about a task error
@@ -406,9 +406,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     ProgressBarVisibility = Visibility.Collapsed;
                 }
 
-                await GenerateData(cancellationToken2);//.ConfigureAwait(false);
+                await GenerateData(cancellationToken2);
 
-                await GenerateLexiconData(cancellationToken2);//.ConfigureAwait(false);
+                await GenerateLexiconData(cancellationToken2);
 
                 await ConnectDataToUi(cancellationToken2).ConfigureAwait(true);
             }
@@ -769,7 +769,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             _ = await Task.Run(async () =>
             {
-                await GenerateLexiconDataCalculations(cancellationToken).ConfigureAwait(false);
+                await GenerateLexiconDataCalculations(cancellationToken);
                 return true;
             }).ConfigureAwait(true);
 
@@ -991,7 +991,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GetLexicon()
         {
             // load in the lexicon.xml for the project
-            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None).ConfigureAwait(false);
+            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None);
             if (queryLexiconResult.Success == false)
             {
                 _logger!.LogError(queryLexiconResult.Message);
@@ -1011,7 +1011,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             // load in the 'spellingstatus.xml'
             var querySsResult =
-                await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
+                await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None);
             if (querySsResult.Success == false)
             {
                 _logger!.LogError(querySsResult.Message);
@@ -1033,7 +1033,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             var queryAbtResult =
                 await ExecuteRequest(
                     new GetBiblicalTermsQuery(paratextInstallPath, BTtype.allBT),
-                    CancellationToken.None).ConfigureAwait(false);
+                    CancellationToken.None);
             if (queryAbtResult.Success == false)
             {
                 _logger!.LogError(queryAbtResult.Message);
@@ -1055,7 +1055,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             var queryBtResult =
                 await ExecuteRequest(
                     new GetBiblicalTermsQuery(paratextInstallPath, BTtype.BT),
-                    CancellationToken.None).ConfigureAwait(false);
+                    CancellationToken.None);
             if (queryBtResult.Success == false)
             {
                 _logger!.LogError(queryBtResult.Message);
@@ -1074,7 +1074,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GetTermRenderings()
         {
             // load in the TermRenderings.xml file
-            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(), CancellationToken.None);
 
             if (queryResult.Success == false)
             {
@@ -1099,7 +1099,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             if (_gridData != null && GridCollectionView is not null)
             {
-                GridCollectionView.Refresh();
+                try
+                {
+                    GridCollectionView.Refresh();
+                }
+                catch
+                {
+                    _logger.LogError("PINS Clear Filter failed.");
+                }
             }
         }
 
@@ -1141,13 +1148,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             if (itemDt.Gloss is null)
             {
                 return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                        || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
+                        || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                        || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
                     && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
             }
 
             return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
                     || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                    || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
+                    || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                    || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
                 && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
         }
 

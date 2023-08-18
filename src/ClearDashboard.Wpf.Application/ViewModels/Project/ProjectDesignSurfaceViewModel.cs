@@ -10,7 +10,6 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 //using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -283,7 +282,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
            try
            {
-               await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
+               await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
                await Task.Delay(250);
            }
            catch (Exception ex)
@@ -589,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode, true);
                         // What other work needs to be done?  how do we know which steps have been executed?
                         DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
                     }
@@ -728,7 +727,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode, true);
                         DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
                     }
                     else
@@ -926,7 +925,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             _busyState.Remove(taskName);
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                DeleteCorpusNode(node);
+                                DeleteCorpusNode(node, true);
                             }
                             else
                             {
@@ -1583,21 +1582,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             });
         }
 
-        public async void DeleteCorpusNode(CorpusNodeViewModel node)
+        public async void DeleteCorpusNode(CorpusNodeViewModel node, bool wasTokenizing)
         {
-            //warn users 
-            var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<DeletingCorpusNodePopupViewModel>();
-
-            var result = await _windowManager!.ShowDialogAsync(
-                deletingCorpusNodePopupViewModel, 
-                null,
-                SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
-
-            if (!result)
-            {
-                return;
-            }
-
             // check to see if is in the middle of working or not by tokenizing
             var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)
@@ -1612,6 +1598,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 return;
             }
 
+            if (!wasTokenizing)
+            {
+                var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<DeletingCorpusNodePopupViewModel>();
+                
+                bool result = false;
+                OnUIThread(async () =>
+                {
+                    result = await _windowManager!.ShowDialogAsync(
+                        deletingCorpusNodePopupViewModel,
+                        null,
+                        SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
+                });
+
+                if (!result)
+                {
+                    return;
+                }
+            }
 
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {

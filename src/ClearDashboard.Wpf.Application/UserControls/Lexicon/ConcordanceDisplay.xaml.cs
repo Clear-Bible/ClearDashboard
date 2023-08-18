@@ -50,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// Identifies the NewTranslation dependency property.
         /// </summary>
         public static readonly DependencyProperty NewTranslationProperty = 
-            DependencyProperty.Register(nameof(NewTranslation), typeof(LexiconTranslationViewModel), typeof(ConcordanceDisplay));
+            DependencyProperty.Register(nameof(NewTranslation), typeof(LexiconTranslationViewModel), typeof(ConcordanceDisplay), new PropertyMetadata(null, OnNewTranslationPropertyChanged));
 
         /// <summary>
         /// Identifies the TokenDisplay dependency property.
@@ -198,14 +198,25 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             await Task.CompletedTask;
         }
 
+        private static void OnNewTranslationPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var display = d as ConcordanceDisplay;
+            display!.SetNewTranslation();
+        }
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (NewTranslation != null && ! string.IsNullOrWhiteSpace(NewTranslation.Text))
+            SetNewTranslation();
+            Loaded -= OnLoaded;
+        }
+
+        private void SetNewTranslation()
+        {
+            if (NewTranslation != null)
             {
                 NewTranslationTextBox.Text = NewTranslation.Text;
-                NewTranslationCheckBox.IsChecked = true;
+                NewTranslationCheckBox.IsChecked = !string.IsNullOrWhiteSpace(NewTranslation.Text);
             }
-            Loaded -= OnLoaded;
         }
 
         [NotifyPropertyChangedInvocator]

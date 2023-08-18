@@ -59,7 +59,10 @@ public class GeneralModelJsonConverter : JsonConverter<GeneralModel>
             if (!propertyInfos.TryGetValue(kvp.Key, out propertyType) &&
                 !modelBuilder.AddedPropertyNamesTypes.TryGetValue(kvp.Key, out propertyType))
             {
-                throw new ArgumentException($"Unexpected property name '{kvp.Key}' encountered when building GeneralModel from property dictionary");
+                var exceptionString = $"Unexpected property name '{kvp.Key}' encountered when building GeneralModel from property dictionary";
+                exceptionString += "\n\nPlease update your version of ClearDashboard to the latest version";
+
+                throw new ArgumentException(exceptionString);
             }
 
             if (kvp.Value is null)

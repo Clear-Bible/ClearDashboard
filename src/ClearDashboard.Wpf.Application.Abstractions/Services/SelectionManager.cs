@@ -28,15 +28,17 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public bool AnySourceTokens => SelectedTokens.Any(t => t.IsSource && t.IsTokenSelected);
-        public bool AnyTargetTokens => SelectedTokens.Any(t => t.IsTarget && t.IsTokenSelected);
+        public bool AnySourceTokens => SelectedTokens.Any(t => t.IsSource && (t.IsTokenSelected || t.IsTranslationSelected));
+        public bool AnyTargetTokens => SelectedTokens.Any(t => t.IsTarget && (t.IsTokenSelected || t.IsTranslationSelected));
 
-        public TokenDisplayViewModelCollection SelectedSourceTokens => new(SelectedTokens.Where(t=> t.IsSource && t.IsTokenSelected));
-        public TokenDisplayViewModelCollection SelectedTargetTokens => new(SelectedTokens.Where(t=> t.IsTarget && t.IsTokenSelected));
+        public TokenDisplayViewModelCollection SelectedSourceTokens => new(SelectedTokens.Where(t => t.IsSource && (t.IsTokenSelected || t.IsTranslationSelected)));
+        public TokenDisplayViewModelCollection SelectedTargetTokens => new(SelectedTokens.Where(t => t.IsTarget && (t.IsTokenSelected || t.IsTranslationSelected)));
 
         public EntityIdCollection SelectedEntityIds => SelectedTokens.EntityIds;
         public NoteIdCollection SelectedNoteIds => SelectedTokens.NoteIds;
-        public bool AnySelectedNotes => SelectedTokens.Any(t => t.HasNote);
+        public bool AnySelectedNotes => SelectedTokens.Any(t => 
+            (t.IsTokenSelected && t.TokenHasNote) || 
+            (t.IsTranslationSelected && t.TranslationHasNote));
 
         public void SelectionUpdated()
         {
@@ -55,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     }
                 }
 
-                if (!token.IsTokenSelected)
+                if (!token.IsTokenSelected && !token.IsTranslationSelected)
                 {
                     SelectedTokens.Remove(token);
                 }

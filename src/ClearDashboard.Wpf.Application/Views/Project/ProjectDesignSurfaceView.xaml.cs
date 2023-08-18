@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private void OnDeleteCorpusNodeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var node = (CorpusNodeViewModel)e.Parameter;
-            ProjectDesignSurfaceViewModel!.DeleteCorpusNode(node);
+            ProjectDesignSurfaceViewModel!.DeleteCorpusNode(node, false);
         }
 
         /// <summary>

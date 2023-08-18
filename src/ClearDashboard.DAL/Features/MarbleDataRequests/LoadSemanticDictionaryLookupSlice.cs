@@ -1,8 +1,5 @@
 ﻿using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.CQRS.Features.Features;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -10,11 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
-using Unidecode.NET;
 
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {

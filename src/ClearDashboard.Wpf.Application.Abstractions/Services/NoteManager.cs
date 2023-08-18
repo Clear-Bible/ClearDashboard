@@ -16,6 +16,7 @@ using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -30,6 +31,10 @@ namespace ClearDashboard.Wpf.Application.Services
         private ILocalizationService LocalizationService { get; }
 
         private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
+        public void ClearNotesCache()
+        {
+            NotesCache.Clear();
+        }
 
         private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
@@ -37,6 +42,14 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var sb = new StringBuilder();
                 sb.Append($"{LocalizationService["Notes_TokenizedCorpus"]} {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
+                sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
+                sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
+                return sb.ToString();
+            }
+            else if (associatedEntityId is TranslationId)
+            {
+                var sb = new StringBuilder();
+                sb.Append($"{LocalizationService["Notes_TranslationSet"]} {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
                 sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
                 return sb.ToString();
@@ -132,11 +145,11 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="noteId">A note ID for which to retrieve the note details.</param>
         /// <param name="doGetParatextSendNoteInformation">If true, also retrieve information needed for sending the note to Paratext.</param>
         /// <returns>A <see cref="NoteViewModel"/> containing the note details.</returns>
-        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true)
+        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true, bool collabUpdate = false)
         {
             try
             {
-                if (NotesCache.TryGetValue(noteId.Id, out var noteDetails))
+                if (!collabUpdate && NotesCache.TryGetValue(noteId.Id, out var noteDetails))
                 {
                     Logger?.LogInformation($"Returning cached details for note \"{noteDetails.Text}\" ({noteId.Id})");
                     return noteDetails;

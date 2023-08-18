@@ -1,67 +1,60 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
-	<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-	<PlatformTarget>AnyCPU</PlatformTarget>
-	<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-	<Version>1.0.6.10</Version>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <Version>1.1.0.6</Version>
+    <FileVersion>1.1.0.6</FileVersion>
+    <AssemblyVersion>1.1.0.6</AssemblyVersion>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>9</LangVersion>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>9</LangVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Plugin.bmp" />
     <None Remove="Resources\DashboardFailure.wav" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Plugin.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Resources\DashboardFailure.wav" />
   </ItemGroup>
-
   <ItemGroup>
-	<!--<PackageReference Include="Microsoft.AspNet.SignalR.SelfHost" Version="2.4.3" />-->
-	<PackageReference Include="Clear.SIL.Machine" Version="2.5.14" />
-	<PackageReference Include="MediatR" Version="9.0.0" />
-	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-	<PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
-	<PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.3" />
-	<PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.9" />
-	<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
+    <!--<PackageReference Include="Microsoft.AspNet.SignalR.SelfHost" Version="2.4.3" />-->
+    <PackageReference Include="Clear.SIL.Machine" Version="2.5.14" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.3" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.9" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Owin" Version="4.2.2" />
     <PackageReference Include="Microsoft.Owin.Cors" Version="4.2.2" />
     <!--<PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.1" />
     <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.1" />-->
-    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.4.33" />
-	<PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.23" />
-	<PackageReference Include="ParatextPluginInterfaces" Version="2.0.23" />
-    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.6.40" />
+    <PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.23" />
+    <PackageReference Include="ParatextPluginInterfaces" Version="2.0.23" />
+    <PackageReference Include="Serilog" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
-    <PackageReference Include="System.Text.Json" Version="7.0.1" />
+    <PackageReference Include="System.Text.Json" Version="7.0.3" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
     <ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -74,14 +67,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="ChangeParatextProject.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -91,9 +82,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call $(ProjectDir)postbuild$(ConfigurationName).bat" />
   </Target>
-
 </Project>
