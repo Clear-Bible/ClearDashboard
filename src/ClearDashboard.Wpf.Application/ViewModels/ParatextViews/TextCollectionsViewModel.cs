@@ -282,8 +282,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                                 if (titles.Contains(startPart))
                                 {
-
-                                    startPart += "_";
+                                    break;
                                 }
                                 titles.Add(startPart);
 
@@ -331,6 +330,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             }
 
                             string topAnchor = string.Empty;
+                            titles.Sort();
                             foreach (var title in titles)
                             {
                                 topAnchor += "<a href=#" + title + ">" + title + "</a>";
