@@ -280,6 +280,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 var endPart = textCollection.Data;
                                 var startPart = textCollection.ReferenceShort;
 
+                                if (titles.Contains(startPart))
+                                {
+
+                                    startPart += "_";
+                                }
                                 titles.Add(startPart);
 
                                 try

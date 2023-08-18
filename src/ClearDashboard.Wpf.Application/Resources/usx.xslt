@@ -780,19 +780,25 @@
           font-size: smaller;
           }
 
-          .navbar {
-          overflow: hidden;
-          background-color: #333;
+          html {
+          scroll-padding-top: 60px; /* height of sticky header*/
+          }
 
+          .navbar {
+          overflow-x: auto;
+          display: flex;
+          background-color: white;
           top: 0; /* Position the navbar at the top of the page */
           width: 100%; /* Full width */
-
           position: sticky; /* Stay in place */
           }
+
           /* Links inside the navbar */
           .navbar a {
+          margin-right:5;
+          background-color: #333;
+          border-radius: 25px;
           float: left;
-          display: block;
           color: #f2f2f2;
           text-align: center;
           padding: 12px 12px;
