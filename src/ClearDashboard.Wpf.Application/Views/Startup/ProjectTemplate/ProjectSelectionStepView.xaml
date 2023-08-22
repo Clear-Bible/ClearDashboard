@@ -19,6 +19,11 @@
              FontFamily="{DynamicResource MaterialDesignFont}"
              mc:Ignorable="d"
         >
+    <UserControl.Resources>
+        <Style x:Key="AutoCompleteBoxStyle" TargetType="{x:Type controls:AutoCompleteComboBox}">
+            <Setter Property="Width" Value="520"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -79,15 +84,15 @@
             <StackPanel Grid.Row="2" Orientation="Vertical" Margin="24,10">
                 <Label Margin="0,0,0,-10" Content="{helpers:Localization ProjectPicker_ParatextProject}" />
                 <StackPanel Orientation="Horizontal">
-                    <controls:AutoCompleteComboBox
+                    <controls:AutoCompleteComboBox 
                         Height="Auto"
-                        Width="400"
+                        Width="620"
+                        FontSize="16"
                         Margin="15"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"
                         cal:Message.Attach="ParatextProjectSelected($eventArgs)"
                         materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextProject}"
-                        FontSize="16"
                         IsEnabled="{Binding IsEnabledSelectedParatextProject}"
                         ItemsSource="{Binding ParatextProjects}"
                         ScrollViewer.CanContentScroll="False"
@@ -98,7 +103,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                                    <TextBlock FontSize="24" Text="{Binding Name}" />
+                                    <TextBlock FontSize="18" Text="{Binding Name}" />
                                     <TextBlock FontSize="12" Text="{Binding LongName}" />
                                     <TextBlock FontSize="10" Text="{Binding Id}" />
                                 </StackPanel>
@@ -127,13 +132,14 @@
                 <StackPanel Orientation="Horizontal">
                     <controls:AutoCompleteComboBox
                     Height="Auto"
-                    Width="400"
+                    Width="620"
+                    FontSize="16"
                     Margin="15"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left"
                     cal:Message.Attach="ParatextBtProjectSelected($eventArgs)"
                     materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextBackTranslation}"
-                    FontSize="16"
+                   
                     IsEnabled="{Binding IsEnabledSelectedParatextBtProject}"
                     ItemsSource="{Binding ParatextBtProjects}"
                     ScrollViewer.CanContentScroll="False"
@@ -144,7 +150,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                                    <TextBlock FontSize="24" Text="{Binding Name}" />
+                                    <TextBlock FontSize="18" Text="{Binding Name}" />
                                     <TextBlock FontSize="12" Text="{Binding LongName}" />
                                     <TextBlock FontSize="10" Text="{Binding Id}" />
                                 </StackPanel>
@@ -173,13 +179,14 @@
                 <StackPanel Orientation="Horizontal">
                     <controls:AutoCompleteComboBox
                     Height="Auto"
+                    Width="620"
+                    FontSize="16"
                     Margin="15"
-                    Width="400"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left"
                     cal:Message.Attach="ParatextLwcProjectSelected($eventArgs)"
                     materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextInterlinearBible}"
-                    FontSize="16"
+                  
                     IsEnabled="{Binding IsEnabledSelectedParatextLwcProject}"
                     ItemsSource="{Binding ParatextLwcProjects}"
                     ScrollViewer.CanContentScroll="False"
@@ -190,7 +197,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                                    <TextBlock FontSize="24" Text="{Binding Name}" />
+                                    <TextBlock FontSize="18" Text="{Binding Name}" />
                                     <TextBlock FontSize="12" Text="{Binding LongName}" />
                                     <TextBlock FontSize="10" Text="{Binding Id}" />
                                 </StackPanel>

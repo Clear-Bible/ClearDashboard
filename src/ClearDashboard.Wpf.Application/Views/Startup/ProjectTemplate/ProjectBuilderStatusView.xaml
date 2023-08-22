@@ -13,7 +13,6 @@
     xmlns:projectTemplate="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate"
     MinWidth="300"
     MinHeight="200"
-    Margin="5"
     d:DataContext="{d:DesignInstance Type=projectTemplate:ProjectBuilderStatusViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="200"
@@ -29,7 +28,7 @@
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
+            <!--<RowDefinition Height="20" />-->
         </Grid.RowDefinitions>
 
         <!--  BackGround Tasks  -->

@@ -23,7 +23,6 @@ using ClearDashboard.DataAccessLayer;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using Point = System.Windows.Point;
-using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.DAL.Alignment;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
@@ -39,6 +38,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private readonly string _createAction;
         private readonly string _backAction;
         private readonly string _cancelAction;
+
+        private bool _showProjectOverviewMessage;
+        public bool ShowProjectOverviewMessage
+        {
+            get => _showProjectOverviewMessage;
+            set => Set(ref _showProjectOverviewMessage, value);
+        }
 
         private string _backOrCancelAction;
         public string BackOrCancelAction
@@ -61,9 +67,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _progressIndicatorVisibility, value);
         }
 
-        public BindableCollection<string> Messages { get; }= new BindableCollection<string>();
+        public BindableCollection<string> Messages => _messages;
 
-        public ProjectBuilderStatusViewModel BackgroundTasksViewModel { get; }
+        public ProjectBuilderStatusViewModel BackgroundTasksViewModel => _backgroundTasksViewModel;
 
         /// <summary>
         /// This is the design surface that is displayed in the window.
@@ -77,6 +83,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         }
 
         private StartupDialogViewModel? _startupDialogViewModel;
+    
+        private readonly BindableCollection<string> _messages = new BindableCollection<string>();
+        private readonly ProjectBuilderStatusViewModel _backgroundTasksViewModel;
 
         public BuildProjectStepViewModel(DashboardProjectManager projectManager, 
                                          ProjectTemplateProcessRunner processRunner,
@@ -90,7 +99,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                                          ProjectDbContextFactory projectNameDbContextFactory)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
-            BackgroundTasksViewModel = backgroundTasksViewModel;
+            _backgroundTasksViewModel = backgroundTasksViewModel;
             _processRunner = processRunner;
             _projectNameDbContextFactory = projectNameDbContextFactory;
 
@@ -114,6 +123,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
+            ShowProjectOverviewMessage = true;
 
             CanMoveForwards = ParentViewModel!.SelectedParatextProject != null && (ParentViewModel!.SelectedBookIds?.Any() ?? false);
 
@@ -186,6 +196,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             CanMoveForwards = false;
             CanMoveBackwards = true;
+            ShowProjectOverviewMessage = false;
 
             await RegisterProjectCreationTasks();
             await CreateProject(_cancellationToken);
@@ -267,22 +278,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         private async Task UpdateDesignSurfaceData()
         {
-            //var readonlyProjectDesignSurfaceData =
-            //    ProjectDesignSurfaceViewModel!.GetProjectDesignSurfaceSerializationModel();
-
+           
             var projectDesignSurfaceData =
-                ProjectDesignSurfaceViewModel.LoadDesignSurfaceData(ProjectManager.CurrentProject);
+                ProjectDesignSurfaceViewModel!.LoadDesignSurfaceData(ProjectManager!.CurrentProject);
+
+            if (projectDesignSurfaceData == null)
+            {
+                return;
+            }
 
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
             foreach (var topLevelProjectId in topLevelProjectIds.CorpusIds)
             {
-                var node = projectDesignSurfaceData!.CorpusNodeLocations.FirstOrDefault(l => l.CorpusName == topLevelProjectId.Name);
-
+                // find the correct node via the Corprus name
+                var node = projectDesignSurfaceData.CorpusNodeLocations.FirstOrDefault(l => l.CorpusName == topLevelProjectId.Name);
                 if (node != null)
                 {
+                    // Set the CorpusId to the Id of the Corpus saved in the database
+                    // so we can properly draw the PDS when the project is loaded in the main app
                     node.CorpusId = topLevelProjectId.Id;
-                    node.CorpusName = topLevelProjectId.Name;
                 }
             }
 
