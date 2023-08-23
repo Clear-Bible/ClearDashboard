@@ -217,6 +217,8 @@ public class CollaborationManager
 
         using (var repo = new Repository(_repositoryPath))
         {
+            repo.Config.Set("core.longpaths", true);
+
             if (!repo.Network.Remotes.Any() && HasRemoteConfigured())
             {
                 repo.Network.Remotes.Add(RemoteOrigin, _configuration.RemoteUrl);
