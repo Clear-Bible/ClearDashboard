@@ -205,6 +205,7 @@ public class CollaborationManager
         {
             Repository.Init(_repositoryPath);
 
+            //HACK when repo is initialized, it creates a branch called main.  We need to change it to master
             var headPath = Path.Combine(_repositoryPath, ".git", "HEAD");
             var fileText = File.ReadAllText(headPath);
             if (fileText.Contains("heads/main"))

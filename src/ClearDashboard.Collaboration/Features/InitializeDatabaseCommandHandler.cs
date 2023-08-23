@@ -112,8 +112,10 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
 
                     await mergeBehavior.MergeEndAsync(cancellationToken);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    _logger.LogError(e, $"Exception thrown in handler '{GetType().Name}'");
+
                     await mergeBehavior.MergeErrorAsync(CancellationToken.None);
                     errorCleanupAction = GetErrorCleanupAction(projectContext, _logger);
                     throw;
