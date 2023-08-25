@@ -812,6 +812,11 @@
           color: black;
           }
 
+          .navbar .active{
+          background: #aaa;
+          color: black;
+          }
+
           summary{
           vertical-align:text-top;
           font-size:23px;
