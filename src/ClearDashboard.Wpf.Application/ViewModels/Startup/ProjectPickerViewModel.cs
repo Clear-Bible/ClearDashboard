@@ -1058,8 +1058,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 importServerProjectViewModel.CollaborationDialogAction = CollaborationDialogAction.Import;
                 var result = await _windowManager.ShowDialogAsync(importServerProjectViewModel, null, importServerProjectViewModel.DialogSettings());
 
-                await GetProjectsVersion();
-                await GetCollabProjects();
+                if(result)
+                {
+                    await GetProjectsVersion();
+                    await GetCollabProjects();
+                }
             }
         }
 

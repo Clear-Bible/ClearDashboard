@@ -278,8 +278,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 TextCollectionList tc = new();
 
                                 var endPart = textCollection.Data;
-                                var startPart = textCollection.ReferenceShort;
+                                var startPart = textCollection.ReferenceShort.Replace('/', '_');
 
+                                if (titles.Contains(startPart))
+                                {
+                                    break;
+                                }
                                 titles.Add(startPart);
 
                                 try
@@ -328,10 +332,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             string topAnchor = string.Empty;
                             foreach (var title in titles)
                             {
-                                topAnchor += "<a href=#" + title + ">" + title + "</a>";
+                                topAnchor += "<a id=\'Link" + title + "\' href=#" + title + ">" + title + "</a>";
                             }
+                            var scripts = "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js\"></script>\r\n  <script>\r\n    // onScreen jQuery plugin v0.2.1\r\n    // (c) 2011-2013 Ben Pickles\r\n    //\r\n    // http://benpickles.github.io/onScreen\r\n    //\r\n    // Released under MIT license.\r\n    ;(function($) {\r\n    $.expr[\":\"].onTop = function(elem) {\r\n      var $window = $(window);\r\n      var viewport_top = $window.scrollTop();\r\n      var viewport_height = $window.height();\r\n      var viewport_bottom = viewport_top + viewport_height;\r\n      var viewport_middle = viewport_top + viewport_height/100;\r\n\r\n      var half = 20;\r\n\r\n      var $elem = $(elem)\r\n      var top = $elem.offset().top\r\n      var height = $elem.height()\r\n      var bottom = top + height\r\n      var header = 63;\r\n      var result = false;\r\n    \r\n      if(top-21 < viewport_top+header+half && bottom + 2 > viewport_top+header+half){\r\n        result = true;\r\n        var divId = $elem.attr('id');\r\n        var desiredLink = $('#' + \"Link\" + divId);\r\n        desiredLink.siblings('a').removeClass('active');\r\n        desiredLink.addClass('active');\r\n      }\r\n      return result\r\n  \t\t}\r\n\t})(jQuery);\r\n    </script>\r\n    \r\n    \r\n    <script>\r\n    \r\n    window.addEventListener(\"scroll\", function(){\r\n\t\t\t$(\"div\")\r\n            //.css(\"background-color\",\"blue\")\r\n            .filter(\":onTop\")\r\n            //.css(\"background-color\", \"red\")\r\n      });\r\n    </script>";
 
-                            collectiveBody = "<div id='Home' class='navbar'>" + topAnchor + "</div>" + collectiveBody;
+                            collectiveBody = scripts + "<div id='Home' class='navbar'>" + topAnchor + "</div>" + collectiveBody;
                             MyHtml = "<html>" +
                                         "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">" + 
                                         head + 
