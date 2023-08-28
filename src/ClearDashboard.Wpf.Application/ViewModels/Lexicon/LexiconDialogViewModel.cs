@@ -1,13 +1,5 @@
 ﻿//#define DEMO
 
-using System;
-using System.Dynamic;
-using System.Linq;
-using System.Net.Mime;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls.Primitives;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -22,6 +14,13 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Dynamic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls.Primitives;
 // ReSharper disable UnusedMember.Global
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon

@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
@@ -417,11 +418,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
 
-            await GetProjectsVersion().ConfigureAwait(false);
+            await GetProjectsVersion();
 
             if (Pinger.PingHost())
             {
-                await GetCollabProjects().ConfigureAwait(false);
+                await GetCollabProjects();
             }
                 
 
@@ -456,6 +457,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         #region Methods
 
+        public async Task OpenSettings()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+
+            // get this applications position on the screen
+            var window = App.Current.Windows.OfType<Window>().SingleOrDefault(w => w.DataContext == this.ParentViewModel);
+            settings.Left = window.Left + 150;
+            settings.Top = window.Top + 100;
+
+            var viewmodel = IoC.Get<DashboardSettingsViewModel>();
+            IWindowManager manager = new WindowManager();
+            await manager.ShowWindowAsync(viewmodel, null, settings);
+        }
+
         public async Task StartParatext()
         {
             if (!_paratextProxy.IsParatextRunning())
@@ -469,7 +488,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task RefreshCollabProjectList()
         {
-            await GetCollabProjects().ConfigureAwait(false);
+            await GetCollabProjects();
         }
 
         public async Task InitializeCollaborationUser()
@@ -489,8 +508,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await manager.ShowDialogAsync(viewModel, null, settings);
 
             await GetRemoteUser();
-            await GetProjectsVersion().ConfigureAwait(false);
-            await GetCollabProjects().ConfigureAwait(false);
+            await GetProjectsVersion();
+            await GetCollabProjects();
         }
 
         public async Task CollabProjectManager()
@@ -537,7 +556,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger!.LogError(ex, "Unable to fetch from server");
             }
 
-            await GetCollabProjects().ConfigureAwait(false);
+            await GetCollabProjects();
             SetCollabVisibility();
         }
 
@@ -736,7 +755,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             // check for database compatibility
             foreach (var project in DashboardProjects)
             {
-                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version);
 
                 if (project.IsCompatibleVersion)
                 {
@@ -1039,14 +1058,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 importServerProjectViewModel.CollaborationDialogAction = CollaborationDialogAction.Import;
                 var result = await _windowManager.ShowDialogAsync(importServerProjectViewModel, null, importServerProjectViewModel.DialogSettings());
 
-                await GetProjectsVersion().ConfigureAwait(false);
-                await GetCollabProjects().ConfigureAwait(false);
+                if(result)
+                {
+                    await GetProjectsVersion();
+                    await GetCollabProjects();
+                }
             }
         }
 
         private async Task SendUiLanguageChangeMessage(string language)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
+            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language));
         }
 
         private bool CheckIfConnectedToParatext()

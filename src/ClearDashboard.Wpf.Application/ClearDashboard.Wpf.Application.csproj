@@ -7,9 +7,9 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.1.0.3</AssemblyVersion>
-    <FileVersion>1.1.0.3</FileVersion>
-    <Version>1.1.0.3</Version>
+    <AssemblyVersion>1.1.0.6</AssemblyVersion>
+    <FileVersion>1.1.0.6</FileVersion>
+    <Version>1.1.0.6</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
     <Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
@@ -126,10 +126,10 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
-    <PackageReference Include="ClearApplicationFoundation" Version="2.0.5" />
+    <PackageReference Include="ClearApplicationFoundation" Version="2.0.8" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.9" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.12" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.5" />

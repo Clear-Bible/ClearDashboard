@@ -151,8 +151,8 @@
             CornerRadius="1">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel
                     Grid.Column="0"
@@ -272,7 +272,7 @@
                         BorderBrush="{StaticResource PrimaryHueMidBrush}"
                         BorderThickness="1"
                         CornerRadius="3"
-                        Visibility="Hidden">
+                        Visibility="Collapsed">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />

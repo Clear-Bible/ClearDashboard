@@ -15,7 +15,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 // https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1416
 #pragma warning disable CA1416
@@ -318,7 +317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
 
-        public async void AddUsers(PermissionLevel permissionLevel = PermissionLevel.ReadOnly)
+        public async void AddUsers(PermissionLevel permissionLevel)
         {
             ShowProgressBar = Visibility.Visible;
             for (int i = CollabUsers.Count - 1; i >= 0; i--)
@@ -342,6 +341,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public void AddUsersReadWrite()
         {
             AddUsers(PermissionLevel.ReadWrite);
+        }
+
+        public void AddUsersReadOnly()
+        {
+            AddUsers(PermissionLevel.ReadOnly);
         }
 
         public void AddOwner()

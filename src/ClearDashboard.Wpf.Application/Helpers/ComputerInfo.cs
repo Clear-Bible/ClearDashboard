@@ -78,7 +78,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 sw.Stop();
                 
                 elapsed = sw.ElapsedMilliseconds;
-            }).ConfigureAwait(false);
+            });
 
             _logger.LogInformation($"GetComputerInfo() took {elapsed} ms");
 
