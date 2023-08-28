@@ -29,7 +29,7 @@ public class Merger
 
         var reporter = new PhasedProgressReporter(MergeContext.Progress,
             new Phase("Merging delete activity ..."),
-            new Phase("Merging create/modify activity ... Users, Corpora, and Tokenized Corpora"),
+            new Phase("Merging create/modify activity ... Users, Lexicon, Corpora, and Tokenized Corpora"),
             new Phase("Merging create/modify activity ... Parallel Corpora, Alignment Sets, and Translation Sets"),
             new Phase("Merging create/modify activity ... Notes and Labels"));
 
@@ -43,6 +43,8 @@ public class Merger
             await DeleteListDifferencesAsync(differencesToApply.ParallelCorpora, currentSnapshot.ParallelCorpora, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.TokenizedCorpora, currentSnapshot.TokenizedCorpora, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, cancellationToken);
+            await DeleteListDifferencesAsync(differencesToApply.LexiconSemanticDomains, currentSnapshot.LexiconSemanticDomains, cancellationToken);
+            await DeleteListDifferencesAsync(differencesToApply.LexiconLexemes, currentSnapshot.LexiconLexemes, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.Users, currentSnapshot.Users, cancellationToken);
         }
 
@@ -52,6 +54,12 @@ public class Merger
             // are dependent upon earlier model types:
             await CreateListDifferencesAsync(differencesToApply.Users, currentSnapshot.Users, cancellationToken);
             await ModifyListDifferencesAsync(differencesToApply.Users, currentSnapshot.Users, targetCommitSnapshot.Users, cancellationToken);
+
+            await CreateListDifferencesAsync(differencesToApply.LexiconLexemes, currentSnapshot.LexiconLexemes, cancellationToken);
+            await ModifyListDifferencesAsync(differencesToApply.LexiconLexemes, currentSnapshot.LexiconLexemes, targetCommitSnapshot.LexiconLexemes, cancellationToken);
+
+            await CreateListDifferencesAsync(differencesToApply.LexiconSemanticDomains, currentSnapshot.LexiconSemanticDomains, cancellationToken);
+            await ModifyListDifferencesAsync(differencesToApply.LexiconSemanticDomains, currentSnapshot.LexiconSemanticDomains, targetCommitSnapshot.LexiconSemanticDomains, cancellationToken);
 
             await CreateListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, cancellationToken);
             await ModifyListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, targetCommitSnapshot.Corpora, cancellationToken);

@@ -16,7 +16,8 @@ using ClearDashboard.Collaboration.Factory;
 using SIL.Scripture;
 using MediatR;
 using ClearDashboard.DAL.Alignment.Features;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using SIL.Machine.FeatureModel;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
@@ -178,10 +179,37 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Trait("Category", "Collaboration")]
         public async Task Test3()
         {
+            var testUser = _fixture.Users.First();
+
+            // Add two SemanticDomains
+            var semanticDomain1 = CollaborationProjectFixture.BuildTestLexiconSemanticDomain("sd1", testUser.Id);
+            var semanticDomain2 = CollaborationProjectFixture.BuildTestLexiconSemanticDomain("sd2", testUser.Id);
+
+            // Add a Lexicon
+            var lexiconLexeme1 = CollaborationProjectFixture.BuildTestLexiconLexeme("en", "lemma1", null, testUser.Id);
+            var lexiconLexeme1Meaning1 = CollaborationProjectFixture.BuildTestLexiconMeaning("fr", "lemma1Meaning1", lexiconLexeme1, testUser.Id);
+            _ = CollaborationProjectFixture.BuildTestLexiconTranslation("lemma1Meaning1Tr1", lexiconLexeme1Meaning1, testUser.Id);
+            var lexiconLexeme1Meaning2 = CollaborationProjectFixture.BuildTestLexiconMeaning("fr", "lemma1Meaning2", lexiconLexeme1, testUser.Id);
+            var lexiconLexeme1Meaning2Tr1 = CollaborationProjectFixture.BuildTestLexiconTranslation("lemma1Meaning2Tr1", lexiconLexeme1Meaning2, testUser.Id);
+            _fixture.LexiconLexemes.Add(lexiconLexeme1);
+
+            _ = CollaborationProjectFixture.BuildTestLexiconSemanticDomainMeaningAssociation(semanticDomain1, lexiconLexeme1Meaning2, testUser.Id);
+
+            var lexiconLexeme2 = CollaborationProjectFixture.BuildTestLexiconLexeme("en", "lemma2", null, testUser.Id);
+            var lexiconLexeme2Meaning1 = CollaborationProjectFixture.BuildTestLexiconMeaning("fr", "lemma2Meaning1", lexiconLexeme2, testUser.Id);
+            _ = CollaborationProjectFixture.BuildTestLexiconTranslation("lemma2Meaning1Tr1", lexiconLexeme2Meaning1, testUser.Id);
+            _ = CollaborationProjectFixture.BuildTestLexiconForm("lemma2Form1", lexiconLexeme2);
+            _fixture.LexiconLexemes.Add(lexiconLexeme2);
+
+            _ = CollaborationProjectFixture.BuildTestLexiconSemanticDomainMeaningAssociation(semanticDomain1, lexiconLexeme2Meaning1, testUser.Id);
+            _ = CollaborationProjectFixture.BuildTestLexiconSemanticDomainMeaningAssociation(semanticDomain2, lexiconLexeme2Meaning1, testUser.Id);
+
+            _fixture.LexiconSemanticDomains.Add(semanticDomain1);
+            _fixture.LexiconSemanticDomains.Add(semanticDomain2);
+
             // Add translation set and some translations
 
             var testAlignmentSet = _fixture.AlignmentSets.First();
-            var testUser = _fixture.Users.First();
 
             var translationSet = CollaborationProjectFixture.BuildTestTranslationSet(testAlignmentSet, testUser.Id);
             _fixture.TranslationSets.Add(translationSet);
@@ -190,15 +218,17 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 translationSet,
                 Models.TranslationOriginatedFrom.Assigned,
                 testUser.Id,
-                new List<(Models.TokenComponent, string)>
+                new List<(Models.TokenComponent, string, Models.Lexicon_Translation?)>
                 {
                     (
                         CollaborationProjectFixture.BuildTestToken(testAlignmentSet.ParallelCorpus!.SourceTokenizedCorpus!, "001001001001001"),
-                        "target text one"
+                        "target text one",
+                        null
                     ),
                     (
                         _fixture.TokenComposites.Where(e => e.EngineTokenId == "001001001002001-001001001003001").First(),
-                        "target text two"
+                        "target text two",
+                        lexiconLexeme1Meaning2Tr1
                     )
                 }));
 
@@ -208,6 +238,21 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             Assert.Equal(1, _fixture.ProjectDbContext.TranslationSets.Count());
             Assert.Equal(2, _fixture.ProjectDbContext.Translations.Count());
+            Assert.Equal(2, _fixture.ProjectDbContext.Lexicon_Lexemes.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.Lexicon_Meanings.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.Lexicon_Translations.Count());
+            Assert.Equal(2, _fixture.ProjectDbContext.Lexicon_SemanticDomains.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.Lexicon_SemanticDomainMeaningAssociations.Count());
+
+            Assert.Single(_fixture.ProjectDbContext.Translations.Where(t => t.LexiconTranslationId != null));
+
+            var lexiconLexemeMeaningsDb = _fixture.ProjectDbContext.Lexicon_Meanings
+                .Include(e => e.SemanticDomains)
+                .ToDictionary(e => e.Id, e => e);
+
+            Assert.Empty(lexiconLexemeMeaningsDb[lexiconLexeme1Meaning1.Id].SemanticDomains);
+            Assert.Single(lexiconLexemeMeaningsDb[lexiconLexeme1Meaning2.Id].SemanticDomains);
+            Assert.Equal(2, lexiconLexemeMeaningsDb[lexiconLexeme2Meaning1.Id].SemanticDomains.Count);
         }
 
         [Fact]
@@ -394,6 +439,37 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             Assert.Single(_fixture.ProjectDbContext.Notes);
             Assert.Equal(newNoteText, _fixture.ProjectDbContext.Notes.First().Text);
+        }
+
+        [Fact]
+        public async Task Test9()
+        {
+            var newTranslationText = "translation change in lexicon";
+
+            var meaning = _fixture.LexiconLexemes.First().Meanings.Where(e => e.Text == "lemma1Meaning1").First();
+            var testTranslation1 = meaning.Translations.First();
+            Assert.NotNull(testTranslation1);
+
+            testTranslation1.Text = newTranslationText;
+
+            Assert.Empty(_fixture.ProjectDbContext.Lexicon_Meanings
+                .Include(e => e.SemanticDomains)
+                .First(e => e.Text == "lemma1Meaning1").SemanticDomains);
+
+            var semanticDomain = _fixture.LexiconSemanticDomains.Where(e => e.Text == "sd2").First();
+            _ = CollaborationProjectFixture.BuildTestLexiconSemanticDomainMeaningAssociation(semanticDomain, meaning, meaning.UserId);
+
+            await DoMerge();
+
+            _fixture.ProjectDbContext.ChangeTracker.Clear();
+
+            var trDb = _fixture.ProjectDbContext.Lexicon_Translations.Where(e => e.Id == testTranslation1.Id).FirstOrDefault();
+            Assert.NotNull(trDb);
+            Assert.Equal(newTranslationText, trDb.Text);
+            Assert.Single(_fixture.ProjectDbContext.Lexicon_Meanings
+                .Include(e => e.SemanticDomains)
+                .First(e => e.Text == "lemma1Meaning1").SemanticDomains);
+            Assert.Equal(4, _fixture.ProjectDbContext.Lexicon_SemanticDomainMeaningAssociations.Count());
         }
 
         protected async Task DoMerge()
