@@ -1,19 +1,19 @@
-﻿using System;
+﻿using Caliburn.Micro;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Factory;
 using ClearDashboard.Collaboration.Model;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Data;
-using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
+using System.Diagnostics;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 
 public class TranslationSetHandler : DefaultMergeHandler<IModelSnapshot<Models.TranslationSet>>
 {
-	public TranslationSetHandler(MergeContext mergeContext) : base(mergeContext)
+    public TranslationSetHandler(MergeContext mergeContext) : base(mergeContext)
     {
     }
 
@@ -54,12 +54,31 @@ public class TranslationSetHandler : DefaultMergeHandler<IModelSnapshot<Models.T
                 var handler = _mergeContext.FindMergeHandler<IModelSnapshot<Models.Translation>>();
 
                 _mergeContext.MergeBehavior.StartInsertModelCommand(firstTranslation);
-                foreach (var child in parentSnapshot.Children[translationsChildName])
+
+
+                try
                 {
-                    var id = await _mergeContext.MergeBehavior.RunInsertModelCommand((IModelSnapshot)child, cancellationToken);
-                    count++;
+                    foreach (var child in parentSnapshot.Children[translationsChildName])
+                    {
+                        var id = await _mergeContext.MergeBehavior.RunInsertModelCommand((IModelSnapshot)child, cancellationToken);
+                        count++;
+                    }
                 }
-                _mergeContext.MergeBehavior.CompleteInsertModelCommand(firstTranslation.EntityType);
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+
+
+                try
+                {
+                    _mergeContext.MergeBehavior.CompleteInsertModelCommand(firstTranslation.EntityType);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+
             }
         }
 
