@@ -781,7 +781,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
                     {
                         // Show Verses in New Windows
-                        Header = LocalizationService.Get("Update"),
+                        Header = LocalizationService.Get("Pds_GetLatestFromParatext"),
                         Id = DesignSurfaceMenuIds.UpdateParatextCorpus,
                         ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                         IconKind = PackIconPicolIconsKind.Edit.ToString(),
