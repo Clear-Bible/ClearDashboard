@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Models;
+using static ClearDashboard.Wpf.Application.Helpers.SlackMessage;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -37,6 +38,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         #region Observable Properties
+
+        private bool _bugReport = true;
+        public bool BugReport
+        {
+            get => _bugReport;
+            set
+            {
+                _bugReport = value;
+                NotifyOfPropertyChange(() => BugReport);
+            }
+        }
+
+
+        private bool _suggestion;
+        public bool Suggestion
+        {
+            get => _suggestion;
+            set
+            {
+                _suggestion = value;
+                NotifyOfPropertyChange(() => Suggestion);
+            }
+        }
+
 
         private string _userMessage;
         public string UserMessage
@@ -202,7 +227,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             string msg = $"*Dashboard User:* {DashboardUser.FullName} \n*Paratext User:* {ParatextUser} \n*Github User:* {GitLabUser.RemoteUserName} \n*Version*: {versionNumber} \n*Message:* \n{UserMessage}";
 
             var logger = LifetimeScope.Resolve<ILogger<SlackMessage>>();
-            SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, logger);
+
+            SlackMessageType slackMessageType = SlackMessageType.BugReport;
+
+
+            if (BugReport)
+            {
+                slackMessageType = SlackMessageType.BugReport;
+            }
+            else
+            {
+                slackMessageType = SlackMessageType.Suggestion;
+            }
+
+            SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, logger, slackMessageType);
             var bSuccess = await slackMessage.SendFileToSlackAsync();
 
             if (bSuccess == true)

@@ -7,7 +7,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="SlackMessageView"
     Width="500"
     Height="300"
@@ -16,6 +16,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -59,8 +60,27 @@
         </StackPanel>
 
         <!--  Row 2  -->
+        <StackPanel Grid.Row="2" Orientation="Vertical">
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <RadioButton
+                    x:Name="BugReport"
+                    Content="Bug Report"
+                    GroupName="GroupChoiceChip" />
+                <RadioButton
+                    x:Name="Suggestion"
+                    Margin="15,0,0,0"
+                    Content="Suggestion"
+                    GroupName="GroupChoiceChip" />
+            </StackPanel>
+
+
+
+
+        </StackPanel>
+
+        <!--  Row 3  -->
         <TextBox
-            Grid.Row="2"
+            Grid.Row="3"
             Margin="10,0,10,10"
             AcceptsReturn="True"
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
@@ -71,9 +91,10 @@
             Text="{Binding UserMessage}"
             TextWrapping="Wrap" />
 
-        <!--  Row 3  -->
 
-        <Grid Grid.Row="3">
+        <!--  Row 4  -->
+
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
