@@ -120,6 +120,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         }
         public Visibility NextVisibility { get; } = Visibility.Collapsed;
         public Visibility OkVisibility { get; } = Visibility.Visible;
+        public Visibility SelectBooksVisibility { get; } = Visibility.Collapsed;
+        public Visibility UpdateAddVisibility { get; } = Visibility.Visible;
 
         private bool _canOk;
         public bool CanOk
@@ -168,11 +170,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             {
                 NextVisibility = Visibility.Visible;
                 OkVisibility = Visibility.Collapsed;
+
+                SelectBooksVisibility = Visibility.Visible;
+                UpdateAddVisibility = Visibility.Collapsed;
             }
             else
             {
                 NextVisibility = Visibility.Collapsed;
                 OkVisibility = Visibility.Visible;
+
+                SelectBooksVisibility = Visibility.Collapsed;
+                UpdateAddVisibility = Visibility.Visible;
             }
             DialogMode = dialogMode;
             CanMoveForwards = true;

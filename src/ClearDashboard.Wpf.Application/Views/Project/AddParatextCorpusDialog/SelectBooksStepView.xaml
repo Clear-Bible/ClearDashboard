@@ -43,8 +43,16 @@
             Grid.Row="0"
             Margin="15,15,0,0"
             HorizontalAlignment="Left"
+            Content="{helpers:Localization AddParatextCorpusDialog_SelectBooks}"
+            FontSize="24"
+            Visibility="{Binding SelectBooksVisibility}" />
+        <Label
+            Grid.Row="0"
+            Margin="15,15,0,0"
+            HorizontalAlignment="Left"
             Content="{helpers:Localization UpdateParatextCorpusDialog_SelectBooks}"
-            FontSize="24" />
+            FontSize="24"
+            Visibility="{Binding UpdateAddVisibility}" />
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
