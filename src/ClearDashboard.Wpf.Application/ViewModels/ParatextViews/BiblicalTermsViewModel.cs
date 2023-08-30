@@ -821,7 +821,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                         //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
                         verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Black});
 
                         // check if this was the last one
                         if (i == 0)
