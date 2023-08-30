@@ -466,10 +466,29 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        VerticalAlignment="Center"
+                                        FontSize="12">
+                                        <Run FontWeight="DemiBold" Text="Owner:" />
+                                        <Run Text="{Binding CollabOwner}" />
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CollabOwner}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <!--<TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
                                         Grid.ColumnSpan="2">
                                         <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Database}" />
                                         <Run FontSize="11" Text="{Binding CompactFilePath, Mode=OneTime}" />
-                                    </TextBlock>
+                                    </TextBlock>-->
 
                                     <TextBlock Grid.Row="2" Grid.Column="1">
                                         <TextBlock.Style>
