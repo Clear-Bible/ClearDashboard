@@ -13,8 +13,10 @@ using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -518,6 +520,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         public async Task Cancel()
         {
+
             if (_runningTask is not null)
             {
                 CanCancelAction = false;
@@ -536,6 +539,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 await TryCloseAsync(false);
             }
         }
+
+        public void CopyToClipboard()
+        {
+            var sb = new StringBuilder();
+            foreach (var task in MergeProgressUpdates)
+            {
+                sb.AppendLine(task);
+            }
+            Clipboard.SetText(sb.ToString());
+        }
+
 
         public async Task Ok()
         {
