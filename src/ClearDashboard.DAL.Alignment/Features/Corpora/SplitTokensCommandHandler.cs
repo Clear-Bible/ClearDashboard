@@ -53,8 +53,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var tokensDb = ProjectDbContext.Tokens
                 .Include(t => t.TokenCompositeTokenAssociations)
-                    .ThenInclude(ta => ta.TokenComposite)
-                        .ThenInclude(tc => tc!.Tokens)
                 .Include(t => t.TokenizedCorpus)
                     .ThenInclude(tc => tc!.SourceParallelCorpora)
                 .Include(t => t.TokenizedCorpus)
