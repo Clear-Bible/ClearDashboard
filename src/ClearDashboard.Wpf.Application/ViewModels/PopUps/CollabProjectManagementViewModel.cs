@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -159,12 +160,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 _filterText = value;
                 CollabeUserCollectionView.Refresh();
                 NotifyOfPropertyChange(() => FilterText);
-
-                if (value is null)
-                {
-                    SelectedOrganization = null;
-                    NotifyOfPropertyChange(nameof(SelectedOrganization));
-                }
             }
         }
 
@@ -175,12 +170,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set
             {
                 _selectedOrganization = value;
+                CollabeUserCollectionView.Refresh();
                 NotifyOfPropertyChange(() => SelectedOrganization);
-
-                if (value is not null)
-                {
-                    FilterText = value;
-                }
             }
         }
 
@@ -268,14 +259,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private bool CollabUsersCollectionFilter(object obj)
         {
-            if (string.IsNullOrEmpty(FilterText))
-            {
-                return true;
-            }
-
             if (obj is GitUser user)
             {
-                if (user.Name!.ToUpper().Contains(FilterText.ToUpper()) || user.Organization.ToUpper().Contains(FilterText.ToUpper()))
+                if (user.Name!.ToUpper().Contains((FilterText ?? string.Empty).ToUpper()) && 
+                    user.Organization.ToUpper().Contains((SelectedOrganization ?? string.Empty).ToUpper()))
                 {
                     return true;
                 }
