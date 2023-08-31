@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.Helpers
@@ -15,7 +16,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
     public class JiraClient
     {
         private static string _ProjectKey = "DUF";
-        private static string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": {\"content\": [{\"content\": [{\"text\": [[TEXTHERE]],\"type\": \"text\"}],\"type\": \"paragraph\"}],\"type\": \"doc\",\"version\": 1},\"labels\": [\"[[LABEL]]\"]}}";
+        private static string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": [[TEXTHERE]],\"labels\": [\"[[LABEL]]\"]}}";
 
 
         /// <summary>
@@ -42,64 +43,6 @@ namespace ClearDashboard.Wpf.Application.Helpers
             HttpClient client = new HttpClient();
             client.BaseAddress = jiraUri;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthentication);
-            //var data = new
-            //{
-            //    fields = new
-            //    {
-            //        issuetype = new { id = 10002 /*Task*/ },
-            //        summary = jiraTitle,
-            //        project = new { key = _ProjectKey /*Key of your project*/},
-            //        description = new
-            //        {
-            //            version = 1,
-            //            type = "doc",
-            //            content = new[] {
-            //                new {
-            //                    type = "paragraph",
-            //                    content = new []{
-            //                        new {
-            //                            type = "text",
-            //                            text =  "Summary of the problem"
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        },
-            //        reporter = new
-            //        {
-            //            accountId = jiraUser.AccountId,
-            //            emailAddress = jiraUser.EmailAddress,
-            //            displayName = jiraUser.DisplayName
-            //        },
-            //        labels = new[] { "bugfix" }
-            //    }
-            //};
-
-            //var data2 = new
-            //{
-            //    fields = new
-            //    {
-            //        issuetype = new { id = 10002 /*Task*/ },
-            //        summary = jiraTitle,
-            //        project = new { key = _ProjectKey /*Key of your project*/},
-            //        description = new
-            //        {
-            //            version = 1,
-            //            type = "doc",
-            //            content = new[] {
-            //                new {
-            //                    type = "paragraph",
-            //                    content = new []{
-            //                        new {
-            //                            type = "text",
-            //                            text =  "Summary of the problem"
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //};
 
             var json = _jsonTemplate;
             json = json.Replace("[[PROJECT]]", _ProjectKey);
@@ -107,17 +50,17 @@ namespace ClearDashboard.Wpf.Application.Helpers
             json = json.Replace("[[ACCOUNTID]]", jiraUser.AccountId);
             json = json.Replace("[[EMAIL]]", jiraUser.EmailAddress);
             json = json.Replace("[[TEXTHERE]]", summaryDetail);
-            json = json.Replace("[[LABEL]]", severityText.Replace(" ",""));
+            json = json.Replace("[[LABEL]]", "WantToDo");
 
+            //Debug.WriteLine(json);
 
-            Debug.WriteLine(json);  
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-
-            var result = await client.PostAsJsonAsync($"/rest/api/3/issue", json);
+            var result = await client.PostAsync("/rest/api/3/issue", content);
             if (result.StatusCode == System.Net.HttpStatusCode.Created)
                 return await result.Content.ReadFromJsonAsync<JiraTicketResponse>();
-            else
-                throw new Exception(await result.Content.ReadAsStringAsync());
+
+            return null;
         }
 
         /// <summary>
@@ -130,7 +73,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <exception cref="Exception"></exception>
         public static async Task<List<JiraUser>> GetAllUsers()
         {
-            Uri jiraUri = new Uri( Settings.Default.JiraBaseUrl);
+            Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
             string apiKey = Settings.Default.JiraToken;
 
@@ -156,7 +99,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
                 return users;
             }
-            
+
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
@@ -166,11 +109,12 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
             if (user != null)
                 return Task.FromResult(user);
-            else
-            {
-                // create a new user in Jira
-                return CreateJiraUser(dashboardUser.Email);
-            }
+
+
+            // create a new user in Jira
+            var createdUser = CreateJiraUser(dashboardUser.Email);
+            if (createdUser != null)
+                return createdUser;
 
             return null;
         }
@@ -206,11 +150,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
             {
                 return await result.Content.ReadFromJsonAsync<JiraUser>();
             }
-            
+
             return new JiraUser { AccountId = "5fff143cf7ea2a0107ff9f87", DisplayName = "dirk.kaiser@clear.bible", EmailAddress = "dirk.kaiser@clear.bible" };
         }
 
-        
+
 
     }
 }
