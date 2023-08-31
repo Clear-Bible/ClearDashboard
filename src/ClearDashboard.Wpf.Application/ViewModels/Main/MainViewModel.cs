@@ -169,7 +169,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task CollabProjectManager()
         {
-            var localizedString = _localizationService!["MainView_About"];
+            var localizedString = _localizationService!["CollabProjectManagementView_CollaborationManagement"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
