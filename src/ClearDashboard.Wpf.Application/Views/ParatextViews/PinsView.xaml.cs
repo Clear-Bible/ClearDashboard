@@ -1,8 +1,8 @@
-﻿using System.Windows;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using MaterialDesignThemes.Wpf;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ClearDashboard.DataAccessLayer.Models;
-using MaterialDesignThemes.Wpf;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
