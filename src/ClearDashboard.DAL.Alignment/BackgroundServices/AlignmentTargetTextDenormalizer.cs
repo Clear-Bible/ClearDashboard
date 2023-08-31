@@ -20,7 +20,13 @@ using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.DAL.Alignment.BackgroundServices
 {
-    public class AlignmentTargetTextDenormalizer : BackgroundService, IHandle<AlignmentSetCreatedEvent>, IHandle<AlignmentAddedRemovedEvent>, IHandle<BackgroundTaskChangedMessage>
+    public class AlignmentTargetTextDenormalizer : 
+        BackgroundService, 
+        IHandle<AlignmentSetCreatedEvent>, 
+        IHandle<AlignmentAddedRemovedEvent>, 
+        IHandle<AlignmentSetSourceTokenIdsUpdatedEvent>, 
+        IHandle<AlignmentSetSourceTrainingTextsUpdatedEvent>, 
+        IHandle<BackgroundTaskChangedMessage>
     {
         private readonly IMediator _mediator;
         private readonly IProjectProvider _projectProvider;
@@ -179,6 +185,18 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
         public async Task HandleAsync(AlignmentAddedRemovedEvent message, CancellationToken cancellationToken)
         {
             _logger.LogDebug($"AlignmentTargetTextDenormalizer received AlignmentAddedRemovedEvent.");
+            await TriggerTaskCompletionSource();
+        }
+
+        public async Task HandleAsync(AlignmentSetSourceTokenIdsUpdatedEvent message, CancellationToken cancellationToken)
+        {
+            _logger.LogDebug($"AlignmentTargetTextDenormalizer received AlignmentSetSourceTokenIdsUpdatedEvent.");
+            await TriggerTaskCompletionSource();
+        }
+
+        public async Task HandleAsync(AlignmentSetSourceTrainingTextsUpdatedEvent message, CancellationToken cancellationToken)
+        {
+            _logger.LogDebug($"AlignmentTargetTextDenormalizer received AlignmentSetSourceTrainingTextsUpdatedEvent.");
             await TriggerTaskCompletionSource();
         }
 

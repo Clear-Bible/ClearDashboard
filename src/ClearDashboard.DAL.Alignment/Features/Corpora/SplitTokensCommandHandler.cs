@@ -8,7 +8,6 @@ using ClearDashboard.DataAccessLayer.Data.Migrations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SIL.Linq;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -134,15 +133,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 surfaceText: surfaceText[(request.SurfaceTextIndex + request.SurfaceTextLength)..^0],
                 trainingText: (request.SurfaceTextIndex > 0) ? request.TrainingText3! : request.TrainingText2);
 
+            var replacementTokensById = new Dictionary<Guid, List<Token>>();
+            var replacementModelTokensById = new Dictionary<Guid, List<Models.Token>>();
+            var sourceTrainingTextsByAlignmentSetId = new Dictionary<Guid, List<string>>();
+
             foreach (var tokenDb in tokensDb)
             {
                 var newChildTokens = new List<Token>();
                 var newChildTokensDb = new List<Models.Token>();
                 var nextSubwordNumber = 0;
-
-                var tokenDbNoteAssociations = noteAssociationsDb
-                    .Where(e => e.DomainEntityIdGuid == tokenDb.Id)
-                    .ToList();
 
                 for (int i = 0; i < childTextPairs.Length; i++)
                 {
@@ -166,21 +165,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     };
 
                     newChildTokens.Add(newToken);
-                    newChildTokensDb.Add(new Models.Token
-                    {
-                        Id = newToken.TokenId.Id,
-                        VerseRowId = tokenDb.VerseRowId,
-                        TokenizedCorpusId = tokenDb.TokenizedCorpusId,
-                        EngineTokenId = newToken.TokenId.ToString(),
-                        BookNumber = newToken.TokenId.BookNumber,
-                        ChapterNumber = newToken.TokenId.ChapterNumber,
-                        VerseNumber = newToken.TokenId.VerseNumber,
-                        WordNumber = newToken.TokenId.WordNumber,
-                        SubwordNumber = newToken.TokenId.SubWordNumber,
-                        SurfaceText = childTextPairs[i].surfaceText,
-                        TrainingText = childTextPairs[i].trainingText,
-                        ExtendedProperties = tokenDb.ExtendedProperties
-                    });
+                    newChildTokensDb.Add(BuildModelToken(newToken, tokenDb.TokenizedCorpusId, tokenDb.VerseRowId));
+
+                    var tokenDbNoteAssociations = noteAssociationsDb
+                        .Where(e => e.DomainEntityIdGuid == tokenDb.Id)
+                        .ToList();
 
                     if (i == 0)
                     {
@@ -200,139 +189,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     }
                 }
 
+                replacementTokensById.Add(tokenDb.Id, newChildTokens);
+                replacementModelTokensById.Add(tokenDb.Id, newChildTokensDb);
+
                 ProjectDbContext.TokenComponents.AddRange(newChildTokensDb);
                 tokenDb.Deleted = currentDateTime;
-
-                if (tokenDb.TokenComposites.Any())
-                {
-                    // For each existing Composite containing T1, replace T1 with
-                    // the newly created tokens as children of the composite.
-
-                    var tokenCompositesDb = tokenDb.TokenComposites;
-
-                    // Remove assocations from all composites that reference this tokenDb.Id
-                    ProjectDbContext.TokenCompositeTokenAssociations.RemoveRange(tokenCompositesDb
-                        .SelectMany(e => e.TokenCompositeTokenAssociations
-                            .Where(t => t.TokenId == tokenDb.Id)));
-
-                    // Add new associations from same composites to newChildTokens
-                    ProjectDbContext.TokenCompositeTokenAssociations.AddRange(tokenCompositesDb
-                        .SelectMany(e => newChildTokens.Select(t => new Models.TokenCompositeTokenAssociation
-                        {
-                            Id = Guid.NewGuid(),
-                            TokenCompositeId = e.Id,
-                            TokenId = t.TokenId.Id
-                        })));
-
-                    newlyCreatedTokens.AddRange(newChildTokens);
-                }
-                else
-                {
-                    var newCompositeIds = new List<Guid>();
-
-                    if (!request.CreateParallelComposite)
-                    {
-                        // If (createParallelComposite == false and T1 is not a member of any composite at all),
-                        // create a non parallel composite C(parallel=null) with the newly created tokens and
-                        // change all (i) alignments, (ii) translations, (iii) notes, and (iv)
-                        // TokenVerseAssoc(source or target) that reference T1 to reference C(parallel=null) instead.
-
-                        var composite = new Models.TokenComposite
-                        {
-                            Id = Guid.NewGuid(),
-                            Tokens = newChildTokensDb
-                        };
-
-                        ProjectDbContext.TokenComposites.Add(composite);
-                        newCompositeIds.Add(composite.Id);
-
-                        tokenDb.SourceAlignments.ForEach(e => e.SourceTokenComponentId = composite.Id);
-                        tokenDb.TargetAlignments.ForEach(e => e.TargetTokenComponentId = composite.Id);
-                        tokenDb.Translations.ForEach(e => e.SourceTokenComponentId = composite.Id);
-                        tokenDb.TokenVerseAssociations.ForEach(e => e.TokenComponentId = composite.Id);
-                    }
-                    else
-                    {
-                        // else, for each parallel, if T1 is not a member of either a parallel or non-parallel
-                        // composite, create a parallel composite C(parallel) with the newly created tokens and
-                        // change all (i) alignments, (ii) translations, (iii) notes, and (iv)
-                        // TokenVerseAssoc(source or target) that reference T1 to reference C(parallel) instead.
-
-                        bool isFirst = true;
-                        foreach (var pc in tokenDb.TokenizedCorpus!.SourceParallelCorpora.Union(tokenDb.TokenizedCorpus!.TargetParallelCorpora))
-                        {
-                            var composite = new Models.TokenComposite
-                            {
-                                Id = Guid.NewGuid(),
-                                Tokens = newChildTokensDb,
-                                ParallelCorpusId = pc.Id
-                            };
-
-                            ProjectDbContext.TokenComposites.Add(composite);
-                            newCompositeIds.Add(composite.Id);
-
-                            if (isFirst)
-                            {
-                                tokenDb.SourceAlignments.ForEach(e => e.SourceTokenComponentId = composite.Id);
-                                tokenDb.TargetAlignments.ForEach(e => e.TargetTokenComponentId = composite.Id);
-                                tokenDb.Translations.ForEach(e => e.SourceTokenComponentId = composite.Id);
-                                tokenDb.TokenVerseAssociations.ForEach(e => e.TokenComponentId = composite.Id);
-                            }
-                            else
-                            {
-                                tokenDb.SourceAlignments.ForEach(e =>
-                                {
-                                    ProjectDbContext.Alignments.Add(new Models.Alignment
-                                    {
-                                        SourceTokenComponentId = composite.Id,
-                                        TargetTokenComponentId = e.TargetTokenComponentId,
-                                        AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
-                                        AlignmentVerification = e.AlignmentVerification
-                                    });
-                                });
-                                tokenDb.TargetAlignments.ForEach(e =>
-                                {
-                                    ProjectDbContext.Alignments.Add(new Models.Alignment
-                                    {
-                                        SourceTokenComponentId = e.SourceTokenComponentId,
-                                        TargetTokenComponentId = composite.Id,
-                                        AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
-                                        AlignmentVerification = e.AlignmentVerification
-                                    });
-                                });
-                                tokenDb.Translations.ForEach(e =>
-                                {
-                                    ProjectDbContext.Translations.Add(new Models.Translation
-                                    {
-                                        SourceTokenComponentId = composite.Id,
-                                        TargetText = e.TargetText,
-                                        TranslationState = e.TranslationState,
-                                        LexiconTranslationId = e.LexiconTranslationId
-                                    });
-                                });
-                                tokenDb.TokenVerseAssociations.ForEach(e =>
-                                {
-                                    ProjectDbContext.TokenVerseAssociations.Add(new Models.TokenVerseAssociation
-                                    {
-                                        TokenComponentId = composite.Id,
-                                        Position = e.Position,
-                                        VerseId = e.VerseId
-                                    });
-                                });
-                            }
-
-                            isFirst = false;
-                        }
-                    }
-                }
 
                 // Find any tokens with a BCVW that matches the current tokenDb and
                 // with a SubwordNumber that is greater than the last new split token,
                 // and do a Subword renumbering
                 nextSubwordNumber++;
                 var tokensHavingSubwordsToRenumberDb = ProjectDbContext.Tokens
-                    .Include(t => t.TokenCompositeTokenAssociations)
-                        .ThenInclude(ta => ta.TokenComposite)
                     .Where(t =>
                         t.BookNumber == tokenDb.BookNumber &&
                         t.ChapterNumber == tokenDb.ChapterNumber &&
@@ -347,23 +214,301 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 }
             }
 
-            //using (var transaction = ProjectDbContext.Database.BeginTransaction())
-            //{
-            //    alignmentSet.AddDomainEvent(new AlignmentSetSourceTokenIdsUpdatingEvent(request.AlignmentSetId.Id, sourceTokenIdsForDenormalization, ProjectDbContext));
-            //    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            var existingCompositeIds = tokensDb
+                .SelectMany(e => e.TokenCompositeTokenAssociations
+                .Select(t => t.TokenCompositeId))
+                .Distinct();
 
-            //    transaction.Commit();
-            //}
+            var tokensDbTokenComposites = ProjectDbContext.TokenComposites
+                .Include(e => e.Tokens)
+                .Include(e => e.SourceAlignments)
+                .Where(e => existingCompositeIds.Contains(e.Id))
+                .ToList();
+            
+            foreach (var tokenComposite in tokensDbTokenComposites)
+            {
+                var previousTrainingText = tokenComposite.TrainingText;
 
-            //await _mediator.Publish(new AlignmentSetSourceTokenIdsUpdatedEvent(request.AlignmentSetId.Id, sourceTokenIdsForDenormalization), cancellationToken);
+                var tokenIdsToReplace = tokenComposite.Tokens
+                    .Select(e => e.Id)
+                    .Intersect(tokensDb.Select(e => e.Id))
+                    .ToList();
 
+                // Remove assocations from this composite that reference tokenIdsToReplace
+                ProjectDbContext.TokenCompositeTokenAssociations.RemoveRange(tokensDb
+                    .SelectMany(e => e.TokenCompositeTokenAssociations
+                        .Where(t =>
+                            t.TokenCompositeId == tokenComposite.Id &&
+                            tokenIdsToReplace.Contains(t.TokenId)
+                        )));
 
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+                // Get existing child tokens for the composites, leaving out the ones
+                // we are going to replace with split token children:
+                var compositeToken = ModelHelper.BuildCompositeToken(tokenComposite);
+                var compositeChildTokens = compositeToken.Tokens
+                    .ExceptBy(tokenIdsToReplace, e => e.TokenId.Id)
+                    .ToList();
+
+                foreach (var tokenIdToReplace in tokenIdsToReplace)
+                {
+                    compositeChildTokens.AddRange(replacementTokensById[tokenIdToReplace]);
+
+                    // Add new associations from this composites to replacement child token ids:
+                    ProjectDbContext.TokenCompositeTokenAssociations.AddRange(replacementTokensById[tokenIdToReplace]
+                        .Select(e => new Models.TokenCompositeTokenAssociation
+                        {
+                            Id = Guid.NewGuid(),
+                            TokenCompositeId = tokenComposite.Id,
+                            TokenId = e.TokenId.Id
+                        }));
+                }
+
+                // Using the higher level CompositeToken structure here (instead 
+                // of Models.TokenComposite) should reset the Surface and Training
+                // text using the new split child tokens:
+                compositeToken.Tokens = compositeChildTokens;
+
+                tokenComposite.SurfaceText = compositeToken.SurfaceText;
+                tokenComposite.TrainingText = compositeToken.TrainingText;
+
+                foreach (var e in tokenComposite.SourceAlignments)
+                {
+                    if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
+                    {
+                        sourceTrainingTexts.Add(previousTrainingText!);
+                        sourceTrainingTexts.Add(tokenComposite.TrainingText!);
+                    }
+                    else
+                    {
+                        sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string>
+                        {
+                            previousTrainingText!,
+                            tokenComposite.TrainingText!
+                        });
+                    }
+                }
+            }
+
+            foreach (var tokenDb in tokensDb.Where(e => !e.TokenCompositeTokenAssociations.Any()))
+            {
+                if (!request.CreateParallelComposite)
+                {
+                    // If (createParallelComposite == false and T1 is not a member of any composite at all),
+                    // create a non parallel composite C(parallel=null) with the newly created tokens and
+                    // change all (i) alignments, (ii) translations, (iii) notes, and (iv)
+                    // TokenVerseAssoc(source or target) that reference T1 to reference C(parallel=null) instead.
+
+                    var compositeToken = new CompositeToken(replacementTokensById[tokenDb.Id]);
+                    compositeToken.TokenId.Id = Guid.NewGuid();
+
+                    var tokenComposite = BuildModelTokenComposite(
+                        compositeToken,
+                        tokenDb.TokenizedCorpusId,
+                        tokenDb.VerseRowId, 
+                        replacementModelTokensById[tokenDb.Id]);
+
+                    ProjectDbContext.TokenComposites.Add(tokenComposite);
+
+                    foreach (var e in tokenDb.SourceAlignments) 
+                    { 
+                        e.SourceTokenComponentId = tokenComposite.Id;
+                        if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
+                        {
+                            sourceTrainingTexts.Add(tokenDb.TrainingText!);
+                            sourceTrainingTexts.Add(tokenComposite.TrainingText!);
+                        }
+                        else
+                        {
+                            sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string> 
+                            { 
+                                tokenDb.TrainingText!,
+                                tokenComposite.TrainingText! 
+                            });
+                        }
+                    }
+                    foreach (var e in tokenDb.TargetAlignments) { e.TargetTokenComponentId = tokenComposite.Id; }
+                    foreach (var e in tokenDb.Translations) { e.SourceTokenComponentId = tokenComposite.Id; }
+                    foreach (var e in tokenDb.TokenVerseAssociations) { e.TokenComponentId = tokenComposite.Id; }
+                }
+                else
+                {
+                    // else, for each parallel, if T1 is not a member of either a parallel or non-parallel
+                    // composite, create a parallel composite C(parallel) with the newly created tokens and
+                    // change all (i) alignments, (ii) translations, (iii) notes, and (iv)
+                    // TokenVerseAssoc(source or target) that reference T1 to reference C(parallel) instead.
+
+                    bool isFirst = true;
+                    foreach (var pc in tokenDb.TokenizedCorpus!.SourceParallelCorpora.Union(tokenDb.TokenizedCorpus!.TargetParallelCorpora))
+                    {
+                        var compositeToken = new CompositeToken(replacementTokensById[tokenDb.Id]);
+                        compositeToken.TokenId.Id = Guid.NewGuid();
+
+                        var tokenComposite = BuildModelTokenComposite(
+                            compositeToken,
+                            tokenDb.TokenizedCorpusId,
+                            tokenDb.VerseRowId,
+                            replacementModelTokensById[tokenDb.Id]);
+                        tokenComposite.ParallelCorpusId = pc.Id;
+
+                        ProjectDbContext.TokenComposites.Add(tokenComposite);
+
+                        if (isFirst)
+                        {
+                            foreach (var e in tokenDb.SourceAlignments)
+                            {
+                                e.SourceTokenComponentId = tokenComposite.Id;
+                                if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
+                                {
+                                    sourceTrainingTexts.Add(tokenDb.TrainingText!);
+                                    sourceTrainingTexts.Add(tokenComposite.TrainingText!);
+                                }
+                                else
+                                {
+                                    sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string> 
+                                    {
+                                        tokenDb.TrainingText!,
+                                        tokenComposite.TrainingText! 
+                                    });
+                                }
+                            }
+                            foreach (var e in tokenDb.TargetAlignments) { e.TargetTokenComponentId = tokenComposite.Id; }
+                            foreach (var e in tokenDb.Translations) { e.SourceTokenComponentId = tokenComposite.Id; }
+                            foreach (var e in tokenDb.TokenVerseAssociations) { e.TokenComponentId = tokenComposite.Id; }
+                        }
+                        else
+                        {
+                            foreach (var e in tokenDb.SourceAlignments)
+                            {
+                                ProjectDbContext.Alignments.Add(new Models.Alignment
+                                {
+                                    AlignmentSetId = e.AlignmentSetId,
+                                    SourceTokenComponentId = tokenComposite.Id,
+                                    TargetTokenComponentId = e.TargetTokenComponentId,
+                                    AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
+                                    AlignmentVerification = e.AlignmentVerification,
+                                    Score = e.Score
+                                });
+                                if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
+                                {
+                                    sourceTrainingTexts.Add(tokenComposite.TrainingText!);
+                                }
+                                else
+                                {
+                                    sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string> { tokenComposite.TrainingText! });
+                                }
+                            }
+                            foreach (var e in tokenDb.TargetAlignments)
+                            {
+                                ProjectDbContext.Alignments.Add(new Models.Alignment
+                                {
+                                    AlignmentSetId = e.AlignmentSetId,
+                                    SourceTokenComponentId = e.SourceTokenComponentId,
+                                    TargetTokenComponentId = tokenComposite.Id,
+                                    AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
+                                    AlignmentVerification = e.AlignmentVerification,
+                                    Score = e.Score
+                                });
+                            }
+                            foreach (var e in tokenDb.Translations)
+                            {
+                                ProjectDbContext.Translations.Add(new Models.Translation
+                                {
+                                    TranslationSetId = e.TranslationSetId,
+                                    SourceTokenComponentId = tokenComposite.Id,
+                                    TargetText = e.TargetText,
+                                    TranslationState = e.TranslationState,
+                                    LexiconTranslationId = e.LexiconTranslationId,
+                                    Modified = e.Modified
+                                });
+                            }
+                            foreach (var e in tokenDb.TokenVerseAssociations)
+                            {
+                                ProjectDbContext.TokenVerseAssociations.Add(new Models.TokenVerseAssociation
+                                {
+                                    TokenComponentId = tokenComposite.Id,
+                                    Position = e.Position,
+                                    VerseId = e.VerseId
+                                });
+                            }
+                        }
+
+                        isFirst = false;
+                    }
+                }
+            }
+
+            if (sourceTrainingTextsByAlignmentSetId.Any())
+            {
+                using (var transaction = ProjectDbContext.Database.BeginTransaction())
+                {
+                    await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatingEvent(sourceTrainingTextsByAlignmentSetId, ProjectDbContext));
+                    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+
+                    await transaction.CommitAsync(cancellationToken);
+                }
+
+                await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatedEvent(sourceTrainingTextsByAlignmentSetId), cancellationToken);
+            }
+            else
+            {
+                _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            }
 
             return new RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>
             (
                 (newlyCreatedComposites, newlyCreatedTokens)
             );
+        }
+
+        private static Models.TokenComposite BuildModelTokenComposite(CompositeToken compositeToken, Guid tokenizedCorpusId, Guid? verseRowId, IEnumerable<Models.Token>? modelTokens = null)
+        {
+            modelTokens ??= compositeToken.Tokens.Union(compositeToken.OtherTokens)
+                .Select(e => BuildModelToken(e, tokenizedCorpusId, verseRowId));
+
+            var tokenComposite = new Models.TokenComposite
+            {
+                Id = compositeToken.TokenId.Id,
+                Tokens = modelTokens.ToList()
+            };
+
+            tokenComposite.SurfaceText = compositeToken.SurfaceText;
+            tokenComposite.TrainingText = compositeToken.TrainingText;
+        
+            tokenComposite.EngineTokenId = compositeToken.TokenId.ToString();
+            tokenComposite.TokenizedCorpusId = tokenizedCorpusId;
+            tokenComposite.ParallelCorpusId = null;
+            tokenComposite.ExtendedProperties = null;
+            tokenComposite.Deleted = null;
+
+            if (modelTokens.GroupBy(e => e.VerseRowId).Count() == 1)
+            {
+                tokenComposite.VerseRowId = verseRowId;
+            }
+            else
+            {
+                tokenComposite.VerseRowId = null;
+            }
+
+            return tokenComposite;
+        }
+
+        private static Models.Token BuildModelToken(Token token, Guid tokenizedCorpusId, Guid? verseRowId)
+        {
+            return new Models.Token
+            {
+                Id = token.TokenId.Id,
+                TokenizedCorpusId = tokenizedCorpusId,
+                VerseRowId = verseRowId,
+                EngineTokenId = token.TokenId.ToString(),
+                BookNumber = token.TokenId.BookNumber,
+                ChapterNumber = token.TokenId.ChapterNumber,
+                VerseNumber = token.TokenId.VerseNumber,
+                WordNumber = token.TokenId.WordNumber,
+                SubwordNumber = token.TokenId.SubWordNumber,
+                SurfaceText = token.SurfaceText,
+                TrainingText = token.TrainingText,
+                ExtendedProperties = token.ExtendedProperties
+            };
         }
     }
 }
