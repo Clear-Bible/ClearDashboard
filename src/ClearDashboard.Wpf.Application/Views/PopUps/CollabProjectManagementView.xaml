@@ -325,29 +325,43 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="205" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}" />
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+
+                                </Grid.RowDefinitions>
+                                <CheckBox
+                                    Grid.RowSpan="2"
+                                    Margin="0,0,5,0"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding IsSelected}" />
                                 <TextBlock
+                                    Grid.Row="0"
                                     Grid.Column="1"
-                                    Margin="5,0,10,0"
+                                    HorizontalAlignment="Stretch"
+                                    FontSize="13.5"
+                                    FontWeight="Bold"
+                                    Text="{Binding Name}" />
+                                <!--<TextBlock Text="{Binding UserName}" />-->
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Cursor="Hand"
+                                    Foreground="Blue"
+                                    Text="{Binding Email}"
+                                    TextDecorations="Underline" />
+
+                                <Label
+                                    Grid.RowSpan="2"
+                                    Grid.Column="2"
+                                    Margin="0,0,5,0"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Organization}" />
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock
-                                        HorizontalAlignment="Stretch"
-                                        Background="{StaticResource SecondaryHueLightBrush}"
-                                        FontWeight="Bold"
-                                        Text="{Binding Name}" />
-                                    <TextBlock Text="{Binding UserName}" />
-                                    <TextBlock
-                                        Cursor="Hand"
-                                        Foreground="Blue"
-                                        Text="{Binding Email}"
-                                        TextDecorations="Underline" />
-                                </StackPanel>
+                                    HorizontalContentAlignment="Right"
+                                    Content="{Binding Organization}" />
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

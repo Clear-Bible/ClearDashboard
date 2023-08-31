@@ -451,7 +451,7 @@
                                         Grid.Column="1"
                                         FontSize="14"
                                         FontWeight="DemiBold">
-                                        <Run Text="{helpers:Localization ProjectPicker_Project}" />
+                                        <!--<Run Text="{helpers:Localization ProjectPicker_Project}" />-->
                                         <Run Text="{Binding ProjectName}" />
                                     </TextBlock>
 
@@ -459,13 +459,13 @@
                                         Grid.Row="0"
                                         Grid.Column="2"
                                         Width="145"
-                                        HorizontalAlignment="Center"
+                                        HorizontalAlignment="Left"
                                         FontSize="12"
                                         Text="{Binding Modified}" />
 
                                     <TextBlock
                                         Grid.Row="1"
-                                        Grid.Column="1"
+                                        Grid.Column="2"
                                         Grid.ColumnSpan="2"
                                         VerticalAlignment="Center"
                                         FontSize="12">
@@ -490,7 +490,7 @@
                                         <Run FontSize="11" Text="{Binding CompactFilePath, Mode=OneTime}" />
                                     </TextBlock>-->
 
-                                    <TextBlock Grid.Row="2" Grid.Column="1">
+                                    <TextBlock Grid.Row="1" Grid.Column="1">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
@@ -500,8 +500,8 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
-                                        <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Version}" />
-                                        <Run FontSize="11" Text="{Binding Version}" />
+                                        <Run FontSize="12" Text="{helpers:Localization ProjectPicker_Version}" />
+                                        <Run FontSize="12" Text="{Binding Version}" />
                                     </TextBlock>
 
                                     <!--<TextBlock
