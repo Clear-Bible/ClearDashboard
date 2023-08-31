@@ -3,6 +3,7 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,7 +15,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
     public class JiraClient
     {
         private static string _ProjectKey = "DUF";
-        private static string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": {\"content\": [{\"content\": [{\"text\": \"[[TEXTHERE]]\",\"type\": \"text\"}],\"type\": \"paragraph\"}],\"type\": \"doc\",\"version\": 1},\"labels\": [\"[[LABEL]]\"]}}";
+        private static string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": {\"content\": [{\"content\": [{\"text\": [[TEXTHERE]],\"type\": \"text\"}],\"type\": \"paragraph\"}],\"type\": \"doc\",\"version\": 1},\"labels\": [\"[[LABEL]]\"]}}";
 
 
         /// <summary>
@@ -41,40 +42,40 @@ namespace ClearDashboard.Wpf.Application.Helpers
             HttpClient client = new HttpClient();
             client.BaseAddress = jiraUri;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthentication);
-            var data = new
-            {
-                fields = new
-                {
-                    issuetype = new { id = 10002 /*Task*/ },
-                    summary = jiraTitle,
-                    project = new { key = _ProjectKey /*Key of your project*/},
-                    description = new
-                    {
-                        version = 1,
-                        type = "doc",
-                        content = new[] {
-                            new {
-                                type = "paragraph",
-                                content = new []{
-                                    new {
-                                        type = "text",
-                                        text =  "Summary of the problem"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    reporter = new
-                    {
-                        accountId = jiraUser.AccountId,
-                        emailAddress = jiraUser.EmailAddress,
-                        displayName = jiraUser.DisplayName
-                    },
-                    labels = new[] { "bugfix" }
-                }
-            };
-
             //var data = new
+            //{
+            //    fields = new
+            //    {
+            //        issuetype = new { id = 10002 /*Task*/ },
+            //        summary = jiraTitle,
+            //        project = new { key = _ProjectKey /*Key of your project*/},
+            //        description = new
+            //        {
+            //            version = 1,
+            //            type = "doc",
+            //            content = new[] {
+            //                new {
+            //                    type = "paragraph",
+            //                    content = new []{
+            //                        new {
+            //                            type = "text",
+            //                            text =  "Summary of the problem"
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        },
+            //        reporter = new
+            //        {
+            //            accountId = jiraUser.AccountId,
+            //            emailAddress = jiraUser.EmailAddress,
+            //            displayName = jiraUser.DisplayName
+            //        },
+            //        labels = new[] { "bugfix" }
+            //    }
+            //};
+
+            //var data2 = new
             //{
             //    fields = new
             //    {
@@ -100,9 +101,19 @@ namespace ClearDashboard.Wpf.Application.Helpers
             //    }
             //};
 
+            var json = _jsonTemplate;
+            json = json.Replace("[[PROJECT]]", _ProjectKey);
+            json = json.Replace("[[SUMMARY]]", jiraTitle);
+            json = json.Replace("[[ACCOUNTID]]", jiraUser.AccountId);
+            json = json.Replace("[[EMAIL]]", jiraUser.EmailAddress);
+            json = json.Replace("[[TEXTHERE]]", summaryDetail);
+            json = json.Replace("[[LABEL]]", severityText.Replace(" ",""));
 
 
-            var result = await client.PostAsJsonAsync($"/rest/api/3/issue", data);
+            Debug.WriteLine(json);  
+
+
+            var result = await client.PostAsJsonAsync($"/rest/api/3/issue", json);
             if (result.StatusCode == System.Net.HttpStatusCode.Created)
                 return await result.Content.ReadFromJsonAsync<JiraTicketResponse>();
             else
