@@ -260,11 +260,11 @@
 
             <Button
                 x:Name="RemoveUser"
-                Height="40"
+                Height="60"
                 Margin="0,5,0,0"
                 VerticalAlignment="Center">
                 <Button.Style>
-                    <Style BasedOn="{StaticResource RedMidButton}" TargetType="Button">
+                    <Style BasedOn="{StaticResource MaterialDesignRaisedErrorButton}" TargetType="Button">
                         <Setter Property="IsEnabled" Value="True" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
@@ -274,10 +274,20 @@
                     </Style>
                 </Button.Style>
 
-                <materialDesign:PackIcon
-                    Width="32"
-                    Height="32"
-                    Kind="ArrowRightDropCircleOutline" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Row="0"
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Center"
+                        Kind="ArrowRightDropCircleOutline" />
+                    <TextBlock Grid.Row="1" Text="Remove" />
+                </Grid>
+
             </Button>
         </StackPanel>
 

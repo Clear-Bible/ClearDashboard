@@ -1088,17 +1088,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-
             // confirm the user wants to delete the project
-            var deletingProjectPopupViewModel = LifetimeScope!.Resolve<DeletingProjectPopupViewModel>();
+            var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+            if (confirmationViewPopupViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+            }
+
+            confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteProjectConfirmation;
 
             bool result = false;
             OnUIThread(async () =>
             {
-                result = await _windowManager!.ShowDialogAsync(
-                    deletingProjectPopupViewModel,
-                    null,
-                    SimpleMessagePopupViewModel.CreateDialogSettings(deletingProjectPopupViewModel.Title));
+                result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
             });
 
             if (!result)

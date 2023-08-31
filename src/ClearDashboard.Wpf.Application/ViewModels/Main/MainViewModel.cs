@@ -19,6 +19,7 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -2300,10 +2301,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // ReSharper disable once PossibleNullReferenceException
                         if (content.PaneId == windowGuid)
                         {
-                            var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
+                            var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
 
-                            var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
-                                SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
+                            if (confirmationViewPopupViewModel == null)
+                            {
+                                throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                            }
+
+                            confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.CloseEnhancedViewConfirmation;
+
+                            var result = await WindowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null, 
+                                SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
 
                             if (result == true)
                             {
