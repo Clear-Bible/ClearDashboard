@@ -36,7 +36,7 @@
 
                 <ResourceDictionary>
                     <!--  primary  -->
-                    <Color x:Key="PrimaryHueLight">#6EC6FF</Color>
+                    <Color x:Key="PrimaryHueLight">#7DA1C4</Color>
                     <Color x:Key="PrimaryHueLightForeground">#000000</Color>
                     <Color x:Key="PrimaryHueMid">#2196F3</Color>
                     <Color x:Key="PrimaryHueMidForeground">#000000</Color>
@@ -64,6 +64,15 @@
                     <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="{DynamicResource SecondaryHueMidForeground}" />
                     <SolidColorBrush x:Key="SecondaryHueDarkBrush" Color="{DynamicResource SecondaryHueDark}" />
                     <SolidColorBrush x:Key="SecondaryHueDarkForegroundBrush" Color="{DynamicResource SecondaryHueDarkForeground}" />
+
+                    <Style
+                        x:Key="MaterialDesignRaisedPrimaryLightButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+                        TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource PrimaryHueLightBrush}" />
+                        <!--<Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForeground}" />-->
+                    </Style>
 
                     <Style
                         x:Key="MaterialDesignRaisedAccentLightButton"

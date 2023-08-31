@@ -544,9 +544,9 @@
                                         Grid.Row="3"
                                         Grid.Column="1"
                                         cal:Message.Attach="UpdateDatabase($dataContext)"
-                                        Content="Database Update Needed">
+                                        Content="Required: Update Project">
                                         <Button.Style>
-                                            <Style BasedOn="{StaticResource MaterialDesignRaisedSecondaryButton}" TargetType="Button">
+                                            <Style BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}" TargetType="Button">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding NeedsMigrationUpgrade}" Value="True">
