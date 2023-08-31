@@ -144,15 +144,6 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
         foreach (DbParameter p in command.Parameters)
         {
-
-            // HACK:  This is a hack to get around the fact that the LexiconTranslationId
-            if (p.ParameterName == "@LexiconTranslationId")
-            {
-                command.Parameters[p.ParameterName].Value = DBNull.Value;
-                continue;
-            }
-
-
             var propertyName = p.ParameterName.Substring(1);  // Skip the @ at the start of each ParameterName
 
             if (identityPropertyName == propertyName)

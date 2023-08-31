@@ -442,6 +442,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         }
 
         [Fact]
+        [Trait("Category", "Collaboration")]
         public async Task Test9()
         {
             var newTranslationText = "translation change in lexicon";
