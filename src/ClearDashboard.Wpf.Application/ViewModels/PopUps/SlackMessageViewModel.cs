@@ -38,6 +38,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private string _zipPathAttachment { get; set; } = string.Empty;
         private List<JiraUser> _jiraUsersList = new();
 
+        private JiraUser _jiraUser;
+
         #endregion //Member Variables
 
 
@@ -280,12 +282,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             WorkingMessage = "";
 
-
-            _jiraUsersList = await JiraClient.GetAllUsers();
+            var jiraClient = IoC.Get<JiraClient>();
+            _jiraUsersList = await jiraClient.GetAllUsers();
 
             
             _currentDashboardUser = ProjectManager.CurrentUser;
             _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_currentDashboardUser.Id);
+
+            _jiraUser = await jiraClient.LoadJiraUser();
+
 
             base.OnViewLoaded(view);
         }
@@ -384,10 +389,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             WorkingMessage = "Sending Message...";
             await Task.Delay(200);
 
-            // does the user have a jira account?
-            var jiraUser = await JiraClient.GetUserByEmail(_jiraUsersList, _dashboardUser);
-
-
+            var jiraClient = IoC.Get<JiraClient>();
+            if (_jiraUser.EmailAddress == string.Empty)
+            {
+                // does the user have a jira account?
+                _jiraUser = await jiraClient.GetUserByEmail(_jiraUsersList, _dashboardUser);
+            }
 
             // convert the markdown to html
             string markdownTxt = File.ReadAllText(@"d:\Downloads\markdown-cheat-sheet.md");
@@ -419,8 +426,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     break;
             }
 
-
-            JiraTicketResponse? result = await JiraClient.CreateTaskTicket(JiraTitle, adf, jiraUser, jiraLabel);
+            JiraTicketResponse? result = await jiraClient.CreateTaskTicket(JiraTitle, adf, _jiraUser, jiraLabel);
 
             // show the icons
             if (result != null)
@@ -444,7 +450,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             settings.MinWidth = 500;
             settings.MinHeight = 400;
             
-            var viewModel = IoC.Get<CollabProjectManagementViewModel>();
+            var viewModel = IoC.Get<JiraResultsViewModel>();
 
             IWindowManager manager = new WindowManager();
             await manager.ShowDialogAsync(viewModel, null, settings);

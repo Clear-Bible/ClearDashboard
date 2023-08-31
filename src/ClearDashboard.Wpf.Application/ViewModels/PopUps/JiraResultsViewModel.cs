@@ -73,6 +73,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
 
+        public async void Close()
+        {
+            await TryCloseAsync();
+        }   
+
         #endregion // Methods
 
 

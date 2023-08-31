@@ -1,23 +1,43 @@
 ﻿using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
-    public class JiraClient
+    public class JiraClient : DashboardApplicationScreen
     {
-        private static string _ProjectKey = "DUF";
-        private static string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": [[TEXTHERE]],\"labels\": [\"[[LABEL]]\"]}}";
+        private readonly ILogger<SlackMessageViewModel> _logger;
 
+        #region Member Variables   
+
+        private string _ProjectKey = "DUF";
+        private string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": [[TEXTHERE]],\"labels\": [\"[[LABEL]]\"]}}";
+
+        private readonly string _secretsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets");
+        private const string SecretsFileName = "jiraUser.json";
+        private string _secretsFilePath = string.Empty;
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
 
         public enum JiraTicketLabel
         {
@@ -26,6 +46,28 @@ namespace ClearDashboard.Wpf.Application.Helpers
             DifficultToCompleteTask = 3,
             WantToDo = 4
         }
+
+        #endregion //Public Properties
+
+
+        #region Constructor
+
+        public JiraClient(INavigationService navigationService, ILogger<SlackMessageViewModel> logger,
+        DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator,
+            CollaborationServerHttpClientServices collaborationHttpClientServices,
+        ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+        {
+            _logger = logger;
+
+            _secretsFilePath = Path.Combine(_secretsFolderPath, SecretsFileName);
+        }
+
+        #endregion //Constructor
+
+
+        #region Methods
+
 
 
         /// <summary>
@@ -38,7 +80,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <param name="summary"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static async Task<JiraTicketResponse> CreateTaskTicket(string jiraTitle, string summaryDetail,
+        public async Task<JiraTicketResponse> CreateTaskTicket(string jiraTitle, string summaryDetail,
             JiraUser jiraUser, JiraTicketLabel ticketLabel)
         {
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
@@ -69,6 +111,8 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (result.StatusCode == System.Net.HttpStatusCode.Created)
                 return await result.Content.ReadFromJsonAsync<JiraTicketResponse>();
 
+            Logger.LogError($"Error creating Jira ticket: {result.StatusCode} - {result.ReasonPhrase}");
+
             return null;
         }
 
@@ -80,7 +124,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <param name="apiKey"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static async Task<List<JiraUser>> GetAllUsers()
+        public async Task<List<JiraUser>> GetAllUsers()
         {
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
@@ -109,10 +153,12 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 return users;
             }
 
+
+            Logger.LogError($"Error getting all Jira Users: {result.StatusCode} - {result.ReasonPhrase}");
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
-        public static async Task<JiraUser> GetUserByEmail(List<JiraUser> jiraUsersList, DashboardUser dashboardUser)
+        public async Task<JiraUser> GetUserByEmail(List<JiraUser> jiraUsersList, DashboardUser dashboardUser)
         {
             var user = jiraUsersList.FirstOrDefault(x => x.EmailAddress == dashboardUser.Email);
 
@@ -127,9 +173,12 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (createdUser != null)
             {
                 createdUser.Password = password;
+                await SaveJiraUser(createdUser);
+
                 return createdUser;
             }
 
+            Logger.LogError($"Error getting GetUserByEmail");
             return null;
         }
 
@@ -140,7 +189,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <param name="dashboardUserEmail"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private static async Task<JiraUser> CreateJiraUser(string? dashboardUserEmail, string fullName, string password)
+        private async Task<JiraUser> CreateJiraUser(string? dashboardUserEmail, string fullName, string password)
         {
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
@@ -174,10 +223,47 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 return await result.Content.ReadFromJsonAsync<JiraUser>();
             }
 
+            Logger.LogError($"Error CreateJiraUser: {result.StatusCode} - {result.ReasonPhrase}");
             return new JiraUser { AccountId = "5fff143cf7ea2a0107ff9f87", DisplayName = "dirk.kaiser@clear.bible", EmailAddress = "dirk.kaiser@clear.bible" };
         }
 
 
+        public async Task<JiraUser> LoadJiraUser()
+        {
+            JiraUser? jiraUser = new();
+            if (File.Exists(_secretsFilePath))
+            {
+                //read the file and convert to JiraUser
+                var json = await File.ReadAllTextAsync(_secretsFilePath);
 
+                try
+                {
+                    jiraUser = JsonSerializer.Deserialize<JiraUser>(json);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError($"Error loading JiraUser: {e.Message}");
+                }
+            }
+
+            return jiraUser;
+        }
+
+        public async Task SaveJiraUser(JiraUser jiraUser)
+        {
+            try
+            {
+                //read the file and convert to JiraUser
+                var json = JsonSerializer.Serialize(jiraUser);
+                await File.WriteAllTextAsync(_secretsFilePath, json);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError($"Error saving JiraUser: {e.Message}");
+            }
+        }
+
+
+        #endregion // Methods
     }
 }

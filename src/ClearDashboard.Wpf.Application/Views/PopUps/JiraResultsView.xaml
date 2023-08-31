@@ -78,9 +78,9 @@
         <TextBox
             Grid.Row="1"
             Grid.Column="1"
+            Width="200"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
-            Width="200"
             Text="{Binding UserName}" />
 
         <!--  Row 2  -->
@@ -94,10 +94,21 @@
         <TextBox
             Grid.Row="1"
             Grid.Column="1"
+            Width="200"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
-            Width="200"
             Text="{Binding Password}" />
+
+        <Button
+            x:Name="Close"
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="10"
+            HorizontalAlignment="Right"
+            BorderThickness="0"
+            Content="{helpers1:Localization SlackMessageView_SuggestionMarkdown}"
+            Style="{StaticResource TransparentButton}" />
+
 
     </Grid>
 </Window>
