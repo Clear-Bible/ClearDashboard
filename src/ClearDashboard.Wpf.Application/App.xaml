@@ -40,7 +40,7 @@
                     <Color x:Key="PrimaryHueLightForeground">#000000</Color>
                     <Color x:Key="PrimaryHueMid">#2196F3</Color>
                     <Color x:Key="PrimaryHueMidForeground">#000000</Color>
-                    <Color x:Key="PrimaryHueDark">#0069C0</Color>
+                    <Color x:Key="PrimaryHueDark">#003A70</Color>
                     <Color x:Key="PrimaryHueDarkForeground">#FFFFFF</Color>
                     <!--  accent  -->
                     <Color x:Key="SecondaryHueLight">#FFF350</Color>
