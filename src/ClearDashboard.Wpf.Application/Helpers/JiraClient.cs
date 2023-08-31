@@ -19,6 +19,15 @@ namespace ClearDashboard.Wpf.Application.Helpers
         private static string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": [[TEXTHERE]],\"labels\": [\"[[LABEL]]\"]}}";
 
 
+        public enum JiraTicketLabel
+        {
+            LostData = 1,
+            CannotCompleteTask = 2,
+            DifficultToCompleteTask = 3,
+            WantToDo = 4
+        }
+
+
         /// <summary>
         /// Creates a task ticket in Jira
         /// </summary>
@@ -30,7 +39,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public static async Task<JiraTicketResponse> CreateTaskTicket(string jiraTitle, string summaryDetail,
-            string severityText, JiraUser jiraUser)
+            JiraUser jiraUser, JiraTicketLabel ticketLabel)
         {
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
@@ -50,7 +59,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             json = json.Replace("[[ACCOUNTID]]", jiraUser.AccountId);
             json = json.Replace("[[EMAIL]]", jiraUser.EmailAddress);
             json = json.Replace("[[TEXTHERE]]", summaryDetail);
-            json = json.Replace("[[LABEL]]", "WantToDo");
+            json = json.Replace("[[LABEL]]", ticketLabel.ToString());
 
             //Debug.WriteLine(json);
 
@@ -103,18 +112,23 @@ namespace ClearDashboard.Wpf.Application.Helpers
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
-        public static Task<JiraUser> GetUserByEmail(List<JiraUser> jiraUsersList, DashboardUser dashboardUser)
+        public static async Task<JiraUser> GetUserByEmail(List<JiraUser> jiraUsersList, DashboardUser dashboardUser)
         {
             var user = jiraUsersList.FirstOrDefault(x => x.EmailAddress == dashboardUser.Email);
 
             if (user != null)
-                return Task.FromResult(user);
+                return user;
 
 
             // create a new user in Jira
-            var createdUser = CreateJiraUser(dashboardUser.Email);
+            var password = GenerateRandomPassword.RandomPassword();
+
+            var createdUser = await CreateJiraUser(dashboardUser.Email, dashboardUser.FullName, password);
             if (createdUser != null)
+            {
+                createdUser.Password = password;
                 return createdUser;
+            }
 
             return null;
         }
@@ -126,7 +140,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <param name="dashboardUserEmail"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private static async Task<JiraUser> CreateJiraUser(string? dashboardUserEmail)
+        private static async Task<JiraUser> CreateJiraUser(string? dashboardUserEmail, string fullName, string password)
         {
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
@@ -145,7 +159,16 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 emailAddress = dashboardUserEmail
             };
 
-            var result = await client.PostAsJsonAsync($"/rest/api/3/user", data);
+
+            var json = "{\"name\": \"[[NAME]]\",\"password\": \"[[PASSWORD]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[DISPLAYNAME]]\"}";
+            json = json.Replace("[[NAME]]", dashboardUserEmail);
+            json = json.Replace("[[EMAIL]]", dashboardUserEmail);
+            json = json.Replace("[[PASSWORD]]", password);
+            json = json.Replace("[[DISPLAYNAME]]", fullName);
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var result = await client.PostAsync("/rest/api/3/user", content);
             if (result.StatusCode == System.Net.HttpStatusCode.Created)
             {
                 return await result.Content.ReadFromJsonAsync<JiraUser>();

@@ -26,6 +26,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 process.StartInfo.Arguments = $"{tempFilePath} -o {tempOutputFilePath}";
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow = true;
                 process.Start();
 
                 // Wait for the process to finish

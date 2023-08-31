@@ -50,7 +50,7 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontSize="14"
-                            Text="Bug Report"
+                            Text="{helpers:Localization SlackMessageView_BugReport}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
@@ -114,7 +114,7 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontSize="14"
-                            Text="Suggestion" />
+                            Text="{helpers:Localization SlackMessageView_Suggestion}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Margin="10">
@@ -135,7 +135,7 @@
                     <TextBlock
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Text="Title:" />
+                        Text="{helpers:Localization SlackMessageView_SuggestionTitle}" />
                     <TextBox
                         x:Name="JiraTitle"
                         Grid.Row="0"
@@ -157,7 +157,7 @@
                         Grid.Column="0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Text="Severity:" />
+                        Text="{helpers:Localization SlackMessageView_SuggestionSeverity}" />
                     <ComboBox
                         x:Name="JiraSeverity"
                         Grid.Row="1"
@@ -167,20 +167,8 @@
                         materialDesign:HintAssist.Hint=""
                         materialDesign:HintAssist.HintOpacity=".26"
                         IsEditable="True"
-                        Text="{Binding JiraSeverity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <ComboBoxItem Content="I lost data in a project" />
-                        <ComboBoxItem Content="I'm not able to complete a task" />
-                        <ComboBoxItem Content="I completed a task but it was difficult" />
-                        <ComboBoxItem Content="I want to do..." />
-                    </ComboBox>
-
-                    <!--  Row 2  -->
-                    <!--<TextBlock
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Text="Description:" />-->
+                        ItemsSource="{Binding SeverityItems}"
+                        Text="{Binding JiraSeverity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <!--  Row 2  -->
                     <TabControl
@@ -200,7 +188,7 @@
                             <TabItem.Header>
                                 <StackPanel Width="auto" Height="auto">
                                     <iconPacks:PackIconForkAwesome HorizontalAlignment="Center" Kind="FileWordOutline" />
-                                    <TextBlock FontSize="12" Text="Editor" />
+                                    <TextBlock FontSize="12" Text="{helpers:Localization SlackMessageView_SuggestionEditor}" />
                                 </StackPanel>
                             </TabItem.Header>
                             <TextBox
@@ -223,7 +211,7 @@
                             <TabItem.Header>
                                 <StackPanel Width="auto" Height="auto">
                                     <iconPacks:PackIconFontisto HorizontalAlignment="Center" Kind="Preview" />
-                                    <TextBlock FontSize="12" Text="Preview" />
+                                    <TextBlock FontSize="12" Text="{helpers:Localization SlackMessageView_SuggestionPreview}" />
                                 </StackPanel>
                             </TabItem.Header>
                             <mdXaml:MarkdownScrollViewer
@@ -236,20 +224,20 @@
                     <!--  Row 3  -->
 
                     <Button
+                        x:Name="ClickMarkDown"
                         Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        x:Name="ClickMarkDown"
+                        Margin="65,0,0,0"
+                        HorizontalAlignment="Left"
                         BorderThickness="0"
                         Style="{StaticResource TransparentButton}">
                         <TextBlock
                             Cursor="Hand"
                             Foreground="DodgerBlue"
-                            Text="Supports Markdown Format"
+                            Text="{helpers:Localization SlackMessageView_SuggestionMarkdown}"
                             TextDecorations="Underline" />
                     </Button>
-
-
 
                     <Button
                         x:Name="SendJiraMessage"
@@ -316,12 +304,6 @@
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Vertical">
-                <!--<TextBlock
-                    Margin="10,0,0,5"
-                    VerticalAlignment="Center"
-                    FontSize="18"
-                    Text="{helpers:Localization SlackMessageView_Message}" />-->
-
                 <TextBlock
                     Margin="10,0,0,5"
                     VerticalAlignment="Center"

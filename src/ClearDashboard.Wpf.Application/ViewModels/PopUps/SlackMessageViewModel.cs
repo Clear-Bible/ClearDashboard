@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using MdXaml;
 using System.Windows.Documents;
 using Markdig;
+using SIL.ObjectModel;
 using Markdown = Markdig.Markdown;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
@@ -28,6 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
         private readonly ILogger<SlackMessageViewModel> _logger;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
+        private readonly ILocalizationService _localizationService;
 
 
         private User _currentDashboardUser;
@@ -192,6 +195,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private ObservableCollection<string> _severityItems = new();
+        public ObservableCollection<string> SeverityItems
+        {
+            get { return _severityItems; }
+            set { _severityItems = value;
+                NotifyOfPropertyChange(() => SeverityItems);
+            }
+        }
 
 
         #endregion //Observable Properties
@@ -212,8 +223,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             _logger = logger;
             _collaborationHttpClientServices = collaborationHttpClientServices;
+            _localizationService = localizationService;
 
             WorkingMessage = "Gathering Files for Transmission";
+
+
+            var combo1 = "[1] " + _localizationService["SlackMessageView_Combo1"];
+            var combo2 = "[2] " + _localizationService["SlackMessageView_Combo2"];
+            var combo3 = "[3] " + _localizationService["SlackMessageView_Combo3"];
+            var combo4 = "[4] " + _localizationService["SlackMessageView_Combo4"];
+
+            SeverityItems.Add(combo1);
+            SeverityItems.Add(combo2);
+            SeverityItems.Add(combo3);
+            SeverityItems.Add(combo4);
         }
 
         protected override async void OnViewLoaded(object view)
@@ -376,50 +399,55 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var adf = await Html2Adf.Convert(html);
 
 
-            var result = await JiraClient.CreateTaskTicket(JiraTitle, adf, JiraSeverity, jiraUser);
-              
+            // get the ticket label enum
+            var jiraLabel = JiraClient.JiraTicketLabel.WantToDo;
+            var index = SeverityItems.IndexOf(JiraSeverity) + 1;
+
+            switch (index)
+            {
+                case 1:
+                    jiraLabel = JiraClient.JiraTicketLabel.LostData;
+                    break;
+                case 2:
+                    jiraLabel = JiraClient.JiraTicketLabel.CannotCompleteTask;
+                    break;
+                case 3:
+                    jiraLabel = JiraClient.JiraTicketLabel.DifficultToCompleteTask;
+                    break;
+                case 4:
+                    jiraLabel = JiraClient.JiraTicketLabel.WantToDo;
+                    break;
+            }
 
 
+            JiraTicketResponse? result = await JiraClient.CreateTaskTicket(JiraTitle, adf, jiraUser, jiraLabel);
+
+            // show the icons
+            if (result != null)
+            {
+                SendErrorVisibility = Visibility.Collapsed;
+                SendSuccessfulVisibility = Visibility.Visible;
+            }
+            else
+            {
+                SendErrorVisibility = Visibility.Visible;
+                SendSuccessfulVisibility = Visibility.Collapsed;
+            }
+            
+
+            WorkingMessage = "Message Sent Successfully";
 
 
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 400;
+            
+            var viewModel = IoC.Get<CollabProjectManagementViewModel>();
 
-            //var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-            //var versionNumber = $"{thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
-
-            //string msg = $"*Dashboard User:* {DashboardUser.FullName} \n*Paratext User:* {ParatextUser} \n*Github User:* {GitLabUser.RemoteUserName} \n*Version*: {versionNumber} \n*Message:* \n{UserMessage}";
-
-            //var logger = LifetimeScope.Resolve<ILogger<SlackMessage>>();
-
-            //SlackMessageType slackMessageType = SlackMessageType.BugReport;
-
-
-            //if (BugReport)
-            //{
-            //    slackMessageType = SlackMessageType.BugReport;
-
-
-            //    SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, logger, slackMessageType);
-            //    var bSuccess = await slackMessage.SendFileToSlackAsync();
-
-            //    if (bSuccess == true)
-            //    {
-            //        SendSuccessfulVisibility = Visibility.Visible;
-            //        SendErrorVisibility = Visibility.Collapsed;
-            //        WorkingMessage = "Message Sent Successfully";
-            //    }
-            //    else
-            //    {
-            //        SendSuccessfulVisibility = Visibility.Collapsed;
-            //        SendErrorVisibility = Visibility.Visible;
-            //        WorkingMessage = "Message Sending Problem";
-            //    }
-
-            //}
-            //else
-            //{
-            //    slackMessageType = SlackMessageType.Suggestion;
-            //}
-
+            IWindowManager manager = new WindowManager();
+            await manager.ShowDialogAsync(viewModel, null, settings);
 
 
         }

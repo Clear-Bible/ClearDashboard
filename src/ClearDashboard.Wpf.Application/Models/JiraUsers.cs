@@ -22,5 +22,7 @@ namespace ClearDashboard.Wpf.Application.Models
         [JsonPropertyName("active")]
         public bool Active { get; set; }
 
+        public string Password { get; set; } = string.Empty;
+
     }
 }
