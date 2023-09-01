@@ -1,6 +1,14 @@
 ﻿using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -21,10 +29,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Observable Properties
 
-        private string _link;
+        private string _link = string.Empty;
         public string Link
         {
-            get => JiraTicketResponse.Self.ToString();
+            get => _link;
             set
             {
                 _link = value;
@@ -33,10 +41,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
 
-        private string _userName;
+        private string _userName = string.Empty;
         public string UserName
         {
-            get => JiraUser.EmailAddress;
+            get => _userName;
             set
             {
                 _userName = value;
@@ -45,10 +53,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
 
-        private string _password;
+        private string _password = string.Empty;
         public string Password
         {
-            get => JiraUser.Password;
+            get => _password;
             set
             {
                 _password = value;
@@ -60,6 +68,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         #region Constructor
+
+        public JiraResultsViewModel()
+        {
+            // no-op
+        }
+
+
+        public JiraResultsViewModel(INavigationService navigationService, ILogger<SlackMessageViewModel> logger,
+            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator,
+            CollaborationServerHttpClientServices collaborationHttpClientServices,
+            ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+        {
+
+        }
+
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            if (JiraTicketResponse.Self != null)
+            {
+                Link = JiraTicketResponse.Self.ToString();
+            }
+            else
+            {
+                Link = "No Link Found";
+            }
+
+            UserName = JiraUser.EmailAddress;
+            Password = JiraUser.Password;
+
+            base.OnViewAttached(view, context);
+        }
+
+
 
         #endregion //Constructor
 
@@ -76,7 +119,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public async void Close()
         {
             await TryCloseAsync();
-        }   
+        }
+
+
+        public void Copy_OnClick(object sender)
+        {
+            if (sender is Button button)
+            {
+                switch (button.Name)
+                {
+                    case "CopyUrl":
+                        Clipboard.SetText(Link);
+                        break;
+                }
+            }
+            else if (sender is TextBlock block)
+            {
+                switch (block.Name)
+                {
+                    case "CopyUsername":
+                        Clipboard.SetText(UserName);
+                        break;
+                    case "CopyPassword":
+                        Clipboard.SetText(Password);
+                        break;
+                }
+            }
+        }
 
         #endregion // Methods
 

@@ -433,15 +433,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 SendErrorVisibility = Visibility.Collapsed;
                 SendSuccessfulVisibility = Visibility.Visible;
+                WorkingMessage = "Message Sent Successfully";
             }
             else
             {
                 SendErrorVisibility = Visibility.Visible;
                 SendSuccessfulVisibility = Visibility.Collapsed;
+                WorkingMessage = "Problem Sending Message";
             }
-            
-
-            WorkingMessage = "Message Sent Successfully";
 
 
             dynamic settings = new ExpandoObject();
@@ -451,11 +450,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             settings.MinHeight = 400;
             
             var viewModel = IoC.Get<JiraResultsViewModel>();
+            viewModel.JiraTicketResponse = result;
+            viewModel.JiraUser = _jiraUser;
 
             IWindowManager manager = new WindowManager();
             await manager.ShowDialogAsync(viewModel, null, settings);
-
-
         }
 
 
