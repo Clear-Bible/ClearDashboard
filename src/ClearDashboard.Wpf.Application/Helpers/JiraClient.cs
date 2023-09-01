@@ -25,14 +25,14 @@ namespace ClearDashboard.Wpf.Application.Helpers
     {
         private readonly ILogger<SlackMessageViewModel> _logger;
 
-        #region Member Variables   
+        #region Member Variables
 
-        private string _ProjectKey = "DUF";
+        private const string ProjectKey = "DUF";
         private string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": [[TEXTHERE]],\"labels\": [\"[[LABEL]]\"]}}";
 
         private readonly string _secretsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets");
         private const string SecretsFileName = "jiraUser.json";
-        private string _secretsFilePath = string.Empty;
+        private string _secretsFilePath;
 
         #endregion //Member Variables
 
@@ -54,7 +54,6 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         public JiraClient(INavigationService navigationService, ILogger<SlackMessageViewModel> logger,
         DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator,
-            CollaborationServerHttpClientServices collaborationHttpClientServices,
         ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
@@ -73,22 +72,16 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <summary>
         /// Creates a task ticket in Jira
         /// </summary>
-        /// <param name="jiraTitle"></param>
-        /// <param name="summaryDetail"></param>
-        /// <param name="severityText"></param>
-        /// <param name="jiraUser"></param>
-        /// <param name="summary"></param>
-        /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<JiraTicketResponse> CreateTaskTicket(string jiraTitle, string summaryDetail,
-            JiraUser jiraUser, JiraTicketLabel ticketLabel)
+        public async Task<JiraTicketResponse?> CreateTaskTicket(string jiraTitle, string summaryDetail,
+            JiraUser? jiraUser, JiraTicketLabel ticketLabel)
         {
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
             string apiKey = Settings.Default.JiraToken;
 
 
-            var authData = System.Text.Encoding.UTF8.GetBytes($"{userName}:{apiKey}");
+            var authData = Encoding.UTF8.GetBytes($"{userName}:{apiKey}");
             var basicAuthentication = Convert.ToBase64String(authData);
 
             HttpClient client = new HttpClient();
@@ -96,7 +89,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthentication);
 
             var json = _jsonTemplate;
-            json = json.Replace("[[PROJECT]]", _ProjectKey);
+            json = json.Replace("[[PROJECT]]", ProjectKey);
             json = json.Replace("[[SUMMARY]]", jiraTitle);
             json = json.Replace("[[ACCOUNTID]]", jiraUser.AccountId);
             json = json.Replace("[[EMAIL]]", jiraUser.EmailAddress);
@@ -111,7 +104,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (result.StatusCode == System.Net.HttpStatusCode.Created)
                 return await result.Content.ReadFromJsonAsync<JiraTicketResponse>();
 
-            Logger.LogError($"Error creating Jira ticket: {result.StatusCode} - {result.ReasonPhrase}");
+            _logger.LogError($"Error creating Jira ticket: {result.StatusCode} - {result.ReasonPhrase}");
 
             return null;
         }
@@ -119,10 +112,6 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <summary>
         /// Gets all users from Jira and filters them down to only active users with email addresses
         /// </summary>
-        /// <param name="jiraUri"></param>
-        /// <param name="userName"></param>
-        /// <param name="apiKey"></param>
-        /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public async Task<List<JiraUser>> GetAllUsers()
         {
@@ -131,7 +120,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             string apiKey = Settings.Default.JiraToken;
 
 
-            var authData = System.Text.Encoding.UTF8.GetBytes($"{userName}:{apiKey}");
+            var authData = Encoding.UTF8.GetBytes($"{userName}:{apiKey}");
             var basicAuthentication = Convert.ToBase64String(authData);
 
             HttpClient client = new HttpClient();
@@ -141,24 +130,27 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var users = await result.Content.ReadFromJsonAsync<List<JiraUser>>();
-                users = users.FindAll(x => x.Active == true);
-                users = users.FindAll(x => x.EmailAddress != string.Empty);  // remove users without email address
-                users = users.FindAll(x => !x.EmailAddress.Contains("atlassian-demo.invalid")); // remove demo users
+                if (users is not null)
+                {
+                    users = users.FindAll(x => x.Active);
+                    users = users.FindAll(x => x.EmailAddress != string.Empty);  // remove users without email address
+                    users = users.FindAll(x => !x.EmailAddress.Contains("atlassian-demo.invalid")); // remove demo users                    
+                }
 
                 //foreach (var user in users)
                 //{
                 //    Debug.WriteLine(user.DisplayName + " " + user.EmailAddress);
                 //}
 
-                return users;
+                return users ?? new List<JiraUser>();
             }
 
 
-            Logger.LogError($"Error getting all Jira Users: {result.StatusCode} - {result.ReasonPhrase}");
+            _logger.LogError($"Error getting all Jira Users: {result.StatusCode} - {result.ReasonPhrase}");
             throw new Exception(await result.Content.ReadAsStringAsync());
         }
 
-        public async Task<JiraUser> GetUserByEmail(List<JiraUser> jiraUsersList, DashboardUser dashboardUser)
+        public async Task<JiraUser?> GetUserByEmail(List<JiraUser> jiraUsersList, DashboardUser dashboardUser)
         {
             var user = jiraUsersList.FirstOrDefault(x => x.EmailAddress == dashboardUser.Email);
 
@@ -169,45 +161,31 @@ namespace ClearDashboard.Wpf.Application.Helpers
             // create a new user in Jira
             var password = GenerateRandomPassword.RandomPassword();
 
-            var createdUser = await CreateJiraUser(dashboardUser.Email, dashboardUser.FullName, password);
-            if (createdUser != null)
-            {
-                createdUser.Password = password;
-                await SaveJiraUser(createdUser);
+            var createdUser = await CreateJiraUser(dashboardUser.Email, dashboardUser.FullName!, password);
+            createdUser.Password = password;
+            await SaveJiraUser(createdUser);
 
-                return createdUser;
-            }
-
-            Logger.LogError($"Error getting GetUserByEmail");
-            return null;
+            return createdUser;
         }
 
 
         /// <summary>
         /// Create a new Jira User using the email address from the dashboard user
         /// </summary>
-        /// <param name="dashboardUserEmail"></param>
-        /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private async Task<JiraUser> CreateJiraUser(string? dashboardUserEmail, string fullName, string password)
+        private async Task<JiraUser?> CreateJiraUser(string? dashboardUserEmail, string fullName, string password)
         {
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
             string apiKey = Settings.Default.JiraToken;
 
 
-            var authData = System.Text.Encoding.UTF8.GetBytes($"{userName}:{apiKey}");
+            var authData = Encoding.UTF8.GetBytes($"{userName}:{apiKey}");
             var basicAuthentication = Convert.ToBase64String(authData);
 
             HttpClient client = new HttpClient();
             client.BaseAddress = jiraUri;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthentication);
-
-            var data = new
-            {
-                emailAddress = dashboardUserEmail
-            };
-
 
             var json = "{\"name\": \"[[NAME]]\",\"password\": \"[[PASSWORD]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[DISPLAYNAME]]\"}";
             json = json.Replace("[[NAME]]", dashboardUserEmail);
@@ -223,12 +201,12 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 return await result.Content.ReadFromJsonAsync<JiraUser>();
             }
 
-            Logger.LogError($"Error CreateJiraUser: {result.StatusCode} - {result.ReasonPhrase}");
+            _logger.LogError($"Error CreateJiraUser: {result.StatusCode} - {result.ReasonPhrase}");
             return new JiraUser { AccountId = "5fff143cf7ea2a0107ff9f87", DisplayName = "dirk.kaiser@clear.bible", EmailAddress = "dirk.kaiser@clear.bible" };
         }
 
 
-        public async Task<JiraUser> LoadJiraUser()
+        public async Task<JiraUser?> LoadJiraUser()
         {
             JiraUser? jiraUser = new();
             if (File.Exists(_secretsFilePath))
@@ -242,14 +220,14 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError($"Error loading JiraUser: {e.Message}");
+                    _logger.LogError($"Error loading JiraUser: {e.Message}");
                 }
             }
 
             return jiraUser;
         }
 
-        public async Task SaveJiraUser(JiraUser jiraUser)
+        public async Task SaveJiraUser(JiraUser? jiraUser)
         {
             try
             {
@@ -259,7 +237,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             }
             catch (Exception e)
             {
-                Logger.LogError($"Error saving JiraUser: {e.Message}");
+                _logger.LogError($"Error saving JiraUser: {e.Message}");
             }
         }
 

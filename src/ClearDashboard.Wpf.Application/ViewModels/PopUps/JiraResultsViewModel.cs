@@ -1,15 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -23,7 +22,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Public Properties
 
         public JiraTicketResponse JiraTicketResponse = new();
-        public JiraUser JiraUser = new();
+        public JiraUser? JiraUser = new();
 
         #endregion //Public Properties
 
@@ -78,7 +77,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public JiraResultsViewModel(INavigationService navigationService, ILogger<SlackMessageViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator,
-            CollaborationServerHttpClientServices collaborationHttpClientServices,
             ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {

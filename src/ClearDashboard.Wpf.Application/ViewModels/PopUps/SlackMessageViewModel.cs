@@ -1,26 +1,23 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
+using Markdig;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DataAccessLayer.Models;
 using static ClearDashboard.Wpf.Application.Helpers.SlackMessage;
-using System.Dynamic;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
-using MdXaml;
-using System.Windows.Documents;
-using Markdig;
-using SIL.ObjectModel;
 using Markdown = Markdig.Markdown;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
@@ -30,15 +27,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
         private readonly ILogger<SlackMessageViewModel> _logger;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
-        private readonly ILocalizationService _localizationService;
 
 
         private User _currentDashboardUser;
         private DashboardUser _dashboardUser;
-        private string _zipPathAttachment { get; set; } = string.Empty;
+        private string ZipPathAttachment { get; set; } = string.Empty;
         private List<JiraUser> _jiraUsersList = new();
 
-        private JiraUser _jiraUser;
+        private JiraUser? _jiraUser;
 
         #endregion //Member Variables
 
@@ -186,7 +182,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private bool _jiraButtonEnabled = false;
+        private bool _jiraButtonEnabled;
         public bool JiraButtonEnabled
         {
             get => _jiraButtonEnabled;
@@ -212,6 +208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Constructor
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public SlackMessageViewModel()
         {
             // no-op
@@ -225,21 +222,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             _logger = logger;
             _collaborationHttpClientServices = collaborationHttpClientServices;
-            _localizationService = localizationService;
+            var localizationService1 = localizationService;
 
             WorkingMessage = "Gathering Files for Transmission";
 
 
-            var combo1 = "[1] " + _localizationService["SlackMessageView_Combo1"];
-            var combo2 = "[2] " + _localizationService["SlackMessageView_Combo2"];
-            var combo3 = "[3] " + _localizationService["SlackMessageView_Combo3"];
-            var combo4 = "[4] " + _localizationService["SlackMessageView_Combo4"];
+            var combo1 = "[1] " + localizationService1["SlackMessageView_Combo1"];
+            var combo2 = "[2] " + localizationService1["SlackMessageView_Combo2"];
+            var combo3 = "[3] " + localizationService1["SlackMessageView_Combo3"];
+            var combo4 = "[4] " + localizationService1["SlackMessageView_Combo4"];
 
             SeverityItems.Add(combo1);
             SeverityItems.Add(combo2);
             SeverityItems.Add(combo3);
             SeverityItems.Add(combo4);
         }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 
         protected override async void OnViewLoaded(object view)
         {
@@ -260,16 +259,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             Files.Add(destinationComputerInfoPath);
 
             var guid = Guid.NewGuid().ToString();
-            _zipPathAttachment = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
+            ZipPathAttachment = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
             // zip up everything
             if (Files.Count > 0)
             {
-                if (File.Exists(_zipPathAttachment))
+                if (File.Exists(ZipPathAttachment))
                 {
-                    File.Delete(_zipPathAttachment);
+                    File.Delete(ZipPathAttachment);
                 }
 
-                ZipFiles zipFiles = new(Files, _zipPathAttachment);
+                ZipFiles zipFiles = new(Files, ZipPathAttachment);
                 var succcess = zipFiles.Zip();
 
                 if (succcess == false)
@@ -286,7 +285,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _jiraUsersList = await jiraClient.GetAllUsers();
 
             
-            _currentDashboardUser = ProjectManager.CurrentUser;
+            _currentDashboardUser = ProjectManager!.CurrentUser!;
             _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_currentDashboardUser.Id);
 
             _jiraUser = await jiraClient.LoadJiraUser();
@@ -321,25 +320,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             await Task.Delay(200);
 
 
-            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-            var versionNumber = $"{thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+            var thisVersion = Assembly.GetEntryAssembly()!.GetName().Version;
+            var versionNumber = $"{thisVersion!.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
             string msg = $"*Dashboard User:* {DashboardUser.FullName} \n*Paratext User:* {ParatextUser} \n*Github User:* {GitLabUser.RemoteUserName} \n*Version*: {versionNumber} \n*Message:* \n{UserMessage}";
 
-            var logger = LifetimeScope.Resolve<ILogger<SlackMessage>>();
-
-            SlackMessageType slackMessageType = SlackMessageType.BugReport;
-
+            var logger = LifetimeScope!.Resolve<ILogger<SlackMessage>>();
 
             if (BugReport)
             {
-                slackMessageType = SlackMessageType.BugReport;
-
-
-                SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, logger, slackMessageType);
+                SlackMessage slackMessage = new SlackMessage(msg, this.ZipPathAttachment, logger, SlackMessageType.BugReport);
                 var bSuccess = await slackMessage.SendFileToSlackAsync();
 
-                if (bSuccess == true)
+                if (bSuccess)
                 {
                     SendSuccessfulVisibility = Visibility.Visible;
                     SendErrorVisibility = Visibility.Collapsed;
@@ -353,12 +346,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
 
             }
-            else
-            {
-                slackMessageType = SlackMessageType.Suggestion;
-            }
-
-
 
         }
 
@@ -390,16 +377,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             await Task.Delay(200);
 
             var jiraClient = IoC.Get<JiraClient>();
-            if (_jiraUser.EmailAddress == string.Empty)
+            if (_jiraUser!.EmailAddress == string.Empty)
             {
                 // does the user have a jira account?
                 _jiraUser = await jiraClient.GetUserByEmail(_jiraUsersList, _dashboardUser);
             }
 
             // convert the markdown to html
-            string markdownTxt = File.ReadAllText(@"d:\Downloads\markdown-cheat-sheet.md");
-
-            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+       var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
             var html = Markdown.ToHtml(JiraDescription, pipeline);
 
             // convert html to ADF format
@@ -450,7 +435,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             settings.MinHeight = 400;
             
             var viewModel = IoC.Get<JiraResultsViewModel>();
-            viewModel.JiraTicketResponse = result;
+            viewModel.JiraTicketResponse = result!;
             viewModel.JiraUser = _jiraUser;
 
             IWindowManager manager = new WindowManager();
