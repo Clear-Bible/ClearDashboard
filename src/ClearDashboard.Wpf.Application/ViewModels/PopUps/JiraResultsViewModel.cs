@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using Autofac;
@@ -112,7 +113,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public void ClickMarkDown()
         {
-            Process.Start(Link);
+
+
+            if (Link == "")
+            {
+                return;
+            }
+
+            try
+            {
+                var link = new Uri(Link);
+
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName =link.AbsoluteUri,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
         }
 
 
