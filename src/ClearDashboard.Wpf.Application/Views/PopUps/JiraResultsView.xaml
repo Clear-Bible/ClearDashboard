@@ -50,7 +50,7 @@
             Margin="0,0,0,8"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Text="URL:" />
+            Text="{helpers:Localization JiraResultsView_URL}" />
 
         <Button
             x:Name="ClickMarkDown"
@@ -87,7 +87,7 @@
             Margin="0,0,0,8"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Text="Username:" />
+            Text="{helpers:Localization JiraResultsView_Username}" />
 
         <TextBlock
             Grid.Row="1"
@@ -115,7 +115,7 @@
             Margin="0,0,0,8"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Text="Password:" />
+            Text="{helpers:Localization JiraResultsView_Password}" />
 
         <TextBlock
             Grid.Row="2"
