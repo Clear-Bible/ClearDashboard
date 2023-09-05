@@ -197,11 +197,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public ObservableCollection<string> SeverityItems
         {
             get { return _severityItems; }
-            set { _severityItems = value;
+            set
+            {
+                _severityItems = value;
                 NotifyOfPropertyChange(() => SeverityItems);
             }
         }
 
+
+        private Visibility _titleVisibility = Visibility.Visible;
+        public Visibility TitleVisibility
+        {
+            get => _titleVisibility;
+            set
+            {
+                _titleVisibility = value;
+                NotifyOfPropertyChange(() => TitleVisibility);
+            }
+        }
+
+
+        private Visibility _severityVisibility = Visibility.Visible;
+        public Visibility SeverityVisibility
+        {
+            get => _severityVisibility;
+            set
+            {
+                _severityVisibility = value;
+                NotifyOfPropertyChange(() => SeverityVisibility);
+            }
+        }
+
+
+        private Visibility _jiraDescriptionVisibility = Visibility.Visible;
+        public Visibility JiraDescriptionVisibility
+        {
+            get => _jiraDescriptionVisibility;
+            set
+            {
+                _jiraDescriptionVisibility = value;
+                NotifyOfPropertyChange(() => JiraDescriptionVisibility);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -284,7 +321,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var jiraClient = IoC.Get<JiraClient>();
             _jiraUsersList = await jiraClient.GetAllUsers();
 
-            
+
             _currentDashboardUser = ProjectManager!.CurrentUser!;
             _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_currentDashboardUser.Id);
 
@@ -352,6 +389,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private void CheckJiraButtonEnabled()
         {
+            if (string.IsNullOrEmpty(JiraTitle) == false)
+            {
+                TitleVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                TitleVisibility = Visibility.Visible;
+            }
+
+            if (string.IsNullOrEmpty(JiraDescription) == false)
+            {
+                JiraDescriptionVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                JiraDescriptionVisibility = Visibility.Visible;
+            }
+
+
+            if (string.IsNullOrEmpty(JiraSeverity) == false)
+            {
+                SeverityVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                SeverityVisibility = Visibility.Visible;
+            }
+
+
             if (string.IsNullOrEmpty(JiraTitle) == false && string.IsNullOrEmpty(JiraDescription) == false && string.IsNullOrEmpty(JiraSeverity) == false)
             {
                 JiraButtonEnabled = true;
@@ -360,7 +426,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 JiraButtonEnabled = false;
             }
-        }   
+        }
 
 
         public async Task SendJiraMessage()
@@ -384,7 +450,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             // convert the markdown to html
-       var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
             var html = Markdown.ToHtml(JiraDescription, pipeline);
 
             // convert html to ADF format
@@ -433,7 +499,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             settings.ResizeMode = ResizeMode.NoResize;
             settings.MinWidth = 500;
             settings.MinHeight = 400;
-            
+
             var viewModel = IoC.Get<JiraResultsViewModel>();
             viewModel.JiraTicketResponse = result!;
             viewModel.JiraUser = _jiraUser;

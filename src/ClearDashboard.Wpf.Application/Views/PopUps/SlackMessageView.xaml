@@ -10,6 +10,7 @@
     xmlns:mdXaml="clr-namespace:MdXaml;assembly=MdXaml"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="SlackMessageView"
     Width="800"
     Height="650"
@@ -128,6 +129,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="110" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="20" />
                     </Grid.ColumnDefinitions>
 
 
@@ -150,6 +152,14 @@
                         SpellCheck.IsEnabled="True"
                         Text="{Binding JiraTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap" />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        FontSize="28"
+                        Foreground="{StaticResource RedLightBrush}"
+                        Text="*"
+                        Visibility="{Binding TitleVisibility}" />
 
                     <!--  Row 1  -->
                     <TextBlock
@@ -169,6 +179,14 @@
                         IsEditable="True"
                         ItemsSource="{Binding SeverityItems}"
                         Text="{Binding JiraSeverity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        FontSize="28"
+                        Foreground="{StaticResource RedLightBrush}"
+                        Text="*"
+                        Visibility="{Binding SeverityVisibility}" />
 
                     <!--  Row 2  -->
                     <TabControl
@@ -191,20 +209,34 @@
                                     <TextBlock FontSize="12" Text="{helpers:Localization SlackMessageView_SuggestionEditor}" />
                                 </StackPanel>
                             </TabItem.Header>
-                            <TextBox
-                                x:Name="JiraDescription"
-                                Height="310"
-                                VerticalAlignment="Center"
-                                AcceptsReturn="True"
-                                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                                BorderThickness="2"
-                                FontSize="16"
-                                Foreground="{StaticResource SecondaryHueDarkForegroundBrush}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                SpellCheck.IsEnabled="True"
-                                Text="{Binding JiraDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                TextWrapping="Wrap" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox
+                                    x:Name="JiraDescription"
+                                    Height="310"
+                                    VerticalAlignment="Center"
+                                    AcceptsReturn="True"
+                                    BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                                    BorderThickness="2"
+                                    FontSize="16"
+                                    Foreground="{StaticResource SecondaryHueDarkForegroundBrush}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    SpellCheck.IsEnabled="True"
+                                    Text="{Binding JiraDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextWrapping="Wrap" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    Foreground="{StaticResource RedLightBrush}"
+                                    Text="*"
+                                    Visibility="{Binding JiraDescriptionVisibility}" />
+                            </Grid>
                         </TabItem>
 
                         <TabItem>
@@ -231,7 +263,7 @@
                         Margin="65,0,0,0"
                         HorizontalAlignment="Left"
                         BorderThickness="0"
-                        Style="{StaticResource TransparentButton}">
+                        Style="{StaticResource TransparentStyle}">
                         <TextBlock
                             Cursor="Hand"
                             Foreground="DodgerBlue"
