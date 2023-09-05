@@ -162,8 +162,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
             var password = GenerateRandomPassword.RandomPassword();
 
             var createdUser = await CreateJiraUser(dashboardUser.Email, dashboardUser.FullName!, password);
-            createdUser.Password = password;
-            await SaveJiraUser(createdUser);
+            if (createdUser.EmailAddress != "dirk.kaiser@clear.bible")
+            {
+                createdUser.Password = password;
+                await SaveJiraUser(createdUser);
+            }
 
             return createdUser;
         }
