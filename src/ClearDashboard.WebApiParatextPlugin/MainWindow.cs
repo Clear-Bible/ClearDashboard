@@ -924,8 +924,9 @@ namespace ClearDashboard.WebApiParatextPlugin
             textCollections.Add(new TextCollection()
             {
                 ReferenceShort = project.ShortName,
-                Data = usxString
-            });
+                Data = usxString,
+                Id = project.ID
+        });
 
             return textCollections;
         }
@@ -962,6 +963,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             if (tokens != null)
             {
                 textCollection.ReferenceShort = project.ShortName;
+                textCollection.Id = project.ID;
 
                 foreach (var token in tokens)
                 {

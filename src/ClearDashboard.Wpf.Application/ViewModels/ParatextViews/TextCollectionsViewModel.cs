@@ -16,6 +16,7 @@ using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using HtmlAgilityPack;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,6 +26,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -313,6 +316,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     classSpecification = "class=\"vh\"";
                                 }
 
+                                var fontQueryResult = await ExecuteRequest(new GetProjectFontFamilyQuery(textCollection.Id), CancellationToken.None);
+                                var fontFamily = FontNames.DefaultFontFamily;
+                                if (fontQueryResult.Success)
+                                {
+                                    fontFamily = fontQueryResult.Data;
+                                }
+
                                 collectiveBody +=
                                     "<div id='"+startPart+"'>" +
                                     "<details open>" +
@@ -320,10 +330,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     startPart+":" +
                                     "</summary>"
                                     +"<span " +
-                                    classSpecification +
+                                classSpecification +
+                                    "style=\"font-family:"+fontFamily+";\""+
                                     ">"
                                     +endPart+
-                                    "</p>"+
+                                    "</span>"+
                                     "</details>" +
                                     "</div>" +
                                     "<hr>";
