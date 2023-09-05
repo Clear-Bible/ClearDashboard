@@ -249,6 +249,7 @@
                             <mdXaml:MarkdownScrollViewer
                                 BorderBrush="{StaticResource SecondaryHueMidBrush}"
                                 BorderThickness="2"
+                                ClickAction="OpenBrowser"
                                 Markdown="{Binding JiraDescription}" />
                         </TabItem>
                     </TabControl>

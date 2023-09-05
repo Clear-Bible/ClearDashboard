@@ -88,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             if (JiraTicketResponse.Self != null)
             {
-                Link = JiraTicketResponse.Self.ToString();
+                Link = $"https://clearbible.atlassian.net/jira/servicedesk/projects/DUF/queues/custom/19/{JiraTicketResponse.Key}";
             }
             else
             {

@@ -91,6 +91,7 @@
             Width="Auto"
             Margin="10,0,10,10"
             HorizontalAlignment="Right"
+            cm:Message.Attach="Close"
             Content="{helpers:Localization Close}"
             Style="{StaticResource TransparentStyle}" />
     </Grid>

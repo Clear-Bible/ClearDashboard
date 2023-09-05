@@ -431,6 +431,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async Task SendJiraMessage()
         {
+            SendSuccessfulVisibility = Visibility.Collapsed;
+
             var bRet = await NetworkHelper.IsConnectedToInternet();
             // check internet connection
             if (bRet == false)
@@ -485,6 +487,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 SendErrorVisibility = Visibility.Collapsed;
                 SendSuccessfulVisibility = Visibility.Visible;
                 WorkingMessage = "Message Sent Successfully";
+
+                // clear the fields
+                JiraTitle = string.Empty;
+                JiraDescription = string.Empty;
+                JiraSeverity = string.Empty;
             }
             else
             {
@@ -498,7 +505,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.NoResize;
             settings.MinWidth = 500;
-            settings.MinHeight = 400;
+            settings.MinHeight = 170;
 
             var viewModel = IoC.Get<JiraResultsViewModel>();
             viewModel.JiraTicketResponse = result!;
