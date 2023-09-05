@@ -47,8 +47,8 @@
                         <Grid
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Background="Transparent">
-                            <ContentPresenter x:Name="ButtonContent" Margin="10" />
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter x:Name="ButtonContent" Margin="36,17.5"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

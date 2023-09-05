@@ -1266,7 +1266,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // Save Current Layout
                 new MenuItemViewModel
                 {
-                    Header = "Initialize Server with Project", Id = MenuIds.CollaborationInitialize,
+                    Header = "Make Project Available for Collab", Id = MenuIds.CollaborationInitialize,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },

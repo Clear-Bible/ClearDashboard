@@ -47,8 +47,8 @@
                     <Color x:Key="SecondaryHueLightForeground">#000000</Color>
                     <Color x:Key="SecondaryHueMid">#FFC107</Color>
                     <Color x:Key="SecondaryHueMidForeground">#000000</Color>
-                    <Color x:Key="SecondaryHueDark">#C79100</Color>
-                    <Color x:Key="SecondaryHueDarkForeground">#000000</Color>
+                    <Color x:Key="SecondaryHueDark">#7A9A01</Color>
+                    <Color x:Key="SecondaryHueDarkForeground">#FFFFFF</Color>
 
                     <Color x:Key="ErrorHue">#C1292E</Color>
                     <Color x:Key="ErrorHueForeground">#FFFFFF</Color>

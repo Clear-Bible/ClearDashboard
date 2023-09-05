@@ -154,8 +154,8 @@
                 <Button
                     HorizontalAlignment="Right"
                     cal:Message.Attach="CopyToClipboard"
-                    ToolTip="Copy Progress to Clipboard"
-                    Style="{StaticResource TransparentStyle}">
+                    Style="{StaticResource TransparentStyle}"
+                    ToolTip="Copy Progress to Clipboard">
                     <materialDesign:PackIcon Kind="ContentCopy" />
                 </Button>
 
@@ -164,8 +164,17 @@
                     Margin="5,5,5,5"
                     cal:Message.Attach="Cancel"
                     Content="{Binding CancelAction}"
-                    IsEnabled="{Binding CanCancelAction}"
-                    Style="{StaticResource TransparentStyle}" />
+                    IsEnabled="{Binding CanCancelAction}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource TransparentStyle}" TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CancelAction}" Value="Done">
+                                    <Setter Property="Background" Value="{StaticResource SecondaryHueDarkBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
             </StackPanel>
         </Grid>

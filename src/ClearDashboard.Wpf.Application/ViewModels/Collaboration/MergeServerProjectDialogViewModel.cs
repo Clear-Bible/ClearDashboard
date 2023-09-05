@@ -14,6 +14,7 @@ using SIL.Machine.Utils;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -47,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         private GitLabUser _gitLabUser;
 
         private ILocalizationService _localizationService;
-        private string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
+        private string DialogTitle => $"Make Project Available for Collab: {ProjectName}";
 
         #endregion //Member Variables
 
@@ -118,11 +119,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             set => Set(ref _canCancelAction, value);
         }
 
-        private string _cancelAction = "Close";
+        private string _cancelAction;
         public string CancelAction
         {
             get => _cancelAction;
-            set => Set(ref _cancelAction, value);
+            set
+            {
+                _cancelAction = value;
+                NotifyOfPropertyChange(() => CancelAction);
+            }
+        }
+
+        private System.Windows.Media.Brush _cancelColor;
+        public System.Windows.Media.Brush CancelColor
+        {
+            get => _cancelColor;
+            set
+            {
+                _cancelColor = value;
+                NotifyOfPropertyChange(() => CancelColor);
+            }
         }
 
         private ObservableCollection<string> _mergeProgressUpdates = new();
@@ -287,7 +303,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         {
             _runningTask = null;
 
-            CancelAction = "Close";
+            CancelAction = "Done";
+            CancelColor = System.Windows.Media.Brushes.Aqua;
             ProgressBarVisibility = Visibility.Hidden;
         }
 
