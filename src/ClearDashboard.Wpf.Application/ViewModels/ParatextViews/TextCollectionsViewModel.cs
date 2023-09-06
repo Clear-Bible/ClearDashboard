@@ -28,6 +28,8 @@ using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -420,8 +422,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public Task HandleAsync(ParatextSyncMessage message, CancellationToken cancellationToken)
         {
-            
-            BcvUserControlVisibility = message.Synced ?  Visibility.Hidden : Visibility.Visible;
+            var makeVisible = false;
+
+            if (message.Parent is MainViewModel mainViewModel)
+            {
+                foreach (var item in mainViewModel.Items)
+                {
+                    if (item is EnhancedViewModel enhancedViewModel && !enhancedViewModel.ParatextSync)
+                    {
+                        makeVisible = true;
+                        break;
+                    }
+                }
+            }
+
+            BcvUserControlVisibility = makeVisible ? Visibility.Visible : Visibility.Hidden;
+
             return Task.CompletedTask;
         }
     }
