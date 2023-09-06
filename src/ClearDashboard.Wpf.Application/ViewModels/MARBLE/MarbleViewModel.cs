@@ -1032,7 +1032,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<MarbleView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<MarbleView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
         /// <summary>

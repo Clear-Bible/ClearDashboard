@@ -1262,7 +1262,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<BiblicalTermsView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<BiblicalTermsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
         #endregion // Methods
     }

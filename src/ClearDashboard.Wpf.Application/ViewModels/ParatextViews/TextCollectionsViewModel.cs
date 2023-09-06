@@ -34,7 +34,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
     // ReSharper disable once ClassNeverInstantiated.Global
     public class TextCollectionsViewModel : ToolViewModel,
         IHandle<VerseChangedMessage>,
-        IHandle<RefreshTextCollectionsMessage>
+        IHandle<RefreshTextCollectionsMessage>,
+        IHandle<ParatextSyncMessage>
     {
         private readonly DashboardProjectManager? _projectManager;
 
@@ -113,6 +114,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                 _paratextSync = value;
                 NotifyOfPropertyChange(() => ParatextSync);
+            }
+        }
+
+        private Visibility _bcvUserControlVisibility = Visibility.Hidden;
+        public Visibility BcvUserControlVisibility
+        {
+            get => _bcvUserControlVisibility;
+            set
+            {
+                _bcvUserControlVisibility = value;
+                NotifyOfPropertyChange(() => BcvUserControlVisibility);
             }
         }
 
@@ -380,7 +392,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
@@ -403,6 +415,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public Task HandleAsync(RefreshTextCollectionsMessage message, CancellationToken cancellationToken)
         {
             Refresh(null);
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ParatextSyncMessage message, CancellationToken cancellationToken)
+        {
+            
+            BcvUserControlVisibility = message.Synced ?  Visibility.Hidden : Visibility.Visible;
             return Task.CompletedTask;
         }
     }

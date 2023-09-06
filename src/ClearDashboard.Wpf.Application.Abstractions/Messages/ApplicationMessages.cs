@@ -45,4 +45,6 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record RefreshTextCollectionsMessage();
 
     public record RebuildMainMenuMessage();
+
+    public record ParatextSyncMessage(bool Synced);
 }

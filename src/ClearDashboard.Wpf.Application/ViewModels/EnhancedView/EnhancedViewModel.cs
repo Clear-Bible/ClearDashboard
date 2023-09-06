@@ -603,7 +603,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<Views.EnhancedView.EnhancedView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<Views.EnhancedView.EnhancedView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
 
