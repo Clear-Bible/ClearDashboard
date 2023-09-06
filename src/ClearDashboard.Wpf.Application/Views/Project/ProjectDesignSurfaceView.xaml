@@ -64,10 +64,10 @@
                             x:Name="nodeRectangle"
                             RadiusX="4"
                             RadiusY="4"
-                            Stroke="{StaticResource NodeBorderBrush}"
                             StrokeThickness="1.3">
                             <Rectangle.Style>
                                 <Style TargetType="Rectangle">
+                                    <Setter Property="Stroke" Value="{StaticResource NodeBorderBrush}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Auxiliary}">
                                             <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceAuxiliary}" />
@@ -283,7 +283,21 @@
                                 VerticalAlignment="Center"
                                 FontWeight="Bold"
                                 IsHitTestVisible="False"
-                                Text="{Binding Name}" />
+                                Text="{Binding Name}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource NodeBorderBrush}" />
+                                        <Style.Triggers>
+                                            <!--<DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptHebrew}">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptGreek}">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>-->
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
                             <!--  The project type of the node.  -->
                             <TextBlock
@@ -294,7 +308,21 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 IsHitTestVisible="False"
-                                Text="{Binding CorpusType}" />
+                                Text="{Binding CorpusType}" >
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource NodeBorderBrush}" />
+                                        <Style.Triggers>
+                                            <!--<DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptHebrew}">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptGreek}">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>-->
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
                             <!--  Displays the node's input connectors.  -->
                             <ItemsControl
