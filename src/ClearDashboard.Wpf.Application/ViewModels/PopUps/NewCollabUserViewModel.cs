@@ -7,7 +7,6 @@ using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
@@ -17,13 +16,12 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System.Xml.Serialization;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -42,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private User _licenseUser;
         private readonly ParatextProxy _paratextProxy;
 
-        private string _emailValidationString = "";
+        private List<string> _emailValidationStringList = new List<string>();
 
         private RegistrationData _registration;
 
@@ -461,7 +459,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // not a user
             if (isAlreadyOnGitLab == false)
             {
-                _emailValidationString = GenerateRandomPassword.RandomNumber(1000, 9999).ToString();
+                _emailValidationStringList.Add(GenerateRandomPassword.RandomNumber(1000, 9999).ToString());
 
 
                 var mailMessage = new MimeMessage();
@@ -470,7 +468,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 mailMessage.Subject = _localizationService["NewCollabUserView_DashboardEmailValidationCode"]; //"ClearDashboard Email Validation Code";
                 mailMessage.Body = new TextPart("plain")
                 {
-                    Text = _localizationService["NewCollabUserView_EmailValidationCode"] + " " + _emailValidationString //Email Verification Code: 
+                    Text = _localizationService["NewCollabUserView_EmailValidationCode"] + " " + _emailValidationStringList.LastOrDefault() //Email Verification Code: 
                 };
 
                 try
@@ -498,7 +496,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                ErrorMessage = _localizationService["NewCollabUserView_EmailValidationCode"]; //"User is already on the system!";
+                ErrorMessage = _localizationService["NewCollabUserView_UserAlreadyExists"]; //"User is already on the system!";
             }
 
 
@@ -518,7 +516,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var password = GenerateRandomPassword.RandomPassword(16);
 
             GitLabUser user = await _gitLabHttpClientServices.CreateNewUser(FirstName, LastName, GetUserName(), password,
-                Email, SelectedGroup.Name).ConfigureAwait(false);
+                Email, SelectedGroup.Name);
 
             if (user.Id == 0)
             {
@@ -528,7 +526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                var accessToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(user).ConfigureAwait(false);
+                var accessToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(user);
 
                 CollaborationConfig = new CollaborationConfiguration
                 {
@@ -547,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 user.Password = password;
 
-                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken).ConfigureAwait(false);
+                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken);
 
                 if (results)
                 {
@@ -606,7 +604,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// </summary>
         public void ValidateEmailCode()
         {
-            if (EmailCode == _emailValidationString)
+            if (_emailValidationStringList.Contains(EmailCode))
             {
                 BadEmailValidationCode = true;
                 ShowGenerateUserButtonEnabled = true;

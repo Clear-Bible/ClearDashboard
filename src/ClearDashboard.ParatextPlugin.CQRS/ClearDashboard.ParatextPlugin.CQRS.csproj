@@ -1,34 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.7</AssemblyVersion>
+    <FileVersion>1.1.0.7</FileVersion>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <Version>1.1.0.7</Version>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="MediatR" Version="9.0.0" />
-		<PackageReference Include="ParatextPluginInterfaces" Version="2.0.23" />
-		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-		<PackageReference Include="System.Text.Json" Version="7.0.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
-	  <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Features\ConnectionChange\" />
-	</ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="ParatextPluginInterfaces" Version="2.0.23" />
+    <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="System.Text.Json" Version="7.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\ConnectionChange\" />
+  </ItemGroup>
 </Project>

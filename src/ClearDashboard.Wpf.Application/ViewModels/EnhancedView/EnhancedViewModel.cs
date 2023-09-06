@@ -867,6 +867,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await VerseManager.UnjoinTokenAsync(e.TokenDisplay.CompositeToken, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
         }
 
+        public void TranslationClicked(object sender, TranslationEventArgs e)
+        {
+            SelectionManager.UpdateSelection(e.TokenDisplay!, e.SelectedTokens, e.IsControlPressed);
+            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public void TranslationRightButtonDown(object sender, TranslationEventArgs e)
+        {
+            if (e.TokenDisplay is not null)
+            {
+                //SelectionManager.UpdateRightClickTranslationSelection(e.TokenDisplay);
+                //NoteControlVisibility = SelectionManager.AnySelectedTokenTranslationNotes ? Visibility.Visible : Visibility.Collapsed;
+                SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
+                NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         public void TranslationMouseEnter(object sender, TranslationEventArgs e)
         {
             Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} hovered";

@@ -13,13 +13,16 @@ using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
@@ -133,6 +136,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
         }
 
+
+        private string _statusMessage;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => Set(ref _statusMessage, value);
+        }
+
+
+        private System.Windows.Media.Brush statusMessageColor;
+        public System.Windows.Media.Brush StatusMessageColor 
+        { 
+            get => statusMessageColor; 
+            set => Set(ref statusMessageColor, value); 
+        }
+
         #endregion //Observable Properties
 
 
@@ -239,6 +258,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private bool PreAction()
         {
+            StatusMessage = string.Empty;
+
+
             if (ProjectId == Guid.Empty)
             {
                 return false;
@@ -288,17 +310,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 progress.Report(new ProgressStatus(0, "Operation Finished!"));
                 PlaySound.PlaySoundFromResource();
+
+                StatusMessage = _localizationService["MergeDialog_OperationComplete"];
+                StatusMessageColor = System.Windows.Media.Brushes.Green;
             }
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
                 PlaySound.PlaySoundFromResource(SoundType.Error);
+
+                StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
+                StatusMessageColor = System.Windows.Media.Brushes.Orange;
             }
             catch (Exception ex)
             {
                 progress.Report(new ProgressStatus(0, $"Exception thrown attempting to initialize project database: {ex.Message}"));
                 CanOkAction = true;
                 PlaySound.PlaySoundFromResource(SoundType.Error);
+
+                StatusMessage = _localizationService["MergeDialog_OperationErrored"]; 
+                StatusMessageColor = System.Windows.Media.Brushes.Red;
             }
             finally
             {
@@ -340,16 +371,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 progress.Report(new ProgressStatus(0, "Operation Finished!"));
                 PlaySound.PlaySoundFromResource();
+
+                StatusMessage = _localizationService["MergeDialog_OperationComplete"];
+                StatusMessageColor = System.Windows.Media.Brushes.Green;
+                
+                await EventAggregator.PublishOnUIThreadAsync(new RefreshCheckGitLab(), CancellationToken.None);
             }
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
                 PlaySound.PlaySoundFromResource(SoundType.Error);
+
+                StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
+                StatusMessageColor = System.Windows.Media.Brushes.Orange;
             }
             catch (Exception ex)
             {
                 progress.Report(new ProgressStatus(0, $"Exception thrown attempting to merge latest project changes: {ex.Message}"));
                 PlaySound.PlaySoundFromResource(SoundType.Error);
+
+                StatusMessage = _localizationService["MergeDialog_OperationErrored"];
+                StatusMessageColor = System.Windows.Media.Brushes.Red;
             }
             finally
             {
@@ -411,14 +453,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                     progress.Report(new ProgressStatus(0, "Operation Finished!"));
                     PlaySound.PlaySoundFromResource();
+
+                    StatusMessage = _localizationService["MergeDialog_OperationComplete"];
+                    StatusMessageColor = System.Windows.Media.Brushes.Green;
                 });
 
                 await _runningTask;
+
+                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(PermissionLevel.Owner));
             }
             catch (OperationCanceledException)
             {
                 progress.Report(new ProgressStatus(0, "Operation Cancelled"));
                 PlaySound.PlaySoundFromResource(SoundType.Error);
+
+                StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
+                StatusMessageColor = System.Windows.Media.Brushes.Orange;
             }
             catch (Exception ex)
             {
@@ -431,6 +481,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     progress.Report(new ProgressStatus(0, $"Exception thrown attempting to stage and commit project changes: {ex.Message}"));
                 }
                 PlaySound.PlaySoundFromResource(SoundType.Error);
+
+                StatusMessage = _localizationService["MergeDialog_OperationErrored"];
+                StatusMessageColor = System.Windows.Media.Brushes.Red;
             }
             finally
             {
@@ -467,6 +520,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         public async Task Cancel()
         {
+
             if (_runningTask is not null)
             {
                 CanCancelAction = false;
@@ -485,6 +539,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 await TryCloseAsync(false);
             }
         }
+
+        public void CopyToClipboard()
+        {
+            var sb = new StringBuilder();
+            foreach (var task in MergeProgressUpdates)
+            {
+                sb.AppendLine(task);
+            }
+            Clipboard.SetText(sb.ToString());
+        }
+
 
         public async Task Ok()
         {

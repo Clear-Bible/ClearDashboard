@@ -65,7 +65,9 @@
                 Text="{helpers:Localization ProjectPicker_AppName}" />
 
         </StackPanel>
+
         <Label Grid.Row="1" Content="{Binding ProgressLabel}" />
+
 
         <ListView
             x:Name="ProgressMessages"
@@ -117,21 +119,6 @@
         </ListView>
 
 
-        <StackPanel
-            Grid.Row="3"
-            Grid.Column="0"
-            Margin="20"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-
-            <Button
-                x:Name="Cancel"
-                Margin="5,5,5,5"
-                cal:Message.Attach="Cancel"
-                Content="{Binding CancelAction}"
-                IsEnabled="{Binding CanCancelAction}"
-                Style="{StaticResource TransparentStyle}" />
-        </StackPanel>
         <ProgressBar
             Grid.Row="2"
             Width="76"
@@ -143,6 +130,46 @@
             Style="{StaticResource MaterialDesignCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
+
+        <Grid
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Margin="0,0,10,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Foreground="{Binding StatusMessageColor}"
+                Text="{Binding StatusMessage}" />
+
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button
+                    HorizontalAlignment="Right"
+                    cal:Message.Attach="CopyToClipboard"
+                    ToolTip="Copy Progress to Clipboard"
+                    Style="{StaticResource TransparentStyle}">
+                    <materialDesign:PackIcon Kind="ContentCopy" />
+                </Button>
+
+                <Button
+                    x:Name="Cancel"
+                    Margin="5,5,5,5"
+                    cal:Message.Attach="Cancel"
+                    Content="{Binding CancelAction}"
+                    IsEnabled="{Binding CanCancelAction}"
+                    Style="{StaticResource TransparentStyle}" />
+
+            </StackPanel>
+        </Grid>
+
 
     </Grid>
 

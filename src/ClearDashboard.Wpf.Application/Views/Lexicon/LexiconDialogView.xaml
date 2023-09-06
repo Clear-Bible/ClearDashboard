@@ -13,6 +13,7 @@
    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d"
+    IsEnabled="{Binding IsLoaded}"
     >
     <Grid MinWidth="500">
         <Grid.RowDefinitions>
@@ -174,10 +175,12 @@
                     FontFamily="{DynamicResource MaterialDesignFont}"
                     FontSize="14"
                     Margin="10"
+                    IsEnabled="{Binding CancelEnabled}"
                     Style="{StaticResource TransparentStyle}"
                     />
         </StackPanel>
-        <ProgressBar Grid.Row="3"
+        <ProgressBar Grid.Row="2"
+            Grid.RowSpan="3"
             Width="76"
             Height="75"
             HorizontalAlignment="Center"

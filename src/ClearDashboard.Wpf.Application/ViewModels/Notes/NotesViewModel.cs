@@ -5,10 +5,12 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -26,9 +28,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.UserControls;
-using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -368,7 +367,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             NoteManager noteManager,
             CancellationToken cancellationToken,
             string taskName,
-            Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus)
+            Func<string, LongRunningTaskStatus, CancellationToken, string?, Exception?, Task> reportStatus, bool collabUpdate)
         {
             HashSet<NoteId> noteIds = new HashSet<NoteId>(new IIdEqualityComparer());
 
@@ -387,7 +386,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Collecting note details for notes", null);
 
             return await noteIds
-                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false))
+                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false, collabUpdate))
                 .WhenAll();
         }
         private void UpdateSelectedNote(NoteViewModel? selectedNoteViewModel)
@@ -416,7 +415,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             if (selectedNoteViewModel != null)
                 SelectedNoteText = selectedNoteViewModel.Text;
         }
-        public async Task GetAllNotesAndSetNoteViewModelsAsync()
+        public async Task GetAllNotesAndSetNoteViewModelsAsync(bool collabUpdate = false)
         {
             try
             {
@@ -428,7 +427,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                 var taskName = "Get_notes";
                 var processStatus = await RunLongRunningTask(
                     taskName,
-                    (cancellationToken) => AssembleNotes(noteManager_!, cancellationToken, taskName, SendBackgroundStatus),
+                    (cancellationToken) => AssembleNotes(noteManager_!, cancellationToken, taskName, SendBackgroundStatus, collabUpdate),
                     (noteVms) =>
                     {
                         NoteViewModels.Clear();
@@ -531,7 +530,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                     $"{taskName} running");
                 Logger!.LogInformation(taskName);
 
-                ProcessResult(await awaitableFunction(cancellationToken));
+                // Running in background thread to allow ui to be responsive
+                // when lots of notes are being loaded
+                ProcessResult(await Task.Run(async () => await awaitableFunction(cancellationToken), cancellationToken));
 
                 await SendBackgroundStatus(
                     taskName,
@@ -666,7 +667,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
         {
-            await GetAllNotesAndSetNoteViewModelsAsync();
+            await GetAllNotesAndSetNoteViewModelsAsync(true);
         }
 
 

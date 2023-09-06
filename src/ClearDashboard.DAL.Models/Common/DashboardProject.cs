@@ -28,6 +28,9 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string Version { get; set; }
 
+        public string? GitLabSha { get; set; }
+
+        public bool GitLabUpdateNeeded { get; set; } = false;
         public bool IsCompatibleVersion { get; set; } = true;
 
         public DateTimeOffset Modified { get; set; }
@@ -128,6 +131,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public bool IsCollabProject { get; set; }
 
         public string CollabOwner { get; set; }
-        public PermissionLevel PermissionLevel { get; set; } = PermissionLevel.Owner;
+        public PermissionLevel PermissionLevel { get; set; } = PermissionLevel.None;
+        public Guid Id { get; set; }
     }
 }

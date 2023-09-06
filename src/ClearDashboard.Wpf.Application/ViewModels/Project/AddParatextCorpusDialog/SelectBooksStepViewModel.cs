@@ -102,7 +102,7 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
         await base.OnActivateAsync(cancellationToken);
     }
 
-    #endregion //Constructor
+      #endregion //Constructor
 
 
     #region Methods

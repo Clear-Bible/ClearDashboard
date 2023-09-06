@@ -1,22 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU</Platforms>
+    <FileVersion>1.1.0.7</FileVersion>
+    <Version>1.1.0.7</Version>
+    <AssemblyVersion>1.1.0.7</AssemblyVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
-    <PackageReference Include="MySqlConnector" Version="2.2.6" />
+    <PackageReference Include="MySqlConnector" Version="2.2.7" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj" />
   </ItemGroup>
-
 </Project>

@@ -513,13 +513,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
                 _currentVerse = CurrentBcv.BBBCCCVVV;
 
-                await LoadUpVerse().ConfigureAwait(false);
+                await LoadUpVerse();
             }
 
             //// start collecting the gloss to Heb/Greek words
             //_ = Task.Run(async () =>
             //{
-            //    await ObtainGlosses().ConfigureAwait(false);
+            //    await ObtainGlosses();
             //});
 
             if (ProjectManager.CurrentParatextProject != null)
@@ -540,7 +540,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         /// <returns></returns>
         private async Task LoadSearchCsv()
         {
-            var queryResult = await ExecuteRequest(new LoadSemanticDictionaryLookupSlice.LoadSemanticDictionaryLookupQuery(), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new LoadSemanticDictionaryLookupSlice.LoadSemanticDictionaryLookupQuery(), CancellationToken.None);
             if (queryResult.Success == false)
             {
                 Logger!.LogError(queryResult.Message);
@@ -566,7 +566,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         //{
         //    //var queryResult =
         //    //    await ExecuteRequest(new LoadSemanticDictionaryGlosses.LoadSemanticDictionaryGlossesQuery(),
-        //    //        CancellationToken.None).ConfigureAwait(false);
+        //    //        CancellationToken.None);
         //    //if (queryResult.Success == false)
         //    //{
         //    //    Logger!.LogError(queryResult.Message);
@@ -638,7 +638,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         
         private async Task SearchSourceDatabase(string searchSource)
         {
-            var queryResult = await ExecuteRequest(new GetConsonantsSliceQuery(searchSource), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new GetConsonantsSliceQuery(searchSource), CancellationToken.None);
             if (queryResult.Success == false)
             {
                 Logger!.LogError(queryResult.Message);
@@ -681,7 +681,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         private async Task SearchEnglishDatabase(string searchEnglish)
         {
-            var queryResult = await ExecuteRequest(new GetEnglishGlossSliceQuery(searchEnglish), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new GetEnglishGlossSliceQuery(searchEnglish), CancellationToken.None);
             if (queryResult.Success == false)
             {
                 Logger!.LogError(queryResult.Message);
@@ -799,7 +799,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         private async Task LoadUpVerse()
         {
-            var queryResult = await ExecuteRequest(new GetVerseDataFromSemanticDatabaseQuery(CurrentBcv), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new GetVerseDataFromSemanticDatabaseQuery(CurrentBcv), CancellationToken.None);
             if (queryResult.Success == false)
             {
                 Logger!.LogError(queryResult.Message);
@@ -819,7 +819,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             {
                 SelectedLexicalLink = _lexicalLinks[0];
                 SelectedWord = _lexicalLinks[0].Word;
-                await GetWord().ConfigureAwait(false);
+                await GetWord();
             }
             NotifyOfPropertyChange(() => LexicalLinks);
         }
@@ -883,12 +883,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                     IsOt = false;
                 }
 
-                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(bcv, languageCode, _selectedWord, _lookup), CancellationToken.None).ConfigureAwait(false);
+                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(bcv, languageCode, _selectedWord, _lookup), CancellationToken.None);
             }
             else
             {
                 // send with the actual current BCV verse
-                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(CurrentBcv, languageCode, _selectedWord, _lookup), CancellationToken.None).ConfigureAwait(false);
+                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(CurrentBcv, languageCode, _selectedWord, _lookup), CancellationToken.None);
             }
             
             if (queryResult.Success == false)
@@ -968,7 +968,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             if (obj is RelatedLemma lemma)
             {
                 _selectedWord = lemma.Lemma;
-                await GetWord().ConfigureAwait(false);
+                await GetWord();
             }
         }
 

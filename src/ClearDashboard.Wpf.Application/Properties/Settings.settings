@@ -92,5 +92,11 @@
     <Setting Name="EmailPass" Type="System.String" Scope="User">
       <Value Profile="(Default)">xtoD/SxgDM+2D9A/rOD/EX9vr9TsoDj0iMnJbgun+tk=</Value>
     </Setting>
+    <Setting Name="DifferentMonitor" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ThirdMonitor" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

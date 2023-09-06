@@ -151,8 +151,8 @@
             CornerRadius="1">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel
                     Grid.Column="0"
@@ -175,46 +175,75 @@
                     </Image>
 
                     <TextBlock
-                        x:Name="ParatextUserNameTitle"
                         Margin="5,0,5,0"
                         VerticalAlignment="Center"
                         Foreground="{StaticResource PrimaryHueMidBrush}">
                         <Run Text="Paratext" />
-                        <Run Text="{helpers:Localization ShellView_User}" />
                     </TextBlock>
                     <TextBlock
-                        x:Name="ParatextUserName"
                         Margin="0,0,5,0"
                         VerticalAlignment="Center"
-                        d:Text="Joe Schmoe" />
+                        d:Text="Joe Schmoe">
+                        <Run Text="{Binding ParatextUserName}" />
+                        <Run Text=": " />
+                        <Run Text="{Binding ParatextProjectName}" />
+                    </TextBlock>
 
                     <TextBlock
-                        x:Name="DashboardProjectNameTitle"
-                        Margin="5,0,5,0"
+                        Margin="15,0,5,0"
                         VerticalAlignment="Center"
                         Foreground="{StaticResource PrimaryHueMidBrush}">
                         <Run Text="ClearDashboard" />
-                        <Run Text="{helpers:Localization Landing_Project}" />
                     </TextBlock>
-                    <TextBlock
-                        x:Name="DashboardProjectName"
-                        Margin="0,0,5,0"
-                        VerticalAlignment="Center"
-                        d:Text="Joe Schmoe" />
 
                     <TextBlock
-                        x:Name="ParatextProjectNameTitle"
-                        Margin="5,0,5,0"
-                        VerticalAlignment="Center"
-                        Foreground="{StaticResource PrimaryHueMidBrush}">
-                        <Run Text="Paratext" />
-                        <Run Text="{helpers:Localization Landing_Project}" />
-                    </TextBlock>
-                    <TextBlock
-                        x:Name="ParatextProjectName"
                         Margin="0,0,5,0"
                         VerticalAlignment="Center"
-                        d:Text="Joe Schmoe" />
+                        d:Text="zzSUR">
+                        <Run Text="{Binding DashboardProjectName}" />
+                    </TextBlock>
+
+
+                    <TextBlock Margin="15,0,5,0" VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="Owner">
+                                        <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="ReadWrite">
+                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="None">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                        <Run Text="Access Level:" />
+                        <Run Text="{Binding PermissionLevel}" />
+                    </TextBlock>
+
+                    <TextBlock
+                        Margin="30,0,0,0"
+                        Padding="20,2,20,2"
+                        VerticalAlignment="Center"
+                        Background="{StaticResource GreenLightBrush}"
+                        TextAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                        <Run Text="{helpers:Localization MainView_RemoteUpdateAvailable}" />
+                    </TextBlock>
 
                     <TextBlock
                         x:Name="ManuscriptVerse"
@@ -243,7 +272,7 @@
                         BorderBrush="{StaticResource PrimaryHueMidBrush}"
                         BorderThickness="1"
                         CornerRadius="3"
-                        Visibility="Hidden">
+                        Visibility="Collapsed">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
