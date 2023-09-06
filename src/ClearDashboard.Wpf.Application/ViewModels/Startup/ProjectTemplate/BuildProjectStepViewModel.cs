@@ -24,6 +24,13 @@ using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using Point = System.Windows.Point;
 using ClearDashboard.DAL.Alignment;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
+using System.Collections.Generic;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using Dahomey.Json.Serialization.Conventions;
+using System.Text.Json;
+using ClearBible.Engine.Exceptions;
+using Dahomey.Json;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
@@ -83,19 +90,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         }
 
         private StartupDialogViewModel? _startupDialogViewModel;
-    
+
         private readonly BindableCollection<string> _messages = new BindableCollection<string>();
         private readonly ProjectBuilderStatusViewModel _backgroundTasksViewModel;
 
-        public BuildProjectStepViewModel(DashboardProjectManager projectManager, 
+        public BuildProjectStepViewModel(DashboardProjectManager projectManager,
                                          ProjectTemplateProcessRunner processRunner,
                                          ProjectBuilderStatusViewModel backgroundTasksViewModel,
-                                         INavigationService navigationService, 
-                                         ILogger<ProjectSetupViewModel> logger, 
-                                         IEventAggregator eventAggregator, 
-                                         IMediator mediator, 
-                                         ILifetimeScope? lifetimeScope,  
-                                         ILocalizationService localizationService, 
+                                         INavigationService navigationService,
+                                         ILogger<ProjectSetupViewModel> logger,
+                                         IEventAggregator eventAggregator,
+                                         IMediator mediator,
+                                         ILifetimeScope? lifetimeScope,
+                                         ILocalizationService localizationService,
                                          ProjectDbContextFactory projectNameDbContextFactory)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
@@ -110,7 +117,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             _backOrCancelAction = _backAction;
             _createOrCloseAction = _createAction;
 
-            
+
         }
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
@@ -202,7 +209,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await CreateProject(_cancellationToken);
         }
 
-       
+
 
         private async Task CreateProject(CancellationToken? cancellationToken)
         {
@@ -216,10 +223,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             {
                 cancellationToken?.ThrowIfCancellationRequested();
 
-               
-                _runningTask = Task.Run(async () => { await CreateNewProject(cancellationToken?? CancellationToken.None); });
-            
-                   
+                _runningTask = Task.Run(async () => { await CreateNewProject(cancellationToken ?? CancellationToken.None); });
+
                 await _runningTask;
 
                 cancellationToken?.ThrowIfCancellationRequested();
@@ -229,6 +234,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
 
                 await UpdateDesignSurfaceData();
+                await AddInterlinearEnhancedViewItems();
 
                 _startupDialogViewModel!.Reset();
 
@@ -271,14 +277,64 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 errorCleanupAction?.Invoke(Logger!);
 
                 ProjectManager!.PauseDenormalization = false;
-         
+
                 stopwatch.Stop();
             }
         }
 
+        private async Task AddInterlinearEnhancedViewItems()
+        {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            var enhancedViewLayouts = new List<EnhancedViewLayout>();
+            var enhancedViewLayout = new EnhancedViewLayout
+            {
+                BBBCCCVVV = $"{ParentViewModel!.SelectedBookManager.SelectedAndEnabledBooks.First().BookNum:000}{1:000}{1:000}",
+                ParatextSync = false,
+                Title = "⳼ ENHANCED VIEW",
+                VerseOffset = 0
+            };
+            
+            var parallelCorpusIds = topLevelProjectIds.ParallelCorpusIds.Where(x =>
+                x.SourceTokenizedCorpusId!.CorpusId!.ParatextGuid == ParentViewModel!.SelectedParatextProject!.Id);
+
+              foreach (var parallelCorpusId in parallelCorpusIds)
+            {
+                var translationSets = topLevelProjectIds.TranslationSetIds.Where(translationSet =>
+                    translationSet.ParallelCorpusId!.IdEquals(parallelCorpusId));
+                foreach (var translationSet in translationSets)
+                {
+
+                    var alignmentSet = topLevelProjectIds.AlignmentSetIds.FirstOrDefault(alignmentSet =>
+                        alignmentSet.Id == translationSet.AlignmentSetGuid);
+                    var metadatum = new InterlinearEnhancedViewItemMetadatum
+                    {
+
+                        TranslationSetId = translationSet.Id.ToString(),
+                        DisplayName = $"{translationSet.DisplayName} Interlinear",
+                        ParallelCorpusDisplayName = translationSet.ParallelCorpusId!.DisplayName,
+                        ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
+                        IsRtl = parallelCorpusId.SourceTokenizedCorpusId!.CorpusId!.IsRtl,
+                        IsNewWindow = false,
+                        IsTargetRtl = parallelCorpusId.TargetTokenizedCorpusId!.CorpusId!.IsRtl,
+                        SourceParatextId = parallelCorpusId.SourceTokenizedCorpusId!.CorpusId!.ParatextGuid,
+                        TargetParatextId =  parallelCorpusId.TargetTokenizedCorpusId.CorpusId.ParatextGuid
+                    };
+                    enhancedViewLayout.EnhancedViewItems.Add(metadatum);
+                }
+            }
+
+            enhancedViewLayouts.Add(enhancedViewLayout);
+
+
+            var options = CreateDiscriminatedJsonSerializerOptions();
+            ProjectManager!.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(enhancedViewLayouts, options);
+
+            await ProjectManager.UpdateCurrentProject();
+        }
+
         private async Task UpdateDesignSurfaceData()
         {
-           
+
             var projectDesignSurfaceData =
                 ProjectDesignSurfaceViewModel!.LoadDesignSurfaceData(ProjectManager!.CurrentProject);
 
@@ -303,6 +359,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             ProjectManager.CurrentProject.DesignSurfaceLayout = ProjectDesignSurfaceViewModel.SerializeDesignSurface(projectDesignSurfaceData);
             await ProjectManager.UpdateCurrentProject();
+        }
+
+        private JsonSerializerOptions CreateDiscriminatedJsonSerializerOptions()
+        {
+            var options = new JsonSerializerOptions
+            {
+                IncludeFields = true,
+                WriteIndented = false,
+            };
+            options.SetupExtensions();
+            var registry = options.GetDiscriminatorConventionRegistry();
+            registry.ClearConventions();
+            registry.RegisterConvention(new DefaultDiscriminatorConvention<string>(options, "_t"));
+
+            var registrars = LifetimeScope.Resolve<IEnumerable<IJsonDiscriminatorRegistrar>>();
+            foreach (var registrar in registrars)
+            {
+                registrar.Register(registry);
+            }
+            return options;
         }
 
         private async Task CreateNewProject(CancellationToken cancellationToken)
@@ -384,7 +460,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         private CorpusNodeViewModel BuildCorpusNode(Corpus corpus, Point designSurfaceLocation)
         {
-           return ProjectDesignSurfaceViewModel!.DesignSurfaceViewModel!.CreateCorpusNode(corpus, designSurfaceLocation);
+            return ProjectDesignSurfaceViewModel!.DesignSurfaceViewModel!.CreateCorpusNode(corpus, designSurfaceLocation);
         }
 
         private Point GetNextPoint(ref int index)
@@ -393,35 +469,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             switch (index)
             {
                 case 0:
-                {
-                    index = index + 1;
-                    point = new Point(25, 50);
-                    break;
-                }
+                    {
+                        index = index + 1;
+                        point = new Point(25, 50);
+                        break;
+                    }
                 case 1:
-                {
-                    index = index + 1;
-                    point = new Point(275, 50);
-                    break;
-                }
+                    {
+                        index = index + 1;
+                        point = new Point(275, 50);
+                        break;
+                    }
                 case 2:
-                {
-                    index = index + 1;
-                    point = new Point(275, 125);
-                    break;
-                }
+                    {
+                        index = index + 1;
+                        point = new Point(275, 125);
+                        break;
+                    }
                 case 3:
-                {
-                    index = index + 1;
-                    point = new Point(275, 200);
-                    break;
-                }
+                    {
+                        index = index + 1;
+                        point = new Point(275, 200);
+                        break;
+                    }
                 case 4:
-                {
-                    index = index + 1;
-                    point = new Point(275, 275);
-                    break;
-                }
+                    {
+                        index = index + 1;
+                        point = new Point(275, 275);
+                        break;
+                    }
             }
 
             return point;
@@ -451,7 +527,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             // If selected, build Macula Greek and Macula Hebrew nodes and associated connectors
             if (ParentViewModel!.IncludeBiblicalTexts)
             {
-              
+
                 if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks)
                 {
                     var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode(GetNextPoint(ref index));
@@ -528,7 +604,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         private CorpusNodeViewModel BuildParatextLwcCorpusNode(Point point)
         {
-           return BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
+            return BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
             {
                 Name = ParentViewModel!.SelectedParatextLwcProject!.Name,
                 FontFamily = ParentViewModel!.SelectedParatextLwcProject.FontFamily,
@@ -540,21 +616,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         private CorpusNodeViewModel BuildParatextBackTranslationCorpusNode(Point point)
         {
-           return BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
+            return BuildCorpusNode(new Corpus(new CorpusId(Guid.NewGuid())
             {
                 Name = ParentViewModel!.SelectedParatextBtProject!.Name,
                 FontFamily = ParentViewModel!.SelectedParatextBtProject.FontFamily,
                 CorpusType = ParentViewModel!.SelectedParatextBtProject.CorpusTypeDisplay
             }), point);
-           
+
         }
 
         private CorpusNodeViewModel BuildMaculaGreekCorpusNode(Point point)
         {
             return BuildCorpusNode(new Corpus(new CorpusId(ManuscriptIds.GreekManuscriptGuid)
             {
-                Name = MaculaCorporaNames.GreekCorpusName, 
-                FontFamily = FontNames.GreekFontFamily, 
+                Name = MaculaCorporaNames.GreekCorpusName,
+                FontFamily = FontNames.GreekFontFamily,
                 CorpusType = CorpusType.ManuscriptGreek.ToString()
             }), point);
         }
@@ -567,7 +643,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 FontFamily = FontNames.HebrewFontFamily,
                 CorpusType = CorpusType.ManuscriptHebrew.ToString()
             }), point);
-           
+
         }
 
         private CorpusNodeViewModel BuildParatextProjectCorpusNode(Point point)
@@ -601,7 +677,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 _cancellationTokenSource.Cancel();
                 _processRunner.Cancel();
 
-                await Task.WhenAny(tasks: new [] { _runningTask, Task.Delay(30000) });
+                await Task.WhenAny(tasks: new[] { _runningTask, Task.Delay(30000) });
             }
             else
             {
@@ -614,8 +690,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         {
             var displayMessage = $"{message.Status.TaskLongRunningProcessStatus}: {message.Status.Name}: {message.Status.Description}";
             Logger!.LogInformation($"RunProcessViewModel: {displayMessage}");
-            Execute.OnUIThread(()=> Messages.Insert(0, displayMessage) );
-            
+            Execute.OnUIThread(() => Messages.Insert(0, displayMessage));
+
             await Task.CompletedTask;
         }
     }
