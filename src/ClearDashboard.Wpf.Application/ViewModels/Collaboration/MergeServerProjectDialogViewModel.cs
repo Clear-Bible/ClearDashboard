@@ -48,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         private GitLabUser _gitLabUser;
 
         private ILocalizationService _localizationService;
-        private string DialogTitle => $"Make Project Available for Collab: {ProjectName}";
+        private string DialogTitle => $"{OkAction}: {ProjectName}";
 
         #endregion //Member Variables
 
@@ -103,7 +103,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         public bool CanCancel => true /* can always cancel */;
 
 
-        public string OkAction => CollaborationDialogAction.ToString();
+        public string OkAction
+        {
+            get
+            {
+                switch (CollaborationDialogAction)
+                {
+                    case CollaborationDialogAction.Commit:
+                        return "Send Changes";
+                    case CollaborationDialogAction.Import:
+                        return "Make Project Available for Collab";
+                    case CollaborationDialogAction.Initialize:
+                        return CollaborationDialogAction.ToString();
+                    case CollaborationDialogAction.Merge:
+                        return "Get Latest Updates";
+                    default:
+                        return CollaborationDialogAction.ToString();
+                }
+            }
+        }
 
         private bool _canOkAction;
         public bool CanOkAction
@@ -302,9 +320,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         private void PostAction()
         {
             _runningTask = null;
-
-            CancelAction = "Done";
-            CancelColor = System.Windows.Media.Brushes.Aqua;
+            
             ProgressBarVisibility = Visibility.Hidden;
         }
 
@@ -330,6 +346,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                 StatusMessageColor = System.Windows.Media.Brushes.Green;
+                CancelAction = "Done";
             }
             catch (OperationCanceledException)
             {
@@ -338,6 +355,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
                 StatusMessageColor = System.Windows.Media.Brushes.Orange;
+                CancelAction = "Close";
             }
             catch (Exception ex)
             {
@@ -347,6 +365,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationErrored"]; 
                 StatusMessageColor = System.Windows.Media.Brushes.Red;
+                CancelAction = "DCloseone";
             }
             finally
             {
@@ -391,7 +410,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                 StatusMessageColor = System.Windows.Media.Brushes.Green;
-                
+                CancelAction = "Done";
+
                 await EventAggregator.PublishOnUIThreadAsync(new RefreshCheckGitLab(), CancellationToken.None);
             }
             catch (OperationCanceledException)
@@ -401,6 +421,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
                 StatusMessageColor = System.Windows.Media.Brushes.Orange;
+                CancelAction = "Close";
             }
             catch (Exception ex)
             {
@@ -409,6 +430,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationErrored"];
                 StatusMessageColor = System.Windows.Media.Brushes.Red;
+                CancelAction = "Close";
             }
             finally
             {
@@ -473,6 +495,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                     StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                     StatusMessageColor = System.Windows.Media.Brushes.Green;
+                    CancelAction = "Done";
                 });
 
                 await _runningTask;
@@ -486,6 +509,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
                 StatusMessageColor = System.Windows.Media.Brushes.Orange;
+                CancelAction = "Close";
             }
             catch (Exception ex)
             {
@@ -501,6 +525,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationErrored"];
                 StatusMessageColor = System.Windows.Media.Brushes.Red;
+                CancelAction = "Close";
             }
             finally
             {

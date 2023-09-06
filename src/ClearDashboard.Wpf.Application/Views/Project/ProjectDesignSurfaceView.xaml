@@ -305,7 +305,7 @@
                                 ItemsSource="{Binding InputConnectors}" />
 
 
-                            <materialDesign:Chip
+                            <!--<materialDesign:Chip
                                 Grid.Row="0"
                                 Grid.RowSpan="2"
                                 Grid.Column="2"
@@ -321,7 +321,7 @@
                                         <Setter Property="Padding" Value="0" />
                                     </Style>
                                 </materialDesign:Chip.Style>
-                            </materialDesign:Chip>
+                            </materialDesign:Chip>-->
 
                             <!--  Displays the node's output connectors.  -->
                             <ItemsControl

@@ -166,11 +166,17 @@
                     Content="{Binding CancelAction}"
                     IsEnabled="{Binding CanCancelAction}">
                     <Button.Style>
-                        <Style BasedOn="{StaticResource TransparentStyle}" TargetType="Button">
+                        <Style BasedOn="{StaticResource CustomBackgroundStyle}" TargetType="Button">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding CancelAction}" Value="Done">
                                     <Setter Property="Background" Value="{StaticResource SecondaryHueDarkBrush}" />
                                 </DataTrigger>
+                                <Trigger Property="Content" Value="Cancel">
+                                    <Setter Property="Background" Value="#EEEBEB" />
+                                </Trigger>
+                                <Trigger Property="Content" Value="Close">
+                                    <Setter Property="Background" Value="#EEEBEB" />
+                                </Trigger>
                             </Style.Triggers>
                         </Style>
                     </Button.Style>

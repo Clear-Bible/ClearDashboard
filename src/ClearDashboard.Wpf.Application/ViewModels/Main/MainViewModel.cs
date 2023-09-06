@@ -800,7 +800,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     new EnhancedViewLayout
                     {
                         ParatextSync = true,
-                        Title = "⳼ ENHANCED VIEW",
+                        Title = "⳼ View",
                         VerseOffset = 0
                     }
                 };
@@ -1272,13 +1272,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Get Latest from Server", Id = MenuIds.CollaborationGetLatest,
+                    Header = "Get Latest Project Updates", Id = MenuIds.CollaborationGetLatest,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Commit Changes to Server", Id = MenuIds.CollaborationCommit,
+                    Header = "Send Changes to Shared Project", Id = MenuIds.CollaborationCommit,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() &&
                                 !_collaborationManager.AreUnmergedChanges() &&

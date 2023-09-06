@@ -506,7 +506,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            DisplayName = "Enhanced View";
+            DisplayName = "View";
             await base.OnInitializeAsync(cancellationToken);
         }
    
