@@ -165,6 +165,20 @@
                     </Style>
                 </ColumnDefinition.Style>
             </ColumnDefinition>
+            <!--  lock-icon [11]  -->
+            <ColumnDefinition>
+                <ColumnDefinition.Style>
+                    <Style TargetType="{x:Type ColumnDefinition}">
+                        <Setter Property="Width" Value="75" />
+                        <Style.Triggers>
+                            <!--  set the width of the up/down control to 0 when the control is readonly  -->
+                            <DataTrigger Binding="{Binding ShowOffsetControl}" Value="True">
+                                <Setter Property="Width" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <!--  OUTLINE BORDER  -->
@@ -184,8 +198,20 @@
             Grid.Column="0"
             Grid.ColumnSpan="11"
             Margin="-1,-1,-1,0"
-            Background="{StaticResource MahApps.Brushes.Badged.Background.Disabled}"
-            CornerRadius="4" />
+            CornerRadius="4">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsControlEnabled}" Value="False">
+                            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Badged.Foreground}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsControlEnabled}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Badged.Background.Disabled}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
 
 
         <TextBlock
@@ -421,6 +447,13 @@
             Maximum="100"
             Minimum="0"
             Value="{Binding VerseOffsetRange, Mode=TwoWay}" />
+
+        <materialDesign:PackIcon
+            Foreground="Gray"
+            VerticalAlignment="Center"
+            Grid.Row="1"
+            Grid.Column="11"
+            Kind="LockOutline" />
 
     </Grid>
 </UserControl>
