@@ -13,9 +13,10 @@ using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using ClearDashboard.Wpf.Application.Views.EnhancedView;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
+using ClearDashboard.DAL.CQRS;
+using MediatR;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -47,6 +48,11 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterManagerDependencies(this ContainerBuilder builder)
         {
+            // Register Paratext as our "External" lexicon provider / drafting tool:
+            builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetLexiconQuery>()
+                .As<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>()
+                .Keyed<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>("External");
+
             builder.RegisterType<AlignmentManager>().AsSelf();
             builder.RegisterType<LexiconManager>().AsSelf();
             builder.RegisterType<NoteManager>().AsSelf().SingleInstance();

@@ -3,8 +3,10 @@ using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -493,6 +495,35 @@ namespace ClearDashboard.DAL.Alignment.Features
         public static Alignment.Lexicon.SemanticDomainId BuildSemanticDomainId(Models.Lexicon_SemanticDomain semanticDomain)
         {
             return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_SemanticDomain, Alignment.Lexicon.SemanticDomainId>(semanticDomain);
+        }
+
+        public static Alignment.Lexicon.Lexeme BuildLexeme(Models.Lexicon_Lexeme lexeme, string? meaningLanguageFilter)
+        {
+            return new Lexeme(
+                BuildLexemeId(lexeme),
+                lexeme.Lemma!,
+                lexeme.Language,
+                lexeme.Type,
+                lexeme.Meanings
+                    .Where(s => string.IsNullOrEmpty(meaningLanguageFilter) || s.Language == meaningLanguageFilter)
+                    .Select(s => new Meaning(
+                        BuildMeaningId(s),
+                        s.Text!,
+                        s.Language,
+                        s.Translations.Select(t => new Alignment.Lexicon.Translation(
+                            BuildTranslationId(t),
+                            t.Text ?? string.Empty
+                        )).ToList(),
+                        s.SemanticDomains.Select(sd => new SemanticDomain(
+                            BuildSemanticDomainId(sd),
+                            sd.Text!
+                        )).ToList()
+                    )).ToList(),
+                lexeme.Forms
+                    .Select(f => new Form(
+                        new FormId(f.Id),
+                        f.Text!
+                    )).ToList());
         }
 
         private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity) 

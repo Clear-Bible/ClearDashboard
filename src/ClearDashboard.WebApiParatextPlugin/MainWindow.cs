@@ -115,6 +115,8 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
         {
+            FunctionsAssemblyResolver.RedirectAssembly();
+
             parent.SetTitle(ClearDashboardWebApiPlugin.PluginName);
             parent.ProjectChanged += ProjectChanged;
             parent.VerseRefChanged += VerseRefChanged;

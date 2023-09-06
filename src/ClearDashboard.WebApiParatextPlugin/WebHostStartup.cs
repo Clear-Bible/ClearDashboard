@@ -1,13 +1,17 @@
-﻿using ClearDashboard.WebApiParatextPlugin.Features.Project;
+﻿using ClearDashboard.ParatextPlugin.CQRS.Features.Lexicon;
+using ClearDashboard.WebApiParatextPlugin.Features.Lexicon;
+using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Owin.Cors;
 using Owin;
 using Paratext.PluginInterfaces;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
@@ -124,6 +128,15 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddSingleton<IPluginHost>(sp => _pluginHost);
             services.AddSingleton<IPluginChildWindow>(sp => _parent);
             services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
+
+            services.AddTransient<ILexiconObtainable>(x => 
+                new Features.Lexicon.LexiconFromXmlFiles(
+                    x.GetRequiredService<ILogger<LexiconFromXmlFiles>>(),
+                    _mainWindow.GetProjectMetadata()
+                        .Where(e => e.Id == _mainWindow.Project.ID)
+                        .SingleOrDefault(),
+                    Directory.GetCurrentDirectory() /* paratextAppPath */
+                ));
 
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)

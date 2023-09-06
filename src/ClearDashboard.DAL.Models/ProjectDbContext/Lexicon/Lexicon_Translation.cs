@@ -13,6 +13,9 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? Text { get; set; }
 
+        [Column(TypeName = "jsonb")]
+        public string? OriginatedFrom { get; set; }
+
         [ForeignKey(nameof(MeaningId))]
         public Guid MeaningId { get; set; }
         public virtual Lexicon_Meaning? Meaning { get; set; }

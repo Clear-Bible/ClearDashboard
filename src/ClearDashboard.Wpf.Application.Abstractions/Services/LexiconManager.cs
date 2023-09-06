@@ -13,8 +13,10 @@ using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using ClearDashboard.Wpf.Application.Messages.Lexicon;
 using ClearDashboard.DataAccessLayer.Models;
+using Lexicon = ClearDashboard.DAL.Alignment.Lexicon.Lexicon;
 using Lexeme = ClearDashboard.DAL.Alignment.Lexicon.Lexeme;
 using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
+using System.Collections.ObjectModel;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -437,6 +439,23 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        public static Lexicon GetExternalLexiconNotInInternal(Lexicon externalLexicon, Lexicon internalLexicon)
+        {
+            var lexemesExternalExceptInternal = externalLexicon.Lexemes
+                .Where(el =>
+                    !internalLexicon.Lexemes.Any(il => il.Lemma == el.Lemma) &&
+                    !internalLexicon.Lexemes.Any(il => el.Forms.Select(e => e.Text).Contains(il.Lemma)) &&
+                    !internalLexicon.Lexemes.Any(il =>
+                        il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text)).Intersect(
+                        el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))).Any())
+                    );
+
+            return new Lexicon
+            {
+                Lexemes = new ObservableCollection<Lexeme>(lexemesExternalExceptInternal)
+            };
         }
 
         /// <summary>
