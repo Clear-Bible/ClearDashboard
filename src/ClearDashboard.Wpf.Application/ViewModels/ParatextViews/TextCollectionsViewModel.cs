@@ -317,7 +317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     }
                                     var currentBody = htmlSnippet.DocumentNode.SelectNodes("//body");
 
-                                    endPart = currentBody.FirstOrDefault().InnerHtml;
+                                    endPart = currentBody.FirstOrDefault().InnerHtml.Replace("> ", ">").Replace(">", "> ");
                                 }
                                 catch (Exception e)
                                 {
