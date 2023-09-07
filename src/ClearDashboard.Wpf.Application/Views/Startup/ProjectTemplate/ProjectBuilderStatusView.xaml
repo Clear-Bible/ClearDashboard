@@ -13,6 +13,7 @@
     xmlns:projectTemplate="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate"
     MinWidth="300"
     MinHeight="200"
+    Height="700"
     d:DataContext="{d:DesignInstance Type=projectTemplate:ProjectBuilderStatusViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="200"

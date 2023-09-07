@@ -10,7 +10,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
              Width="1010"
-             Height="635"
+             Height="700"
              d:DesignHeight="450"
              d:DesignWidth="800"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -230,7 +230,9 @@
                       IsChecked="{Binding ShowBiblicalTexts, Mode=TwoWay}"
                       Content="{helpers:Localization ProjectPicker_IncludeBiblicalTexts}">
 
-                    <CheckBox.ToolTip>If checked, this will ...</CheckBox.ToolTip>
+                    <CheckBox.ToolTip>
+                        <Label Content="{helpers:Localization ProjectPicker_IncludeBiblicalTextsTooltip}"/>
+                    </CheckBox.ToolTip>
                 </CheckBox>
             </StackPanel>
 
