@@ -98,9 +98,9 @@ namespace ClearDashboard.Wpf.Application
                 .Keyed<IWorkflowStepViewModel>("ProjectTemplate")
                 .WithMetadata("Order", 1);
 
-            //builder.RegisterType<UsfmCheckStepViewModel>().As<IWorkflowStepViewModel>()
-            //    .Keyed<IWorkflowStepViewModel>("ProjectTemplate")
-            //    .WithMetadata("Order", 2);
+            builder.RegisterType<UsfmCheckStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ProjectTemplate")
+                .WithMetadata("Order", 2);
 
             builder.RegisterType<ScopeSelectionStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("ProjectTemplate")

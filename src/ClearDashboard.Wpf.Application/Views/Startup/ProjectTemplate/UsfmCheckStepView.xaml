@@ -8,8 +8,9 @@
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
              Width="1010"
-             Height="635"
+             Height="700"
              d:DesignHeight="450"
              d:DesignWidth="800"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -25,8 +26,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <Label Content="USFM Check" Grid.Row="1"/>
+        <Label Grid.Row="0"  Grid.ColumnSpan="2" Content="{Binding DisplayName}" FontSize="24" Margin="12,0,0,0"></Label>
+        <!--<Label Content="USFM Check" Grid.Row="1"/>-->
+        <userControls:UsfmErrorsDisplay  
+            Grid.Row="2" 
+            DataContext="{Binding .}" ListViewHeight="400"/>
         <StackPanel
             Grid.Row="3"
             Grid.Column="0"
@@ -34,20 +38,36 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal">
 
-            <Button
-                x:Name="MoveBackwards"
-                Margin="5,5,5,5"
-                cal:Message.Attach="MoveBackwards"
-                Content="{helpers:Localization Back}"
-                IsEnabled="{Binding EnableControls}"
-                Style="{StaticResource TransparentStyle}" />
-            <Button
-                x:Name="MoveForwards"
-                cal:Message.Attach="MoveForwards"
-                Content="{helpers:Localization Next}"
-                IsDefault="True"
-                Style="{StaticResource TransparentStyle}" />
+            <Button x:Name="MoveBackwards"
+                    Width="90"
+                    Margin="0,0,15,15"
+                    HorizontalAlignment="Right"
+                    cal:Message.Attach="MoveBackwards()"
+                    Content="{helpers:Localization Back}"
+                    FontSize="12"
+                    Style="{StaticResource TransparentStyle}" />
+            <Button x:Name="MoveForwards"
+                    Width="90"
+                    Margin="0,0,15,15"
+                    HorizontalAlignment="Right"
+                    cal:Message.Attach="MoveForwards()"
+                    Content="{helpers:Localization Next}"
+                    FontSize="12"
+                    IsEnabled="{Binding ContinueEnabled}"
+                    Style="{StaticResource TransparentStyle}"
+                    Visibility="{Binding OkVisibility}" />
         </StackPanel>
-
+        <ProgressBar
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Width="76"
+            Height="75"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgressIndicatorVisibility}"
+            Value="0" />
     </Grid>
 </UserControl>

@@ -165,7 +165,7 @@
 
             <userControls:UsfmErrorsDisplay  
                 Grid.Row="1" 
-                DataContext="{Binding .}" />
+                DataContext="{Binding .}" ListViewHeight="200"/>
           
             <ProgressBar
                 Grid.Row="1"

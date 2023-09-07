@@ -681,7 +681,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             }
             else
             {
-                await ParentViewModel!.GoToStep(4);
+                await ParentViewModel!.GoToStep(5);
             }
         }
         // ReSharper restore UnusedMember.Global

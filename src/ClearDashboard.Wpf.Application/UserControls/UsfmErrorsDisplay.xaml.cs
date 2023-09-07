@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.ComponentModel;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -13,8 +14,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// </summary>
     public partial class UsfmErrorsDisplay : UserControl
     {
+        /// <summary>
+        /// Identifies the TargetFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ListViewHeightProperty = DependencyProperty.Register(nameof(ListViewHeight), typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(200d));
 
-        
+        /// <summary>
+        /// Gets or sets the font size for the target tokens.
+        /// </summary>
+        [TypeConverter(typeof(LengthConverter))]
+        [Localizability(LocalizationCategory.None, Readability = Readability.Unreadable)]
+        public double ListViewHeight
+        {
+            get => (double)GetValue(ListViewHeightProperty);
+            set => SetValue(ListViewHeightProperty, value);
+        }
 
         public UsfmErrorsDisplay()
         {

@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -27,6 +28,8 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <system:Boolean x:Key="True">True</system:Boolean>
+            <system:Boolean x:Key="False">False</system:Boolean>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             
         </ResourceDictionary>
@@ -56,7 +59,7 @@
             HorizontalAlignment="Left"
             Content="{helpers:Localization AddParatextCorpusDialog_SelectedBooks}"
             FontSize="20" 
-            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=1}"/>
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

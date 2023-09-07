@@ -84,7 +84,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ProgressIndicatorVisibility = Visibility.Visible;
 
             UsfmErrors = await PerformUsfmErrorCheck(cancellationToken);
-            
+
             await SelectedBookManager!.InitializeBooks(UsfmErrors, false, true, cancellationToken);
 
             ProgressIndicatorVisibility = Visibility.Hidden;

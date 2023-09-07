@@ -58,2095 +58,2101 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>Vă rugăm să introduceți un nume pentru proiectul dvs.</value>
-  </data>
-  <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>Numele este necesar</value>
-  </data>
-  <data name="Marble_DomainsTitle" xml:space="preserve">
-    <value>Domenii</value>
-  </data>
-  <data name="Bcv_NextChapter" xml:space="preserve">
-    <value>Capitolul următor</value>
-  </data>
-  <data name="BiblicalTermsForm_Found" xml:space="preserve">
-    <value>Găsite</value>
-  </data>
-  <data name="Lexicon_AddMeaning" xml:space="preserve">
-    <value>Adăugați sens</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Actualizați</value>
-  </data>
-  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
-    <value>asociere</value>
-  </data>
-  <data name="SlackMessageView_NoInternet" xml:space="preserve">
-    <value>Fara Internet</value>
-  </data>
-  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext funcționează, dar nu este conectat.</value>
-  </data>
-  <data name="SlackMessageView_Combo4" xml:space="preserve">
-    <value>As dori sa fac...</value>
-  </data>
-  <data name="Settings_UserAlreadyExists" xml:space="preserve">
-    <value>Utilizatorul există deja pe server</value>
-  </data>
-  <data name="Pins_Word" xml:space="preserve">
-    <value>Cuvânt</value>
-  </data>
-  <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
-    <value>Paratext traducere înapoi</value>
-  </data>
-  <data name="Notes_Note_Created" xml:space="preserve">
-    <value>Creată</value>
-  </data>
-  <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Schimbați nivelul zoom al conținutului</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>Nu</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
-  </data>
-  <data name="Pds_Target" xml:space="preserve">
-    <value>Ţintă</value>
-  </data>
-  <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>Includeți în rotația afișajului de ceas</value>
-  </data>
-  <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
-    <value>Actualizați și adăugați noi</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>Afișați sarcini de fundal</value>
-  </data>
-  <data name="Notes_Note_NoteStatus" xml:space="preserve">
-    <value>stare</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la vizualizare</value>
-  </data>
-  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>containere; creșterea animalelor</value>
-  </data>
-  <data name="CollabProjectManagementView_Description" xml:space="preserve">
-    <value>Descriere</value>
-  </data>
-  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
-    <value>Salvat pe serverul de la distanță</value>
-  </data>
-  <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
-    <value>cu etichete de la:</value>
-  </data>
-  <data name="Pds_PropertiesMenu" xml:space="preserve">
-    <value>Proprietăți</value>
-  </data>
-  <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Actualizați și adăugați cărți noi</value>
-  </data>
-  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
-    <value>Textul versului</value>
-  </data>
-  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
-    <value>Selectați organizarea</value>
-  </data>
-  <data name="MainView_WindowsMarble" xml:space="preserve">
-    <value>MARMURĂ</value>
-  </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1CO</value>
-  </data>
-  <data name="Marble_Sense" xml:space="preserve">
-    <value>Sens</value>
-  </data>
-  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Creați un utilizator de colaborare</value>
-  </data>
-  <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>Cântec de cântece</value>
-  </data>
-  <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Formatat</value>
+  <data name="EnhancedView_FilterPins" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="REV" xml:space="preserve">
     <value>REV</value>
   </data>
-  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma pentru New Lexeme:</value>
-  </data>
-  <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Faceți clic aici pentru a începe Paratext</value>
-  </data>
-  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>Mod de putere activat</value>
-  </data>
-  <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Habakkuk</value>
-  </data>
-  <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Nume de utilizator:</value>
-  </data>
-  <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
-    <value>Titlu:</value>
-  </data>
-  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Setați cartografierea versului între Corpora paralelizată</value>
-  </data>
-  <data name="NewCollabUserView_Group" xml:space="preserve">
-    <value>Grup:</value>
-  </data>
-  <data name="ProperCase_Esther" xml:space="preserve">
-    <value>Esther</value>
-  </data>
-  <data name="JER" xml:space="preserve">
-    <value>JER</value>
-  </data>
-  <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Verificați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
-  </data>
-  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>Creați noi interlinear</value>
-  </data>
-  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>monument</value>
-  </data>
-  <data name="ProperCase_Titus" xml:space="preserve">
-    <value>Tit</value>
-  </data>
-  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Îndepărtați corpusul</value>
-  </data>
-  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
-    <value>Vedere</value>
-  </data>
-  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
-    <value>Proiecte de colaborare</value>
-  </data>
-  <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Jude</value>
-  </data>
-  <data name="Bcv_Sync" xml:space="preserve">
-    <value>Sincronizare</value>
-  </data>
-  <data name="ProperCase_Hosea" xml:space="preserve">
-    <value>Osea</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>Cheia dvs. de licență este lipsită sau ruptă.</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>Sarcina a fost anulată</value>
-  </data>
-  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>decontare</value>
-  </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
-  </data>
-  <data name="UpdateParatextCorpusDialog_Add" xml:space="preserve">
-    <value>Adăuga nou</value>
-  </data>
-  <data name="Landing_Projects" xml:space="preserve">
-    <value>Proiecte</value>
-  </data>
-  <data name="Settings_Plugins" xml:space="preserve">
-    <value>Pluginuri</value>
-  </data>
-  <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luca</value>
-  </data>
-  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>activități religioase</value>
-  </data>
-  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>Partea țintă</value>
-  </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
-  </data>
-  <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>Concordanţă</value>
-  </data>
-  <data name="BiblicalTermsForm_Category" xml:space="preserve">
-    <value>Categorie</value>
-  </data>
-  <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Iona</value>
-  </data>
-  <data name="Notes_NoteText" xml:space="preserve">
-    <value>Text</value>
-  </data>
-  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Unjoin compus jeton</value>
-  </data>
-  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Paralelizează versetele corporale</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>constructie; activități religioase</value>
-  </data>
-  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
-    <value>Instrument de aliniere</value>
-  </data>
-  <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Coduri puternice</value>
-  </data>
-  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
-    <value>Eliminați acest grup de etichete</value>
-  </data>
-  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>Subdomeniu:</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>Verificarea USFM</value>
-  </data>
-  <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>Definiție Long:</value>
-  </data>
-  <data name="ProperCase_Daniel" xml:space="preserve">
-    <value>Daniel</value>
-  </data>
-  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul de erori:</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Activați afișarea colecțiilor de text vers-by-versel</value>
-  </data>
-  <data name="Pins_Origin" xml:space="preserve">
-    <value>Origine</value>
-  </data>
-  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Crearea bazei de date ...</value>
-  </data>
-  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
-    <value>Utilizatori de colaborare disponibili:</value>
-  </data>
-  <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Levitic</value>
-  </data>
-  <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Creați proiect:</value>
-  </data>
-  <data name="Marble_Book" xml:space="preserve">
-    <value>Carte</value>
-  </data>
-  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Redarea lipsă</value>
-  </data>
-  <data name="Settings_SaveSettings" xml:space="preserve">
-    <value>Salvează setările</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="BiblicalTermsForm_Term" xml:space="preserve">
-    <value>Termen</value>
-  </data>
-  <data name="Pds_Unknown" xml:space="preserve">
-    <value>Necunoscut</value>
-  </data>
-  <data name="ClockUserControl_Delete" xml:space="preserve">
-    <value>Șterge</value>
-  </data>
-  <data name="Pds_InfoToolTip" xml:space="preserve">
-    <value>Afișați informații despre acest proiect</value>
-  </data>
-  <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Timotei</value>
-  </data>
-  <data name="FontSettings_Source" xml:space="preserve">
-    <value>Text sursă:</value>
-  </data>
-  <data name="2KI" xml:space="preserve">
-    <value>2KI</value>
-  </data>
-  <data name="Pins_Match" xml:space="preserve">
-    <value>Meci</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Marcajul selectat ca „nevalid”</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>ființe și puteri supranaturale; titluri</value>
-  </data>
-  <data name="ProperCase_James" xml:space="preserve">
-    <value>James</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="ProjectPicker_ EnableBookSelection" xml:space="preserve">
-    <value>Activați selecția cărților</value>
-  </data>
-  <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>Selectați fusul orar</value>
-  </data>
-  <data name="Marble_All" xml:space="preserve">
-    <value>Toate</value>
-  </data>
-  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Reîmprospătați lista de proiecte de colaborare</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>Marcați alinierea ca „revizuire a nevoilor”</value>
-  </data>
-  <data name="Settings_Email" xml:space="preserve">
-    <value>E-mail</value>
-  </data>
-  <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Adăugați text la fereastra nouă</value>
-  </data>
-  <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>Creați un nou proiect</value>
-  </data>
-  <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Simțul versetului</value>
-  </data>
-  <data name="Done" xml:space="preserve">
-    <value>Terminat</value>
-  </data>
-  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Ștergeți alinierea</value>
-  </data>
-  <data name="Pins_Phrase" xml:space="preserve">
-    <value>Fraza</value>
-  </data>
-  <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>grup nou</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Șterge</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>JON</value>
-  </data>
-  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
-    <value>Aproba</value>
-  </data>
-  <data name="SlackMessageView_BugReport" xml:space="preserve">
-    <value>Raport de erori</value>
-  </data>
-  <data name="Notes_NoteReplies_Read" xml:space="preserve">
-    <value>Văzut</value>
-  </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>Psalmi</value>
-  </data>
-  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Partea sursă</value>
-  </data>
-  <data name="Pins_Suffix" xml:space="preserve">
-    <value>Sufix</value>
-  </data>
-  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
-    <value>Vă rugăm să introduceți un nume pentru proiectul dvs.</value>
-  </data>
-  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
-    <value>Salvat pe serverul de la distanță</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la New View</value>
-  </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>Tren</value>
-  </data>
-  <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Măriți din conținut</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
-  </data>
-  <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Trimiteți această notă la Paratext</value>
-  </data>
-  <data name="ProperCase_Genesis" xml:space="preserve">
-    <value>Geneză</value>
-  </data>
-  <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>Montați întreaga zonă de conținut la Viewport</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>Selectează tot</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>ființe și puteri supranaturale</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Anulare</value>
-  </data>
-  <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>Termeni biblici</value>
-  </data>
-  <data name="Pins_Prefix" xml:space="preserve">
-    <value>Prefix</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Mark selectat drept „revizuire a nevoilor”</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>instrumente; naştere</value>
-  </data>
-  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
-    <value>Nu este găsit pe sistem!</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>construcții; creșterea animalelor</value>
-  </data>
-  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
-    <value>Verset</value>
-  </data>
-  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>Ștergeți acest Lexeme?</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
-  </data>
-  <data name="MRK" xml:space="preserve">
-    <value>MRK</value>
-  </data>
-  <data name="MainView_FileOpen" xml:space="preserve">
-    <value>Deschis</value>
-  </data>
-  <data name="MainView_Layouts" xml:space="preserve">
-    <value>Machete</value>
-  </data>
-  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salvați utilizatorul GitLab pe server</value>
-  </data>
-  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
-    <value>Redări</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Selectați Proiectul Paratext</value>
-  </data>
-  <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studiu</value>
-  </data>
-  <data name="Settings_PowerModes" xml:space="preserve">
-    <value>Moduri de putere</value>
-  </data>
-  <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verificați -vă e -mailul și introduceți codul de validare:</value>
-  </data>
-  <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Expert de șablon de proiect</value>
-  </data>
-  <data name="Bcv_Chapter" xml:space="preserve">
-    <value>CAPITOL</value>
-  </data>
-  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
-    <value>Luciu</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Dezaproba</value>
-  </data>
-  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Proiect de import server</value>
-  </data>
-  <data name="Windows_EnhancedView" xml:space="preserve">
-    <value>Vedere</value>
-  </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext nu rulează</value>
-  </data>
-  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
-    <value>natură</value>
-  </data>
-  <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Alăturați -vă jetoane</value>
-  </data>
-  <data name="Settings_UserName" xml:space="preserve">
-    <value>Nume de utilizator</value>
-  </data>
-  <data name="ProperCase_2_John" xml:space="preserve">
-    <value>2 Ioan</value>
-  </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Vizualizare nouă</value>
-  </data>
-  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
-    <value>scop</value>
-  </data>
-  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>Numărați după text de suprafață</value>
-  </data>
-  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>Alinieri</value>
-  </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>Adresa de e-mail</value>
-  </data>
-  <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Scoateți acest domeniu semantic din acest sens</value>
-  </data>
-  <data name="Copy" xml:space="preserve">
-    <value>Copie</value>
-  </data>
-  <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>E -mail de trimitere</value>
-  </data>
-  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurați utilizatorul de colaborare</value>
-  </data>
-  <data name="Bcv_Offset" xml:space="preserve">
-    <value>DECALAJ</value>
-  </data>
-  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
-    <value>Capitol</value>
-  </data>
-  <data name="Settings_Group" xml:space="preserve">
-    <value>grup</value>
-  </data>
-  <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Proiect paratext</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Marcajul selectat drept „valabil”</value>
-  </data>
-  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Ești sigur că vrei să ștergi acest corpus? Toate notele, alinierile și interlinarile asociate cu acest corpus vor fi șterse și nu pot fi recuperate.</value>
-  </data>
-  <data name="ProperCase_John" xml:space="preserve">
-    <value>Ioan</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Revizuirea alinierii în vrac</value>
-  </data>
-  <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>Jetoane de corpus</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>Editor de aliniere în vrac</value>
-  </data>
-  <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>Isaia</value>
-  </data>
-  <data name="ProperCase_2_Samuel" xml:space="preserve">
-    <value>2 Samuel</value>
-  </data>
-  <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Numiți elementul</value>
-  </data>
-  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>Nu rulează sarcini de fundal</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Interlinear</value>
-  </data>
-  <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>Capitolul anterior</value>
-  </data>
-  <data name="BulkAlignmentReview_Count" xml:space="preserve">
-    <value>Numara</value>
-  </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>MarbleResource</value>
-  </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
-  </data>
-  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>Deselectează tot</value>
-  </data>
-  <data name="MainView_FileNew" xml:space="preserve">
-    <value>Nou</value>
-  </data>
-  <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 Regi</value>
-  </data>
-  <data name="BulkAlignmentReview_Source" xml:space="preserve">
-    <value>Sursă</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
-    <value>Dezaprobat</value>
-  </data>
-  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
-    <value>fructe</value>
-  </data>
-  <data name="MainView_WindowsPINS" xml:space="preserve">
-    <value>PINS</value>
-  </data>
-  <data name="ProperCase_Joel" xml:space="preserve">
-    <value>Joel</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>Ștergeți alinierea pentru „{0}”?</value>
-  </data>
-  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>Creați o nouă tokenizare a corpusului</value>
-  </data>
-  <data name="Language [UID_Key]" xml:space="preserve">
-    <value>Romanian [ro]</value>
-  </data>
-  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
-    <value>Verificați disponibilitatea utilizatorului</value>
-  </data>
-  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Fără erori</value>
-  </data>
-  <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Bază de date:</value>
-  </data>
-  <data name="ProperCase_Philippians" xml:space="preserve">
-    <value>Filipeni</value>
-  </data>
-  <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>Evrei</value>
-  </data>
-  <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
-    <value>previzualizare</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Eroare</value>
-  </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Definiția indisponibilă</value>
-  </data>
-  <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Prin text de notă</value>
-  </data>
-  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Eclesiastes</value>
-  </data>
-  <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>Cleardashboard</value>
-  </data>
-  <data name="MainView_File" xml:space="preserve">
-    <value>Fişier</value>
-  </data>
-  <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Deschis inchis</value>
-  </data>
-  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la New View</value>
-  </data>
-  <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Noi traducere</value>
-  </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
-  </data>
-  <data name="FontSettings_ParagraphMode" xml:space="preserve">
-    <value>Modul de paragraf</value>
-  </data>
-  <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>Definiție scurtă:</value>
-  </data>
-  <data name="1SA" xml:space="preserve">
-    <value>1SA</value>
-  </data>
-  <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zaharia</value>
-  </data>
-  <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Adăugați o notă nouă</value>
-  </data>
-  <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Lemma/forme:</value>
-  </data>
-  <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
-  </data>
-  <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Numele grupului de etichete</value>
-  </data>
-  <data name="BiblicalTermsForm_Note" xml:space="preserve">
-    <value>Notă</value>
-  </data>
-  <data name="SlackMessageView_Suggestion" xml:space="preserve">
-    <value>Sugestie</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Salvați</value>
-  </data>
-  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verificați -vă e -mailul și introduceți codul de validare:</value>
-  </data>
-  <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>Consultantnote</value>
-  </data>
-  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>Cuvinte pivotate</value>
-  </data>
-  <data name="Marble_Definition" xml:space="preserve">
-    <value>Definiție</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>mamifere; animale domestice</value>
-  </data>
-  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
-    <value>Utilizatorii actuali ai proiectului:</value>
-  </data>
-  <data name="FontSettings_Title" xml:space="preserve">
-    <value>Titlu:</value>
-  </data>
-  <data name="Pins_Language" xml:space="preserve">
-    <value>Limba</value>
-  </data>
-  <data name="MergeDialog_OperationErrored" xml:space="preserve">
-    <value>Eroare întâlnită</value>
-  </data>
-  <data name="SlackMessageView_Send" xml:space="preserve">
-    <value>Trimite</value>
-  </data>
-  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Cheia furnizată este defectuoasă. Când sunt decriptate, anumite elemente JSON nu au putut fi găsite.</value>
-  </data>
-  <data name="Pds_Standard" xml:space="preserve">
-    <value>Standard</value>
-  </data>
-  <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acel proiect, o altă aplicație îl folosește în continuare.</value>
-  </data>
-  <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Permiteți ClearDashboard să schimbe modurile de putere în timpul evenimentelor de calcul înalte</value>
-  </data>
-  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Anulați sarcina</value>
-  </data>
-  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>Creați un nou proiect</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
-  </data>
-  <data name="Created" xml:space="preserve">
-    <value>Creată</value>
-  </data>
-  <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Ieremia</value>
-  </data>
-  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>Termeni biblici</value>
-  </data>
-  <data name="Marble_Scope" xml:space="preserve">
-    <value>Domeniu de aplicare:</value>
-  </data>
-  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
-    <value>Utilizatorul există deja pe server</value>
-  </data>
-  <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Selectați cărți</value>
-  </data>
-  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>onoare, respect, statut</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Token '{0}' are mai multe alinieri definite. Făcând clic pe '{1}' va șterge toate alinierile.</value>
-  </data>
-  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Utilizator</value>
-  </data>
-  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>individ nou</value>
-  </data>
-  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>Semnificații cuvinte</value>
+  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Îmbinați -vă complet ... interfață de reîncărcare</value>
-  </data>
-  <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentări</value>
-  </data>
-  <data name="Notes_NoteReplies" xml:space="preserve">
-    <value>Răspunsuri</value>
-  </data>
-  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
-    <value>Invalid</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>Marcați alinierea drept „valabilă”</value>
-  </data>
-  <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>Scoateți această formă lexicală din această lemmă</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
-    <value>Deschis</value>
-  </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>Aproba selectată</value>
-  </data>
-  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>afecţiune</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="Bcv_Verse" xml:space="preserve">
-    <value>VERSET</value>
-  </data>
-  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
-  </data>
-  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Ștergeți acest sens</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
-    <value>instrumente; greutate; comerţ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
-    <value>persoană</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Crea</value>
-  </data>
-  <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>LEMMA</value>
-  </data>
-  <data name="Pds_Dictionary" xml:space="preserve">
-    <value>Dicţionar</value>
-  </data>
-  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
-    <value>Redări</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
-    <value>Luciu:</value>
-  </data>
-  <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotei</value>
-  </data>
-  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
-    <value>moravuri și etică</value>
-  </data>
-  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
-    <value>Cod de verificare a e -mailului:</value>
-  </data>
-  <data name="None" xml:space="preserve">
-    <value>Nici unul</value>
-  </data>
-  <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>Obadia</value>
-  </data>
-  <data name="MainView_About" xml:space="preserve">
-    <value>Despre</value>
-  </data>
-  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>Suprafață de proiectare a proiectului</value>
-  </data>
-  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Adăugați un nou utilizator de colaborare</value>
-  </data>
-  <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Tip lexeme</value>
-  </data>
-  <data name="WordMeaningsView_Sense" xml:space="preserve">
-    <value>Sens:</value>
-  </data>
-  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
-    <value>Ștergeți această traducere</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
-    <value>Membru al proiectului</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați vizualizarea versului pentru vizualizare</value>
-  </data>
-  <data name="ProperCase_Haggai" xml:space="preserve">
-    <value>Haggai</value>
-  </data>
-  <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Efeseni</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Ștergeți toate alinierile?</value>
-  </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Includeți texte biblice?</value>
-  </data>
-  <data name="ProjectValidator_SameName" xml:space="preserve">
-    <value>Există deja un proiect cu același nume. Vă rugăm să alegeți un nume unic.</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
-    <value>oameni; autoritate</value>
-  </data>
-  <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Activați pluginul Aqua experimental</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
-    <value>Detinatorul proiectului</value>
-  </data>
-  <data name="FontSettings_Height" xml:space="preserve">
-    <value>Înălţime:</value>
-  </data>
-  <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>Note de lansare</value>
-  </data>
-  <data name="Pins_Occurences" xml:space="preserve">
-    <value>Apariții</value>
-  </data>
-  <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 Ioan</value>
-  </data>
-  <data name="SlackMessageView_SuggestionEditor" xml:space="preserve">
-    <value>Editor</value>
-  </data>
-  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>Ștergeți această lexemă</value>
-  </data>
-  <data name="Landing_Settings" xml:space="preserve">
-    <value>Setări</value>
-  </data>
-  <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Limba-sursă</value>
-  </data>
-  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Alăturați -vă jetoane pentru pereche de limbă</value>
-  </data>
-  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Aplicați traducerea</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Nume</value>
-  </data>
-  <data name="SlackMessageView_Combo2" xml:space="preserve">
-    <value>Nu sunt în stare să finalizez o sarcină</value>
-  </data>
-  <data name="Lexicon_AddLexeme" xml:space="preserve">
-    <value>Adăugați Lexeme</value>
-  </data>
-  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
-    <value>Necesită revizuire</value>
-  </data>
-  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
-    <value>1 Tesaloniceni</value>
-  </data>
-  <data name="BiblicalTermsForm_All" xml:space="preserve">
-    <value>Toate</value>
-  </data>
-  <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>Mesaj:</value>
-  </data>
-  <data name="Notes_LabelGroupInitialize" xml:space="preserve">
-    <value>Inițializează grupul de etichete</value>
-  </data>
-  <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele dvs. de familie</value>
-  </data>
-  <data name="Pins_Filter" xml:space="preserve">
-    <value>Filtru:</value>
-  </data>
-  <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Vă rugăm să introduceți cheia de licență</value>
-  </data>
-  <data name="ExpandView" xml:space="preserve">
-    <value>Extindeți vizualizarea</value>
-  </data>
-  <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>Ezechiel</value>
-  </data>
-  <data name="ProperCase_Matthew" xml:space="preserve">
-    <value>Matei</value>
-  </data>
-  <data name="EnhancedView_AddAlignment" xml:space="preserve">
-    <value>Adăugați alinierea?</value>
-  </data>
-  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Transliterarewithencoder</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Selectați cărți de procesat</value>
-  </data>
-  <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți prenumele dvs.</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>Adăuga</value>
-  </data>
-  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
-    <value>local</value>
-  </data>
-  <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Afișați vizualizări în oglindă pe un monitor diferit de tabloul de bord</value>
-  </data>
-  <data name="FontSettings_Target" xml:space="preserve">
-    <value>Textul țintă:</value>
-  </data>
-  <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Măriți conținutul</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
-  </data>
-  <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Următoarea carte</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Tip de aliniere:</value>
-  </data>
-  <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Neemia</value>
-  </data>
-  <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>Operația a fost anulată</value>
-  </data>
-  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>păgânism</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="Delete_Project" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
-  </data>
-  <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Ștergeți această notă?</value>
-  </data>
-  <data name="OldTestament" xml:space="preserve">
-    <value>Vechiul Testament</value>
-  </data>
-  <data name="ProjectPicker_ EnableBookSelectionTooltip" xml:space="preserve">
-    <value>Dacă este verificat, veți putea selecta ce cărți să procesați.</value>
-  </data>
-  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
-    <value>Aprobat</value>
-  </data>
-  <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Bord</value>
-  </data>
-  <data name="Pins_Stem" xml:space="preserve">
-    <value>Tulpină</value>
-  </data>
-  <data name="Migrate_Header2" xml:space="preserve">
-    <value>Resetați mapări de versuri la versificarea implicită</value>
-  </data>
-  <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Filtru clar</value>
-  </data>
-  <data name="Notes_FilterStatus_Open" xml:space="preserve">
-    <value>Deschis</value>
-  </data>
-  <data name="Settings_ValidateEmailCode" xml:space="preserve">
-    <value>Validați codul de e -mail</value>
-  </data>
-  <data name="BiblicalTermsDomains_People" xml:space="preserve">
-    <value>oameni</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2PE</value>
-  </data>
-  <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>Creați -vă proiectul pentru a începe.</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
-    <value>Marcați alinierea drept „invalid”</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
-  </data>
-  <data name="ProperCase_Acts" xml:space="preserve">
-    <value>Acte</value>
-  </data>
-  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Managementul colaborării</value>
-  </data>
-  <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Adăugați o formă lexicală la această lemmă</value>
-  </data>
-  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>Dacă este verificat, acest lucru va schimba toate aparițiile nesemnificative ale acestui cuvânt</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
-    <value>Cuvinte aliniate</value>
-  </data>
-  <data name="Marble_Senses" xml:space="preserve">
-    <value>Simțuri</value>
-  </data>
-  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>Îndepărtați acest grup de etichete?</value>
-  </data>
-  <data name="ShellView_User" xml:space="preserve">
-    <value>Utilizator</value>
-  </data>
-  <data name="Windows_AlignmentTool" xml:space="preserve">
-    <value>Instrument de aliniere</value>
-  </data>
-  <data name="ProperCase_2_Corinthians" xml:space="preserve">
-    <value>2 Corinteni</value>
-  </data>
-  <data name="Marble_GeneralInformation" xml:space="preserve">
-    <value>Informații generale</value>
-  </data>
-  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
-    <value>grup; zonă</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>PHM</value>
-  </data>
-  <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Backtranslație</value>
-  </data>
-  <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>Coloseni</value>
-  </data>
-  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Căutați recent</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>Înapoi</value>
-  </data>
-  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>Machete standard</value>
-  </data>
-  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
-  </data>
-  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
-    <value>2 Tesaloniceni</value>
-  </data>
-  <data name="ProperCase_Judges" xml:space="preserve">
-    <value>Judecători</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>start</value>
-  </data>
-  <data name="NewTestament" xml:space="preserve">
-    <value>Noul Testament</value>
-  </data>
-  <data name="Settings_ReservedCaption" xml:space="preserve">
-    <value>Rezervat pentru extinderea viitoare</value>
-  </data>
-  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
-    <value>Creați alinierea cuvintelor noi</value>
-  </data>
-  <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>Creați -vă proiectul folosind expertul șablonului de proiect.</value>
-  </data>
-  <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>Inregistreaza-te</value>
-  </data>
-  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>De asociații</value>
-  </data>
-  <data name="Notes_UnreadReplies" xml:space="preserve">
-    <value>Răspunsuri necitite</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
-  </data>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
-  </data>
-  <data name="ProperCase_2_Kings" xml:space="preserve">
-    <value>2 Regi</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
-    <value>copaci; Parfumuri și condimente</value>
-  </data>
-  <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Trimiteți această notă la Paratext?</value>
-  </data>
-  <data name="SNG" xml:space="preserve">
-    <value>SNG</value>
-  </data>
-  <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Căutare de ebraică/greacă</value>
-  </data>
-  <data name="ProperCase_Micah" xml:space="preserve">
-    <value>Micah</value>
-  </data>
-  <data name="AMO" xml:space="preserve">
-    <value>AMO</value>
-  </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
-  </data>
-  <data name="Pins_Notes" xml:space="preserve">
-    <value>Note</value>
-  </data>
-  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>animale</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Aliniere</value>
-  </data>
-  <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Actualizați la noua versiune a ClearDashboard</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Gestionați proiectele de colaborare</value>
-  </data>
-  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>Contează</value>
-  </data>
-  <data name="ProperCase_2_Peter" xml:space="preserve">
-    <value>2 Petru</value>
-  </data>
-  <data name="Landing_NewProject" xml:space="preserve">
-    <value>Proiect nou</value>
-  </data>
-  <data name="Notes_NoteLabelGroup" xml:space="preserve">
-    <value>grup</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>Cheia de licență este necesară</value>
-  </data>
-  <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Arată backtranslație</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
-    <value>Ștergeți alinierea?</value>
-  </data>
-  <data name="ClockUserControl_Add" xml:space="preserve">
-    <value>Adăuga</value>
-  </data>
-  <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>Referințe de vers</value>
-  </data>
-  <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Modificări de colab disponibile</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>HOS</value>
-  </data>
-  <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adăugați Corpora</value>
-  </data>
-  <data name="ProperCase_Exodus" xml:space="preserve">
-    <value>Exod</value>
-  </data>
-  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
-    <value>Note clare</value>
-  </data>
-  <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>De către utilizatori</value>
-  </data>
-  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Selectați cum se tokenizează corpusul</value>
-  </data>
-  <data name="MainView_Settings" xml:space="preserve">
-    <value>Setări</value>
-  </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
-  </data>
-  <data name="Next" xml:space="preserve">
-    <value>Următorul</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>oameni; onoare, respect, statut</value>
-  </data>
-  <data name="ProperCase_1_Chronicles" xml:space="preserve">
-    <value>1 Cronici</value>
-  </data>
-  <data name="FontSettings_SourceFontSize" xml:space="preserve">
-    <value>Dimensiunea fontului sursă:</value>
-  </data>
-  <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>Notă indicatori:</value>
-  </data>
-  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>ierburi</value>
-  </data>
-  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>Jetoane de corpus</value>
-  </data>
-  <data name="Marble_Verse" xml:space="preserve">
-    <value>Verset</value>
-  </data>
-  <data name="ZEC" xml:space="preserve">
-    <value>ZEC</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Introduceți o nouă traducere</value>
-  </data>
-  <data name="Settings_EmailVerificationCode" xml:space="preserve">
-    <value>Cod de verificare a e -mailului</value>
-  </data>
-  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>Ebraică (OT) macula</value>
-  </data>
-  <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>Grafic de frecvență</value>
-  </data>
-  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Adăugați un sens pentru această lemmă</value>
-  </data>
-  <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Este singuratic aici. Vă rugăm să creați un nou proiect.</value>
-  </data>
-  <data name="Pins_Code" xml:space="preserve">
-    <value>Cod</value>
-  </data>
-  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
-    <value>Cod de validare a e -mailului ClearDashboard</value>
-  </data>
-  <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Etichete</value>
-  </data>
-  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Antrenează modelul simetrizat?</value>
-  </data>
-  <data name="Marble_Domains" xml:space="preserve">
-    <value>Domenii:</value>
-  </data>
-  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>Introduceți o nouă traducere pentru</value>
-  </data>
-  <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algoritm de aliniere a cuvântului mașinii</value>
-  </data>
-  <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1 Corinteni</value>
-  </data>
-  <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>URL:</value>
-  </data>
-  <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Accesați paratext și schimbați proiecte. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
-  </data>
-  <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Se stabili o traducere pentru</value>
-  </data>
-  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calculați noul model de traducere</value>
-  </data>
-  <data name="ProperCase_Amos" xml:space="preserve">
-    <value>Amos</value>
-  </data>
-  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>StudiuBibleAdDitions</value>
-  </data>
-  <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>Semnificații cuvinte</value>
-  </data>
-  <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Revelatie</value>
-  </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
-  </data>
-  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Pinii de filtrare după termeni cheie</value>
-  </data>
-  <data name="Pds_GetLatestFromParatext" xml:space="preserve">
-    <value>Obțineți cele mai recente de la paratext</value>
-  </data>
-  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>Semne și minuni</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Ștergeți alinierea</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Editați | ×</value>
-  </data>
-  <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>A micsora</value>
-  </data>
-  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>Există deja un proiect cu numele '{0}'. Vă rugăm să alegeți un nume unic. "</value>
-  </data>
-  <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați oglindă pe a treia monitor</value>
-  </data>
-  <data name="Pins_Lexeme" xml:space="preserve">
-    <value>Lexem</value>
-  </data>
-  <data name="Notes_TranslationSet" xml:space="preserve">
-    <value>Set de traduceri</value>
-  </data>
-  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Selectați proiect</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>NEH</value>
-  </data>
-  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>Metadate JSON</value>
-  </data>
-  <data name="UseDefaults" xml:space="preserve">
-    <value>Creați utilizarea valorilor implicite</value>
-  </data>
-  <data name="FontSettings_Horizontal" xml:space="preserve">
-    <value>Distanțare orizontală:</value>
-  </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>Cuvânt:</value>
-  </data>
-  <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Un grup de etichete există deja cu nume</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Nume de utilizator:</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
-  </data>
-  <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>Numere</value>
-  </data>
-  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>Prenume este necesar</value>
-  </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>Setări ClearDashboard</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Creați paralelizarea versurilor corporale</value>
-  </data>
-  <data name="MainView_WindowsTextCollections" xml:space="preserve">
-    <value>Colecții de text</value>
-  </data>
-  <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Modificat</value>
-  </data>
-  <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Bord</value>
-  </data>
-  <data name="Delete_Project_Confirmation" xml:space="preserve">
-    <value>Ești sigur că vrei să ștergi acest proiect?</value>
-  </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
-  </data>
-  <data name="Marble_Glosses" xml:space="preserve">
-    <value>GLUSE:</value>
-  </data>
-  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
-    <value>Domeniul semantic:</value>
-  </data>
-  <data name="ProperCase_Joshua" xml:space="preserve">
-    <value>Iosua</value>
-  </data>
-  <data name="MainView_LayoutsDelete" xml:space="preserve">
-    <value>Ștergeți aspectul salvat</value>
-  </data>
-  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>Aplicație închidere</value>
-  </data>
-  <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lematele înrudite</value>
-  </data>
-  <data name="Bcv_PreviousVerse" xml:space="preserve">
-    <value>Versetul anterior</value>
-  </data>
-  <data name="Windows_PINS" xml:space="preserve">
-    <value>Pini</value>
-  </data>
-  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
-  </data>
-  <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Romani</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
-    <value>copaci; fructe</value>
-  </data>
-  <data name="Pds_Resource" xml:space="preserve">
-    <value>Resursă</value>
-  </data>
-  <data name="ProperCase_Mark" xml:space="preserve">
-    <value>marcă</value>
-  </data>
-  <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Pini de filtrare</value>
-  </data>
-  <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>Trimiteți un mesaj slab</value>
-  </data>
-  <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Fragmente din discurs</value>
-  </data>
-  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Dezaproba selectată</value>
-  </data>
-  <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Montați toate nodurile la Viewport</value>
-  </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>CARTE</value>
-  </data>
-  <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>Distanțare verticală:</value>
-  </data>
-  <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>Corpus tokenizat</value>
-  </data>
-  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
-    <value>Ștergeți această viziune?</value>
-  </data>
-  <data name="Settings_CollaborationSettings" xml:space="preserve">
-    <value>Setări de colaborare</value>
-  </data>
-  <data name="Pds_Source" xml:space="preserve">
-    <value>Sursă</value>
-  </data>
-  <data name="DisplayName" xml:space="preserve">
-    <value>Numele de afișare</value>
-  </data>
-  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>Proiecte</value>
-  </data>
-  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>pietre prețioase</value>
-  </data>
-  <data name="Notes_LabelRemove" xml:space="preserve">
-    <value>Scoateți această etichetă</value>
-  </data>
-  <data name="MainView_Windows" xml:space="preserve">
-    <value>Ferestre</value>
-  </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>Parte</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
-    <value>Asociațiile</value>
-  </data>
-  <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Sub domenii:</value>
-  </data>
-  <data name="ProperCase_Deuteronomy" xml:space="preserve">
-    <value>Deuteronom</value>
-  </data>
-  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>Creați utilizator de colaborare</value>
-  </data>
-  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Conținutul cheii de licență decriptate nu se potrivește cu informațiile furnizate.</value>
-  </data>
-  <data name="Notes_Part" xml:space="preserve">
-    <value>Parte</value>
-  </data>
-  <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>Neformat</value>
-  </data>
-  <data name="MainView_ShowLog" xml:space="preserve">
-    <value>Arată jurnal</value>
-  </data>
-  <data name="ProjectSetup_Title" xml:space="preserve">
-    <value>Creați -vă noul proiect</value>
-  </data>
-  <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>TransliterationManual</value>
-  </data>
-  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
-    <value>Carte</value>
-  </data>
-  <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>Dimensiunea fontului titlu:</value>
-  </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>Preferințe</value>
-  </data>
-  <data name="ProjectPicker_NoMatches" xml:space="preserve">
-    <value>Nici-o potrivire.</value>
-  </data>
-  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>Nou utilizator de colaborare</value>
-  </data>
-  <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Parola:</value>
-  </data>
-  <data name="Bcv_NextVerse" xml:space="preserve">
-    <value>Următorul verset</value>
-  </data>
-  <data name="Settings_MultiMonitorSupport" xml:space="preserve">
-    <value>Suport multi -monitor</value>
-  </data>
-  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
-    <value>zonă; natură</value>
-  </data>
-  <data name="NewCollabUserView_Email" xml:space="preserve">
-    <value>E-mail:</value>
-  </data>
-  <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Suportă formatul Markdown</value>
-  </data>
-  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Aliniați '{0}' cu '{1}'?</value>
-  </data>
-  <data name="Marble_Verses" xml:space="preserve">
-    <value>Versuri</value>
-  </data>
-  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>Ștergeți interlinear</value>
-  </data>
-  <data name="Pins_Forms" xml:space="preserve">
-    <value>Forme</value>
-  </data>
-  <data name="Pins_Gloss" xml:space="preserve">
-    <value>Luciu</value>
-  </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>Toate</value>
-  </data>
-  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>probleme cunoscute</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>stare</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
     <value>Greacă (NT) macula</value>
   </data>
-  <data name="Notes_FilterStatus_Any" xml:space="preserve">
-    <value>Orice</value>
+  <data name="Pds_GetLatestFromParatext" xml:space="preserve">
+    <value>Loading...</value>
   </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>Tip</value>
+  <data name="FontSettings_Source" xml:space="preserve">
+    <value>Text sursă:</value>
   </data>
-  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
-    <value>Numărați prin instruire text</value>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
   </data>
-  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Înțelepciune, înțelegere</value>
+  <data name="Marble_Senses" xml:space="preserve">
+    <value>Loading...</value>
   </data>
-  <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Proiect:</value>
-  </data>
-  <data name="Notes_FilterExpander" xml:space="preserve">
-    <value>Filtre</value>
-  </data>
-  <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest interval de versuri.</value>
-  </data>
-  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>sacrificii și oferte</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
-    <value>Eroare la crearea utilizatorului pe server</value>
-  </data>
-  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Utilizatorul este deja pe sistem!</value>
-  </data>
-  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Creați alinierea</value>
-  </data>
-  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
-    <value>Adăugați un Lexeme</value>
-  </data>
-  <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Note</value>
-  </data>
-  <data name="ProperCase_1_Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
-  </data>
-  <data name="ProperCase_Ruth" xml:space="preserve">
-    <value>Ruth</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>Am finalizat o sarcină, dar a fost dificil</value>
-  </data>
-  <data name="MainView_LayoutsSave" xml:space="preserve">
-    <value>Salvați aspectul curent</value>
-  </data>
-  <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Există deja un lexeme pentru lemma</value>
-  </data>
-  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
-    <value>Creați alinierea cuvintelor noi</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="MainView_GatherLogs" xml:space="preserve">
-    <value>Trimiteți un mesaj pentru a șterge</value>
-  </data>
-  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
-    <value>meşteşuguri; pânză</value>
-  </data>
-  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Machete de proiect</value>
-  </data>
-  <data name="MainView_Help" xml:space="preserve">
-    <value>Ajutor</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>Bine</value>
-  </data>
-  <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Schimbați toate aparițiile nesemnificative</value>
-  </data>
-  <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>Lexem</value>
-  </data>
-  <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Biblia interlinear (LWC)</value>
-  </data>
-  <data name="EZR" xml:space="preserve">
-    <value>EZR</value>
-  </data>
-  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Sursa ref</value>
-  </data>
-  <data name="TargetContextView_ZoomIn" xml:space="preserve">
-    <value>A mari</value>
-  </data>
-  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
-    <value>Toate</value>
-  </data>
-  <data name="AboutView_Version" xml:space="preserve">
-    <value>Versiune</value>
-  </data>
-  <data name="MainView_GettingStartedGuide" xml:space="preserve">
-    <value>Ghidul începătorului</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algoritm de aliniere a cuvântului mașinii</value>
-  </data>
-  <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>Proverbe</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>Creați alinierea cuvintelor</value>
-  </data>
-  <data name="BiblicalTermsDomains_All" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Severitate:</value>
-  </data>
-  <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>Căutare de Gloss English</value>
-  </data>
-  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Numele proiectului dat conține caractere ilegale. Caracterele valide includ „A-Z” (MADICACASE ȘI UPPERCASE), NUMĂRĂ „0-9” și caracterele '-' și „_”.</value>
-  </data>
-  <data name="Notes_LabelAdd" xml:space="preserve">
-    <value>Adăugați o etichetă</value>
-  </data>
-  <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Interlinear</value>
-  </data>
-  <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Total verset</value>
-  </data>
-  <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Trimiteți e -mail de validare</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="Notes_LabelGroupAdd" xml:space="preserve">
-    <value>Adăugați grupul de etichete</value>
-  </data>
-  <data name="Notes_NoteLabelGroups" xml:space="preserve">
-    <value>Grupuri de etichete</value>
-  </data>
-  <data name="Marble_Chapter" xml:space="preserve">
-    <value>Capitol</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>da</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="ProperCase_3_John" xml:space="preserve">
-    <value>3 Ioan</value>
-  </data>
-  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
-    <value>Mașinărie</value>
-  </data>
-  <data name="LUK" xml:space="preserve">
-    <value>LUK</value>
-  </data>
-  <data name="ClockUserControl_LocalTime" xml:space="preserve">
-    <value>Ora locala</value>
-  </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Anulați traducerea</value>
-  </data>
-  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
-    <value>instrumente</value>
-  </data>
-  <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Parola:</value>
-  </data>
-  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
-    <value>Jeton de acces:</value>
-  </data>
-  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Adăugați un nou interlinear</value>
-  </data>
-  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
-    <value>Valabil</value>
-  </data>
-  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext nu este instalat. Vă rugăm să instalați Paratext și să reluați aplicația ClearDashboard.</value>
-  </data>
-  <data name="ProperCase_1_Peter" xml:space="preserve">
-    <value>1 Petru</value>
-  </data>
-  <data name="MergeDialog_OperationComplete" xml:space="preserve">
-    <value>Funcționare completă!</value>
-  </data>
-  <data name="Windows_TextCollection" xml:space="preserve">
-    <value>Colecția de text</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Închis</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>Număr de tokenizări diferite</value>
-  </data>
-  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
-    <value>Răspunsuri necitite prezente</value>
-  </data>
-  <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Referințe de încărcare</value>
-  </data>
-  <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versiune:</value>
-  </data>
-  <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Philemon</value>
-  </data>
-  <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>Adresa de e-mail</value>
-  </data>
-  <data name="MainView_AccountInfo" xml:space="preserve">
-    <value>informatii despre cont</value>
-  </data>
-  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>Scalați conținutul la 100%</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1JN</value>
-  </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
-  </data>
-  <data name="BiblicalTermsForm_Project" xml:space="preserve">
-    <value>Proiect</value>
-  </data>
-  <data name="ProjectPicker_GetStarted" xml:space="preserve">
-    <value>Incepe</value>
-  </data>
-  <data name="ProperCase_2_Chronicles" xml:space="preserve">
-    <value>2 Cronici</value>
-  </data>
-  <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>Am pierdut datele într -un proiect</value>
-  </data>
-  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>Deschideți recent</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Creați interlinear</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="ShellView_Loading" xml:space="preserve">
-    <value>Se încarcă...</value>
-  </data>
-  <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Galateni</value>
-  </data>
-  <data name="Settings_TextCollections" xml:space="preserve">
-    <value>Colecția de text</value>
-  </data>
-  <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
-    <value>Proiect de șablon vrăjitor: {0}</value>
-  </data>
-  <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Afișați pre-versiuni</value>
-  </data>
-  <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Auxiliar</value>
-  </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
-  </data>
-  <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>Cartea anterioară</value>
-  </data>
-  <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Afișați controalele de vizualizare</value>
-  </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Reîmprospăta</value>
-  </data>
-  <data name="ProperCase_Nahum" xml:space="preserve">
-    <value>Nahum</value>
-  </data>
-  <data name="EnhancedView_Notes" xml:space="preserve">
-    <value>Note</value>
-  </data>
-  <data name="BulkAlignmentReview_Target" xml:space="preserve">
-    <value>Ţintă</value>
-  </data>
-  <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Aliniere</value>
-  </data>
-  <data name="Notes_Word" xml:space="preserve">
-    <value>Cuvânt</value>
-  </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Adăugați un domeniu semantic la acest sens</value>
-  </data>
-  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
-    <value>grup</value>
-  </data>
-  <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea fontului țintă:</value>
-  </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>Adăugați un domeniu semantic</value>
-  </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>Validați codul de e -mail</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>Închide</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
-    <value>mamifere; animale salbatice</value>
-  </data>
-  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Închis</value>
-  </data>
-  <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Sensuri:</value>
-  </data>
-  <data name="WordMeaningsView_Domain" xml:space="preserve">
-    <value>Domeniu:</value>
+  <data name="Start" xml:space="preserve">
+    <value>Loading...</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Creat de</value>
   </data>
-  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>Copiați în clipboard</value>
-  </data>
-  <data name="Pds_Xml" xml:space="preserve">
-    <value>XML</value>
-  </data>
-  <data name="Settings_Reserved" xml:space="preserve">
-    <value>Rezervat</value>
-  </data>
-  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
-    <value>zonă</value>
-  </data>
-  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
-    <value>agricultură</value>
-  </data>
-  <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Prin etichete</value>
-  </data>
-  <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>Marimea fontului:</value>
-  </data>
-  <data name="Pds_Daughter" xml:space="preserve">
-    <value>Fiică</value>
-  </data>
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
-  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vizualizare</value>
+  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
+    <value>Subdomeniu:</value>
   </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
+  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
+    <value>asociere</value>
   </data>
-  <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Resetați mapări de versuri la versificarea implicită</value>
+  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
+    <value>Loading...</value>
   </data>
-  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>doliu</value>
+  <data name="MainView_WindowsTextCollections" xml:space="preserve">
+    <value>Colecții de text</value>
   </data>
-  <data name="ProperCase_Job" xml:space="preserve">
-    <value>Loc de munca</value>
+  <data name="Marble_Scope" xml:space="preserve">
+    <value>Loading...</value>
   </data>
-  <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Nume</value>
+  <data name="Pds_Dictionary" xml:space="preserve">
+    <value>Dicţionar</value>
   </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>Traduceri:</value>
+  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
+    <value>Textul versului</value>
   </data>
-  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
-    <value>Cod de validare a e -mailului ClearDashboard</value>
+  <data name="Marble_Book" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_FilterStatus_Open" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Delete_Project_Confirmation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Genesis" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_PropertiesMenu" xml:space="preserve">
+    <value>Proprietăți</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
+    <value>Cuvinte aliniate</value>
+  </data>
+  <data name="Pds_Resource" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
+    <value>Interlinear</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_NoteLabels" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Bcv_Verse" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_1_Samuel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Language" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Mark" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_LayoutsDelete" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Deuteronomy" xml:space="preserve">
+    <value>Deuteronom</value>
+  </data>
+  <data name="Pins_LexemeType" xml:space="preserve">
+    <value>Tip lexeme</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
+    <value>Instrument de aliniere</value>
+  </data>
+  <data name="Pins_Code" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
+    <value>De asociații</value>
+  </data>
+  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="SlackMessageView_Combo2" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RegistrationDialogView_Register" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_SubDomains" xml:space="preserve">
+    <value>Sub domenii:</value>
+  </data>
+  <data name="Notes_LabelGroupName" xml:space="preserve">
+    <value>Numele grupului de etichete</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>Adresa de e-mail</value>
   </data>
   <data name="Landing_Project" xml:space="preserve">
-    <value>Proiect</value>
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_FilterStatus_Any" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_Note_Modified" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
+    <value>Dezaprobat</value>
+  </data>
+  <data name="Notes_LabelGroupExists" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Esther" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_SourceLanguage" xml:space="preserve">
+    <value>Limba-sursă</value>
+  </data>
+  <data name="WordMeaningsView_Domain" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Lamentations" xml:space="preserve">
+    <value>Lamentații</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Joel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_MultiMonitorSupport" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="Lexicon_Concordance" xml:space="preserve">
+    <value>Concordanţă</value>
+  </data>
+  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_BackTranslation" xml:space="preserve">
+    <value>Backtranslație</value>
+  </data>
+  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_3_John" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Bcv_Offset" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_LoadReferences" xml:space="preserve">
+    <value>Referințe de încărcare</value>
+  </data>
+  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_1_Timothy" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_Word" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_CreateNote" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Daniel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
+    <value>probleme cunoscute</value>
+  </data>
+  <data name="BiblicalTermsForm_Term" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Philemon" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ClockUserControl_Name" xml:space="preserve">
+    <value>Numiți elementul</value>
+  </data>
+  <data name="ProperCase_Titus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="FontSettings_Vertical" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_FileNew" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="SlackMessageView_NoInternet" xml:space="preserve">
+    <value>Fara Internet</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
+    <value>Selectați cărți</value>
+  </data>
+  <data name="Pds_ShowVersesMenu" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
+    <value>Căutați recent</value>
+  </data>
+  <data name="Pds_SwitchParatextProject" xml:space="preserve">
+    <value>Accesați paratext și schimbați proiecte. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
     <value>Adăugați un grup de etichete</value>
   </data>
-  <data name="NewCollabUserView_FirstName" xml:space="preserve">
-    <value>Nume</value>
+  <data name="MainView_ShowLog" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
+    <value>JSON Metadate</value>
+  </data>
+  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_WindowsDashboard" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
+    <value>Adăugați un Lexeme</value>
+  </data>
+  <data name="Marble_PartsOfSpeech" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="TargetContextView_ZoomOut" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
+    <value>Semnificații cuvinte</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
+    <value>Cuvinte pivotate</value>
+  </data>
+  <data name="ProperCase_Galatians" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Leviticus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Exodus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Bcv_NextVerse" xml:space="preserve">
+    <value>Următorul verset</value>
+  </data>
+  <data name="MainView_Layouts" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="1SA" xml:space="preserve">
+    <value>1SA</value>
+  </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>Selectați proiect</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_AccountInfo" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
+    <value>Cărți selectate</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
+    <value>Partea țintă</value>
+  </data>
+  <data name="ProjectPicker_AppName" xml:space="preserve">
+    <value>Cleardashboard</value>
+  </data>
+  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewTestament" xml:space="preserve">
+    <value>Noul Testament</value>
+  </data>
+  <data name="Settings_PowerModes" xml:space="preserve">
+    <value>Moduri de putere</value>
+  </data>
+  <data name="EnhancedView_AddAlignment" xml:space="preserve">
+    <value>Adăugați alinierea?</value>
+  </data>
+  <data name="Pds_Source" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Acts" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
+    <value>agricultură</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
+    <value>Tip de aliniere:</value>
+  </data>
+  <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
+    <value>Aplicație închidere</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Ruth" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_Sense" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Malachi" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Bcv_PreviousVerse" xml:space="preserve">
+    <value>Versetul anterior</value>
+  </data>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Job" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_DomainsTitle" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_StartParatext" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="JiraResultsView_URL" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
+    <value>Ștergeți alinierea</value>
+  </data>
+  <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>Membru al proiectului</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_FilterExpander" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_Version" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_FilterNoteText" xml:space="preserve">
+    <value>Prin text de notă</value>
+  </data>
+  <data name="ShellView_ShowPreReleases" xml:space="preserve">
+    <value>Afișați pre-lansarea</value>
+  </data>
+  <data name="ProjectPicker_NoMatches" xml:space="preserve">
+    <value>Nici-o potrivire.</value>
+  </data>
+  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
+    <value>Domeniul semantic:</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
+    <value>Jetoane de corpus</value>
+  </data>
+  <data name="Notes_Part" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_LabelRemove" xml:space="preserve">
+    <value>Scoateți această etichetă</value>
+  </data>
+  <data name="Settings_ReservedCaption" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
+    <value>Creați alinierea</value>
+  </data>
+  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_All" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="ProjectPicker_CreateProject" xml:space="preserve">
+    <value>Creați proiect:</value>
+  </data>
+  <data name="Pds_FitNodesToViewport" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Forms" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ShellView_UpdateFound" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>Adăugați text la vizualizare</value>
+  </data>
+  <data name="FontSettings_TitleFontSize" xml:space="preserve">
+    <value>Dimensiunea fontului titlu:</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_ResetVerseVersification" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>Verificarea USFM</value>
+  </data>
+  <data name="EnhancedView_ShowControls" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_AddNewNote" xml:space="preserve">
+    <value>Adăugați o notă nouă</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_FilterUsers" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
+    <value>Numărul erorilor:</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
+  </data>
+  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_SearchHebrew" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_1_John" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
+    <value>Ștergeți proiectul</value>
+  </data>
+  <data name="SlackMessageView_Combo1" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Hosea" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="Notes_NoteLabelGroups" xml:space="preserve">
+    <value>Grupuri de etichete</value>
+  </data>
+  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
+    <value>Sursa ref</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="Marble_Verse" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_2_Corinthians" xml:space="preserve">
+    <value>2 Corinteni</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
+    <value>copaci; fructe</value>
+  </data>
+  <data name="NewCollabUserView_LastName" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_NewTranslation" xml:space="preserve">
+    <value>Noi traducere</value>
+  </data>
+  <data name="SlackMessageView_Suggestion" xml:space="preserve">
+    <value>Sugestie</value>
+  </data>
+  <data name="ProjectSetup_Hint" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_FrequencyGraph" xml:space="preserve">
+    <value>Grafic de frecvență</value>
+  </data>
+  <data name="Bcv_Sync" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_GettingStartedGuide" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
+    <value>Machete de proiect</value>
+  </data>
+  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_MarbleResource" xml:space="preserve">
+    <value>MarbleResource</value>
+  </data>
+  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_1_Chronicles" xml:space="preserve">
+    <value>1 Cronici</value>
+  </data>
+  <data name="ProperCase_2_Samuel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="UseDefaults" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_DefinitionShort" xml:space="preserve">
+    <value>Definiție scurtă:</value>
+  </data>
+  <data name="Pins_Suffix" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_Database" xml:space="preserve">
+    <value>Bază de date:</value>
+  </data>
+  <data name="NewCollabUserView_Group" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="Marble_StrongCodes" xml:space="preserve">
+    <value>Coduri puternice</value>
+  </data>
+  <data name="ProjectPicker_NoProject" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Luke" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Ephesians" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_Daughter" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_Notes" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="JiraResultsView_Username" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ClockUserControl_Include" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="SlackMessageView_Message" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="Bcv_NextBook" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
+    <value>individ nou</value>
+  </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_ChangeZoom" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="Marble_SearchEnglish" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="FontSettings_Height" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Amos" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Numele de afișare</value>
+  </data>
+  <data name="ProperCase_Colossians" xml:space="preserve">
+    <value>Coloseni</value>
+  </data>
+  <data name="ProperCase_Isaiah" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="FontSettings_Target" xml:space="preserve">
+    <value>Textul țintă:</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
+    <value>meşteşuguri; pânză</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="Bcv_PreviousChapter" xml:space="preserve">
+    <value>Capitolul anterior</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Nehemiah" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_FilterLabels" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Prefix" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="Landing_NewProject" xml:space="preserve">
+    <value>Proiect nou</value>
+  </data>
+  <data name="MainView_Windows" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="BulkAlignmentReview_Target" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
+    <value>decontare</value>
+  </data>
+  <data name="Notes_SendConfirmation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RegistrationView_FirstName" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_FitContentToViewport" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_LemmaForms" xml:space="preserve">
+    <value>Lemma/forme:</value>
+  </data>
+  <data name="ShellView_Loading" xml:space="preserve">
+    <value>Se încarcă...</value>
+  </data>
+  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
+    <value>Numele proiectului dat conține caractere ilegale. Caracterele valide includ „A-Z” (MADICACASE ȘI UPPERCASE), NUMĂRĂ „0-9” și caracterele '-' și „_”.</value>
+  </data>
+  <data name="ProperCase_Song of Songs" xml:space="preserve">
+    <value>Cântec de cântece</value>
+  </data>
+  <data name="MergeDialog_OperationComplete" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_PowerModesDescription" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Windows_EnhancedView" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Windows_PINS" xml:space="preserve">
+    <value>Căutare termen</value>
+  </data>
+  <data name="Pds_Auxiliary" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Zechariah" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Landing_Projects" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="SlackMessageView_Send" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_ChangeAll" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_Note_Created" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_AddLexeme" xml:space="preserve">
+    <value>Adăugați Lexeme</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_2_Kings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_Domains" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Romans" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_Meanings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Proverbs" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Windows_AlignmentTool" xml:space="preserve">
+    <value>Instrument de aliniere</value>
+  </data>
+  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
+    <value>Jeton de acces:</value>
+  </data>
+  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Match" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MergeDialog_OperationCancelled" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
+    <value>Redări</value>
+  </data>
+  <data name="FontSettings_Horizontal" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_WindowsNotes" xml:space="preserve">
+    <value>Lista de note</value>
+  </data>
+  <data name="MergeDialog_OperationErrored" xml:space="preserve">
+    <value>Eroare întâlnită</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="FontSettings_ParagraphMode" xml:space="preserve">
+    <value>Modul de paragraf</value>
+  </data>
+  <data name="SlackMessageView_Combo3" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_CreateLong" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
+  </data>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>Salvează setările</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_DeleteError" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_NoVerseData" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Gloss" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ClockUserControl_Add" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ExpandView" xml:space="preserve">
+    <value>Extindeți vizualizarea</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
+  </data>
+  <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Micah" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Windows_TextCollection" xml:space="preserve">
+    <value>Colecția de text</value>
+  </data>
+  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Bcv_PreviousBook" xml:space="preserve">
+    <value>Cartea anterioară</value>
+  </data>
+  <data name="Notes_NoteReplies" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="TargetContextView_Formatted" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_People" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_Glosses" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
+    <value>Deschideți recent</value>
+  </data>
+  <data name="UpdateParatextCorpusDialog_Add" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_JoinTokens" xml:space="preserve">
+    <value>Alăturați -vă jetoane</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_Email" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_Reserved" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_Interlinear" xml:space="preserve">
+    <value>Interlinear</value>
+  </data>
+  <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_Note_NoteStatus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RegistrationView_LicenseKey" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_Paratext" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_ShowBackTranslation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Joshua" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Occurences" xml:space="preserve">
+    <value>Apariții</value>
+  </data>
+  <data name="FontSettings_Title" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="Notes_LabelGroupInitialize" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>Detinatorul proiectului</value>
+  </data>
+  <data name="Pds_InfoToolTip" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
+    <value>Ești sigur că vrei să ștergi acest corpus? Toate notele, alinierile și interlinarile asociate cu acest corpus vor fi șterse și nu pot fi recuperate.</value>
+  </data>
+  <data name="OldTestament" xml:space="preserve">
+    <value>Vechiul Testament</value>
+  </data>
+  <data name="Marble_VerseSense" xml:space="preserve">
+    <value>Simțul versetului</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>Adăugați la vizualizare</value>
+  </data>
+  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Jeremiah" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_Project" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="WordMeaningsView_Sense" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_Category" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
+    <value>Adăugați la New View</value>
+  </data>
+  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
+    <value>Aplicați traducerea</value>
+  </data>
+  <data name="ProperCase_Ezekiel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_Alignment" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Numbers" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_Plugins" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="TargetContextView_Unformatted" xml:space="preserve">
+    <value>Neformat</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_AddMeaning" xml:space="preserve">
+    <value>Adăugați sens</value>
   </data>
   <data name="ZEP" xml:space="preserve">
     <value>ZEP</value>
   </data>
-  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
-    <value>Domeniu de aplicare:</value>
+  <data name="Lexicon_SetTranslation" xml:space="preserve">
+    <value>Loading...</value>
   </data>
-  <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Vizualizați/creați note</value>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_VerseTotal" xml:space="preserve">
+    <value>Total verset</value>
+  </data>
+  <data name="Migrate_Header2" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="FontSettings_TargetFontSize" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Jonah" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
+    <value>Ștergeți alinierea</value>
+  </data>
+  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="SlackMessageView_Combo4" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="LicenseValidator_LastMissing" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_StudyBible" xml:space="preserve">
+    <value>Studiu</value>
+  </data>
+  <data name="Notes_TranslationSet" xml:space="preserve">
+    <value>Set de traduceri</value>
+  </data>
+  <data name="Notes_LabelGroupAdd" xml:space="preserve">
+    <value>Adăugați grupul de etichete</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_AddForm" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Notes" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="Pds_Xml" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Stem" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="FontSettings_NoteIndicators" xml:space="preserve">
+    <value>Notă indicatori:</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Source" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="Bcv_Chapter" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ShellView_User" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_GatherLogs" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Haggai" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="ProperCase_2_John" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Phrase" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="Lexicon_LexemeExists" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="Language [UID_Key]" xml:space="preserve">
+    <value>Romanian [ro]</value>
+  </data>
+  <data name="Notes_NoteLabelGroup" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_FileOpen" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
+    <value>Note clare</value>
+  </data>
+  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
+    <value>zonă; natură</value>
+  </data>
+  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
+    <value>Asociațiile</value>
+  </data>
+  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>Preferințe</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="TargetContextView_ZoomIn" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Zephaniah" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_LabelAdd" xml:space="preserve">
+    <value>Adăugați o etichetă</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Hebrews" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_RemoveDomain" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_SendToParatext" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Nahum" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Windows_CorpusTokens" xml:space="preserve">
+    <value>Jetoane de corpus</value>
+  </data>
+  <data name="MainView_WindowsMarble" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_NoteReplies_Read" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
+    <value>Machete standard</value>
+  </data>
+  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_AddCorpora" xml:space="preserve">
+    <value>Adăugați Corpora</value>
+  </data>
+  <data name="Pds_ConsultantNotes" xml:space="preserve">
+    <value>Consultantnote</value>
+  </data>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_Settings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_Lexeme" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_TextCollections" xml:space="preserve">
+    <value>Colecția de text</value>
+  </data>
+  <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_FirstName" xml:space="preserve">
+    <value>Nume</value>
+  </data>
+  <data name="ProperCase_James" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_Password" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_TransliterationManual" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Windows_Dashboard" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="FontSettings_FontSize" xml:space="preserve">
+    <value>Marimea fontului:</value>
+  </data>
+  <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_ParatextProject" xml:space="preserve">
+    <value>Proiect paratext</value>
+  </data>
+  <data name="Pins_Word" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>Aproba selectată</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="Pds_Standard" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="Notes_DeleteConfirmation" xml:space="preserve">
+    <value>Ștergeți această notă?</value>
+  </data>
+  <data name="SlackMessageView_Title" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_Target" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Delete_Project" xml:space="preserve">
+    <value>Ștergeți proiectul</value>
+  </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_1_Kings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="FontSettings_SourceFontSize" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
+    <value>Partea sursă</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
+    <value>Termeni biblici</value>
+  </data>
+  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewCollabUserView_Username" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_NoteText" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_2_Peter" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_DefinitionLong" xml:space="preserve">
+    <value>Definiție Long:</value>
+  </data>
+  <data name="ProjectPicker_GetStarted" xml:space="preserve">
+    <value>Incepe</value>
+  </data>
+  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="SlackMessageView_SuggestionEditor" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
+    <value>Redări</value>
+  </data>
+  <data name="Marble_All" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_Note" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_TokenizedCorpus" xml:space="preserve">
+    <value>Corpus tokenizat</value>
+  </data>
+  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ClockUserControl_LocalTime" xml:space="preserve">
+    <value>Ora locala</value>
+  </data>
+  <data name="Pins_Origin" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_Definition" xml:space="preserve">
+    <value>Definiție</value>
+  </data>
+  <data name="Lexicon_RemoveForm" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectSetup_Title" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewProjectDialog_Title" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
+    <value>Dezaproba</value>
+  </data>
+  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="JiraResultsView_Password" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_RelatedLemmas" xml:space="preserve">
+    <value>Lematele înrudite</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="SlackMessageView_BugReport" xml:space="preserve">
+    <value>Raport de erori</value>
+  </data>
+  <data name="ProperCase_1_Corinthians" xml:space="preserve">
+    <value>1 Corinteni</value>
+  </data>
+  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProjectPicker_Project" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="RegistrationView_LastName" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="ShellView_ShowNotes" xml:space="preserve">
+    <value>Note de lansare</value>
+  </data>
+  <data name="ProperCase_2_Chronicles" xml:space="preserve">
+    <value>2 Cronici</value>
+  </data>
+  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Matthew" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
+  </data>
+  <data name="Marble_Chapter" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
+    <value>Selectează tot</value>
+  </data>
+  <data name="ClockUserControl_NewGroup" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
+    <value>grup; zonă</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
+    <value>Ștergeți alinierea?</value>
+  </data>
+  <data name="ProperCase_Obadiah" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_UnreadReplies" xml:space="preserve">
+    <value>Răspunsuri necitite</value>
+  </data>
+  <data name="ProperCase_Jude" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ClockUserControl_Select" xml:space="preserve">
+    <value>Selectați fusul orar</value>
+  </data>
+  <data name="ProperCase_1_Peter" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Judges" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_ClearFilter" xml:space="preserve">
+    <value>Filtru clar</value>
+  </data>
+  <data name="ProperCase_Philippians" xml:space="preserve">
+    <value>Filipeni</value>
+  </data>
+  <data name="MainView_WindowsPINS" xml:space="preserve">
+    <value>PINS</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Notes_OpenClosed" xml:space="preserve">
+    <value>Deschis inchis</value>
+  </data>
+  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
+    <value>2 Tesaloniceni</value>
+  </data>
+  <data name="ProjectValidator_SameName" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_Found" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsForm_All" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
+    <value>Necesită revizuire</value>
+  </data>
+  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
+    <value>Alinieri</value>
+  </data>
+  <data name="BulkAlignmentReview_Count" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_VerseReferences" xml:space="preserve">
+    <value>Referințe de vers</value>
+  </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>Adresa de e-mail</value>
+  </data>
+  <data name="ProperCase_Habakkuk" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pins_Filter" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_GeneralInformation" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Revelation" xml:space="preserve">
+    <value>Revelatie</value>
+  </data>
+  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
+    <value>Anulați sarcina</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="MainView_LayoutsSave" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Windows_BiblicalTerms" xml:space="preserve">
+    <value>Termeni biblici</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_ZoomIn" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_John" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Landing_Settings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>Traduceri:</value>
+  </data>
+  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Pds_Unknown" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
+    <value>Deselectează tot</value>
+  </data>
+  <data name="Settings_AquaEnabled" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ClockUserControl_Delete" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Lexicon_Lemma" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Windows_WordMeanings" xml:space="preserve">
+    <value>Semnificații cuvinte</value>
+  </data>
+  <data name="Pins_Lexeme" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Marble_Verses" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
+    <value>Ștergeți această viziune?</value>
+  </data>
+  <data name="ProperCase_2_Timothy" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
+  </data>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>Descriere</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
+    <value>1 Tesaloniceni</value>
+  </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
+    <value>Eclesiastes</value>
+  </data>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
+  </data>
+  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
+    <value>Eliminați corpusul</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="Pds_ZoomOut" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Bcv_NextChapter" xml:space="preserve">
+    <value>Capitolul următor</value>
   </data>
 </root>
