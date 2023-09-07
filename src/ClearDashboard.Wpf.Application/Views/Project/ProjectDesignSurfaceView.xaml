@@ -308,7 +308,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 IsHitTestVisible="False"
-                                Text="{Binding CorpusType}" >
+                                Text="{Binding CorpusType}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="{StaticResource NodeBorderBrush}" />

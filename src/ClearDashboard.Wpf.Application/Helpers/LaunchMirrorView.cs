@@ -124,7 +124,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 pinsViewModel.MainGrid.Tag = "True";
             }
 
-            mirror.Title = title;
+            mirror.Title = $"{title} Expanded View";
 
             // force the MirrorView to show
             mirror.Show();

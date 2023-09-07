@@ -1219,6 +1219,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
         }
 
+        public async void ShowCollaborationGetLatest(DashboardProject project)
+        {
+            await ProjectManager.LoadProject(project.ProjectName);
+            if (_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
+            {
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Merge;
+
+                    this._windowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
+                        project.GitLabUpdateNeeded = false;
+                    }
+                }
+            }
+        }
+
         #endregion  Methods
 
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)

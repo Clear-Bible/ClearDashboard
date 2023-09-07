@@ -557,25 +557,28 @@
                                         </Button.Style>
                                     </Button>
 
-                                    <TextBlock
+                                    <Button
                                         Grid.Row="4"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2"
                                         Padding="2"
-                                        Background="{StaticResource GreenLightBrush}"
-                                        TextAlignment="Center">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility" Value="Collapsed" />
+                                        HorizontalContentAlignment="Center"
+                                        cal:Message.Attach="ShowCollaborationGetLatest($dataContext)"
+                                        Background="{StaticResource GreenLightBrush}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
+                                                    <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="False">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </TextBlock.Style>
+                                        </Button.Style>
                                         <Run Text="{helpers:Localization MainView_RemoteUpdateAvailable}" />
-                                    </TextBlock>
+                                    </Button>
 
                                 </Grid>
 
