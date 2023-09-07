@@ -23,7 +23,15 @@ using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
-    public class AddParatextCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, AddParatextCorpusStepViewModel>
+    public interface IUsfmErrorHost
+    {
+        ObservableCollection<UsfmError> UsfmErrors { get; }
+
+        string GetFormattedUsfmErrors();
+
+        string GetUsfmErrorsFileName();
+    }
+    public class AddParatextCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, AddParatextCorpusStepViewModel>, IUsfmErrorHost
     {
         #region Member Variables
 
@@ -239,18 +247,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         #region Methods
 
-        public void CopyToClipboard()
+        public string GetUsfmErrorsFileName()
         {
-            Clipboard.Clear();
-            StringBuilder sb = new StringBuilder();
+            return $"{SelectedProject.LongName}-USFM-Errors.txt";
+        }
+        public string GetFormattedUsfmErrors()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"Project Name: {SelectedProject.LongName}");
+
             foreach (var error in UsfmErrors)
             {
                 sb.AppendLine($"{error.Reference}\t{error.Error}");
             }
 
-            Clipboard.SetText(sb.ToString());
+            return sb.ToString();
         }
 
+       
         public async void ProjectSelected()
         {
             CanOk = false;
