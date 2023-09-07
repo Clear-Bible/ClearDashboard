@@ -99,6 +99,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+
         private Visibility _sendErrorVisibility = Visibility.Collapsed;
         public Visibility SendErrorVisibility
         {
@@ -110,16 +111,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private Visibility _sendSuccessfulVisibility = Visibility.Collapsed;
-        public Visibility SendSuccessfulVisibility
+
+        private bool _showSlackSendButton = true;
+        public bool ShowSlackSendButton
         {
-            get => _sendSuccessfulVisibility;
+            get => _showSlackSendButton;
             set
             {
-                _sendSuccessfulVisibility = value;
-                NotifyOfPropertyChange(() => SendSuccessfulVisibility);
+                _showSlackSendButton = value;
+                NotifyOfPropertyChange(() => ShowSlackSendButton);
             }
         }
+
+        private bool _showEmailIcon;
+        public bool ShowEmailIcon
+        {
+            get => _showEmailIcon;
+            set
+            {
+                _showEmailIcon = value;
+                NotifyOfPropertyChange(() => ShowEmailIcon);
+            }
+        }
+
 
         private Visibility _showOkButton = Visibility.Collapsed;
 
@@ -353,6 +367,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 return;
             }
 
+            ShowSlackSendButton = false;
+
             WorkingMessage = "Sending Message...";
             await Task.Delay(200);
 
@@ -371,15 +387,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 if (bSuccess)
                 {
-                    SendSuccessfulVisibility = Visibility.Visible;
+                    ShowSlackSendButton = false;
                     SendErrorVisibility = Visibility.Collapsed;
                     WorkingMessage = "Message Sent Successfully";
+                    ShowEmailIcon= true;
                 }
                 else
                 {
-                    SendSuccessfulVisibility = Visibility.Collapsed;
+                    ShowSlackSendButton = true;
                     SendErrorVisibility = Visibility.Visible;
                     WorkingMessage = "Message Sending Problem";
+                    ShowEmailIcon = false;
                 }
 
             }
@@ -431,8 +449,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async Task SendJiraMessage()
         {
-            SendSuccessfulVisibility = Visibility.Collapsed;
-
             var bRet = await NetworkHelper.IsConnectedToInternet();
             // check internet connection
             if (bRet == false)
@@ -441,6 +457,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 return;
             }
 
+            JiraButtonEnabled = false;
             WorkingMessage = "Sending Message...";
             await Task.Delay(200);
 
@@ -485,19 +502,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             if (result != null)
             {
                 SendErrorVisibility = Visibility.Collapsed;
-                SendSuccessfulVisibility = Visibility.Visible;
+                JiraButtonEnabled = false;
                 WorkingMessage = "Message Sent Successfully";
 
                 // clear the fields
                 JiraTitle = string.Empty;
                 JiraDescription = string.Empty;
                 JiraSeverity = string.Empty;
+                ShowEmailIcon = true;
             }
             else
             {
                 SendErrorVisibility = Visibility.Visible;
-                SendSuccessfulVisibility = Visibility.Collapsed;
+                JiraButtonEnabled = true;
                 WorkingMessage = "Problem Sending Message";
+                ShowEmailIcon = false;  
             }
 
 

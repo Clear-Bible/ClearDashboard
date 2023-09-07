@@ -89,7 +89,7 @@
                                     <DataTrigger Binding="{Binding SendErrorVisibility}" Value="Visible">
                                         <Setter Property="IsEnabled" Value="False" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding SendSuccessfulVisibility}" Value="Visible">
+                                    <DataTrigger Binding="{Binding ShowSlackSendButton}" Value="False">
                                         <Setter Property="IsEnabled" Value="False" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding ShowOkButton}" Value="Visible">
@@ -292,9 +292,6 @@
                                     <DataTrigger Binding="{Binding SendErrorVisibility}" Value="Visible">
                                         <Setter Property="IsEnabled" Value="False" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding SendSuccessfulVisibility}" Value="Visible">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding ShowOkButton}" Value="Visible">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
@@ -376,10 +373,10 @@
                 Kind="EnvelopeCheck">
                 <iconPacks:PackIconUnicons.Style>
                     <Style TargetType="iconPacks:PackIconUnicons">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SendSuccessfulVisibility}" Value="Collapsed">
-                                <Setter Property="Visibility" Value="Collapsed" />
+                            <DataTrigger Binding="{Binding ShowEmailIcon}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
