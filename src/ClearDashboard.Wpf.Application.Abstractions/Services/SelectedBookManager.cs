@@ -47,7 +47,7 @@ public class SelectedBookManager : PropertyChangedBase
         }
     }
 
-    public async Task InitializeBooks(IDictionary<string, IEnumerable<UsfmError>> usfmErrorsByParatextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
+    public async Task InitializeBooks(IDictionary<string, IEnumerable<UsfmError>> usfmErrorsByParatextProjectId, bool enableTokenizedBooks, bool selectAllEnabledBooks, CancellationToken cancellationToken)
     {
         var commonBooks = CreateBooks(true, true).ToDictionary(e => e.Abbreviation, e => e);
 
@@ -65,6 +65,15 @@ public class SelectedBookManager : PropertyChangedBase
         }
 
         SelectedBooks = new(commonBooks.Values);
+
+        if (selectAllEnabledBooks)
+        {
+            var enabledBooks = SelectedBooks.Where(b => b.IsEnabled);
+            foreach (var book in enabledBooks)
+            {
+                book.IsSelected = true;
+            }
+        }
         NotifyOfPropertyChange(() => SelectedBooks);
     }
 

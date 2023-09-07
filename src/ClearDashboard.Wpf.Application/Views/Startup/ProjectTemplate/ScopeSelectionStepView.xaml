@@ -7,14 +7,13 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:addParatextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog"
-    xmlns:addParatextCorpusDialog1="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Width="1010"
-    Height="635"
+    Height="700"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
@@ -29,13 +28,23 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0"  Grid.ColumnSpan="2" Content="{Binding DisplayName}" FontSize="24" Margin="12,0,0,0"></Label>
-        <userControls:SelectBooksControl Grid.Row="1" />
+        <userControls:SelectBooksControl Grid.Row="1" IsEnabled="{Binding ControlsEnabled}" />
+        <CheckBox Grid.Row="2" 
+                  Margin="20,0,0,20"
+                  FontSize="13"
+                  IsChecked="{Binding ControlsEnabled, Mode=TwoWay}" 
+                  Content="{helpers:Localization ProjectPicker_EnableBookSelection}" >
+            <CheckBox.ToolTip>
+                <Label Content="{helpers:Localization ProjectPicker_EnableBookSelectionTooltip}" />
+            </CheckBox.ToolTip>
+        </CheckBox>
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             Margin="10,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
@@ -60,7 +69,7 @@
         </StackPanel>
         <ProgressBar
             Grid.Row="1"
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             Width="76"
             Height="75"
             HorizontalAlignment="Center"

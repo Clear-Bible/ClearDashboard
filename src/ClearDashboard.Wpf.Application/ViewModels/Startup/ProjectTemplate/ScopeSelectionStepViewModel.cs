@@ -27,6 +27,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _continueEnabled, value);
         }
 
+        public bool ControlsEnabled
+        {
+            get => _controlsEnabled;
+            set => Set(ref _controlsEnabled, value);
+        }
+
         private Visibility _progressIndicatorVisibility = Visibility.Hidden;
         public Visibility ProgressIndicatorVisibility
         {
@@ -42,6 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
+            ControlsEnabled = false;
         }
 
         private void OnSelectedBookManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -55,8 +62,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
+        public Dictionary<string, IEnumerable<UsfmError>>? UsfmErrors;
+        private bool _controlsEnabled;
+
         public override async Task Initialize(CancellationToken cancellationToken)
         {
+
             SelectedBookManager = ParentViewModel!.SelectedBookManager;
            
             SelectedBookManager.PropertyChanged += OnSelectedBookManagerPropertyChanged;
@@ -72,48 +83,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             ProgressIndicatorVisibility = Visibility.Visible;
 
-            var usfmErrorsByParatextProjectId = new Dictionary<string, IEnumerable<UsfmError>>();
+            UsfmErrors = await PerformUsfmErrorCheck(cancellationToken);
+            
+            await SelectedBookManager!.InitializeBooks(UsfmErrors, false, true, cancellationToken);
 
+            ProgressIndicatorVisibility = Visibility.Hidden;
+            await base.Initialize(cancellationToken);
+        }
+
+        private async Task<Dictionary<string, IEnumerable<UsfmError>>> PerformUsfmErrorCheck(CancellationToken cancellationToken)
+        {
+            var usfmErrors = new Dictionary<string, IEnumerable<UsfmError>>();
             if (ParentViewModel!.SelectedParatextProject != null)
             {
-                var result = await Mediator!.Send(new GetCheckUsfmQuery(ParentViewModel!.SelectedParatextProject.Id), cancellationToken);
+                var result = await Mediator!.Send(new GetCheckUsfmQuery(ParentViewModel!.SelectedParatextProject.Id),
+                    cancellationToken);
                 if (!result.Success)
                 {
-                    Logger!.LogError($"Error checking USFM for Paratext project: '{ParentViewModel!.SelectedParatextProject.Name}': {result.Message}");
+                    Logger!.LogError(
+                        $"Error checking USFM for Paratext project: '{ParentViewModel!.SelectedParatextProject.Name}': {result.Message}");
                 }
 
-                usfmErrorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextProject.Id!, result.Data!.UsfmErrors);
+                usfmErrors.Add(ParentViewModel!.SelectedParatextProject.Id!, result.Data!.UsfmErrors);
             }
 
             if (ParentViewModel!.SelectedParatextBtProject != null)
             {
-                var result = await Mediator!.Send(new GetCheckUsfmQuery(ParentViewModel!.SelectedParatextBtProject.Id), cancellationToken);
+                var result = await Mediator!.Send(new GetCheckUsfmQuery(ParentViewModel!.SelectedParatextBtProject.Id),
+                    cancellationToken);
                 if (!result.Success)
                 {
-                    Logger!.LogError($"Error checking USFM for Paratext BT project: '{ParentViewModel!.SelectedParatextBtProject.Name}': {result.Message}");
+                    Logger!.LogError(
+                        $"Error checking USFM for Paratext BT project: '{ParentViewModel!.SelectedParatextBtProject.Name}': {result.Message}");
                 }
 
-                usfmErrorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextBtProject.Id!, result.Data!.UsfmErrors);
+                usfmErrors.Add(ParentViewModel!.SelectedParatextBtProject.Id!, result.Data!.UsfmErrors);
             }
 
             if (ParentViewModel!.SelectedParatextLwcProject != null)
             {
-                var result = await Mediator!.Send(new GetCheckUsfmQuery(ParentViewModel!.SelectedParatextLwcProject.Id), cancellationToken);
+                var result = await Mediator!.Send(new GetCheckUsfmQuery(ParentViewModel!.SelectedParatextLwcProject.Id),
+                    cancellationToken);
                 if (!result.Success)
                 {
-                    Logger!.LogError($"Error checking USFM for Paratext LWC project: '{ParentViewModel!.SelectedParatextLwcProject.Name}': {result.Message}");
+                    Logger!.LogError(
+                        $"Error checking USFM for Paratext LWC project: '{ParentViewModel!.SelectedParatextLwcProject.Name}': {result.Message}");
                 }
 
-                usfmErrorsByParatextProjectId.Add(ParentViewModel!.SelectedParatextLwcProject.Id!, result.Data!.UsfmErrors);
+                usfmErrors.Add(ParentViewModel!.SelectedParatextLwcProject.Id!, result.Data!.UsfmErrors);
             }
 
-            await SelectedBookManager!.InitializeBooks(usfmErrorsByParatextProjectId, false, cancellationToken);
-
-
-
-
-            ProgressIndicatorVisibility = Visibility.Hidden;
-            await base.Initialize(cancellationToken);
+            return usfmErrors;
         }
 
         public override async Task Reset(CancellationToken cancellationToken)

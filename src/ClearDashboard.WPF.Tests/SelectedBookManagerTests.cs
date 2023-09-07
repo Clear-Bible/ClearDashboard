@@ -72,7 +72,7 @@ ab4261bb84031c8d984468f2e9d86df7ffe52809abcdefff / CRSB
                     { zzSurBtProjectId, resultZzSurBt.Data!.UsfmErrors}
                 };
 
-                await manager!.InitializeBooks(usfmErorsByParatextProjectId, false, CancellationToken.None);
+                await manager!.InitializeBooks(usfmErorsByParatextProjectId, false, false, CancellationToken.None);
                 var selectedBooks = manager.SelectedBooks;
 
                 Output.WriteLine("\nBooks with Usfm Errors");
