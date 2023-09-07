@@ -48,6 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private ILocalizationService _localizationService;
         private string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
+        private bool _completedTask = false;
 
         #endregion //Member Variables
 
@@ -293,6 +294,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private async Task Import()
         {
+            _completedTask = false;
             IProgress<ProgressStatus> progress = new Progress<ProgressStatus>(Report);
             try
             {
@@ -313,6 +315,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                 StatusMessageColor = System.Windows.Media.Brushes.Green;
+
+                _completedTask = true;
             }
             catch (OperationCanceledException)
             {
@@ -536,6 +540,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
             else
             {
+                if (_completedTask)
+                {
+                    await TryCloseAsync(true);
+                }
+
                 await TryCloseAsync(false);
             }
         }
