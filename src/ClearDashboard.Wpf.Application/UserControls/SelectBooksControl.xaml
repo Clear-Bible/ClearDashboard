@@ -22,11 +22,13 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+            x:Name="SelectBookControl">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -45,7 +47,16 @@
             Margin="15,15,0,0"
             HorizontalAlignment="Left"
             Content="{helpers:Localization AddParatextCorpusDialog_SelectBooks}"
-            FontSize="20" />
+            FontSize="20" 
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+        <Label
+            Grid.Row="0"
+            Margin="15,15,0,0"
+            HorizontalAlignment="Left"
+            Content="{helpers:Localization AddParatextCorpusDialog_SelectedBooks}"
+            FontSize="20" 
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=1}"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -1685,7 +1696,8 @@
             Grid.Row="3"
             Grid.Column="0"
             Margin="5"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <Button
                 Margin="10,0,0,15"
