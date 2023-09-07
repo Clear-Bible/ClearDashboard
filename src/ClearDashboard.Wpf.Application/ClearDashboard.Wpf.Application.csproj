@@ -125,7 +125,7 @@
   </ItemGroup>
   <ItemGroup>
 	  <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
-	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
+	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="109.1.110" />
 	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.8.1-alpha" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
