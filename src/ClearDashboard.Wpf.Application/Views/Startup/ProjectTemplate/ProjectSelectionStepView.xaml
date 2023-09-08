@@ -81,7 +81,7 @@
                     </TextBox>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Grid.Row="2" Orientation="Vertical" Margin="24,10">
+            <StackPanel Grid.Row="2" Orientation="Vertical" Margin="24,20">
                 <Label Margin="0,0,0,-10" Content="{helpers:Localization ProjectPicker_ParatextProject}" />
                 <StackPanel Orientation="Horizontal">
                     <controls:AutoCompleteComboBox 

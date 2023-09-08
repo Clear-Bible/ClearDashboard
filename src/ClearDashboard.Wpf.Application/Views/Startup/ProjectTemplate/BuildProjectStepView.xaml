@@ -10,6 +10,7 @@
              xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
              xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.Views.Shell"
              xmlns:projectTemplate1="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate"
+             xmlns:extension="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
              d:DataContext="{d:DesignInstance Type=projectTemplate:BuildProjectStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -46,25 +47,36 @@
                 DataContext="{Binding ProjectDesignSurfaceViewModel}" />
 
         <StackPanel x:Name="ProjectOverviewText" Grid.Row="1" Grid.Column="1" Visibility="{Binding  ShowProjectOverviewMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock Margin="20, 40" FontSize="20" TextWrapping="Wrap">Some text describing what is going to happen.</TextBlock>
+            <Label Content="We're almost there!" Margin="20,0" FontSize="24" HorizontalAlignment="Center"></Label>
+            <TextBlock Margin="20, 10" FontSize="20" TextWrapping="Wrap" Text="{helpers:Localization ProjectPicker_ProjectBuilderOverview}"></TextBlock>
         </StackPanel>
         <projectTemplate1:ProjectBuilderStatusView   Grid.Row="1" Grid.Column="1"  Visibility="{Binding  ElementName=ProjectOverviewText, Path=DataContext.ShowProjectOverviewMessage, Converter={StaticResource InverseBooleanToVisibilityConverter}}" x:Name="BackgroundTasksView" DataContext="{Binding BackgroundTasksViewModel}" />
         <!--<ListBox Grid.Row="1" Grid.Column="1"  ItemsSource="{Binding Messages}"></ListBox>-->
+        <TextBlock  Grid.Row="2" Grid.Column="0" Margin="40, 20">
+            <Hyperlink NavigateUri="https://cleardashboard.org"
+                       extension:HyperlinkExtensions.IsExternal="true">
+                <Hyperlink.Inlines>
+                    <Run Text="{helpers:Localization ProjectPicker_ProjectBuilderHelpfulVideos}"/>
+                </Hyperlink.Inlines>
+            </Hyperlink>
+        </TextBlock>
+
         <StackPanel
             Grid.Row="2"
             Grid.ColumnSpan="2"
             Margin="10,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
+
             <Button x:Name="BackOrCancel"
-                Width="90"
-                Margin="0,0,15,15"
-                HorizontalAlignment="Right"
-                cm:Message.Attach="BackOrCancel()"
-                Content="{Binding BackOrCancelAction}"
-                FontSize="12"
-                IsEnabled="{Binding CanMoveBackwards}"
-                Style="{StaticResource TransparentStyle}" />
+                    Width="90"
+                    Margin="0,0,15,15"
+                    HorizontalAlignment="Right"
+                    cm:Message.Attach="BackOrCancel()"
+                    Content="{Binding BackOrCancelAction}"
+                    FontSize="12"
+                    IsEnabled="{Binding CanMoveBackwards}"
+                    Style="{StaticResource TransparentStyle}" />
             <Button x:Name="CreateOrClose"
                 Width="90"
                 Margin="0,0,15,15"

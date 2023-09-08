@@ -31,6 +31,7 @@
             </Grid.ColumnDefinitions>
             <Label
                  Grid.Column="0"
+                 Margin="20,0"
                  Content="{helpers:Localization AddParatextCorpusDialog_Check}"
                  FontSize="18" />
 
