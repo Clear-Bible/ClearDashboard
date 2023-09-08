@@ -34,7 +34,7 @@
         <StackPanel
             Grid.Row="3"
             Grid.Column="0"
-            Margin="20"
+            Margin="30, 40, 10, 0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
 
