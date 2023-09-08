@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -125,8 +125,8 @@
   </ItemGroup>
   <ItemGroup>
 	  <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
-	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="109.1.110" />
-	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.8.1-alpha" />
+	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
+	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.8" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.12" />
