@@ -331,7 +331,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .UsingEntity<Lexicon_SemanticDomainMeaningAssociation>();
 
             modelBuilder.Entity<Lexicon_Lexeme>()
-                .HasIndex(e => new { e.Lemma, e.Language })
+                .HasIndex(e => new { e.Lemma, e.Type, e.Language })
                 .IsUnique();
             // =============
         }

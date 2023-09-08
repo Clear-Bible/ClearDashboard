@@ -11,6 +11,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_Lexicon_Lexeme_Lemma_Language",
+                table: "Lexicon_Lexeme");
+
             migrationBuilder.AddColumn<string>(
                 name: "OriginatedFrom",
                 table: "Lexicon_Translation",
@@ -34,6 +38,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             migrationBuilder.Sql("UPDATE Lexicon_Form SET (UserId, Created) = (SELECT UserId, Created FROM Project LIMIT 1);");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Lexicon_Lexeme_Lemma_Type_Language",
+                table: "Lexicon_Lexeme",
+                columns: new[] { "Lemma", "Type", "Language" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Lexicon_Form_UserId",
                 table: "Lexicon_Form",
                 column: "UserId");
@@ -55,6 +65,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 table: "Lexicon_Form");
 
             migrationBuilder.DropIndex(
+                name: "IX_Lexicon_Lexeme_Lemma_Type_Language",
+                table: "Lexicon_Lexeme");
+
+            migrationBuilder.DropIndex(
                 name: "IX_Lexicon_Form_UserId",
                 table: "Lexicon_Form");
 
@@ -69,6 +83,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             migrationBuilder.DropColumn(
                 name: "UserId",
                 table: "Lexicon_Form");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lexicon_Lexeme_Lemma_Language",
+                table: "Lexicon_Lexeme",
+                columns: new[] { "Lemma", "Language" },
+                unique: true);
         }
     }
 }

@@ -409,7 +409,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("Lemma", "Language")
+                    b.HasIndex("Lemma", "Type", "Language")
                         .IsUnique();
 
                     b.ToTable("Lexicon_Lexeme");

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20230908014526_lexicon-import")]
+    [Migration("20230908211519_lexicon-import")]
     partial class lexiconimport
     {
         /// <inheritdoc />
@@ -412,7 +412,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("Lemma", "Language")
+                    b.HasIndex("Lemma", "Type", "Language")
                         .IsUnique();
 
                     b.ToTable("Lexicon_Lexeme");

@@ -31,11 +31,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 #endif
 
             var lexemesByLemmaOrForms = await ProjectDbContext.Lexicon_Lexemes
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language == request.MeaningLanguage))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.User)
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language == request.MeaningLanguage))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.Translations)
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language == request.MeaningLanguage))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.SemanticDomainMeaningAssociations)
                         .ThenInclude(sda => sda.SemanticDomain)
                             .ThenInclude(sd => sd!.User)
@@ -43,7 +43,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 .Include(e => e.User)
                 .Where(e => 
                     (e.Lemma == request.LemmaOrForm || e.Forms.Any(f => f.Text == request.LemmaOrForm)) && 
-                    (string.IsNullOrEmpty(request.Language) || e.Language == request.Language))
+                    (string.IsNullOrEmpty(request.Language) || e.Language!.StartsWith(request.Language)))
                 .ToListAsync();
 
 #if DEBUG
