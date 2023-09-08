@@ -58,1955 +58,767 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
-    <value>مشاريع التعاون</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
-    <value>الأشجار؛ العطور والتوابل</value>
-  </data>
-  <data name="BiblicalTermsForm_Found" xml:space="preserve">
-    <value>وجد</value>
-  </data>
-  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
-    <value>إنشاء محاذاة كلمات جديدة</value>
-  </data>
-  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
-    <value>الفاكهة</value>
-  </data>
-  <data name="Settings_ReservedCaption" xml:space="preserve">
-    <value>مخصصة للتوسع في المستقبل</value>
-  </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>إضافة مجال دلالي</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="AboutView_Version" xml:space="preserve">
-    <value>إصدار</value>
-  </data>
-  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>دبابيس تصفية حسب المصطلحات الرئيسية</value>
-  </data>
-  <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>قم بإنشاء مشروعك للبدء.</value>
-  </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="ProjectValidator_SameName" xml:space="preserve">
-    <value>مشروع مع نفس الاسم موجود بالفعل. الرجاء اختيار اسم فريد.</value>
-  </data>
-  <data name="ProperCase_2_Chronicles" xml:space="preserve">
-    <value>2 سجلات</value>
-  </data>
-  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
-    <value>أدوات</value>
-  </data>
-  <data name="Marble_Chapter" xml:space="preserve">
-    <value>الفصل</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>مغلق</value>
-  </data>
-  <data name="Landing_NewProject" xml:space="preserve">
-    <value>مشروع جديد</value>
-  </data>
-  <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>وحي</value>
-  </data>
-  <data name="Bcv_Sync" xml:space="preserve">
-    <value>المزامنة</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>يبدأ</value>
-  </data>
-  <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>أرسل رسالة الركود</value>
-  </data>
-  <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>يونس</value>
-  </data>
-  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>النموذج المتماثل القطار؟</value>
-  </data>
-  <data name="Marble_Book" xml:space="preserve">
-    <value>كتاب</value>
-  </data>
-  <data name="1SA" xml:space="preserve">
-    <value>1SA</value>
-  </data>
-  <data name="ProperCase_Daniel" xml:space="preserve">
-    <value>دانيال</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
-  </data>
-  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>نصب تذكاري</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
-    <value>الناس؛ سلطة</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>تنسيق</value>
-  </data>
-  <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>اختر المجال الزمني</value>
-  </data>
-  <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>إنشاء مشروع:</value>
-  </data>
-  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
-    <value>لم يتم العثور عليها على النظام!</value>
-  </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext لا يعمل</value>
-  </data>
-  <data name="ProperCase_2_Peter" xml:space="preserve">
-    <value>2 بيتر</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>الجزء المستهدف</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>عزرا</value>
-  </data>
-  <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>الاستشاري</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
-  </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
-  </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>كتاب</value>
-  </data>
-  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>تطبيق وثيقة</value>
-  </data>
-  <data name="Pins_Filter" xml:space="preserve">
-    <value>منقي:</value>
-  </data>
-  <data name="Pins_Phrase" xml:space="preserve">
-    <value>عبارة</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="ClockUserControl_Add" xml:space="preserve">
-    <value>يضيف</value>
-  </data>
-  <data name="Settings_UserName" xml:space="preserve">
-    <value>اسم المستخدم</value>
-  </data>
-  <data name="Lexicon_AddMeaning" xml:space="preserve">
-    <value>أضف المعنى</value>
-  </data>
-  <data name="BiblicalTermsForm_Term" xml:space="preserve">
-    <value>شرط</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>خوارزمية محاذاة كلمة الجهاز</value>
-  </data>
-  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>لم يتم تثبيت Paratext. يرجى تثبيت Paratext وإعادة تشغيل تطبيق ClearDashboard.</value>
-  </data>
-  <data name="Pds_Daughter" xml:space="preserve">
-    <value>بنت</value>
-  </data>
-  <data name="FontSettings_ParagraphMode" xml:space="preserve">
-    <value>وضع الفقرة</value>
-  </data>
-  <data name="MainView_FileNew" xml:space="preserve">
-    <value>جديد</value>
-  </data>
-  <data name="ProperCase_John" xml:space="preserve">
-    <value>جون</value>
-  </data>
-  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
-    <value>مستخدمي المشروع الحاليين:</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
-    <value>حدد منظمة</value>
-  </data>
-  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>تمكين عرض مجموعات النص الآية على حدة</value>
-  </data>
-  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>لا اخطاء</value>
-  </data>
-  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>أضف نص المجموعة المميزة إلى عرض جديد محسّن</value>
-  </data>
-  <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>البقعة اليونانية</value>
-  </data>
-  <data name="EnhancedView_AddAlignment" xml:space="preserve">
-    <value>إضافة محاذاة؟</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>اختر الكل</value>
-  </data>
-  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>المستخدم بالفعل على النظام!</value>
-  </data>
-  <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>السماح ClearDashboard بتغيير أوضاع الطاقة أثناء الأحداث الحسابية العالية</value>
-  </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
-  </data>
-  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
-    <value>زراعة</value>
-  </data>
-  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>عروض مفقودة</value>
-  </data>
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>الرجاء إدخال اسم لمشروعك.</value>
   </data>
-  <data name="Pins_Language" xml:space="preserve">
-    <value>لغة</value>
-  </data>
-  <data name="Notes_FilterStatus_Any" xml:space="preserve">
-    <value>أي</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>الثدييات الحيوانات الأليفة</value>
-  </data>
-  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
-    <value>غير صالح</value>
-  </data>
-  <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>فليمون</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
-  </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>ClearDashboard إعدادات</value>
-  </data>
-  <data name="Notes_LabelGroupInitialize" xml:space="preserve">
-    <value>تهيئة مجموعة الملصقات</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>مراوح</value>
-  </data>
-  <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>أرسل هذه الملاحظة إلى Paratext؟</value>
-  </data>
-  <data name="ProperCase_Hosea" xml:space="preserve">
-    <value>هوشع</value>
-  </data>
-  <data name="ProperCase_Joel" xml:space="preserve">
-    <value>جويل</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
-    <value>مارك محاذاة على أنها "غير صالحة"</value>
-  </data>
-  <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>الرسم البياني التردد</value>
-  </data>
-  <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>قم بإزالة هذا النموذج المعجمي من هذا الليمون</value>
-  </data>
-  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>إذا تم التحقق منه ، فسيؤدي ذلك إلى تغيير جميع أحداث هذه الكلمة</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>PHM</value>
-  </data>
-  <data name="WordMeaningsView_Sense" xml:space="preserve">
-    <value>حاسة:</value>
-  </data>
-  <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>ليما</value>
-  </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>عرض جديد محسّن</value>
-  </data>
-  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
-    <value>رمز التحقق من البريد الإلكتروني:</value>
-  </data>
-  <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>أفسس</value>
-  </data>
-  <data name="MainView_ShowLog" xml:space="preserve">
-    <value>إظهار السجل</value>
-  </data>
-  <data name="FontSettings_SourceFontSize" xml:space="preserve">
-    <value>حجم الخط المصدر:</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>مرحبًا بك في ClearDashboard! الرجاء إدخال معلومات التسجيل الخاصة بك.</value>
-  </data>
-  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>الحيوانات</value>
-  </data>
-  <data name="Pins_Notes" xml:space="preserve">
+  <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>ملحوظات</value>
-  </data>
-  <data name="MainView_FileOpen" xml:space="preserve">
-    <value>يفتح</value>
-  </data>
-  <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>تغيير كل الأحداث غير المخلصة</value>
-  </data>
-  <data name="None" xml:space="preserve">
-    <value>لا أحد</value>
-  </data>
-  <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>ليما/النماذج:</value>
-  </data>
-  <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>تحقق من بريدك الإلكتروني وأدخل رمز التحقق:</value>
-  </data>
-  <data name="Notes_NoteReplies" xml:space="preserve">
-    <value>الردود</value>
-  </data>
-  <data name="SlackMessageView_Send" xml:space="preserve">
-    <value>يرسل</value>
-  </data>
-  <data name="MainView_AccountInfo" xml:space="preserve">
-    <value>معلومات الحساب</value>
-  </data>
-  <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>بواسطة الملصقات</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>التحقق من USFM</value>
-  </data>
-  <data name="ProperCase_Job" xml:space="preserve">
-    <value>وظيفة</value>
-  </data>
-  <data name="ProperCase_Nahum" xml:space="preserve">
-    <value>ناحوم</value>
-  </data>
-  <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>معدل</value>
-  </data>
-  <data name="MainView_File" xml:space="preserve">
-    <value>ملف</value>
-  </data>
-  <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>البحث عن طريق اللمعان الإنجليزية</value>
-  </data>
-  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
-    <value>مجموعة؛ منطقة</value>
-  </data>
-  <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>الأمثال</value>
-  </data>
-  <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>لا يمكنك حذف هذا المشروع ، لا يزال هناك تطبيق آخر يستخدمه.</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1JN</value>
-  </data>
-  <data name="BulkAlignmentReview_Target" xml:space="preserve">
-    <value>هدف</value>
-  </data>
-  <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>اسم المستخدم:</value>
-  </data>
-  <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>أشعيا</value>
-  </data>
-  <data name="ProperCase_Judges" xml:space="preserve">
-    <value>القضاة</value>
-  </data>
-  <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>تصغير من المحتوى</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>نوع المحاذاة:</value>
-  </data>
-  <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>حجم خط الخط:</value>
-  </data>
-  <data name="Settings_EmailVerificationCode" xml:space="preserve">
-    <value>رمز التحقق من البريد الإلكتروني</value>
-  </data>
-  <data name="Landing_Project" xml:space="preserve">
-    <value>مشروع</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
-    <value>الاداءات</value>
-  </data>
-  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>لا توجد مهام خلفية تعمل</value>
-  </data>
-  <data name="FontSettings_Target" xml:space="preserve">
-    <value>النص المستهدف:</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>خطأ</value>
-  </data>
-  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
-    <value>غاية</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
-  </data>
-  <data name="Settings_Group" xml:space="preserve">
-    <value>مجموعة</value>
-  </data>
-  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
-    <value>ردود غير مقروءة موجودة</value>
-  </data>
-  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
-    <value>الحرف؛ قماش</value>
-  </data>
-  <data name="ProperCase_Deuteronomy" xml:space="preserve">
-    <value>سفر التثنية</value>
-  </data>
-  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>الشرف والاحترام والوضع</value>
-  </data>
-  <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>مصطلحات الكتاب المقدس</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>تم إلغاء المهمة</value>
-  </data>
-  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>إنشاء مستخدم تعاون</value>
-  </data>
-  <data name="ClockUserControl_LocalTime" xml:space="preserve">
-    <value>الوقت المحلي</value>
-  </data>
-  <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>أضف ملاحظة جديدة</value>
-  </data>
-  <data name="Notes_FilterStatus_Open" xml:space="preserve">
-    <value>يفتح</value>
-  </data>
-  <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>أغنية الأغاني</value>
-  </data>
-  <data name="Notes_NoteText" xml:space="preserve">
-    <value>نص</value>
-  </data>
-  <data name="FontSettings_Source" xml:space="preserve">
-    <value>النص المصدر:</value>
-  </data>
-  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>رفض اختيار</value>
-  </data>
-  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>البحث في الآونة الأخيرة</value>
-  </data>
-  <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>مراجع الآية</value>
-  </data>
-  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
-    <value>الجميع</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>حالة</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>حذف المحاذاة</value>
-  </data>
-  <data name="Pds_Target" xml:space="preserve">
-    <value>هدف</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>يلغي</value>
-  </data>
-  <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>الرجاء إدخال اسمك الأخير</value>
-  </data>
-  <data name="MainView_LayoutsDelete" xml:space="preserve">
-    <value>حذف التصميم المحفوظ</value>
-  </data>
-  <data name="BulkAlignmentReview_Source" xml:space="preserve">
-    <value>مصدر</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>يحرر</value>
-  </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>يدرب</value>
-  </data>
-  <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>تعريف قصير:</value>
-  </data>
-  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
-    <value>منطقة؛ طبيعة</value>
-  </data>
-  <data name="ClockUserControl_Delete" xml:space="preserve">
-    <value>يمسح</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>عرض/إنشاء ملاحظات</value>
-  </data>
-  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>استعادة مستخدم التعاون</value>
-  </data>
-  <data name="ProperCase_Matthew" xml:space="preserve">
-    <value>ماثيو</value>
-  </data>
-  <data name="ProperCase_Acts" xml:space="preserve">
-    <value>أعمال</value>
-  </data>
-  <data name="MainView_Settings" xml:space="preserve">
-    <value>إعدادات</value>
-  </data>
-  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>حدد كيفية تميز الجسم</value>
-  </data>
-  <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>تحديث إلى إصدار جديد من ClearDashboard</value>
-  </data>
-  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>التضحيات والعروض</value>
-  </data>
-  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
-    <value>نص الآية</value>
-  </data>
-  <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>اسم مجموعة التسمية</value>
-  </data>
-  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
-    <value>يحتاج مراجعة</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>محرر المحاذاة بالجملة</value>
-  </data>
-  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>حذف المشروع</value>
-  </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>الموافقة على المحدد</value>
-  </data>
-  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>studyBibleadditions</value>
-  </data>
-  <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>حذف محاذاة '{0}'؟</value>
-  </data>
-  <data name="Pds_Unknown" xml:space="preserve">
-    <value>مجهول</value>
-  </data>
-  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
-    <value>تم حفظه على الخادم البعيد</value>
-  </data>
-  <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>إضافة Corpora</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
-    <value>الأشجار؛ الفاكهة</value>
-  </data>
-  <data name="FontSettings_Horizontal" xml:space="preserve">
-    <value>التباعد الأفقي:</value>
-  </data>
-  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>حذف المحاذاة</value>
-  </data>
-  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>أضف مستخدم تعاون جديد</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
-    <value>أدوات؛ وزن؛ تجارة</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>رفض</value>
-  </data>
-  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>الأعشاب</value>
-  </data>
-  <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>إظهار ترجمة خلفية</value>
-  </data>
-  <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>زيفانيا</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>يغلق</value>
-  </data>
-  <data name="Notes_LabelRemove" xml:space="preserve">
-    <value>أزل هذا التسمية</value>
-  </data>
-  <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>الرجاء إدخال اسم لمشروعك</value>
-  </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>التعريف غير متوفر</value>
-  </data>
-  <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>أجزاء من الكلام</value>
-  </data>
-  <data name="Copy" xml:space="preserve">
-    <value>ينسخ</value>
-  </data>
-  <data name="Bcv_Verse" xml:space="preserve">
-    <value>بيت شعر</value>
-  </data>
-  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
-    <value>رمز وصول:</value>
-  </data>
-  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم فك تشفيره مع المعلومات التي قدمتها.</value>
-  </data>
-  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>إلغاء المهمة</value>
-  </data>
-  <data name="ProperCase_Romans" xml:space="preserve">
-    <value>رومية</value>
-  </data>
-  <data name="Pds_Source" xml:space="preserve">
-    <value>مصدر</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>عدد الرموز المختلفة</value>
-  </data>
-  <data name="ProjectPicker_GetStarted" xml:space="preserve">
-    <value>البدء</value>
-  </data>
-  <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 ملوك</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>إضافة مجال دلالي إلى هذا المعنى</value>
-  </data>
-  <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>يرجى ادخال الاسم الاول</value>
-  </data>
-  <data name="EnhancedView_Notes" xml:space="preserve">
-    <value>ملحوظات</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="ProperCase_1_Chronicles" xml:space="preserve">
-    <value>1 سجلات</value>
-  </data>
-  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>الأحجار الكريمة</value>
-  </data>
-  <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>إسم العائلة مطلوب</value>
-  </data>
-  <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Habakkuk</value>
-  </data>
-  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>الأنشطة الدينية</value>
-  </data>
-  <data name="ProperCase_2_John" xml:space="preserve">
-    <value>2 جون</value>
-  </data>
-  <data name="Windows_TextCollection" xml:space="preserve">
-    <value>جمع النص</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>لا</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>أدوات؛ الولادة</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
-  </data>
-  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>فتح في الآونة الأخيرة</value>
-  </data>
-  <data name="Notes_LabelGroupAdd" xml:space="preserve">
-    <value>أضف مجموعة التسمية</value>
-  </data>
-  <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>من قبل المستخدمين</value>
-  </data>
-  <data name="BiblicalTermsForm_Note" xml:space="preserve">
-    <value>ملحوظة</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>إنشاء interlinear</value>
-  </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
-  </data>
-  <data name="Notes_NoteReplies_Read" xml:space="preserve">
-    <value>مرئي</value>
-  </data>
-  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>إزالة مجموعة الملصقات هذه؟</value>
-  </data>
-  <data name="Lexicon_AddLexeme" xml:space="preserve">
-    <value>إضافة لكزيم</value>
-  </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
-  </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>الجميع</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>كائنات وقوى خارقة للطبيعة. الألقاب</value>
-  </data>
-  <data name="WordMeaningsView_Domain" xml:space="preserve">
-    <value>اِختِصاص:</value>
-  </data>
-  <data name="Settings_Email" xml:space="preserve">
-    <value>بريد إلكتروني</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>إنشاء محاذاة الكلمات</value>
-  </data>
-  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>أدخل ترجمة جديدة</value>
-  </data>
-  <data name="Settings_CollaborationSettings" xml:space="preserve">
-    <value>إعدادات التعاون</value>
-  </data>
-  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
-    <value>لمعان:</value>
-  </data>
-  <data name="ProperCase_2_Samuel" xml:space="preserve">
-    <value>2 صموئيل</value>
-  </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>عنوان البريد الإلكتروني</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
-    <value>رفض</value>
-  </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>مربى</value>
-  </data>
-  <data name="Notes_Part" xml:space="preserve">
-    <value>جزء</value>
-  </data>
-  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
-    <value>شخص</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
-    <value>عضو المشروع</value>
-  </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1CO</value>
-  </data>
-  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>حدد المشروع</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="BiblicalTermsDomains_All" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>زكريا</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>حذف جميع المحاذاة؟</value>
-  </data>
-  <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>نحميا</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>نعم</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>إدارة مشاريع التعاون</value>
   </data>
-  <data name="JER" xml:space="preserve">
-    <value>JER</value>
-  </data>
-  <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>مراوح</value>
-  </data>
-  <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>الرثاء</value>
-  </data>
-  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
-    <value>الفصل</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>حدد كتبًا للمعالجة</value>
-  </data>
-  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>استيراد مشروع خادم</value>
-  </data>
-  <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>رسالة:</value>
-  </data>
-  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>أضف إلى وجهة نظر محسنة مركزة</value>
-  </data>
-  <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>كولوسي</value>
-  </data>
-  <data name="ProperCase_James" xml:space="preserve">
-    <value>جوامع</value>
-  </data>
-  <data name="Settings_TextCollections" xml:space="preserve">
-    <value>جمع النص</value>
-  </data>
-  <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>تكبير على المحتوى</value>
-  </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
-  </data>
-  <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>تعريف طويل:</value>
-  </data>
-  <data name="Notes_Note_NoteStatus" xml:space="preserve">
-    <value>حالة</value>
-  </data>
-  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>مشاكل معروفة</value>
-  </data>
-  <data name="Marble_Sense" xml:space="preserve">
-    <value>حاسة</value>
-  </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>الترجمات:</value>
-  </data>
-  <data name="Created" xml:space="preserve">
-    <value>مخلوق</value>
-  </data>
-  <data name="FontSettings_Height" xml:space="preserve">
-    <value>ارتفاع:</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>تم اختيار علامة "صالحة"</value>
-  </data>
-  <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>حجم الخط:</value>
-  </data>
-  <data name="Marble_Domains" xml:space="preserve">
-    <value>المجالات:</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>خوارزمية محاذاة كلمة الجهاز</value>
-  </data>
-  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>قم بإنشاء رمز كوربوس جديد</value>
-  </data>
-  <data name="Pins_Occurences" xml:space="preserve">
-    <value>حدث</value>
-  </data>
-  <data name="Settings_Reserved" xml:space="preserve">
-    <value>محجوز</value>
-  </data>
-  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>حذف هذا الكسيم</value>
-  </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>التفضيلات</value>
-  </data>
-  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>نسخ إلى الحافظة</value>
-  </data>
-  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>الحكمة ، الفهم</value>
-  </data>
-  <data name="Pins_Stem" xml:space="preserve">
-    <value>ينبع</value>
-  </data>
-  <data name="TargetContextView_ZoomIn" xml:space="preserve">
-    <value>تكبير</value>
-  </data>
-  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
-    <value>المستخدم موجود بالفعل على الخادم</value>
-  </data>
-  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>من قبل الجمعيات</value>
-  </data>
-  <data name="MainView_GatherLogs" xml:space="preserve">
-    <value>أرسل رسالة إلى Clear</value>
-  </data>
-  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>اضبط رسم خرائط الآية بين Corpora المتوازي</value>
-  </data>
-  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>هل أنت متأكد أنك تريد حذف هذه المجموعة؟ سيتم حذف جميع الملاحظات ، والمحاذاة ، والألواح الداخلية المرتبطة بهذه المجموعة ولا يمكن استردادها.</value>
-  </data>
-  <data name="CollabProjectManagementView_Description" xml:space="preserve">
-    <value>وصف</value>
-  </data>
-  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>حساب نموذج ترجمة جديد</value>
-  </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>جزء</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
-    <value>الثدييات الحيوانات البرية</value>
-  </data>
-  <data name="ZEC" xml:space="preserve">
-    <value>ZEC</value>
-  </data>
-  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>إدارة التعاون</value>
-  </data>
-  <data name="Pds_Resource" xml:space="preserve">
-    <value>الموارد</value>
-  </data>
-  <data name="Pds_PropertiesMenu" xml:space="preserve">
-    <value>ملكيات</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>الرمز المميز '{0}' له محاذاة متعددة محددة. سيؤدي النقر فوق "{1} إلى حذف جميع المحاذاة.</value>
-  </data>
-  <data name="Pins_Match" xml:space="preserve">
-    <value>مباراة</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>إنشاء interlinear جديد</value>
-  </data>
-  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>مستخدم تعاون جديد</value>
-  </data>
-  <data name="Marble_SubDomains" xml:space="preserve">
-    <value>المجالات الفرعية:</value>
-  </data>
-  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>مستعمرة</value>
-  </data>
   <data name="MainView_WindowsTextCollections" xml:space="preserve">
     <value>مجموعات نصية</value>
   </data>
-  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>إلغاء تحديد الكل</value>
-  </data>
-  <data name="Landing_Settings" xml:space="preserve">
-    <value>إعدادات</value>
-  </data>
-  <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>إرميا</value>
-  </data>
-  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
-    <value>منطقة</value>
-  </data>
-  <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>حذف هذه الملاحظة؟</value>
-  </data>
-  <data name="FontSettings_Title" xml:space="preserve">
-    <value>عنوان:</value>
-  </data>
-  <data name="Bcv_Chapter" xml:space="preserve">
-    <value>الفصل</value>
-  </data>
-  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
-    <value>إنشاء محاذاة كلمات جديدة</value>
-  </data>
-  <data name="REV" xml:space="preserve">
-    <value>REV</value>
-  </data>
-  <data name="UseDefaults" xml:space="preserve">
-    <value>إنشاء باستخدام الافتراضات</value>
-  </data>
-  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
-    <value>طبيعة</value>
-  </data>
-  <data name="NewCollabUserView_FirstName" xml:space="preserve">
-    <value>الاسم الأول</value>
-  </data>
-  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
-    <value>ذات الصلة</value>
-  </data>
-  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>حذف interlinear</value>
-  </data>
-  <data name="Language [UID_Key]" xml:space="preserve">
-    <value>Arabic [ar]</value>
-  </data>
-  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
-    <value>يعتمد</value>
-  </data>
-  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>النطاق الفرعي:</value>
-  </data>
-  <data name="Pins_Origin" xml:space="preserve">
-    <value>أصل</value>
-  </data>
-  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>تمكين وضع الطاقة</value>
-  </data>
-  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>المفتاح المقدم هو معيب. عندما تم فك تشفيرها ، لا يمكن العثور على بعض عناصر JSON.</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
-    <value>كلمات محاذاة</value>
-  </data>
-  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
-    <value>أضف إلى عرض جديد محسّن</value>
-  </data>
-  <data name="Settings_PowerModes" xml:space="preserve">
-    <value>أوضاع الطاقة</value>
-  </data>
-  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
-    <value>1 تسالونيكي</value>
-  </data>
-  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>TransliterationWithencoder</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="Settings_Plugins" xml:space="preserve">
-    <value>الإضافات</value>
-  </data>
-  <data name="ProperCase_1_Samuel" xml:space="preserve">
-    <value>1 صموئيل</value>
-  </data>
-  <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 جون</value>
-  </data>
-  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>تخطيطات قياسية</value>
-  </data>
-  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>يحتوي اسم المشروع المحدد على شخصيات غير قانونية. تتضمن الأحرف الصالحة "A-Z" (الأحرف الصغيرة والأحرف الكبيرة) ، والأرقام "0-9" والأحرف "-" و "_".</value>
-  </data>
-  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>إنشاء قاعدة بيانات ...</value>
-  </data>
-  <data name="ProperCase_Micah" xml:space="preserve">
-    <value>ميكا</value>
-  </data>
-  <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>لوحة القيادة</value>
-  </data>
-  <data name="Pds_Standard" xml:space="preserve">
-    <value>معيار</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2PE</value>
-  </data>
-  <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>قم بتناسب جميع العقد مع منفذ العرض</value>
-  </data>
-  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
-    <value>تحقق من توفر المستخدم</value>
-  </data>
-  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>أضف عرض الآية إلى عرض محسن مركّز</value>
-  </data>
-  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>أضف Interlinear جديد</value>
-  </data>
-  <data name="NewTestament" xml:space="preserve">
-    <value>العهد الجديد</value>
-  </data>
-  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
-    <value>صالح</value>
-  </data>
-  <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
-    <value>مع الملصقات من</value>
-  </data>
-  <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>مشروع:</value>
-  </data>
-  <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>الفصل السابق</value>
-  </data>
-  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>مشروع يحمل اسم "{0}" موجود بالفعل. الرجاء اختيار اسم فريد ".</value>
-  </data>
-  <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>معاني الكلمات</value>
-  </data>
-  <data name="Marble_Verse" xml:space="preserve">
-    <value>بيت شعر</value>
-  </data>
-  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>محاذاة</value>
-  </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
-  </data>
-  <data name="Marble_GeneralInformation" xml:space="preserve">
-    <value>معلومات عامة</value>
-  </data>
-  <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>تعيين ترجمة ل</value>
-  </data>
-  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
-    <value>قم بإزالة مجموعة الملصقات هذه</value>
-  </data>
-  <data name="ProperCase_Joshua" xml:space="preserve">
-    <value>جوشوا</value>
-  </data>
-  <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>عنوان البريد الإلكتروني</value>
-  </data>
-  <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>مساعد</value>
-  </data>
-  <data name="Pds_Dictionary" xml:space="preserve">
-    <value>قاموس</value>
-  </data>
-  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>فرد جديد</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
-    <value>حذف المحاذاة؟</value>
-  </data>
-  <data name="Migrate_Header2" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
-  </data>
-  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
-    <value>مستخدمو التعاون المتاحين:</value>
-  </data>
-  <data name="MainView_GettingStartedGuide" xml:space="preserve">
-    <value>دليل البداية</value>
-  </data>
-  <data name="ProperCase_Amos" xml:space="preserve">
-    <value>عاموس</value>
-  </data>
-  <data name="ProperCase_Genesis" xml:space="preserve">
-    <value>منشأ</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>مرشح واضح</value>
-  </data>
-  <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>إجمالي الآية</value>
-  </data>
-  <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>أوباديا</value>
-  </data>
-  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>العبرية البقعة</value>
-  </data>
-  <data name="Pins_Lexeme" xml:space="preserve">
-    <value>لكلية</value>
-  </data>
-  <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>تصغير</value>
-  </data>
-  <data name="ProperCase_2_Corinthians" xml:space="preserve">
-    <value>2 كورنثوس</value>
-  </data>
-  <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>لا توجد بيانات آية في نطاق الآية هذا.</value>
-  </data>
-  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
-    <value>رمز التحقق من صحة البريد الإلكتروني ClearDashboard</value>
-  </data>
-  <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>ملاحظة المؤشرات:</value>
-  </data>
-  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>تخطيطات المشروع</value>
-  </data>
-  <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>حزن</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>علامة تم اختيارها على أنها "مراجعة احتياجات"</value>
-  </data>
-  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>الحاويات تربية الحيوان</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>بناء؛ الأنشطة الدينية</value>
-  </data>
-  <data name="Pins_Word" xml:space="preserve">
-    <value>كلمة</value>
-  </data>
-  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
-    <value>الأخلاق والأخلاق</value>
-  </data>
-  <data name="MainView_WindowsMarble" xml:space="preserve">
-    <value>رخام</value>
-  </data>
-  <data name="Pins_Forms" xml:space="preserve">
-    <value>نماذج</value>
-  </data>
-  <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>تمكين البرنامج المساعد التجريبي المائي</value>
-  </data>
-  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>un incin composite token</value>
-  </data>
-  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>أدخل ترجمة جديدة ل</value>
-  </data>
-  <data name="Notes_Note_Created" xml:space="preserve">
-    <value>مخلوق</value>
-  </data>
-  <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>المعاني:</value>
-  </data>
-  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>علامات وعجائب</value>
-  </data>
-  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>سفر الجامعة</value>
-  </data>
-  <data name="Windows_EnhancedView" xml:space="preserve">
-    <value>عرض محسّن</value>
-  </data>
-  <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>ملاحظات الإصدار</value>
-  </data>
-  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
-    <value>رمز التحقق من صحة البريد الإلكتروني ClearDashboard</value>
-  </data>
-  <data name="Marble_Senses" xml:space="preserve">
-    <value>حواس</value>
-  </data>
-  <data name="Pds_Xml" xml:space="preserve">
-    <value>XML</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>أضف نص مجموعة رمزية إلى عرض محسن التركيز</value>
-  </data>
-  <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>إرسال البريد الإلكتروني للتحقق من الصحة</value>
-  </data>
-  <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>رموز كوربوس</value>
-  </data>
-  <data name="Windows_AlignmentTool" xml:space="preserve">
-    <value>أداة المحاذاة</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>NEH</value>
-  </data>
-  <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>البريد الإلكتروني إرسال خطأ</value>
-  </data>
-  <data name="Pins_Gloss" xml:space="preserve">
-    <value>لمعان</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>مارك محاذاة كـ "مراجعة احتياجات"</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>يكتب</value>
-  </data>
-  <data name="Windows_PINS" xml:space="preserve">
-    <value>دبابيس</value>
-  </data>
-  <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>سفر اللاويين</value>
-  </data>
-  <data name="ProperCase_Titus" xml:space="preserve">
-    <value>تيتوس</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>يخلق</value>
-  </data>
-  <data name="ProperCase_Philippians" xml:space="preserve">
-    <value>فيلبي</value>
-  </data>
-  <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>كلمة المرور:</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>نعم</value>
-  </data>
-  <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>غلاطية</value>
-  </data>
-  <data name="Marble_DomainsTitle" xml:space="preserve">
-    <value>المجالات</value>
-  </data>
-  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
-    <value>عد عن طريق التدريب النص</value>
-  </data>
-  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
-    <value>آلة</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="ProperCase_Ruth" xml:space="preserve">
-    <value>روث</value>
-  </data>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
-  </data>
-  <data name="ProjectPicker_NoMatches" xml:space="preserve">
-    <value>لا تطابقات.</value>
-  </data>
-  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
-    <value>منظمة</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>الناس؛ الشرف والاحترام والوضع</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
-  </data>
-  <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>عرض ما قبل الإلغاء</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>دمج كاملة ... واجهة إعادة تحميل</value>
-  </data>
-  <data name="Settings_ValidateEmailCode" xml:space="preserve">
-    <value>التحقق من صحة رمز البريد الإلكتروني</value>
-  </data>
-  <data name="Notes_NoteLabelGroups" xml:space="preserve">
-    <value>مجموعات الملصقات</value>
-  </data>
-  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>الحداد</value>
-  </data>
-  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
-    <value>الاداءات</value>
-  </data>
-  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
-    <value>بيت شعر</value>
-  </data>
-  <data name="GEN" xml:space="preserve">
-    <value>GEN</value>
-  </data>
-  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
-    <value>حذف هذا المحسّن؟</value>
-  </data>
-  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>عد عن طريق النص السطح</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>اعمال البناء؛ تربية الحيوان</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>حدد كوربوس</value>
-  </data>
-  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>تطبيق الترجمة</value>
-  </data>
-  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>مفتاح الترخيص مطلوب</value>
-  </data>
-  <data name="LUK" xml:space="preserve">
-    <value>LUK</value>
-  </data>
-  <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>لكلية</value>
-  </data>
-  <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>ترجمة</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>منسقة</value>
-  </data>
-  <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>إصدار:</value>
-  </data>
-  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
-    <value>لغة</value>
-  </data>
-  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>سطح تصميم المشروع</value>
-  </data>
-  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>قم بتحديث قائمة مشاريع التعاون</value>
-  </data>
-  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
-    <value>أداة المحاذاة</value>
-  </data>
-  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>المصدر المرجع</value>
-  </data>
-  <data name="BulkAlignmentReview_Count" xml:space="preserve">
-    <value>عدد</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>خلف</value>
-  </data>
-  <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
-  </data>
-  <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>يسجل</value>
-  </data>
-  <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>مجموعة رمزية</value>
-  </data>
-  <data name="Marble_Scope" xml:space="preserve">
-    <value>نِطَاق:</value>
-  </data>
-  <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>اسم العنصر</value>
-  </data>
-  <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>مجموعة جديدة</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
-    <value>يفتح</value>
-  </data>
-  <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>تغيير مستوى التكبير للمحتوى</value>
-  </data>
-  <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>كتاب سابق</value>
-  </data>
-  <data name="MainView_WindowsPINS" xml:space="preserve">
-    <value>PINS</value>
-  </data>
-  <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>حجم الخط الهدف:</value>
-  </data>
-  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
-    <value>كتاب</value>
-  </data>
-  <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>توجد مجموعة تسمية بالفعل مع الاسم</value>
-  </data>
-  <data name="Landing_Projects" xml:space="preserve">
-    <value>المشاريع</value>
-  </data>
-  <data name="Bcv_Offset" xml:space="preserve">
-    <value>عوض</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>مارك محاذاة على أنها "صالحة"</value>
-  </data>
-  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>مستخدم</value>
-  </data>
-  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100 ٪</value>
-  </data>
-  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>معاني الكلمات</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>JON</value>
-  </data>
-  <data name="Settings_UserAlreadyExists" xml:space="preserve">
-    <value>المستخدم موجود بالفعل على الخادم</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>يضيف</value>
-  </data>
-  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>إنشاء مشروع جديد</value>
-  </data>
-  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>العد</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>حذف هذا المعنى</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>مارك تم اختياره على أنه "غير صالح"</value>
-  </data>
-  <data name="NewCollabUserView_Email" xml:space="preserve">
-    <value>بريد إلكتروني:</value>
-  </data>
-  <data name="CreatedBy" xml:space="preserve">
-    <value>انشأ من قبل</value>
-  </data>
-  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>انضم إلى الرموز لزوج اللغة</value>
-  </data>
-  <data name="Pds_StudyBible" xml:space="preserve">
-    <value>الدراسة</value>
-  </data>
-  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma من أجل Lexeme الجديد:</value>
-  </data>
-  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>كلمات محورية</value>
-  </data>
-  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
-    <value>حذف هذه الترجمة</value>
-  </data>
-  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>جزء المصدر</value>
-  </data>
-  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Word Machine Word Aligner</value>
-  </data>
-  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>أضف معنى لهذا ليمما</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>كائنات وقوى خارقة للطبيعة</value>
-  </data>
-  <data name="Bcv_NextChapter" xml:space="preserve">
-    <value>الفصل التالي</value>
-  </data>
-  <data name="Marble_VerseSense" xml:space="preserve">
-    <value>إحساس الآية</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
-  </data>
-  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
-    <value>تم حفظه على الخادم البعيد</value>
-  </data>
-  <data name="Pins_Prefix" xml:space="preserve">
-    <value>بادئة</value>
-  </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
-  </data>
-  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
-    <value>مجموعة</value>
-  </data>
-  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>بيانات التعريف json</value>
-  </data>
-  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>إنشاء مستخدم تعاون</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>تحديث</value>
-  </data>
-  <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>أعداد</value>
-  </data>
-  <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>تشمل في دوران عرض الساعة</value>
-  </data>
-  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
-    <value>خطأ في إنشاء المستخدم على الخادم</value>
-  </data>
-  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
-    <value>عرض محسّن</value>
-  </data>
-  <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>أضف شكلًا معجميًا إلى هذا ليمما</value>
-  </data>
-  <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>تحميل المراجع</value>
-  </data>
-  <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>يرجى إدخال مفتاح الترخيص الخاص بك</value>
-  </data>
-  <data name="Notes_LabelAdd" xml:space="preserve">
-    <value>إضافة تسمية</value>
-  </data>
-  <data name="Notes_Word" xml:space="preserve">
-    <value>كلمة</value>
-  </data>
-  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
-    <value>المجال الدلالي:</value>
-  </data>
-  <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>LEMMAS ذات الصلة</value>
-  </data>
-  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>الوثنية</value>
-  </data>
-  <data name="AMO" xml:space="preserve">
-    <value>AMO</value>
-  </data>
-  <data name="Notes_FilterExpander" xml:space="preserve">
-    <value>المرشحات</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>ZEP</value>
-  </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>إلغاء الترجمة</value>
-  </data>
-  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>رموز كوربوس</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>ينعش</value>
-  </data>
-  <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>البحث من قبل العبرية/اليونانية</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>إظهار مهام الخلفية</value>
-  </data>
-  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
-    <value>ملاحظات واضحة</value>
-  </data>
-  <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Sourcelanguage</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>يحفظ</value>
-  </data>
-  <data name="ProperCase_Haggai" xml:space="preserve">
-    <value>هاجاي</value>
-  </data>
-  <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>أضف نص المجموعة المميزة إلى نافذة جديدة محسّنة</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="Pins_Code" xml:space="preserve">
-    <value>شفرة</value>
-  </data>
-  <data name="ProperCase_2_Kings" xml:space="preserve">
-    <value>2 ملوك</value>
-  </data>
-  <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>غير مهتم</value>
-  </data>
-  <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>تسميات</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>اسم</value>
-  </data>
-  <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>قاعدة البيانات:</value>
-  </data>
-  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>إزالة كوربوس</value>
-  </data>
-  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
-    <value>نِطَاق:</value>
-  </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>التحقق من صحة رمز البريد الإلكتروني</value>
-  </data>
-  <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>إنشاء مشروع جديد</value>
-  </data>
-  <data name="MainView_Help" xml:space="preserve">
-    <value>يساعد</value>
-  </data>
-  <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>قم بتناسب منطقة المحتوى بأكملها مع منفذ العرض</value>
-  </data>
-  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>مصطلحات الكتاب المقدس</value>
-  </data>
-  <data name="OldTestament" xml:space="preserve">
-    <value>العهد القديم</value>
-  </data>
-  <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>العبرانيين</value>
-  </data>
-  <data name="DisplayName" xml:space="preserve">
-    <value>اسم العرض</value>
-  </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
-  </data>
-  <data name="Bcv_NextVerse" xml:space="preserve">
-    <value>الآية التالية</value>
-  </data>
-  <data name="Marble_All" xml:space="preserve">
-    <value>الجميع</value>
-  </data>
-  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>محاذاة '{0}' مع '{1}'؟</value>
-  </data>
-  <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>ترجمة جديدة</value>
-  </data>
-  <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>إظهار عناصر التحكم في العرض المحسنة</value>
-  </data>
-  <data name="Marble_Definition" xml:space="preserve">
-    <value>تعريف</value>
-  </data>
-  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
-    <value>لمعان</value>
-  </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>مزامير</value>
-  </data>
-  <data name="MRK" xml:space="preserve">
-    <value>MRK</value>
-  </data>
-  <data name="ShellView_Loading" xml:space="preserve">
-    <value>تحميل...</value>
-  </data>
-  <data name="ProperCase_Mark" xml:space="preserve">
-    <value>علامة</value>
-  </data>
-  <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>التباعد الرأسي:</value>
-  </data>
-  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>المشاريع</value>
-  </data>
-  <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>انضم إلى الرموز</value>
-  </data>
-  <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>مرشح دبابيس</value>
-  </data>
-  <data name="ProperCase_Jude" xml:space="preserve">
-    <value>جود</value>
-  </data>
-  <data name="HOS" xml:space="preserve">
-    <value>HOS</value>
-  </data>
-  <data name="ShellView_User" xml:space="preserve">
-    <value>مستخدم</value>
-  </data>
-  <data name="ProperCase_1_Peter" xml:space="preserve">
-    <value>1 بيتر</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
-    <value>صاحب المشروع</value>
-  </data>
-  <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>ترجمة خلفية</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="ProperCase_Esther" xml:space="preserve">
-    <value>استير</value>
-  </data>
-  <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>اسم العائلة</value>
-  </data>
-  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
-    <value>أضف لكزسم</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>مراجعة المحاذاة بالجملة</value>
-  </data>
-  <data name="BiblicalTermsDomains_People" xml:space="preserve">
-    <value>الناس</value>
-  </data>
-  <data name="BiblicalTermsForm_Project" xml:space="preserve">
-    <value>مشروع</value>
-  </data>
-  <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 تيموثي</value>
-  </data>
-  <data name="MainView_LayoutsSave" xml:space="preserve">
-    <value>حفظ التصميم الحالي</value>
+  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
+    <value>حذف المحاذاة</value>
+  </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>اسم المستخدم</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>الجميع</value>
   </data>
-  <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>قم بإزالة هذا المجال الدلالي من هذا المعنى</value>
+  <data name="TargetContextView_ZoomIn" xml:space="preserve">
+    <value>تكبير</value>
   </data>
-  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>إنشاء موازاة آيات الشركات</value>
+  <data name="SlackMessageView_Message" xml:space="preserve">
+    <value>رسالة:</value>
   </data>
-  <data name="MainView_Windows" xml:space="preserve">
-    <value>شبابيك</value>
+  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>اعمال البناء؛ تربية الحيوان</value>
   </data>
-  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>أضف عرض الموافقة بالجملة إلى عرض محسّن مركّز</value>
+  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
+    <value>عرض محسّن</value>
   </data>
-  <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>فهرس أبجدي</value>
+  <data name="MergeDialog_OperationErrored" xml:space="preserve">
+    <value>خطأ واجه</value>
+  </data>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>لم يتم العثور عليها على النظام!</value>
+  </data>
+  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
+    <value>فتح في الآونة الأخيرة</value>
+  </data>
+  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
+    <value>أضف نص المجموعة المميزة إلى عرض جديد محسّن</value>
+  </data>
+  <data name="ProperCase_Philippians" xml:space="preserve">
+    <value>فيلبي</value>
+  </data>
+  <data name="Delete_Project_Confirmation" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد حذف هذا المشروع؟</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
+    <value>قم بإزالة مجموعة الملصقات هذه</value>
+  </data>
+  <data name="Pins_Forms" xml:space="preserve">
+    <value>نماذج</value>
+  </data>
+  <data name="ProjectPicker_DeleteError" xml:space="preserve">
+    <value>لا يمكنك حذف هذا المشروع ، لا يزال هناك تطبيق آخر يستخدمه.</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="Marble_Domains" xml:space="preserve">
+    <value>المجالات:</value>
+  </data>
+  <data name="ProperCase_Nahum" xml:space="preserve">
+    <value>ناحوم</value>
+  </data>
+  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
+    <value>ذات الصلة</value>
+  </data>
+  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
+    <value>مستخدم تعاون جديد</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
   </data>
-  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>الإسم الأول مطلوب</value>
+  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
+    <value>تمكين وضع الطاقة</value>
   </data>
-  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>مغلق</value>
+  <data name="ProperCase_Obadiah" xml:space="preserve">
+    <value>أوباديا</value>
+  </data>
+  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
+    <value>كلمات محورية</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>مزامير</value>
+  </data>
+  <data name="OldTestament" xml:space="preserve">
+    <value>العهد القديم</value>
+  </data>
+  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
+    <value>يحتاج مراجعة</value>
+  </data>
+  <data name="TargetContextView_Unformatted" xml:space="preserve">
+    <value>غير مهتم</value>
+  </data>
+  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
+    <value>لا اخطاء</value>
+  </data>
+  <data name="Marble_Senses" xml:space="preserve">
+    <value>حواس</value>
+  </data>
+  <data name="Notes_Note_Modified" xml:space="preserve">
+    <value>معدل</value>
+  </data>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>تم حفظه على الخادم البعيد</value>
+  </data>
+  <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
+    <value>قم بإنشاء مشروعك باستخدام معالج قالب المشروع.</value>
+  </data>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>أضف إلى وجهة نظر محسنة مركزة</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>خلف</value>
+  </data>
+  <data name="Pds_Auxiliary" xml:space="preserve">
+    <value>مساعد</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
+    <value>مستخدم</value>
+  </data>
+  <data name="Bcv_Chapter" xml:space="preserve">
+    <value>الفصل</value>
+  </data>
+  <data name="Lexicon_Concordance" xml:space="preserve">
+    <value>فهرس أبجدي</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
+    <value>رفض</value>
+  </data>
+  <data name="Marble_FrequencyGraph" xml:space="preserve">
+    <value>الرسم البياني التردد</value>
   </data>
   <data name="ProperCase_Exodus" xml:space="preserve">
     <value>خروج</value>
   </data>
-  <data name="SNG" xml:space="preserve">
-    <value>SNG</value>
+  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
+    <value>أضف لكزسم</value>
   </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>كلمة:</value>
+  <data name="MainView_File" xml:space="preserve">
+    <value>ملف</value>
   </data>
-  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>عاطِفَة</value>
+  <data name="Settings_Reserved" xml:space="preserve">
+    <value>محجوز</value>
   </data>
-  <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>بالملاحظة نص</value>
+  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
+    <value>كلمات محاذاة</value>
   </data>
-  <data name="Settings_SaveSettings" xml:space="preserve">
-    <value>احفظ التغييرات</value>
+  <data name="Marble_Definition" xml:space="preserve">
+    <value>تعريف</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
+    <value>تم اختيار علامة "صالحة"</value>
+  </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>البريد الإلكتروني إرسال خطأ</value>
+  </data>
+  <data name="ProjectValidator_SameName" xml:space="preserve">
+    <value>مشروع مع نفس الاسم موجود بالفعل. الرجاء اختيار اسم فريد.</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
+    <value>الأشجار؛ الفاكهة</value>
+  </data>
+  <data name="ShellView_Loading" xml:space="preserve">
+    <value>تحميل...</value>
+  </data>
+  <data name="ProperCase_Song of Songs" xml:space="preserve">
+    <value>أغنية الأغاني</value>
+  </data>
+  <data name="Notes_LabelGroupAdd" xml:space="preserve">
+    <value>أضف مجموعة التسمية</value>
+  </data>
+  <data name="ProperCase_2_John" xml:space="preserve">
+    <value>2 جون</value>
+  </data>
+  <data name="Notes_FilterExpander" xml:space="preserve">
+    <value>المرشحات</value>
+  </data>
+  <data name="ProperCase_2_Kings" xml:space="preserve">
+    <value>2 ملوك</value>
+  </data>
+  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
+    <value>منطقة</value>
+  </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>ClearDashboard إعدادات</value>
+  </data>
+  <data name="ShellView_ShowNotes" xml:space="preserve">
+    <value>ملاحظات الإصدار</value>
+  </data>
+  <data name="Migrate_Header2" xml:space="preserve">
+    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
+  </data>
+  <data name="Lexicon_NewTranslation" xml:space="preserve">
+    <value>ترجمة جديدة</value>
+  </data>
+  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
+    <value>محاذاة '{0}' مع '{1}'؟</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
+    <value>حدد كتبًا للمعالجة</value>
+  </data>
+  <data name="Windows_PINS" xml:space="preserve">
+    <value>دبابيس</value>
+  </data>
+  <data name="ProperCase_Micah" xml:space="preserve">
+    <value>ميكا</value>
+  </data>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
+  </data>
+  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
+    <value>أدوات</value>
+  </data>
+  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
+    <value>النموذج المتماثل القطار؟</value>
+  </data>
+  <data name="BiblicalTermsForm_Found" xml:space="preserve">
+    <value>وجد</value>
+  </data>
+  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
+    <value>مشروع يحمل اسم "{0}" موجود بالفعل. الرجاء اختيار اسم فريد ".</value>
+  </data>
+  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
+    <value>لمعان</value>
+  </data>
+  <data name="ProperCase_Ezekiel" xml:space="preserve">
+    <value>حزقيال</value>
+  </data>
+  <data name="Notes_Part" xml:space="preserve">
+    <value>جزء</value>
+  </data>
+  <data name="Pds_StudyBible" xml:space="preserve">
+    <value>الدراسة</value>
+  </data>
+  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
+    <value>الحداد</value>
+  </data>
+  <data name="Notes_LabelGroupName" xml:space="preserve">
+    <value>اسم مجموعة التسمية</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>كائنات وقوى خارقة للطبيعة. الألقاب</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>أضف نص مجموعة رمزية إلى عرض محسن التركيز</value>
+  </data>
+  <data name="ProperCase_1_John" xml:space="preserve">
+    <value>1 جون</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>يمسح</value>
   </data>
-  <data name="MainView_Layouts" xml:space="preserve">
-    <value>تخطيطات</value>
+  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
+    <value>إذا تم التحقق منه ، فسيؤدي ذلك إلى تغيير جميع أحداث هذه الكلمة</value>
   </data>
-  <data name="Notes_UnreadReplies" xml:space="preserve">
-    <value>ردود غير مقروءة</value>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>وصف</value>
   </data>
-  <data name="SlackMessageView_NoInternet" xml:space="preserve">
-    <value>لا انترنت</value>
+  <data name="ProperCase_1_Samuel" xml:space="preserve">
+    <value>1 صموئيل</value>
   </data>
-  <data name="Pins_LexemeType" xml:space="preserve">
-    <value>نوع lexeme</value>
+  <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
+    <value>مع الملصقات من</value>
   </data>
-  <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1 كورنثوس</value>
+  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
+    <value>أدخل ترجمة جديدة</value>
   </data>
-  <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>أضف مجموعة ملصقات</value>
+  <data name="EnhancedView_AddAlignment" xml:space="preserve">
+    <value>إضافة محاذاة؟</value>
   </data>
-  <data name="Marble_Glosses" xml:space="preserve">
-    <value>اللمعان:</value>
+  <data name="EnhancedView_NoVerseData" xml:space="preserve">
+    <value>لا توجد بيانات آية في نطاق الآية هذا.</value>
   </data>
-  <data name="Next" xml:space="preserve">
-    <value>التالي</value>
+  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
+    <value>يفتح</value>
   </data>
-  <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 تيموثي</value>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>أضف مستخدم تعاون جديد</value>
   </data>
-  <data name="Marble_Verses" xml:space="preserve">
-    <value>آيات</value>
+  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
+    <value>إنشاء interlinear</value>
   </data>
-  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>حذف هذا الكسيم؟</value>
+  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
+    <value>سطح تصميم المشروع</value>
   </data>
-  <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>مفتوح/مغلق</value>
+  <data name="Close" xml:space="preserve">
+    <value>يغلق</value>
   </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
+  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
+    <value>طبيعة</value>
   </data>
-  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
-    <value>موافقة</value>
+  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
+    <value>نص الآية</value>
   </data>
-  <data name="Windows_Dashboard" xml:space="preserve">
-    <value>لوحة القيادة</value>
+  <data name="ProperCase_Revelation" xml:space="preserve">
+    <value>وحي</value>
+  </data>
+  <data name="ProperCase_1_Timothy" xml:space="preserve">
+    <value>1 تيموثي</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
     <value>إنشاء محاذاة</value>
   </data>
-  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>حفظ مستخدم GitLab إلى الخادم</value>
+  <data name="Lexicon_RemoveForm" xml:space="preserve">
+    <value>قم بإزالة هذا النموذج المعجمي من هذا الليمون</value>
   </data>
-  <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>انقر هنا لبدء paratext</value>
+  <data name="Pds_ZoomOut" xml:space="preserve">
+    <value>تصغير من المحتوى</value>
   </data>
-  <data name="Bcv_PreviousVerse" xml:space="preserve">
-    <value>الآية السابقة</value>
+  <data name="MainView_Layouts" xml:space="preserve">
+    <value>تخطيطات</value>
   </data>
-  <data name="ProjectSetup_Title" xml:space="preserve">
-    <value>قم بإنشاء مشروعك الجديد</value>
+  <data name="TargetContextView_Formatted" xml:space="preserve">
+    <value>منسقة</value>
   </data>
-  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>عدد الأخطاء:</value>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>بريد إلكتروني</value>
   </data>
-  <data name="Pins_Suffix" xml:space="preserve">
-    <value>لاحقة</value>
+  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
+    <value>آلة</value>
   </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
+  <data name="Landing_NewProject" xml:space="preserve">
+    <value>مشروع جديد</value>
+  </data>
+  <data name="Pds_MarbleResource" xml:space="preserve">
+    <value>مربى</value>
+  </data>
+  <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
+    <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض Mirror View على الشاشة الثالثة</value>
+  </data>
+  <data name="Pds_TransliterationManual" xml:space="preserve">
+    <value>ترجمة</value>
+  </data>
+  <data name="FontSettings_SourceFontSize" xml:space="preserve">
+    <value>حجم الخط المصدر:</value>
+  </data>
+  <data name="ProjectPicker_Project" xml:space="preserve">
+    <value>مشروع:</value>
+  </data>
+  <data name="MainView_FileNew" xml:space="preserve">
+    <value>جديد</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="Lexicon_LemmaForms" xml:space="preserve">
+    <value>ليما/النماذج:</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>إدارة التعاون</value>
+  </data>
+  <data name="NewTestament" xml:space="preserve">
+    <value>العهد الجديد</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
+  </data>
+  <data name="BulkAlignmentReview_Target" xml:space="preserve">
+    <value>هدف</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
+    <value>إنشاء محاذاة الكلمات</value>
+  </data>
+  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
+    <value>المجال الدلالي:</value>
+  </data>
+  <data name="RegistrationView_FirstName" xml:space="preserve">
+    <value>يرجى ادخال الاسم الاول</value>
   </data>
   <data name="2KI" xml:space="preserve">
     <value>2KI</value>
   </data>
-  <data name="ProperCase_3_John" xml:space="preserve">
-    <value>3 جون</value>
+  <data name="ProperCase_2_Corinthians" xml:space="preserve">
+    <value>2 كورنثوس</value>
   </data>
-  <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>ClearDashboard</value>
+  <data name="Marble_Glosses" xml:space="preserve">
+    <value>اللمعان:</value>
   </data>
-  <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>ملاخي</value>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
   </data>
-  <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>تنسيق</value>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
   </data>
-  <data name="BiblicalTermsForm_Category" xml:space="preserve">
-    <value>فئة</value>
+  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
+    <value>غاية</value>
   </data>
-  <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>أرسل هذه الملاحظة إلى Paratext</value>
+  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
+    <value>الاداءات</value>
+  </data>
+  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
+    <value>حذف هذا المحسّن؟</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
+  </data>
+  <data name="ProjectPicker_Database" xml:space="preserve">
+    <value>قاعدة البيانات:</value>
+  </data>
+  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
+    <value>شخص</value>
+  </data>
+  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
+    <value>إزالة مجموعة الملصقات هذه؟</value>
+  </data>
+  <data name="ProperCase_1_Kings" xml:space="preserve">
+    <value>1 ملوك</value>
+  </data>
+  <data name="Lexicon_RemoveDomain" xml:space="preserve">
+    <value>قم بإزالة هذا المجال الدلالي من هذا المعنى</value>
+  </data>
+  <data name="Marble_DefinitionShort" xml:space="preserve">
+    <value>تعريف قصير:</value>
+  </data>
+  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
+    <value>جزء المصدر</value>
+  </data>
+  <data name="Pds_ShowVersesMenu" xml:space="preserve">
+    <value>أضف نص المجموعة المميزة إلى نافذة جديدة محسّنة</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
+    <value>مارك محاذاة كـ "مراجعة احتياجات"</value>
   </data>
   <data name="ExpandView" xml:space="preserve">
     <value>توسيع العرض</value>
   </data>
-  <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>إنه وحيد هنا. يرجى إنشاء مشروع جديد.</value>
+  <data name="ProjectPicker_CreateProject" xml:space="preserve">
+    <value>إنشاء مشروع:</value>
   </data>
-  <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>رموز قوية</value>
+  <data name="RegistrationView_LicenseKey" xml:space="preserve">
+    <value>يرجى إدخال مفتاح الترخيص الخاص بك</value>
   </data>
-  <data name="Bcv_NextBook" xml:space="preserve">
-    <value>الكتاب التالي</value>
+  <data name="Marble_Book" xml:space="preserve">
+    <value>كتاب</value>
   </data>
-  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext قيد التشغيل ولكن غير متصل.</value>
+  <data name="MainView_FileOpen" xml:space="preserve">
+    <value>يفتح</value>
+  </data>
+  <data name="Pds_ManuscriptGreek" xml:space="preserve">
+    <value>البقعة اليونانية</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
     <value>موازية آيات كوربورا</value>
   </data>
-  <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>يوجد معجم ل lemma بالفعل</value>
+  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
+    <value>كتاب</value>
   </data>
-  <data name="NewCollabUserView_Group" xml:space="preserve">
-    <value>مجموعة:</value>
+  <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
+    <value>معالج قالب المشروع: {0}</value>
   </data>
-  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>تحقق من بريدك الإلكتروني وأدخل رمز التحقق:</value>
+  <data name="Settings_PowerModes" xml:space="preserve">
+    <value>أوضاع الطاقة</value>
   </data>
-  <data name="ProperCase_Luke" xml:space="preserve">
-    <value>لوقا</value>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
   </data>
-  <data name="MainView_WindowsNotes" xml:space="preserve">
+  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
+    <value>إنشاء محاذاة كلمات جديدة</value>
+  </data>
+  <data name="FontSettings_FontSize" xml:space="preserve">
+    <value>حجم الخط:</value>
+  </data>
+  <data name="Landing_Settings" xml:space="preserve">
+    <value>إعدادات</value>
+  </data>
+  <data name="ProperCase_John" xml:space="preserve">
+    <value>جون</value>
+  </data>
+  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
+    <value>يحتوي اسم المشروع المحدد على شخصيات غير قانونية. تتضمن الأحرف الصالحة "A-Z" (الأحرف الصغيرة والأحرف الكبيرة) ، والأرقام "0-9" والأحرف "-" و "_".</value>
+  </data>
+  <data name="Bcv_NextChapter" xml:space="preserve">
+    <value>الفصل التالي</value>
+  </data>
+  <data name="MainView_WindowsPINS" xml:space="preserve">
+    <value>PINS</value>
+  </data>
+  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
+    <value>رموز كوربوس</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="EnhancedView_Interlinear" xml:space="preserve">
+    <value>مراوح</value>
+  </data>
+  <data name="Notes_AddNewNote" xml:space="preserve">
+    <value>أضف ملاحظة جديدة</value>
+  </data>
+  <data name="FontSettings_Vertical" xml:space="preserve">
+    <value>التباعد الرأسي:</value>
+  </data>
+  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
+    <value>عدد الأخطاء:</value>
+  </data>
+  <data name="Lexicon_Lexeme" xml:space="preserve">
+    <value>لكلية</value>
+  </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>مجموعة</value>
+  </data>
+  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
+    <value>الأحجار الكريمة</value>
+  </data>
+  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
+    <value>بيت شعر</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>الترجمات:</value>
+  </data>
+  <data name="ProperCase_Numbers" xml:space="preserve">
+    <value>أعداد</value>
+  </data>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>إرسال البريد الإلكتروني للتحقق من الصحة</value>
+  </data>
+  <data name="MergeDialog_OperationCancelled" xml:space="preserve">
+    <value>تم إلغاء العملية</value>
+  </data>
+  <data name="Pins_Notes" xml:space="preserve">
     <value>ملحوظات</value>
+  </data>
+  <data name="Notes_FilterStatus_Open" xml:space="preserve">
+    <value>يفتح</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
+    <value>خوارزمية محاذاة كلمة الجهاز</value>
+  </data>
+  <data name="MainView_GatherLogs" xml:space="preserve">
+    <value>أرسل رسالة إلى Clear</value>
+  </data>
+  <data name="ProjectPicker_StartParatext" xml:space="preserve">
+    <value>انقر هنا لبدء paratext</value>
+  </data>
+  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
+    <value>قم بإنشاء رمز كوربوس جديد</value>
+  </data>
+  <data name="Pds_FitNodesToViewport" xml:space="preserve">
+    <value>قم بتناسب جميع العقد مع منفذ العرض</value>
+  </data>
+  <data name="RegistrationView_LastName" xml:space="preserve">
+    <value>الرجاء إدخال اسمك الأخير</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
+    <value>محرر المحاذاة بالجملة</value>
+  </data>
+  <data name="Marble_RelatedLemmas" xml:space="preserve">
+    <value>LEMMAS ذات الصلة</value>
+  </data>
+  <data name="FontSettings_NoteIndicators" xml:space="preserve">
+    <value>ملاحظة المؤشرات:</value>
+  </data>
+  <data name="ProjectPicker_NoMatches" xml:space="preserve">
+    <value>لا تطابقات.</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
+    <value>حذف جميع المحاذاة؟</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
+    <value>رفض</value>
+  </data>
+  <data name="ProperCase_Mark" xml:space="preserve">
+    <value>علامة</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
+  </data>
+  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
+    <value>من قبل الجمعيات</value>
+  </data>
+  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
+    <value>أضف عرض الموافقة بالجملة إلى عرض محسّن مركّز</value>
+  </data>
+  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
+    <value>لم يتم تثبيت Paratext. يرجى تثبيت Paratext وإعادة تشغيل تطبيق ClearDashboard.</value>
+  </data>
+  <data name="Lexicon_ChangeAll" xml:space="preserve">
+    <value>تغيير كل الأحداث غير المخلصة</value>
+  </data>
+  <data name="Windows_AlignmentTool" xml:space="preserve">
+    <value>أداة المحاذاة</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
+    <value>مرحبًا بك في ClearDashboard! الرجاء إدخال معلومات التسجيل الخاصة بك.</value>
+  </data>
+  <data name="Notes_NoteLabels" xml:space="preserve">
+    <value>تسميات</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
+    <value>مارك محاذاة على أنها "صالحة"</value>
+  </data>
+  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
+    <value>الحيوانات</value>
+  </data>
+  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
+    <value>أدخل ترجمة جديدة ل</value>
+  </data>
+  <data name="EnhancedView_Notes" xml:space="preserve">
+    <value>ملحوظات</value>
+  </data>
+  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
+    <value>حذف هذا الكسيم؟</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>التحقق من USFM</value>
+  </data>
+  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
+    <value>ملاحظات واضحة</value>
+  </data>
+  <data name="ProperCase_Habakkuk" xml:space="preserve">
+    <value>Habakkuk</value>
+  </data>
+  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
+    <value>أضف إلى عرض جديد محسّن</value>
+  </data>
+  <data name="Pds_BackTranslation" xml:space="preserve">
+    <value>ترجمة خلفية</value>
+  </data>
+  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
+    <value>مستعمرة</value>
+  </data>
+  <data name="ClockUserControl_Delete" xml:space="preserve">
+    <value>يمسح</value>
+  </data>
+  <data name="NewCollabUserView_Email" xml:space="preserve">
+    <value>بريد إلكتروني:</value>
+  </data>
+  <data name="Pins_Lexeme" xml:space="preserve">
+    <value>لكلية</value>
+  </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>عنوان البريد الإلكتروني</value>
+  </data>
+  <data name="ProperCase_Galatians" xml:space="preserve">
+    <value>غلاطية</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
+    <value>الثدييات الحيوانات البرية</value>
+  </data>
+  <data name="ProjectPicker_CreateLong" xml:space="preserve">
+    <value>قم بإنشاء مشروعك للبدء.</value>
+  </data>
+  <data name="ProperCase_1_Corinthians" xml:space="preserve">
+    <value>1 كورنثوس</value>
+  </data>
+  <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
+    <value>معالج قالب المشروع</value>
+  </data>
+  <data name="ProperCase_Esther" xml:space="preserve">
+    <value>استير</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
+    <value>المفتاح المقدم هو معيب. عندما تم فك تشفيرها ، لا يمكن العثور على بعض عناصر JSON.</value>
+  </data>
+  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
+    <value>إنشاء مستخدم تعاون</value>
+  </data>
+  <data name="ProjectPicker_GetStarted" xml:space="preserve">
+    <value>البدء</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
+    <value>حذف محاذاة '{0}'؟</value>
+  </data>
+  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد حذف هذه المجموعة؟ سيتم حذف جميع الملاحظات ، والمحاذاة ، والألواح الداخلية المرتبطة بهذه المجموعة ولا يمكن استردادها.</value>
+  </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>حساب نموذج ترجمة جديد</value>
+  </data>
+  <data name="ProperCase_2_Timothy" xml:space="preserve">
+    <value>2 تيموثي</value>
+  </data>
+  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
+    <value>دمج كاملة ... واجهة إعادة تحميل</value>
+  </data>
+  <data name="Marble_DefinitionLong" xml:space="preserve">
+    <value>تعريف طويل:</value>
+  </data>
+  <data name="ClockUserControl_LocalTime" xml:space="preserve">
+    <value>الوقت المحلي</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="Notes_TokenizedCorpus" xml:space="preserve">
+    <value>مجموعة رمزية</value>
+  </data>
+  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
+    <value>عروض مفقودة</value>
+  </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>إضافة مجال دلالي إلى هذا المعنى</value>
+  </data>
+  <data name="ProperCase_1_Chronicles" xml:space="preserve">
+    <value>1 سجلات</value>
+  </data>
+  <data name="BiblicalTermsForm_Category" xml:space="preserve">
+    <value>فئة</value>
+  </data>
+  <data name="Settings_Plugins" xml:space="preserve">
+    <value>الإضافات</value>
+  </data>
+  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
+    <value>مشاكل معروفة</value>
+  </data>
+  <data name="FontSettings_Title" xml:space="preserve">
+    <value>عنوان:</value>
+  </data>
+  <data name="Notes_SendToParatext" xml:space="preserve">
+    <value>أرسل هذه الملاحظة إلى Paratext</value>
+  </data>
+  <data name="Marble_SearchHebrew" xml:space="preserve">
+    <value>البحث من قبل العبرية/اليونانية</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
+    <value>تنسيق</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
+    <value>لغة</value>
+  </data>
+  <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
+    <value>إظهار طرق عرض المرآة على شاشة مختلفة عن لوحة القيادة</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>عنوان البريد الإلكتروني</value>
   </data>
   <data name="ProperCase_2_Thessalonians" xml:space="preserve">
     <value>2 تسالونيكي</value>
@@ -2014,10 +826,1240 @@
   <data name="EZR" xml:space="preserve">
     <value>EZR</value>
   </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
+  <data name="ProperCase_Lamentations" xml:space="preserve">
+    <value>الرثاء</value>
+  </data>
+  <data name="Marble_All" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
+  <data name="ProperCase_Daniel" xml:space="preserve">
+    <value>دانيال</value>
+  </data>
+  <data name="Settings_ReservedCaption" xml:space="preserve">
+    <value>مخصصة للتوسع في المستقبل</value>
+  </data>
+  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
+    <value>Paratext قيد التشغيل ولكن غير متصل.</value>
+  </data>
+  <data name="ProperCase_2_Peter" xml:space="preserve">
+    <value>2 بيتر</value>
+  </data>
+  <data name="Notes_LabelRemove" xml:space="preserve">
+    <value>أزل هذا التسمية</value>
+  </data>
+  <data name="Notes_LabelGroupInitialize" xml:space="preserve">
+    <value>تهيئة مجموعة الملصقات</value>
+  </data>
+  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
+    <value>الأعشاب</value>
+  </data>
+  <data name="Notes_NoteLabelGroups" xml:space="preserve">
+    <value>مجموعات الملصقات</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>ينعش</value>
+  </data>
+  <data name="ProjectSetup_Hint" xml:space="preserve">
+    <value>الرجاء إدخال اسم لمشروعك</value>
+  </data>
+  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
+    <value>المصدر المرجع</value>
+  </data>
+  <data name="Marble_Sense" xml:space="preserve">
+    <value>حاسة</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="FontSettings_Horizontal" xml:space="preserve">
+    <value>التباعد الأفقي:</value>
+  </data>
+  <data name="Notes_NoteReplies" xml:space="preserve">
+    <value>الردود</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>مستخدمي المشروع الحاليين:</value>
+  </data>
+  <data name="ProperCase_Malachi" xml:space="preserve">
+    <value>ملاخي</value>
+  </data>
+  <data name="Marble_Chapter" xml:space="preserve">
+    <value>الفصل</value>
+  </data>
+  <data name="Pins_LexemeType" xml:space="preserve">
+    <value>نوع lexeme</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>حفظ مستخدم GitLab إلى الخادم</value>
+  </data>
+  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
+    <value>تحقق من بريدك الإلكتروني وأدخل رمز التحقق:</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+  <data name="MainView_WindowsDashboard" xml:space="preserve">
+    <value>لوحة القيادة</value>
+  </data>
+  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
+    <value>إنشاء interlinear جديد</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>انشأ من قبل</value>
+  </data>
+  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
+    <value>1 تسالونيكي</value>
+  </data>
+  <data name="Bcv_PreviousBook" xml:space="preserve">
+    <value>كتاب سابق</value>
+  </data>
+  <data name="Windows_EnhancedView" xml:space="preserve">
+    <value>عرض محسّن</value>
+  </data>
+  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
+    <value>غير صالح</value>
+  </data>
+  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
+    <value>حدد كيفية تميز الجسم</value>
+  </data>
+  <data name="Delete_Project" xml:space="preserve">
+    <value>حذف المشروع</value>
+  </data>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>أضف Interlinear جديد</value>
+  </data>
+  <data name="Pins_Suffix" xml:space="preserve">
+    <value>لاحقة</value>
+  </data>
+  <data name="Marble_VerseSense" xml:space="preserve">
+    <value>إحساس الآية</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>المشاريع</value>
+  </data>
+  <data name="Notes_LabelAdd" xml:space="preserve">
+    <value>إضافة تسمية</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
+    <value>الناس؛ سلطة</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>يدرب</value>
+  </data>
+  <data name="Pds_Dictionary" xml:space="preserve">
+    <value>قاموس</value>
+  </data>
+  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
+    <value>عد عن طريق النص السطح</value>
+  </data>
+  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
+    <value>مغلق</value>
+  </data>
+  <data name="Windows_CorpusTokens" xml:space="preserve">
+    <value>رموز كوربوس</value>
+  </data>
+  <data name="Notes_NoteLabelGroup" xml:space="preserve">
+    <value>مجموعة</value>
+  </data>
+  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
+    <value>الحكمة ، الفهم</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
+    <value>اختر الكل</value>
+  </data>
+  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
+    <value>مجموعة</value>
+  </data>
+  <data name="NewCollabUserView_Group" xml:space="preserve">
+    <value>مجموعة:</value>
+  </data>
+  <data name="Windows_Dashboard" xml:space="preserve">
+    <value>لوحة القيادة</value>
+  </data>
+  <data name="ProperCase_Ruth" xml:space="preserve">
+    <value>روث</value>
+  </data>
+  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
+    <value>دبابيس تصفية حسب المصطلحات الرئيسية</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>التالي</value>
+  </data>
+  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
+    <value>تطبيق وثيقة</value>
+  </data>
+  <data name="Language [UID_Key]" xml:space="preserve">
+    <value>Arabic [ar]</value>
+  </data>
+  <data name="ProperCase_Leviticus" xml:space="preserve">
+    <value>سفر اللاويين</value>
+  </data>
+  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
+    <value>مجموعة؛ منطقة</value>
+  </data>
+  <data name="ProperCase_Judges" xml:space="preserve">
+    <value>القضاة</value>
+  </data>
+  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
+    <value>العد</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>عدد الرموز المختلفة</value>
+  </data>
+  <data name="ClockUserControl_NewGroup" xml:space="preserve">
+    <value>مجموعة جديدة</value>
+  </data>
+  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
+    <value>نسخ إلى الحافظة</value>
+  </data>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>Paratext لا يعمل</value>
+  </data>
+  <data name="Pins_Occurences" xml:space="preserve">
+    <value>حدث</value>
+  </data>
+  <data name="ProjectPicker_Paratext" xml:space="preserve">
+    <value>Paratext</value>
+  </data>
+  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
+    <value>البحث في الآونة الأخيرة</value>
+  </data>
+  <data name="ProperCase_Zechariah" xml:space="preserve">
+    <value>زكريا</value>
+  </data>
+  <data name="Notes_DeleteConfirmation" xml:space="preserve">
+    <value>حذف هذه الملاحظة؟</value>
+  </data>
+  <data name="1SA" xml:space="preserve">
+    <value>1SA</value>
+  </data>
+  <data name="BiblicalTermsForm_Project" xml:space="preserve">
+    <value>مشروع</value>
+  </data>
+  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
+    <value>صالح</value>
+  </data>
+  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
+    <value>حذف interlinear</value>
+  </data>
+  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
+    <value>أضف عرض الآية إلى عرض محسن مركّز</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>خطأ</value>
+  </data>
+  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
+    <value>مصطلحات الكتاب المقدس</value>
+  </data>
+  <data name="Windows_WordMeanings" xml:space="preserve">
+    <value>معاني الكلمات</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="Notes_UnreadReplies" xml:space="preserve">
+    <value>ردود غير مقروءة</value>
+  </data>
+  <data name="ProjectPicker_AppName" xml:space="preserve">
+    <value>ClearDashboard</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>لا أحد</value>
+  </data>
+  <data name="NewCollabUserView_LastName" xml:space="preserve">
+    <value>اسم العائلة</value>
+  </data>
+  <data name="NewCollabUserView_Password" xml:space="preserve">
+    <value>كلمة المرور:</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
+    <value>أدوات؛ الولادة</value>
+  </data>
+  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
+    <value>تحقق من توفر المستخدم</value>
+  </data>
+  <data name="ProperCase_2_Chronicles" xml:space="preserve">
+    <value>2 سجلات</value>
+  </data>
+  <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
+    <value>أضف مجموعة ملصقات</value>
+  </data>
+  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
+    <value>انضم إلى الرموز لزوج اللغة</value>
+  </data>
+  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
+    <value>رفض اختيار</value>
+  </data>
+  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
+    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم فك تشفيره مع المعلومات التي قدمتها.</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="Lexicon_Meanings" xml:space="preserve">
+    <value>المعاني:</value>
+  </data>
+  <data name="ProjectSetup_Title" xml:space="preserve">
+    <value>قم بإنشاء مشروعك الجديد</value>
+  </data>
+  <data name="FontSettings_TargetFontSize" xml:space="preserve">
+    <value>حجم الخط الهدف:</value>
+  </data>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>إضافة مجال دلالي</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>اسم</value>
+  </data>
+  <data name="Pins_Stem" xml:space="preserve">
+    <value>ينبع</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="FontSettings_Source" xml:space="preserve">
+    <value>النص المصدر:</value>
+  </data>
+  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
+    <value>التضحيات والعروض</value>
+  </data>
+  <data name="EnhancedView_FilterPins" xml:space="preserve">
+    <value>مرشح دبابيس</value>
+  </data>
+  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
+    <value>منظمة</value>
+  </data>
+  <data name="Settings_MultiMonitorSupport" xml:space="preserve">
+    <value>دعم Multi Monitor</value>
+  </data>
+  <data name="Lexicon_Lemma" xml:space="preserve">
+    <value>ليما</value>
+  </data>
+  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
+    <value>رمز التحقق من صحة البريد الإلكتروني ClearDashboard</value>
+  </data>
+  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
+    <value>إلغاء المهمة</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>يحرر</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>المستخدم موجود بالفعل على الخادم</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
+    <value>مارك تم اختياره على أنه "غير صالح"</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>تم إلغاء المهمة</value>
+  </data>
+  <data name="ShellView_UpdateFound" xml:space="preserve">
+    <value>تحديث إلى إصدار جديد من ClearDashboard</value>
+  </data>
+  <data name="MainView_GettingStartedGuide" xml:space="preserve">
+    <value>دليل البداية</value>
+  </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>قم بتحديث قائمة مشاريع التعاون</value>
+  </data>
+  <data name="Pds_Target" xml:space="preserve">
+    <value>هدف</value>
+  </data>
+  <data name="ProperCase_Colossians" xml:space="preserve">
+    <value>كولوسي</value>
+  </data>
+  <data name="BiblicalTermsForm_Note" xml:space="preserve">
+    <value>ملحوظة</value>
+  </data>
+  <data name="ClockUserControl_Name" xml:space="preserve">
+    <value>اسم العنصر</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>ينسخ</value>
+  </data>
+  <data name="NewProjectDialog_Title" xml:space="preserve">
+    <value>إنشاء مشروع جديد</value>
+  </data>
+  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
+    <value>إزالة كوربوس</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="ProperCase_Genesis" xml:space="preserve">
+    <value>منشأ</value>
+  </data>
+  <data name="Notes_Note_NoteStatus" xml:space="preserve">
+    <value>حالة</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
+    <value>مغلق</value>
+  </data>
+  <data name="Marble_DomainsTitle" xml:space="preserve">
+    <value>المجالات</value>
+  </data>
+  <data name="ProperCase_Job" xml:space="preserve">
+    <value>وظيفة</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>حالة</value>
+  </data>
+  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
+    <value>سفر الجامعة</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
+    <value>نوع المحاذاة:</value>
+  </data>
+  <data name="EnhancedView_CreateNote" xml:space="preserve">
+    <value>عرض/إنشاء ملاحظات</value>
+  </data>
+  <data name="LicenseValidator_LastMissing" xml:space="preserve">
+    <value>إسم العائلة مطلوب</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="ClockUserControl_Add" xml:space="preserve">
+    <value>يضيف</value>
+  </data>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
+  <data name="ProperCase_Hebrews" xml:space="preserve">
+    <value>العبرانيين</value>
+  </data>
+  <data name="Pds_AddCorpora" xml:space="preserve">
+    <value>إضافة Corpora</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="Lexicon_AddLexeme" xml:space="preserve">
+    <value>إضافة لكزيم</value>
+  </data>
+  <data name="ProperCase_Matthew" xml:space="preserve">
+    <value>ماثيو</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>كائنات وقوى خارقة للطبيعة</value>
+  </data>
+  <data name="SlackMessageView_NoInternet" xml:space="preserve">
+    <value>لا انترنت</value>
+  </data>
+  <data name="ShellView_User" xml:space="preserve">
+    <value>مستخدم</value>
+  </data>
+  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
+    <value>خطأ في إنشاء المستخدم على الخادم</value>
+  </data>
+  <data name="Bcv_NextVerse" xml:space="preserve">
+    <value>الآية التالية</value>
+  </data>
+  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
+    <value>أضف معنى لهذا ليمما</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
+    <value>حذف المحاذاة؟</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
+    <value>علامة تم اختيارها على أنها "مراجعة احتياجات"</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>يساعد</value>
+  </data>
+  <data name="Windows_TextCollection" xml:space="preserve">
+    <value>جمع النص</value>
+  </data>
+  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
+    <value>نصب تذكاري</value>
+  </data>
+  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
+    <value>حذف المشروع</value>
+  </data>
+  <data name="ProperCase_Joel" xml:space="preserve">
+    <value>جويل</value>
+  </data>
+  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
+    <value>يعتمد</value>
+  </data>
+  <data name="Bcv_PreviousVerse" xml:space="preserve">
+    <value>الآية السابقة</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="NewCollabUserView_FirstName" xml:space="preserve">
+    <value>الاسم الأول</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>التحقق من صحة رمز البريد الإلكتروني</value>
+  </data>
+  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
+    <value>حذف هذه الترجمة</value>
+  </data>
+  <data name="Marble_Scope" xml:space="preserve">
+    <value>نِطَاق:</value>
+  </data>
+  <data name="Settings_AquaEnabled" xml:space="preserve">
+    <value>تمكين البرنامج المساعد التجريبي المائي</value>
+  </data>
+  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
+    <value>الفصل</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>يحفظ</value>
+  </data>
+  <data name="ProperCase_2_Samuel" xml:space="preserve">
+    <value>2 صموئيل</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>يكتب</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="ProperCase_Deuteronomy" xml:space="preserve">
+    <value>سفر التثنية</value>
+  </data>
+  <data name="MainView_LayoutsDelete" xml:space="preserve">
+    <value>حذف التصميم المحفوظ</value>
+  </data>
+  <data name="ProperCase_James" xml:space="preserve">
+    <value>جوامع</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>مشاريع التعاون</value>
+  </data>
+  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
+    <value>قم بتوسيع المحتوى إلى 100 ٪</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>عزرا</value>
+  </data>
+  <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
+    <value>مفتاح الترخيص مطلوب</value>
+  </data>
+  <data name="Bcv_PreviousChapter" xml:space="preserve">
+    <value>الفصل السابق</value>
+  </data>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>احفظ التغييرات</value>
+  </data>
+  <data name="Notes_FilterUsers" xml:space="preserve">
+    <value>من قبل المستخدمين</value>
+  </data>
+  <data name="Marble_PartsOfSpeech" xml:space="preserve">
+    <value>أجزاء من الكلام</value>
+  </data>
+  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
+    <value>محاذاة</value>
+  </data>
+  <data name="SlackMessageView_Title" xml:space="preserve">
+    <value>أرسل رسالة الركود</value>
+  </data>
+  <data name="MainView_Windows" xml:space="preserve">
+    <value>شبابيك</value>
+  </data>
+  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
+    <value>اضبط رسم خرائط الآية بين Corpora المتوازي</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
+    <value>بيانات التعريف json</value>
+  </data>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>كتاب</value>
+  </data>
+  <data name="Pds_ResetVerseVersification" xml:space="preserve">
+    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>استعادة مستخدم التعاون</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>يبدأ</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
+    <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
+  </data>
+  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
+  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
+    <value>الفاكهة</value>
+  </data>
+  <data name="Pins_Language" xml:space="preserve">
+    <value>لغة</value>
+  </data>
+  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
+    <value>TransliterationWithencoder</value>
+  </data>
+  <data name="ProperCase_Jude" xml:space="preserve">
+    <value>جود</value>
+  </data>
+  <data name="SlackMessageView_Send" xml:space="preserve">
+    <value>يرسل</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
+    <value>ردود غير مقروءة موجودة</value>
+  </data>
+  <data name="ProjectPicker_Version" xml:space="preserve">
+    <value>إصدار:</value>
+  </data>
+  <data name="ProperCase_Joshua" xml:space="preserve">
+    <value>جوشوا</value>
+  </data>
+  <data name="Notes_FilterNoteText" xml:space="preserve">
+    <value>بالملاحظة نص</value>
+  </data>
+  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
+    <value>عد عن طريق التدريب النص</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
     <value>عن</value>
+  </data>
+  <data name="MainView_WindowsMarble" xml:space="preserve">
+    <value>رخام</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="Lexicon_LexemeExists" xml:space="preserve">
+    <value>يوجد معجم ل lemma بالفعل</value>
+  </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>استيراد مشروع خادم</value>
+  </data>
+  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
+    <value>الجزء المستهدف</value>
+  </data>
+  <data name="Landing_Project" xml:space="preserve">
+    <value>مشروع</value>
+  </data>
+  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
+    <value>تطبيق الترجمة</value>
+  </data>
+  <data name="Notes_NoteReplies_Read" xml:space="preserve">
+    <value>مرئي</value>
+  </data>
+  <data name="ProperCase_Amos" xml:space="preserve">
+    <value>عاموس</value>
+  </data>
+  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
+    <value>حذف هذا المعنى</value>
+  </data>
+  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
+    <value>الحاويات تربية الحيوان</value>
+  </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>جزء</value>
+  </data>
+  <data name="EnhancedView_Alignment" xml:space="preserve">
+    <value>تنسيق</value>
+  </data>
+  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
+    <value>studyBibleadditions</value>
+  </data>
+  <data name="Pins_Filter" xml:space="preserve">
+    <value>منقي:</value>
+  </data>
+  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
+    <value>علامات وعجائب</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>اسم العرض</value>
+  </data>
+  <data name="Pins_Word" xml:space="preserve">
+    <value>كلمة</value>
+  </data>
+  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
+    <value>حدد منظمة</value>
+  </data>
+  <data name="BiblicalTermsForm_Term" xml:space="preserve">
+    <value>شرط</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="ProperCase_Nehemiah" xml:space="preserve">
+    <value>نحميا</value>
+  </data>
+  <data name="RegistrationDialogView_Register" xml:space="preserve">
+    <value>يسجل</value>
+  </data>
+  <data name="Pds_ZoomIn" xml:space="preserve">
+    <value>تكبير على المحتوى</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="Notes_OpenClosed" xml:space="preserve">
+    <value>مفتوح/مغلق</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
+    <value>حذف المحاذاة</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
+  </data>
+  <data name="UseDefaults" xml:space="preserve">
+    <value>إنشاء باستخدام الافتراضات</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="Pins_Phrase" xml:space="preserve">
+    <value>عبارة</value>
+  </data>
+  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
+    <value>الاداءات</value>
+  </data>
+  <data name="Marble_StrongCodes" xml:space="preserve">
+    <value>رموز قوية</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
+    <value>بناء؛ الأنشطة الدينية</value>
+  </data>
+  <data name="Bcv_Sync" xml:space="preserve">
+    <value>المزامنة</value>
+  </data>
+  <data name="Pins_Prefix" xml:space="preserve">
+    <value>بادئة</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
+    <value>إنشاء مشروع جديد</value>
+  </data>
+  <data name="Pds_PropertiesMenu" xml:space="preserve">
+    <value>ملكيات</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="ProperCase_3_John" xml:space="preserve">
+    <value>3 جون</value>
+  </data>
+  <data name="ProperCase_Haggai" xml:space="preserve">
+    <value>هاجاي</value>
+  </data>
+  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
+    <value>الإسم الأول مطلوب</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="Marble_VerseTotal" xml:space="preserve">
+    <value>إجمالي الآية</value>
+  </data>
+  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
+    <value>إنشاء قاعدة بيانات ...</value>
+  </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>مستخدمو التعاون المتاحين:</value>
+  </data>
+  <data name="MainView_AccountInfo" xml:space="preserve">
+    <value>معلومات الحساب</value>
+  </data>
+  <data name="ClockUserControl_Include" xml:space="preserve">
+    <value>تشمل في دوران عرض الساعة</value>
+  </data>
+  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
+    <value>النطاق الفرعي:</value>
+  </data>
+  <data name="ProperCase_Romans" xml:space="preserve">
+    <value>رومان</value>
+  </data>
+  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
+    <value>تمكين عرض مجموعات النص الآية على حدة</value>
+  </data>
+  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
+    <value>رمز التحقق من البريد الإلكتروني:</value>
+  </data>
+  <data name="FontSettings_ParagraphMode" xml:space="preserve">
+    <value>وضع الفقرة</value>
+  </data>
+  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
+    <value>لا توجد مهام خلفية تعمل</value>
+  </data>
+  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
+    <value>الوثنية</value>
+  </data>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>إعدادات التعاون</value>
+  </data>
+  <data name="Marble_SearchEnglish" xml:space="preserve">
+    <value>البحث عن طريق اللمعان الإنجليزية</value>
+  </data>
+  <data name="Landing_Projects" xml:space="preserve">
+    <value>المشاريع</value>
+  </data>
+  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
+    <value>تخطيطات قياسية</value>
+  </data>
+  <data name="Pds_Resource" xml:space="preserve">
+    <value>مورد</value>
+  </data>
+  <data name="ProperCase_Proverbs" xml:space="preserve">
+    <value>الأمثال</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
+    <value>حدد كوربوس</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="Pds_InfoToolTip" xml:space="preserve">
+    <value>عرض معلومات حول هذا المشروع</value>
+  </data>
+  <data name="ProperCase_Ephesians" xml:space="preserve">
+    <value>أفسس</value>
+  </data>
+  <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
+    <value>تغييرات التعاون المتاحة</value>
+  </data>
+  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
+    <value>عاطِفَة</value>
+  </data>
+  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
+    <value>un incin composite token</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>التعريف غير متوفر</value>
+  </data>
+  <data name="ProperCase_Luke" xml:space="preserve">
+    <value>لوقا</value>
+  </data>
+  <data name="Marble_Verses" xml:space="preserve">
+    <value>آيات</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>الموافقة على المحدد</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>عضو المشروع</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="Pds_SourceLanguage" xml:space="preserve">
+    <value>Sourcelanguage</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
+    <value>إنشاء موازاة آيات الشركات</value>
+  </data>
+  <data name="Pins_LoadReferences" xml:space="preserve">
+    <value>تحميل المراجع</value>
+  </data>
+  <data name="ProperCase_1_Peter" xml:space="preserve">
+    <value>1 بيتر</value>
+  </data>
+  <data name="Pds_FitContentToViewport" xml:space="preserve">
+    <value>قم بتناسب منطقة المحتوى بأكملها مع منفذ العرض</value>
+  </data>
+  <data name="Settings_TextCollections" xml:space="preserve">
+    <value>جمع النص</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
+    <value>الناس؛ الشرف والاحترام والوضع</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>يلغي</value>
+  </data>
+  <data name="Pins_Match" xml:space="preserve">
+    <value>مباراة</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
+    <value>الرمز المميز '{0}' له محاذاة متعددة محددة. سيؤدي النقر فوق "{1} إلى حذف جميع المحاذاة.</value>
+  </data>
+  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
+    <value>معاني الكلمات</value>
+  </data>
+  <data name="Marble_GeneralInformation" xml:space="preserve">
+    <value>معلومات عامة</value>
+  </data>
+  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
+    <value>إنشاء محاذاة كلمات جديدة</value>
+  </data>
+  <data name="ProjectPicker_NoProject" xml:space="preserve">
+    <value>إنه وحيد هنا. يرجى إنشاء مشروع جديد.</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
+    <value>مراجعة المحاذاة بالجملة</value>
+  </data>
+  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
+    <value>نِطَاق:</value>
+  </data>
+  <data name="Pds_Standard" xml:space="preserve">
+    <value>معيار</value>
+  </data>
+  <data name="Pds_Daughter" xml:space="preserve">
+    <value>بنت</value>
+  </data>
+  <data name="NewCollabUserView_Username" xml:space="preserve">
+    <value>اسم المستخدم:</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>تحقق من بريدك الإلكتروني وأدخل رمز التحقق:</value>
+  </data>
+  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
+    <value>إلغاء تحديد الكل</value>
+  </data>
+  <data name="ProperCase_Jeremiah" xml:space="preserve">
+    <value>إرميا</value>
+  </data>
+  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
+    <value>العبرية البقعة</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="ProperCase_Philemon" xml:space="preserve">
+    <value>فليمون</value>
+  </data>
+  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
+    <value>الحرف؛ قماش</value>
+  </data>
+  <data name="MainView_ShowLog" xml:space="preserve">
+    <value>إظهار السجل</value>
+  </data>
+  <data name="BiblicalTermsDomains_All" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="TargetContextView_ZoomOut" xml:space="preserve">
+    <value>تصغير</value>
+  </data>
+  <data name="ShellView_ShowPreReleases" xml:space="preserve">
+    <value>عرض ما قبل الإلغاء</value>
+  </data>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>إلغاء الترجمة</value>
+  </data>
+  <data name="ProperCase_Acts" xml:space="preserve">
+    <value>أعمال</value>
+  </data>
+  <data name="Pds_Source" xml:space="preserve">
+    <value>مصدر</value>
+  </data>
+  <data name="ProperCase_Isaiah" xml:space="preserve">
+    <value>أشعيا</value>
+  </data>
+  <data name="WordMeaningsView_Domain" xml:space="preserve">
+    <value>اِختِصاص:</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="BiblicalTermsDomains_People" xml:space="preserve">
+    <value>الناس</value>
+  </data>
+  <data name="Notes_LabelGroupExists" xml:space="preserve">
+    <value>توجد مجموعة تسمية بالفعل مع الاسم</value>
+  </data>
+  <data name="EnhancedView_ShowControls" xml:space="preserve">
+    <value>إظهار عناصر التحكم في العرض المحسنة</value>
+  </data>
+  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
+    <value>موافقة</value>
+  </data>
+  <data name="Windows_BiblicalTerms" xml:space="preserve">
+    <value>مصطلحات الكتاب المقدس</value>
+  </data>
+  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
+    <value>الأخلاق والأخلاق</value>
+  </data>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>رمز التحقق من البريد الإلكتروني</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="ProperCase_Hosea" xml:space="preserve">
+    <value>هوشع</value>
+  </data>
+  <data name="Marble_Verse" xml:space="preserve">
+    <value>بيت شعر</value>
+  </data>
+  <data name="EnhancedView_JoinTokens" xml:space="preserve">
+    <value>انضم إلى الرموز</value>
+  </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>حدد المشروع</value>
+  </data>
+  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
+    <value>تخطيطات المشروع</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>مخلوق</value>
+  </data>
+  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
+    <value>رمز وصول:</value>
+  </data>
+  <data name="Pds_Xml" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="Notes_SendConfirmation" xml:space="preserve">
+    <value>أرسل هذه الملاحظة إلى Paratext؟</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="Pins_VerseReferences" xml:space="preserve">
+    <value>مراجع الآية</value>
+  </data>
+  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
+    <value>حذف هذا الكسيم</value>
+  </data>
+  <data name="ProperCase_Zephaniah" xml:space="preserve">
+    <value>زيفانيا</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>يخلق</value>
+  </data>
+  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
+    <value>تم حفظه على الخادم البعيد</value>
+  </data>
+  <data name="ClockUserControl_Select" xml:space="preserve">
+    <value>اختر المجال الزمني</value>
+  </data>
+  <data name="Marble_SubDomains" xml:space="preserve">
+    <value>المجالات الفرعية:</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>كلمة:</value>
+  </data>
+  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
+    <value>إنشاء مستخدم تعاون</value>
+  </data>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>التفضيلات</value>
+  </data>
+  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
+    <value>الشرف والاحترام والوضع</value>
+  </data>
+  <data name="Lexicon_AddForm" xml:space="preserve">
+    <value>أضف شكلًا معجميًا إلى هذا ليمما</value>
+  </data>
+  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
+    <value>الأنشطة الدينية</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>إظهار مهام الخلفية</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
+    <value>الثدييات الحيوانات الأليفة</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
+    <value>Lemma من أجل Lexeme الجديد:</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
+    <value>خوارزمية محاذاة كلمة الجهاز</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>صاحب المشروع</value>
+  </data>
+  <data name="MergeDialog_OperationComplete" xml:space="preserve">
+    <value>عملية كاملة!</value>
+  </data>
+  <data name="Pins_ClearFilter" xml:space="preserve">
+    <value>مرشح واضح</value>
+  </data>
+  <data name="MainView_Settings" xml:space="preserve">
+    <value>إعدادات</value>
+  </data>
+  <data name="Pins_Origin" xml:space="preserve">
+    <value>أصل</value>
+  </data>
+  <data name="Notes_FilterLabels" xml:space="preserve">
+    <value>بواسطة الملصقات</value>
+  </data>
+  <data name="Lexicon_AddMeaning" xml:space="preserve">
+    <value>أضف المعنى</value>
+  </data>
+  <data name="FontSettings_Target" xml:space="preserve">
+    <value>النص المستهدف:</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="ProperCase_Titus" xml:space="preserve">
+    <value>تيتوس</value>
+  </data>
+  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
+    <value>المستخدم بالفعل على النظام!</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
+    <value>أدوات؛ وزن؛ تجارة</value>
+  </data>
+  <data name="Pds_ConsultantNotes" xml:space="preserve">
+    <value>الاستشاري</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
+    <value>زراعة</value>
+  </data>
+  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
+    <value>Word Machine Word Aligner</value>
+  </data>
+  <data name="Pins_Gloss" xml:space="preserve">
+    <value>لمعان</value>
+  </data>
+  <data name="Notes_FilterStatus_Any" xml:space="preserve">
+    <value>أي</value>
+  </data>
+  <data name="FontSettings_TitleFontSize" xml:space="preserve">
+    <value>حجم خط الخط:</value>
+  </data>
+  <data name="MainView_LayoutsSave" xml:space="preserve">
+    <value>حفظ التصميم الحالي</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>يضيف</value>
+  </data>
+  <data name="Notes_Note_Created" xml:space="preserve">
+    <value>مخلوق</value>
+  </data>
+  <data name="BulkAlignmentReview_Count" xml:space="preserve">
+    <value>عدد</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="BulkAlignmentReview_Source" xml:space="preserve">
+    <value>مصدر</value>
+  </data>
+  <data name="Bcv_Offset" xml:space="preserve">
+    <value>عوض</value>
+  </data>
+  <data name="Lexicon_SetTranslation" xml:space="preserve">
+    <value>تعيين ترجمة ل</value>
+  </data>
+  <data name="Bcv_Verse" xml:space="preserve">
+    <value>بيت شعر</value>
+  </data>
+  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
+    <value>لمعان:</value>
+  </data>
+  <data name="FontSettings_Height" xml:space="preserve">
+    <value>ارتفاع:</value>
+  </data>
+  <data name="WordMeaningsView_Sense" xml:space="preserve">
+    <value>حاسة:</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
+    <value>الأشجار؛ العطور والتوابل</value>
+  </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>عرض جديد محسّن</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>التحقق من صحة رمز البريد الإلكتروني</value>
+  </data>
+  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
+    <value>فرد جديد</value>
+  </data>
+  <data name="Pds_Unknown" xml:space="preserve">
+    <value>مجهول</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="Pds_ChangeZoom" xml:space="preserve">
+    <value>تغيير مستوى التكبير للمحتوى</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>رمز التحقق من صحة البريد الإلكتروني ClearDashboard</value>
+  </data>
+  <data name="Notes_NoteText" xml:space="preserve">
+    <value>نص</value>
+  </data>
+  <data name="Bcv_NextBook" xml:space="preserve">
+    <value>الكتاب التالي</value>
+  </data>
+  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
+    <value>أداة المحاذاة</value>
+  </data>
+  <data name="Notes_Word" xml:space="preserve">
+    <value>كلمة</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="Pins_ShowBackTranslation" xml:space="preserve">
+    <value>إظهار ترجمة خلفية</value>
+  </data>
+  <data name="HOS" xml:space="preserve">
+    <value>HOS</value>
+  </data>
+  <data name="Settings_PowerModesDescription" xml:space="preserve">
+    <value>السماح ClearDashboard بتغيير أوضاع الطاقة أثناء الأحداث الحسابية العالية</value>
+  </data>
+  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
+    <value>المستخدم موجود بالفعل على الخادم</value>
+  </data>
+  <data name="ProperCase_Jonah" xml:space="preserve">
+    <value>يونس</value>
+  </data>
+  <data name="Pins_Code" xml:space="preserve">
+    <value>شفرة</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>إصدار</value>
+  </data>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
+  </data>
+  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
+    <value>منطقة؛ طبيعة</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
+    <value>مارك محاذاة على أنها "غير صالحة"</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
+    <value>مراوح</value>
   </data>
 </root>

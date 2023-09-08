@@ -70,7 +70,7 @@
         </Grid>
 
         <Button Grid.Column="1" Name="AddLabelButton"
-                Margin="9,-5,0,0"
+                Margin="9,-3,0,0"
                 Padding="0,0,0,0"
                 Background="Transparent"
                 BorderThickness="0"

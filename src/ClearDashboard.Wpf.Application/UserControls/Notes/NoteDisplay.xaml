@@ -5,7 +5,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -17,10 +16,10 @@
     mc:Ignorable="d">
     <Border
         Margin="0,0,0,0"
-        Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}"
-        BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderBrush}"
-        BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
-        CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderCornerRadius}"
+        Padding="{Binding ElementName=NotesDisplayControl, Path=NoteBorderPadding}"
+        BorderBrush="{Binding ElementName=NotesDisplayControl, Path=NoteBorderBrush}"
+        BorderThickness="{Binding ElementName=NotesDisplayControl, Path=NoteBorderThickness}"
+        CornerRadius="{Binding ElementName=NotesDisplayControl, Path=NoteBorderCornerRadius}"
         MouseEnter="OnMouseEnter"
         MouseLeave="OnMouseLeave"
         MouseLeftButtonUp="NoteDisplayBorder_OnMouseLeftButtonUp">
@@ -29,13 +28,13 @@
                 <Setter Property="Background" Value="Transparent" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="true">
-                        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteHoverBrush}" />
+                        <Setter Property="Background" Value="{Binding ElementName=NotesDisplayControl, Path=NoteHoverBrush}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Border.Style>
-        <StackPanel Orientation="Vertical">
 
+        <StackPanel Orientation="Vertical">
             <!-- Note text and delete button -->
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -43,28 +42,28 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
-                           Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextMargin}"
-                           Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextPadding}"
-                           FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontFamily}"
-                           FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontSize}"
-                           FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontStyle}"
-                           FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontWeight}"
+                           Margin="{Binding ElementName=NotesDisplayControl, Path=NoteTextMargin}"
+                           Padding="{Binding ElementName=NotesDisplayControl, Path=NoteTextPadding}"
+                           FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontFamily}"
+                           FontSize="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontSize}"
+                           FontStyle="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontStyle}"
+                           FontWeight="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontWeight}"
                            MouseDown="OnNoteLabelClick"
-                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Text}"
+                           Text="{Binding ElementName=NotesDisplayControl, Path=Note.Text}"
                            TextWrapping="Wrap"
-                           Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteLabelVisibility}" />
+                           Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteLabelVisibility}" />
                 <TextBox Grid.Column="0"
                          x:Name="NoteTextBox"
-                         Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextMargin}"
-                         Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextPadding}"
-                         FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontFamily}"
-                         FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontSize}"
-                         FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontStyle}"
-                         FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontWeight}"
-                         Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Text}"
+                         Margin="{Binding ElementName=NotesDisplayControl, Path=NoteTextMargin}"
+                         Padding="{Binding ElementName=NotesDisplayControl, Path=NoteTextPadding}"
+                         FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontFamily}"
+                         FontSize="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontSize}"
+                         FontStyle="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontStyle}"
+                         FontWeight="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontWeight}"
+                         Text="{Binding ElementName=NotesDisplayControl, Path=Note.Text}"
                          TextChanged="OnNoteTextBoxChanged"
                          TextWrapping="Wrap"
-                         Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextBoxVisibility}" />
+                         Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteTextBoxVisibility}" />
                 <TextBlock Grid.Column="0"
                            Grid.Row="0"
                            Margin="4,0,0,0"
@@ -72,7 +71,7 @@
                            VerticalAlignment="Center"
                            Foreground="DarkGray"
                            IsHitTestVisible="False"
-                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Watermark}">
+                           Text="{Binding ElementName=NotesDisplayControl, Path=Watermark}">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -93,7 +92,7 @@
                         Click="ConfirmNoteDeletion"
                         FontSize="12"
                         FontWeight="SemiBold"
-                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampRowVisibility}">
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=TimestampRowVisibility}">
                     <Image Height="18" Source="/Resources/close24.png" />
                 </Button>
                 <Popup Grid.Column="1"
@@ -130,43 +129,43 @@
             <Grid
                 Margin="0,0"
                 VerticalAlignment="Top"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampRowVisibility}">
+                Visibility="{Binding ElementName=NotesDisplayControl, Path=TimestampRowVisibility}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <Label
                     Grid.Column="0"
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserMargin}"
+                    Margin="{Binding ElementName=NotesDisplayControl, Path=UserMargin}"
                     VerticalContentAlignment="Top"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.ModifiedBy}"
-                    FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontFamily}"
-                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontSize}"
-                    FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}" />
+                    Content="{Binding ElementName=NotesDisplayControl, Path=Note.ModifiedBy}"
+                    FontFamily="{Binding ElementName=NotesDisplayControl, Path=UserFontFamily}"
+                    FontSize="{Binding ElementName=NotesDisplayControl, Path=UserFontSize}"
+                    FontStyle="{Binding ElementName=NotesDisplayControl, Path=UserFontStyle}"
+                    FontWeight="{Binding ElementName=NotesDisplayControl, Path=UserFontWeight}" />
                 <Label
                     Grid.Column="1"
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                    Margin="{Binding ElementName=NotesDisplayControl, Path=TimestampMargin}"
                     HorizontalAlignment="Right"
                     HorizontalContentAlignment="Right"
                     VerticalContentAlignment="Top"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.ModifiedLocalTime}"
-                    FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
-                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
-                    FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}" />
+                    Content="{Binding ElementName=NotesDisplayControl, Path=Note.ModifiedLocalTime}"
+                    FontFamily="{Binding ElementName=NotesDisplayControl, Path=TimestampFontFamily}"
+                    FontSize="{Binding ElementName=NotesDisplayControl, Path=TimestampFontSize}"
+                    FontStyle="{Binding ElementName=NotesDisplayControl, Path=UserFontStyle}"
+                    FontWeight="{Binding ElementName=NotesDisplayControl, Path=UserFontWeight}" />
             </Grid>
 
             <!-- Apply and Cancel buttons -->
             <StackPanel
                 HorizontalAlignment="Center"
                 Orientation="Horizontal"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ButtonVisibility}">
+                Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteSaveCancelButtonVisibility}">
                 <Button
                     Height="40"
                     Margin="5"
                     Click="ApplyNote"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ApplyLabel}"
+                    Content="{Binding ElementName=NotesDisplayControl, Path=ApplyLabel}"
                     FontSize="11"
                     Foreground="{DynamicResource MaterialDesignBody}"
                     Style="{StaticResource TransparentStyle}" />
@@ -180,8 +179,72 @@
                     Style="{StaticResource TransparentStyle}" />
             </StackPanel>
 
+            <!-- Note properties: Labels, Associations, Replies, etc. -->
+            <StackPanel Margin="0,10,0,0"
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=NotePropertiesVisibility}">
+
+                <!-- Labels -->
+                <userControls:TogglePanel IsOpen="True">
+                    <userControls:TogglePanel.Header>
+                        <Label Content="{helpers:Localization Notes_NoteLabels}"
+                               FontSize="13"
+                               FontWeight="SemiBold" />
+                    </userControls:TogglePanel.Header>
+                    <notes:LabelsEditor CurrentUserId="{Binding ElementName=NotesDisplayControl, Path=CurrentUserId}"
+                                        CurrentLabelGroup="{Binding ElementName=NotesDisplayControl, Path=DefaultLabelGroup, Mode=OneWay}"
+                                        LabelAdded="OnLabelAdded"
+                                        LabelBackground="{Binding ElementName=NotesDisplayControl, Path=LabelBackground}"
+                                        LabelCornerRadius="{Binding ElementName=NotesDisplayControl, Path=LabelCornerRadius}"
+                                        LabelFontSize="{Binding ElementName=NotesDisplayControl, Path=LabelFontSize}"
+                                        LabelGroupAdded="OnLabelGroupAdded"
+                                        LabelGroupSelected="OnLabelGroupSelected"
+                                        LabelGroups="{Binding ElementName=NotesDisplayControl, Path=LabelGroups}"
+                                        LabelMargin="{Binding ElementName=NotesDisplayControl, Path=LabelMargin}"
+                                        LabelPadding="{Binding ElementName=NotesDisplayControl, Path=LabelPadding}"
+                                        LabelRemoved="OnLabelRemoved"
+                                        LabelSelected="OnLabelSelected"
+                                        Labels="{Binding ElementName=NotesDisplayControl, Path=Note.Labels}"
+                                        Margin="0,0,0,10"
+                                        Note="{Binding ElementName=NotesDisplayControl, Path=Note}" />
+                </userControls:TogglePanel>
+
+                <!-- Associations -->
+                <userControls:TogglePanel IsOpen="False">
+                    <userControls:TogglePanel.Header>
+                        <Label Content="{helpers:Localization Notes_NoteAssociationDescriptions}"
+                               FontSize="13"
+                               FontWeight="SemiBold" />
+                    </userControls:TogglePanel.Header>
+                    <notes:NoteAssociationsDisplay 
+                                               FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontFamily}"
+                                               FontSize="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontSize}"
+                                               FontStyle="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontStyle}"
+                                               FontWeight="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontWeight}"
+                                               InnerMargin="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationMargin}"
+                                               InnerPadding="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationPadding}"
+                                               Margin="10,0,0,0"
+                                               Note="{Binding ElementName=NotesDisplayControl, Path=Note}"
+                                               NoteAssociationClicked="OnNoteAssociationClicked"
+                                               NoteAssociationDoubleClicked="OnNoteAssociationDoubleClicked"
+                                               NoteAssociationLeftButtonDown="OnNoteAssociationLeftButtonDown"
+                                               NoteAssociationLeftButtonUp="OnNoteAssociationLeftButtonUp"
+                                               NoteAssociationMouseEnter="OnNoteAssociationMouseEnter"
+                                               NoteAssociationMouseLeave="OnNoteAssociationMouseLeave"
+                                               NoteAssociationRightButtonDown="OnNoteAssociationRightButtonDown"
+                                               NoteAssociationRightButtonUp="OnNoteAssociationRightButtonUp"/>
+                </userControls:TogglePanel>
+
+                <!-- Associations -->
+                <userControls:TogglePanel IsOpen="False">
+                    <userControls:TogglePanel.Header>
+                        <Label Content="{helpers:Localization Notes_NoteReplies}"
+                               FontSize="13"
+                               FontWeight="SemiBold" />
+                    </userControls:TogglePanel.Header>
+                </userControls:TogglePanel>
+            </StackPanel>
             <!-- Labels -->
-            <!--<Grid Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
+            <!--<Grid Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelSelectorVisibility}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*"/>
@@ -196,7 +259,7 @@
                     Content="{helpers:Localization Notes_NoteLabels}"
                     FontSize="13"
                     FontWeight="SemiBold"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}" />
+                    Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelSelectorVisibility}" />
                 <StackPanel
                     Grid.Row="0"
                     Grid.Column="1"
@@ -204,14 +267,14 @@
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <notes:LabelsDisplay
-                        LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
-                        LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
-                        LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
-                        LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
-                        LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
+                        LabelFontSize="{Binding ElementName=NotesDisplayControl, Path=LabelFontSize}"
+                        LabelBackground="{Binding ElementName=NotesDisplayControl, Path=LabelBackground}"
+                        LabelCornerRadius="{Binding ElementName=NotesDisplayControl, Path=LabelCornerRadius}"
+                        LabelMargin="{Binding ElementName=NotesDisplayControl, Path=LabelMargin}"
+                        LabelPadding="{Binding ElementName=NotesDisplayControl, Path=LabelPadding}"
                         LabelRemoved="OnLabelRemoved"
-                        Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}"
-                        Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}"
+                        Labels="{Binding ElementName=NotesDisplayControl, Path=Note.Labels}"
+                        Note="{Binding ElementName=NotesDisplayControl, Path=Note}"
                         Orientation="Vertical" />
                     <notes:LabelSelector
                         HorizontalAlignment="Center"
@@ -219,28 +282,71 @@
                         VerticalContentAlignment="Center"
                         LabelAdded="OnLabelAdded"
                         LabelSelected="OnLabelSelected"
-                        LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
-                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}" />
+                        LabelSuggestions="{Binding ElementName=NotesDisplayControl, Path=LabelSuggestions}"
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelSelectorVisibility}" />
                 </StackPanel>
             </Grid>-->
 
-            <notes:LabelsEditor CurrentUserId="{Binding ElementName=NotesDisplayControl, Path=CurrentUserId}"
-                                CurrentLabelGroup="{Binding ElementName=NotesDisplayControl, Path=DefaultLabelGroup, Mode=OneWay}"
-                                LabelFontSize="{Binding ElementName=NotesDisplayControl, Path=LabelFontSize}"
-                                LabelBackground="{Binding ElementName=NotesDisplayControl, Path=LabelBackground}"
-                                LabelCornerRadius="{Binding ElementName=NotesDisplayControl, Path=LabelCornerRadius}"
-                                LabelGroupAdded="OnLabelGroupAdded"
-                                LabelGroupSelected="OnLabelGroupSelected"
-                                LabelGroups="{Binding ElementName=NotesDisplayControl, Path=LabelGroups}"
-                                LabelMargin="{Binding ElementName=NotesDisplayControl, Path=LabelMargin}"
-                                LabelPadding="{Binding ElementName=NotesDisplayControl, Path=LabelPadding}"
-                                LabelRemoved="OnLabelRemoved"
-                                Labels="{Binding ElementName=NotesDisplayControl, Path=Note.Labels}"
-                                Margin="0,10,0,0"
-                                Note="{Binding ElementName=NotesDisplayControl, Path=Note}" />
+            <!--<Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+ 
+                <Label Grid.Row="0" Grid.Column="0">Toggle</Label>
+                <Button Grid.Column="1" Grid.Row="0"
+                        Width="Auto"
+                        Height="Auto"
+                        Margin="0,0,0,0"
+                        Padding="0"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Left"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="OnToggleClick"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelSelectorVisibility}">
+                    <materialDesign:PackIcon
+                        Margin="0,2,0,0"
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=AssociationsButtonVisibility}" >
+                        <materialDesign:PackIcon.Style>
+                            <Style TargetType="{x:Type materialDesign:PackIcon}">
+                                <Setter Property="Kind" Value="ArrowDownThin" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsToggled, ElementName=NotesDisplayControl}" Value="true">
+                                        <Setter Property="Kind" Value="ArrowUpThin" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsToggled, ElementName=NotesDisplayControl}" Value="false">
+                                        <Setter Property="Kind" Value="ArrowDownThin" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </materialDesign:PackIcon.Style>
+                    </materialDesign:PackIcon>
+                </Button>
+                <Label Grid.Row="1" Grid.Column="0">
+                    <Label.Style>
+                        <Style TargetType="{x:Type Label}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsToggled, ElementName=NotesDisplayControl}" Value="true">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+
+                    Content
+                </Label>
+            </Grid>-->
 
             <!-- Associations -->
-            <Grid Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
+            <!--<Grid Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelSelectorVisibility}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*"/>
@@ -261,7 +367,7 @@
                         Click="OnAssociationsButtonClick"
                         FontSize="13"
                         FontWeight="SemiBold"
-                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelSelectorVisibility}">
                     <Label Content="{helpers:Localization Notes_NoteAssociationDescriptions}" />
                 </Button>
                 <Button Grid.Column="1" Grid.Row="0"
@@ -276,21 +382,21 @@
                         Click="OnAssociationsButtonClick"
                         FontSize="13"
                         FontWeight="SemiBold"
-                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelSelectorVisibility}">
                     <materialDesign:PackIcon
                         Margin="0,2,0,0"
                         Kind="ArrowDownThin"
-                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AssociationsButtonVisibility}" />
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=AssociationsButtonVisibility}" />
                 </Button>
                 <notes:NoteAssociationsDisplay Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
                                                Margin="10,0,0,0"
-                                               FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontFamily}"
-                                               FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontSize}"
-                                               FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontStyle}"
-                                               FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontWeight}"
-                                               InnerMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationMargin}"
-                                               InnerPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationPadding}"
-                                               Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}"
+                                               FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontFamily}"
+                                               FontSize="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontSize}"
+                                               FontStyle="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontStyle}"
+                                               FontWeight="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontWeight}"
+                                               InnerMargin="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationMargin}"
+                                               InnerPadding="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationPadding}"
+                                               Note="{Binding ElementName=NotesDisplayControl, Path=Note}"
                                                NoteAssociationClicked="OnNoteAssociationClicked"
                                                NoteAssociationDoubleClicked="OnNoteAssociationDoubleClicked"
                                                NoteAssociationLeftButtonDown="OnNoteAssociationLeftButtonDown"
@@ -299,15 +405,15 @@
                                                NoteAssociationMouseLeave="OnNoteAssociationMouseLeave"
                                                NoteAssociationRightButtonDown="OnNoteAssociationRightButtonDown"
                                                NoteAssociationRightButtonUp="OnNoteAssociationRightButtonUp"
-                                               Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AssociationsVisibility}" />
-            </Grid>
+                                               Visibility="{Binding ElementName=NotesDisplayControl, Path=AssociationsVisibility}" />
+            </Grid>-->
             
             <!-- Paratext send -->
             <StackPanel
                     Grid.Row="3"
                     Grid.Column="1"
                     Orientation="Vertical"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ParatextSendVisibility}">
+                    Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibility}">
                     <Button
                         Name="SendToParatextButton"
                         Margin="10,-5,10,0"
@@ -349,8 +455,6 @@
                         </Border>
                     </Popup>
                 </StackPanel>
-
         </StackPanel>
-
     </Border>
 </UserControl>

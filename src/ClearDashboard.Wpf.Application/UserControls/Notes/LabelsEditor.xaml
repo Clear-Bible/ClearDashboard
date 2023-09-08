@@ -17,23 +17,23 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <!--<RowDefinition/>
+            <RowDefinition/>-->
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <!--<Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0"
+            --><!--<Label Grid.Column="0"
                        FontFamily="{DynamicResource MaterialDesignFont}"
                        FontSize="13"
                        FontStyle="Normal"
                        FontWeight="SemiBold"
                        Margin="0,0,0,0"
                        Content="{helpers:Localization Notes_NoteLabels}"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>--><!--
             <notesControls:LabelSelector Grid.Column="1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
@@ -41,10 +41,11 @@
                 LabelAdded="OnLabelAdded"
                 LabelSelected="OnLabelSelected"
                 LabelSuggestions="{Binding ElementName=LabelsEditorControl, Path=LabelSuggestions}"/>
-        </Grid>
+        </Grid>-->
 
-        <Grid Grid.Row="1" Margin="5,10,10,0">
+        <Grid Grid.Row="0" Margin="5,0,0,0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -54,37 +55,18 @@
                        FontSize="12"
                        FontStyle="Normal"
                        FontWeight="Normal"
-                       Text="{helpers:Localization Notes_NoteLabelGroups}"
+                       Text="{helpers:Localization Notes_NoteLabelGroup}"
                        VerticalAlignment="Center"/>
-            <Button Grid.Column="1" 
-                    Name="AddLabelGroupButton"
-                    Margin="0,-5,0,0"
-                    Padding="0,0,0,0"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Click="OnLabelGroupAddClicked"
-                    ToolTip="{helpers:Localization Notes_LabelGroupAddTooltip}"
-                    FontSize="12"
-                    FontWeight="SemiBold">
-                <Image Height="18" Source="/Resources/add24.png" />
-            </Button>
-        </Grid>
 
-        <Grid Grid.Row="2" Margin="10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <ComboBox Grid.Column="0" x:Name="LabelGroupComboBox"  
+            <ComboBox Grid.Column="1" x:Name="LabelGroupComboBox"  
                       ItemsSource="{Binding ElementName=LabelsEditorControl, Path=LabelGroups}" 
                       FontSize="12"
                       HorizontalAlignment="Left"
-                      Margin="0,0,0,0"
+                      Margin="10,0,0,0"
                       Padding="5"
                       SelectionChanged="OnLabelGroupSelectionChanged"
                       SelectedItem="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup, Mode=TwoWay}"
-                      Width="150">
+                      Width="100">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock FontSize="13" Text="{Binding Name}" />
@@ -92,20 +74,33 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <Button  Grid.Column="1" x:Name="DeleteLabelGroupButton"
-                     Margin="5,-5,0,0"
-                     Padding="0,0,0,0"
-                     Background="Transparent"
-                     BorderThickness="0"
-                     Click="ConfirmLabelGroupDeletion"
-                     ToolTip="{helpers:Localization Notes_LabelGroupRemoveTooltip}"
-                     FontSize="12"
-                     FontWeight="SemiBold"
-                     Visibility="{Binding ElementName=LabelsEditorControl, Path=LabelGroupDeleteVisibility}">
-                <Image Height="18" Source="/Resources/close24.png" />
-            </Button>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button x:Name="DeleteLabelGroupButton"
+                         Margin="5,-5,5,0"
+                         Padding="0,0,0,0"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Click="ConfirmLabelGroupDeletion"
+                         ToolTip="{helpers:Localization Notes_LabelGroupRemoveTooltip}"
+                         FontSize="12"
+                         FontWeight="SemiBold"
+                         Visibility="{Binding ElementName=LabelsEditorControl, Path=LabelGroupDeleteVisibility}">
+                    <Image Height="18" Source="/Resources/close24.png" />
+                </Button>
+                <Button Name="AddLabelGroupButton"
+                        Margin="0,-5,0,0"
+                        Padding="0,0,0,0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="OnLabelGroupAddClicked"
+                        ToolTip="{helpers:Localization Notes_LabelGroupAddTooltip}"
+                        FontSize="12"
+                        FontWeight="SemiBold">
+                    <Image Height="18" Source="/Resources/add24.png" />
+                </Button>
+            </StackPanel>
 
-            <Popup Grid.Column="1"
+            <Popup Grid.Column="2"
                    Name="AddLabelGroupPopup"
                    Width="400"
                    Placement="Left"
@@ -171,7 +166,8 @@
                     </StackPanel>
                 </Border>
             </Popup>
-            <Popup Grid.Column="1"
+
+            <Popup Grid.Column="2"
                    Name="ConfirmDeleteLabelGroupPopup"
                    Width="200"
                    Placement="Left"
@@ -194,19 +190,35 @@
                     </StackPanel>
                 </Border>
             </Popup>
+
         </Grid>
 
-        <notesControls:LabelsDisplay Grid.Row="3"
-                                     LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
-                                     LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
-                                     LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
-                                     LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
-                                     LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
-                                     LabelRemoved="OnLabelRemoved"
-                                     Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}"
-                                     Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}"
-                                     >
+        <!--<Grid Grid.Row="2" Margin="10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-        </notesControls:LabelsDisplay>
+
+        </Grid>-->
+
+        <WrapPanel Grid.Row="1" Margin="0,10,0,0">
+            <notesControls:LabelsDisplay Grid.Row="1"
+                                         LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
+                                         LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
+                                         LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
+                                         LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
+                                         LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
+                                         LabelRemoved="OnLabelRemoved"
+                                         Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}"
+                                         Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}"/>
+            <notesControls:LabelSelector Grid.Column="1"
+                                         HorizontalAlignment="Right"
+                                         VerticalAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         LabelAdded="OnLabelAdded"
+                                         LabelSelected="OnLabelSelected"
+                                         LabelSuggestions="{Binding ElementName=LabelsEditorControl, Path=LabelSuggestions}"/>
+        </WrapPanel>
     </Grid>
 </UserControl>

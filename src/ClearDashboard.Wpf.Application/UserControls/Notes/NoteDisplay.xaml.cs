@@ -585,12 +585,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
-        private void OnAssociationsButtonClick(object sender, RoutedEventArgs e)
-        {
-            IsAssociationButtonClicked = true;
-            OnPropertyChanged(nameof(AssociationsVisibility));
-            OnPropertyChanged(nameof(AssociationsButtonVisibility));
-        }
+        //private void OnAssociationsButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    IsAssociationButtonClicked = true;
+        //    OnPropertyChanged(nameof(AssociationsVisibility));
+        //    OnPropertyChanged(nameof(AssociationsButtonVisibility));
+        //}
 
         private void OnNoteAssociationClicked(object sender, RoutedEventArgs e)
         {
@@ -704,19 +704,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 _isChanged = value;
                 OnPropertyChanged(nameof(TimestampRowVisibility));
-                OnPropertyChanged(nameof(ButtonVisibility));
+                OnPropertyChanged(nameof(NoteSaveCancelButtonVisibility));
             } 
         }
 
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
+        public Visibility NoteSaveCancelButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
         public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility LabelSelectorVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
-        public Visibility ParatextSendVisibility => !AddMode && Note.EnableParatextSend ? Visibility.Visible : Visibility.Hidden;
-        private bool IsAssociationButtonClicked { get; set; }
+        public Visibility NotePropertiesVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
+        //public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
+        //public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
+        public Visibility ParatextSendVisibility => !AddMode && Note != null && Note.EnableParatextSend ? Visibility.Visible : Visibility.Collapsed;
+        //private bool IsAssociationButtonClicked { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="UserId"/> for the current user.

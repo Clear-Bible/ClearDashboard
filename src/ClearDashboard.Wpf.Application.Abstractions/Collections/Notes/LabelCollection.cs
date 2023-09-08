@@ -15,6 +15,14 @@ namespace ClearDashboard.Wpf.Application.Collections.Notes
         {
         }
 
+        public void AddDistinct(Label label)
+        {
+            if (!Contains(label))
+            {
+                Add(label);
+            }
+        }
+
         public void Insert(Label label)
         {
             throw new NotImplementedException();

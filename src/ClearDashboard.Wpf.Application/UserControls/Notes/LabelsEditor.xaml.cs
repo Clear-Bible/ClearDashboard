@@ -231,12 +231,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             var labelEventArgs = e as LabelEventArgs;
             RaiseLabelEvent(LabelAddedEvent, labelEventArgs!);
+
+            Labels.AddDistinct(labelEventArgs!.Label);
+            OnPropertyChanged(nameof(Labels));
         }
 
         private void OnLabelSelected(object sender, RoutedEventArgs e)
         {
             var labelEventArgs = e as LabelEventArgs;
             RaiseLabelEvent(LabelSelectedEvent, labelEventArgs!);
+
+            Labels.AddDistinct(labelEventArgs!.Label);
+            OnPropertyChanged(nameof(Labels));
         }
 
         private void OnLabelRemoved(object sender, RoutedEventArgs e)
@@ -301,6 +307,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             RaiseLabelGroupEvent(LabelGroupSelectedEvent, CurrentLabelGroup);
             LabelSuggestions = CurrentLabelGroup.Labels;
+
+            OnPropertyChanged(nameof(LabelGroupDeleteVisibility));
         }
 
         private void ConfirmLabelGroupDeletion(object sender, RoutedEventArgs e)

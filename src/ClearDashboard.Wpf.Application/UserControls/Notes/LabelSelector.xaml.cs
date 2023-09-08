@@ -76,7 +76,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             LabelTextBox.Text = string.Empty;
             LabelSuggestionListBox.SelectedIndex = -1;
-            TextBoxVisibility = Visibility.Hidden;
+            TextBoxVisibility = Visibility.Collapsed;
             AddButtonVisibility = Visibility.Visible;
             OnPropertyChanged(nameof(TextBoxVisibility));
             OnPropertyChanged(nameof(AddButtonVisibility));
@@ -146,7 +146,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         public Visibility AddButtonVisibility { get; set; } = Visibility.Visible;
-        public Visibility TextBoxVisibility { get; set; } = Visibility.Hidden;
+        public Visibility TextBoxVisibility { get; set; } = Visibility.Collapsed;
 
         #endregion
 
