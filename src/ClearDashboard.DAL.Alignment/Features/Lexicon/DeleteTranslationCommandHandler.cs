@@ -35,6 +35,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 );
             }
 
+            foreach (var tr in ProjectDbContext!.Translations
+                .Where(e => e.LexiconTranslationId == translation.Id))
+            {
+                tr.LexiconTranslationId = null;
+            }
+                
             ProjectDbContext.Remove(translation);
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 

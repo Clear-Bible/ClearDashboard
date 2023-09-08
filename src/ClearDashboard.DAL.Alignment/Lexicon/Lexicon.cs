@@ -1,4 +1,7 @@
-﻿using Microsoft.SqlServer.Server;
+﻿using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Features.Lexicon;
+using MediatR;
+using Microsoft.SqlServer.Server;
 using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
@@ -19,6 +22,9 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         private ObservableCollection<Lexeme> lexemes_;
 #endif
 
+        private readonly List<LexemeId> lexemeIdsInDatabase_;
+        public IEnumerable<LexemeId> LexemeIdsToDelete => lexemeIdsInDatabase_.ExceptBy(lexemes_.Select(e => e.LexemeId.Id), e => e.Id);
+
         public ObservableCollection<Lexeme> Lexemes
         {
             get { return lexemes_; }
@@ -34,10 +40,29 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         public Lexicon()
         {
             lexemes_ = new ObservableCollection<Lexeme>();
+            lexemeIdsInDatabase_ = new();
+
         }
         internal Lexicon(ICollection<Lexeme> lexemes)
         {
             lexemes_ = new ObservableCollection<Lexeme>(lexemes.DistinctBy(e => e.LexemeId));
+            lexemeIdsInDatabase_ = new(lexemes.Select(f => f.LexemeId));
+        }
+
+        public async Task SaveAsync(IMediator mediator, CancellationToken token = default)
+        {
+            var result = await mediator.Send(new SaveLexiconCommand(this), token);
+            result.ThrowIfCanceledOrFailed();
+
+            var createdIIdsByGuid = result.Data!.ToDictionary(e => e.Id, e => e);
+
+            lexemeIdsInDatabase_.Clear();
+            lexemeIdsInDatabase_.AddRange(lexemes_.Select(e => e.LexemeId));
+
+            foreach (var lexeme in lexemes_)
+            {
+                lexeme.PostSaveAll(createdIIdsByGuid);
+            }
         }
     }
 }

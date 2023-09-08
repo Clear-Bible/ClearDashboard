@@ -17,6 +17,17 @@ namespace ClearDashboard.DAL.Alignment.Features
             };
             return current;
         }
+
+        public static T Create(Guid id, UserId userId)
+        {
+            var current = new T
+            {
+                Id = id,
+                UserId = userId
+            };
+            return current;
+        }
+
         public static T Create(Guid id)
         {
             var current = new T

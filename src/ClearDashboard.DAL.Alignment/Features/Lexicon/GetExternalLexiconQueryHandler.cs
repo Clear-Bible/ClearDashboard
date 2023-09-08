@@ -33,31 +33,25 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             var result = await _mediator.Send(_externalLexiconQuery, cancellationToken);
             result.ThrowIfCanceledOrFailed();
 
-            var currentDateTime = DataAccessLayer.Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
-
             var lexemes = new List<Alignment.Lexicon.Lexeme>();
             foreach (var lexeme in result.Data!.Lexemes)
             {
-                lexeme.Created = currentDateTime;
                 lexeme.User = _userProvider.CurrentUser!;
                 lexeme.UserId = _userProvider.CurrentUser!.Id;
 
                 foreach (var meaning in lexeme.Meanings)
                 {
-                    meaning.Created = currentDateTime;
                     meaning.User = _userProvider.CurrentUser!;
                     meaning.UserId = _userProvider.CurrentUser!.Id;
 
                     foreach (var translation in meaning.Translations)
                     {
-                        translation.Created = currentDateTime;
                         translation.User = _userProvider.CurrentUser!;
                         translation.UserId = _userProvider.CurrentUser!.Id;
                     }
 
                     foreach (var semanticDomain in meaning.SemanticDomains)
                     {
-                        semanticDomain.Created = currentDateTime;
                         semanticDomain.User = _userProvider.CurrentUser!;
                         semanticDomain.UserId = _userProvider.CurrentUser!.Id;
                     }
@@ -66,7 +60,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
             var lexicon = new Alignment.Lexicon.Lexicon(
                 result.Data!.Lexemes
-                    .Select(e => ModelHelper.BuildLexeme(e, null))
+                    .Select(e => ModelHelper.BuildLexeme(e, null, true))
                     .ToList()
                 );
 

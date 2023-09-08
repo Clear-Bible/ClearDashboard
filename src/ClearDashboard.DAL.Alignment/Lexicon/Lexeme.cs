@@ -1,14 +1,18 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
 using MediatR;
+using Microsoft.SqlServer.Server;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public class Lexeme
+    public class Lexeme : IEquatable<Lexeme>
     {
-        public LexemeId? LexemeId
+        public LexemeId LexemeId
         {
             get;
 #if DEBUG
@@ -19,9 +23,42 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             set;
 #endif
         }
-        public string? Lemma { get; set; }
-        public string? Language { get; set; }
-        public string? Type { get; set; }
+
+        private string? lemma_;
+        public string? Lemma 
+        {
+            get => lemma_;
+            set
+            {
+                lemma_ = value;
+                IsDirty = true;
+            }
+        }
+
+        private string? language_;
+        public string? Language 
+        {
+            get => language_;
+            set
+            {
+                language_ = value;
+                IsDirty = true;
+            }
+        }
+
+        private string? type_;
+        public string? Type 
+        { 
+            get => type_;
+            set
+            {
+                type_ = value;
+                IsDirty = true;
+            }
+        }
+
+        private readonly List<MeaningId> meaningIdsInDatabase_;
+        internal IEnumerable<MeaningId> MeaningIdsToDelete => meaningIdsInDatabase_.ExceptBy(meanings_.Select(e => e.MeaningId.Id), e => e.Id);
 
 #if DEBUG
         private ObservableCollection<Meaning> meanings_;
@@ -43,6 +80,9 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 #endif
         }
 
+        private readonly List<FormId> formIdsInDatabase_;
+        internal IEnumerable<FormId> FormIdsToDelete => formIdsInDatabase_.ExceptBy(forms_.Select(e => e.FormId.Id), e => e.Id);
+
 #if DEBUG
         private ObservableCollection<Form> forms_;
 #else
@@ -63,76 +103,142 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 #endif
         }
 
+        public bool IsDirty { get; internal set; } = false;
+        public bool IsInDatabase { get => LexemeId.Created is not null; }
+
         public Lexeme()
         {
+            LexemeId = LexemeId.Create(Guid.NewGuid());
+
             meanings_ = new ObservableCollection<Meaning>();
+            meaningIdsInDatabase_ = new();
+
             forms_ = new ObservableCollection<Form>();
+            formIdsInDatabase_ = new();
         }
         internal Lexeme(LexemeId lexemeId, string lemma, string? language, string? type, ICollection<Meaning> meanings, ICollection<Form> forms)
         {
             LexemeId = lexemeId;
-            Lemma = lemma;
-            Language = language;
-            Type = type;
-            meanings_ = new ObservableCollection<Meaning>(meanings.DistinctBy(s => s.MeaningId)); ;
-            forms_ = new ObservableCollection<Form>(forms.DistinctBy(f => f.FormId)); ;
+
+            lemma_ = lemma;
+            language_ = language;
+            type_ = type;
+
+            meanings_ = new ObservableCollection<Meaning>(meanings.DistinctBy(s => s.MeaningId));
+            meaningIdsInDatabase_ = new(meanings.Select(f => f.MeaningId));
+
+            forms_ = new ObservableCollection<Form>(forms.DistinctBy(f => f.FormId));
+            formIdsInDatabase_ = new(forms.Select(f => f.FormId));
         }
 
         public async Task<Lexeme> Create(IMediator mediator, CancellationToken token = default)
         {
-            var command = new CreateOrUpdateLexemeCommand(null, Lemma ?? string.Empty, Language, Type);
+            var command = new CreateOrUpdateLexemeCommand(LexemeId, Lemma ?? string.Empty, Language, Type);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
 
-            LexemeId = result.Data!;
+            PostSave(result.Data!);
             return this;
         }
 
         public async Task PutMeaning(IMediator mediator, Meaning meaning, CancellationToken token = default)
         {
-            if (LexemeId is null)
+            if (!IsInDatabase)
             {
                 throw new MediatorErrorEngineException("Create Lexeme before associating with given Meaning");
+            }
+
+            if (meaning.IsInDatabase && !meaning.IsDirty)
+            {
+                return;
             }
 
             var result = await mediator.Send(new PutMeaningCommand(LexemeId, meaning), token);
             result.ThrowIfCanceledOrFailed();
 
-            if (meaning.MeaningId is not null &&
-                meanings_.Any(s => s.MeaningId == meaning.MeaningId))
+            meaning.PostSave(result.Data!);
+
+            if (!meanings_.Contains(meaning))
+            {
+                meanings_.Add(meaning);
+            }
+
+            if (!meaningIdsInDatabase_.Contains(meaning.MeaningId, new IIdEqualityComparer()))
+            {
+                meaningIdsInDatabase_.Add(meaning.MeaningId);
+            }
+        }
+
+        public async Task DeleteMeaning(IMediator mediator, Meaning meaning, CancellationToken token = default)
+        {
+            if (!meaning.IsInDatabase)
             {
                 return;
             }
 
-            meaning.MeaningId = result.Data!;
-            meanings_.Add(meaning);
+            // If there are any SemanticDomains associated with the meaning being deleted,
+            // the SemanticDomainMeaningAssociation in the DB should automatically get deleted.
+            var command = new DeleteMeaningCommand(meaning.MeaningId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
+
+            meaning.PostSave(SimpleSynchronizableTimestampedEntityId<MeaningId>.Create(meaning.MeaningId.Id));
+
+            meanings_.Remove(meaning);
+            meaningIdsInDatabase_.RemoveAll(e => e.Id == meaning.MeaningId.Id);
         }
 
         public async Task PutForm(IMediator mediator, Form form, CancellationToken token = default)
         {
-            if (form.FormId is not null &&
-                forms_.Any(f => f.FormId == form.FormId))
-            {
-                return;
-            }
-
-            if (LexemeId is null)
+            if (!IsInDatabase)
             {
                 throw new MediatorErrorEngineException("Create Lexeme before associating with given Form");
+            }
+
+            if (form.IsInDatabase && !form.IsDirty)
+            {
+                return;
             }
 
             var result = await mediator.Send(new PutFormCommand(LexemeId, form), token);
             result.ThrowIfCanceledOrFailed();
 
-            form.FormId = result.Data!;
+            form.PostSave(result.Data!);
 
-            forms_.Add(form);
+            if (!forms_.Contains(form))
+            {
+                forms_.Add(form);
+            }
+          
+            if (!formIdsInDatabase_.Contains(form.FormId, new IIdEqualityComparer()))
+            {
+                formIdsInDatabase_.Add(form.FormId);
+            }
+        }
+
+        public async Task DeleteForm(IMediator mediator, Form form, CancellationToken token = default)
+        {
+            if (!form.IsInDatabase)
+            {
+                return;
+            }
+
+            var command = new DeleteFormCommand(form.FormId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
+
+            form.PostSave(SimpleSynchronizableTimestampedEntityId<FormId>.Create(form.FormId.Id));
+
+            forms_.Remove(form);
+            formIdsInDatabase_.RemoveAll(e => e.Id == form.FormId.Id);
         }
 
         public async Task Delete(IMediator mediator, CancellationToken token = default)
         {
-            if (LexemeId == null)
+            if (!IsInDatabase)
             {
                 return;
             }
@@ -141,6 +247,8 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();
+
+            LexemeId = SimpleSynchronizableTimestampedEntityId<LexemeId>.Create(LexemeId.Id);
         }
 
         [Obsolete("This method is deprecated, use GetByLemmaOrForm instead.")]
@@ -173,5 +281,45 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
             return result.Data!;
         }
+
+        internal void PostSave(LexemeId? lexemeId)
+        {
+            LexemeId = lexemeId ?? LexemeId;
+            IsDirty = false;
+        }
+
+        internal void PostSaveAll(IDictionary<Guid, IId> createdIIdsByGuid)
+        {
+            createdIIdsByGuid.TryGetValue(LexemeId.Id, out var lexemeId);
+            PostSave((LexemeId?)lexemeId);
+
+            formIdsInDatabase_.Clear();
+            formIdsInDatabase_.AddRange(forms_.Select(e => e.FormId));
+
+            foreach (var form in forms_)
+            {
+                form.PostSaveAll(createdIIdsByGuid);
+            }
+
+            meaningIdsInDatabase_.Clear();
+            meaningIdsInDatabase_.AddRange(meanings_.Select(e => e.MeaningId));
+
+            foreach (var meaning in meanings_)
+            {
+                meaning.PostSaveAll(createdIIdsByGuid);
+            }
+        }
+
+        public override bool Equals(object? obj) => Equals(obj as Lexeme);
+        public bool Equals(Lexeme? other)
+        {
+            if (other is null) return false;
+            if (!LexemeId.Id.Equals(other.LexemeId.Id)) return false;
+
+            return true;
+        }
+        public override int GetHashCode() => LexemeId.Id.GetHashCode();
+        public static bool operator ==(Lexeme? e1, Lexeme? e2) => Equals(e1, e2);
+        public static bool operator !=(Lexeme? e1, Lexeme? e2) => !(e1 == e2);
     }
 }

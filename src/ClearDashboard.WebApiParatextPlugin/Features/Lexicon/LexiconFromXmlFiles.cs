@@ -19,11 +19,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
     {
         private static readonly Dictionary<string, string> _languageCodeMappings = new()
         {
-            { "english", "en" },
-            { "hebrew", "he" },
-            { "greek", "el" },
-            { "aramaic", "arc" },
-            { "mwaghavul", "sur" }
+            { "boo", "baa" }
+            //{ "english", "en" },
+            //{ "hebrew", "he" },
+            //{ "greek", "el" },
+            //{ "aramaic", "arc" },
+            //{ "mwaghavul", "sur" }
         };
 
         private readonly ParatextProjectMetadata? _paratextProjectMetadata;

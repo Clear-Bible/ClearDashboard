@@ -51,7 +51,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
             var lexicon = new Alignment.Lexicon.Lexicon(
                 lexemeModels
-                    .Select(e => ModelHelper.BuildLexeme(e, null))
+                    .Select(e => ModelHelper.BuildLexeme(e, null, false))
                     .ToList()
             );
 

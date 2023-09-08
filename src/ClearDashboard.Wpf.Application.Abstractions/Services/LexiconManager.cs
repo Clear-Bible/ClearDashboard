@@ -187,14 +187,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task DeleteLexemeFormAsync(Form form)
+        public async Task DeleteLexemeFormAsync(LexemeViewModel lexeme, Form form)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #if !DEMO
-                await form.Delete(Mediator);
+                await lexeme.Entity.DeleteForm(Mediator, form);
 #endif
                 stopwatch.Stop();
 
@@ -226,7 +226,12 @@ namespace ClearDashboard.Wpf.Application.Services
                 throw;
             }
         }
-        
+
+        public static void AddMeaningDeferred(LexemeViewModel lexeme, MeaningViewModel meaning)
+        {
+            lexeme.Meanings.Add(meaning);
+        }
+
         public async Task UpdateMeaningAsync(LexemeViewModel lexeme, MeaningViewModel meaning)
         {
             try
@@ -247,14 +252,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task DeleteMeaningAsync(MeaningViewModel meaning)
+        public async Task DeleteMeaningAsync(LexemeViewModel lexeme, MeaningViewModel meaning)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #if !DEMO
-                await meaning.Entity.Delete(Mediator);
+                await lexeme.Entity.DeleteMeaning(Mediator, meaning.Entity);
 #endif
                 stopwatch.Stop();
 
@@ -380,7 +385,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task MoveTranslationAsync(LexiconTranslationViewModel sourceTranslation, MeaningViewModel targetMeaning)
+        public async Task MoveTranslationAsync(MeaningViewModel targetMeaning, LexiconTranslationViewModel sourceTranslation)
         {
             try
             {
@@ -388,10 +393,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Start();
 
                 var sourceMeaning = sourceTranslation.Meaning;
-                if (sourceTranslation.TranslationId != null)
+                if (sourceMeaning != null)
                 {
 #if !DEMO
-                    await sourceTranslation.Entity.Delete(Mediator);
+                    await sourceMeaning.Entity.DeleteTranslation(Mediator, sourceTranslation.Entity);
 #endif
                 }
 
@@ -421,14 +426,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task DeleteTranslationAsync(LexiconTranslationViewModel translation)
+        public async Task DeleteTranslationAsync(MeaningViewModel meaning, LexiconTranslationViewModel translation)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                await translation.Entity.Delete(Mediator);
+                await meaning.Entity.DeleteTranslation(Mediator, translation.Entity);
 
                 stopwatch.Stop();
 
@@ -456,6 +461,11 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Lexemes = new ObservableCollection<Lexeme>(lexemesExternalExceptInternal)
             };
+        }
+
+        public static void Save(Lexicon lexicon)
+        {
+
         }
 
         /// <summary>
