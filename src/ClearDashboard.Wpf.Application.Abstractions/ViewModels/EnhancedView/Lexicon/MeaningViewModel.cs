@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
     {
         public Meaning Entity { get; }
 
-        public MeaningId? MeaningId
+        public MeaningId MeaningId
         {
             get => Entity.MeaningId;
             set => Entity.MeaningId = value;

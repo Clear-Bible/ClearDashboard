@@ -33,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.Collections.Lexicon
 
         public void RemoveIfContainsId(TranslationId translationId)
         {
-            var existing = this.FirstOrDefault(t => t.TranslationId != null && t.TranslationId.Equals(translationId));
+            var existing = this.FirstOrDefault(t => t.TranslationId.IsInDatabase && t.TranslationId.Equals(translationId));
             if (existing != null)
             {
                 Remove(existing);
