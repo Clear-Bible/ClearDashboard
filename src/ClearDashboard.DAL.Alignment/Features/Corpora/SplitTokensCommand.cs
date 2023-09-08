@@ -6,11 +6,15 @@ using MediatR;
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record SplitTokensCommand(
+        TokenizedTextCorpusId TokenizedTextCorpusId,
         IEnumerable<TokenId> TokenIdsWithSameSurfaceText,
         int SurfaceTextIndex,
         int SurfaceTextLength,
         string TrainingText1,
         string TrainingText2,
         string? TrainingText3,
-        bool CreateParallelComposite = true) : ProjectRequestCommand<(IEnumerable<CompositeToken>, IEnumerable<Token>)>;
+        bool CreateParallelComposite = true) : 
+        ProjectRequestCommand<
+            (IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, 
+             IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)>;
 }

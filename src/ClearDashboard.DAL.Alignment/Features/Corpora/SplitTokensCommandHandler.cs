@@ -15,7 +15,8 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class SplitTokensCommandHandler : ProjectDbContextCommandHandler<SplitTokensCommand,
-        RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>, (IEnumerable<CompositeToken>, IEnumerable<Token>)>
+        RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>, 
+        (IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
     {
         private readonly IMediator _mediator;
 
@@ -28,12 +29,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>> SaveDataAsync(SplitTokensCommand request,
+        protected override async Task<RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>> SaveDataAsync(
+            SplitTokensCommand request,
             CancellationToken cancellationToken)
         {
             if (request.TrainingText3 is null && request.SurfaceTextIndex > 0)
             {
-                return new RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>
+                return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
                 (
                     success: false,
                     message: $"Request '{nameof(request.TrainingText3)}' can only be null if '{nameof(request.SurfaceTextIndex)}' == 0 (incoming value: [{request.SurfaceTextIndex}])"
@@ -42,7 +44,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             if (!request.TokenIdsWithSameSurfaceText.Any())
             {
-                return new RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>
+                return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
                 (
                     success: false,
                     message: $"Request '{nameof(request.TokenIdsWithSameSurfaceText)}' was empty"
@@ -61,6 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(t => t.SourceAlignments.Where(a => a.Deleted == null))
                 .Include(t => t.TargetAlignments.Where(a => a.Deleted == null))
                 .Include(t => t.TokenVerseAssociations.Where(a => a.Deleted == null))
+                .Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
                 .Where(t => requestTokenIdGuids.Contains(t.Id))
                 .ToList();
 
@@ -72,7 +75,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var missingTokenIdGuids = requestTokenIdGuids.Except(tokensDb.Select(e => e.Id));
             if (missingTokenIdGuids.Any())
             {
-                return new RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>
+                return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
                 (
                     success: false,
                     message: $"Request TokenId(s) '{string.Join(",", missingTokenIdGuids)}' not found in database"
@@ -82,7 +85,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var surfaceText = tokensDb.First().SurfaceText;
             if (string.IsNullOrEmpty(surfaceText))
             {
-                return new RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>
+                return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
                 (
                     success: false,
                     message: $"First matching Token in database has SurfaceText that is null or empty (TokenId: '{tokensDb.First().Id}')"
@@ -91,7 +94,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             if (!tokensDb.Select(e => e.SurfaceText).All(e => e == surfaceText))
             {
-                return new RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>
+                return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
                 (
                     success: false,
                     message: $"Tokens in database matching request TokenIds do not all having SurfaceText matching: '{surfaceText}'"
@@ -102,15 +105,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 request.SurfaceTextLength <= 0 ||
                 (request.SurfaceTextIndex + request.SurfaceTextLength) >= surfaceText.Length)
             {
-                return new RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>
+                return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
                 (
                     success: false,
                     message: $"Request SurfaceTextIndex [{request.SurfaceTextIndex}] and/or SurfaceTextLength [{request.SurfaceTextLength}] is out of range for SurfaceText '{surfaceText}'"
                 );
             }
 
-            var newlyCreatedComposites = new List<CompositeToken>();
-            var newlyCreatedTokens = new List<Token>();
+            var splitCompositeTokensByIncomingTokenId = new Dictionary<TokenId, IEnumerable<CompositeToken>>();
+            var splitChildTokensByIncomingTokenId = new Dictionary<TokenId, IEnumerable<Token>>();
             var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
             var idx = 0;
@@ -190,6 +193,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 replacementTokensById.Add(tokenDb.Id, newChildTokens);
                 replacementModelTokensById.Add(tokenDb.Id, newChildTokensDb);
 
+                // Put the new child tokens into the "splitChild' return value structure:
+                splitChildTokensByIncomingTokenId.Add(ModelHelper.BuildTokenId(tokenDb), newChildTokens);
+
                 ProjectDbContext.TokenComponents.AddRange(newChildTokensDb);
                 tokenDb.Deleted = currentDateTime;
 
@@ -222,7 +228,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(e => e.SourceAlignments)
                 .Where(e => existingCompositeIds.Contains(e.Id))
                 .ToList();
-            
+
+            // Replace tokens with new split tokens in every composite they
+            // are found in:
+            var incomingTokenIdCompositePairs = new List<(Guid, CompositeToken)>();
             foreach (var tokenComposite in tokensDbTokenComposites)
             {
                 var previousTrainingText = tokenComposite.TrainingText;
@@ -259,6 +268,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             TokenCompositeId = tokenComposite.Id,
                             TokenId = e.TokenId.Id
                         }));
+
+                    incomingTokenIdCompositePairs.Add((tokenIdToReplace, compositeToken));
                 }
 
                 // Using the higher level CompositeToken structure here (instead 
@@ -298,6 +309,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                     var compositeToken = new CompositeToken(replacementTokensById[tokenDb.Id]);
                     compositeToken.TokenId.Id = Guid.NewGuid();
+
+                    incomingTokenIdCompositePairs.Add((tokenDb.Id, compositeToken));
 
                     var tokenComposite = BuildModelTokenComposite(
                         compositeToken,
@@ -349,6 +362,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         tokenComposite.ParallelCorpusId = pc.Id;
 
                         ProjectDbContext.TokenComposites.Add(tokenComposite);
+
+                        incomingTokenIdCompositePairs.Add((tokenDb.Id, compositeToken));
 
                         if (isFirst)
                         {
@@ -435,6 +450,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 }
             }
 
+            var compositesByIncomingTokenId = incomingTokenIdCompositePairs
+                .GroupBy(e => e.Item1)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(e => e.Item2));
+
+            tokensDb.ForEach(e =>
+            {
+                if (compositesByIncomingTokenId.TryGetValue(e.Id, out var composites))
+                {
+                    splitCompositeTokensByIncomingTokenId.Add(ModelHelper.BuildTokenId(e), composites);
+                }
+            });
+
             if (sourceTrainingTextsByAlignmentSetId.Any())
             {
                 using (var transaction = ProjectDbContext.Database.BeginTransaction())
@@ -452,9 +481,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
             }
 
-            return new RequestResult<(IEnumerable<CompositeToken>, IEnumerable<Token>)>
+            return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
             (
-                (newlyCreatedComposites, newlyCreatedTokens)
+                (splitCompositeTokensByIncomingTokenId, splitChildTokensByIncomingTokenId)
             );
         }
 

@@ -211,7 +211,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <param name="createParallelComposite">Create parallel composite when tokenId is not a member of any composite 
         /// at all (for any parallel or non-parallel composite.</param>
         /// <returns></returns>
-        public static async Task<(IEnumerable<CompositeToken>, IEnumerable<Token>)> SplitTokens(
+        public async Task<(IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)> SplitTokens(
             IMediator mediator,
             IEnumerable<TokenId> tokenIdsWithSameSurfaceText,
             int surfaceTextIndex,
@@ -223,6 +223,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         )
         {
             var command = new SplitTokensCommand(
+                TokenizedTextCorpusId,
                 tokenIdsWithSameSurfaceText, 
                 surfaceTextIndex,
                 surfaceTextLength,
