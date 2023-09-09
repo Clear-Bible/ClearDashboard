@@ -16,12 +16,123 @@
     >
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <Style x:Key="SliderRepeatLeft" TargetType="RepeatButton">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border SnapsToDevicePixels="True" Background="Gray"  BorderThickness="1" BorderBrush="Gray" Height="5"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderRepeatRight" TargetType="RepeatButton">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border Background="Transparent"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderThumbTop" TargetType="Thumb">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Path Data="M 0 0 L 16 0 L 8 16 Z"  Stroke="Gray" Margin="0,0,0,0" StrokeThickness="2" Fill="Gray"></Path>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderThumbBottom" TargetType="Thumb">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Path Data="M 0 16 L 16 16 L 8 0 Z"  Stroke="Gray" Margin="0,0,0,0" StrokeThickness="2" Fill="Gray"></Path>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="TopSliderTemplate"  TargetType="Slider">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" x:Name="TrackBackground" VerticalAlignment="Center" Margin="0,-10,0,0" BorderBrush="LightGray" Background="LightGray" Height="3" BorderThickness="1"/>
+                <Track Grid.Row="0" x:Name="PART_Track" Margin="0,-10,0,0"  >
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatLeft}"  Command="Slider.DecreaseLarge" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource SliderThumbTop}" Margin="0,15,0,0" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatRight}" Command="Slider.IncreaseLarge" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+                <TickBar Grid.Row="1" x:Name="Top" Fill="LightGray" SnapsToDevicePixels="True" Placement="Bottom" Height="4" Visibility="Collapsed" />
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="BottomSliderTemplate"  TargetType="Slider">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                </Grid.RowDefinitions>
+                <TickBar Grid.Row="0" x:Name="BottomTick" Fill="LightGray" SnapsToDevicePixels="True" Placement="Bottom" Height="4" Visibility="Collapsed" />
+                <Border Grid.Row="1" x:Name="TrackBackground" VerticalAlignment="Center" Margin="0,-10,0,0" BorderBrush="LightGray" Background="LightGray" Height="3" BorderThickness="1"/>
+                <Track Grid.Row="1" x:Name="PART_Track" Margin="0,-10,0,0"  >
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatLeft}"  Command="Slider.DecreaseLarge" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource SliderThumbBottom}" Margin="0,0,0,13" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatRight}" Command="Slider.IncreaseLarge" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+
+        <Style x:Key="TopSlider" TargetType="Slider">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template" Value="{StaticResource TopSliderTemplate}" />
+        </Style>
+
+        <Style x:Key="BottomSlider" TargetType="Slider">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template" Value="{StaticResource BottomSliderTemplate}" />
+        </Style>
+
     </UserControl.Resources>
+
     <Grid MinWidth="500">
         <Grid.RowDefinitions>
             <RowDefinition Height="55" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
@@ -34,7 +145,18 @@
                Margin="0,10,0,20"
                />
 
-        <userControls:TokenCharactersDisplay Grid.Row="1" x:Name="CharactersDisplay" 
+        <Slider Grid.Row="1" 
+                IsSnapToTickEnabled="True"
+                Maximum="{Binding TokenCharacters.Count}"
+                Minimum="0"
+                Style="{StaticResource TopSlider}"
+                TickFrequency="1"
+                Value="{Binding CharacterThreshold}" 
+                VerticalAlignment="Center"
+                Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
+        />
+
+        <userControls:TokenCharactersDisplay Grid.Row="2" x:Name="CharactersDisplay" 
                                              CharacterWidth="50"
                                              DataContext="{Binding TokenCharacters}" 
                                              FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
@@ -44,17 +166,19 @@
                                              Threshold="{Binding ElementName=CharacterSlider, Path=Value}"
         />
 
-        <Slider Grid.Row="2" x:Name="CharacterSlider"
+        <Slider Grid.Row="3" x:Name="CharacterSlider"
             IsSnapToTickEnabled="True"
+            Margin="0,10,0,0"
             Maximum="{Binding TokenCharacters.Count}"
             Minimum="0"
+            Style="{StaticResource BottomSlider}"
             TickFrequency="1"
             Value="{Binding CharacterThreshold}" 
             VerticalAlignment="Center"
             Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
             />
 
-        <Grid Grid.Row="3" Margin="0,20,0,20"          
+        <Grid Grid.Row="4" Margin="0,20,0,20"          
               Visibility="{Binding ApplyEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -67,33 +191,33 @@
             <Label Grid.Row="0" Grid.Column="0" 
                    Content="{helpers:Localization EnhancedView_NewToken}"
                    FontFamily="{DynamicResource MaterialDesignFont}"
-                   FontSize="16"
+                   FontSize="18"
                    HorizontalAlignment="Right"
-                   Margin="0,0,20,0"
+                   Margin="0,0,10,0"
                    VerticalAlignment="Center"
                    />
             <TextBlock Grid.Row="0" Grid.Column="1" 
                        FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
-                       FontSize="24"
+                       FontSize="18"
                        FontWeight="SemiBold"
                        Text="{Binding Subtoken1}"
                        />
             <Label Grid.Row="1" Grid.Column="0" 
                    Content="{helpers:Localization EnhancedView_NewToken}"
                    FontFamily="{DynamicResource MaterialDesignFont}"
-                   FontSize="16"
+                   FontSize="18"
                    HorizontalAlignment="Right"
-                   Margin="0,0,20,0"
+                   Margin="0,0,10,0"
                    VerticalAlignment="Center"
                    />
             <TextBlock Grid.Row="1" Grid.Column="1" 
                        FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
-                       FontSize="24"
+                       FontSize="18"
                        FontWeight="SemiBold"
                        Text="{Binding Subtoken2}"/>
         </Grid>
 
-        <StackPanel Grid.Row="4"
+        <StackPanel Grid.Row="5"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <Button x:Name="ApplySplit" 
@@ -114,7 +238,7 @@
                     />
         </StackPanel>
 
-        <ProgressBar Grid.Row="1"
+        <ProgressBar Grid.Row="2"
                      Grid.RowSpan="3"
                      Width="76"
                      Height="75"
