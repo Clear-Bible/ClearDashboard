@@ -88,6 +88,10 @@
                         x:Name="UnjoinTokenMenuItem"
                         Click="OnTokenUnjoin"
                         Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
+                    <MenuItem
+                        x:Name="SplitTokenMenuItem"
+                        Click="OnTokenSplit"
+                        Header="{helpers:Localization EnhancedView_SplitToken}" />
                     <MenuItem 
                         x:Name="CopyMenuItem" 
                         Click="OnCopy" 

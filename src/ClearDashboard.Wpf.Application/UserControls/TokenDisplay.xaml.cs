@@ -412,6 +412,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenJoinLanguagePair", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TokenSplit routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenSplitEvent = EventManager.RegisterRoutedEvent
+            (nameof(TokenSplit), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the TokenUnjoinEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
@@ -670,6 +676,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(TokenJoinLanguagePairEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when the user requests to split a token.
+        /// </summary>
+        public event RoutedEventHandler TokenSplit
+        {
+            add => AddHandler(TokenSplitEvent, value);
+            remove => RemoveHandler(TokenSplitEvent, value);
+        }        
+        
         /// <summary>
         /// Occurs when the user requests to unjoin a composite token.
         /// </summary>
@@ -953,6 +968,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
                     JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
                     UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
+                    SplitTokenMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                     FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                     CreateAlignmentMenuItem.Visibility = tokenDisplay.VerseDisplay is AlignmentDisplayViewModel && AllSelectedTokens.CanCreateAlignment ? Visibility.Visible : Visibility.Collapsed;
                     DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned && AllSelectedTokens.SelectedTokenCount == 1 ? Visibility.Visible : Visibility.Collapsed;
@@ -963,6 +979,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     JoinTokensMenuItem.Visibility = Visibility.Collapsed;
                     JoinTokensLanguagePairMenuItem.Visibility = Visibility.Collapsed;
                     UnjoinTokenMenuItem.Visibility = Visibility.Collapsed;
+                    SplitTokenMenuItem.Visibility = Visibility.Collapsed;
                     FilterPinsMenuItem.Visibility = Visibility.Collapsed;
                     CreateAlignmentMenuItem.Visibility = Visibility.Collapsed;
                     DeleteAlignmentMenuItem.Visibility = Visibility.Collapsed;
@@ -1234,6 +1251,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenJoinLanguagePairEvent, e);
         }
 
+        private void OnTokenSplit(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenSplitEvent, e);
+        }        
+        
         private void OnTokenUnjoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenUnjoinEvent, e);

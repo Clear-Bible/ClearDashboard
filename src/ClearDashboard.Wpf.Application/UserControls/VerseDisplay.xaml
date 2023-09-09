@@ -55,6 +55,7 @@
                 TokenMouseWheel="OnTokenMouseWheel"
                 TokenRightButtonDown="OnTokenRightButtonDown"
                 TokenRightButtonUp="OnTokenRightButtonUp"
+                TokenSplit="OnTokenSplit"
                 TokenUnjoin="OnTokenUnjoin"
                 TokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenVerticalSpacing}"
                 TranslateQuick="OnTranslateQuick"

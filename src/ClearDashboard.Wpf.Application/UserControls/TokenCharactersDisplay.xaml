@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.TokenCharactersDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             mc:Ignorable="d" 
+             x:Name="TokenCharactersDisplayControl"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate x:Key="TokenCharacterDisplay">
+            <userControls:TokenCharacterDisplay 
+                BackgroundColor1="{Binding ElementName=TokenCharactersDisplayControl, Path=BackgroundColor1}" 
+                BackgroundColor2="{Binding ElementName=TokenCharactersDisplayControl, Path=BackgroundColor2}" 
+                FlowDirection="{Binding ElementName=TokenCharactersDisplayControl, Path=FlowDirection}" 
+                FontFamily="{Binding ElementName=TokenCharactersDisplayControl, Path=FontFamily}" 
+                FontSize="{Binding ElementName=TokenCharactersDisplayControl, Path=FontSize}" 
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Threshold="{Binding ElementName=TokenCharactersDisplayControl, Path=Threshold}" 
+                Width="{Binding ElementName=TokenCharactersDisplayControl, Path=CharacterWidth}" 
+                />
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="WrapPanelTemplate">
+            <WrapPanel FlowDirection="{Binding ElementName=TokenCharactersDisplayControl, Path=FlowDirection}" 
+                       Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <ItemsControl
+            FlowDirection="{Binding ElementName=TokenCharactersDisplayControl, Path=FlowDirection}"
+            ItemTemplate="{StaticResource TokenCharacterDisplay}"
+            ItemsPanel="{StaticResource WrapPanelTemplate}"
+            ItemsSource="{Binding}" />
+    </Grid>
+</UserControl>
