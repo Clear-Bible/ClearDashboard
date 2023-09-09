@@ -3,12 +3,19 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     public partial class TokenCharactersDisplay
     {
+        /// <summary>
+        /// Identifies the CharacterClicked routed event.
+        /// </summary>
+        public static readonly RoutedEvent CharacterClickedEvent = EventManager.RegisterRoutedEvent
+            (nameof(CharacterClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenCharactersDisplay));
+
         /// <summary>
         /// Identifies the BackgroundColor1 dependency property.
         /// </summary>
@@ -70,6 +77,29 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (int)GetValue(ThresholdProperty);
             set => SetValue(ThresholdProperty, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual character is clicked.
+        /// </summary>
+        public event RoutedEventHandler CharacterClicked
+        {
+            add => AddHandler(CharacterClickedEvent, value);
+            remove => RemoveHandler(CharacterClickedEvent, value);
+        }
+
+        private void RaiseTokenCharacterEvent(RoutedEvent routedEvent, TokenCharacterEventArgs e)
+        {
+            RaiseEvent(new TokenCharacterEventArgs
+            {
+                RoutedEvent = routedEvent,
+                TokenCharacter = e.TokenCharacter,
+            });
+        }
+
+        private void OnCharacterClicked(object sender, RoutedEventArgs args)
+        {
+            RaiseTokenCharacterEvent(CharacterClickedEvent, args as TokenCharacterEventArgs);
         }
 
         /// <summary>

@@ -12,6 +12,7 @@
             <userControls:TokenCharacterDisplay 
                 BackgroundColor1="{Binding ElementName=TokenCharactersDisplayControl, Path=BackgroundColor1}" 
                 BackgroundColor2="{Binding ElementName=TokenCharactersDisplayControl, Path=BackgroundColor2}" 
+                CharacterClicked="OnCharacterClicked"
                 FlowDirection="{Binding ElementName=TokenCharactersDisplayControl, Path=FlowDirection}" 
                 FontFamily="{Binding ElementName=TokenCharactersDisplayControl, Path=FontFamily}" 
                 FontSize="{Binding ElementName=TokenCharactersDisplayControl, Path=FontSize}" 

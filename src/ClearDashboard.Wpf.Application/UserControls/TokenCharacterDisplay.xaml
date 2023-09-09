@@ -10,6 +10,7 @@
     <Grid>
         <TextBlock 
             Background="{Binding ElementName=TokenCharacterDisplayControl, Path=ComputedBackgroundColor}" 
+            MouseLeftButtonDown="OnMouseLeftButtonDown"
             FontFamily="{Binding ElementName=TokenCharacterDisplayControl, Path=FontFamily}" 
             FontSize="{Binding ElementName=TokenCharacterDisplayControl, Path=FontSize}"
             HorizontalAlignment="Center"

@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:cm="http://caliburnmicro.com"
     d:DataContext="{d:DesignInstance Type=viewModels:SplitTokenDialogViewModel}"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -164,7 +165,8 @@
                                              HorizontalAlignment="Center"
                                              HorizontalContentAlignment="Center"
                                              Threshold="{Binding ElementName=CharacterSlider, Path=Value}"
-        />
+                                             cm:Message.Attach="[Event CharacterClicked] = [Action CharacterClicked($this, $eventArgs)]"
+/>
 
         <Slider Grid.Row="3" x:Name="CharacterSlider"
             IsSnapToTickEnabled="True"

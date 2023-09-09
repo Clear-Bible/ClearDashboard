@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -11,6 +11,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
     public partial class TokenCharacterDisplay : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Identifies the CharacterClicked routed event.
+        /// </summary>
+        public static readonly RoutedEvent CharacterClickedEvent = EventManager.RegisterRoutedEvent
+            (nameof(CharacterClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenCharacterDisplay));
 
         /// <summary>
         /// Identifies the BackgroundColor1 dependency property.
@@ -37,6 +43,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var control = d as TokenCharacterDisplay;
             control?.OnPropertyChanged(nameof(ComputedBackgroundColor));
+        }
+
+        private void OnDataContextChanged(object? sender, DependencyPropertyChangedEventArgs args)
+        {
+            OnPropertyChanged(nameof(Character));
+            OnPropertyChanged(nameof(ComputedBackgroundColor));
+        }
+
+        private void RaiseTokenCharacterEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            var control = e.Source as FrameworkElement;
+            var tokenCharacter = control?.DataContext as TokenCharacterViewModel;
+            RaiseEvent(new TokenCharacterEventArgs
+            {
+                RoutedEvent = routedEvent,
+                TokenCharacter = tokenCharacter!,
+            });
+        }
+
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            RaiseTokenCharacterEvent(CharacterClickedEvent, e);
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -82,6 +110,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when an individual character is clicked.
+        /// </summary>
+        public event RoutedEventHandler CharacterClicked
+        {
+            add => AddHandler(CharacterClickedEvent, value);
+            remove => RemoveHandler(CharacterClickedEvent, value);
+        }
+
+        /// <summary>
         /// Gets the <see cref="TokenCharacterViewModel"/> to display.
         /// </summary>
         private TokenCharacterViewModel TokenCharacter => (TokenCharacterViewModel)DataContext;
@@ -91,14 +128,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             InitializeComponent();
 
             this.DataContextChanged += OnDataContextChanged;
-            //var dataContext = DependencyPropertyDescriptor.FromProperty(DataContextProperty, typeof(FrameworkElement));
-            //dataContext.AddValueChanged(this, OnDataContextChanged);
         }
 
-        private void OnDataContextChanged(object? sender, DependencyPropertyChangedEventArgs args)
-        {
-            OnPropertyChanged(nameof(Character));
-            OnPropertyChanged(nameof(ComputedBackgroundColor));
-        }
     }
 }

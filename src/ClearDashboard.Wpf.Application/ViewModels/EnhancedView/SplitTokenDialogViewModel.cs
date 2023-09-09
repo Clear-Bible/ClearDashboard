@@ -7,6 +7,7 @@ using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
@@ -95,6 +96,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get => _isLoaded;
             private set => Set(ref _isLoaded, value);
+        }
+
+        public void CharacterClicked(object source, RoutedEventArgs args)
+        {
+            var tokenCharacterArgs = args as TokenCharacterEventArgs;
+            CharacterThreshold = tokenCharacterArgs!.TokenCharacter.Index + 1;
         }
 
         public async void ApplySplit()
