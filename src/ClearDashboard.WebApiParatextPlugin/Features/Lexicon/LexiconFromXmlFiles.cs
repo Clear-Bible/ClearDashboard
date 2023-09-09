@@ -12,20 +12,21 @@ using BiblicalTermFileModel = ClearDashboard.DataAccessLayer.Models.Term;
 using BiblicalTermsListFileModel = ClearDashboard.DataAccessLayer.Models.BiblicalTermsList;
 using TermRenderingsListFileModel = ClearDashboard.DataAccessLayer.Models.TermRenderingsList;
 using Microsoft.Extensions.Logging;
+using System.Media;
+using System.Reflection;
+using SIL.WritingSystems;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 {
     public class LexiconFromXmlFiles : ILexiconObtainable
     {
-        private static readonly Dictionary<string, string> _languageCodeMappings = new()
+        private static readonly Dictionary<string, string> _languageNamePreLookupMappings = new(StringComparer.InvariantCultureIgnoreCase)
         {
-            { "boo", "baa" }
-            //{ "english", "en" },
-            //{ "hebrew", "he" },
-            //{ "greek", "el" },
-            //{ "aramaic", "arc" },
-            //{ "mwaghavul", "sur" }
+            { "aramaic", "Official Aramaic" }
         };
+
+        private readonly LanguageLookup _lookup = new();
+        private readonly Dictionary<string, LanguageInfo> _suggestLanguagesCache = new();
 
         private readonly ParatextProjectMetadata? _paratextProjectMetadata;
         private readonly ILogger _logger;
@@ -41,6 +42,24 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             _logger = logger;
             _paratextProjectMetadata = paratextProjectMetadata;
             _paratextAppPath = paratextAppPath;
+        }
+
+        private LanguageInfo? SuggestLanguage(string searchString)
+        {
+            if (_suggestLanguagesCache.TryGetValue(searchString, out var languageInfo))
+            {
+                return languageInfo;
+            }
+            else
+            {
+                languageInfo = _lookup.SuggestLanguages(searchString)?.FirstOrDefault();
+                if (languageInfo is not null)
+                {
+                    _suggestLanguagesCache.Add(searchString, languageInfo);
+                }
+
+                return languageInfo;
+            }
         }
 
         public Lexicon_Lexicon GetLexicon()
@@ -90,17 +109,22 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             // Determine language of each by finding related BiblicalTerm
             if (_paratextProjectMetadata != null)
             {
-                // FIXME:  add language code to ParatextProjectMetadata and use that instead
-                if (!_languageCodeMappings.TryGetValue(_paratextProjectMetadata.LanguageName.ToLower(), out var meaningLanguage))
-                {
-                    meaningLanguage = _paratextProjectMetadata.LanguageName;
-                }
+                var lookup = new LanguageLookup();
+                var projectLanguageInfo = SuggestLanguage(_paratextProjectMetadata.LanguageName);
 
-                LoadIntoLexiconModel(
-                    lexiconModel,
-                    biblicalTermsById,
-                    meaningLanguage,
-                    LoadIntoFileModel<TermRenderingsListFileModel>(Path.Combine(_paratextProjectMetadata.ProjectPath, "TermRenderings.xml")));
+                if (projectLanguageInfo is not null)
+                {
+                    LoadIntoLexiconModel(
+                        lexiconModel,
+                        biblicalTermsById,
+                        projectLanguageInfo.LanguageTag,
+                        LoadIntoFileModel<TermRenderingsListFileModel>(Path.Combine(_paratextProjectMetadata.ProjectPath, "TermRenderings.xml")));
+
+                }
+                else
+                {
+                    _logger.LogWarning($"Unable to GetLanguageNameFromCode using ParatextProjectMetadata.LanguageName: '{_paratextProjectMetadata.LanguageName}' to determine Term Renderings meaning language");
+                }
             }
 
             return lexiconModel;
@@ -108,33 +132,39 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 
         protected void LoadIntoLexiconModel(Lexicon_Lexicon lexiconModel, LexiconFileModel lexiconFileModel)
         {
+            var lookup = new LanguageLookup();
+
+            var lexiconLanguageInfo = lookup.GetLanguageFromCode(lexiconFileModel.Language);
+            if (lexiconLanguageInfo is null)
+            {
+                _logger.LogWarning($"Unable to load Lexicon file data into Lexicon model due to GetLanguageNameFromCode returning null for language: '{lexiconFileModel.Language}'");
+                return;
+            }
+
             foreach (var item in lexiconFileModel.Entries.Item)
             {
-                if (!_languageCodeMappings.TryGetValue(lexiconFileModel.Language.ToLower(), out var lexemeLanguage))
-                {
-                    lexemeLanguage = lexiconFileModel.Language;
-                }
-
                 var lexemeModel = new Lexicon_Lexeme
                 {
                     Id = Guid.NewGuid(),
                     Lemma = item.Lexeme.Form,
                     Type = item.Lexeme.Type,
-                    Language = lexemeLanguage,
+                    Language = lexiconLanguageInfo.LanguageTag,
                 };
 
                 foreach (var sense in item.Entry.Sense)
                 {
-                    if (!_languageCodeMappings.TryGetValue(sense.Gloss.Language.ToLower(), out var meaningLanguage))
+                    var senseLanguageInfo = lookup.GetLanguageFromCode(sense.Gloss.Language);
+                    if (senseLanguageInfo is null)
                     {
-                        meaningLanguage = sense.Gloss.Language;
+                        _logger.LogInformation($"Unable to load Lexicon file sense/meaning entry into Lexicon model due to GetLanguageNameFromCode returning null for language: '{sense.Gloss.Language}'");
+                        continue;
                     }
 
                     var meaningModel = new Lexicon_Meaning
                     {
                         Id = Guid.NewGuid(),
                         Text = string.Empty, // FIXME?
-                        Language = meaningLanguage,
+                        Language = senseLanguageInfo.LanguageTag,
                         LexemeId = lexemeModel.Id
                     };
 
@@ -159,21 +189,26 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 
         protected void LoadIntoLexiconModel(Lexicon_Lexicon lexiconModel, Dictionary<string, BiblicalTermFileModel> biblicalTermsById, BiblicalTermsListFileModel biblicalTermsFileModel)
         {
+            var lookup = new LanguageLookup();
             var termIdsAlreadyImported = biblicalTermsById.Keys;
             foreach (var term in biblicalTermsFileModel.Term
                 .Where(e => e.Gloss != null && !termIdsAlreadyImported.Contains(e.Id)))
             {
-                if (!_languageCodeMappings.TryGetValue(term.Language.ToLower(), out var lexemeLanguage))
+                var termLanguageInfo = (_languageNamePreLookupMappings.ContainsKey(term.Language))
+                    ? SuggestLanguage(_languageNamePreLookupMappings[term.Language])
+                    : SuggestLanguage(term.Language);
+                if (termLanguageInfo is null)
                 {
-                    lexemeLanguage = term.Language;
+                    _logger.LogInformation($"Unable to load Biblical Term into Lexicon model due to SuggestLanguages returning null for language: '{term.Language}'");
+                    continue;
                 }
 
                 var lexemeModel = new Lexicon_Lexeme
                 {
                     Id = Guid.NewGuid(),
                     Lemma = term.Id,
-                    Type = lexemeLanguage,
-                    Language = term.Language,
+                    Type = null,  // FIXME:  does this have a type?
+                    Language = termLanguageInfo.LanguageTag,
                 };
 
                 var meaningModel = new Lexicon_Meaning
@@ -219,22 +254,27 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             string meaningLanguage,
             TermRenderingsListFileModel termRenderingsFileModel)
         {
+            var lookup = new LanguageLookup();
             foreach (var termRendering in termRenderingsFileModel.TermRendering
                 .Where(e => e.Renderings != null && e.Guess == false && biblicalTermsById.ContainsKey(e.Id)))
             {
                 var biblicalTerm = biblicalTermsById[termRendering.Id];
 
-                if (!_languageCodeMappings.TryGetValue(biblicalTerm.Language.ToLower(), out var lexemeLanguage))
+                var termLanguageInfo = (_languageNamePreLookupMappings.ContainsKey(biblicalTerm.Language))
+                    ? SuggestLanguage(_languageNamePreLookupMappings[biblicalTerm.Language])
+                    : SuggestLanguage(biblicalTerm.Language);
+                if (termLanguageInfo is null)
                 {
-                    lexemeLanguage = biblicalTerm.Language;
+                    _logger.LogInformation($"Unable to load Term Rendering into Lexicon model due to SuggestLanguages returning null for language: '{biblicalTerm.Language}'");
+                    continue;
                 }
 
                 var lexemeModel = new Lexicon_Lexeme
                 {
                     Id = Guid.NewGuid(),
                     Lemma = termRendering.Id,
-                    Type = null,
-                    Language = lexemeLanguage,
+                    Type = null,   // FIXME:  does this have a type?
+                    Language = termLanguageInfo.LanguageTag,
                 };
 
                 var meaningModel = new Lexicon_Meaning

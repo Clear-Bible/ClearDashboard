@@ -141,8 +141,8 @@ public class CreateLexiconCommandHandlerTests : TestBase
                 Output.WriteLine($"Lemma: '{lexeme.Key.Lemma}', language: '{lexeme.Key.Language}', count: [{lexeme.Value}]");
             }
 
-            //await externalLexicon.SaveAsync(Mediator!);
-            //AssertIsInDatabaseIsDirty(externalLexicon, true, false);
+            await externalLexicon.SaveAsync(Mediator!);
+            AssertIsInDatabaseIsDirty(externalLexicon, true, false);
         }
         finally
         {
