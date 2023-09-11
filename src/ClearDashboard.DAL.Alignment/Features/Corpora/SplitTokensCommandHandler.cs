@@ -53,7 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var requestTokenIdGuids = request.TokenIdsWithSameSurfaceText.Select(e => e.Id);
 
-            var tokensDb = ProjectDbContext.Tokens
+            var tokensDb = await ProjectDbContext.Tokens
                 .Include(t => t.TokenCompositeTokenAssociations)
                 .Include(t => t.TokenizedCorpus)
                     .ThenInclude(tc => tc!.SourceParallelCorpora)
@@ -65,7 +65,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(t => t.TokenVerseAssociations.Where(a => a.Deleted == null))
                 .Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
                 .Where(t => requestTokenIdGuids.Contains(t.Id))
-                .ToList();
+                .ToListAsync(cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             var noteAssociationsDb = ProjectDbContext.NoteDomainEntityAssociations
                 .Where(dea => dea.DomainEntityIdGuid != null)
@@ -140,6 +142,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             foreach (var tokenDb in tokensDb)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var newChildTokens = new List<Token>();
                 var newChildTokensDb = new List<Models.Token>();
                 var nextSubwordNumber = 0;
@@ -234,6 +238,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var incomingTokenIdCompositePairs = new List<(Guid, CompositeToken)>();
             foreach (var tokenComposite in tokensDbTokenComposites)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var previousTrainingText = tokenComposite.TrainingText;
 
                 var tokenIdsToReplace = tokenComposite.Tokens
@@ -300,6 +306,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             foreach (var tokenDb in tokensDb.Where(e => !e.TokenCompositeTokenAssociations.Any()))
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (!request.CreateParallelComposite)
                 {
                     // If (createParallelComposite == false and T1 is not a member of any composite at all),

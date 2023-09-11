@@ -219,7 +219,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             string trainingText1,
             string trainingText2,
             string? trainingText3, 
-            bool createParallelComposite = true
+            bool createParallelComposite = true,
+            CancellationToken cancellationToken = default
         )
         {
             var command = new SplitTokensCommand(
@@ -232,7 +233,25 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 trainingText3,
                 createParallelComposite);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, cancellationToken);
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
+        }
+
+        public async Task<IEnumerable<Token>> FindTokensBySurfaceText(
+            IMediator mediator, 
+            string searchString,
+            WordPart wordPart = WordPart.Full, // or regex find predicate?
+            bool ignoreCase = true,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var result = await mediator.Send(new FindTokensBySurfaceTextQuery(
+                TokenizedTextCorpusId, 
+                searchString, 
+                wordPart,
+                ignoreCase), cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
 
             return result.Data!;
