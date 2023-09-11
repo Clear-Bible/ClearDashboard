@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+
 // https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1416
 #pragma warning disable CA1416
 
@@ -79,16 +80,60 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private ObservableCollection<GitLabProjectUser> _projectUsers = new();
-        public ObservableCollection<GitLabProjectUser> ProjectUsers
+        private List<GitLabProjectUser> _projectUsers = new();
+        public List<GitLabProjectUser> ProjectUsers
         {
             get => _projectUsers;
             set
             {
+
                 _projectUsers = value;
+
+                ProjectParticipants.Clear();
+                ProjectOwners.Clear();
+                foreach (var user in _projectUsers)
+                {
+                    if (user.IsOwner)
+                    {
+                        ProjectOwners.Add(user);
+                        ProjectOwners.Add(user);
+                    }
+                    else
+                    {
+                        ProjectParticipants.Add(user);
+                        ProjectParticipants.Add(user);
+                    }
+                }
+                
                 NotifyOfPropertyChange(() => ProjectUsers);
             }
         }
+
+        private ObservableCollection<GitLabProjectUser> _projectParticipants = new();
+        public ObservableCollection<GitLabProjectUser> ProjectParticipants
+        {
+            get => _projectParticipants;
+            set
+            {
+                _projectParticipants = value;
+                NotifyOfPropertyChange(() => ProjectParticipants);
+            }
+        }
+
+        private ObservableCollection<GitLabProjectUser> _projectOwners = new();
+        public ObservableCollection<GitLabProjectUser> ProjectOwners
+        {
+            get => _projectOwners;
+            set
+            {
+                _projectOwners = value;
+                NotifyOfPropertyChange(() => ProjectOwners);
+            }
+        }
+
+       // public ObservableCollection<GitLabProjectUser> ProjectParticipants => ProjectUsers .(x => x.IsOwner);
+
+        //public ObservableCollection<GitLabProjectUser> ProjectOwners => (ObservableCollection<GitLabProjectUser>)ProjectUsers.Where(x => !x.IsOwner);
 
         private ObservableCollection<string> _organization;
         public ObservableCollection<string> Organization
@@ -286,7 +331,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ShowProgressBar = Visibility.Visible;
 
             var users = await _gitLabHttpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);
-            ProjectUsers = new ObservableCollection<GitLabProjectUser>(users);
+            ProjectUsers = new List<GitLabProjectUser>(users);
 
             // remove existing users from the selectable list
             _collabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
