@@ -1,14 +1,7 @@
 ﻿using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
 using MediatR;
-using Microsoft.SqlServer.Server;
-using Paratext.PluginInterfaces;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {

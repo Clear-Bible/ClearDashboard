@@ -20,6 +20,8 @@ using Lexeme = ClearDashboard.DAL.Alignment.Lexicon.Lexeme;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using SIL.Scripture;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -123,26 +125,59 @@ public class CreateLexiconCommandHandlerTests : TestBase
 
             var lexemesExternalExceptInternal = externalLexicon.Lexemes
                 .Where(el =>
-                    !internalLexicon.Lexemes.Any(il => il.Lemma == el.Lemma) &&
-                    !internalLexicon.Lexemes.Any(il => el.Forms.Select(e => e.Text).Contains(il.Lemma)) &&
                     !internalLexicon.Lexemes.Any(il =>
-                        il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text)).Intersect(
-                        el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))).Any())
-                    );
+                        il.LemmaPlusFormTexts.Intersect(el.LemmaPlusFormTexts).Any() &&
+                        il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))
+                            .Intersect(
+                        el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))
+                            ).Any()
+                    ));
 
             var lemmaLanguagePairs = externalLexicon.Lexemes
                 .Select(e => (e.Lemma, e.Language))
                 .GroupBy(e => e)
                 .ToDictionary(g => g.Key, g => g.Count());
 
-            Output.WriteLine($"Duplicate language/lemma record count: [{lemmaLanguagePairs.Count()}]");
-            foreach (var lexeme in lemmaLanguagePairs.Where(e => e.Value > 1))
-            {
-                Output.WriteLine($"Lemma: '{lexeme.Key.Lemma}', language: '{lexeme.Key.Language}', count: [{lexeme.Value}]");
-            }
+            //Output.WriteLine($"Duplicate language/lemma record count: [{lemmaLanguagePairs.Count()}]");
+            //foreach (var lexeme in lemmaLanguagePairs.Where(e => e.Value > 1))
+            //{
+            //    Output.WriteLine($"Lemma: '{lexeme.Key.Lemma}', language: '{lexeme.Key.Language}', count: [{lexeme.Value}]");
+            //}
 
-            await externalLexicon.SaveAsync(Mediator!);
-            AssertIsInDatabaseIsDirty(externalLexicon, true, false);
+            var partialExternalLexicon = new Alignment.Lexicon.Lexicon()
+            {
+                Lexemes = new ObservableCollection<Lexeme>(externalLexicon.Lexemes.Take(5000))
+            };
+            await partialExternalLexicon.SaveAsync(Mediator!);
+            AssertIsInDatabaseIsDirty(partialExternalLexicon, true, false);
+
+            var externalLexiconCommand2 = new GetExternalLexiconQuery();
+            var externalLexiconResult2 = await Mediator.Send(externalLexiconCommand2);
+
+            var internalLexiconCommand2 = new GetInternalLexiconQuery();
+            var internalLexiconResult2 = await Mediator.Send(internalLexiconCommand2);
+
+            Stopwatch sw = new();
+            sw.Start();
+
+            var lexemeIdsInFirstHavingMatchInSecond = externalLexiconResult2.Data!.Lexemes
+                .IntersectIdsByLexemeTranslationMatch(internalLexiconResult2.Data!.Lexemes);
+
+            Assert.Equal(5000, lexemeIdsInFirstHavingMatchInSecond.Count());
+
+            //var leftovers = externalLexiconResult2.Data!.Lexemes
+            //    .Where(el =>
+            //        !internalLexiconResult2.Data!.Lexemes.Any(il =>
+            //            il.LemmaPlusFormTexts.Intersect(el.LemmaPlusFormTexts).Any() &&
+            //            il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))
+            //                .Intersect(
+            //            el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))
+            //                ).Any()
+            //        ))
+            //    .ToList();
+
+            sw.Stop();
+            Output.WriteLine($"{sw.Elapsed}");
         }
         finally
         {

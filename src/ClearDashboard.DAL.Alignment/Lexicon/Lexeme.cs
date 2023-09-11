@@ -1,12 +1,10 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
 using MediatR;
-using Microsoft.SqlServer.Server;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
@@ -105,6 +103,17 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         public bool IsDirty { get; internal set; } = false;
         public bool IsInDatabase { get => LexemeId.Created is not null; }
+
+        public IEnumerable<string> LemmaPlusFormTexts
+        {
+            get => (string.IsNullOrEmpty(lemma_))
+                ? forms_
+                    .Where(e => !string.IsNullOrEmpty(e.Text))
+                    .Select(e => e.Text!)
+                : new List<string>() { lemma_ }.Union(forms_
+                    .Where(e => !string.IsNullOrEmpty(e.Text))
+                    .Select(e => e.Text!));
+        }
 
         public Lexeme()
         {

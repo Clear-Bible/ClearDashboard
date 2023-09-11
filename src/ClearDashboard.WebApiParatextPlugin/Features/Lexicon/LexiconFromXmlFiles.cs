@@ -183,7 +183,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                     lexemeModel.Meanings.Add(meaningModel);
                 }
 
-                lexiconModel.Lexemes.Add(lexemeModel);
+                if (lexemeModel.Meanings.Any())
+                {
+                    lexiconModel.Lexemes.Add(lexemeModel);
+                }
             }
         }
 

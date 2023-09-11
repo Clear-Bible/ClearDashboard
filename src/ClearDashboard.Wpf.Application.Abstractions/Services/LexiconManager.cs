@@ -448,14 +448,30 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public static Lexicon GetExternalLexiconNotInInternal(Lexicon externalLexicon, Lexicon internalLexicon)
         {
+            // Include each external Lexeme for which there are not any internal lexemes for which:
+            //  Any of the external lemma/forms match any of the internal lemma/forms AND
+            //  Any of the external translation texts match any of the internal translation texts
+
+            //var lexemesExternalExceptInternal = externalLexicon.Lexemes
+            //    .Where(el =>
+            //        !internalLexicon.Lexemes.Any(il =>
+            //            (il.Lemma == el.Lemma || 
+            //             el.Forms.Select(e => e.Text).Contains(il.Lemma)) &&
+            //             il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text)).Intersect(
+            //             el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))).Any()));
+
+            //var lexemesExternalExceptInternal = externalLexicon.Lexemes
+            //    .Where(el =>
+            //        !internalLexicon.Lexemes.Any(il => 
+            //            il.LemmaPlusFormTexts.Intersect(el.LemmaPlusFormTexts).Any() &&
+            //            il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))
+            //                .Intersect(
+            //            el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))
+            //                ).Any()
+            //        ));
+
             var lexemesExternalExceptInternal = externalLexicon.Lexemes
-                .Where(el =>
-                    !internalLexicon.Lexemes.Any(il => il.Lemma == el.Lemma) &&
-                    !internalLexicon.Lexemes.Any(il => el.Forms.Select(e => e.Text).Contains(il.Lemma)) &&
-                    !internalLexicon.Lexemes.Any(il =>
-                        il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text)).Intersect(
-                        el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))).Any())
-                    );
+                .ExceptByLexemeTranslationMatch(internalLexicon.Lexemes);
 
             return new Lexicon
             {
