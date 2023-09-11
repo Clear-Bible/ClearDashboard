@@ -24,7 +24,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RepeatButton">
-                        <Border SnapsToDevicePixels="True" Background="Gray"  BorderThickness="1" BorderBrush="Gray" Height="5"/>
+                        <Border SnapsToDevicePixels="True" Background="{DynamicResource PrimaryHueMidBrush}"  BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}" Height="5"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -50,7 +50,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Path Data="M 0 0 L 16 0 L 8 16 Z"  Stroke="Gray" Margin="0,0,0,0" StrokeThickness="2" Fill="Gray"></Path>
+                        <Path Data="M 0 0 L 16 0 L 8 16 Z"  Stroke="{DynamicResource PrimaryHueMidBrush}" Margin="0,0,0,0" StrokeThickness="2" Fill="{DynamicResource PrimaryHueMidBrush}"></Path>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -62,7 +62,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Path Data="M 0 16 L 16 16 L 8 0 Z"  Stroke="Gray" Margin="0,0,0,0" StrokeThickness="2" Fill="Gray"></Path>
+                        <Path Data="M 0 16 L 16 16 L 8 0 Z"  Stroke="{DynamicResource PrimaryHueMidBrush}" Margin="0,0,0,-1" StrokeThickness="2" Fill="{DynamicResource PrimaryHueMidBrush}"></Path>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -74,7 +74,7 @@
                     <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" x:Name="TrackBackground" VerticalAlignment="Center" Margin="0,-10,0,0" BorderBrush="LightGray" Background="LightGray" Height="3" BorderThickness="1"/>
+                <Border Grid.Row="0" x:Name="TrackBackground" VerticalAlignment="Center" Margin="0,-10,0,0" BorderBrush="{DynamicResource PrimaryHueLightBrush}" Background="{DynamicResource PrimaryHueLightBrush}" Height="3" BorderThickness="1"/>
                 <Track Grid.Row="0" x:Name="PART_Track" Margin="0,-10,0,0"  >
                     <Track.DecreaseRepeatButton>
                         <RepeatButton Style="{StaticResource SliderRepeatLeft}"  Command="Slider.DecreaseLarge" />
@@ -86,7 +86,7 @@
                         <RepeatButton Style="{StaticResource SliderRepeatRight}" Command="Slider.IncreaseLarge" />
                     </Track.IncreaseRepeatButton>
                 </Track>
-                <TickBar Grid.Row="1" x:Name="Top" Fill="LightGray" SnapsToDevicePixels="True" Placement="Bottom" Height="4" Visibility="Collapsed" />
+                <TickBar Grid.Row="1" x:Name="Top" Fill="{DynamicResource PrimaryHueLightBrush}" SnapsToDevicePixels="True" Placement="Bottom" Height="4" Visibility="Collapsed" />
             </Grid>
         </ControlTemplate>
 
@@ -96,8 +96,8 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
                 </Grid.RowDefinitions>
-                <TickBar Grid.Row="0" x:Name="BottomTick" Fill="LightGray" SnapsToDevicePixels="True" Placement="Bottom" Height="4" Visibility="Collapsed" />
-                <Border Grid.Row="1" x:Name="TrackBackground" VerticalAlignment="Center" Margin="0,-10,0,0" BorderBrush="LightGray" Background="LightGray" Height="3" BorderThickness="1"/>
+                <TickBar Grid.Row="0" x:Name="BottomTick" Fill="{DynamicResource PrimaryHueLightBrush}" SnapsToDevicePixels="True" Placement="Bottom" Height="4" Visibility="Collapsed" />
+                <Border Grid.Row="1" x:Name="TrackBackground" VerticalAlignment="Center" Margin="0,-10,0,0" BorderBrush="{DynamicResource PrimaryHueLightBrush}" Background="{DynamicResource PrimaryHueLightBrush}" Height="3" BorderThickness="1"/>
                 <Track Grid.Row="1" x:Name="PART_Track" Margin="0,-10,0,0"  >
                     <Track.DecreaseRepeatButton>
                         <RepeatButton Style="{StaticResource SliderRepeatLeft}"  Command="Slider.DecreaseLarge" />
