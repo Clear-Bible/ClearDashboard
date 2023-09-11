@@ -19,6 +19,7 @@
     Height="800"
     MinWidth="886"
     MinHeight="594"
+    MaxWidth="1140"
     MaxHeight="800"
     d:DesignHeight="450"
     d:DesignWidth="800"
