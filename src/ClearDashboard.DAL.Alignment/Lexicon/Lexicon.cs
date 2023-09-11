@@ -57,5 +57,21 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 lexeme.PostSaveAll(createdIIdsByGuid);
             }
         }
+
+        public static async Task<Lexicon> GetExternalLexicon(IMediator mediator, CancellationToken token = default)
+        {
+            var result = await mediator.Send(new GetExternalLexiconQuery(), token);
+            result.ThrowIfCanceledOrFailed();
+
+            return result.Data!;
+        }
+
+        public static async Task<Lexicon> GetInternalLexicon(IMediator mediator, CancellationToken token = default)
+        {
+            var result = await mediator.Send(new GetInternalLexiconQuery(), token);
+            result.ThrowIfCanceledOrFailed();
+
+            return result.Data!;
+        }
     }
 }
