@@ -733,8 +733,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 //});
                 //addSeparator = true;
             }
-
-
+            
             foreach (var tokenizedCorpus in tokenizedCorpora)
             {
                 if (!string.IsNullOrEmpty(tokenizedCorpus.TokenizationFunction))
@@ -801,7 +800,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         menuBuilder.CreateCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
                     }
 
-                    corpusNodeViewModel.MenuItems.Add(corpusNodeMenuViewModel);
+                    if (tokenizedCorpora.Count() > 1)
+                    {
+                        corpusNodeViewModel.MenuItems.Add(corpusNodeMenuViewModel);
+                    }
+                    else
+                    {
+                        corpusNodeViewModel.MenuItems.AddRange(corpusNodeMenuViewModel.MenuItems);
+                    }
+                    
                     corpusNodeViewModel.TokenizationCount++;
                 }
             }

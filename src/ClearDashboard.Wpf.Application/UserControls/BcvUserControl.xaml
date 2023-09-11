@@ -449,10 +449,10 @@
             Value="{Binding VerseOffsetRange, Mode=TwoWay}" />
 
         <materialDesign:PackIcon
-            Foreground="Gray"
-            VerticalAlignment="Center"
             Grid.Row="1"
             Grid.Column="11"
+            VerticalAlignment="Center"
+            Foreground="Gray"
             Kind="LockOutline" />
 
     </Grid>
