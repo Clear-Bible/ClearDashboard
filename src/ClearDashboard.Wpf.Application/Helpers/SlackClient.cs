@@ -12,14 +12,24 @@ namespace ClearDashboard.Wpf.Application.Helpers
         private readonly string _messageText;
         private readonly string _filePath;
         private readonly ILogger<SlackMessage> _logger;
-        private const string Channel = "C048084B26A";  //'dashboard-external-logs' channel
-        private const string Token = "xoxb-543912748098-4276663789221-yA8iEo2FYECELxpePNnSOkRP";
+        private readonly SlackMessageType _slackMessageType;
+        private const string BugChannel = "C05PV2VM2JU";  //'clear-dashboard-external-logs' channel
+        private const string SuggestionChannel = "C05PTF00DL5";  //'clear-dashboard-external-suggestions' channel
+        private const string Token = "xoxb-4696406923-5804914278598-WoMrOnYk4E3zV2VoSrJvEEbn";
 
-        public SlackMessage(string messageText, string filePath, ILogger<SlackMessage> logger)
+        public enum SlackMessageType
+        {
+            BugReport,
+            Suggestion
+        }
+
+
+        public SlackMessage(string messageText, string filePath, ILogger<SlackMessage> logger, SlackMessageType slackMessageType)
         {
             _messageText = messageText;
             _filePath = filePath;
             _logger = logger;
+            _slackMessageType = slackMessageType;
         }
 
         /// <summary>
@@ -32,7 +42,16 @@ namespace ClearDashboard.Wpf.Application.Helpers
             var slackClient = new SlackClient(webhookUrl);
 
             var postMessage = new PostMessage();
-            postMessage.Channel = Channel;
+
+            if (_slackMessageType == SlackMessageType.BugReport)
+            {
+                postMessage.Channel = BugChannel;
+            }
+            else
+            {
+                postMessage.Channel = SuggestionChannel;  // clear-dashboard-external-suggestions
+            }
+                        
             postMessage.MessageText = _messageText;
             postMessage.FilePath = _filePath;
             postMessage.Token = Token;
