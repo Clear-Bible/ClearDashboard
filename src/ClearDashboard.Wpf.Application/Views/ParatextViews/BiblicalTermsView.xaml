@@ -534,7 +534,8 @@
                             Text="{helpers:Localization BiblicalTermsForm_GlossLower}" />
                         <TextBlock
                             Width="{Binding ActualWidth, ElementName=SelectedItemVerses, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
-                            Foreground="{StaticResource SecondaryHueMidBrush}"
+                            FontWeight="Bold"
+                            Foreground="Black"
                             Text="{Binding Gloss}"
                             TextWrapping="Wrap" />
                     </StackPanel>

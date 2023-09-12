@@ -280,6 +280,7 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterModule<AbstractionsModule>();
             builder.RegisterModule(configurationModule);
             builder.RegisterType<CollaborationManager>().AsSelf().SingleInstance();
+            builder.RegisterType<JiraClient>();
 
             builder
                 .RegisterAssemblyTypes(typeof(GetProjectSnapshotQueryHandler).Assembly)

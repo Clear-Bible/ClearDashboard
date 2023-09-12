@@ -663,7 +663,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
                             XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
+                            XmlSourceDisplayName = "Key Terms",//Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
                             Code = "KeyTerm",
                             OriginID = terms.Id,
                             Gloss = gloss,
@@ -704,7 +704,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
                                 XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
+                                XmlSourceDisplayName = "All Biblical Terms",//Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -735,8 +735,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
                                 XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,
-                                    "TermRenderings.xml"),
+                                XmlSourceDisplayName = "Term Renderings", //Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,"TermRenderings.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -888,7 +887,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
                             XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlPath = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
+                            XmlSourceDisplayName = "Lexicon",//Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
                             Code = senseEntry.Id,
                             Gloss = senseEntry.Gloss.Text,
                             Lang = senseEntry.Gloss.Language,
@@ -1413,7 +1412,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
         void VerseCollection_Filter(object sender, FilterEventArgs e)

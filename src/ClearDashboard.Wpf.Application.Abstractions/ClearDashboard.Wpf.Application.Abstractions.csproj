@@ -50,13 +50,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Update="Views\Popups\DeletingProjectPopupView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Popups\DeletingCorpusNodePopupView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Popups\ClosingEnhancedViewPopupView.xaml.cs">
+    <Compile Update="Views\Popups\ConfirmationPopupView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Popups\AlignmentPopupView.xaml.cs">
