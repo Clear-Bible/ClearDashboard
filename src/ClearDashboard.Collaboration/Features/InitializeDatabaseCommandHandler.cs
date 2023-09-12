@@ -35,7 +35,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
             var factory = new ProjectSnapshotFromGitFactory(request.RepositoryPath, _logger);
 
             var projectModelSnapshot = factory.LoadProject(request.CommitSha, request.ProjectId);
-            var userModelSnapshots = factory.LoadUsers(request.CommitSha, request.ProjectId);
+            var userModelSnapshots = factory.LoadUsers(request.CommitSha, request.ProjectId, cancellationToken);
 
             request.Progress.Report(new ProgressStatus(0, "MergeDialog_CreatingDatabase"));
 

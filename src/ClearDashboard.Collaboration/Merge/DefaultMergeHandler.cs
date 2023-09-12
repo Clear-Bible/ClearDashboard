@@ -352,6 +352,11 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
             await HandleCreateComplete(firstChild, cancellationToken);
         }
 
+        foreach (var modelSnapshot in snapshotList)
+        {
+            await HandleCreateChildrenAsync(modelSnapshot, cancellationToken);
+        }
+
         return insertCount;
     }
 
