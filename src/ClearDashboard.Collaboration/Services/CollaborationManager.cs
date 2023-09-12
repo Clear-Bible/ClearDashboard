@@ -11,7 +11,6 @@ using LibGit2Sharp.Handlers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
-using System.Diagnostics;
 using System.Text.Json;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -205,6 +204,7 @@ public class CollaborationManager
         {
             Repository.Init(_repositoryPath);
 
+            //HACK when repo is initialized, it creates a branch called main.  We need to change it to master
             var headPath = Path.Combine(_repositoryPath, ".git", "HEAD");
             var fileText = File.ReadAllText(headPath);
             if (fileText.Contains("heads/main"))
@@ -216,6 +216,8 @@ public class CollaborationManager
 
         using (var repo = new Repository(_repositoryPath))
         {
+            repo.Config.Set("core.longpaths", true);
+
             if (!repo.Network.Remotes.Any() && HasRemoteConfigured())
             {
                 repo.Network.Remotes.Add(RemoteOrigin, _configuration.RemoteUrl);

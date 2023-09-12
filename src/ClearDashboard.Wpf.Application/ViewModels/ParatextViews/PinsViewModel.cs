@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -65,6 +66,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private Stopwatch _watch = new Stopwatch();
 
         private Collection<PinsDataTable> _gridData { get; } = new();
+        private PinsVerseViewModel? _pinsVerseViewModel;
 
         #endregion //Member Variables
 
@@ -661,7 +663,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
                             XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
+                            XmlSourceDisplayName = "Key Terms",//Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
                             Code = "KeyTerm",
                             OriginID = terms.Id,
                             Gloss = gloss,
@@ -702,7 +704,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
                                 XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
+                                XmlSourceDisplayName = "All Biblical Terms",//Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -733,8 +735,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
                                 XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,
-                                    "TermRenderings.xml"),
+                                XmlSourceDisplayName = "Term Renderings", //Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,"TermRenderings.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -886,7 +887,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
                             XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlPath = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
+                            XmlSourceDisplayName = "Lexicon",//Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
                             Code = senseEntry.Id,
                             Gloss = senseEntry.Gloss.Text,
                             Lang = senseEntry.Gloss.Language,
@@ -1178,6 +1179,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> LoadVerseText(PinsDataTable dataRow)
         {
+            if (_pinsVerseViewModel != null)
+            {
+                await _pinsVerseViewModel.TryCloseAsync();
+            }
+
             LastSelectedPinsDataTableSource = dataRow.Source;
             VerseFilterText = string.Empty;
             //_showBackTranslation = false;
@@ -1234,7 +1240,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 {
                     backTranslation = backTranslationResult.Data.Name;
 
-                    if (ShowBackTranslation)
+                    if (Settings.Default.PinsShowBackTranslation)
                         showBackTranslation = true;
                     //showBackTranslation = true;
                     //if(!ShowBackTranslation)
@@ -1258,7 +1264,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             CreateInlines(dataRow);
             NotifyOfPropertyChange(() => SelectedItemVerses);
-            VerseRefDialogOpen = true;
+            //VerseRefDialogOpen = true;
+
+
+            dynamic settings = new ExpandoObject();
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.Title = "PINS Verse List";
+
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("lastSelectedPinsDataTableSource", LastSelectedPinsDataTableSource),
+                new NamedParameter("verseCollection", _verseCollection),
+                new NamedParameter("showBackTranslation", Settings.Default.PinsShowBackTranslation),
+                new NamedParameter("backTranslationFound", BackTranslationFound),
+                new NamedParameter("selectedItemVerses", SelectedItemVerses),
+            };
+            
+            _pinsVerseViewModel = LifetimeScope?.Resolve<PinsVerseViewModel>(parameters);
+            
+            IWindowManager manager = new WindowManager();
+            manager.ShowWindowAsync(_pinsVerseViewModel, null, settings);
             return false;
         }
 
@@ -1387,7 +1412,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
         void VerseCollection_Filter(object sender, FilterEventArgs e)

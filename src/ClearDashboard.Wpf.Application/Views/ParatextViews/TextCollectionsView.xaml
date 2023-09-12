@@ -113,7 +113,8 @@
             ShowHeader="False"
             ShowOffsetControl="False"
             VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            Visibility="{Binding Path=BcvUserControlVisibility}" />
 
         <Button
             Grid.Column="2"

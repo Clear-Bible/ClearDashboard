@@ -44,11 +44,8 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <Grid
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="Transparent">
-                            <ContentPresenter x:Name="ButtonContent" Margin="10" />
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter x:Name="ButtonContent" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -63,6 +60,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
     <Style x:Key="SmallTransparentStyle" TargetType="{x:Type Button}">
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
