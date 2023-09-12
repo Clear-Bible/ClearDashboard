@@ -11,7 +11,6 @@ using LibGit2Sharp.Handlers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
-using System.Diagnostics;
 using System.Text.Json;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
