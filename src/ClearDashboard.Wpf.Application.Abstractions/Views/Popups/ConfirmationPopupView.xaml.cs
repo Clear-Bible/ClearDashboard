@@ -4,11 +4,11 @@ using System.Windows.Controls;
 namespace ClearDashboard.Wpf.Application.Views.Popups
 {
     /// <summary>
-    /// Interaction logic for ClosingEnhancedViewPopupView.xaml
+    /// Interaction logic for ConfirmationPopupView.xaml
     /// </summary>
-    public partial class ClosingEnhancedViewPopupView : UserControl
+    public partial class ConfirmationPopupView : UserControl
     {
-        public ClosingEnhancedViewPopupView()
+        public ConfirmationPopupView()
         {
             InitializeComponent();
         }

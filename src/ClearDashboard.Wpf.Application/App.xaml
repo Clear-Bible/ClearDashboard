@@ -36,19 +36,22 @@
 
                 <ResourceDictionary>
                     <!--  primary  -->
-                    <Color x:Key="PrimaryHueLight">#6EC6FF</Color>
+                    <Color x:Key="PrimaryHueLight">#7DA1C4</Color>
                     <Color x:Key="PrimaryHueLightForeground">#000000</Color>
                     <Color x:Key="PrimaryHueMid">#2196F3</Color>
                     <Color x:Key="PrimaryHueMidForeground">#000000</Color>
-                    <Color x:Key="PrimaryHueDark">#0069C0</Color>
+                    <Color x:Key="PrimaryHueDark">#003A70</Color>
                     <Color x:Key="PrimaryHueDarkForeground">#FFFFFF</Color>
                     <!--  accent  -->
                     <Color x:Key="SecondaryHueLight">#FFF350</Color>
                     <Color x:Key="SecondaryHueLightForeground">#000000</Color>
                     <Color x:Key="SecondaryHueMid">#FFC107</Color>
                     <Color x:Key="SecondaryHueMidForeground">#000000</Color>
-                    <Color x:Key="SecondaryHueDark">#C79100</Color>
-                    <Color x:Key="SecondaryHueDarkForeground">#000000</Color>
+                    <Color x:Key="SecondaryHueDark">#7A9A01</Color>
+                    <Color x:Key="SecondaryHueDarkForeground">#FFFFFF</Color>
+
+                    <Color x:Key="ErrorHue">#C1292E</Color>
+                    <Color x:Key="ErrorHueForeground">#FFFFFF</Color>
 
                     <!--  primary  -->
                     <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{DynamicResource PrimaryHueLight}" />
@@ -65,11 +68,32 @@
                     <SolidColorBrush x:Key="SecondaryHueDarkBrush" Color="{DynamicResource SecondaryHueDark}" />
                     <SolidColorBrush x:Key="SecondaryHueDarkForegroundBrush" Color="{DynamicResource SecondaryHueDarkForeground}" />
 
+                    <SolidColorBrush x:Key="ErrorHueBrush" Color="{DynamicResource ErrorHue}" />
+                    <SolidColorBrush x:Key="ErrorHueForegroundBrush" Color="{DynamicResource ErrorHueForeground}" />
+
+                    <Style
+                        x:Key="MaterialDesignRaisedPrimaryLightButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+                        TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource PrimaryHueLightBrush}" />
+                        <!--<Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForeground}" />-->
+                    </Style>
+
                     <Style
                         x:Key="MaterialDesignRaisedAccentLightButton"
                         BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
                         TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="{StaticResource SecondaryHueLightBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="MaterialDesignRaisedErrorButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource ErrorHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource ErrorHueBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ErrorHueForegroundBrush}" />
                     </Style>
 
                 </ResourceDictionary>
