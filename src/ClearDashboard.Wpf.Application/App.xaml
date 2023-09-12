@@ -39,19 +39,27 @@
                     <Color x:Key="PrimaryHueLight">#7DA1C4</Color>
                     <Color x:Key="PrimaryHueLightForeground">#000000</Color>
                     <Color x:Key="PrimaryHueMid">#2196F3</Color>
+                    <!--  #2196F3  -->
                     <Color x:Key="PrimaryHueMidForeground">#000000</Color>
                     <Color x:Key="PrimaryHueDark">#003A70</Color>
                     <Color x:Key="PrimaryHueDarkForeground">#FFFFFF</Color>
-                    <!--  accent  -->
-                    <Color x:Key="SecondaryHueLight">#FFF350</Color>
+                    <!--  secondary  -->
+                    <Color x:Key="SecondaryHueLight">#C1CD42</Color>
                     <Color x:Key="SecondaryHueLightForeground">#000000</Color>
                     <Color x:Key="SecondaryHueMid">#FFC107</Color>
+                    <!--  #FFC107  -->
                     <Color x:Key="SecondaryHueMidForeground">#000000</Color>
                     <Color x:Key="SecondaryHueDark">#7A9A01</Color>
                     <Color x:Key="SecondaryHueDarkForeground">#FFFFFF</Color>
-
+                    <!--  accent  -->
+                    <Color x:Key="AccentHue">#EDC54C</Color>
+                    <Color x:Key="AccentHueForeground">#000000</Color>
+                    <!--  error  -->
                     <Color x:Key="ErrorHue">#C1292E</Color>
                     <Color x:Key="ErrorHueForeground">#FFFFFF</Color>
+                    <!--  secondary button  -->
+                    <Color x:Key="SecondaryButtonHue">#808080</Color>
+                    <Color x:Key="SecondaryButtonHueForeground">#000000</Color>
 
                     <!--  primary  -->
                     <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{DynamicResource PrimaryHueLight}" />
@@ -68,6 +76,9 @@
                     <SolidColorBrush x:Key="SecondaryHueDarkBrush" Color="{DynamicResource SecondaryHueDark}" />
                     <SolidColorBrush x:Key="SecondaryHueDarkForegroundBrush" Color="{DynamicResource SecondaryHueDarkForeground}" />
 
+                    <SolidColorBrush x:Key="AccentHueBrush" Color="{DynamicResource AccentHue}" />
+                    <SolidColorBrush x:Key="AccentHueForegroundBrush" Color="{DynamicResource AccentHueForeground}" />
+
                     <SolidColorBrush x:Key="ErrorHueBrush" Color="{DynamicResource ErrorHue}" />
                     <SolidColorBrush x:Key="ErrorHueForegroundBrush" Color="{DynamicResource ErrorHueForeground}" />
 
@@ -81,7 +92,16 @@
                     </Style>
 
                     <Style
-                        x:Key="MaterialDesignRaisedAccentLightButton"
+                        x:Key="MaterialDesignRaisedAccentButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+                        TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource AccentHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentHueBrush}" />
+                        <!--<Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForeground}" />-->
+                    </Style>
+
+                    <Style
+                        x:Key="MaterialDesignRaisedSecondaryLightButton"
                         BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
                         TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="{StaticResource SecondaryHueLightBrush}" />

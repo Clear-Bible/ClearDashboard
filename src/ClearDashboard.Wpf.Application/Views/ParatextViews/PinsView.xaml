@@ -125,6 +125,7 @@
                 Content="All" />
             <RadioButton
                 Name="AllXmlSourceRadio"
+                Background="{StaticResource PrimaryHueLightBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsAll}" />
             <Label
@@ -133,6 +134,7 @@
                 Content="Key Terms" />
             <RadioButton
                 Name="BtXmlSourceRadio"
+                Background="{StaticResource PrimaryHueLightBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsBt}" />
             <Label
@@ -141,6 +143,7 @@
                 Content="All Biblical Terms" />
             <RadioButton
                 Name="AbtXmlSourceRadio"
+                Background="{StaticResource PrimaryHueLightBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsAbt}" />
             <Label
@@ -149,6 +152,7 @@
                 Content="Term Renderings" />
             <RadioButton
                 Name="TrXmlSourceRadio"
+                Background="{StaticResource PrimaryHueLightBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsTr}" />
             <Label
@@ -157,6 +161,7 @@
                 Content="Lexicon" />
             <RadioButton
                 Name="LxXmlSourceRadio"
+                Background="{StaticResource PrimaryHueLightBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsLx}" />
 
@@ -215,7 +220,7 @@
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}" />
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate>
@@ -249,7 +254,7 @@
                                 Margin="-13,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                                BorderBrush="{StaticResource PrimaryHueLightBrush}"
                                 BorderThickness="2"
                                 CornerRadius="10">
                                 <TextBlock
@@ -281,10 +286,11 @@
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>
                                 <Button.Style>
-                                    <Style BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}" TargetType="Button">
+                                    <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SimpRefs}" Value="0">
-                                                <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
+                                                <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+                                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -511,7 +517,7 @@
             DialogOpened="DialogHost_OnDialogOpened"
             DialogTheme="Inherit"
             IsOpen="{Binding VerseRefDialogOpen}"
-            OverlayBackground="{DynamicResource PrimaryHueMidBrush}">
+            OverlayBackground="{DynamicResource PrimaryHueLightBrush}">
             <materialDesign:DialogHost.DialogContent>
                 <Border
                     x:Name="LowerBorder"
@@ -694,7 +700,7 @@
             </materialDesign:DialogHost.DialogContent>
             <Border
                 MinWidth="256"
-                BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                BorderBrush="{StaticResource PrimaryHueLightBrush}"
                 BorderThickness="0"
                 ClipToBounds="True" />
         </materialDesign:DialogHost>
