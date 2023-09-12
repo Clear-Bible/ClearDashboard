@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.Lexicon.LexiconImport"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" />
+        </Style>
+    </UserControl.Resources>
+    <materialDesign:Card  Height="300"  Margin="5" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" ></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Content="{helpers:Localization LexiconImport_SelectAll}" />
+             
+            </Grid>
+            <DataGrid Grid.Row="1" Grid.Column="0" 
+                          x:Name="ApprovalDataGrid" 
+                          ItemsSource="{Binding PagedBulkAlignments}" 
+                          AutoGenerateColumns="False" 
+                          HorizontalAlignment="Stretch"
+                          Margin="4"
+                          VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                          IsReadOnly="True"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox cm:Message.Attach="[Event Checked] = [Action OnToggleAlignmentsChecked($source)];[Event Unchecked] = [Action OnToggleAlignmentsChecked($source)]" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Focusable="False" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceWord}"  Binding="{Binding Type}" Width="100"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceLanguage}" Binding="{Binding SourceRef}" Width="125"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetWord}"  Binding="{Binding Type}" Width="100"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding SourceRef}" Width="125"/>
+                    <!--<DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}" Width=".6*">
+                        
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
+                                             Style="{StaticResource SmallTransparentStyle}" 
+                                             Content="{iconPacks:PicolIcons Kind=Synchronize}"></Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{helpers:Localization Bcv_Sync}" Width="75">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
+                                             Style="{StaticResource SmallTransparentStyle}" 
+                                             Content="{iconPacks:PicolIcons Kind=Synchronize}"></Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>-->
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </materialDesign:Card>
+
+</UserControl>
