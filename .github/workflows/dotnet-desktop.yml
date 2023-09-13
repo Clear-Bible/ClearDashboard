@@ -41,12 +41,12 @@ name: .NET Core Desktop
 on:
   push:
     branches:
-      - main
-      - DEV
+      - 'main'
+      - 'DEV'
   pull_request:
     branches:
-      - main
-      - DEV
+      - 'main'
+      - 'DEV'
 
 jobs:
 
