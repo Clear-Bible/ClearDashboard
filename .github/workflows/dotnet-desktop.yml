@@ -40,9 +40,9 @@ name: .NET Core Desktop
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
 
 jobs:
 
@@ -152,7 +152,7 @@ jobs:
       uses: slackapi/slack-github-action@v1.18.0
       if: "contains(job.status, 'success')"
       with:
-        channel-id: 'CKC1D8GFN'
+        channel-id: 'C05S5RG6EFL'
         slack-message: ":grin: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
@@ -163,7 +163,7 @@ jobs:
       uses: slackapi/slack-github-action@v1.18.0
       if: "!contains(job.status, 'success')"
       with:
-        channel-id: 'CKC1D8GFN'
+        channel-id: 'C05S5RG6EFL'
         slack-message: ":poop: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
