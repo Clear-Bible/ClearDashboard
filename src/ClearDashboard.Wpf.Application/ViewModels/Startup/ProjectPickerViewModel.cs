@@ -565,6 +565,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var licenseUser = LicenseManager.GetUserFromLicense();
 
             var dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
+            if (string.IsNullOrEmpty(dashboardUser.ParatextUserName))
+            {
+                dashboardUser.ParatextUserName = ParatextUserName;
+                await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+            }
+
 
             CollaborationUser collaborationUser;
             bool dashboardUserChanged = false;
