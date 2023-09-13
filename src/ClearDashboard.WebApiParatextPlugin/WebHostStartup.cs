@@ -129,12 +129,17 @@ namespace ClearDashboard.WebApiParatextPlugin
             services.AddSingleton<IPluginChildWindow>(sp => _parent);
             services.AddSingleton<IPluginLogger>(sp => _pluginLogger);
 
+            Func<string, DataAccessLayer.Models.ParatextProjectMetadata> getParatextProjectMetadata = (string projectId) =>
+            {
+                return _mainWindow.GetProjectMetadata()
+                            .Where(e => e.Id == (projectId ?? _mainWindow.Project.ID))
+                            .SingleOrDefault();
+            };
+
             services.AddTransient<ILexiconObtainable>(x => 
                 new Features.Lexicon.LexiconFromXmlFiles(
                     x.GetRequiredService<ILogger<LexiconFromXmlFiles>>(),
-                    _mainWindow.GetProjectMetadata()
-                        .Where(e => e.Id == _mainWindow.Project.ID)
-                        .SingleOrDefault(),
+                    getParatextProjectMetadata,
                     Directory.GetCurrentDirectory() /* paratextAppPath */
                 ));
 

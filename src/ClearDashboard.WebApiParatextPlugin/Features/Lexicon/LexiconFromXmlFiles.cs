@@ -28,7 +28,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
         private readonly LanguageLookup _lookup = new();
         private readonly Dictionary<string, LanguageInfo> _suggestLanguagesCache = new();
 
-        private readonly ParatextProjectMetadata? _paratextProjectMetadata;
+        private readonly Func<string, ParatextProjectMetadata> _getParatextProjectMetadata;
         private readonly ILogger _logger;
         private readonly string _paratextAppPath;
         private JsonSerializerOptions _jsonSerializerOptions = new()
@@ -37,10 +37,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             WriteIndented = false
         };
 
-        public LexiconFromXmlFiles(ILogger<LexiconFromXmlFiles> logger, ParatextProjectMetadata? paratextProjectMetadata, string paratextAppPath) 
+        public LexiconFromXmlFiles(ILogger<LexiconFromXmlFiles> logger, Func<string, ParatextProjectMetadata> getParatextProjectMetadata, string paratextAppPath) 
         {
             _logger = logger;
-            _paratextProjectMetadata = paratextProjectMetadata;
+            _getParatextProjectMetadata = getParatextProjectMetadata;
             _paratextAppPath = paratextAppPath;
         }
 
@@ -62,16 +62,17 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             }
         }
 
-        public Lexicon_Lexicon GetLexicon()
+        public Lexicon_Lexicon GetLexicon(string projectId)
         {
             var lexiconModel = new Lexicon_Lexicon();
+            var paratextProjectMetadata = _getParatextProjectMetadata(projectId);
 
             // 1.  [currentParatextProjectPath]\Lexicon.xml (if there is a Paratext project loaded)
-            if (_paratextProjectMetadata != null)
+            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null)
             {
                 LoadIntoLexiconModel(
                     lexiconModel,
-                    LoadIntoFileModel<LexiconFileModel>(Path.Combine(_paratextProjectMetadata.ProjectPath, "Lexicon.xml")));
+                    LoadIntoFileModel<LexiconFileModel>(Path.Combine(paratextProjectMetadata.ProjectPath, "Lexicon.xml")));
             }
 
             //  2. [currentParatextProjectPath]\ProjectBiblicalTerms.xml (? - Milt doesn't use)
@@ -85,12 +86,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             var biblicalTermsDirectory = Path.Combine(_paratextAppPath, "Terms", "Lists");
             var biblicalTermsById = new Dictionary<string, BiblicalTermFileModel>();
 
-            if (_paratextProjectMetadata != null)
+            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null)
             {
                 LoadIntoLexiconModel(
                     lexiconModel,
                     biblicalTermsById,
-                    LoadIntoFileModel<BiblicalTermsListFileModel>(Path.Combine(_paratextProjectMetadata.ProjectPath, "ProjectBiblicalTerms.xml")));
+                    LoadIntoFileModel<BiblicalTermsListFileModel>(Path.Combine(paratextProjectMetadata.ProjectPath, "ProjectBiblicalTerms.xml")));
             }
 
             LoadIntoLexiconModel(
@@ -107,10 +108,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             //
             // Each TermRendering is related to a BiblicalTerm by TermRendering.Id == BiblicalTerm.Id
             // Determine language of each by finding related BiblicalTerm
-            if (_paratextProjectMetadata != null)
+            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null)
             {
                 var lookup = new LanguageLookup();
-                var projectLanguageInfo = SuggestLanguage(_paratextProjectMetadata.LanguageName);
+                var projectLanguageInfo = SuggestLanguage(paratextProjectMetadata.LanguageName);
 
                 if (projectLanguageInfo is not null)
                 {
@@ -118,12 +119,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                         lexiconModel,
                         biblicalTermsById,
                         projectLanguageInfo.LanguageTag,
-                        LoadIntoFileModel<TermRenderingsListFileModel>(Path.Combine(_paratextProjectMetadata.ProjectPath, "TermRenderings.xml")));
+                        LoadIntoFileModel<TermRenderingsListFileModel>(Path.Combine(paratextProjectMetadata.ProjectPath, "TermRenderings.xml")));
 
                 }
                 else
                 {
-                    _logger.LogWarning($"Unable to GetLanguageNameFromCode using ParatextProjectMetadata.LanguageName: '{_paratextProjectMetadata.LanguageName}' to determine Term Renderings meaning language");
+                    _logger.LogWarning($"Unable to GetLanguageNameFromCode using ParatextProjectMetadata.LanguageName: '{paratextProjectMetadata.LanguageName}' to determine Term Renderings meaning language");
                 }
             }
 

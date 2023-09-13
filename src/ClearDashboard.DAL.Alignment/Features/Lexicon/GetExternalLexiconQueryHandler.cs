@@ -14,23 +14,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
         private readonly IMediator _mediator;
         private readonly IUserProvider _userProvider;
 
-        private IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>> _externalLexiconQuery { get; }
+        private Func<string?, IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>> _externalLexiconQueryFactory { get; }
 
         public GetExternalLexiconQueryHandler(
             [NotNull] ILogger<GetExternalLexiconQueryHandler> logger,
             [NotNull] IMediator mediator,
             [NotNull] IUserProvider userProvider,
-            [KeyFilter("External")] IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>> externalLexiconQuery)
+            [KeyFilter("External")] Func<string?, IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>> externalLexiconQueryFactory)
         {
             _logger = logger;
             _mediator = mediator;
             _userProvider = userProvider;
-            _externalLexiconQuery = externalLexiconQuery;
+            _externalLexiconQueryFactory = externalLexiconQueryFactory;
         }
 
         public async Task<RequestResult<Alignment.Lexicon.Lexicon>> Handle(GetExternalLexiconQuery request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(_externalLexiconQuery, cancellationToken);
+            var externalLexiconQuery = _externalLexiconQueryFactory(request.ProjectId);
+            var result = await _mediator.Send(externalLexiconQuery, cancellationToken);
             result.ThrowIfCanceledOrFailed();
 
             var lexemes = new List<Alignment.Lexicon.Lexeme>();

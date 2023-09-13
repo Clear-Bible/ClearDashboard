@@ -49,8 +49,9 @@ namespace ClearDashboard.Wpf.Application
         public static void RegisterManagerDependencies(this ContainerBuilder builder)
         {
             // Register Paratext as our "External" lexicon provider / drafting tool:
-            builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetLexiconQuery>()
-                .As<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>()
+            builder.Register<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>(
+                (c, p) => 
+                    new ParatextPlugin.CQRS.Features.Lexicon.GetLexiconQuery(p.TypedAs<string?>()))
                 .Keyed<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>("External");
 
             builder.RegisterType<AlignmentManager>().AsSelf();

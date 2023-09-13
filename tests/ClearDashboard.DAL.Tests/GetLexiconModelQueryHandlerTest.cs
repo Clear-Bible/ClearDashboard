@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Tests
             // get the HEB/GRK source language project type
             var result =
                 await ExecuteParatextAndTestRequest<GetLexiconQuery, RequestResult<Lexicon_Lexicon>, Lexicon_Lexicon>(
-                    new GetLexiconQuery());
+                    new GetLexiconQuery(null));
 
             Assert.True(result.HasData);
             Assert.NotNull(result.Data);

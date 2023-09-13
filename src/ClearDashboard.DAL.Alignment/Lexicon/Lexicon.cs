@@ -58,9 +58,9 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             }
         }
 
-        public static async Task<Lexicon> GetExternalLexicon(IMediator mediator, CancellationToken token = default)
+        public static async Task<Lexicon> GetExternalLexicon(IMediator mediator, string? projectId, CancellationToken token = default)
         {
-            var result = await mediator.Send(new GetExternalLexiconQuery(), token);
+            var result = await mediator.Send(new GetExternalLexiconQuery(projectId), token);
             result.ThrowIfCanceledOrFailed();
 
             return result.Data!;

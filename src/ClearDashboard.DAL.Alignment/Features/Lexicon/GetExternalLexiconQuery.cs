@@ -4,5 +4,5 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public record GetExternalLexiconQuery() : IRequest<RequestResult<Alignment.Lexicon.Lexicon>>;
+    public record GetExternalLexiconQuery(string? ProjectId) : IRequest<RequestResult<Alignment.Lexicon.Lexicon>>;
 }

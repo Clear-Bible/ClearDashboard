@@ -25,7 +25,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
         {
             try
             {
-                var lexicon = _lexiconObtainable.GetLexicon();
+                var lexicon = _lexiconObtainable.GetLexicon(request.ProjectId);
 
                 return Task.FromResult(new RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>(
                     lexicon)
