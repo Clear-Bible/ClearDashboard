@@ -42,11 +42,11 @@ on:
   push:
     branches:
       - main
-      - dev
+      - DEV
   pull_request:
     branches:
       - main
-      - dev
+      - DEV
 
 jobs:
 
