@@ -69,7 +69,7 @@ echo code sign the WPF exe
 pause
 
 echo CompressXMLs in Resources folder
-..\tools\CompressXML\CompressXML\bin\Release\net5.0\CompressTreeXML.exe
+rem ..\tools\CompressXML\CompressXML\bin\Release\net5.0\CompressTreeXML.exe
 
 pause
 ::===================INNO Dashboard=====================
