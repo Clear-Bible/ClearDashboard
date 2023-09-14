@@ -3,6 +3,8 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using System.Collections.Generic;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Messages
 {
@@ -28,7 +30,9 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record ParatextConnectedMessage(bool Connected);
 
     public record UserMessage(User User);
-    public record DashboardProjectNameMessage(string projectName);
+    public record DashboardProjectNameMessage(string ProjectName);
+
+    public record DashboardProjectPermissionLevelMessage(PermissionLevel PermissionLevel);
 
     public record FilterPinsMessage(string Message, XmlSource XmlSource = XmlSource.All);
 
@@ -36,9 +40,13 @@ namespace ClearDashboard.Wpf.Application.Messages
 
     public record ReloadProjectMessage();
 
+    public record RefreshCheckGitLab();
+
     public record ProjectsMetadataChangedMessage(List<ParatextProjectMetadata> ProjectsMetadata);
 
     public record RefreshTextCollectionsMessage();
 
     public record RebuildMainMenuMessage();
+
+    public record ParatextSyncMessage(bool Synced, object Parent);
 }

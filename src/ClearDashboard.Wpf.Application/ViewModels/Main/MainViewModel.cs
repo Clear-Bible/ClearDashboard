@@ -19,6 +19,7 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -38,7 +39,6 @@ using Dahomey.Json.Serialization.Conventions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -169,7 +169,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task CollabProjectManager()
         {
-            var localizedString = _localizationService!["MainView_About"];
+            var localizedString = _localizationService!["CollabProjectManagementView_CollaborationManagement"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -179,7 +179,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<CollabProjectManagementViewModel>();
-
 
             IWindowManager manager = new WindowManager();
             await manager.ShowDialogAsync(viewModel, null, settings);
@@ -801,7 +800,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     new EnhancedViewLayout
                     {
                         ParatextSync = true,
-                        Title = "⳼ ENHANCED VIEW",
+                        Title = "⳼ View",
                         VerseOffset = 0
                     }
                 };
@@ -1162,8 +1161,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.NoResize;
-            settings.MinWidth = 500;
-            settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<AccountInfoViewModel>();
@@ -1269,19 +1266,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // Save Current Layout
                 new MenuItemViewModel
                 {
-                    Header = "Initialize Server with Project", Id = MenuIds.CollaborationInitialize,
+                    Header = "Make Project Available for Collab", Id = MenuIds.CollaborationInitialize,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Get Latest from Server", Id = MenuIds.CollaborationGetLatest,
+                    Header = "Get Latest Project Updates", Id = MenuIds.CollaborationGetLatest,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Commit Changes to Server", Id = MenuIds.CollaborationCommit,
+                    Header = "Send Changes to Shared Project", Id = MenuIds.CollaborationCommit,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() &&
                                 !_collaborationManager.AreUnmergedChanges() &&
@@ -1964,8 +1961,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 case MenuIds.Settings:
                     {
+                        dynamic settings = new ExpandoObject();
+                        settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                        settings.ResizeMode = ResizeMode.NoResize;
+                        settings.MinWidth = 500;
+                        settings.MinHeight = 500;
+
+                        // get this applications position on the screen
+                        var thisApp = App.Current.MainWindow;
+                        settings.Left = thisApp.Left + 150;
+                        settings.Top = thisApp.Top + 100;
+
                         var viewmodel = IoC.Get<DashboardSettingsViewModel>();
-                        await this.WindowManager.ShowWindowAsync(viewmodel, null, null);
+                        await this.WindowManager.ShowWindowAsync(viewmodel, null, settings);
                         break;
                     }
 
@@ -2213,6 +2221,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             if (result == true)
             {
+                NoteManager.ClearNotesCache();
+
                 await OnDeactivateAsync(false, CancellationToken.None);
                 NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
                 await OnInitializeAsync(CancellationToken.None);
@@ -2285,20 +2295,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 foreach (var pane in dockableWindows)
                 {
-                    var content = pane.Content as EnhancedViewModel;
-                    // ReSharper disable once PossibleNullReferenceException
-                    if (content.PaneId == windowGuid)
+                    if (pane.Content is not null)
                     {
-                        var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
-
-                        var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
-                            SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
-
-                        if (result == true)
+                        var content = pane.Content as EnhancedViewModel;
+                        // ReSharper disable once PossibleNullReferenceException
+                        if (content.PaneId == windowGuid)
                         {
-                            pane.Close();
+                            var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                            if (confirmationViewPopupViewModel == null)
+                            {
+                                throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                            }
+
+                            confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.CloseEnhancedViewConfirmation;
+
+                            var result = await WindowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null, 
+                                SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+
+                            if (result == true)
+                            {
+                                pane.Close();
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }

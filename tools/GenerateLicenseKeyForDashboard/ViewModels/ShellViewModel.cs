@@ -502,10 +502,6 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
             await RefreshProjectUserConnectionGrid();
 
-            ProjectUserConnectionsCollectionView  = CollectionViewSource.GetDefaultView(ProjectUserConnections);
-            ProjectUserConnectionsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("ProjectName"));
-            ProjectUserConnectionsCollectionView.Filter += ConnectionCollection_Filter;
-
             base.OnViewReady(view);
         }
 
@@ -586,12 +582,17 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                     projectUserConnection.Add(new ProjectUserConnection
                     {
                         UserName = user.Name,
-                        ProjectName = project.Description.ToString()!,
+                        ProjectName = (project.Description ?? "Nameless").ToString(),
                         AccessLevel = user.GetPermissionLevel
                     });
                 }
             }
             ProjectUserConnections = projectUserConnection;
+
+            ProjectUserConnectionsCollectionView  = CollectionViewSource.GetDefaultView(ProjectUserConnections);
+            ProjectUserConnectionsCollectionView.GroupDescriptions.Clear();
+            ProjectUserConnectionsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("ProjectName"));
+            ProjectUserConnectionsCollectionView.Filter += ConnectionCollection_Filter;
         }
 
         private bool ConnectionCollection_Filter(object obj)
@@ -638,7 +639,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             var password = GenerateRandomPassword.RandomPassword(16);
 
             GitLabUser user = await _gitLabServices.CreateNewUser(FirstNameBox, LastNameBox, GetUserName(), password,
-                EmailBox, SelectedGroup.Name).ConfigureAwait(false);
+                EmailBox, SelectedGroup.Name);
 
             if (user.Id == 0)
             {
@@ -649,7 +650,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             }
             else
             {
-                var accessToken = await _gitLabServices.GeneratePersonalAccessToken(user).ConfigureAwait(false);
+                var accessToken = await _gitLabServices.GeneratePersonalAccessToken(user);
 
                 CollaborationConfig = new CollaborationConfiguration
                 {
@@ -667,7 +668,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
                 user.Password = password;
 
-                var results = await _mySqlHttpClientServices.CreateNewCollabUser(user, accessToken).ConfigureAwait(false);
+                var results = await _mySqlHttpClientServices.CreateNewCollabUser(user, accessToken);
 
                 if (results)
                 {

@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DAL.CQRS;
+﻿using System;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -54,7 +55,7 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
 
             protected override string ProcessData()
             {
-                string appVersion = "unknown";
+                var appVersion = Guid.Empty.ToString();
                 while (DataReader != null && DataReader.Read())
                 {
                     if (!DataReader.IsDBNull(0))

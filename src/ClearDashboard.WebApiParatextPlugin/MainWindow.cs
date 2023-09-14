@@ -555,19 +555,22 @@ namespace ClearDashboard.WebApiParatextPlugin
                 }
                 else if (window is IParatextChildState win)
                 {
-                    try
+                    if (win.Project is not null)
                     {
-                        // add only those projects for which the window is open
-                        var shortName = win.Project.ShortName;
-                        var project = allProjectsList.FirstOrDefault(x => x.ShortName == shortName);
-                        if (project != null)
+                        try
                         {
-                            _projectList.Add(project);
+                            // add only those projects for which the window is open
+                            var shortName = win.Project.ShortName;
+                            var project = allProjectsList.FirstOrDefault(x => x.ShortName == shortName);
+                            if (project != null)
+                            {
+                                _projectList.Add(project);
+                            }
                         }
-                    }
-                    catch (Exception)
-                    {
-                        // no-op
+                        catch (Exception)
+                        {
+                            // no-op
+                        }
                     }
                 }
 
@@ -924,8 +927,9 @@ namespace ClearDashboard.WebApiParatextPlugin
             textCollections.Add(new TextCollection()
             {
                 ReferenceShort = project.ShortName,
-                Data = usxString
-            });
+                Data = usxString,
+                Id = project.ID
+        });
 
             return textCollections;
         }
@@ -962,6 +966,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             if (tokens != null)
             {
                 textCollection.ReferenceShort = project.ShortName;
+                textCollection.Id = project.ID;
 
                 foreach (var token in tokens)
                 {
@@ -1283,7 +1288,9 @@ namespace ClearDashboard.WebApiParatextPlugin
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
 
-            projects.ForEach(p => allProjects.Add(BuildParatextProject(p)));
+            var paratextPath = GetParatextProjectsPath();
+
+            projects.ForEach(p => allProjects.Add(BuildParatextProject(p, paratextPath)));
 
             allProjects = allProjects.OrderBy(x => x.Type)
                 .ThenBy(n => n.ShortName)
@@ -1351,8 +1358,9 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// takes in a project and builds a model from it
         /// </summary>
         /// <param name="project"></param>
+        /// <param name="paratextPath"></param>
         /// <returns></returns>
-        private ParatextProject BuildParatextProject(IProject project)
+        private ParatextProject BuildParatextProject(IProject project, string paratextPath)
         {
             var paratextProject = new ParatextProject();
 
@@ -1361,6 +1369,13 @@ namespace ClearDashboard.WebApiParatextPlugin
             paratextProject.Guid = project.ID;
             paratextProject.LongName = project.LongName;
             paratextProject.IsResource = project.IsResource;
+
+            paratextProject.DirectoryPath = Path.Combine(paratextPath, project.ShortName);
+
+            if (Directory.Exists(paratextProject.DirectoryPath) == false)
+            {
+                paratextProject.DirectoryPath = "";
+            }
 
             foreach (var book in project.AvailableBooks)
             {

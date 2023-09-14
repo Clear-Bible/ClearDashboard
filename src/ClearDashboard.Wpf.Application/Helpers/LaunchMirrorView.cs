@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,7 +21,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
 {
     public static class LaunchMirrorView<TView> where TView : UserControl, new()
     {
-        public static void Show(object datacontext, double actualWidth, double actualHeight)
+        public static void Show(object datacontext, double actualWidth, double actualHeight, string title = "")
         {
             bool found = false;
             foreach (var window in App.Current.Windows)
@@ -37,8 +41,65 @@ namespace ClearDashboard.Wpf.Application.Helpers
             // create instance of MirrorView
             var mirror = new MirrorView
             {
-                WindowState = WindowState.Maximized
+                //WindowState = WindowState.Maximized
             };
+
+
+            // load in the monitor settings
+            var differentMonitor = Settings.Default.DifferentMonitor;
+            var thirdMonitor = Settings.Default.ThirdMonitor;
+            // get the number and sizes of the monitors on the system
+            var monitors = Monitor.AllMonitors.ToList();
+
+            if (monitors.Count > 2 && thirdMonitor)
+            {
+                // throw on third monitor
+                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
+                mirror.Left = monitors[2].Bounds.Left;
+                mirror.Top = monitors[2].Bounds.Top;
+            }
+            else
+            {
+                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
+
+                // get this applications position on the screen
+                var thisApp = App.Current.MainWindow;
+
+                if (differentMonitor)
+                {
+                    Monitor leftMonitor = monitors.FirstOrDefault();
+                    Monitor rightMonitor = monitors.LastOrDefault();
+                    foreach (var monitor in monitors)
+                    {
+                        if (monitor.Bounds.TopLeft == new Point(0,0))
+                        {
+                            leftMonitor = monitor;
+                        }
+                        else
+                        {
+                            rightMonitor = monitor;
+                        }
+                    }
+
+                    if ((thisApp.RestoreBounds.Left + thisApp.RestoreBounds.Right)/2 < leftMonitor.Bounds.Right)
+                    {
+                        // throw on second monitor
+                        mirror.Left = rightMonitor.Bounds.Left;
+                        mirror.Top = rightMonitor.Bounds.Top;
+                    }
+                    else
+                    {
+                        // throw on first monitor
+                        mirror.Left = leftMonitor.Bounds.Left;
+                        mirror.Top = leftMonitor.Bounds.Top;
+                    }
+                }
+                else
+                {
+                    mirror.Left = thisApp.Left;
+                    mirror.Top = thisApp.Top;
+                }
+            }
 
             var mirroredView = new TView();
 
@@ -62,8 +123,14 @@ namespace ClearDashboard.Wpf.Application.Helpers
             {
                 pinsViewModel.MainGrid.Tag = "True";
             }
+
+            mirror.Title = $"{title} Expanded View";
+
             // force the MirrorView to show
             mirror.Show();
+            mirror.WindowState = WindowState.Maximized;
+
+
             // now that it is shown, we can get it's actual size
             var newWidth = mainGrid.ActualWidth;
             var newHeight = mainGrid.ActualHeight;

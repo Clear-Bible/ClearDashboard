@@ -283,7 +283,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
            try
            {
-               await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
+               await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
                await Task.Delay(250);
            }
            catch (Exception ex)
@@ -343,6 +343,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // restore the nodes
                 if (designSurfaceData != null)
                 {
+                    bool currentParatextProjectPresent = false;
+                    bool standardCorporaPresent = false;
+
                     foreach (var corpusId in topLevelProjectIds.CorpusIds)
                     {
                         if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
@@ -369,6 +372,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             {
                                 corpus.CorpusId.CorpusType = CorpusType.Resource.ToString();
                             }
+                            else
+                            {
+                                standardCorporaPresent = true;
+                                if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
+                                {
+                                    currentParatextProjectPresent = true;
+                                }
+                            }
                         }
                         
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
@@ -377,6 +388,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
+
+                    if (standardCorporaPresent  && !currentParatextProjectPresent)
+                    {
+                        var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                        if (confirmationViewPopupViewModel == null)
+                        {
+                            throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                        }
+
+                        confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.SwitchParatextProjectMessage;
+
+                        var result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                            SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                    }
+
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
                     //DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
@@ -589,7 +616,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode, true);
                         // What other work needs to be done?  how do we know which steps have been executed?
                         DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
                     }
@@ -728,7 +755,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode, true);
                         DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
                     }
                     else
@@ -926,7 +953,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             _busyState.Remove(taskName);
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                DeleteCorpusNode(node);
+                                DeleteCorpusNode(node, true);
                             }
                             else
                             {
@@ -1646,21 +1673,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             });
         }
 
-        public async void DeleteCorpusNode(CorpusNodeViewModel node)
+        public async void DeleteCorpusNode(CorpusNodeViewModel node, bool wasTokenizing)
         {
-            //warn users 
-            var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<DeletingCorpusNodePopupViewModel>();
-
-            var result = await _windowManager!.ShowDialogAsync(
-                deletingCorpusNodePopupViewModel, 
-                null,
-                SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
-
-            if (!result)
-            {
-                return;
-            }
-
             // check to see if is in the middle of working or not by tokenizing
             var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)
@@ -1675,6 +1689,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 return;
             }
 
+            if (!wasTokenizing)
+            {
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCorpusNodeConfirmation;
+
+                bool result = false;
+                OnUIThread(async () =>
+                {
+                    result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                        SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                });
+
+                if (!result)
+                {
+                    return;
+                }
+            }
 
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {

@@ -7,32 +7,34 @@
 
 
 5. Shut down Paratext
-6. Search the solution for the 5 usages of the previous version number and update them
-7. Update the version number in the DashboardInstaller.iss file
-8. Change Visual Studio to Release mode
+8. SetVersionInfo tool
+7. Update the version number in manifest.app
+8. Update the version number in the DashboardInstaller.iss file
+9. Change Visual Studio to Release mode
 
 
-Steps 9-10 are necessary to rebuild the Paratext Plugin (since codesign_exe.bat can’t) and rebuild ClearDashboard.Wpf.Application for publishing.
+Steps 10-12 are necessary to rebuild the Paratext Plugin (since codesign_exe.bat can’t) and rebuild ClearDashboard.Wpf.Application for publishing.
 
 
-9. Clean bin and obj files
-10. Restore Nuget packages
-11. Rebuild the Solution
+10. Clean bin and obj files
+11. Restore Nuget packages
+12. Rebuild the Solution
 
 
-12. (optional) Run the app to make sure it works.  Shut down Paratext if you open it.
+13. (optional) Run the app to make sure it works.  Shut down Paratext if you open it.
 
 
-13. Publish ClearDashboard.Wpf.Application
-14. Publish PluginManager
-15. Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
-16. Run the codesign_exe.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
+14. Publish ClearDashboard.Wpf.Application
+15. Publish PluginManager
+15. Publish ResetCurrentUser
+16. Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
+17. Run the codesign_exe.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
 
 
-17. Install locally to test out that it works
+18. Install locally to test out that it works
 
 
-18. Upload the installer to google drive
-19. Upload the installer to CLEAR_External_Releases/Files
-20. Update pico-composer/content/index.md to point to the new installer in CLEAR_External_Releases/Files
-21. Create the Version Notes json file.  Call it ClearDashboard.json and place it in CLEAR_External_Releases/VersionHistory
+19. Upload the installer to google drive
+20. Upload the installer to CLEAR_External_Releases/Files
+21. Update pico-composer/content/index.md to point to the new installer in CLEAR_External_Releases/Files
+22. Create the Version Notes json file.  Call it ClearDashboard.json and place it in CLEAR_External_Releases/VersionHistory

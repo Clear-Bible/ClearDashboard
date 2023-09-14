@@ -92,5 +92,20 @@
     <Setting Name="EmailPass" Type="System.String" Scope="User">
       <Value Profile="(Default)">xtoD/SxgDM+2D9A/rOD/EX9vr9TsoDj0iMnJbgun+tk=</Value>
     </Setting>
+    <Setting Name="DifferentMonitor" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ThirdMonitor" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="JiraUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dirk.kaiser@clear.bible</Value>
+    </Setting>
+    <Setting Name="JiraToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ATATT3xFfGF0qGkLXJcyCb8vCNGKc-qsHtK1Va-M0FxkFD0pldZVZtnaaCDRCUV6QyqBy9t2mIwHoFYrtx5ddmcpFHGb6FRS09r9VC6psItw7mKv9a_eca0SeBaiCzj-oGOo1VFjtsodqwlx-NqxI2FFHJZrFgpGBQRJdxciynI6ZCPKKoYxf0E=EB25BFDE</Value>
+    </Setting>
+    <Setting Name="JiraBaseUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://clearbible.atlassian.net</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

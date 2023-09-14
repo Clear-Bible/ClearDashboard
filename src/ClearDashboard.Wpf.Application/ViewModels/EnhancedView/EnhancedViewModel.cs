@@ -520,7 +520,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            DisplayName = "Enhanced View";
+            DisplayName = "View";
             await base.OnInitializeAsync(cancellationToken);
         }
    
@@ -617,7 +617,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<Views.EnhancedView.EnhancedView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<Views.EnhancedView.EnhancedView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
 
@@ -877,6 +877,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task TokenUnjoinAsync(TokenEventArgs e)
         {
             await VerseManager.UnjoinTokenAsync(e.TokenDisplay.CompositeToken, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
+        }
+
+        public void TranslationClicked(object sender, TranslationEventArgs e)
+        {
+            SelectionManager.UpdateSelection(e.TokenDisplay!, e.SelectedTokens, e.IsControlPressed);
+            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public void TranslationRightButtonDown(object sender, TranslationEventArgs e)
+        {
+            if (e.TokenDisplay is not null)
+            {
+                //SelectionManager.UpdateRightClickTranslationSelection(e.TokenDisplay);
+                //NoteControlVisibility = SelectionManager.AnySelectedTokenTranslationNotes ? Visibility.Visible : Visibility.Collapsed;
+                SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
+                NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
         public void TranslationMouseEnter(object sender, TranslationEventArgs e)

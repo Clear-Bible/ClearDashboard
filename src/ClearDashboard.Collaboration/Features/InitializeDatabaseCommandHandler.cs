@@ -1,28 +1,15 @@
-﻿using ClearDashboard.Collaboration.DifferenceModel;
-using ClearDashboard.Collaboration.Factory;
+﻿using ClearDashboard.Collaboration.Factory;
 using ClearDashboard.Collaboration.Merge;
 using ClearDashboard.Collaboration.Services;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
-using Microsoft.AspNet.SignalR.Client.Http;
-using ClearDashboard.DAL.CQRS.Features.Features;
-using ClearDashboard.DAL.Alignment.Features.Denormalization;
-using SIL.Machine.Utils;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SIL.Machine.Utils;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Features;
 public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDatabaseCommand, RequestResult<Unit>>
@@ -125,8 +112,10 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
 
                     await mergeBehavior.MergeEndAsync(cancellationToken);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    _logger.LogError(e, $"Exception thrown in handler '{GetType().Name}'");
+
                     await mergeBehavior.MergeErrorAsync(CancellationToken.None);
                     errorCleanupAction = GetErrorCleanupAction(projectContext, _logger);
                     throw;

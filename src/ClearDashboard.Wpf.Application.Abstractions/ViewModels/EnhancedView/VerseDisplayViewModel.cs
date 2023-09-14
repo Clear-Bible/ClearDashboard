@@ -244,7 +244,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
                 var compositeToken = tokenMap.GetCompositeToken(token);
-                result.Add(new TokenDisplayViewModel(token)
+                var tokenDisplayViewModel = new TokenDisplayViewModel(token)
                 {
                     VerseDisplay = this,
                     CompositeToken = compositeToken,
@@ -253,8 +253,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     Translation = GetTranslationForToken(token, compositeToken),
                     AlignedToken = GetAlignedToken(token, compositeToken),
                     NoteIds = await GetNoteIdsForToken(token.TokenId),
+                    TokenNoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
                     IsSource = isSource,
-                });
+                };
+                if (tokenDisplayViewModel.Translation?.TranslationId != null)
+                {
+                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
+                }
+                result.Add(tokenDisplayViewModel);
             }
             return result;
         }
@@ -286,31 +292,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            NonMatchingTokenAction(message.SelectedTokens.TokenIds, t => t.IsTokenSelected = false);
+            foreach (var token in SourceTokenDisplayViewModels.Union(TargetTokenDisplayViewModels))
+            {
+                var matchingToken = message.SelectedTokens.FirstOrDefault(t => t.Token.TokenId.IdEquals(token.Token.TokenId));
+                if (matchingToken == null)
+                {
+                    token.IsTokenSelected = false;
+                    token.IsTranslationSelected = false;
+                }
+                else
+                {
+                    token.IsTokenSelected = matchingToken.IsTokenSelected;
+                    token.IsTranslationSelected = matchingToken.IsTranslationSelected;
+                }
+            }
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(message.EntityIds, t => t.NoteAdded(message.Note));
+            MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TokenId)), t => t.TokenNoteAdded(message.Note));
+            MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TranslationId)), t => t.TranslationNoteAdded(message.Note));
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(NoteDeletedMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(message.EntityIds, t => t.NoteDeleted(message.Note));
+            MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TokenId)), t => t.TokenNoteDeleted(message.Note));
+            MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TranslationId)), t => t.TranslationNoteDeleted(message.Note));
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId)), t => t.IsNoteHovered = true);
+            MatchingTokenAction(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId) || a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = true);
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId)), t => t.IsNoteHovered = false);
+            MatchingTokenAction(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId) || a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = false);
             await Task.CompletedTask;
         }
 

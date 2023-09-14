@@ -372,7 +372,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             {
                 new NamedParameter("name", "Target"),
                 new NamedParameter("paratextProjectId", node.ParatextProjectId),
-                new NamedParameter("connectorType", ConnectorType.Input)
+                new NamedParameter("connectorType", ConnectorType.Input),
+                new NamedParameter("corpusType", corpus.CorpusId.CorpusType)
             });
             node.InputConnectors.Add(targetConnector);
 
@@ -381,7 +382,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             {
                 new NamedParameter("name", "Source"),
                 new NamedParameter("paratextProjectId", node.ParatextProjectId),
-                new NamedParameter("connectorType", ConnectorType.Output)
+                new NamedParameter("connectorType", ConnectorType.Output),
+                new NamedParameter("corpusType", corpus.CorpusId.CorpusType)
             });
             node.OutputConnectors.Add(outputConnector);
 
@@ -748,8 +750,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 //});
                 //addSeparator = true;
             }
-
-
+            
             foreach (var tokenizedCorpus in tokenizedCorpora)
             {
                 if (!string.IsNullOrEmpty(tokenizedCorpus.TokenizationFunction))
@@ -800,7 +801,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
                     {
                         // Show Verses in New Windows
-                        Header = LocalizationService.Get("Update"),
+                        Header = LocalizationService.Get("Pds_GetLatestFromParatext"),
                         Id = DesignSurfaceMenuIds.UpdateParatextCorpus,
                         ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                         IconKind = PackIconPicolIconsKind.Edit.ToString(),
@@ -818,7 +819,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         menuBuilder.CreateCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
                     }
 
-                    corpusNodeViewModel.MenuItems.Add(corpusNodeMenuViewModel);
+                    if (tokenizedCorpora.Count() > 1)
+                    {
+                        corpusNodeViewModel.MenuItems.Add(corpusNodeMenuViewModel);
+                    }
+                    else
+                    {
+                        corpusNodeViewModel.MenuItems.AddRange(corpusNodeMenuViewModel.MenuItems);
+                    }
+                    
                     corpusNodeViewModel.TokenizationCount++;
                 }
             }

@@ -203,6 +203,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             (nameof(TranslationMouseWheel), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TranslationSetEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationSetEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationSet), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the NoteIndicatorLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonDownEvent = EventManager.RegisterRoutedEvent
@@ -603,34 +609,60 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RaiseTokenEvent(TokenDeleteAlignmentEvent, args);
             }
         }
-
-        private void UpdateVerseSelection(TokenDisplayViewModel? token, bool addToSelection)
+        private void UpdateVerseSelection(TokenDisplayViewModel? token, bool addToSelection, bool isTranslation = false)
         {
             if (token == null)
             {
                 return;
             }
+
             var tokenIsSelected = token.IsTokenSelected;
+            var translationIsSelected = token.IsTranslationSelected;
+
+            var currentTokenShouldStaySelected =
+                !addToSelection &&
+                VerseSelectedTokens.Count(t => t.IsTokenSelected) + VerseSelectedTokens.Count(t => t.IsTranslationSelected) > 1 &&
+                VerseSelectedTokens.Contains(token.Token.TokenId) &&
+                (
+                    (!isTranslation && tokenIsSelected) ||
+                    (isTranslation && translationIsSelected)
+                );
+
             if (!addToSelection)
             {
                 foreach (var selectedToken in VerseSelectedTokens)
                 {
-                    selectedToken.IsTokenSelected = false;
+                    if (!currentTokenShouldStaySelected || !selectedToken.Token.TokenId.IdEquals(token.Token.TokenId))
+                    {
+                        selectedToken.IsTokenSelected = false;
+                        selectedToken.IsTranslationSelected = false;
+                    }
                 }
                 VerseSelectedTokens.Clear();
             }
 
-            token.IsTokenSelected = !tokenIsSelected;
-            if (token.IsTokenSelected)
+            if (!currentTokenShouldStaySelected)
             {
-                if (token.IsCompositeTokenMember)
+                if (!isTranslation)
                 {
-                    VerseDisplayViewModel.MatchingTokenAction(token.CompositeTokenMembers.TokenIds, t => t.IsTokenSelected = true);
-                    VerseSelectedTokens.AddRange(VerseDisplayViewModel.SourceTokenDisplayViewModels.MatchingTokens(token.CompositeTokenMembers.TokenIds));
+                    token.IsTokenSelected = !tokenIsSelected;
                 }
                 else
                 {
-                    VerseSelectedTokens.Add(token);
+                    token.IsTranslationSelected = !translationIsSelected;
+                }
+            }
+
+            if (token.IsTokenSelected || token.IsTranslationSelected)
+            {
+                if (token.IsCompositeTokenMember)
+                {
+                    VerseDisplayViewModel.MatchingTokenAction(token.CompositeTokenMembers.TokenIds, t => { t.IsTokenSelected = token.IsTokenSelected; t.IsTranslationSelected = token.IsTranslationSelected; });
+                    VerseSelectedTokens.AddRangeDistinct(VerseDisplayViewModel.SourceTokenDisplayViewModels.MatchingTokens(token.CompositeTokenMembers.TokenIds));
+                }
+                else
+                {
+                    VerseSelectedTokens.AddDistinct(token);
                 }
             }
             else
@@ -638,7 +670,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (token.IsCompositeTokenMember)
                 {
                     var selectedCompositeTokenMembers = VerseSelectedTokens.MatchingTokens(token.CompositeTokenMembers.TokenIds);
-                    VerseSelectedTokens.RemoveAll(t=>selectedCompositeTokenMembers.Contains(t));
+                    VerseSelectedTokens.RemoveAll(t => selectedCompositeTokenMembers.Contains(t));
                 }
                 else
                 {
@@ -758,6 +790,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     var element = (UIElement)sender;
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
+
+                if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
+                {
+                    UpdateVerseSelection(args.TokenDisplay, true);
+                }
             }
 
             RaiseTokenEvent(TokenMouseEnterEvent, e);
@@ -778,20 +815,37 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenUnjoinEvent, e);
         }
 
-        private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        private void RaiseTranslationEvent(RoutedEvent routedEvent, TranslationEventArgs args)
         {
-            var control = (TokenDisplay)e.Source;
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = control.TokenDisplayViewModel,
+                TokenDisplay = args.TokenDisplay,
+                SelectedTokens = VerseSelectedTokens,
                 InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
-                Translation = control.TokenDisplayViewModel.Translation!,
-            }) ;
+                Translation = args.TokenDisplay!.Translation!,
+                ModifierKeys = args.ModifierKeys
+            });
+        }
+
+        private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(routedEvent, (TranslationEventArgs)e);
         }
 
         private void OnTranslationClicked(object sender, RoutedEventArgs e)
         {
+            if (e is not TranslationEventArgs args || args is { TokenDisplay: null })
+            {
+                return;
+            }
+
+            // If shift is pressed, then leave any selected tokens selected.
+            if (!args.IsShiftPressed)
+            {
+                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed, true);
+            }
+
             RaiseTranslationEvent(TranslationClickedEvent, e);
         }
 
@@ -832,6 +886,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTranslationMouseWheel(object sender, RoutedEventArgs e)
         {
             RaiseTranslationEvent(TranslationMouseWheelEvent, e);
+        }
+
+        private void OnTranslationSet(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationSetEvent, e);
         }
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
@@ -1198,6 +1257,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TranslationMouseWheelEvent, value);
             remove => RemoveHandler(TranslationMouseWheelEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual translation is clicked.
+        /// </summary>
+        public event RoutedEventHandler TranslationSet
+        {
+            add => AddHandler(TranslationSetEvent, value);
+            remove => RemoveHandler(TranslationSetEvent, value);
         }
 
         /// <summary>

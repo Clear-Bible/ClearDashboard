@@ -301,7 +301,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             if (ProjectManager.CurrentVerse != String.Empty)
             {
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-                await ReloadWordMeanings().ConfigureAwait(false);
+                await ReloadWordMeanings();
             }
 
             base.OnViewReady(view);
@@ -456,7 +456,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     break;
             }
 
-            var queryResult = await ExecuteRequest(new GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None);
             if (queryResult.Success == false)
             {
                 Logger!.LogError(queryResult.Message);

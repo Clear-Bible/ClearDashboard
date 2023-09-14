@@ -229,9 +229,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// A list of <see cref="NoteViewModel"/>s for the token.
         /// </summary>
-        public NoteViewModelCollection Notes { get; set; } = new();
+        public NoteViewModelCollection TokenNotes { get; set; } = new();
 
-        public NoteIdCollection NoteIds { get; set; } = new();
+        public NoteIdCollection TokenNoteIds { get; set; } = new();
 
         private bool _isTokenSelected;
         /// <summary>
@@ -241,8 +241,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get => _isTokenSelected;
             set => Set(ref _isTokenSelected, value);
-        }        
-        
+        }
+
+        /// <summary>
+        /// A list of <see cref="NoteViewModel"/>s for the token.
+        /// </summary>
+        public NoteViewModelCollection TranslationNotes { get; set; } = new();
+
+        public NoteIdCollection TranslationNoteIds { get; set; } = new();
+
         private bool _isTranslationSelected;
         /// <summary>
         /// Gets or sets whether the translation for this token is selected.
@@ -285,7 +292,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _isNoteHovered, value);
         }
 
-        public bool HasNote => NoteIds.Any();
+        public bool TokenHasNote => TokenNoteIds.Any();
+        public bool TranslationHasNote => TranslationNoteIds.Any();
+
+        public void TokenNoteAdded(NoteViewModel note)
+        {
+            TokenNoteIds.AddDistinct(note.NoteId!);
+            NotifyOfPropertyChange(nameof(TokenHasNote));
+        }
+
+        public void TokenNoteDeleted(NoteViewModel note)
+        {
+            TokenNoteIds.RemoveIfExists(note.NoteId!);
+            NotifyOfPropertyChange(nameof(TokenHasNote));
+        }
 
         public bool HasExtendedProperties => !string.IsNullOrEmpty(ExtendedProperties);
 
@@ -301,14 +321,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void NoteAdded(NoteViewModel note)
         {
-            NoteIds.AddDistinct(note.NoteId!);
-            NotifyOfPropertyChange(nameof(HasNote));
+            TranslationNoteIds.AddDistinct(note.NoteId!);
+            NotifyOfPropertyChange(nameof(TranslationHasNote));
         }
 
-        public void NoteDeleted(NoteViewModel note)
+        public void TranslationNoteDeleted(NoteViewModel note)
         {
-            NoteIds.RemoveIfExists(note.NoteId!);
-            NotifyOfPropertyChange(nameof(HasNote));
+            TranslationNoteIds.RemoveIfExists(note.NoteId!);
+            NotifyOfPropertyChange(nameof(TranslationHasNote));
         }
 
         public void TranslationApplied(Translation translation)

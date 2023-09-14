@@ -123,6 +123,8 @@ public class CollaborationManager
             }
 
             File.WriteAllText(_secretsFilePath, jsonString);
+
+            _configuration = configuration;
         }
         catch (Exception e)
         {
@@ -201,10 +203,21 @@ public class CollaborationManager
         if (!Repository.IsValid(_repositoryPath))
         {
             Repository.Init(_repositoryPath);
+
+            //HACK when repo is initialized, it creates a branch called main.  We need to change it to master
+            var headPath = Path.Combine(_repositoryPath, ".git", "HEAD");
+            var fileText = File.ReadAllText(headPath);
+            if (fileText.Contains("heads/main"))
+            {
+                File.WriteAllText(headPath, "ref: refs/heads/master\n");
+            }
+
         }
 
         using (var repo = new Repository(_repositoryPath))
         {
+            repo.Config.Set("core.longpaths", true);
+
             if (!repo.Network.Remotes.Any() && HasRemoteConfigured())
             {
                 repo.Network.Remotes.Add(RemoteOrigin, _configuration.RemoteUrl);
@@ -226,6 +239,24 @@ public class CollaborationManager
         return false;
     }
 
+    public string GetRemoteSha(string? dashboardProjectFullFilePath, Guid dashboardProjectId)
+    {
+        var path =Path.Combine( _repositoryBasePath, "P_" + dashboardProjectId);
+
+        if (Directory.Exists(path))
+        {
+            _repositoryPath = path;
+            var result = FindRemoteHeadCommitSha();
+
+            if (result != null)
+            {
+                return result;
+            }
+        }
+
+        return string.Empty;
+    }
+
     protected string? FindRemoteHeadCommitSha()
     {
         using (var repo = new Repository(_repositoryPath))
@@ -241,12 +272,19 @@ public class CollaborationManager
             {
                 if (remote.Name == RemoteOrigin)
                 {
-                    var references = repo.Network.ListReferences(remote, credentialsProvider);
-                    var headRef = references.Where(e => e.CanonicalName == "HEAD").FirstOrDefault();
-                    if (headRef is not null)
+                    try
                     {
-                        var headCommitSha = headRef.ResolveToDirectReference().TargetIdentifier;
-                        return headCommitSha;
+                        var references = repo.Network.ListReferences(remote, credentialsProvider);
+                        var headRef = references.Where(e => e.CanonicalName == "HEAD").FirstOrDefault();
+                        if (headRef is not null)
+                        {
+                            var headCommitSha = headRef.ResolveToDirectReference().TargetIdentifier;
+                            return headCommitSha;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
                     }
                 }
             }
@@ -257,13 +295,18 @@ public class CollaborationManager
 
     public bool AreUnmergedChanges()
     {
+        if (_repositoryPath == "LocalOnly")
+        {
+            return false;
+        }
+
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 
         try
         {
             var remoteHeadCommitSha = FindRemoteHeadCommitSha();
-            return project.LastMergedCommitSha != remoteHeadCommitSha;
+            return project.LastMergedCommitSha != null && project.LastMergedCommitSha != remoteHeadCommitSha;
         }
         catch (Exception ex)
         {
@@ -815,6 +858,12 @@ public class CollaborationManager
             projectDifferences.Serialize(Path.Combine(_dumpsPath, folderName));
         }
     }
+
+    public string GetRespositoryBasePath()
+    {
+        return _repositoryBasePath;
+    }
+
 
     public Models.CollaborationConfiguration GetConfig()
     {

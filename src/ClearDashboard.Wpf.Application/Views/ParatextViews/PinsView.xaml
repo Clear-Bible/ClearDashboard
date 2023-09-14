@@ -130,7 +130,7 @@
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="KT" />
+                Content="Key Terms" />
             <RadioButton
                 Name="BtXmlSourceRadio"
                 GroupName="XmlSourceRadio"
@@ -138,7 +138,7 @@
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="ABT" />
+                Content="All Biblical Terms" />
             <RadioButton
                 Name="AbtXmlSourceRadio"
                 GroupName="XmlSourceRadio"
@@ -146,7 +146,7 @@
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="TR" />
+                Content="Term Renderings" />
             <RadioButton
                 Name="TrXmlSourceRadio"
                 GroupName="XmlSourceRadio"
@@ -154,7 +154,7 @@
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="LX" />
+                Content="Lexicon" />
             <RadioButton
                 Name="LxXmlSourceRadio"
                 GroupName="XmlSourceRadio"
@@ -256,7 +256,7 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Text="{Binding Path='XmlSourceAbbreviation'}"
-                                    ToolTip="{Binding Path='XmlPath'}" />
+                                    ToolTip="{Binding Path='XmlSourceDisplayName'}" />
                             </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -508,6 +508,7 @@
             Grid.ColumnSpan="3"
             VerticalAlignment="Center"
             CloseOnClickAway="False"
+            DialogOpened="DialogHost_OnDialogOpened"
             DialogTheme="Inherit"
             IsOpen="{Binding VerseRefDialogOpen}"
             OverlayBackground="{DynamicResource PrimaryHueMidBrush}">
@@ -518,8 +519,8 @@
                     CornerRadius="3">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -677,6 +678,7 @@
                                                         FontStyle="Italic"
                                                         Foreground="Green"
                                                         Text="{Binding BackTranslation}"
+                                                        TextWrapping="Wrap"
                                                         Visibility="{Binding ShowBackTranslation, Converter={BoolToVisibilityConverter}}" />
                                                 </StackPanel>
 

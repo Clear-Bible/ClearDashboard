@@ -1,29 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	  <TargetFramework>net7.0</TargetFramework>
-	 
+    <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>ClearDashboard.DataAccessLayer</RootNamespace>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.1.0.7</Version>
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearDashboard</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Clear-Bible/ClearDashboard</RepositoryUrl>
+    <FileVersion>1.1.0.7</FileVersion>
+    <AssemblyVersion>1.1.0.7</AssemblyVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Models\**" />
     <EmbeddedResource Remove="Models\**" />
     <None Remove="Models\**" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Remove="Features\DashboardProjects\DashboardProjectSlice.cs" />
     <Compile Remove="Features\MarbleDataRequests\GetWhatIsThisWordSlice.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="Resources\marble-concordances\BHSAnalysis.xml" />
     <None Remove="Resources\marble-concordances\BHSLemmaConcordance.xml" />
@@ -148,7 +145,6 @@
     <None Remove="Resources\SDBH\SDBH-22.XML" />
     <None Remove="Resources\SDBH\SDBH-23.XML" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Resources\marble-concordances\BHSAnalysis.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -517,27 +513,25 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
-	  <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-	  <PackageReference Include="Clear.SIL.Machine" Version="2.5.14" />
-    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Clear.SIL.Machine" Version="2.5.14" />
+    <PackageReference Include="Dapper" Version="2.0.143" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.9" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="TinyMapper" Version="3.0.3" />
     <PackageReference Include="Unidecode.NET" Version="2.1.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
@@ -546,8 +540,6 @@
     <ProjectReference Include="..\ClearDashboard.DAL.ViewModels\ClearDashboard.DAL.ViewModels.csproj" />
     <ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
   </ItemGroup>
-
-
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -560,14 +552,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="MarbleHelpers\DataFiles\tag_structure_bhs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -592,10 +582,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Exceptions\" />
     <Folder Include="MarbleHelpers\DataFiles\" />
   </ItemGroup>
-
 </Project>

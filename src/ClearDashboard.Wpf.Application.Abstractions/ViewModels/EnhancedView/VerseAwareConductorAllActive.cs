@@ -13,6 +13,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -224,6 +227,7 @@ public abstract class VerseAwareConductorOneActive : DashboardConductorOneActive
         get => _paratextSync;
         set
         {
+            EventAggregator.PublishOnUIThreadAsync(new ParatextSyncMessage(value, Parent));
             if (value)
             {
                 // update Paratext with the verseId
