@@ -46,10 +46,9 @@
                     <!--  secondary  -->
                     <Color x:Key="SecondaryHueLight">#C1CD42</Color>
                     <Color x:Key="SecondaryHueLightForeground">#000000</Color>
-                    <Color x:Key="SecondaryHueMid">#FFC107</Color>
-                    <!--  #FFC107  -->
+                    <Color x:Key="SecondaryHueMid">#7A9A01</Color>
                     <Color x:Key="SecondaryHueMidForeground">#000000</Color>
-                    <Color x:Key="SecondaryHueDark">#7A9A01</Color>
+                    <Color x:Key="SecondaryHueDark">#283500</Color>
                     <Color x:Key="SecondaryHueDarkForeground">#FFFFFF</Color>
                     <!--  accent  -->
                     <Color x:Key="AccentHue">#EDC54C</Color>

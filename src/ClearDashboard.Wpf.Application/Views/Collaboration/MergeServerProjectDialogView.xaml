@@ -198,7 +198,7 @@
                                                                 <Condition Binding="{Binding CancelAction}" Value="Done" />
                                                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
                                                             </MultiDataTrigger.Conditions>
-                                                            <Setter Property="Background" Value="{StaticResource SecondaryHueDarkBrush}" />
+                                                            <Setter Property="Background" Value="{StaticResource SecondaryHueMidBrush}" />
                                                         </MultiDataTrigger>
 
                                                         <MultiDataTrigger>

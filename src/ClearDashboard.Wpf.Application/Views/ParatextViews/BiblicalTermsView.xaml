@@ -100,7 +100,7 @@
                     </Button.Style>
                     <materialDesign:PackIcon
                         Background="Transparent"
-                        Foreground="{StaticResource SecondaryHueDarkBrush}"
+                        Foreground="{StaticResource AccentHueBrush}"
                         Kind="ArrowExpandAll" />
                 </Button>
 

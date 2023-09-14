@@ -98,7 +98,7 @@
             <materialDesign:PackIcon
                 cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
                 Background="Transparent"
-                Foreground="{StaticResource SecondaryHueDarkBrush}"
+                Foreground="{StaticResource AccentHueBrush}"
                 Kind="ArrowExpandAll" />
         </Button>
 
