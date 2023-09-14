@@ -113,7 +113,7 @@ public class CreateLexiconCommandHandlerTests : TestBase
             Assert.Equal(2, internalLexiconLexeme1Meaning2.Translations.Count);
             AssertIsInDatabaseIsDirty(internalLexicon, true, false);
 
-            var externalLexiconCommand = new GetExternalLexiconQuery();
+            var externalLexiconCommand = new GetExternalLexiconQuery(null /* currently loaded project */);
             var externalLexiconResult = await Mediator.Send(externalLexiconCommand);
 
             var externalLexicon = externalLexiconResult.Data!;
@@ -151,7 +151,7 @@ public class CreateLexiconCommandHandlerTests : TestBase
             await partialExternalLexicon.SaveAsync(Mediator!);
             AssertIsInDatabaseIsDirty(partialExternalLexicon, true, false);
 
-            var externalLexiconCommand2 = new GetExternalLexiconQuery();
+            var externalLexiconCommand2 = new GetExternalLexiconQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f");
             var externalLexiconResult2 = await Mediator.Send(externalLexiconCommand2);
 
             var internalLexiconCommand2 = new GetInternalLexiconQuery();
