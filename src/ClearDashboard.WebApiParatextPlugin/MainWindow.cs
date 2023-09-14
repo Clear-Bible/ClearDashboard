@@ -1170,6 +1170,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     {
                         Id = project.ID,
                         LanguageName = project.LanguageName,
+                        LanguageId = project.Language.Id,
                         Name = project.ShortName,
                         LongName = project.LongName,
                         CorpusType = DetermineCorpusType(project.Type, project.IsResource),
