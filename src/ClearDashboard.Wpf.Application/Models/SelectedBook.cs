@@ -52,30 +52,30 @@ namespace ClearDashboard.Wpf.Application.Models
                 {
                     // OT
                     case EBookColor.Pentateuch:
-                        BookColor = Brushes.Cyan;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("PrimaryHueDarkBrush");
                         break;
                     case EBookColor.Historical:
-                        BookColor = Brushes.Coral;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("SecondaryHueDarkBrush");
                         break;
                     case EBookColor.Wisdom:
-                        BookColor = Brushes.LimeGreen;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("PrimaryHueDarkBrush");
                         break;
                     case EBookColor.Prophets:
-                        BookColor = Brushes.Magenta;
+                        BookColor =(SolidColorBrush?)System.Windows.Application.Current.FindResource("SecondaryHueDarkBrush");
                         break;
 
                     // NT
                     case EBookColor.Gospels:
-                        BookColor = Brushes.MediumPurple;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("PrimaryHueDarkBrush");
                         break;
                     case EBookColor.Acts:
-                        BookColor = Brushes.Gold;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("SecondaryHueDarkBrush");
                         break;
                     case EBookColor.Epistles:
-                        BookColor = Brushes.MediumSpringGreen;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("PrimaryHueDarkBrush");
                         break;
                     case EBookColor.Revelation:
-                        BookColor = Brushes.Turquoise;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("SecondaryHueDarkBrush");
                         break;
 
                 }
