@@ -230,7 +230,7 @@
                         Margin="30,0,0,0"
                         Padding="20,2,20,2"
                         VerticalAlignment="Center"
-                        Background="{StaticResource GreenLightBrush}"
+                        Background="{StaticResource SecondaryHueLightBrush}"
                         TextAlignment="Center">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">

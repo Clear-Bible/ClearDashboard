@@ -133,7 +133,7 @@
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsOwner}" Value="True">
                                                     <Setter Property="Kind" Value="AdminLine" />
-                                                    <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkBrush}" />
                                                     <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectOwner}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -152,13 +152,13 @@
                                         Text="{Binding GetPermissionLevel}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                <Setter Property="Foreground" Value="{StaticResource ReadOnlyHueBrush}" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding GetPermissionLevel}" Value="Owner">
-                                                        <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                        <Setter Property="Foreground" Value="{StaticResource OwnerHueBrush}" />
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding GetPermissionLevel}" Value="ReadWrite">
-                                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                        <Setter Property="Foreground" Value="{StaticResource ReadWriteHueBrush}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -194,7 +194,7 @@
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsOwner}" Value="True">
                                                     <Setter Property="Kind" Value="AdminLine" />
-                                                    <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                    <Setter Property="Foreground" Value="{StaticResource OwnerHueBrush}" />
                                                     <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectOwner}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -213,13 +213,13 @@
                                         Text="{Binding GetPermissionLevel}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                <Setter Property="Foreground" Value="{StaticResource ReadOnlyHueBrush}" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding GetPermissionLevel}" Value="Owner">
-                                                        <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                        <Setter Property="Foreground" Value="{StaticResource OwnerHueBrush}" />
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding GetPermissionLevel}" Value="ReadWrite">
-                                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                        <Setter Property="Foreground" Value="{StaticResource ReadWriteHueBrush}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -248,7 +248,7 @@
 
             <Button x:Name="AddUsersReadWrite" Height="60">
                 <Button.Style>
-                    <Style BasedOn="{StaticResource GreenMidButton}" TargetType="Button">
+                    <Style BasedOn="{StaticResource ReadWriteHueButton}" TargetType="Button">
                         <Setter Property="IsEnabled" Value="True" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
@@ -277,7 +277,7 @@
                 Height="60"
                 Margin="0,5,0,0">
                 <Button.Style>
-                    <Style BasedOn="{StaticResource YellowMidButton}" TargetType="Button">
+                    <Style BasedOn="{StaticResource ReadOnlyHueButton}" TargetType="Button">
                         <Setter Property="IsEnabled" Value="True" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
@@ -306,7 +306,7 @@
                 Height="60"
                 Margin="0,5,0,0">
                 <Button.Style>
-                    <Style BasedOn="{StaticResource PurpleMidButton}" TargetType="Button">
+                    <Style BasedOn="{StaticResource OwnerHueButton}" TargetType="Button">
                         <Setter Property="IsEnabled" Value="True" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">

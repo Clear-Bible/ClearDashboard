@@ -91,12 +91,21 @@
                     </Style>
 
                     <Style
-                        x:Key="MaterialDesignRaisedAccentButton"
-                        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
-                        TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="{StaticResource AccentHueBrush}" />
-                        <Setter Property="BorderBrush" Value="{StaticResource AccentHueBrush}" />
-                        <!--<Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForeground}" />-->
+                        x:Key="ClearDashboardPrimaryHueDarkButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="ClearDashboardSecondaryHueLightButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource SecondaryHueLightBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueLightBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightForegroundBrush}" />
                     </Style>
 
                     <Style
@@ -104,6 +113,15 @@
                         BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
                         TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="{StaticResource SecondaryHueLightBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="MaterialDesignRaisedAccentButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+                        TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource AccentHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentHueBrush}" />
+                        <!--<Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForeground}" />-->
                     </Style>
 
                     <Style
@@ -120,6 +138,42 @@
                         BasedOn="{StaticResource MaterialDesignCircularProgressBar}"
                         TargetType="{x:Type ProgressBar}">
                         <Setter Property="Foreground" Value="{DynamicResource AccentHueBrush}" />
+                    </Style>
+
+                    <SolidColorBrush x:Key="OwnerHueBrush" Color="{DynamicResource PrimaryHueDark}" />
+                    <SolidColorBrush x:Key="OwnerHueForegroundBrush" Color="{DynamicResource PrimaryHueDarkForeground}" />
+
+                    <SolidColorBrush x:Key="ReadWriteHueBrush" Color="{DynamicResource SecondaryHueLight}" />
+                    <SolidColorBrush x:Key="ReadWriteHueForegroundBrush" Color="{DynamicResource SecondaryHueLightForeground}" />
+
+                    <SolidColorBrush x:Key="ReadOnlyHueBrush" Color="{DynamicResource AccentHue}" />
+                    <SolidColorBrush x:Key="ReadOnlyHueForegroundBrush" Color="{DynamicResource AccentHueForeground}" />
+
+                    <Style
+                        x:Key="OwnerHueButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource OwnerHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource OwnerHueBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource OwnerHueForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="ReadWriteHueButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource ReadWriteHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource ReadWriteHueBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ReadWriteHueForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="ReadOnlyHueButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource ReadOnlyHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource ReadOnlyHueBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource ReadOnlyHueForegroundBrush}" />
                     </Style>
 
 

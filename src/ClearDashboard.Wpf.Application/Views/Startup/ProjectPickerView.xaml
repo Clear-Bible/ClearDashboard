@@ -566,7 +566,7 @@
                                         Padding="2"
                                         HorizontalContentAlignment="Center"
                                         cal:Message.Attach="ShowCollaborationGetLatest($dataContext)"
-                                        Background="{StaticResource GreenLightBrush}">
+                                        Background="{StaticResource SecondaryHueLightBrush}">
                                         <Button.Style>
                                             <Style TargetType="Button">
                                                 <Style.Triggers>
