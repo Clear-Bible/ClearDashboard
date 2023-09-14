@@ -332,7 +332,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             WorkingMessage = "";
 
-            var jiraClient = IoC.Get<JiraClient>();
+            var jiraClient = IoC.Get<JiraClientServices>();
             _jiraUsersList = await jiraClient.GetAllUsers();
 
 
@@ -461,7 +461,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             WorkingMessage = "Sending Message...";
             await Task.Delay(200);
 
-            var jiraClient = IoC.Get<JiraClient>();
+            var jiraClient = IoC.Get<JiraClientServices>();
             if (_jiraUser!.EmailAddress == string.Empty)
             {
                 // does the user have a jira account?
@@ -477,22 +477,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
             // get the ticket label enum
-            var jiraLabel = JiraClient.JiraTicketLabel.WantToDo;
+            var jiraLabel = JiraClientServices.JiraTicketLabel.WantToDo;
             var index = SeverityItems.IndexOf(JiraSeverity) + 1;
 
             switch (index)
             {
                 case 1:
-                    jiraLabel = JiraClient.JiraTicketLabel.LostData;
+                    jiraLabel = JiraClientServices.JiraTicketLabel.LostData;
                     break;
                 case 2:
-                    jiraLabel = JiraClient.JiraTicketLabel.CannotCompleteTask;
+                    jiraLabel = JiraClientServices.JiraTicketLabel.CannotCompleteTask;
                     break;
                 case 3:
-                    jiraLabel = JiraClient.JiraTicketLabel.DifficultToCompleteTask;
+                    jiraLabel = JiraClientServices.JiraTicketLabel.DifficultToCompleteTask;
                     break;
                 case 4:
-                    jiraLabel = JiraClient.JiraTicketLabel.WantToDo;
+                    jiraLabel = JiraClientServices.JiraTicketLabel.WantToDo;
                     break;
             }
 

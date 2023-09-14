@@ -368,6 +368,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
+
+        public ProjectPickerViewModel()
+        {
+            // no-op
+        }
+
         public ProjectPickerViewModel(TranslationSource translationSource,
             DashboardProjectManager projectManager,
             ParatextProxy paratextProxy,

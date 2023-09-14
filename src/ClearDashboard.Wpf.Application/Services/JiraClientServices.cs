@@ -14,14 +14,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using ClearDashboard.Wpf.Application.Helpers;
 
-namespace ClearDashboard.Wpf.Application.Helpers
+namespace ClearDashboard.Wpf.Application.Services
 {
-    public class JiraClient : DashboardApplicationScreen
+    public class JiraClientServices : DashboardApplicationScreen
     {
         private readonly ILogger<SlackMessageViewModel> _logger;
 
@@ -52,7 +52,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         #region Constructor
 
-        public JiraClient(INavigationService navigationService, ILogger<SlackMessageViewModel> logger,
+        public JiraClientServices(INavigationService navigationService, ILogger<SlackMessageViewModel> logger,
         DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator,
         ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
@@ -76,6 +76,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
         public async Task<JiraTicketResponse?> CreateTaskTicket(string jiraTitle, string summaryDetail,
             JiraUser? jiraUser, JiraTicketLabel ticketLabel)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new JiraTicketResponse();
+            }
+
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
             string apiKey = Settings.Default.JiraToken;
@@ -115,6 +120,12 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <exception cref="Exception"></exception>
         public async Task<List<JiraUser>> GetAllUsers()
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new List<JiraUser>();
+            }
+
+
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
             string apiKey = Settings.Default.JiraToken;
@@ -152,6 +163,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         public async Task<JiraUser?> GetUserByEmail(List<JiraUser> jiraUsersList, DashboardUser dashboardUser)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new JiraUser();
+            }
+
             var user = jiraUsersList.FirstOrDefault(x => x.EmailAddress == dashboardUser.Email);
 
             if (user != null)
@@ -178,6 +194,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
         /// <exception cref="Exception"></exception>
         private async Task<JiraUser?> CreateJiraUser(string? dashboardUserEmail, string fullName, string password)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new JiraUser();
+            }
+
             Uri jiraUri = new Uri(Settings.Default.JiraBaseUrl);
             string userName = Settings.Default.JiraUser;
             string apiKey = Settings.Default.JiraToken;
@@ -211,6 +232,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         public async Task<JiraUser?> LoadJiraUser()
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new JiraUser();
+            }
+
             JiraUser? jiraUser = new();
             if (File.Exists(_secretsFilePath))
             {
