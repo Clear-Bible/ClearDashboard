@@ -323,7 +323,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                     ParentViewModel.BookIds.Add(book.Abbreviation);
                 }
             }
-            await MoveForwards();
+            ParentViewModel?.Ok();
         }
         public void BackAsync(object obj)
         {
