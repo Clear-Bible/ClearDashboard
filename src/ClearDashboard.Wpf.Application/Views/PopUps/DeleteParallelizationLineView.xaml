@@ -142,7 +142,7 @@
                 Grid.Column="0"
                 Width="40"
                 Height="40"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                Style="{StaticResource ClearDashboardCircularProgressBar}"
                 Visibility="{Binding ProgressBarVisibility}" />
 
             <Button

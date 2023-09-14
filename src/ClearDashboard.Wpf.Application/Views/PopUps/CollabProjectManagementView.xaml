@@ -446,7 +446,7 @@
         <!--  PROGRESS ICON  -->
         <ProgressBar
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ShowProgressBar}"
             Value="35" />
         <!--  CLOSE BUTTON  -->

@@ -115,6 +115,15 @@
                         <Setter Property="Foreground" Value="{DynamicResource ErrorHueForegroundBrush}" />
                     </Style>
 
+                    <Style
+                        x:Key="ClearDashboardCircularProgressBar"
+                        BasedOn="{StaticResource MaterialDesignCircularProgressBar}"
+                        TargetType="{x:Type ProgressBar}">
+                        <Setter Property="Foreground" Value="{DynamicResource AccentHueBrush}" />
+                    </Style>
+
+
+
                 </ResourceDictionary>
 
                 <ResourceDictionary>

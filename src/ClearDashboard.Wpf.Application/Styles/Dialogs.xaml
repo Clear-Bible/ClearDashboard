@@ -36,7 +36,7 @@
                                         <Setter Property="Background" Value="LightGray" />
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="#EEEBEB" />
+                                        <Setter Property="Background" Value="#7DA1C4" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
                                         <Setter Property="Background" Value="Transparent" />
@@ -80,7 +80,7 @@
                                         <Setter Property="Background" Value="LightGray" />
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="#EEEBEB" />
+                                        <Setter Property="Background" Value="#7DA1C4" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
                                         <Setter Property="Background" Value="Transparent" />
