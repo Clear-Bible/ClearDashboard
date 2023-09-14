@@ -19,6 +19,49 @@
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" />
         </Style>
+        <Style x:Key="SmallTransparentButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="LightGray" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="#EEEBEB" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Background="Transparent">
+                                <ContentPresenter x:Name="ButtonContent" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="1" />
+                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <materialDesign:Card  Height="300"  Margin="5" >
         <Grid>
@@ -37,7 +80,15 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Content="{helpers:Localization LexiconImport_SelectAll}" />
+                <Button Grid.Row="0" 
+                        Grid.Column="0" 
+                        Width="100"
+                        Height="30"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        HorizontalAlignment="Left"
+                        Content="{helpers:Localization LexiconImport_ImportChecked}" 
+                        Style="{StaticResource SmallTransparentButtonStyle}"
+                        />
              
             </Grid>
             <DataGrid Grid.Row="1" Grid.Column="0" 
@@ -59,7 +110,36 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
-                                <CheckBox cm:Message.Attach="[Event Checked] = [Action OnToggleAlignmentsChecked($source)];[Event Unchecked] = [Action OnToggleAlignmentsChecked($source)]" />
+                                <CheckBox x:Name="SelectAllCheckBox" >
+                                    <!--cm:Message.Attach="[Event Checked] = [Action OnToggleAllChecked($source)];[Event Unchecked] = [Action OnToggleAllChecked($source)]" -->
+                                    <CheckBox.Resources>
+                                        <ToolTip x:Key="CheckedToolTip">
+                                            <TextBlock Text="{helpers:Localization LexiconImport_SelectAll}"></TextBlock>
+                                        </ToolTip>
+                                        <ToolTip x:Key="UncheckedToolTip">
+                                            <TextBlock Text="{helpers:Localization LexiconImport_UnselectAll}"></TextBlock>
+                                        </ToolTip>
+                                    </CheckBox.Resources>
+
+                                    <CheckBox.Style>
+                                       <Style TargetType="CheckBox">
+                                           <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=SelectAllCheckBox, Path=IsChecked}" Value="False">
+                                                    <Setter Property="CheckBox.ToolTip"
+                                                            Value="{StaticResource CheckedToolTip}"/>
+                                               </DataTrigger>
+                                               <DataTrigger Binding="{Binding ElementName=SelectAllCheckBox, Path=IsChecked}" Value="True">
+                                                   <Setter Property="CheckBox.ToolTip"
+                                                           Value="{StaticResource UncheckedToolTip}"/>
+                                               </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                   </CheckBox.Style>
+                                    
+                                    <!--<CheckBox.ToolTip>
+                                        <TextBlock Text="{helpers:Localization LexiconImport_SelectAll}"></TextBlock>
+                                    </CheckBox.ToolTip>-->
+                                </CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
@@ -69,10 +149,10 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceWord}"  Binding="{Binding Type}" Width="100"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceLanguage}" Binding="{Binding SourceRef}" Width="125"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetWord}"  Binding="{Binding Type}" Width="100"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding SourceRef}" Width="125"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceWord}"  Binding="{Binding Type}" Width="150"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceLanguage}" Binding="{Binding SourceRef}" Width="200"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetWord}"  Binding="{Binding Type}" Width="150"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding SourceRef}" Width="200"/>
                     <!--<DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}" Width=".6*">
                         
                             <DataGridTemplateColumn.CellTemplate>
