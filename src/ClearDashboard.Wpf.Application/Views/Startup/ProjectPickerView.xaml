@@ -200,21 +200,14 @@
                     Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
-                <!--<TextBlock
-                    Margin="5,0,5,0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Left"
-                    Foreground="{DynamicResource PrimaryHueMidBrush}">
-                    <Run Text="Paratext is not running" />
-                </TextBlock>-->
                 <Button
                     x:Name="StartParatext"
-                    Width="340"
+                    Width="240"
                     Height="60"
-                    VerticalAlignment="Center"
                     VerticalContentAlignment="Bottom"
                     cal:Message.Attach="StartParatext"
-                    Style="{StaticResource TransparentStyle}">
+                    Style="{StaticResource TransparentStyle}"
+                    Visibility="{Binding IsParatextRegularInstalled}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="30" Height="30">
                             <Image.Style>
@@ -237,9 +230,47 @@
                             Orientation="Vertical">
                             <TextBlock
                                 HorizontalAlignment="Center"
-                                FontSize="14"
+                                FontSize="12"
                                 FontWeight="Bold"
                                 Text="{helpers:Localization ProjectPicker_NotRunning}" />
+                            <TextBlock HorizontalAlignment="Center" Text="{helpers:Localization ProjectPicker_StartParatext}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Button>
+                <Button
+                    x:Name="StartParatextBeta"
+                    Width="240"
+                    Height="60"
+                    VerticalContentAlignment="Bottom"
+                    cal:Message.Attach="StartParatextBeta"
+                    Style="{StaticResource TransparentStyle}"
+                    Visibility="{Binding IsParatextBetaInstalled}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="30" Height="30">
+                            <Image.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Connected}" Value="True">
+                                            <Setter Property="Image.Source" Value="/Resources/ParatextBeta_Connected32.png" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Connected}" Value="False">
+                                            <Setter Property="Image.Source" Value="/Resources/ParatextBeta_Disconnected32.png" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <StackPanel
+                            Margin="15,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                TextWrapping="Wrap"
+                                Text="{helpers:Localization ProjectPicker_BetaNotRunning}" />
                             <TextBlock HorizontalAlignment="Center" Text="{helpers:Localization ProjectPicker_StartParatext}" />
                         </StackPanel>
                     </StackPanel>
