@@ -368,6 +368,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
+
+        public ProjectPickerViewModel()
+        {
+            // no-op
+        }
+
         public ProjectPickerViewModel(TranslationSource translationSource,
             DashboardProjectManager projectManager,
             ParatextProxy paratextProxy,
@@ -565,6 +571,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var licenseUser = LicenseManager.GetUserFromLicense();
 
             var dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
+            if (string.IsNullOrEmpty(dashboardUser.ParatextUserName))
+            {
+                dashboardUser.ParatextUserName = ParatextUserName;
+                await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+            }
+
 
             CollaborationUser collaborationUser;
             bool dashboardUserChanged = false;
