@@ -1,12 +1,13 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+﻿using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using Paratext.PluginInterfaces;
 using SIL.Linq;
-using SIL.Machine.Corpora;
 using SIL.Scripture;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
+
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {
@@ -25,19 +26,70 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 
             return new ExternalNote()
             {
-                ExternalNoteType = ExternalNoteType.ParatextNote,
                 VersePlainText = versePlainText,
                 SelectedPlainText = projectNote.Anchor.SelectedText,
                 IndexOfSelectedPlainTextInVersePainText = tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVersePlainText + 
                     (projectNote.Anchor.Offset - tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVerseRawUsfm),
                 VerseRefString = verseRef.ToString(),
-                ExternalNoteBody = projectNote.GetProjectNoteBody()
+                Body = SerializeNoteBody(projectNote.GetProjectNoteBody())
             };
         }
 
-        private static string GetProjectNoteBody(this IProjectNote projectNote)
+        public class BodyComment
         {
-            return "";
+            public List<string> Paragraphs { get; set; }
+            public string Created { get; set; }
+            public string Language { get; set; }
+            public string AssignedUserName { get; set; }
+        }
+        public class Body
+        {
+            public string AssignedUserName { get; set; }
+            public string ReplyToUserName { get; set; }
+            public bool IsRead { get; set; }
+            public bool IsResolved { get; set; }
+            public List<BodyComment> Comments { get; set; }
+        }
+        private static string SerializeNoteBody(Body body)
+        {
+            //from https://learn.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-serialize-and-deserialize-json-data?redirectedfrom=MSDN for
+            //.net 4.x
+            // Create a stream to serialize the object to.
+            var ms = new MemoryStream();
+
+            // Serializer the User object to the stream.
+            var ser = new DataContractJsonSerializer(typeof(Body));
+            ser.WriteObject(ms, body);
+            byte[] json = ms.ToArray();
+            ms.Close();
+            return Encoding.UTF8.GetString(json, 0, json.Length);
+        }
+        private static Body GetProjectNoteBody(this IProjectNote projectNote)
+        {
+            var body = new Body();
+            body.AssignedUserName = projectNote.AssignedUser?.Name ?? "";
+            body.ReplyToUserName = projectNote.ReplyToUser?.Name ?? "";
+            body.IsRead = projectNote.IsRead;
+            body.IsResolved = projectNote.IsResolved;
+
+            projectNote.Comments.ForEach(comment =>
+            {
+                var bodyComment = new BodyComment();
+                bodyComment.Created = comment.Created.ToString();
+                bodyComment.Language = comment.Language.Id;
+                bodyComment.AssignedUserName = comment.AssignedUser.Name;
+
+                bodyComment.Paragraphs = new List<string>();
+
+                if (comment.Contents != null)
+                {
+                    foreach (var paragraph in comment.Contents)
+                    {
+                        bodyComment.Paragraphs.Add(paragraph.ToString());
+                    }
+                }
+            });
+            return body;
         }
         public static (string versePlainText, List<(string tokenPlainText, int indexOfTokenInVersePlainText, int indexOfTokenInVerseRawUsfm)>) GetPlainTextTokensAndIndexes(
             this IEnumerable<IUSFMToken> usfmTokens)
@@ -51,8 +103,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 if (usfmToken is IUSFMTextToken textToken &&
                     textToken.IsScripture)
                 {
-                    indexInPlainText += textToken.Text.TrimStart().Length;
                     plainTextTokenTuples.Add((textToken.Text, indexInPlainText, textToken.VerseOffset));
+
+                    versePlainText.Append(textToken.Text);
+                    indexInPlainText += textToken.Text.Length; //FIXME: ask dirk about TrimStart()
                 }
             });
             return (versePlainText.ToString(), plainTextTokenTuples);

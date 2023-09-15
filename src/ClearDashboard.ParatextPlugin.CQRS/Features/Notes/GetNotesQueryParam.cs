@@ -1,11 +1,8 @@
 ﻿
-namespace ClearDashboard.DataAccessLayer.Models
+namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes
 {
     public class GetNotesQueryParam 
     {
-        /// <summary>
-        /// Must be set to a valid externalprojectid or plugin will exception.
-        /// </summary>
         public string ExternalProjectId { get; set; } = string.Empty;
         public int BookNumber { get; set; }
         public int ChapterNumber { get; set; }

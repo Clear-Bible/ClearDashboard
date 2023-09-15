@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
+using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Tokenization;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
+using SIL.Scripture;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -117,7 +118,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="note">The note to send to Paratext.</param>
         /// <param name="logger">A <see cref="ILogger"/> for logging the operation.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public static async Task SendToParatextAsync(IMediator mediator, NoteViewModel note, ILogger? logger = null)
+        public static async Task SendToParatextAsync(IMediator mediator, NoteViewModel note, ILogger? logger = null, CancellationToken cancellationToken = default)
         {
             if (note.ParatextSendNoteInformation == null) throw new ArgumentException($"Cannot send note {note.NoteId?.Id} to Paratext.");
 
@@ -142,7 +143,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     verseFirstTokenId.VerseNumber
                 );
 
-                var result = await mediator.Send(new AddNoteCommand(addNoteCommandParam));
+                var result = await mediator.Send(new AddNoteCommand(addNoteCommandParam), cancellationToken);
                 stopwatch.Stop();
                 if (result.Success)
                 {
@@ -151,6 +152,71 @@ namespace ClearDashboard.Wpf.Application.Services
                 else
                 {
                     logger?.LogCritical($"Error sending {note.NoteId?.Id} to Paratext: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+
+        public static async Task<IEnumerable<(VerseRef verseRef, IEnumerable<TokenId> tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromParatextAsync(
+            IMediator mediator, 
+            TokenizedTextCorpusId tokenizedTextCorpusId, 
+            int bookNumber, 
+            int chapterNumber, 
+            EngineStringDetokenizer engineStringDetokenizer,
+            ILogger? logger = null,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var bookAbbreviation = BookIds
+                  .Where(b => b.silCannonBookNum.Equals(bookNumber.ToString()))
+                  .Select(b => b.silCannonBookAbbrev)
+                  .FirstOrDefault() 
+                    ?? throw new InvalidBookMappingEngineException(message: "Doesn't exist", name: "silCannonBookNum", value: bookNumber.ToString());
+
+                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator, tokenizedTextCorpusId, false, cancellationToken);
+                var tokenTextRows = tokenizedTextCorpus.GetRows(new List<string>() { bookAbbreviation })
+                    .Where(r => ((VerseRef)r.Ref).ChapterNum == chapterNumber)
+                    .Cast<TokensTextRow>();
+
+                var getNotesCommandParam = new GetNotesQueryParam()
+                {
+                    ExternalProjectId = tokenizedTextCorpusId?.CorpusId?.ParatextGuid 
+                        ?? throw new InvalidDataEngineException(name: "corpusId.ParatextGuid", value: "null"),
+                    BookNumber = bookNumber,
+                    ChapterNumber = chapterNumber,
+                    IncludeResolved = true
+                };
+
+                var result = await mediator.Send(new GetNotesQuery(getNotesCommandParam), cancellationToken);
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    var externalNotesGroupedByVerse = result?.Data
+                        ?.GroupBy(e => e.VerseRefString)
+                            ?? throw new InvalidDataEngineException(name: "result.Data", value: "null", message: "result of GetNotesQuery is successful yet result.Data is null");
+
+                    logger?.LogInformation($"Got notes from external authoring tool for book {bookNumber} chapter {chapterNumber} in {stopwatch.ElapsedMilliseconds} ms");
+
+                    return externalNotesGroupedByVerse
+                        ?.Select(g => g
+                            .Select(r => r)
+                            .AddVerseAndTokensContext(tokenTextRows.First(ttr => ((VerseRef)ttr.Ref).VerseNum.ToString() == g.Key).Tokens, engineStringDetokenizer))
+                        .SelectMany(r => r)
+                            ?? throw new InvalidDataEngineException(name: "result.Data", value: "null", message: "result of GetNotesQuery is successful yet result.Data is null");
+                }
+                else
+                {
+                    logger?.LogCritical($"Error getting notes from external authoring tool for book {bookNumber} chapter {chapterNumber}: {result.Message}");
                     throw new MediatorErrorEngineException(result.Message);
                 }
             }

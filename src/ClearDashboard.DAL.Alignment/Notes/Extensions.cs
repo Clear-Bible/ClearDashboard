@@ -1,12 +1,8 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DataAccessLayer.Models;
-using Paratext.PluginInterfaces;
-using SIL.Extensions;
-using SIL.Machine.FiniteState;
-using SIL.Machine.Matching;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using SIL.Scripture;
-using static System.Net.Mime.MediaTypeNames;
 using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.DAL.Alignment.Notes
@@ -92,6 +88,21 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             //ParatextUser
              addNoteCommandParam.ParatextUser = assignedUser?.ParatextUserName;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="externalNotes"></param>
+        /// <param name="verseTokens">All the tokens for a single verse</param>
+        /// <param name="engineStringDetokenizer"></param>
+        /// <returns></returns>
+        public static IEnumerable<(VerseRef verseRef, IEnumerable<TokenId> tokenIds, ExternalNote externalNote)> AddVerseAndTokensContext(
+            this IEnumerable<ExternalNote> externalNotes,
+            IEnumerable<Token> verseTokens,
+            EngineStringDetokenizer engineStringDetokenizer)
+        {
+            throw new Exception();
         }
     }
 }

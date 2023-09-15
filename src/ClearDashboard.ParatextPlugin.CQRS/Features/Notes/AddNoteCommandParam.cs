@@ -1,5 +1,7 @@
 ﻿
-namespace ClearDashboard.DataAccessLayer.Models
+using System.Collections.Generic;
+
+namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes
 {
     public class AddNoteCommandParam 
     {
