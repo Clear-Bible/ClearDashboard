@@ -306,6 +306,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     X = corpusNode.X,
                     Y = corpusNode.Y,
                     CorpusId = corpusNode.CorpusId,
+                    CorpusName = corpusNode.Name
                 });
             }
 
@@ -345,7 +346,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     bool currentParatextProjectPresent = false;
                     bool standardCorporaPresent = false;
 
-                    foreach (var corpusId in topLevelProjectIds.CorpusIds)
+                    foreach (var corpusId in topLevelProjectIds.CorpusIds.OrderBy(c => c.Created))
                     {
                         if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
                         {

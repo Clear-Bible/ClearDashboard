@@ -223,6 +223,34 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
+        protected override void OnViewLoaded(object view)
+        {
+            if (ProjectDesignSurface == null)
+            {
+                if (view is UserControl projectDesignSurfaceView)
+                {
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    ProjectDesignSurface = (Wpf.Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+
+                }
+            }
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            if (ProjectDesignSurface == null)
+            {
+                if (view is UserControl projectDesignSurfaceView)
+                {
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    ProjectDesignSurface = (Wpf.Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+
+                }
+            }
+            base.OnViewReady(view);
+        }
+
         protected override void OnViewAttached(object view, object context)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
