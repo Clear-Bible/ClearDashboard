@@ -116,7 +116,7 @@
                     </Style>
 
                     <Style
-                        x:Key="MaterialDesignRaisedAccentButton"
+                        x:Key="ClearDashboardRaisedAccentButton"
                         BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
                         TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="{StaticResource AccentHueBrush}" />

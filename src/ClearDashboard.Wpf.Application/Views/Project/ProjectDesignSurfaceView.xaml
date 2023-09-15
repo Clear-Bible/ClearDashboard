@@ -444,7 +444,7 @@
             Grid.Row="0"
             Margin="0"
             Padding="5"
-            Background="{DynamicResource PrimaryHueMidBrush}"
+            Background="{DynamicResource PrimaryHueLightBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
             <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"  -->
             <Grid MinWidth="400">
