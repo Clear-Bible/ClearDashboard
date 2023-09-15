@@ -57,8 +57,8 @@
                     <Color x:Key="ErrorHue">#C1292E</Color>
                     <Color x:Key="ErrorHueForeground">#FFFFFF</Color>
                     <!--  secondary button  -->
-                    <Color x:Key="SecondaryButtonHue">#808080</Color>
-                    <Color x:Key="SecondaryButtonHueForeground">#000000</Color>
+                    <Color x:Key="AlternativeButtonHue">#808080</Color>
+                    <Color x:Key="AlternativeButtonHueForeground">#000000</Color>
 
                     <Color x:Key="MaroonHue">#6F1542</Color>
                     <Color x:Key="MaroonHueForeground">#FFFFFF</Color>
@@ -83,6 +83,9 @@
 
                     <SolidColorBrush x:Key="ErrorHueBrush" Color="{DynamicResource ErrorHue}" />
                     <SolidColorBrush x:Key="ErrorHueForegroundBrush" Color="{DynamicResource ErrorHueForeground}" />
+
+                    <SolidColorBrush x:Key="AlternativeButtonHueBrush" Color="{DynamicResource AlternativeButtonHue}" />
+                    <SolidColorBrush x:Key="AlternativeButtonHueForegroundBrush" Color="{DynamicResource AlternativeButtonHueForeground}" />
 
                     <SolidColorBrush x:Key="MaroonHueBrush" Color="{DynamicResource MaroonHue}" />
                     <SolidColorBrush x:Key="MaroonHueForegroundBrush" Color="{DynamicResource MaroonHueForeground}" />
