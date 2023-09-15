@@ -1,7 +1,4 @@
-﻿using SIL.Scripture;
-using System.Collections.Generic;
-
-namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+﻿namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 
 public class ExternalNote
 {

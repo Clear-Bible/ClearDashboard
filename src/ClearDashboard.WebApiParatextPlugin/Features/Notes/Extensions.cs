@@ -5,6 +5,7 @@ using SIL.Scripture;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
@@ -31,24 +32,41 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 IndexOfSelectedPlainTextInVersePainText = tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVersePlainText + 
                     (projectNote.Anchor.Offset - tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVerseRawUsfm),
                 VerseRefString = verseRef.ToString(),
-                Body = SerializeNoteBody(projectNote.GetProjectNoteBody())
+                Body = SerializeNoteBody(projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum)))
             };
         }
 
+        [DataContract]
         public class BodyComment
         {
+            [DataMember]
             public List<string> Paragraphs { get; set; }
+            [DataMember]
             public string Created { get; set; }
+            [DataMember]
             public string Language { get; set; }
+            [DataMember]
             public string AssignedUserName { get; set; }
         }
+        [DataContract]
         public class Body
         {
+            [DataMember]
             public string AssignedUserName { get; set; }
+            [DataMember]
             public string ReplyToUserName { get; set; }
+            [DataMember]
             public bool IsRead { get; set; }
+            [DataMember]
             public bool IsResolved { get; set; }
+            [DataMember]
             public List<BodyComment> Comments { get; set; }
+            [DataMember]
+            public string VerseUsfmBeforeSelectedText { get; set; }
+            [DataMember]
+            public string VerseUsfmAfterSelectedText { get; set; }
+            [DataMember]
+            public string VerseUsfmText { get; set; }
         }
         private static string SerializeNoteBody(Body body)
         {
@@ -64,14 +82,16 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             ms.Close();
             return Encoding.UTF8.GetString(json, 0, json.Length);
         }
-        private static Body GetProjectNoteBody(this IProjectNote projectNote)
+        private static Body GetProjectNoteBody(this IProjectNote projectNote, string verseUsfmText)
         {
             var body = new Body();
             body.AssignedUserName = projectNote.AssignedUser?.Name ?? "";
             body.ReplyToUserName = projectNote.ReplyToUser?.Name ?? "";
             body.IsRead = projectNote.IsRead;
             body.IsResolved = projectNote.IsResolved;
-
+            body.VerseUsfmBeforeSelectedText = projectNote.Anchor.BeforeContext;
+            body.VerseUsfmAfterSelectedText = projectNote.Anchor.AfterContext;
+            body.VerseUsfmText = verseUsfmText;
             projectNote.Comments.ForEach(comment =>
             {
                 var bodyComment = new BodyComment();
