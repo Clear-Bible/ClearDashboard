@@ -4,9 +4,9 @@ namespace ClearDashboard.DataAccessLayer.Models
     public class AddNoteCommandParam 
     {
         /// <summary>
-        /// Must be set to a valid paratextprojectid or plugin will exception.
+        /// Must be set to a valid externalprojectid or plugin will exception.
         /// </summary>
-        public string ParatextProjectId { get; set; } = string.Empty;
+        public string ExternalProjectId { get; set; } = string.Empty;
 
         /// <summary>
         /// if Book, Chapter, and Verse are not all set to a positive value then will attempt to apply note to the current verse paratext is set to.

@@ -43,7 +43,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 throw new Exception("Must supply a non-zero amount of verse tokens");
             }
 
-            addNoteCommandParam.ParatextProjectId = paratextProjectId;
+            addNoteCommandParam.ExternalProjectId = paratextProjectId;
             addNoteCommandParam.Book = book;
             addNoteCommandParam.Chapter = chapter;
             addNoteCommandParam.Verse = verse;

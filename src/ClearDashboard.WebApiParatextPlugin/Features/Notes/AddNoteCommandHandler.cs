@@ -1,5 +1,5 @@
 ﻿using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models;
+
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -8,47 +8,40 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using System.Windows.Forms;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.LinkLabel;
-using ClearDashboard.WebApiParatextPlugin.Helpers;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {
-    public class AddNoteCommandHandler : IRequestHandler<AddNoteCommand, RequestResult<IProjectNote>>
+    public class AddNoteCommandHandler : IRequestHandler<AddNoteCommand, RequestResult<ExternalNote>>
     {
         private readonly IPluginHost _host;
-        private readonly IProject _project;
         private readonly MainWindow _mainWindow;
         private readonly IPluginChildWindow _parent;
         private readonly ILogger<AddNoteCommandHandler> _logger;
 
-        public AddNoteCommandHandler(IPluginHost host, IProject project, MainWindow mainWindow, IPluginChildWindow parent, ILogger<AddNoteCommandHandler> logger)
+        public AddNoteCommandHandler(IPluginHost host, MainWindow mainWindow, IPluginChildWindow parent, ILogger<AddNoteCommandHandler> logger)
         {
             _host = host;
-            _project = project;
             _mainWindow = mainWindow;
             _parent = parent;
             _logger = logger;
         }
-        public Task<RequestResult<IProjectNote>> Handle(AddNoteCommand request, CancellationToken cancellationToken)
+        public Task<RequestResult<ExternalNote>> Handle(AddNoteCommand request, CancellationToken cancellationToken)
         {
-            if (request.Data.ParatextProjectId.Equals(string.Empty))
+            if (request.Data.ExternalProjectId.Equals(string.Empty))
             {
-                throw new Exception($"paratextprojectid is not set");
+                throw new Exception($"externalprojectid is not set");
             }
             IProject project;
             try
             {
                 project = _host.GetAllProjects(true)
-                    .Where(p => p.ID.Equals(request.Data.ParatextProjectId))
+                    .Where(p => p.ID.Equals(request.Data.ExternalProjectId))
                     .First();
             }
             catch (Exception)
             {
-                throw new Exception($"paratextprojectid {request.Data.ParatextProjectId} not found");
+                throw new Exception($"externalprojectid {request.Data.ExternalProjectId} not found");
             }
 
             IVerseRef verseRef;
@@ -97,8 +90,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 }
 
                 var noteAdded = project.AddNote(writeLock, anchor, commentParagraphs, assignedUser: new UserInfo(request.Data.ParatextUser));
-                //cannot return IProjectNote return value from AddNote because it has a circular reference and the json serializer used with signalr cannot serialize the object.
-                return Task.FromResult(new RequestResult<IProjectNote>(null));
+                return Task.FromResult(new RequestResult<ExternalNote>(noteAdded.GetExternalNote(project)));
             }
         }
 
