@@ -1242,7 +1242,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 else
                 {
                     verseText = "There was an issue getting the text for this verse.";
-                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    //_logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 var backTranslationResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum, true), CancellationToken.None);
@@ -1261,7 +1261,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 }
                 else
                 {
-                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    //_logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 SelectedItemVerses.Add(new PinsVerseListViewModel
