@@ -12,10 +12,10 @@
     <PackageIcon>ClearDashboard_logo_100.png</PackageIcon>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.1.0.7</Version>
+    <Version>1.1.0.8</Version>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <FileVersion>1.1.0.7</FileVersion>
-    <AssemblyVersion>1.1.0.7</AssemblyVersion>
+    <FileVersion>1.1.0.8</FileVersion>
+    <AssemblyVersion>1.1.0.8</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\ClearDashboard.Wpf.Application\Assets\ClearDashboard_logo_100.png">
@@ -50,13 +50,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Update="Views\Popups\DeletingProjectPopupView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Popups\DeletingCorpusNodePopupView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Popups\ClosingEnhancedViewPopupView.xaml.cs">
+    <Compile Update="Views\Popups\ConfirmationPopupView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Popups\AlignmentPopupView.xaml.cs">

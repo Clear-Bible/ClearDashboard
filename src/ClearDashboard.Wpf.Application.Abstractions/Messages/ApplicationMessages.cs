@@ -3,6 +3,8 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using System.Collections.Generic;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Messages
 {
@@ -45,4 +47,6 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record RefreshTextCollectionsMessage();
 
     public record RebuildMainMenuMessage();
+
+    public record ParatextSyncMessage(bool Synced, object Parent);
 }

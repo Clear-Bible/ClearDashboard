@@ -11,7 +11,6 @@ using LibGit2Sharp.Handlers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
-using System.Diagnostics;
 using System.Text.Json;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -307,6 +306,12 @@ public class CollaborationManager
         try
         {
             var remoteHeadCommitSha = FindRemoteHeadCommitSha();
+            if (remoteHeadCommitSha is null)
+            {
+                return false;
+            }
+
+
             return project.LastMergedCommitSha != null && project.LastMergedCommitSha != remoteHeadCommitSha;
         }
         catch (Exception ex)

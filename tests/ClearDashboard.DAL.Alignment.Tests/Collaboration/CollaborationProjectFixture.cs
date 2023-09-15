@@ -29,6 +29,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         private bool disposedValue;
 
         public List<Models.User> Users { get; private set; } = new();
+        public List<Models.Lexicon_Lexeme> LexiconLexemes { get; private set; } = new();
+        public List<Models.Lexicon_SemanticDomain> LexiconSemanticDomains { get; private set; } = new();
         public List<Models.Corpus> Corpora { get; private set; } = new();
         public List<Models.TokenizedCorpus> TokenizedCorpora { get; private set; } = new();
         public List<Models.ParallelCorpus> ParallelCorpora { get; private set; } = new();
@@ -98,6 +100,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             projectSnapshot.AddGeneralModelList(ToTranslationSetBuilder(TranslationSets, Translations).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToNoteBuilder(Notes, RepliesByThread, NoteAssociations).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToLabelBuilder(Labels, LabelNoteAssociations).BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(ToLexiconBuilder(LexiconLexemes).BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(ToSemanticDomainBuilder(LexiconSemanticDomains).BuildModelSnapshots(builderContext));
 
             return projectSnapshot;
         }
@@ -171,7 +175,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Id = Corpus.FixedCorpusIdsByCorpusType[Models.CorpusType.ManuscriptHebrew],
                 IsRtl = true,
                 FontFamily = FontNames.HebrewFontFamily,
-                Name = "Macula Hebrew",
+                Name = "Hebrew (OT) Macula",
                 Language = "he",
                 ParatextGuid = ManuscriptIds.HebrewManuscriptId,
                 CorpusType = Models.CorpusType.ManuscriptHebrew,
@@ -184,7 +188,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Id = TokenizedTextCorpus.FixedTokenizedCorpusIdsByCorpusType[Models.CorpusType.ManuscriptHebrew],
                 CorpusId = corpus.Id,
                 Corpus = corpus,
-                DisplayName = "Macula Hebrew",
+                DisplayName = "Hebrew (OT) Macula",
                 TokenizationFunction = "WhitespaceTokenizer",
                 Metadata = new(),
                 LastTokenized = DateTimeOffset.UtcNow,
@@ -204,7 +208,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Id = Corpus.FixedCorpusIdsByCorpusType[Models.CorpusType.ManuscriptGreek],
                 IsRtl = false,
                 FontFamily = FontNames.GreekFontFamily,
-                Name = "Macula Greek",
+                Name = "Greek (NT) Macula",
                 Language = "el",
                 ParatextGuid = ManuscriptIds.GreekManuscriptId,
                 CorpusType = Models.CorpusType.ManuscriptGreek,
@@ -217,7 +221,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Id = TokenizedTextCorpus.FixedTokenizedCorpusIdsByCorpusType[Models.CorpusType.ManuscriptGreek],
                 CorpusId = corpus.Id,
                 Corpus = corpus,
-                DisplayName = "Macula Greek",
+                DisplayName = "Greek (NT) Macula",
                 TokenizationFunction = "WhitespaceTokenizer",
                 Metadata = new(),
                 LastTokenized = DateTimeOffset.UtcNow,
@@ -389,6 +393,91 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             };
         }
 
+        public static Models.Lexicon_Lexeme BuildTestLexiconLexeme(string language, string lemma, string? type, Guid testUserId)
+        {
+            return new Models.Lexicon_Lexeme
+            {
+                Id = Guid.NewGuid(),
+                Language = language,
+                Lemma = lemma,
+                Type = type,
+                Created = DateTimeOffset.UtcNow,
+                UserId = testUserId
+            };
+        }
+
+        public static Models.Lexicon_Meaning BuildTestLexiconMeaning(string language, string text, Models.Lexicon_Lexeme lexeme, Guid testUserId)
+        {
+            var meaning = new Models.Lexicon_Meaning
+            {
+                Id = Guid.NewGuid(),
+                Language = language,
+                Text = text,
+                Lexeme = lexeme,
+                LexemeId = lexeme.Id,
+                Created = DateTimeOffset.UtcNow,
+                UserId = testUserId
+            };
+            lexeme.Meanings.Add(meaning);
+            return meaning;
+        }
+
+        public static Models.Lexicon_Translation BuildTestLexiconTranslation(string text, Models.Lexicon_Meaning meaning, Guid testUserId)
+        {
+            var translation = new Models.Lexicon_Translation
+            {
+                Id = Guid.NewGuid(),
+                Text = text,
+                Meaning = meaning,
+                MeaningId = meaning.Id,
+                Created = DateTimeOffset.UtcNow,
+                UserId = testUserId
+            };
+            meaning.Translations.Add(translation);
+            return translation;
+        }
+
+        public static Models.Lexicon_Form BuildTestLexiconForm(string text, Models.Lexicon_Lexeme lexeme)
+        {
+            var form = new Models.Lexicon_Form
+            {
+                Id = Guid.NewGuid(),
+                Text = text,
+                Lexeme = lexeme,
+                LexemeId = lexeme.Id
+            };
+            lexeme.Forms.Add(form);
+            return form;
+        }
+
+        public static Models.Lexicon_SemanticDomain BuildTestLexiconSemanticDomain(string text, Guid testUserId)
+        {
+            return new Models.Lexicon_SemanticDomain
+            {
+                Id = Guid.NewGuid(),
+                Text = text,
+                Created = DateTimeOffset.UtcNow,
+                UserId = testUserId
+            };
+        }
+
+        public static Models.Lexicon_SemanticDomainMeaningAssociation BuildTestLexiconSemanticDomainMeaningAssociation(Models.Lexicon_SemanticDomain semanticDomain, Models.Lexicon_Meaning meaning, Guid testUserId)
+        {
+            var association = new Models.Lexicon_SemanticDomainMeaningAssociation
+            {
+                Id = Guid.NewGuid(),
+                SemanticDomain = semanticDomain,
+                SemanticDomainId = semanticDomain.Id,
+                Meaning = meaning,
+                MeaningId = meaning.Id,
+            };
+            meaning.SemanticDomains.Add(semanticDomain);
+            meaning.SemanticDomainMeaningAssociations.Add(association);
+            semanticDomain.Meanings.Add(meaning);
+            semanticDomain.SemanticDomainMeaningAssociations.Add(association);
+            return association;
+        }
+
         public static Models.TranslationSet BuildTestTranslationSet(Models.AlignmentSet testAlignmentSet, Guid testUserId)
         {
             return new Models.TranslationSet
@@ -442,11 +531,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Models.TranslationSet translationSet,
             Models.TranslationOriginatedFrom originatedFrom,
             Guid userId,
-            IEnumerable<(Models.TokenComponent sourceTokenComponent, string targetText)> tokenComponentText)
+            IEnumerable<(Models.TokenComponent sourceTokenComponent, string targetText, Models.Lexicon_Translation? lexiconTranslation)> tokenComponentText)
         {
             var translations = new List<Models.Translation>();
 
-            foreach (var (sourceTokenComponent, targetText) in tokenComponentText)
+            foreach (var (sourceTokenComponent, targetText, lexiconTranslation) in tokenComponentText)
             {
                 var translation = new Models.Translation()
                 {
@@ -457,6 +546,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                     SourceTokenComponentId = sourceTokenComponent.Id,
                     TargetText = targetText,
                     TranslationState = originatedFrom,
+                    LexiconTranslation = lexiconTranslation,
+                    LexiconTranslationId = lexiconTranslation?.Id,
                     Created = DateTimeOffset.UtcNow,
                     UserId = userId
                 };
@@ -511,6 +602,16 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         public static UserBuilder ToUserBuilder(IEnumerable<Models.User> users)
         {
             return new UserBuilder { GetUsers = (projectDbContext) => users };
+        }
+
+        public static LexiconBuilder ToLexiconBuilder(IEnumerable<Models.Lexicon_Lexeme> lexemes)
+        {
+            return new LexiconBuilder { GetLexemes = (projectDbContext) => lexemes };
+        }
+
+        public static SemanticDomainBuilder ToSemanticDomainBuilder(IEnumerable<Models.Lexicon_SemanticDomain> semanticDomains)
+        {
+            return new SemanticDomainBuilder { GetSemanticDomains = (projectDbContext) => semanticDomains };
         }
 
         public static CorpusBuilder ToCorpusBuilder(IEnumerable<Models.Corpus> corpora)

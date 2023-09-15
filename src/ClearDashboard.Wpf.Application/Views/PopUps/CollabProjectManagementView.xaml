@@ -101,67 +101,139 @@
                 Content="{helpers:Localization CollabProjectManagementView_CurrentProjectUsers}"
                 FontWeight="Medium" />
 
-            <ListBox
-                Height="300"
-                Margin="5,0,5,0"
-                VerticalContentAlignment="Stretch"
-                BorderBrush="{StaticResource PrimaryHueMidBrush}"
-                BorderThickness="1"
-                ItemsSource="{Binding ProjectUsers}"
-                SelectedItem="{Binding SelectedCurrentUser}"
-                SelectionMode="Single">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
+            <Grid Height="478">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-                            <iconPacks:PackIconRemixIcon
-                                Width="24"
-                                Height="24"
-                                VerticalAlignment="Center">
-                                <iconPacks:PackIconRemixIcon.Style>
-                                    <Style TargetType="iconPacks:PackIconRemixIcon">
-                                        <Setter Property="Kind" Value="UserLine" />
-                                        <Setter Property="Foreground" Value="{StaticResource BlueLightBrush}" />
-                                        <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectMember}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsOwner}" Value="True">
-                                                <Setter Property="Kind" Value="AdminLine" />
-                                                <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
-                                                <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectOwner}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </iconPacks:PackIconRemixIcon.Style>
-                            </iconPacks:PackIconRemixIcon>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock
-                                    Margin="5,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Name}" />
-                                <TextBlock
-                                    Margin="5,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontStyle="Italic"
-                                    Text="{Binding GetPermissionLevel}">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                <ListBox
+                    Grid.Row="0"
+                    Margin="5,0,5,0"
+                    VerticalContentAlignment="Stretch"
+                    BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                    BorderThickness="1"
+                    ItemsSource="{Binding ProjectOwners}"
+                    SelectedItem="{Binding SelectedCurrentUser}"
+                    SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+
+                                <iconPacks:PackIconRemixIcon
+                                    Width="24"
+                                    Height="24"
+                                    VerticalAlignment="Center">
+                                    <iconPacks:PackIconRemixIcon.Style>
+                                        <Style TargetType="iconPacks:PackIconRemixIcon">
+                                            <Setter Property="Kind" Value="UserLine" />
+                                            <Setter Property="Foreground" Value="{StaticResource BlueLightBrush}" />
+                                            <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectMember}" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding GetPermissionLevel}" Value="Owner">
+                                                <DataTrigger Binding="{Binding IsOwner}" Value="True">
+                                                    <Setter Property="Kind" Value="AdminLine" />
                                                     <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding GetPermissionLevel}" Value="ReadWrite">
-                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                    <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectOwner}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                    </iconPacks:PackIconRemixIcon.Style>
+                                </iconPacks:PackIconRemixIcon>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Name}" />
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontStyle="Italic"
+                                        Text="{Binding GetPermissionLevel}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding GetPermissionLevel}" Value="Owner">
+                                                        <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding GetPermissionLevel}" Value="ReadWrite">
+                                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <ListBox
+                    Grid.Row="1"
+                    Margin="5,-2,5,0"
+                    VerticalContentAlignment="Stretch"
+                    BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                    BorderThickness="1"
+                    ItemsSource="{Binding ProjectParticipants}"
+                    SelectedItem="{Binding SelectedCurrentUser}"
+                    SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+
+                                <iconPacks:PackIconRemixIcon
+                                    Width="24"
+                                    Height="24"
+                                    VerticalAlignment="Center">
+                                    <iconPacks:PackIconRemixIcon.Style>
+                                        <Style TargetType="iconPacks:PackIconRemixIcon">
+                                            <Setter Property="Kind" Value="UserLine" />
+                                            <Setter Property="Foreground" Value="{StaticResource BlueLightBrush}" />
+                                            <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectMember}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsOwner}" Value="True">
+                                                    <Setter Property="Kind" Value="AdminLine" />
+                                                    <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                    <Setter Property="ToolTip" Value="{helpers:Localization CollabProjectManagementView_ProjectOwner}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </iconPacks:PackIconRemixIcon.Style>
+                                </iconPacks:PackIconRemixIcon>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Name}" />
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontStyle="Italic"
+                                        Text="{Binding GetPermissionLevel}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding GetPermissionLevel}" Value="Owner">
+                                                        <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding GetPermissionLevel}" Value="ReadWrite">
+                                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+
+            </Grid>
+
 
         </StackPanel>
 
@@ -260,11 +332,11 @@
 
             <Button
                 x:Name="RemoveUser"
-                Height="40"
+                Height="60"
                 Margin="0,5,0,0"
                 VerticalAlignment="Center">
                 <Button.Style>
-                    <Style BasedOn="{StaticResource RedMidButton}" TargetType="Button">
+                    <Style BasedOn="{StaticResource MaterialDesignRaisedErrorButton}" TargetType="Button">
                         <Setter Property="IsEnabled" Value="True" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
@@ -274,10 +346,20 @@
                     </Style>
                 </Button.Style>
 
-                <materialDesign:PackIcon
-                    Width="32"
-                    Height="32"
-                    Kind="ArrowRightDropCircleOutline" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Row="0"
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Center"
+                        Kind="ArrowRightDropCircleOutline" />
+                    <TextBlock Grid.Row="1" Text="Remove" />
+                </Grid>
+
             </Button>
         </StackPanel>
 
@@ -315,29 +397,43 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="205" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}" />
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+
+                                </Grid.RowDefinitions>
+                                <CheckBox
+                                    Grid.RowSpan="2"
+                                    Margin="0,0,5,0"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding IsSelected}" />
                                 <TextBlock
+                                    Grid.Row="0"
                                     Grid.Column="1"
-                                    Margin="5,0,10,0"
+                                    HorizontalAlignment="Stretch"
+                                    FontSize="13.5"
+                                    FontWeight="Bold"
+                                    Text="{Binding Name}" />
+                                <!--<TextBlock Text="{Binding UserName}" />-->
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Cursor="Hand"
+                                    Foreground="Blue"
+                                    Text="{Binding Email}"
+                                    TextDecorations="Underline" />
+
+                                <Label
+                                    Grid.RowSpan="2"
+                                    Grid.Column="2"
+                                    Margin="0,0,5,0"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Organization}" />
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock
-                                        HorizontalAlignment="Stretch"
-                                        Background="{StaticResource SecondaryHueLightBrush}"
-                                        FontWeight="Bold"
-                                        Text="{Binding Name}" />
-                                    <TextBlock Text="{Binding UserName}" />
-                                    <TextBlock
-                                        Cursor="Hand"
-                                        Foreground="Blue"
-                                        Text="{Binding Email}"
-                                        TextDecorations="Underline" />
-                                </StackPanel>
+                                    HorizontalContentAlignment="Right"
+                                    Content="{Binding Organization}" />
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

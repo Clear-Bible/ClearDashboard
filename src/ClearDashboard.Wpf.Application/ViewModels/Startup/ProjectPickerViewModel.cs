@@ -368,6 +368,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion
 
         #region Constructor
+
+        public ProjectPickerViewModel()
+        {
+            // no-op
+        }
+
         public ProjectPickerViewModel(TranslationSource translationSource,
             DashboardProjectManager projectManager,
             ParatextProxy paratextProxy,
@@ -514,7 +520,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task CollabProjectManager()
         {
-            var localizedString = _localizationService!["MainView_About"];
+            var localizedString = _localizationService!["CollabProjectManagementView_CollaborationManagement"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -565,6 +571,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var licenseUser = LicenseManager.GetUserFromLicense();
 
             var dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
+            if (string.IsNullOrEmpty(dashboardUser.ParatextUserName))
+            {
+                dashboardUser.ParatextUserName = ParatextUserName;
+                await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+            }
+
 
             CollaborationUser collaborationUser;
             bool dashboardUserChanged = false;
@@ -1088,17 +1100,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-
             // confirm the user wants to delete the project
-            var deletingProjectPopupViewModel = LifetimeScope!.Resolve<DeletingProjectPopupViewModel>();
+            var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+            if (confirmationViewPopupViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+            }
+
+            confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteProjectConfirmation;
 
             bool result = false;
             OnUIThread(async () =>
             {
-                result = await _windowManager!.ShowDialogAsync(
-                    deletingProjectPopupViewModel,
-                    null,
-                    SimpleMessagePopupViewModel.CreateDialogSettings(deletingProjectPopupViewModel.Title));
+                result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
             });
 
             if (!result)
@@ -1213,6 +1229,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             MoveForwards();
             EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
+        }
+
+        public async void ShowCollaborationGetLatest(DashboardProject project)
+        {
+            await ProjectManager.LoadProject(project.ProjectName);
+            if (_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
+            {
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Merge;
+
+                    this._windowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
+                        project.GitLabUpdateNeeded = false;
+                    }
+                }
+            }
         }
 
         #endregion  Methods

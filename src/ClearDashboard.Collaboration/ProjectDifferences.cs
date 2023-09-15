@@ -22,6 +22,8 @@ public class ProjectDifferences
 {
     public IModelDifference<IModelSnapshot<Models.Project>> Project { get; private set; }
     public IListDifference<IModelSnapshot<Models.User>> Users { get; private set; }
+    public IListDifference<IModelSnapshot<Models.Lexicon_Lexeme>> LexiconLexemes { get; private set; }
+    public IListDifference<IModelSnapshot<Models.Lexicon_SemanticDomain>> LexiconSemanticDomains { get; private set; }
     public IListDifference<IModelSnapshot<Models.Corpus>> Corpora { get; private set; }
     public IListDifference<IModelSnapshot<Models.TokenizedCorpus>> TokenizedCorpora { get; private set; }
     public IListDifference<IModelSnapshot<Models.ParallelCorpus>> ParallelCorpora { get; private set; }
@@ -38,6 +40,12 @@ public class ProjectDifferences
         cancellationToken.ThrowIfCancellationRequested();
 
         Users = snapshot1.Users.GetListDifference(snapshot2.Users);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        LexiconLexemes = snapshot1.LexiconLexemes.GetListDifference(snapshot2.LexiconLexemes);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        LexiconSemanticDomains = snapshot1.LexiconSemanticDomains.GetListDifference(snapshot2.LexiconSemanticDomains);
         cancellationToken.ThrowIfCancellationRequested();
 
         Corpora = snapshot1.Corpora.GetListDifference(snapshot2.Corpora);
@@ -64,6 +72,8 @@ public class ProjectDifferences
         HasDifferences =
             Project.HasDifferences ||
             Users.HasDifferences ||
+            LexiconLexemes.HasDifferences ||
+            LexiconSemanticDomains.HasDifferences ||
             Corpora.HasDifferences ||
             TokenizedCorpora.HasDifferences ||
             ParallelCorpora.HasDifferences ||
@@ -99,6 +109,12 @@ public class ProjectDifferences
 
         var serializedUserDifferences = JsonSerializer.Serialize(Users, jsonSerializerOptions);
         File.WriteAllText(Path.Combine(path, "_UserDiffs"), serializedUserDifferences);
+
+        var serializedLexiconLexemeDifferences = JsonSerializer.Serialize(LexiconLexemes, jsonSerializerOptions);
+        File.WriteAllText(Path.Combine(path, "_LexiconLexemeDiffs"), serializedLexiconLexemeDifferences);
+
+        var serializedLexiconSemanticDomainDifferences = JsonSerializer.Serialize(LexiconSemanticDomains, jsonSerializerOptions);
+        File.WriteAllText(Path.Combine(path, "_LexiconSemanticDomainDiffs"), serializedLexiconSemanticDomainDifferences);
 
         var serializedCorporaDifferences = JsonSerializer.Serialize(Corpora, jsonSerializerOptions);
         File.WriteAllText(Path.Combine(path, "_CorporaDiffs"), serializedCorporaDifferences);

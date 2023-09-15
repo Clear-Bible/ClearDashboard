@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.Models
@@ -19,6 +20,10 @@ namespace ClearDashboard.Wpf.Application.Models
         }
 
         public string? BookName { get; set; }
+
+        public FontWeight FontWeight { get; set; }
+
+        public bool IsImported { get; set; }
 
         public bool IsSelected { get; set; }
 

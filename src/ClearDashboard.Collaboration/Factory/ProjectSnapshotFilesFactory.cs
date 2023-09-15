@@ -53,59 +53,94 @@ public class ProjectSnapshotFilesFactory
         var serializedProject = JsonSerializer.Serialize(projectSnapshot.GetGeneralModelProject(), _jsonSerializerOptions);
         File.WriteAllText(Path.Combine(_path, ProjectSnapshotFactoryCommon.PROPERTIES_FILE), serializedProject);
 
-        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Corpus>(), null);
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Corpus>(), null, cancellationToken);
 
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.TokenizedCorpus>(),
             (string parentPath,
             GeneralModel<Models.TokenizedCorpus> modelSnapshot) =>
             {
-                SaveGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(parentPath, modelSnapshot, cancellationToken);
-                SaveGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(parentPath, modelSnapshot, cancellationToken);
-            });
+                SaveGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(parentPath, modelSnapshot, null, cancellationToken);
+                SaveGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
 
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.ParallelCorpus>(),
             (string parentPath,
             GeneralModel<Models.ParallelCorpus> modelSnapshot) =>
             {
-                SaveGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(parentPath, modelSnapshot, cancellationToken);
-            });
+                SaveGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
 
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.AlignmentSet>(),
             (string parentPath,
             GeneralModel<Models.AlignmentSet> modelSnapshot) =>
             {
-                SaveGeneralModelChild<Models.AlignmentSet, Models.Alignment>(parentPath, modelSnapshot, cancellationToken);
-            });
+                SaveGeneralModelChild<Models.AlignmentSet, Models.Alignment>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
 
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.TranslationSet>(),
             (string parentPath,
             GeneralModel<Models.TranslationSet> modelSnapshot) =>
             {
-                SaveGeneralModelChild<Models.TranslationSet, Models.Translation>(parentPath, modelSnapshot, cancellationToken);
-            });
+                SaveGeneralModelChild<Models.TranslationSet, Models.Translation>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
 
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Note>(),
             (string parentPath,
             GeneralModel<Models.Note> modelSnapshot) =>
             {
-                SaveGeneralModelChild<Models.Note, Models.Note>(parentPath, modelSnapshot, cancellationToken);
-                SaveGeneralModelChild<Models.Note, NoteModelRef>(parentPath, modelSnapshot, cancellationToken);
-            });
+                SaveGeneralModelChild<Models.Note, Models.Note>(parentPath, modelSnapshot, null, cancellationToken);
+                SaveGeneralModelChild<Models.Note, NoteModelRef>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
 
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Label>(),
             (string parentPath,
             GeneralModel<Models.Label> modelSnapshot) =>
             {
-                SaveGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(parentPath, modelSnapshot, cancellationToken);
-            });
+                SaveGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
 
-        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.User>(), null);
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.User>(), null, cancellationToken);
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Lexicon_Lexeme>(), 
+            (string parentPath,
+            GeneralModel<Models.Lexicon_Lexeme> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.Lexicon_Lexeme, Models.Lexicon_Meaning>(
+                    parentPath, 
+                    modelSnapshot, 
+                    (string parentPath, GeneralModel<Models.Lexicon_Meaning> childModelSnapshot) =>
+                    {
+                        SaveGeneralModelChild<Models.Lexicon_Meaning, Models.Lexicon_Translation>(parentPath, childModelSnapshot, null, cancellationToken);
+                    }, 
+                    cancellationToken);
+                SaveGeneralModelChild<Models.Lexicon_Lexeme, Models.Lexicon_Form>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Lexicon_SemanticDomain>(),
+            (string parentPath,
+            GeneralModel<Models.Lexicon_SemanticDomain> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.Lexicon_SemanticDomain, Models.Lexicon_SemanticDomainMeaningAssociation>(
+                    parentPath,
+                    modelSnapshot,
+                    null,
+                    cancellationToken);
+            },
+            cancellationToken);
     }
 
     private void SaveTopLevelEntities<T>(
         string parentPath,
         IEnumerable<GeneralModel<T>> topLevelEntities,
-        SaveGeneralModelChildDelegate<T>? saveGeneralModelChildDelegate)
+        SaveGeneralModelChildDelegate<T>? saveGeneralModelChildDelegate,
+        CancellationToken cancellationToken)
         where T : notnull
     {
         var topLevelEntityTypePath = Path.Combine(parentPath, topLevelEntityFolderNameMappings[typeof(T)]);
@@ -113,6 +148,8 @@ public class ProjectSnapshotFilesFactory
 
         foreach (var topLevelEntity in topLevelEntities)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var topLevelEntityPath = Path.Combine(topLevelEntityTypePath, topLevelEntity.GetId()!.ToString()!);
             Directory.CreateDirectory(topLevelEntityPath);
 
@@ -126,7 +163,11 @@ public class ProjectSnapshotFilesFactory
         }
     }
 
-    private void SaveGeneralModelChild<P,C>(string parentPath, GeneralModel<P> modelSnapshot, CancellationToken cancellationToken)
+    private void SaveGeneralModelChild<P,C>(
+        string parentPath, 
+        GeneralModel<P> modelSnapshot, 
+        SaveGeneralModelChildDelegate<C>? saveGeneralModelChildDelegate, 
+        CancellationToken cancellationToken)
         where P : notnull
         where C : notnull
     {
@@ -141,8 +182,8 @@ public class ProjectSnapshotFilesFactory
 
             if (typeof(C).IsAssignableTo(typeof(NoteModelRef)))
             {
-                var childModelShapshots = (GeneralListModel<NoteModelRef>?)children!;
-                SaveChildren<NoteModelRef>(childPath, childModelShapshots, cancellationToken);
+                var childModelSnapshots = (IEnumerable<NoteModelRef>)children!;
+                SaveModelSnapshotChildren(childPath, childModelSnapshots, cancellationToken);
             }
             else if (typeof(C).IsAssignableTo(typeof(Models.VerseRow)))
             {
@@ -168,24 +209,59 @@ public class ProjectSnapshotFilesFactory
                     TranslationBuilder.SaveTranslations(modelSnapshot, childModelShapshots, childPath, _jsonSerializerOptions, cancellationToken);
                 }
             }
+            else if (children!.GetType().IsAssignableTo(typeof(IEnumerable<GeneralModel<C>>)))
+            {
+                var childModelShapshots = (IEnumerable<GeneralModel<C>>)children!;
+                SaveGeneralModelChildren(childPath, childModelShapshots, saveGeneralModelChildDelegate, cancellationToken);
+            }
             else
             {
-                var childModelShapshots = (GeneralListModel<GeneralModel<C>>?)children!;
-                SaveChildren(childPath, childModelShapshots, cancellationToken);
+                throw new NotSupportedException($"{nameof(ProjectSnapshotFilesFactory)}.{nameof(SaveGeneralModelChild)} unsupported children type {children?.GetType().ShortDisplayName()}");
             }
-
         }
     }
 
-    private void SaveChildren<T>(string childPath, IEnumerable<T> modelSnapshots, CancellationToken cancellationToken)
+    private void SaveModelSnapshotChildren<T>(
+        string childPath,
+        IEnumerable<T> childModelSnapshots,
+        CancellationToken cancellationToken)
         where T : IModelSnapshot
     {
-        foreach (var modelSnapshot in modelSnapshots)
+        foreach (var childModelSnapshot in childModelSnapshots)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var serializedModelSnapshot = JsonSerializer.Serialize(modelSnapshot, _jsonSerializerOptions);
-            File.WriteAllText(Path.Combine(childPath, modelSnapshot.GetId()!.ToString()!), serializedModelSnapshot);
+            var serializedModelSnapshot = JsonSerializer.Serialize(childModelSnapshot, _jsonSerializerOptions);
+            File.WriteAllText(Path.Combine(childPath, childModelSnapshot.GetId()!.ToString()!), serializedModelSnapshot);
+        }
+    }
+
+    private void SaveGeneralModelChildren<T>(
+        string childPath,
+        IEnumerable<GeneralModel<T>> childModelSnapshots,
+        SaveGeneralModelChildDelegate<T>? saveGeneralModelChildDelegate,
+        CancellationToken cancellationToken)
+        where T : notnull
+    {
+        foreach (var childModelSnapshot in childModelSnapshots)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (saveGeneralModelChildDelegate is not null)
+            {
+                var childEntityPath = Path.Combine(childPath, childModelSnapshot.GetId()!.ToString()!);
+                Directory.CreateDirectory(childEntityPath);
+
+                var serializedModelSnapshot = JsonSerializer.Serialize(childModelSnapshot, _jsonSerializerOptions);
+                File.WriteAllText(Path.Combine(childEntityPath, ProjectSnapshotFactoryCommon.PROPERTIES_FILE), serializedModelSnapshot);
+
+                saveGeneralModelChildDelegate(childEntityPath, childModelSnapshot);
+            }
+            else
+            {
+                var serializedModelSnapshot = JsonSerializer.Serialize(childModelSnapshot, _jsonSerializerOptions);
+                File.WriteAllText(Path.Combine(childPath, childModelSnapshot.GetId()!.ToString()!), serializedModelSnapshot);
+            }
         }
     }
 }
