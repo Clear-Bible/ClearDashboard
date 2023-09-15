@@ -58,2197 +58,2200 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Settings_CollaborationSettings" xml:space="preserve">
-    <value>सहयोग सेटिंग्स</value>
-  </data>
-  <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए स्थान का चयन करें:</value>
-  </data>
-  <data name="FontSettings_Height" xml:space="preserve">
-    <value>ऊंचाई:</value>
-  </data>
-  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>परियोजना डिजाइन सतह</value>
-  </data>
-  <data name="HAG" xml:space="preserve">
-    <value>HAG</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>मेल मिलाना</value>
-  </data>
-  <data name="FontSettings_Horizontal" xml:space="preserve">
-    <value>क्षैतिज रिक्ति:</value>
-  </data>
-  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
-    <value>ग्लोस</value>
-  </data>
-  <data name="2TH" xml:space="preserve">
-    <value>2TH</value>
-  </data>
-  <data name="SlackMessageView_Send" xml:space="preserve">
-    <value>भेजना</value>
-  </data>
-  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
-    <value>नए दृश्य में जोड़ें</value>
-  </data>
-  <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>संदेश:</value>
-  </data>
-  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>नया व्यक्ति</value>
-  </data>
-  <data name="MainView_LayoutsSave" xml:space="preserve">
-    <value>वर्तमान लेआउट सहेजें</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>प्रकार</value>
-  </data>
-  <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>कविता संदर्भ</value>
-  </data>
-  <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>संबंधित नींबू</value>
-  </data>
-  <data name="Pds_Target" xml:space="preserve">
-    <value>लक्ष्य</value>
-  </data>
-  <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>मेल पता</value>
-  </data>
-  <data name="AMO" xml:space="preserve">
-    <value>AMO</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>आपकी लाइसेंस कुंजी या तो गायब है या टूट गई है।</value>
-  </data>
-  <data name="Notes_TranslationSet" xml:space="preserve">
-    <value>अनुवाद सेट</value>
-  </data>
-  <data name="ProperCase_Esther" xml:space="preserve">
-    <value>एस्थर</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>पूरी तरह से मिलान</value>
-  </data>
-  <data name="ProperCase_Ruth" xml:space="preserve">
-    <value>दया</value>
-  </data>
-  <data name="Marble_SubDomains" xml:space="preserve">
-    <value>उप डोमेन:</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>लोग; सम्मान, सम्मान, स्थिति</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>इंटरलीनियर</value>
-  </data>
-  <data name="Landing_Settings" xml:space="preserve">
-    <value>समायोजन</value>
-  </data>
-  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>बलिदान और प्रसाद</value>
-  </data>
-  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>परियोजनाओं</value>
-  </data>
-  <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>फार्म</value>
-  </data>
-  <data name="Bcv_NextVerse" xml:space="preserve">
-    <value>अगला कविता</value>
-  </data>
-  <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>गीतों का गीत</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>ताज़ा करना</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>शुरू</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>रद्द करना</value>
-  </data>
-  <data name="ProperCase_Romans" xml:space="preserve">
-    <value>रोमनों</value>
-  </data>
-  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>स्रोत रेफरी</value>
-  </data>
-  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>पिवटेड शब्द</value>
-  </data>
-  <data name="MainView_LayoutsDelete" xml:space="preserve">
-    <value>बचाया लेआउट हटाएं</value>
-  </data>
-  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>स्नेह</value>
-  </data>
-  <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
-    <value>शीर्षक:</value>
-  </data>
-  <data name="AboutView_Version" xml:space="preserve">
-    <value>संस्करण</value>
-  </data>
-  <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>ओबद्याह</value>
-  </data>
-  <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>विभाजित टोकन</value>
-  </data>
-  <data name="ProperCase_Matthew" xml:space="preserve">
-    <value>मैथ्यू</value>
-  </data>
-  <data name="Bcv_Chapter" xml:space="preserve">
-    <value>अध्याय</value>
-  </data>
-  <data name="ProperCase_2_Samuel" xml:space="preserve">
-    <value>2 शमूएल</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>USFM की जाँच करना</value>
-  </data>
-  <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>छिछोरापन</value>
-  </data>
-  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
-    <value>उपयोगकर्ता उपलब्धता की जाँच करें</value>
-  </data>
-  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>अपना ईमेल देखें और सत्यापन कोड में दर्ज करें:</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
-  </data>
-  <data name="MAT" xml:space="preserve">
-    <value>MAT</value>
-  </data>
-  <data name="ClockUserControl_LocalTime" xml:space="preserve">
-    <value>स्थानीय समय</value>
-  </data>
-  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
-    <value>समूह; क्षेत्र</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>मार्क को 'अमान्य' के रूप में चुना गया</value>
-  </data>
-  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>के लिए एक नया अनुवाद दर्ज करें</value>
-  </data>
-  <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Lemma/रूप:</value>
-  </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
-  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>ऐकलेसिस्टास</value>
-  </data>
-  <data name="ProperCase_2_Peter" xml:space="preserve">
-    <value>2 पीटर</value>
-  </data>
-  <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>चापलूसी</value>
-  </data>
-  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>प्रदान की गई कुंजी दोषपूर्ण है। जब डिक्रिप्ट किया जाता है, तो कुछ JSON तत्व नहीं मिल सके।</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>बचाना</value>
-  </data>
-  <data name="Next" xml:space="preserve">
-    <value>अगला</value>
-  </data>
-  <data name="Windows_EnhancedView" xml:space="preserve">
-    <value>देखना</value>
-  </data>
-  <data name="ProperCase_Acts" xml:space="preserve">
-    <value>अधिनियमों</value>
-  </data>
-  <data name="MIC" xml:space="preserve">
-    <value>MIC</value>
-  </data>
-  <data name="PHP" xml:space="preserve">
-    <value>PHP</value>
-  </data>
-  <data name="ProperCase_2_Chronicles" xml:space="preserve">
-    <value>2 इतिहास</value>
-  </data>
-  <data name="Marble_GeneralInformation" xml:space="preserve">
-    <value>सामान्य जानकारी</value>
-  </data>
-  <data name="ProperCase_Titus" xml:space="preserve">
-    <value>टाइटस</value>
-  </data>
-  <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>पिछली किताब</value>
-  </data>
-  <data name="ZEP" xml:space="preserve">
-    <value>ZEP</value>
-  </data>
-  <data name="Notes_NoteText" xml:space="preserve">
-    <value>मूलपाठ</value>
-  </data>
-  <data name="BiblicalTermsDomains_People" xml:space="preserve">
-    <value>लोग</value>
-  </data>
-  <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>स्रोत भाषा</value>
-  </data>
-  <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>गलाटियन्स</value>
-  </data>
-  <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>फ़ॉन्ट आकार:</value>
-  </data>
-  <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>के लिए एक अनुवाद निर्धारित करें</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>अलौकिक प्राणी और शक्तियां</value>
-  </data>
-  <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>Url:</value>
-  </data>
-  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
-    <value>कृषि</value>
-  </data>
-  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>सामग्री को 100% तक स्केल करें</value>
-  </data>
-  <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>यशायाह</value>
-  </data>
-  <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>मार्कडाउन प्रारूप का समर्थन करता है</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
-    <value>औजार; वज़न; व्यापार</value>
-  </data>
-  <data name="ShellView_Loading" xml:space="preserve">
-    <value>लोड हो रहा है...</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>गलती</value>
-  </data>
-  <data name="BulkAlignmentReview_Count" xml:space="preserve">
-    <value>गिनती करना</value>
-  </data>
-  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
-    <value>औजार</value>
-  </data>
-  <data name="MainView_About" xml:space="preserve">
-    <value>के बारे में</value>
-  </data>
-  <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>इस नोट को हटा दें?</value>
-  </data>
-  <data name="CreatedBy" xml:space="preserve">
-    <value>के द्वारा बनाई गई</value>
-  </data>
-  <data name="EZK" xml:space="preserve">
-    <value>EZK</value>
-  </data>
-  <data name="MergeDialog_OperationComplete" xml:space="preserve">
-    <value>ऑपरेशन पूरा!</value>
-  </data>
-  <data name="Pins_Code" xml:space="preserve">
-    <value>कोड</value>
-  </data>
-  <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>बाइबिल की शर्तें</value>
-  </data>
-  <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>लेबल समूह नाम</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>फाइल करने के लिए USFM त्रुटियों को सहेजें</value>
-  </data>
-  <data name="ProperCase_Joshua" xml:space="preserve">
-    <value>यहोशू</value>
-  </data>
-  <data name="EZR" xml:space="preserve">
-    <value>EZR</value>
-  </data>
-  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>एक सहयोग उपयोगकर्ता बनाएं</value>
-  </data>
-  <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>मालाची</value>
-  </data>
-  <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>फ़िल्टर शब्द खोज</value>
-  </data>
-  <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>रहस्योद्घाटन</value>
-  </data>
-  <data name="Pins_Stem" xml:space="preserve">
-    <value>तना</value>
-  </data>
-  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>त्रुटियों की संख्या:</value>
-  </data>
-  <data name="JER" xml:space="preserve">
-    <value>JER</value>
-  </data>
-  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>कार्य रद्द करें</value>
-  </data>
-  <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>नोट संकेतक:</value>
-  </data>
-  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>नए दृश्य में पाठ जोड़ें</value>
-  </data>
-  <data name="BulkAlignmentReview_Source" xml:space="preserve">
-    <value>स्रोत</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>जोड़ना</value>
-  </data>
-  <data name="None" xml:space="preserve">
-    <value>कोई नहीं</value>
-  </data>
-  <data name="MainView_ShowLog" xml:space="preserve">
-    <value>प्रवेश देखें</value>
-  </data>
-  <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>सामग्री का ज़ूम स्तर बदलें</value>
-  </data>
-  <data name="NewCollabUserView_Email" xml:space="preserve">
-    <value>ईमेल:</value>
-  </data>
-  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
-    <value>वैध</value>
-  </data>
-  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
-    <value>स्पष्ट नोट</value>
-  </data>
-  <data name="Marble_Sense" xml:space="preserve">
-    <value>समझ</value>
-  </data>
-  <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>Cleardashboard</value>
-  </data>
-  <data name="BiblicalTermsForm_Project" xml:space="preserve">
-    <value>परियोजना</value>
-  </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>नई देखें</value>
-  </data>
-  <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
-    <value>से लेबल के साथ:</value>
-  </data>
-  <data name="MainView_Settings" xml:space="preserve">
-    <value>समायोजन</value>
-  </data>
-  <data name="Pins_Match" xml:space="preserve">
-    <value>मिलान</value>
-  </data>
-  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>'{0}' नाम के साथ एक परियोजना पहले से मौजूद है। कृपया एक अनूठा नाम चुनें। "</value>
-  </data>
-  <data name="Landing_NewProject" xml:space="preserve">
-    <value>नया काम</value>
-  </data>
-  <data name="LexiconImport_SourceWord" xml:space="preserve">
-    <value>स्रोत शब्द</value>
-  </data>
-  <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>हिब्रू/ग्रीक द्वारा खोजें</value>
-  </data>
-  <data name="Settings_PowerModes" xml:space="preserve">
-    <value>बिजली मोड</value>
-  </data>
-  <data name="FontSettings_Target" xml:space="preserve">
-    <value>लक्ष्य पाठ:</value>
-  </data>
-  <data name="EnhancedView_AddAlignment" xml:space="preserve">
-    <value>संरेखण जोड़ें?</value>
-  </data>
-  <data name="MainView_WindowsTextCollections" xml:space="preserve">
-    <value>पाठ संग्रह</value>
-  </data>
-  <data name="Notes_LabelRemove" xml:space="preserve">
-    <value>इस लेबल को हटा दें</value>
-  </data>
-  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>देखने के लिए जोड़ें</value>
-  </data>
-  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>अनुवाद</value>
-  </data>
-  <data name="2CH" xml:space="preserve">
-    <value>2CH</value>
+  <data name="EnhancedView_NewToken" xml:space="preserve">
+    <value>नया टोकन</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>शब्द</value>
   </data>
-  <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>ईजेकील</value>
-  </data>
-  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
-    <value>देखना</value>
-  </data>
-  <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>कुल कविता</value>
-  </data>
-  <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>कॉर्पोरा जोड़ें</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>एजरा</value>
-  </data>
-  <data name="PHM" xml:space="preserve">
-    <value>PHM</value>
-  </data>
-  <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>अस्वरूपित</value>
-  </data>
-  <data name="Pins_Occurences" xml:space="preserve">
-    <value>पुनरावृत्तियां</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>'{0}' के लिए संरेखण को हटा दें?</value>
-  </data>
-  <data name="2JN" xml:space="preserve">
-    <value>2JN</value>
-  </data>
-  <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दामाद</value>
-  </data>
-  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
-    <value>ईमेल सत्यापन कोड:</value>
-  </data>
-  <data name="LexiconImport_SelectAll" xml:space="preserve">
-    <value>सबका चयन करें</value>
-  </data>
-  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>शब्द अर्थ</value>
-  </data>
-  <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>नया समूह</value>
-  </data>
-  <data name="Lexicon_AddMeaning" xml:space="preserve">
-    <value>अर्थ जोड़ें</value>
-  </data>
-  <data name="MRK" xml:space="preserve">
-    <value>MRK</value>
-  </data>
-  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
-    <value>ग्लोस:</value>
-  </data>
-  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>ClearDashboard में आपका स्वागत है! कृपया अपनी पंजीकरण जानकारी दर्ज करें।</value>
-  </data>
-  <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1 कुरिन्थियों</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>स्थिति</value>
-  </data>
-  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>समानांतर कॉर्पोरा छंद</value>
-  </data>
-  <data name="1CO" xml:space="preserve">
-    <value>1CO</value>
-  </data>
-  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
-    <value>इस दृश्य को हटा दें?</value>
-  </data>
-  <data name="FontSettings_Title" xml:space="preserve">
-    <value>शीर्षक:</value>
-  </data>
-  <data name="Settings_ValidateEmailCode" xml:space="preserve">
-    <value>मान्य ईमेल कोड</value>
-  </data>
-  <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>नीचे दिए गए 'क्रिएट' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को तैयार करने, संरेखित करने और तैयार करने के लिए टोकन, संरेखित करेंगे। सभी कदम यहां दिखाई देंगे क्योंकि वे संसाधित किए जाते हैं। जब आप नीचे दिए गए लिंक पर क्लिक करने के लिए स्वतंत्र महसूस कर रहे हैं और ClearDashboard का उपयोग करके शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
-  </data>
-  <data name="Pins_Phrase" xml:space="preserve">
-    <value>वाक्यांश</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
-    <value>'अमान्य' के रूप में चिह्न संरेखण</value>
-  </data>
-  <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>उपयोगकर्ता नाम:</value>
-  </data>
-  <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>अणुवादित का वापस से अनुवाद</value>
-  </data>
-  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
-    <value>संगठन का चयन करें</value>
-  </data>
-  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>कॉर्पस को टोकन करने के लिए चुनें</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>सबका चयन करें</value>
-  </data>
-  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
-    <value>दायरा:</value>
-  </data>
-  <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>परियोजना:</value>
-  </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>मार्बलसोर्स</value>
-  </data>
-  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
-    <value>एक्सेस टोकन:</value>
-  </data>
-  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext स्थापित नहीं है। कृपया Paratext इंस्टॉल करें और ClearDashboard एप्लिकेशन को फिर से तैयार करें।</value>
-  </data>
-  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
-    <value>प्रकृति</value>
-  </data>
-  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
-    <value>मशीन</value>
-  </data>
-  <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>अंतर -बाइबिल (LWC)</value>
-  </data>
-  <data name="ProperCase_John" xml:space="preserve">
-    <value>जॉन</value>
-  </data>
-  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
-  </data>
-  <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध है</value>
-  </data>
-  <data name="ExpandView" xml:space="preserve">
-    <value>विस्तार दृश्य</value>
-  </data>
-  <data name="ProperCase_1_Peter" xml:space="preserve">
-    <value>1 पीटर</value>
-  </data>
-  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>प्रोजेक्ट हटाएं</value>
-  </data>
-  <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>आवृत्ति ग्राफ</value>
-  </data>
-  <data name="JUD" xml:space="preserve">
-    <value>JUD</value>
-  </data>
-  <data name="EST" xml:space="preserve">
-    <value>EST</value>
-  </data>
-  <data name="Pds_Source" xml:space="preserve">
-    <value>स्रोत</value>
-  </data>
-  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
-    <value>समीक्षा की आवश्यकता है</value>
-  </data>
-  <data name="OldTestament" xml:space="preserve">
-    <value>पुराना वसीयतनामा</value>
-  </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>किताब</value>
-  </data>
-  <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>पिछला अध्याय</value>
-  </data>
-  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>समझौता</value>
-  </data>
-  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
-  </data>
-  <data name="ProperCase_Judges" xml:space="preserve">
-    <value>न्यायाधीशों</value>
-  </data>
-  <data name="ProperCase_2_Kings" xml:space="preserve">
-    <value>2 किंग्स</value>
-  </data>
-  <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>सत्यापन ईमेल भेजें</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>संपादन करना</value>
-  </data>
-  <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>अर्थ [अनुवाद]</value>
-  </data>
-  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>औजार; प्रसव</value>
-  </data>
-  <data name="NUM" xml:space="preserve">
-    <value>NUM</value>
-  </data>
-  <data name="Bcv_NextBook" xml:space="preserve">
-    <value>अगली किताब</value>
-  </data>
-  <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>सामग्री से बाहर ज़ूम करें</value>
-  </data>
-  <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>सामग्री पर ज़ूम करें</value>
-  </data>
-  <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>संस्करण:</value>
-  </data>
-  <data name="ProperCase_Genesis" xml:space="preserve">
-    <value>उत्पत्ति</value>
+  <data name="Notes_Note_Created" xml:space="preserve">
+    <value>बनाया था</value>
+  </data>
+  <data name="JiraResultsView_URL" xml:space="preserve">
+    <value>Url:</value>
   </data>
   <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
     <value>स्थान</value>
   </data>
-  <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 तीमुथियुस</value>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
   </data>
-  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
-    <value>अमान्य</value>
+  <data name="TargetContextView_Unformatted" xml:space="preserve">
+    <value>अस्वरूपित</value>
   </data>
-  <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>उपयोगकर्ता नाम:</value>
-  </data>
-  <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>पूर्व-रिलीज़ दिखाएं</value>
-  </data>
-  <data name="MAL" xml:space="preserve">
-    <value>MAL</value>
-  </data>
-  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>गिनता</value>
-  </data>
-  <data name="JHN" xml:space="preserve">
-    <value>JHN</value>
-  </data>
-  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>सतह पाठ द्वारा गिनती</value>
-  </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>भजन संहिता</value>
-  </data>
-  <data name="FontSettings_Source" xml:space="preserve">
-    <value>स्रोत इबारत:</value>
-  </data>
-  <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>क्लॉक डिस्प्ले रोटेशन में शामिल करें</value>
-  </data>
-  <data name="ProperCase_Joel" xml:space="preserve">
-    <value>योएल</value>
-  </data>
-  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>कंटेनर; पशुपालन</value>
-  </data>
-  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>पहला नाम आवश्यक है</value>
-  </data>
-  <data name="LEV" xml:space="preserve">
-    <value>LEV</value>
-  </data>
-  <data name="Marble_Chapter" xml:space="preserve">
-    <value>अध्याय</value>
-  </data>
-  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>नया सहयोग उपयोगकर्ता जोड़ें</value>
-  </data>
-  <data name="Pds_Resource" xml:space="preserve">
-    <value>संसाधन</value>
-  </data>
-  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>डिक्रिप्टेड लाइसेंस कुंजी की सामग्री आपके द्वारा प्रदान की गई जानकारी से मेल नहीं खाती है।</value>
-  </data>
-  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
-    <value>प्रशिक्षण पाठ द्वारा गिनती</value>
-  </data>
-  <data name="2SA" xml:space="preserve">
-    <value>2SA</value>
-  </data>
-  <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>लक्ष्य फ़ॉन्ट आकार:</value>
-  </data>
-  <data name="ProperCase_2_John" xml:space="preserve">
-    <value>2 जॉन</value>
-  </data>
-  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>क्या आप सुनिश्चित हैं कि आप इस कॉर्पस को हटाना चाहते हैं? सभी नोट, संरेखण, और इस कॉर्पस से जुड़े इंटरलाइनियर को हटा दिया जाएगा और इसे पुनर्प्राप्त नहीं किया जा सकता है।</value>
-  </data>
-  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
-    <value>अनुमत</value>
-  </data>
-  <data name="1PE" xml:space="preserve">
-    <value>1PE</value>
-  </data>
-  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>सहयोग परियोजनाओं का प्रबंधन करें</value>
-  </data>
-  <data name="Language [UID_Key]" xml:space="preserve">
-    <value>Hindi [hi]</value>
-  </data>
-  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
-    <value>सभी</value>
-  </data>
-  <data name="Settings_MultiMonitorSupport" xml:space="preserve">
-    <value>बहुमाला समर्थन</value>
-  </data>
-  <data name="Settings_Plugins" xml:space="preserve">
-    <value>प्लग-इन</value>
-  </data>
-  <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>इस नोट को paratext पर भेजें?</value>
-  </data>
-  <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>जकर्याह</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Paratext प्रोजेक्ट का चयन करें</value>
-  </data>
-  <data name="NewCollabUserView_Group" xml:space="preserve">
-    <value>समूह:</value>
-  </data>
-  <data name="NEH" xml:space="preserve">
-    <value>NEH</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>अद्यतन</value>
-  </data>
-  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
-    <value>ClearDashboard ईमेल सत्यापन कोड</value>
-  </data>
-  <data name="DisplayName" xml:space="preserve">
-    <value>प्रदर्शित होने वाला नाम</value>
-  </data>
-  <data name="ProjectPicker_GetStarted" xml:space="preserve">
-    <value>शुरू हो जाओ</value>
-  </data>
-  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>इस लेक्सेम को हटा दें?</value>
-  </data>
-  <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>के रूप में के रूप में ... के लिए ...</value>
-  </data>
-  <data name="WordMeaningsView_Sense" xml:space="preserve">
-    <value>समझ:</value>
-  </data>
-  <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>शीर्षक फ़ॉन्ट आकार:</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>सब ढूँढ़ो</value>
-  </data>
-  <data name="ProperCase_Mark" xml:space="preserve">
-    <value>निशान</value>
-  </data>
-  <data name="Pins_Prefix" xml:space="preserve">
-    <value>उपसर्ग</value>
-  </data>
-  <data name="Marble_Scope" xml:space="preserve">
-    <value>दायरा:</value>
-  </data>
-  <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>डेटाबेस:</value>
-  </data>
-  <data name="Landing_Project" xml:space="preserve">
-    <value>परियोजना</value>
-  </data>
-  <data name="FontSettings_Translations" xml:space="preserve">
-    <value>अनुवाद:</value>
-  </data>
-  <data name="Copy" xml:space="preserve">
-    <value>प्रतिलिपि</value>
-  </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>बाइबिल के ग्रंथों को शामिल करें?</value>
-  </data>
-  <data name="1TI" xml:space="preserve">
-    <value>1TI</value>
-  </data>
-  <data name="BiblicalTermsDomains_All" xml:space="preserve">
-    <value>*</value>
-  </data>
-  <data name="MainView_Windows" xml:space="preserve">
-    <value>खिड़कियाँ</value>
-  </data>
-  <data name="LexiconImport_TargetLanguage" xml:space="preserve">
-    <value>लक्ष्य भाषा</value>
-  </data>
-  <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>नई परियोजना बनाएं</value>
-  </data>
-  <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
-    <value>अपडेट करें और नया जोड़ें</value>
-  </data>
-  <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>खुला बंद</value>
-  </data>
-  <data name="2CO" xml:space="preserve">
-    <value>2CO</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>हाँ</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>थोक संरेखण संपादक</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>निर्माण; पशुपालन</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
-    <value>खुला</value>
-  </data>
-  <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>प्रारूपित</value>
-  </data>
-  <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>अनुवाद रद्द करें</value>
-  </data>
-  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>अलौकिक प्राणी और शक्तियां; खिताब</value>
-  </data>
-  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>संकेत और चमत्कार</value>
-  </data>
-  <data name="Delete_Project_Confirmation" xml:space="preserve">
-    <value>क्या आप सुनिश्चित हैं कि आप इस परियोजना को हटाना चाहते हैं?</value>
-  </data>
-  <data name="COL" xml:space="preserve">
-    <value>COL</value>
-  </data>
-  <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>शब्दभेद</value>
-  </data>
-  <data name="Notes_Note_NoteStatus" xml:space="preserve">
-    <value>स्थिति</value>
-  </data>
-  <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>नोट देखें/बनाएं</value>
-  </data>
-  <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>रिलीज नोट्स</value>
-  </data>
-  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
-  </data>
-  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>कॉरपस टोकन</value>
-  </data>
-  <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>इब्रा</value>
-  </data>
-  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
-    <value>ClearDashboard ईमेल सत्यापन कोड</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>नहीं</value>
-  </data>
-  <data name="ProperCase_Micah" xml:space="preserve">
-    <value>मीका</value>
-  </data>
-  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>हाल ही में खोजें</value>
-  </data>
-  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>कोई पृष्ठभूमि कार्य नहीं चल रहा है</value>
-  </data>
-  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext चल रहा है लेकिन जुड़ा नहीं है।</value>
-  </data>
-  <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>शब्द अर्थ</value>
-  </data>
-  <data name="LexiconEdit_Edit" xml:space="preserve">
-    <value>संपादन करना</value>
-  </data>
-  <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>प्रयोगात्मक एक्वा प्लगइन सक्षम करें</value>
-  </data>
-  <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>नंबर</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>टोकन '{0}' में कई संरेखण परिभाषित हैं। '{1}' पर क्लिक करने से सभी संरेखण हटा देंगे।</value>
-  </data>
-  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>सम्मान, सम्मान, स्थिति</value>
-  </data>
-  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
-    <value>फल</value>
-  </data>
-  <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>हबक्कूक</value>
-  </data>
-  <data name="Pins_Language" xml:space="preserve">
-    <value>भाषा</value>
-  </data>
-  <data name="BiblicalTermsForm_Category" xml:space="preserve">
-    <value>वर्ग</value>
-  </data>
-  <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>पंजीकरण करवाना</value>
-  </data>
-  <data name="ProperCase_Deuteronomy" xml:space="preserve">
-    <value>व्यवस्था विवरण</value>
-  </data>
-  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
-    <value>उपयोगकर्ता पहले से ही सर्वर पर मौजूद है</value>
-  </data>
-  <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
-  </data>
-  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
-    <value>नया शब्द संरेखण बनाएं</value>
-  </data>
-  <data name="NAM" xml:space="preserve">
-    <value>NAM</value>
-  </data>
-  <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>शब्दिम</value>
-  </data>
-  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
-    <value>1 थिस्सलोनियन</value>
-  </data>
-  <data name="Marble_Domains" xml:space="preserve">
-    <value>डोमेन:</value>
-  </data>
-  <data name="SlackMessageView_NoInternet" xml:space="preserve">
-    <value>कोई इंटरनेट नहीं</value>
-  </data>
-  <data name="Settings_ReservedCaption" xml:space="preserve">
-    <value>भविष्य के विस्तार के लिए आरक्षित</value>
-  </data>
-  <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>डैशबोर्ड की तुलना में एक अलग मॉनिटर पर दर्पण दृश्य दिखाएं</value>
-  </data>
-  <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>आइटम का नाम</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
-    <value>स्तनधारियों; जंगली जानवर</value>
-  </data>
-  <data name="MainView_FileOpen" xml:space="preserve">
-    <value>खुला</value>
-  </data>
-  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>शोक</value>
-  </data>
-  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
-    <value>कविता पाठ</value>
-  </data>
-  <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>संरेखण</value>
-  </data>
-  <data name="ProjectPicker_NoMatches" xml:space="preserve">
-    <value>कोई मेल नहीं।</value>
-  </data>
-  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>बाइबिल की शर्तें</value>
-  </data>
-  <data name="JON" xml:space="preserve">
-    <value>JON</value>
-  </data>
-  <data name="Pds_PropertiesMenu" xml:space="preserve">
-    <value>गुण</value>
-  </data>
-  <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>स्पष्ट निस्यंदक</value>
-  </data>
-  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
-    <value>अध्याय</value>
-  </data>
-  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>नया कॉर्पस टोकन बनाएं</value>
-  </data>
-  <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>Paratext बीटा नहीं चल रहा है</value>
-  </data>
-  <data name="CollabProjectManagementView_Description" xml:space="preserve">
-    <value>विवरण</value>
-  </data>
-  <data name="UpdateParatextCorpusDialog_Add" xml:space="preserve">
-    <value>नया जोड़ो</value>
-  </data>
-  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
-    <value>अपठित उत्तर वर्तमान</value>
-  </data>
-  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>घास</value>
-  </data>
-  <data name="Pins_Filter" xml:space="preserve">
-    <value>फ़िल्टर:</value>
-  </data>
-  <data name="FontSettings_SourceFontSize" xml:space="preserve">
-    <value>स्रोत फ़ॉन्ट आकार:</value>
-  </data>
-  <data name="Pds_Unknown" xml:space="preserve">
-    <value>अज्ञात</value>
-  </data>
-  <data name="Notes_FilterStatus_Any" xml:space="preserve">
-    <value>कोई</value>
-  </data>
-  <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>उपनाम</value>
-  </data>
-  <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>कृपया अपना लाइसेंस कुंजी दर्ज करें</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Interlinear बनाएँ</value>
-  </data>
-  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>देखने के लिए कविता दृश्य जोड़ें</value>
-  </data>
-  <data name="MergeDialog_OperationErrored" xml:space="preserve">
-    <value>त्रुटि का सामना करना पड़ा</value>
-  </data>
-  <data name="MainView_Layouts" xml:space="preserve">
-    <value>लेआउट</value>
-  </data>
-  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
-    <value>सर्वर पर उपयोगकर्ता बनाने में त्रुटि</value>
-  </data>
-  <data name="ProperCase_Amos" xml:space="preserve">
-    <value>अमोस</value>
-  </data>
-  <data name="DEU" xml:space="preserve">
-    <value>DEU</value>
-  </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>रेलगाड़ी</value>
-  </data>
-  <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>ClearDashboard के नए संस्करण के लिए अपडेट करें</value>
-  </data>
-  <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>मैंने एक कार्य पूरा किया लेकिन यह मुश्किल था</value>
-  </data>
-  <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>इस अर्थ में एक शब्दार्थ डोमेन जोड़ें</value>
-  </data>
-  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
-    <value>शिल्प; कपड़ा</value>
-  </data>
-  <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>इस अर्थ डोमेन को इस अर्थ से निकालें</value>
-  </data>
-  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>उपयोगकर्ता पहले से ही सिस्टम पर है!</value>
-  </data>
-  <data name="ProperCase_1_Samuel" xml:space="preserve">
-    <value>1 शमूएल</value>
-  </data>
-  <data name="ProperCase_2_Corinthians" xml:space="preserve">
-    <value>2 कुरिन्थियों</value>
-  </data>
-  <data name="SlackMessageView_Combo4" xml:space="preserve">
-    <value>मेरा मैं यह करने का मन है...</value>
-  </data>
-  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
-    <value>व्यक्ति</value>
-  </data>
-  <data name="ClockUserControl_Add" xml:space="preserve">
-    <value>जोड़ना</value>
-  </data>
-  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
-    <value>2 थिस्सलोनियन</value>
-  </data>
-  <data name="Settings_UserAlreadyExists" xml:space="preserve">
-    <value>उपयोगकर्ता पहले से ही सर्वर पर मौजूद है</value>
-  </data>
-  <data name="Notes_LabelAdd" xml:space="preserve">
-    <value>एक लेबल जोड़ें</value>
-  </data>
-  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नया प्रोजेक्ट बनाएं</value>
-  </data>
-  <data name="2TI" xml:space="preserve">
-    <value>2TI</value>
-  </data>
-  <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
-  </data>
-  <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>लेबल</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
-    <value>चयनित पुस्तकें</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>संरेखण हटाएं</value>
-  </data>
-  <data name="LexiconImport_SourceLanguage" xml:space="preserve">
-    <value>स्रोत भाषा</value>
-  </data>
-  <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>नया टोकन</value>
-  </data>
-  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
-    <value>प्रतिपादन</value>
-  </data>
-  <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>पसंद</value>
-  </data>
-  <data name="Notes_FilterExpander" xml:space="preserve">
-    <value>फिल्टर</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>बंद करना</value>
-  </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>सभी</value>
-  </data>
-  <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>संशोधित</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>मशीन शब्द संरेखण एल्गोरिथ्म</value>
-  </data>
-  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>ताज़ा सहयोग परियोजना सूची</value>
-  </data>
-  <data name="Pds_Daughter" xml:space="preserve">
-    <value>बेटी</value>
-  </data>
-  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
-    <value>उद्देश्य</value>
-  </data>
-  <data name="PSA" xml:space="preserve">
-    <value>PSA</value>
-  </data>
-  <data name="NewCollabUserView_FirstName" xml:space="preserve">
-    <value>पहला नाम</value>
-  </data>
-  <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>प्रोजेक्ट बनाएं:</value>
-  </data>
-  <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>कृपया अपना पहला नाम दें</value>
-  </data>
-  <data name="Marble_Glosses" xml:space="preserve">
-    <value>ग्लोस:</value>
-  </data>
-  <data name="Pds_StudyBible" xml:space="preserve">
-    <value>अध्ययन योग्य</value>
-  </data>
-  <data name="Notes_LabelGroupAdd" xml:space="preserve">
-    <value>लेबल समूह जोड़ें</value>
-  </data>
-  <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>कहावत का खेल</value>
-  </data>
-  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर प्रोजेक्ट</value>
-  </data>
-  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>सर्वर पर Gitlab उपयोगकर्ता को सहेजें</value>
-  </data>
-  <data name="SNG" xml:space="preserve">
-    <value>SNG</value>
-  </data>
-  <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>मजबूत कोड</value>
-  </data>
-  <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>सहायक</value>
-  </data>
-  <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>पुस्तक चयन सक्षम करें</value>
-  </data>
-  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>प्रमुख शब्दों द्वारा फ़िल्टर शब्द खोज</value>
-  </data>
-  <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>लेम्मा</value>
-  </data>
-  <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>इस नोट को paratext पर भेजें</value>
-  </data>
-  <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>नई विंडो में पाठ जोड़ें</value>
-  </data>
-  <data name="ProperCase_Haggai" xml:space="preserve">
-    <value>हाग्गै</value>
-  </data>
-  <data name="ZEC" xml:space="preserve">
-    <value>ZEC</value>
-  </data>
-  <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>इस लेक्सिकल फॉर्म को इस लेम्मा से हटा दें</value>
-  </data>
-  <data name="ProperCase_Nahum" xml:space="preserve">
-    <value>नाहुम</value>
-  </data>
-  <data name="1JN" xml:space="preserve">
-    <value>1JN</value>
-  </data>
-  <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>जोनाह</value>
-  </data>
-  <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 तीमुथियुस</value>
-  </data>
-  <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>सभी नोड्स को Viewport पर फिट करें</value>
-  </data>
-  <data name="Pins_Forms" xml:space="preserve">
-    <value>फार्म</value>
-  </data>
-  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
-    <value>उपलब्ध सहयोग उपयोगकर्ता:</value>
-  </data>
-  <data name="WordMeaningsView_Domain" xml:space="preserve">
-    <value>कार्यक्षेत्र:</value>
-  </data>
-  <data name="Pins_Word" xml:space="preserve">
-    <value>शब्द</value>
-  </data>
-  <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>ऊर्ध्वाधर रिक्ति:</value>
-  </data>
-  <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>पासवर्ड:</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>मार्क को 'समीक्षा की आवश्यकता' के रूप में चुना गया</value>
-  </data>
-  <data name="Settings_Settings" xml:space="preserve">
-    <value>ClearDashboard सेटिंग्स</value>
-  </data>
-  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>अनजान समग्र टोकन</value>
-  </data>
-  <data name="MainView_File" xml:space="preserve">
-    <value>फ़ाइल</value>
-  </data>
-  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
-    <value>कृपया अपनी परियोजना के लिए एक नाम दर्ज करें।</value>
-  </data>
-  <data name="MainView_FileNew" xml:space="preserve">
-    <value>नया</value>
-  </data>
-  <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
-  </data>
-  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>क्लिपबोर्ड पर USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
-  </data>
-  <data name="Notes_FilterStatus_Open" xml:space="preserve">
-    <value>खुला</value>
-  </data>
-  <data name="JDG" xml:space="preserve">
-    <value>JDG</value>
-  </data>
-  <data name="Marble_Book" xml:space="preserve">
-    <value>किताब</value>
-  </data>
-  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>स्रोत भाग</value>
-  </data>
-  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>ज्ञात पहलु</value>
-  </data>
-  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
-    <value>इस लेबल समूह को हटा दें</value>
-  </data>
-  <data name="3JN" xml:space="preserve">
-    <value>3JN</value>
-  </data>
-  <data name="JAS" xml:space="preserve">
-    <value>JAS</value>
-  </data>
-  <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>प्रोजेक्ट टेम्पलेट विज़ार्ड</value>
-  </data>
-  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>सहयोग परियोजनाओं का प्रबंधन करें</value>
-  </data>
-  <data name="SlackMessageView_Combo2" xml:space="preserve">
-    <value>मैं एक कार्य पूरा करने में सक्षम नहीं हूं</value>
-  </data>
-  <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>ईमेल भेजना त्रुटि</value>
-  </data>
-  <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>लेबल द्वारा</value>
-  </data>
-  <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>अपडेट करें और नई किताबें जोड़ें</value>
-  </data>
-  <data name="EnhancedView_Notes" xml:space="preserve">
-    <value>टिप्पणियाँ</value>
-  </data>
-  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>चयनित अस्वीकृत</value>
-  </data>
-  <data name="LexiconImport_UnselectAll" xml:space="preserve">
-    <value>सभी को अचयनित करें</value>
-  </data>
-  <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
-    <value>पूर्व दर्शन</value>
-  </data>
-  <data name="ProperCase_Jude" xml:space="preserve">
-    <value>जूदास</value>
-  </data>
-  <data name="MainView_WindowsMarble" xml:space="preserve">
-    <value>संगमरमर</value>
-  </data>
-  <data name="ProjectValidator_SameName" xml:space="preserve">
-    <value>एक ही नाम के साथ एक परियोजना पहले से मौजूद है। कृपया एक अनूठा नाम चुनें।</value>
-  </data>
-  <data name="Migrate_Header2" xml:space="preserve">
-    <value>डिफ़ॉल्ट वर्सिफिकेशन के लिए पद्य मैपिंग रीसेट करें</value>
-  </data>
-  <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>यिर्मयाह</value>
-  </data>
-  <data name="ProperCase_Exodus" xml:space="preserve">
-    <value>एक्सोदेस</value>
-  </data>
-  <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>अंग्रेजी चमक द्वारा खोजें</value>
-  </data>
-  <data name="ProperCase_3_John" xml:space="preserve">
-    <value>3 जॉन</value>
-  </data>
-  <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Paratext शुरू करने के लिए यहां क्लिक करें</value>
-  </data>
-  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>निर्माण; धार्मिक गतिविधियाँ</value>
-  </data>
-  <data name="ProperCase_Hosea" xml:space="preserve">
-    <value>होशे</value>
-  </data>
-  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>लापता रेंडरिंग</value>
-  </data>
-  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
-    <value>कविता</value>
-  </data>
-  <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>'डैशबोर्ड गेटिंग स्टार्ट' वीडियो देखने के लिए यहां क्लिक करें</value>
-  </data>
-  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>शब्द संरेखण बनाएं</value>
-  </data>
-  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>कविता-दर-कविता पाठ संग्रह प्रदर्शन सक्षम करें</value>
-  </data>
-  <data name="LexiconEdit_SaveChanges" xml:space="preserve">
-    <value>परिवर्तनों को सुरक्षित करें</value>
-  </data>
-  <data name="Bcv_NextChapter" xml:space="preserve">
-    <value>अगला अध्याय</value>
-  </data>
-  <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>नोट सूची</value>
-  </data>
-  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>नया इंटरलाइन बनाएं</value>
-  </data>
-  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>बंद किया हुआ</value>
-  </data>
-  <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>लक्ष्य शब्द</value>
-  </data>
-  <data name="Bcv_Offset" xml:space="preserve">
-    <value>ओफ़्सेट</value>
-  </data>
-  <data name="Windows_Dashboard" xml:space="preserve">
-    <value>चापलूसी</value>
-  </data>
-  <data name="Windows_PINS" xml:space="preserve">
-    <value>अवधि खोज</value>
-  </data>
-  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>इस अर्थ को हटा दें</value>
-  </data>
-  <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>अनुवादक</value>
-  </data>
-  <data name="Settings_SaveSettings" xml:space="preserve">
-    <value>सेटिंग्स सेव करें</value>
-  </data>
-  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>मेल पता</value>
-  </data>
-  <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>डिफ़ॉल्ट वर्सिफिकेशन के लिए पद्य मैपिंग रीसेट करें</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
-    <value>पेड़; इत्र और मसाले</value>
-  </data>
-  <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>एक लेबल समूह पहले से ही नाम के साथ मौजूद है</value>
-  </data>
-  <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
-    <value>स्रोत भाषा</value>
-  </data>
-  <data name="BiblicalTermsForm_Found" xml:space="preserve">
-    <value>मिला</value>
-  </data>
-  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
-    <value>किताब</value>
-  </data>
-  <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>पासवर्ड:</value>
-  </data>
-  <data name="DAN" xml:space="preserve">
-    <value>DAN</value>
-  </data>
-  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>प्रोजेक्ट लेआउट</value>
-  </data>
-  <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>विलाप</value>
-  </data>
-  <data name="GEN" xml:space="preserve">
-    <value>GEN</value>
-  </data>
-  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>मशीन शब्द संरेखण एल्गोरिथ्म</value>
-  </data>
-  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>संसाधित करने के लिए पुस्तकों का चयन करें</value>
-  </data>
-  <data name="HAB" xml:space="preserve">
-    <value>HAB</value>
-  </data>
-  <data name="Notes_LabelGroupInitialize" xml:space="preserve">
-    <value>आरंभिक लेबल समूह</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>संरेखण प्रकार:</value>
-  </data>
-  <data name="ShellView_User" xml:space="preserve">
-    <value>उपयोगकर्ता</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>देखने के लिए पाठ जोड़ें</value>
-  </data>
-  <data name="JOS" xml:space="preserve">
-    <value>JOS</value>
-  </data>
-  <data name="SlackMessageView_BugReport" xml:space="preserve">
-    <value>बग रिपोर्ट</value>
-  </data>
-  <data name="1SA" xml:space="preserve">
-    <value>1SA</value>
-  </data>
-  <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 किंग्स</value>
-  </data>
-  <data name="ROM" xml:space="preserve">
-    <value>ROM</value>
-  </data>
-  <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>नया अनुवाद</value>
-  </data>
-  <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>अंतिम नाम आवश्यक है</value>
-  </data>
-  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
-    <value>समूह</value>
-  </data>
-  <data name="Marble_Verses" xml:space="preserve">
-    <value>वर्सेज</value>
-  </data>
-  <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>परिभाषा लघु:</value>
-  </data>
-  <data name="2KI" xml:space="preserve">
-    <value>2KI</value>
-  </data>
-  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
-    <value>नया शब्द संरेखण बनाएं</value>
-  </data>
-  <data name="Pds_Dictionary" xml:space="preserve">
-    <value>शब्दकोष</value>
-  </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>प्रकार</value>
-  </data>
-  <data name="ProperCase_James" xml:space="preserve">
-    <value>जेम्स</value>
-  </data>
-  <data name="Notes_NoteReplies_Read" xml:space="preserve">
-    <value>देखा</value>
-  </data>
-  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
-    <value>दूरस्थ सर्वर के लिए सहेजा गया</value>
-  </data>
-  <data name="GAL" xml:space="preserve">
-    <value>GAL</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>पूरी तरह</value>
-  </data>
-  <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>परिभाषा लंबी:</value>
-  </data>
-  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>सभी संरेखण हटाएं?</value>
-  </data>
-  <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>ज़ूम आउट</value>
-  </data>
-  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>अनुवाद लागू करें</value>
-  </data>
-  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>इस लेबल समूह को हटा दें?</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>कार्य रद्द कर दिया गया था</value>
-  </data>
-  <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>इंटरलीनियर</value>
-  </data>
-  <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>अभियान रद्द किया गया</value>
-  </data>
-  <data name="ISA" xml:space="preserve">
-    <value>ISA</value>
-  </data>
-  <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>नहेमायाह</value>
-  </data>
-  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
-    <value>एक lexeme जोड़ें</value>
-  </data>
-  <data name="BulkAlignmentReview_Target" xml:space="preserve">
-    <value>लक्ष्य</value>
-  </data>
-  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>ट्रेन सममित मॉडल?</value>
-  </data>
-  <data name="1KI" xml:space="preserve">
-    <value>1KI</value>
-  </data>
-  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>दिए गए प्रोजेक्ट नाम में अवैध अक्षर हैं। मान्य वर्णों में 'ए-जेड' (लोअरकेस और अपरकेस), नंबर '0-9' और वर्ण '-' और '_' शामिल हैं।</value>
-  </data>
-  <data name="Notes_NoteLabelGroups" xml:space="preserve">
-    <value>लेबल समूह</value>
-  </data>
-  <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>इस लेम्मा में एक शाब्दिक रूप जोड़ें</value>
-  </data>
-  <data name="Delete_Project" xml:space="preserve">
-    <value>प्रोजेक्ट हटाएं</value>
-  </data>
-  <data name="Marble_All" xml:space="preserve">
-    <value>सभी</value>
-  </data>
-  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
-    <value>नैतिकता और नैतिकता</value>
-  </data>
-  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
-    <value>सिस्टम पर नहीं मिला!</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>नाम</value>
-  </data>
-  <data name="ProperCase_Philippians" xml:space="preserve">
-    <value>फिलिप्पियों</value>
-  </data>
-  <data name="Notes_NoteReplies" xml:space="preserve">
-    <value>जवाब</value>
-  </data>
-  <data name="Pins_Gloss" xml:space="preserve">
-    <value>ग्लोस</value>
-  </data>
-  <data name="BiblicalTermsForm_All" xml:space="preserve">
-    <value>सभी</value>
-  </data>
-  <data name="SlackMessageView_SuggestionEditor" xml:space="preserve">
-    <value>संपादक</value>
-  </data>
-  <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>शब्दिम</value>
-  </data>
-  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
-    <value>मंज़ूरी देना</value>
-  </data>
-  <data name="MainView_WindowsPINS" xml:space="preserve">
-    <value>PINS</value>
-  </data>
-  <data name="BiblicalTermsForm_Term" xml:space="preserve">
-    <value>अवधि</value>
-  </data>
-  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>नया इंटरलाइन जोड़ें</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>ठीक है</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>'{1}' के साथ '{0}' संरेखित करें?</value>
-  </data>
-  <data name="Pds_GetLatestFromParatext" xml:space="preserve">
-    <value>Paratext से नवीनतम प्राप्त करें</value>
-  </data>
-  <data name="Marble_DomainsTitle" xml:space="preserve">
-    <value>डोमेन</value>
-  </data>
-  <data name="1CH" xml:space="preserve">
-    <value>1CH</value>
-  </data>
-  <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>सलाहकार</value>
-  </data>
-  <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>इस कविता सीमा में कोई कविता डेटा नहीं।</value>
-  </data>
-  <data name="Notes_Part" xml:space="preserve">
-    <value>भाग</value>
-  </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext नहीं चल रहा है</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>आंशिक रूप से</value>
-  </data>
-  <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>टोकन में शामिल हों</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>संरेखण</value>
-  </data>
-  <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>स्लैक संदेश भेजें</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>पृष्ठभूमि कार्य दिखाएं</value>
-  </data>
-  <data name="ACT" xml:space="preserve">
-    <value>ACT</value>
-  </data>
-  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>इस लेम्मा के लिए एक अर्थ जोड़ें</value>
-  </data>
-  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
-    <value>संगठन</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
-    <value>लक्ष्य भाषा</value>
-  </data>
-  <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>सपन्याह</value>
-  </data>
-  <data name="PRO" xml:space="preserve">
-    <value>PRO</value>
-  </data>
-  <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>आयात चेक किया गया</value>
-  </data>
-  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
-    <value>क्षेत्र; प्रकृति</value>
-  </data>
-  <data name="ClockUserControl_Delete" xml:space="preserve">
-    <value>मिटाना</value>
-  </data>
-  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
-    <value>दूरस्थ सर्वर के लिए सहेजा गया</value>
-  </data>
-  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>डेटाबेस बनाना ...</value>
-  </data>
-  <data name="MainView_GatherLogs" xml:space="preserve">
-    <value>साफ़ करने के लिए संदेश भेजें</value>
-  </data>
-  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
-    <value>पेड़; फल</value>
-  </data>
-  <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाना</value>
-  </data>
-  <data name="Marble_Definition" xml:space="preserve">
-    <value>परिभाषा</value>
-  </data>
-  <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>पुस्तकों का चयन करें</value>
-  </data>
-  <data name="Created" xml:space="preserve">
-    <value>बनाया था</value>
-  </data>
-  <data name="Pds_InfoToolTip" xml:space="preserve">
-    <value>इस परियोजना के बारे में जानकारी दिखाएं</value>
-  </data>
-  <data name="Notes_Note_Created" xml:space="preserve">
-    <value>बनाया था</value>
-  </data>
-  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>इस लेक्सेम को हटा दें</value>
-  </data>
-  <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>भाग</value>
-  </data>
-  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>एप्लिकेशन बंद करो</value>
-  </data>
-  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>ज्ञान, समझ</value>
-  </data>
-  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
-    <value>संरेखण उपकरण</value>
-  </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>परिभाषा अनुपलब्ध है</value>
-  </data>
-  <data name="Pins_Notes" xml:space="preserve">
-    <value>टिप्पणियाँ</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>अलग -अलग टोकन की संख्या</value>
-  </data>
-  <data name="Windows_TextCollection" xml:space="preserve">
-    <value>पाठ संग्रह</value>
-  </data>
-  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>संघों द्वारा</value>
-  </data>
-  <data name="Marble_Verse" xml:space="preserve">
-    <value>कविता</value>
-  </data>
-  <data name="MainView_Help" xml:space="preserve">
-    <value>मदद</value>
-  </data>
-  <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>सभी अनसेट घटनाओं को बदलें</value>
-  </data>
-  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ट्रेन मशीन शब्द संरेखक</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>पीछे</value>
-  </data>
-  <data name="Bcv_PreviousVerse" xml:space="preserve">
-    <value>पिछला कविता</value>
-  </data>
-  <data name="LUK" xml:space="preserve">
-    <value>LUK</value>
-  </data>
-  <data name="JOB" xml:space="preserve">
-    <value>JOB</value>
-  </data>
-  <data name="Pins_Lexeme" xml:space="preserve">
-    <value>शब्दिम</value>
-  </data>
-  <data name="Pins_Origin" xml:space="preserve">
-    <value>मूल</value>
-  </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>शब्द:</value>
-  </data>
-  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
-    <value>प्रतिपादन</value>
-  </data>
-  <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>प्रोजेक्ट टेम्पलेट विज़ार्ड का उपयोग करके अपनी प्रोजेक्ट बनाएं।</value>
-  </data>
-  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>मान्य ईमेल कोड</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>और</value>
-  </data>
-  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>प्रोजेक्ट का चयन करें</value>
-  </data>
-  <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>पैराटेक्स्ट प्रोजेक्ट</value>
-  </data>
-  <data name="TIT" xml:space="preserve">
-    <value>TIT</value>
-  </data>
-  <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>अर्थ:</value>
-  </data>
-  <data name="Pds_Standard" xml:space="preserve">
-    <value>मानक</value>
-  </data>
-  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>देखने के लिए थोक अनुमोदन जोड़ें</value>
-  </data>
-  <data name="ProperCase_Job" xml:space="preserve">
-    <value>काम</value>
-  </data>
-  <data name="Settings_Reserved" xml:space="preserve">
-    <value>सुरक्षित</value>
-  </data>
-  <data name="OBA" xml:space="preserve">
-    <value>OBA</value>
-  </data>
-  <data name="FontSettings_ParagraphMode" xml:space="preserve">
-    <value>अनुच्छेद विधा</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
-    <value>परियोजना सदस्य</value>
-  </data>
-  <data name="Settings_TextCollections" xml:space="preserve">
-    <value>पाठ संग्रह</value>
-  </data>
-  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>कॉर्पस को हटा दें</value>
-  </data>
-  <data name="Pds_Xml" xml:space="preserve">
-    <value>एक्सएमएल</value>
-  </data>
-  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
-    <value>लोग; अधिकार</value>
-  </data>
-  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
-    <value>प्रोजेक्ट स्वामी</value>
-  </data>
-  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
-    <value>अस्वीकृत</value>
-  </data>
-  <data name="Marble_VerseSense" xml:space="preserve">
-    <value>कविता</value>
-  </data>
-  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>बंद किया हुआ</value>
-  </data>
-  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>सहयोग उपयोगकर्ता बनाएं</value>
-  </data>
-  <data name="1TH" xml:space="preserve">
-    <value>1TH</value>
-  </data>
-  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>नए लेक्सेम के लिए लेम्मा:</value>
-  </data>
-  <data name="SlackMessageView_Suggestion" xml:space="preserve">
-    <value>सुझाव</value>
-  </data>
-  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>अस्वीकार कर देना</value>
-  </data>
-  <data name="MainView_AccountInfo" xml:space="preserve">
-    <value>खाता संबंधी जानकारी</value>
-  </data>
-  <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>तीन या अधिक मॉनिटर वाले सिस्टम के लिए, तीसरे मॉनिटर पर मिरर व्यू दिखाएं</value>
-  </data>
-  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>त्रुटियाँ नहीं</value>
-  </data>
-  <data name="Settings_UserName" xml:space="preserve">
-    <value>उपयोगकर्ता नाम</value>
-  </data>
-  <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
-    <value>Paratext वापस अनुवाद</value>
-  </data>
-  <data name="MainView_GettingStartedGuide" xml:space="preserve">
-    <value>गेटिंग स्टार्टेड गाइड</value>
-  </data>
-  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>बुतपरस्ती</value>
-  </data>
-  <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>एक लेबल समूह जोड़ें</value>
-  </data>
-  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
-    <value>संघों</value>
-  </data>
-  <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>कृपया अपना अंतिम नाम दर्ज करें</value>
-  </data>
-  <data name="EXO" xml:space="preserve">
-    <value>EXO</value>
-  </data>
-  <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>पहले से ही एक लेक्सम लेम्मा के लिए मौजूद है</value>
-  </data>
-  <data name="NewTestament" xml:space="preserve">
-    <value>नया करार</value>
-  </data>
-  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>रत्न शामिल हैं</value>
-  </data>
-  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>मानक लेआउट</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>मिटाना</value>
-  </data>
-  <data name="Marble_Senses" xml:space="preserve">
-    <value>होश</value>
-  </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
-    <value>अनुवाद</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>बनाएं</value>
-  </data>
-  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>मार्क को 'मान्य' के रूप में चुना गया</value>
-  </data>
-  <data name="Landing_Projects" xml:space="preserve">
-    <value>परियोजनाओं</value>
-  </data>
-  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>इंटरलाइन को हटाएं</value>
-  </data>
-  <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>ग्रीक (एनटी) मैकुला</value>
-  </data>
-  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>ज्सन मेटाडेटा</value>
-  </data>
-  <data name="Pins_LexemeType" xml:space="preserve">
-    <value>लेक्सेम प्रकार</value>
-  </data>
-  <data name="BiblicalTermsForm_Note" xml:space="preserve">
-    <value>टिप्पणी</value>
-  </data>
-  <data name="HEB" xml:space="preserve">
-    <value>HEB</value>
-  </data>
-  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>संरेखण</value>
-  </data>
-  <data name="ProjectSetup_Title" xml:space="preserve">
-    <value>अपना नया प्रोजेक्ट बनाएं</value>
-  </data>
-  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
-    <value>संरेखित शब्द</value>
-  </data>
-  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
-    <value>संरेखण हटाएं?</value>
-  </data>
-  <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>एक नया नोट जोड़ें</value>
-  </data>
-  <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>टोकन का</value>
-  </data>
-  <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>उपयोगकर्ताओं द्वारा</value>
-  </data>
-  <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>उच्च कम्प्यूटेशनल घटनाओं के दौरान क्लीयरडैशबोर्ड को पावर मोड बदलने की अनुमति दें</value>
-  </data>
-  <data name="Bcv_Sync" xml:space="preserve">
-    <value>साथ-साथ करना</value>
-  </data>
-  <data name="TargetContextView_ZoomIn" xml:space="preserve">
-    <value>ज़ूम इन</value>
-  </data>
-  <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>यहां अकेलापन है। कृपया एक नई परियोजना बनाएं।</value>
-  </data>
-  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
-    <value>क्षेत्र</value>
-  </data>
-  <data name="Settings_EmailVerificationCode" xml:space="preserve">
-    <value>ईमेल सत्यापन कोड</value>
-  </data>
-  <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>मैंने एक प्रोजेक्ट में डेटा खो दिया</value>
-  </data>
-  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
-    <value>इस अनुवाद को हटा दें</value>
-  </data>
-  <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>लोड संदर्भ</value>
-  </data>
-  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>संरेखण बनाएँ</value>
-  </data>
-  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>हिब्रू (ओटी) मैकुला</value>
-  </data>
-  <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
-    <value>प्रोजेक्ट टेम्पलेट विज़ार्ड: {0}</value>
-  </data>
-  <data name="Lexicon_AddLexeme" xml:space="preserve">
-    <value>लेक्सेम जोड़ें</value>
-  </data>
-  <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
-    <value>हम बस पहुँच गए!</value>
-  </data>
-  <data name="Windows_AlignmentTool" xml:space="preserve">
-    <value>संरेखण उपकरण</value>
-  </data>
-  <data name="Bcv_Verse" xml:space="preserve">
-    <value>कविता</value>
-  </data>
-  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>स्तनधारियों; घरेलू जानवरों</value>
-  </data>
-  <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>आप उस परियोजना को नहीं हटा सकते हैं, एक अन्य एप्लिकेशन अभी भी इसका उपयोग कर रहा है।</value>
-  </data>
-  <data name="Pins_Suffix" xml:space="preserve">
-    <value>प्रत्यय</value>
-  </data>
-  <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>Timezone का चयन करें</value>
-  </data>
-  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>संरेखण हटाएं</value>
-  </data>
-  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>पावर मोड सक्षम</value>
-  </data>
-  <data name="Settings_Email" xml:space="preserve">
-    <value>ईमेल</value>
-  </data>
-  <data name="Notes_UnreadReplies" xml:space="preserve">
-    <value>अपठित उत्तर</value>
-  </data>
-  <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>तीव्रता:</value>
-  </data>
-  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
-    <value>वर्तमान परियोजना उपयोगकर्ता:</value>
-  </data>
-  <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
-  </data>
-  <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 जॉन</value>
-  </data>
-  <data name="Notes_NoteLabelGroup" xml:space="preserve">
-    <value>समूह</value>
-  </data>
-  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>स्मारक</value>
-  </data>
-  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>जानवरों</value>
-  </data>
-  <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>कॉरपस टोकन</value>
-  </data>
-  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>सभी को अचयनित करें</value>
-  </data>
-  <data name="ProperCase_Luke" xml:space="preserve">
-    <value>ल्यूक</value>
-  </data>
-  <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>कृपया अपनी परियोजना के लिए एक नाम दर्ज करें</value>
-  </data>
-  <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>नोट पाठ द्वारा</value>
-  </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>एक शब्दार्थ डोमेन जोड़ें</value>
-  </data>
-  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>हाल ही वाला खोलें</value>
-  </data>
-  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>सहयोग उपयोगकर्ता को पुनर्स्थापित करें</value>
-  </data>
-  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>नए अनुवाद मॉडल की गणना करें</value>
-  </data>
-  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>थोक संरेखण समीक्षा</value>
-  </data>
-  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>उपयोगकर्ता</value>
-  </data>
-  <data name="ECC" xml:space="preserve">
-    <value>ECC</value>
-  </data>
-  <data name="ProperCase_1_Chronicles" xml:space="preserve">
-    <value>1 इतिहास</value>
-  </data>
-  <data name="Done" xml:space="preserve">
-    <value>हो गया</value>
-  </data>
-  <data name="2PE" xml:space="preserve">
-    <value>2PE</value>
-  </data>
-  <data name="UseDefaults" xml:space="preserve">
-    <value>चूक का उपयोग करके बनाएँ</value>
-  </data>
-  <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>दृश्य नियंत्रण दिखाएं</value>
-  </data>
-  <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>क़बूल</value>
-  </data>
-  <data name="RUT" xml:space="preserve">
-    <value>RUT</value>
-  </data>
-  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>चयनित स्वीकृत</value>
-  </data>
-  <data name="REV" xml:space="preserve">
-    <value>REV</value>
-  </data>
-  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>अध्ययन</value>
-  </data>
-  <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>अपना ईमेल देखें और सत्यापन कोड में दर्ज करें:</value>
-  </data>
-  <data name="Settings_Group" xml:space="preserve">
-    <value>समूह</value>
-  </data>
-  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>एक नया अनुवाद दर्ज करें</value>
+  <data name="Marble_VerseTotal" xml:space="preserve">
+    <value>कुल कविता</value>
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
   </data>
-  <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Paratext पर जाएं और परियोजनाओं को स्विच करें। वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ी Paratext प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट में कॉर्पस के समान नहीं है।</value>
+  <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
+    <value>प्रोजेक्ट स्वामी</value>
   </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>रेलगाड़ी</value>
   </data>
-  <data name="ProperCase_Daniel" xml:space="preserve">
-    <value>डैनियल</value>
+  <data name="RegistrationView_LicenseKey" xml:space="preserve">
+    <value>कृपया अपना लाइसेंस कुंजी दर्ज करें</value>
   </data>
-  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>लक्ष्य भाग</value>
+  <data name="SlackMessageView_Combo1" xml:space="preserve">
+    <value>मैंने एक प्रोजेक्ट में डेटा खो दिया</value>
   </data>
-  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
-    <value>सहयोग परियोजनाएं</value>
+  <data name="Pins_Suffix" xml:space="preserve">
+    <value>प्रत्यय</value>
   </data>
-  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
-    <value>सिमेंटिक डोमेन:</value>
+  <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
+    <value>इस लेबल समूह को हटा दें</value>
+  </data>
+  <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
+    <value>इस दृश्य को हटा दें?</value>
+  </data>
+  <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
+    <value>ज्सन मेटाडेटा</value>
+  </data>
+  <data name="Pins_Word" xml:space="preserve">
+    <value>शब्द</value>
+  </data>
+  <data name="MainView_Settings" xml:space="preserve">
+    <value>समायोजन</value>
+  </data>
+  <data name="Settings_Plugins" xml:space="preserve">
+    <value>प्लग-इन</value>
+  </data>
+  <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
+    <value>लापता रेंडरिंग</value>
+  </data>
+  <data name="Pins_LoadReferences" xml:space="preserve">
+    <value>लोड संदर्भ</value>
+  </data>
+  <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
+    <value>कॉर्पस को हटा दें</value>
+  </data>
+  <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
+    <value>नया सहयोग उपयोगकर्ता जोड़ें</value>
+  </data>
+  <data name="BiblicalTermsForm_Category" xml:space="preserve">
+    <value>वर्ग</value>
+  </data>
+  <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
+    <value>दिए गए प्रोजेक्ट नाम में अवैध अक्षर हैं। मान्य वर्णों में 'ए-जेड' (लोअरकेस और अपरकेस), नंबर '0-9' और वर्ण '-' और '_' शामिल हैं।</value>
+  </data>
+  <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
+    <value>नए दृश्य में पाठ जोड़ें</value>
+  </data>
+  <data name="ProjectPicker_Project" xml:space="preserve">
+    <value>परियोजना:</value>
+  </data>
+  <data name="CollabProjectManagementView_Description" xml:space="preserve">
+    <value>विवरण</value>
+  </data>
+  <data name="Pins_ShowBackTranslation" xml:space="preserve">
+    <value>दिखावा दिखाओ</value>
+  </data>
+  <data name="ProperCase_Esther" xml:space="preserve">
+    <value>एस्थर</value>
+  </data>
+  <data name="ISA" xml:space="preserve">
+    <value>ISA</value>
+  </data>
+  <data name="WordMeaningsView_SubDomain" xml:space="preserve">
+    <value>सबडोमेन:</value>
+  </data>
+  <data name="MainView_ShowLog" xml:space="preserve">
+    <value>प्रवेश देखें</value>
+  </data>
+  <data name="Marble_Verses" xml:space="preserve">
+    <value>वर्सेज</value>
+  </data>
+  <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
+    <value>मेल पता</value>
+  </data>
+  <data name="Notes_LabelGroupExists" xml:space="preserve">
+    <value>एक लेबल समूह पहले से ही नाम के साथ मौजूद है</value>
+  </data>
+  <data name="JUD" xml:space="preserve">
+    <value>JUD</value>
+  </data>
+  <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
+    <value>एक सहयोग उपयोगकर्ता बनाएं</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>एजरा</value>
+  </data>
+  <data name="ClockUserControl_Include" xml:space="preserve">
+    <value>क्लॉक डिस्प्ले रोटेशन में शामिल करें</value>
+  </data>
+  <data name="LicenseValidator_LastMissing" xml:space="preserve">
+    <value>अंतिम नाम आवश्यक है</value>
+  </data>
+  <data name="MainView_GettingStartedGuide" xml:space="preserve">
+    <value>गेटिंग स्टार्टेड गाइड</value>
+  </data>
+  <data name="ProperCase_1_Chronicles" xml:space="preserve">
+    <value>1 इतिहास</value>
+  </data>
+  <data name="Pins_VerseReferences" xml:space="preserve">
+    <value>कविता संदर्भ</value>
+  </data>
+  <data name="Notes_FilterStatus_Any" xml:space="preserve">
+    <value>कोई</value>
+  </data>
+  <data name="Bcv_PreviousBook" xml:space="preserve">
+    <value>पिछली किताब</value>
+  </data>
+  <data name="LexiconImport_ImportChecked" xml:space="preserve">
+    <value>आयात चेक किया गया</value>
+  </data>
+  <data name="SlackMessageView_NoInternet" xml:space="preserve">
+    <value>कोई इंटरनेट नहीं</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>प्रकार</value>
+  </data>
+  <data name="Settings_EmailAddress" xml:space="preserve">
+    <value>मेल पता</value>
+  </data>
+  <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
+    <value>अपना ईमेल देखें और सत्यापन कोड में दर्ज करें:</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>पीछे</value>
+  </data>
+  <data name="EnhancedView_Notes" xml:space="preserve">
+    <value>टिप्पणियाँ</value>
+  </data>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>किताब</value>
+  </data>
+  <data name="Settings_Reserved" xml:space="preserve">
+    <value>सुरक्षित</value>
+  </data>
+  <data name="LexiconEdit_Forms" xml:space="preserve">
+    <value>फार्म</value>
+  </data>
+  <data name="Notes_NoteLabelGroups" xml:space="preserve">
+    <value>लेबल समूह</value>
+  </data>
+  <data name="ProperCase_Matthew" xml:space="preserve">
+    <value>मैथ्यू</value>
+  </data>
+  <data name="FontSettings_ParagraphMode" xml:space="preserve">
+    <value>अनुच्छेद विधा</value>
+  </data>
+  <data name="Marble_Scope" xml:space="preserve">
+    <value>दायरा:</value>
+  </data>
+  <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
+    <value>'{0}' नाम के साथ एक परियोजना पहले से मौजूद है। कृपया एक अनूठा नाम चुनें। "</value>
+  </data>
+  <data name="MainView_WindowsMarble" xml:space="preserve">
+    <value>संगमरमर</value>
+  </data>
+  <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
+    <value>दूरस्थ सर्वर के लिए सहेजा गया</value>
+  </data>
+  <data name="LexiconImport_SelectAll" xml:space="preserve">
+    <value>सबका चयन करें</value>
+  </data>
+  <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
+    <value>ग्लोस:</value>
+  </data>
+  <data name="LexiconImport_UnselectAll" xml:space="preserve">
+    <value>सभी को अचयनित करें</value>
+  </data>
+  <data name="Notes_NoteLabels" xml:space="preserve">
+    <value>लेबल</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
+    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
+  </data>
+  <data name="Pds_MarbleResource" xml:space="preserve">
+    <value>मार्बलसोर्स</value>
+  </data>
+  <data name="LexiconIEdit_Matching" xml:space="preserve">
+    <value>मेल मिलाना</value>
+  </data>
+  <data name="HAG" xml:space="preserve">
+    <value>HAG</value>
+  </data>
+  <data name="Pds_Dictionary" xml:space="preserve">
+    <value>शब्दकोष</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
+    <value>सभी संरेखण हटाएं?</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>बनाया था</value>
+  </data>
+  <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
+    <value>शीर्षक:</value>
+  </data>
+  <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
+    <value>संगठन का चयन करें</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>ठीक है</value>
+  </data>
+  <data name="Lexicon_SetTranslation" xml:space="preserve">
+    <value>के लिए एक अनुवाद निर्धारित करें</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
+    <value>Paratext प्रोजेक्ट का चयन करें</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
+    <value>औजार; प्रसव</value>
+  </data>
+  <data name="LicenseValidator_FirstMissing" xml:space="preserve">
+    <value>पहला नाम आवश्यक है</value>
+  </data>
+  <data name="ProperCase_Leviticus" xml:space="preserve">
+    <value>छिछोरापन</value>
+  </data>
+  <data name="Pds_BackTranslation" xml:space="preserve">
+    <value>अणुवादित का वापस से अनुवाद</value>
+  </data>
+  <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
+    <value>कविता पाठ</value>
+  </data>
+  <data name="Notes_LabelGroupName" xml:space="preserve">
+    <value>लेबल समूह नाम</value>
+  </data>
+  <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
+    <value>पिवटेड शब्द</value>
+  </data>
+  <data name="BulkAlignmentReview_Valid" xml:space="preserve">
+    <value>वैध</value>
+  </data>
+  <data name="FontSettings_Vertical" xml:space="preserve">
+    <value>ऊर्ध्वाधर रिक्ति:</value>
+  </data>
+  <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
+    <value>स्रोत भाग</value>
+  </data>
+  <data name="Lexicon_DeleteMeaning" xml:space="preserve">
+    <value>इस अर्थ को हटा दें</value>
+  </data>
+  <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
+    <value>ताज़ा सहयोग परियोजना सूची</value>
+  </data>
+  <data name="EZK" xml:space="preserve">
+    <value>EZK</value>
+  </data>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>सभी</value>
+  </data>
+  <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
+    <value>नया कॉर्पस टोकन बनाएं</value>
+  </data>
+  <data name="BiblicalTermsForm_Note" xml:space="preserve">
+    <value>टिप्पणी</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>बंद करना</value>
+  </data>
+  <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
+    <value>हम बस पहुँच गए!</value>
+  </data>
+  <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
+    <value>कृषि</value>
+  </data>
+  <data name="Settings_PowerModes" xml:space="preserve">
+    <value>बिजली मोड</value>
+  </data>
+  <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
+    <value>जानवरों</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>हाँ</value>
+  </data>
+  <data name="Pds_Unknown" xml:space="preserve">
+    <value>अज्ञात</value>
+  </data>
+  <data name="Lexicon_AddForm" xml:space="preserve">
+    <value>इस लेम्मा में एक शाब्दिक रूप जोड़ें</value>
+  </data>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>परिभाषा अनुपलब्ध है</value>
+  </data>
+  <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
+    <value>ट्रेन सममित मॉडल?</value>
+  </data>
+  <data name="ClockUserControl_Select" xml:space="preserve">
+    <value>Timezone का चयन करें</value>
+  </data>
+  <data name="ProjectSetup_Title" xml:space="preserve">
+    <value>अपना नया प्रोजेक्ट बनाएं</value>
+  </data>
+  <data name="ProperCase_2_Peter" xml:space="preserve">
+    <value>2 पीटर</value>
+  </data>
+  <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
+    <value>संरेखण उपकरण</value>
+  </data>
+  <data name="Windows_AlignmentTool" xml:space="preserve">
+    <value>संरेखण उपकरण</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
+    <value>मशीन शब्द संरेखण एल्गोरिथ्म</value>
+  </data>
+  <data name="ProjectPicker_NotInstalled" xml:space="preserve">
+    <value>Paratext स्थापित नहीं है। कृपया Paratext इंस्टॉल करें और ClearDashboard एप्लिकेशन को फिर से तैयार करें।</value>
+  </data>
+  <data name="RegistrationView_LastName" xml:space="preserve">
+    <value>कृपया अपना अंतिम नाम दर्ज करें</value>
+  </data>
+  <data name="EnhancedView_SplitToken" xml:space="preserve">
+    <value>विभाजित टोकन</value>
+  </data>
+  <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
+    <value>शिल्प; कपड़ा</value>
+  </data>
+  <data name="2SA" xml:space="preserve">
+    <value>2SA</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Viewport के लिए पूरे सामग्री क्षेत्र को फिट करें</value>
   </data>
-  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>धार्मिक गतिविधियाँ</value>
+  <data name="Lexicon_NewTranslation" xml:space="preserve">
+    <value>नया अनुवाद</value>
+  </data>
+  <data name="ProperCase_Habakkuk" xml:space="preserve">
+    <value>हबक्कूक</value>
+  </data>
+  <data name="ProperCase_Zephaniah" xml:space="preserve">
+    <value>सपन्याह</value>
+  </data>
+  <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
+    <value>एक लेबल समूह जोड़ें</value>
+  </data>
+  <data name="Marble_Book" xml:space="preserve">
+    <value>किताब</value>
+  </data>
+  <data name="FontSettings_FontSize" xml:space="preserve">
+    <value>फ़ॉन्ट आकार:</value>
+  </data>
+  <data name="ShellView_ShowPreReleases" xml:space="preserve">
+    <value>पूर्व-रिलीज़ दिखाएं</value>
+  </data>
+  <data name="Pds_StudyBible" xml:space="preserve">
+    <value>अध्ययन योग्य</value>
+  </data>
+  <data name="UseDefaults" xml:space="preserve">
+    <value>चूक का उपयोग करके बनाएँ</value>
+  </data>
+  <data name="BulkAlignmentReview_Approved" xml:space="preserve">
+    <value>अनुमत</value>
+  </data>
+  <data name="MAT" xml:space="preserve">
+    <value>MAT</value>
+  </data>
+  <data name="1CH" xml:space="preserve">
+    <value>1CH</value>
+  </data>
+  <data name="DashboardWindow_ClearNotes" xml:space="preserve">
+    <value>स्पष्ट नोट</value>
+  </data>
+  <data name="LexiconImport_TargetWord" xml:space="preserve">
+    <value>लक्ष्य शब्द</value>
+  </data>
+  <data name="1PE" xml:space="preserve">
+    <value>1PE</value>
+  </data>
+  <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
+    <value>टोकन '{0}' में कई संरेखण परिभाषित हैं। '{1}' पर क्लिक करने से सभी संरेखण हटा देंगे।</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>हो गया</value>
+  </data>
+  <data name="SNG" xml:space="preserve">
+    <value>SNG</value>
+  </data>
+  <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
+    <value>अपडेट करें और नया जोड़ें</value>
+  </data>
+  <data name="ProperCase_1_Timothy" xml:space="preserve">
+    <value>1 तीमुथियुस</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>इफिसियों</value>
   </data>
-  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो यह इस शब्द की सभी अस्वाभाविक घटनाओं को बदल देगा</value>
+  <data name="DEU" xml:space="preserve">
+    <value>DEU</value>
   </data>
-  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>समानांतर कॉर्पोरा के बीच कविता मानचित्रण सेट करें</value>
+  <data name="MainView_WindowsEnhancedView" xml:space="preserve">
+    <value>देखना</value>
   </data>
-  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>नया सहयोग उपयोगकर्ता</value>
+  <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
+    <value>ClearDashboard ईमेल सत्यापन कोड</value>
   </data>
-  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>'मान्य' के रूप में चिह्न संरेखण</value>
+  <data name="NewCollabUserView_LastName" xml:space="preserve">
+    <value>उपनाम</value>
   </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>या</value>
+  <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
+    <value>उपयोगकर्ता पहले से ही सर्वर पर मौजूद है</value>
+  </data>
+  <data name="ProperCase_John" xml:space="preserve">
+    <value>जॉन</value>
+  </data>
+  <data name="Notes_LabelGroupAdd" xml:space="preserve">
+    <value>लेबल समूह जोड़ें</value>
+  </data>
+  <data name="ProperCase_Lamentations" xml:space="preserve">
+    <value>विलाप</value>
+  </data>
+  <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
+    <value>नया शब्द संरेखण बनाएं</value>
+  </data>
+  <data name="MainView_Windows" xml:space="preserve">
+    <value>खिड़कियाँ</value>
+  </data>
+  <data name="Notes_SendToParatext" xml:space="preserve">
+    <value>इस नोट को paratext पर भेजें</value>
+  </data>
+  <data name="BiblicalTermsDomains_Area" xml:space="preserve">
+    <value>क्षेत्र</value>
+  </data>
+  <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
+    <value>Paratext बीटा नहीं चल रहा है</value>
+  </data>
+  <data name="NewCollabUserView_Group" xml:space="preserve">
+    <value>समूह:</value>
+  </data>
+  <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
+    <value>डैशबोर्ड की तुलना में एक अलग मॉनिटर पर दर्पण दृश्य दिखाएं</value>
+  </data>
+  <data name="BulkAlignmentReview_Approve" xml:space="preserve">
+    <value>मंज़ूरी देना</value>
+  </data>
+  <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
+    <value>अपठित उत्तर वर्तमान</value>
+  </data>
+  <data name="ProjectPicker_CreateLong" xml:space="preserve">
+    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
+  </data>
+  <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
+    <value>प्रतिपादन</value>
+  </data>
+  <data name="Pds_ConsultantNotes" xml:space="preserve">
+    <value>सलाहकार</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>नाम</value>
+  </data>
+  <data name="Marble_DefinitionLong" xml:space="preserve">
+    <value>परिभाषा लंबी:</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
+    <value>मार्क को 'अमान्य' के रूप में चुना गया</value>
+  </data>
+  <data name="FontSettings_TitleFontSize" xml:space="preserve">
+    <value>शीर्षक फ़ॉन्ट आकार:</value>
+  </data>
+  <data name="NewCollabUserView_AccessToken" xml:space="preserve">
+    <value>एक्सेस टोकन:</value>
+  </data>
+  <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
+    <value>चयनित अस्वीकृत</value>
+  </data>
+  <data name="ProjectPicker_ParatextProject" xml:space="preserve">
+    <value>पैराटेक्स्ट प्रोजेक्ट</value>
+  </data>
+  <data name="ProjectSetup_Hint" xml:space="preserve">
+    <value>कृपया अपनी परियोजना के लिए एक नाम दर्ज करें</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>लाइसेंस कुंजी आवश्यक है</value>
   </data>
-  <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>के लिए ट्रांसलेशन के रूप में लक्ष्य के रूप में ...</value>
+  <data name="ProperCase_Deuteronomy" xml:space="preserve">
+    <value>व्यवस्था विवरण</value>
+  </data>
+  <data name="ProjectValidator_SameName" xml:space="preserve">
+    <value>एक ही नाम के साथ एक परियोजना पहले से मौजूद है। कृपया एक अनूठा नाम चुनें।</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>EST</value>
+  </data>
+  <data name="EnhancedView_Interlinear" xml:space="preserve">
+    <value>इंटरलीनियर</value>
+  </data>
+  <data name="LexiconIEdit_Or" xml:space="preserve">
+    <value>या</value>
+  </data>
+  <data name="ProperCase_3_John" xml:space="preserve">
+    <value>3 जॉन</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>स्थिति</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>प्रकार</value>
+  </data>
+  <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
+    <value>समीक्षा की आवश्यकता है</value>
+  </data>
+  <data name="RUT" xml:space="preserve">
+    <value>RUT</value>
+  </data>
+  <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
+    <value>क्लिपबोर्ड पर USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
+  </data>
+  <data name="MainView_Layouts" xml:space="preserve">
+    <value>लेआउट</value>
+  </data>
+  <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
+    <value>संघों</value>
+  </data>
+  <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
+    <value>कंटेनर; पशुपालन</value>
+  </data>
+  <data name="Lexicon_LemmaForms" xml:space="preserve">
+    <value>Lemma/रूप:</value>
+  </data>
+  <data name="Pins_Occurences" xml:space="preserve">
+    <value>पुनरावृत्तियां</value>
+  </data>
+  <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
+    <value>'डैशबोर्ड गेटिंग स्टार्ट' वीडियो देखने के लिए यहां क्लिक करें</value>
+  </data>
+  <data name="ProjectPicker_NoProject" xml:space="preserve">
+    <value>यहां अकेलापन है। कृपया एक नई परियोजना बनाएं।</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
+    <value>संरेखित शब्द</value>
+  </data>
+  <data name="Pds_Auxiliary" xml:space="preserve">
+    <value>सहायक</value>
+  </data>
+  <data name="ShellView_User" xml:space="preserve">
+    <value>उपयोगकर्ता</value>
+  </data>
+  <data name="BulkAlignmentReview_Source" xml:space="preserve">
+    <value>स्रोत</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>पृष्ठभूमि कार्य दिखाएं</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
+    <value>सबका चयन करें</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>अगला</value>
+  </data>
+  <data name="ShellView_PowerModeEnabled" xml:space="preserve">
+    <value>पावर मोड सक्षम</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
     <value>कुलुस्सियों</value>
+  </data>
+  <data name="NewCollabUserView_Username" xml:space="preserve">
+    <value>उपयोगकर्ता नाम:</value>
+  </data>
+  <data name="Marble_Definition" xml:space="preserve">
+    <value>परिभाषा</value>
+  </data>
+  <data name="Notes_Part" xml:space="preserve">
+    <value>भाग</value>
+  </data>
+  <data name="3JN" xml:space="preserve">
+    <value>3JN</value>
+  </data>
+  <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
+    <value>प्रमुख शब्दों द्वारा फ़िल्टर शब्द खोज</value>
+  </data>
+  <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
+    <value>प्रोजेक्ट का चयन करें</value>
+  </data>
+  <data name="Lexicon_Lemma" xml:space="preserve">
+    <value>लेम्मा</value>
+  </data>
+  <data name="Bcv_PreviousVerse" xml:space="preserve">
+    <value>पिछला कविता</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
+    <value>अस्वीकृत</value>
+  </data>
+  <data name="Marble_Senses" xml:space="preserve">
+    <value>होश</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
+    <value>संसाधित करने के लिए पुस्तकों का चयन करें</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>संपादन करना</value>
+  </data>
+  <data name="OldTestament" xml:space="preserve">
+    <value>पुराना वसीयतनामा</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
+    <value>निर्माण; पशुपालन</value>
+  </data>
+  <data name="ProperCase_Daniel" xml:space="preserve">
+    <value>डैनियल</value>
+  </data>
+  <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
+    <value>चयनित स्वीकृत</value>
+  </data>
+  <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
+    <value>औजार; वज़न; व्यापार</value>
+  </data>
+  <data name="2CO" xml:space="preserve">
+    <value>2CO</value>
+  </data>
+  <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
+    <value>फल</value>
+  </data>
+  <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
+    <value>उद्देश्य</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
+    <value>स्तनधारियों; जंगली जानवर</value>
+  </data>
+  <data name="Pds_ManuscriptGreek" xml:space="preserve">
+    <value>ग्रीक (एनटी) मैकुला</value>
+  </data>
+  <data name="Lexicon_LexemeExists" xml:space="preserve">
+    <value>पहले से ही एक लेक्सम लेम्मा के लिए मौजूद है</value>
+  </data>
+  <data name="ProperCase_Joel" xml:space="preserve">
+    <value>योएल</value>
+  </data>
+  <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
+    <value>सहयोग उपयोगकर्ता को पुनर्स्थापित करें</value>
+  </data>
+  <data name="ZEP" xml:space="preserve">
+    <value>ZEP</value>
+  </data>
+  <data name="ProjectPicker_CollabProjects" xml:space="preserve">
+    <value>सहयोग परियोजनाएं</value>
+  </data>
+  <data name="LexiconEdit_Lexeme" xml:space="preserve">
+    <value>शब्दिम</value>
+  </data>
+  <data name="Lexicon_AddMeaning" xml:space="preserve">
+    <value>अर्थ जोड़ें</value>
+  </data>
+  <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
+    <value>नैतिकता और नैतिकता</value>
+  </data>
+  <data name="JAS" xml:space="preserve">
+    <value>JAS</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>रद्द करना</value>
+  </data>
+  <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
+    <value>उपयोगकर्ता उपलब्धता की जाँच करें</value>
+  </data>
+  <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
+    <value>नया शब्द संरेखण बनाएं</value>
+  </data>
+  <data name="DAN" xml:space="preserve">
+    <value>DAN</value>
+  </data>
+  <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
+    <value>लक्ष्य भाग</value>
+  </data>
+  <data name="Notes_OpenClosed" xml:space="preserve">
+    <value>खुला बंद</value>
+  </data>
+  <data name="LexiconIEdit_Fully" xml:space="preserve">
+    <value>पूरी तरह</value>
+  </data>
+  <data name="ProperCase_Philemon" xml:space="preserve">
+    <value>दामाद</value>
+  </data>
+  <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
+    <value>ClearDashboard ईमेल सत्यापन कोड</value>
+  </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>नई देखें</value>
+  </data>
+  <data name="Pins_Gloss" xml:space="preserve">
+    <value>ग्लोस</value>
+  </data>
+  <data name="JOB" xml:space="preserve">
+    <value>JOB</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>गलती</value>
+  </data>
+  <data name="EnhancedView_NoVerseData" xml:space="preserve">
+    <value>इस कविता सीमा में कोई कविता डेटा नहीं।</value>
+  </data>
+  <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
+    <value>पुस्तक चयन सक्षम करें</value>
+  </data>
+  <data name="JiraResultsView_Username" xml:space="preserve">
+    <value>उपयोगकर्ता नाम:</value>
+  </data>
+  <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
+    <value>संरेखण</value>
+  </data>
+  <data name="Migrate_Header2" xml:space="preserve">
+    <value>डिफ़ॉल्ट वर्सिफिकेशन के लिए पद्य मैपिंग रीसेट करें</value>
+  </data>
+  <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
+    <value>सिमेंटिक डोमेन:</value>
+  </data>
+  <data name="Notes_SendConfirmation" xml:space="preserve">
+    <value>इस नोट को paratext पर भेजें?</value>
+  </data>
+  <data name="Notes_FilterUsers" xml:space="preserve">
+    <value>उपयोगकर्ताओं द्वारा</value>
+  </data>
+  <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
+    <value>प्रोजेक्ट टेम्पलेट विज़ार्ड: {0}</value>
+  </data>
+  <data name="PHM" xml:space="preserve">
+    <value>PHM</value>
+  </data>
+  <data name="TargetContextView_ZoomOut" xml:space="preserve">
+    <value>ज़ूम आउट</value>
+  </data>
+  <data name="ShellView_Loading" xml:space="preserve">
+    <value>लोड हो रहा है...</value>
+  </data>
+  <data name="ProjectPicker_CreateProject" xml:space="preserve">
+    <value>प्रोजेक्ट बनाएं:</value>
+  </data>
+  <data name="SlackMessageView_Title" xml:space="preserve">
+    <value>स्लैक संदेश भेजें</value>
+  </data>
+  <data name="Windows_WordMeanings" xml:space="preserve">
+    <value>शब्द अर्थ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
+    <value>प्रकृति</value>
+  </data>
+  <data name="Settings_CheckEmail" xml:space="preserve">
+    <value>अपना ईमेल देखें और सत्यापन कोड में दर्ज करें:</value>
+  </data>
+  <data name="ProperCase_Ruth" xml:space="preserve">
+    <value>दया</value>
+  </data>
+  <data name="UpdateParatextCorpusDialog_Add" xml:space="preserve">
+    <value>नया जोड़ो</value>
+  </data>
+  <data name="Landing_Settings" xml:space="preserve">
+    <value>समायोजन</value>
+  </data>
+  <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
+    <value>इस लेबल समूह को हटा दें?</value>
+  </data>
+  <data name="Windows_CorpusTokens" xml:space="preserve">
+    <value>कॉरपस टोकन</value>
+  </data>
+  <data name="ProperCase_Luke" xml:space="preserve">
+    <value>ल्यूक</value>
+  </data>
+  <data name="MainView_AccountInfo" xml:space="preserve">
+    <value>खाता संबंधी जानकारी</value>
+  </data>
+  <data name="CollabProjectManagementView_Projects" xml:space="preserve">
+    <value>परियोजनाओं</value>
+  </data>
+  <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
+    <value>कार्य रद्द करें</value>
+  </data>
+  <data name="Pds_TransliterationManual" xml:space="preserve">
+    <value>अनुवादक</value>
+  </data>
+  <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
+    <value>समूह; क्षेत्र</value>
+  </data>
+  <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
+    <value>मार्कडाउन प्रारूप का समर्थन करता है</value>
+  </data>
+  <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
+    <value>मान्य ईमेल कोड</value>
+  </data>
+  <data name="BiblicalTermsForm_RenderingsLower" xml:space="preserve">
+    <value>प्रतिपादन</value>
+  </data>
+  <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
+    <value>बुतपरस्ती</value>
+  </data>
+  <data name="HEB" xml:space="preserve">
+    <value>HEB</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
+    <value>लोग; सम्मान, सम्मान, स्थिति</value>
+  </data>
+  <data name="ProperCase_Hosea" xml:space="preserve">
+    <value>होशे</value>
+  </data>
+  <data name="TargetContextView_Formatted" xml:space="preserve">
+    <value>प्रारूपित</value>
+  </data>
+  <data name="TIT" xml:space="preserve">
+    <value>TIT</value>
+  </data>
+  <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
+    <value>के लिए एक नया अनुवाद दर्ज करें</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
+    <value>'{0}' के लिए संरेखण को हटा दें?</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>के द्वारा बनाई गई</value>
+  </data>
+  <data name="ProperCase_1_Thessalonians" xml:space="preserve">
+    <value>1 थिस्सलोनियन</value>
+  </data>
+  <data name="ProjectPicker_StartParatext" xml:space="preserve">
+    <value>Paratext शुरू करने के लिए यहां क्लिक करें</value>
+  </data>
+  <data name="ProperCase_Amos" xml:space="preserve">
+    <value>अमोस</value>
+  </data>
+  <data name="Lexicon_Meanings" xml:space="preserve">
+    <value>अर्थ:</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>फ़ाइल</value>
+  </data>
+  <data name="JiraResultsView_Password" xml:space="preserve">
+    <value>पासवर्ड:</value>
+  </data>
+  <data name="EnhancedView_FilterPins" xml:space="preserve">
+    <value>फ़िल्टर शब्द खोज</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
+    <value>अलौकिक प्राणी और शक्तियां; खिताब</value>
+  </data>
+  <data name="MainView_WindowsPINS" xml:space="preserve">
+    <value>PINS</value>
+  </data>
+  <data name="ZEC" xml:space="preserve">
+    <value>ZEC</value>
+  </data>
+  <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
+    <value>प्रोजेक्ट टेम्पलेट विज़ार्ड का उपयोग करके अपनी प्रोजेक्ट बनाएं।</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
+    <value>मार्क को 'समीक्षा की आवश्यकता' के रूप में चुना गया</value>
+  </data>
+  <data name="ProperCase_2_Corinthians" xml:space="preserve">
+    <value>2 कुरिन्थियों</value>
+  </data>
+  <data name="Lexicon_CancelTranslation" xml:space="preserve">
+    <value>अनुवाद रद्द करें</value>
+  </data>
+  <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
+    <value>उपलब्ध सहयोग उपयोगकर्ता:</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
+    <value>फाइल करने के लिए USFM त्रुटियों को सहेजें</value>
+  </data>
+  <data name="Notes_LabelAdd" xml:space="preserve">
+    <value>एक लेबल जोड़ें</value>
+  </data>
+  <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
+    <value>निर्माण; धार्मिक गतिविधियाँ</value>
+  </data>
+  <data name="Language [UID_Key]" xml:space="preserve">
+    <value>Hindi [hi]</value>
+  </data>
+  <data name="Notes_FilterLabels" xml:space="preserve">
+    <value>लेबल द्वारा</value>
+  </data>
+  <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
+    <value>अनजान समग्र टोकन</value>
+  </data>
+  <data name="Pins_Phrase" xml:space="preserve">
+    <value>वाक्यांश</value>
+  </data>
+  <data name="ProperCase_Job" xml:space="preserve">
+    <value>काम</value>
+  </data>
+  <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
+    <value>मार्क को 'मान्य' के रूप में चुना गया</value>
+  </data>
+  <data name="ECC" xml:space="preserve">
+    <value>ECC</value>
+  </data>
+  <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
+    <value>संकेत और चमत्कार</value>
+  </data>
+  <data name="Settings_PowerModesDescription" xml:space="preserve">
+    <value>उच्च कम्प्यूटेशनल घटनाओं के दौरान क्लीयरडैशबोर्ड को पावर मोड बदलने की अनुमति दें</value>
+  </data>
+  <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
+    <value>सहयोग परियोजनाओं का प्रबंधन करें</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>शुरू</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
+    <value>चयनित पुस्तकें</value>
+  </data>
+  <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
+    <value>कविता-दर-कविता पाठ संग्रह प्रदर्शन सक्षम करें</value>
+  </data>
+  <data name="FontSettings_Source" xml:space="preserve">
+    <value>स्रोत इबारत:</value>
+  </data>
+  <data name="Lexicon_Lexeme" xml:space="preserve">
+    <value>शब्दिम</value>
+  </data>
+  <data name="SlackMessageView_Combo3" xml:space="preserve">
+    <value>मैंने एक कार्य पूरा किया लेकिन यह मुश्किल था</value>
+  </data>
+  <data name="BulkAlignmentReview_Count" xml:space="preserve">
+    <value>गिनती करना</value>
+  </data>
+  <data name="Bcv_NextChapter" xml:space="preserve">
+    <value>अगला अध्याय</value>
+  </data>
+  <data name="TargetContextView_ZoomIn" xml:space="preserve">
+    <value>ज़ूम इन</value>
+  </data>
+  <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
+    <value>शोक</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>अद्यतन</value>
+  </data>
+  <data name="Pds_PropertiesMenu" xml:space="preserve">
+    <value>गुण</value>
+  </data>
+  <data name="Pds_FitNodesToViewport" xml:space="preserve">
+    <value>सभी नोड्स को Viewport पर फिट करें</value>
+  </data>
+  <data name="ProperCase_1_Corinthians" xml:space="preserve">
+    <value>1 कुरिन्थियों</value>
+  </data>
+  <data name="Marble_GeneralInformation" xml:space="preserve">
+    <value>सामान्य जानकारी</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
+    <value>आपकी लाइसेंस कुंजी या तो गायब है या टूट गई है।</value>
+  </data>
+  <data name="Pins_Forms" xml:space="preserve">
+    <value>फार्म</value>
+  </data>
+  <data name="Windows_PINS" xml:space="preserve">
+    <value>अवधि खोज</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>COL</value>
+  </data>
+  <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
+    <value>न्यू लेक्सेम के लिए लेम्मा:</value>
+  </data>
+  <data name="Marble_PartsOfSpeech" xml:space="preserve">
+    <value>शब्दभेद</value>
+  </data>
+  <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
+    <value>ज्ञात पहलु</value>
+  </data>
+  <data name="MainView_GatherLogs" xml:space="preserve">
+    <value>साफ़ करने के लिए संदेश भेजें</value>
+  </data>
+  <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
+    <value>ईमेल सत्यापन कोड:</value>
+  </data>
+  <data name="ProperCase_Galatians" xml:space="preserve">
+    <value>गलाटियन्स</value>
+  </data>
+  <data name="NewCollabUserView_Password" xml:space="preserve">
+    <value>पासवर्ड:</value>
+  </data>
+  <data name="ProperCase_Revelation" xml:space="preserve">
+    <value>रहस्योद्घाटन</value>
+  </data>
+  <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
+    <value>अध्याय</value>
+  </data>
+  <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
+    <value>एप्लिकेशन बंद करो</value>
+  </data>
+  <data name="ProjectPicker_NoMatches" xml:space="preserve">
+    <value>कोई मेल नहीं।</value>
+  </data>
+  <data name="SlackMessageView_Suggestion" xml:space="preserve">
+    <value>सुझाव</value>
+  </data>
+  <data name="MAL" xml:space="preserve">
+    <value>MAL</value>
+  </data>
+  <data name="2TI" xml:space="preserve">
+    <value>2TI</value>
+  </data>
+  <data name="Pds_ChangeZoom" xml:space="preserve">
+    <value>सामग्री का ज़ूम स्तर बदलें</value>
+  </data>
+  <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
+    <value>रत्न शामिल हैं</value>
+  </data>
+  <data name="Settings_SendValidationEmail" xml:space="preserve">
+    <value>सत्यापन ईमेल भेजें</value>
+  </data>
+  <data name="Notes_TranslationSet" xml:space="preserve">
+    <value>अनुवाद सेट</value>
+  </data>
+  <data name="Settings_SaveSettings" xml:space="preserve">
+    <value>सेटिंग्स सेव करें</value>
+  </data>
+  <data name="BiblicalTermsForm_Found" xml:space="preserve">
+    <value>मिला</value>
+  </data>
+  <data name="Lexicon_AddLexeme" xml:space="preserve">
+    <value>लेक्सेम जोड़ें</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
+    <value>के लिए ट्रांसलेशन के रूप में लक्ष्य के रूप में ...</value>
+  </data>
+  <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
+    <value>आयात सर्वर प्रोजेक्ट</value>
+  </data>
+  <data name="Bcv_Chapter" xml:space="preserve">
+    <value>अध्याय</value>
+  </data>
+  <data name="LexiconEdit_Meanings" xml:space="preserve">
+    <value>अर्थ [अनुवाद]</value>
+  </data>
+  <data name="LexiconEdit_Edit" xml:space="preserve">
+    <value>संपादन करना</value>
+  </data>
+  <data name="EnhancedView_CreateNote" xml:space="preserve">
+    <value>नोट देखें/बनाएं</value>
+  </data>
+  <data name="BiblicalTermsDomains_People" xml:space="preserve">
+    <value>लोग</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>ROM</value>
+  </data>
+  <data name="SlackMessageView_BugReport" xml:space="preserve">
+    <value>बग रिपोर्ट</value>
+  </data>
+  <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
+    <value>डिक्रिप्टेड लाइसेंस कुंजी की सामग्री आपके द्वारा प्रदान की गई जानकारी से मेल नहीं खाती है।</value>
+  </data>
+  <data name="Bcv_NextVerse" xml:space="preserve">
+    <value>अगला कविता</value>
+  </data>
+  <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
+    <value>प्रदान की गई कुंजी दोषपूर्ण है। जब डिक्रिप्ट किया जाता है, तो कुछ JSON तत्व नहीं मिल सके।</value>
+  </data>
+  <data name="MainView_WindowsDashboard" xml:space="preserve">
+    <value>चकरानेवाला</value>
+  </data>
+  <data name="Notes_FilterNoteText" xml:space="preserve">
+    <value>नोट पाठ द्वारा</value>
+  </data>
+  <data name="ProperCase_James" xml:space="preserve">
+    <value>जेम्स</value>
+  </data>
+  <data name="Settings_AquaEnabled" xml:space="preserve">
+    <value>प्रयोगात्मक एक्वा प्लगइन सक्षम करें</value>
+  </data>
+  <data name="Notes_LabelGroupInitialize" xml:space="preserve">
+    <value>आरंभिक लेबल समूह</value>
+  </data>
+  <data name="BiblicalTermsDomains_Person" xml:space="preserve">
+    <value>व्यक्ति</value>
+  </data>
+  <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
+    <value>ज्ञान, समझ</value>
+  </data>
+  <data name="Marble_StrongCodes" xml:space="preserve">
+    <value>मजबूत कोड</value>
+  </data>
+  <data name="SlackMessageView_SuggestionEditor" xml:space="preserve">
+    <value>संपादक</value>
+  </data>
+  <data name="ProperCase_Nahum" xml:space="preserve">
+    <value>नाहुम</value>
+  </data>
+  <data name="Lexicon_ChangeAll" xml:space="preserve">
+    <value>सभी अनसेट घटनाओं को बदलें</value>
+  </data>
+  <data name="Pds_SourceLanguage" xml:space="preserve">
+    <value>स्रोत भाषा</value>
+  </data>
+  <data name="Pds_GetLatestFromParatext" xml:space="preserve">
+    <value>Paratext से नवीनतम प्राप्त करें</value>
+  </data>
+  <data name="EnhancedView_CreateAlignment" xml:space="preserve">
+    <value>संरेखण बनाएँ</value>
+  </data>
+  <data name="BiblicalTermsDomains_Group" xml:space="preserve">
+    <value>समूह</value>
+  </data>
+  <data name="Notes_NoteText" xml:space="preserve">
+    <value>मूलपाठ</value>
+  </data>
+  <data name="Notes_NoteReplies" xml:space="preserve">
+    <value>जवाब</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
+    <value>'मान्य' के रूप में चिह्न संरेखण</value>
+  </data>
+  <data name="Marble_DomainsTitle" xml:space="preserve">
+    <value>डोमेन</value>
+  </data>
+  <data name="NewCollabUserView_Email" xml:space="preserve">
+    <value>ईमेल:</value>
+  </data>
+  <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
+    <value>कोई पृष्ठभूमि कार्य नहीं चल रहा है</value>
+  </data>
+  <data name="PSA" xml:space="preserve">
+    <value>PSA</value>
+  </data>
+  <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
+    <value>लोग; अधिकार</value>
+  </data>
+  <data name="Marble_SearchEnglish" xml:space="preserve">
+    <value>अंग्रेजी चमक द्वारा खोजें</value>
+  </data>
+  <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
+    <value>इस लेम्मा के लिए एक अर्थ जोड़ें</value>
+  </data>
+  <data name="ProjectPicker_GetStarted" xml:space="preserve">
+    <value>शुरू हो जाओ</value>
+  </data>
+  <data name="Pins_Prefix" xml:space="preserve">
+    <value>उपसर्ग</value>
+  </data>
+  <data name="ProperCase_Jeremiah" xml:space="preserve">
+    <value>यिर्मयाह</value>
+  </data>
+  <data name="ProperCase_Acts" xml:space="preserve">
+    <value>अधिनियमों</value>
+  </data>
+  <data name="ProjectPicker_AppName" xml:space="preserve">
+    <value>Cleardashboard</value>
+  </data>
+  <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
+    <value>सर्वर पर Gitlab उपयोगकर्ता को सहेजें</value>
+  </data>
+  <data name="ProperCase_Romans" xml:space="preserve">
+    <value>रोमनों</value>
+  </data>
+  <data name="MRK" xml:space="preserve">
+    <value>MRK</value>
+  </data>
+  <data name="ClockUserControl_NewGroup" xml:space="preserve">
+    <value>नया समूह</value>
+  </data>
+  <data name="PRO" xml:space="preserve">
+    <value>PRO</value>
+  </data>
+  <data name="Settings_TextCollections" xml:space="preserve">
+    <value>पाठ संग्रह</value>
+  </data>
+  <data name="Marble_FrequencyGraph" xml:space="preserve">
+    <value>आवृत्ति ग्राफ</value>
+  </data>
+  <data name="Pds_StudyBibleAdditions" xml:space="preserve">
+    <value>अध्ययन</value>
+  </data>
+  <data name="FontSettings_Translations" xml:space="preserve">
+    <value>अनुवाद:</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
+    <value>Internear बनाएँ</value>
+  </data>
+  <data name="ExpandView" xml:space="preserve">
+    <value>विस्तार दृश्य</value>
+  </data>
+  <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
+    <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
+  </data>
+  <data name="LexiconIEdit_And" xml:space="preserve">
+    <value>और</value>
+  </data>
+  <data name="Pds_ResetVerseVersification" xml:space="preserve">
+    <value>डिफ़ॉल्ट वर्सिफिकेशन के लिए पद्य मैपिंग रीसेट करें</value>
+  </data>
+  <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
+    <value>तीन या अधिक मॉनिटर वाले सिस्टम के लिए, तीसरे मॉनिटर पर मिरर व्यू दिखाएं</value>
+  </data>
+  <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
+    <value>संघों द्वारा</value>
+  </data>
+  <data name="Notes_Note_NoteStatus" xml:space="preserve">
+    <value>स्थिति</value>
+  </data>
+  <data name="ProjectPicker_Database" xml:space="preserve">
+    <value>डेटाबेस:</value>
+  </data>
+  <data name="Pds_CreateNewInterlinear" xml:space="preserve">
+    <value>नया इंटरलाइन बनाएं</value>
+  </data>
+  <data name="MergeDialog_OperationCancelled" xml:space="preserve">
+    <value>रद्द किया गया ऑपरेशन</value>
+  </data>
+  <data name="Notes_Note_ModifiedBy" xml:space="preserve">
+    <value>उपयोगकर्ता</value>
+  </data>
+  <data name="EnhancedView_Alignment" xml:space="preserve">
+    <value>संरेखण</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>अलग -अलग टोकन की संख्या</value>
+  </data>
+  <data name="JDG" xml:space="preserve">
+    <value>JDG</value>
+  </data>
+  <data name="ProperCase_2_John" xml:space="preserve">
+    <value>2 जॉन</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
+    <value>थोक संरेखण संपादक</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>बचाना</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>JER</value>
+  </data>
+  <data name="Pds_ManuscriptHebrew" xml:space="preserve">
+    <value>हिब्रू (ओटी) मैकुला</value>
+  </data>
+  <data name="Notes_UnreadReplies" xml:space="preserve">
+    <value>अपठित उत्तर</value>
+  </data>
+  <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
+    <value>स्मारक</value>
+  </data>
+  <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
+    <value>'अमान्य' के रूप में चिह्न संरेखण</value>
+  </data>
+  <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
+    <value>एक नया अनुवाद दर्ज करें</value>
+  </data>
+  <data name="Marble_All" xml:space="preserve">
+    <value>सभी</value>
+  </data>
+  <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
+    <value>देखने के लिए कविता दृश्य जोड़ें</value>
+  </data>
+  <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
+    <value>नया सहयोग उपयोगकर्ता</value>
+  </data>
+  <data name="ProperCase_2_Kings" xml:space="preserve">
+    <value>2 किंग्स</value>
+  </data>
+  <data name="Pins_Lexeme" xml:space="preserve">
+    <value>शब्दिम</value>
+  </data>
+  <data name="LexiconEdit_SaveChanges" xml:space="preserve">
+    <value>परिवर्तनों को सुरक्षित करें</value>
+  </data>
+  <data name="LEV" xml:space="preserve">
+    <value>LEV</value>
+  </data>
+  <data name="Lexicon_AddDomain" xml:space="preserve">
+    <value>इस अर्थ में एक शब्दार्थ डोमेन जोड़ें</value>
+  </data>
+  <data name="Settings_ReservedCaption" xml:space="preserve">
+    <value>भविष्य के विस्तार के लिए आरक्षित</value>
+  </data>
+  <data name="NewTestament" xml:space="preserve">
+    <value>नया करार</value>
+  </data>
+  <data name="ProperCase_2_Thessalonians" xml:space="preserve">
+    <value>2 थिस्सलोनियन</value>
+  </data>
+  <data name="JHN" xml:space="preserve">
+    <value>JHN</value>
+  </data>
+  <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
+    <value>औजार</value>
+  </data>
+  <data name="FontSettings_Target" xml:space="preserve">
+    <value>लक्ष्य पाठ:</value>
+  </data>
+  <data name="Pds_Daughter" xml:space="preserve">
+    <value>बेटी</value>
+  </data>
+  <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
+    <value>प्रशिक्षण पाठ द्वारा गिनती</value>
+  </data>
+  <data name="Pds_Standard" xml:space="preserve">
+    <value>मानक</value>
+  </data>
+  <data name="HAB" xml:space="preserve">
+    <value>HAB</value>
+  </data>
+  <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
+    <value>इंटरलाइन को हटाएं</value>
+  </data>
+  <data name="ProperCase_Joshua" xml:space="preserve">
+    <value>यहोशू</value>
+  </data>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>Paratext नहीं चल रहा है</value>
+  </data>
+  <data name="Notes_FilterStatus_Open" xml:space="preserve">
+    <value>खुला</value>
+  </data>
+  <data name="ProperCase_1_John" xml:space="preserve">
+    <value>1 जॉन</value>
+  </data>
+  <data name="EZR" xml:space="preserve">
+    <value>EZR</value>
+  </data>
+  <data name="OBA" xml:space="preserve">
+    <value>OBA</value>
+  </data>
+  <data name="1TH" xml:space="preserve">
+    <value>1TH</value>
+  </data>
+  <data name="MainView_WindowsNotes" xml:space="preserve">
+    <value>नोट सूची</value>
+  </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>नए अनुवाद मॉडल की गणना करें</value>
+  </data>
+  <data name="Lexicon_RemoveForm" xml:space="preserve">
+    <value>इस लेक्सिकल फॉर्म को इस लेम्मा से हटा दें</value>
+  </data>
+  <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
+    <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
+  </data>
+  <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
+    <value>ट्रेन मशीन शब्द संरेखक</value>
+  </data>
+  <data name="MainView_LayoutsSave" xml:space="preserve">
+    <value>वर्तमान लेआउट सहेजें</value>
+  </data>
+  <data name="Pds_ProjectDesignSurface" xml:space="preserve">
+    <value>परियोजना डिजाइन सतह</value>
+  </data>
+  <data name="1SA" xml:space="preserve">
+    <value>1SA</value>
+  </data>
+  <data name="BiblicalTermsForm_Term" xml:space="preserve">
+    <value>अवधि</value>
+  </data>
+  <data name="Lexicon_RemoveDomain" xml:space="preserve">
+    <value>इस अर्थ डोमेन को इस अर्थ से निकालें</value>
+  </data>
+  <data name="REV" xml:space="preserve">
+    <value>REV</value>
+  </data>
+  <data name="ACT" xml:space="preserve">
+    <value>ACT</value>
+  </data>
+  <data name="ProperCase_2_Samuel" xml:space="preserve">
+    <value>2 शमूएल</value>
+  </data>
+  <data name="JON" xml:space="preserve">
+    <value>JON</value>
+  </data>
+  <data name="Pds_ShowVersesMenu" xml:space="preserve">
+    <value>नई विंडो में पाठ जोड़ें</value>
+  </data>
+  <data name="NewProjectDialog_Title" xml:space="preserve">
+    <value>नई परियोजना बनाएं</value>
+  </data>
+  <data name="ClockUserControl_LocalTime" xml:space="preserve">
+    <value>स्थानीय समय</value>
+  </data>
+  <data name="FontSettings_Horizontal" xml:space="preserve">
+    <value>क्षैतिज रिक्ति:</value>
+  </data>
+  <data name="GEN" xml:space="preserve">
+    <value>GEN</value>
+  </data>
+  <data name="BiblicalTermsForm_All" xml:space="preserve">
+    <value>सभी</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
+    <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
+  </data>
+  <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
+    <value>सहयोग उपयोगकर्ता बनाएं</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>बनाएं</value>
+  </data>
+  <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
+    <value>Collab परिवर्तन उपलब्ध है</value>
+  </data>
+  <data name="Settings_UserName" xml:space="preserve">
+    <value>उपयोगकर्ता नाम</value>
+  </data>
+  <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
+    <value>प्रोजेक्ट लेआउट</value>
+  </data>
+  <data name="Pds_ZoomIn" xml:space="preserve">
+    <value>सामग्री पर ज़ूम करें</value>
+  </data>
+  <data name="ProperCase_Judges" xml:space="preserve">
+    <value>न्यायाधीशों</value>
+  </data>
+  <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
+    <value>त्रुटियों की संख्या:</value>
+  </data>
+  <data name="NUM" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="Notes_DeleteConfirmation" xml:space="preserve">
+    <value>इस नोट को हटा दें?</value>
+  </data>
+  <data name="Windows_BiblicalTerms" xml:space="preserve">
+    <value>बाइबिल की शर्तें</value>
+  </data>
+  <data name="Marble_SearchHebrew" xml:space="preserve">
+    <value>हिब्रू/ग्रीक द्वारा खोजें</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
+    <value>खुला</value>
+  </data>
+  <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
+    <value>स्रोत रेफरी</value>
+  </data>
+  <data name="EnhancedView_ShowControls" xml:space="preserve">
+    <value>दृश्य नियंत्रण दिखाएं</value>
+  </data>
+  <data name="ProperCase_Isaiah" xml:space="preserve">
+    <value>यशायाह</value>
+  </data>
+  <data name="PHP" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
+    <value>प्रोजेक्ट टेम्पलेट विज़ार्ड</value>
+  </data>
+  <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
+    <value>देखने के लिए थोक अनुमोदन जोड़ें</value>
+  </data>
+  <data name="ClockUserControl_Add" xml:space="preserve">
+    <value>जोड़ना</value>
+  </data>
+  <data name="ProperCase_1_Samuel" xml:space="preserve">
+    <value>1 शमूएल</value>
+  </data>
+  <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
+    <value>नया व्यक्ति</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>शब्द:</value>
+  </data>
+  <data name="ProperCase_Haggai" xml:space="preserve">
+    <value>हाग्गै</value>
+  </data>
+  <data name="1CO" xml:space="preserve">
+    <value>1CO</value>
+  </data>
+  <data name="ProperCase_Jude" xml:space="preserve">
+    <value>जूदास</value>
+  </data>
+  <data name="EnhancedView_JoinTokens" xml:space="preserve">
+    <value>टोकन में शामिल हों</value>
+  </data>
+  <data name="Pins_Notes" xml:space="preserve">
+    <value>टिप्पणियाँ</value>
+  </data>
+  <data name="ProperCase_Exodus" xml:space="preserve">
+    <value>एक्सोदेस</value>
+  </data>
+  <data name="Marble_DefinitionShort" xml:space="preserve">
+    <value>परिभाषा लघु:</value>
+  </data>
+  <data name="Pins_Language" xml:space="preserve">
+    <value>भाषा</value>
+  </data>
+  <data name="ProperCase_Obadiah" xml:space="preserve">
+    <value>ओबद्याह</value>
+  </data>
+  <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
+  </data>
+  <data name="Delete_Project" xml:space="preserve">
+    <value>प्रोजेक्ट हटाएं</value>
+  </data>
+  <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
+    <value>डेटाबेस बनाना ...</value>
+  </data>
+  <data name="BulkAlignmentReview_Part" xml:space="preserve">
+    <value>भाग</value>
+  </data>
+  <data name="Pds_InfoToolTip" xml:space="preserve">
+    <value>इस परियोजना के बारे में जानकारी दिखाएं</value>
+  </data>
+  <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
+    <value>सभी को अचयनित करें</value>
+  </data>
+  <data name="Settings_Settings" xml:space="preserve">
+    <value>ClearDashboard सेटिंग्स</value>
+  </data>
+  <data name="MainView_ProgramPreferences" xml:space="preserve">
+    <value>पसंद</value>
+  </data>
+  <data name="ProperCase_Ezekiel" xml:space="preserve">
+    <value>ईजेकील</value>
+  </data>
+  <data name="AMO" xml:space="preserve">
+    <value>AMO</value>
+  </data>
+  <data name="BiblicalTermsDomains_Association" xml:space="preserve">
+    <value>संगठन</value>
+  </data>
+  <data name="ProperCase_Jonah" xml:space="preserve">
+    <value>जोनाह</value>
+  </data>
+  <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
+    <value>त्रुटियाँ नहीं</value>
+  </data>
+  <data name="Notes_NoteReplies_Read" xml:space="preserve">
+    <value>देखा</value>
+  </data>
+  <data name="ProperCase_Titus" xml:space="preserve">
+    <value>टाइटस</value>
+  </data>
+  <data name="Pins_Origin" xml:space="preserve">
+    <value>मूल</value>
+  </data>
+  <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
+    <value>परियोजना सदस्य</value>
+  </data>
+  <data name="BulkAlignmentReview_Machine" xml:space="preserve">
+    <value>मशीन</value>
+  </data>
+  <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
+    <value>सभी</value>
+  </data>
+  <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
+    <value>सहयोग परियोजनाओं का प्रबंधन करें</value>
+  </data>
+  <data name="MainView_FileOpen" xml:space="preserve">
+    <value>खुला</value>
+  </data>
+  <data name="Marble_Verse" xml:space="preserve">
+    <value>कविता</value>
+  </data>
+  <data name="LexiconImport_SourceLanguage" xml:space="preserve">
+    <value>स्रोत भाषा</value>
+  </data>
+  <data name="Landing_Projects" xml:space="preserve">
+    <value>परियोजनाओं</value>
+  </data>
+  <data name="ProperCase_Malachi" xml:space="preserve">
+    <value>मालाची</value>
+  </data>
+  <data name="MergeDialog_OperationErrored" xml:space="preserve">
+    <value>त्रुटि का सामना करना पड़ा</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>देखने के लिए पाठ जोड़ें</value>
+  </data>
+  <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
+    <value>पुस्तकों का चयन करें</value>
+  </data>
+  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
+    <value>पूरी तरह से मिलान</value>
+  </data>
+  <data name="Pds_ZoomOut" xml:space="preserve">
+    <value>सामग्री से बाहर ज़ूम करें</value>
+  </data>
+  <data name="ShellView_UpdateFound" xml:space="preserve">
+    <value>ClearDashboard के नए संस्करण के लिए अपडेट करें</value>
+  </data>
+  <data name="MainView_LayoutsDelete" xml:space="preserve">
+    <value>बचाया लेआउट हटाएं</value>
+  </data>
+  <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
+    <value>मशीन शब्द संरेखण एल्गोरिथ्म</value>
+  </data>
+  <data name="Pds_Target" xml:space="preserve">
+    <value>लक्ष्य</value>
+  </data>
+  <data name="Settings_NotFoundOnSystem" xml:space="preserve">
+    <value>सिस्टम पर नहीं मिला!</value>
+  </data>
+  <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
+    <value>एक lexeme जोड़ें</value>
+  </data>
+  <data name="Pds_AddCorpora" xml:space="preserve">
+    <value>कॉर्पोरा जोड़ें</value>
+  </data>
+  <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
+    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
+  </data>
+  <data name="ProjectPicker_OpenRecent" xml:space="preserve">
+    <value>हाल ही वाला खोलें</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
+    <value>के रूप में के रूप में ...</value>
+  </data>
+  <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
+    <value>क्षेत्र; प्रकृति</value>
+  </data>
+  <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
+    <value>Paratext चल रहा है लेकिन जुड़ा नहीं है।</value>
+  </data>
+  <data name="NEH" xml:space="preserve">
+    <value>NEH</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
+    <value>संरेखण हटाएं?</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
+    <value>पेड़; इत्र और मसाले</value>
+  </data>
+  <data name="ProperCase_1_Peter" xml:space="preserve">
+    <value>1 पीटर</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>नहीं</value>
+  </data>
+  <data name="ProperCase_Ecclesiastes" xml:space="preserve">
+    <value>ऐकलेसिस्टास</value>
+  </data>
+  <data name="MIC" xml:space="preserve">
+    <value>MIC</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>जोड़ना</value>
+  </data>
+  <data name="1TI" xml:space="preserve">
+    <value>1TI</value>
+  </data>
+  <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
+    <value>थोक संरेखण समीक्षा</value>
+  </data>
+  <data name="RegistrationDialogView_Register" xml:space="preserve">
+    <value>पंजीकरण करवाना</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>भजन संहिता</value>
+  </data>
+  <data name="Settings_Group" xml:space="preserve">
+    <value>समूह</value>
+  </data>
+  <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
+    <value>अमान्य</value>
+  </data>
+  <data name="2JN" xml:space="preserve">
+    <value>2JN</value>
+  </data>
+  <data name="Pds_DeletingCorpusNode" xml:space="preserve">
+    <value>क्या आप सुनिश्चित हैं कि आप इस कॉर्पस को हटाना चाहते हैं? सभी नोट, संरेखण, और इस कॉर्पस से जुड़े इंटरलाइनियर को हटा दिया जाएगा और इसे पुनर्प्राप्त नहीं किया जा सकता है।</value>
+  </data>
+  <data name="Notes_FilterStatus_Closed" xml:space="preserve">
+    <value>बंद किया हुआ</value>
+  </data>
+  <data name="ProperCase_Mark" xml:space="preserve">
+    <value>निशान</value>
+  </data>
+  <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
+    <value>अंतर -बाइबिल (LWC)</value>
+  </data>
+  <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
+    <value>सर्वर पर उपयोगकर्ता बनाने में त्रुटि</value>
+  </data>
+  <data name="MainView_WindowsWordMeanings" xml:space="preserve">
+    <value>शब्द अर्थ</value>
+  </data>
+  <data name="ProperCase_Song of Songs" xml:space="preserve">
+    <value>गीतों का गीत</value>
+  </data>
+  <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
+    <value>स्रोत भाषा</value>
+  </data>
+  <data name="Notes_TokenizedCorpus" xml:space="preserve">
+    <value>टोकन का</value>
+  </data>
+  <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
+    <value>संरेखण प्रकार:</value>
+  </data>
+  <data name="2CH" xml:space="preserve">
+    <value>2CH</value>
+  </data>
+  <data name="Pins_ClearFilter" xml:space="preserve">
+    <value>स्पष्ट निस्यंदक</value>
+  </data>
+  <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
+    <value>'{1}' के साथ '{0}' संरेखित करें?</value>
+  </data>
+  <data name="Notes_NoteLabelGroup" xml:space="preserve">
+    <value>समूह</value>
+  </data>
+  <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
+    <value>उपयोगकर्ता पहले से ही सिस्टम पर है!</value>
+  </data>
+  <data name="GAL" xml:space="preserve">
+    <value>GAL</value>
+  </data>
+  <data name="Lexicon_DeleteTranslation" xml:space="preserve">
+    <value>इस अनुवाद को हटा दें</value>
+  </data>
+  <data name="Pins_Filter" xml:space="preserve">
+    <value>फ़िल्टर:</value>
+  </data>
+  <data name="ProperCase_Proverbs" xml:space="preserve">
+    <value>कहावत का खेल</value>
+  </data>
+  <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
+    <value>यदि जाँच की जाती है, तो यह इस शब्द की सभी अस्वाभाविक घटनाओं को बदल देगा</value>
+  </data>
+  <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
+    <value>तीव्रता:</value>
+  </data>
+  <data name="SlackMessageView_Combo2" xml:space="preserve">
+    <value>मैं एक कार्य पूरा करने में सक्षम नहीं हूं</value>
+  </data>
+  <data name="FontSettings_TargetFontSize" xml:space="preserve">
+    <value>लक्ष्य फ़ॉन्ट आकार:</value>
+  </data>
+  <data name="BiblicalTermsForm_Project" xml:space="preserve">
+    <value>परियोजना</value>
+  </data>
+  <data name="WordMeaningsView_Sense" xml:space="preserve">
+    <value>समझ:</value>
+  </data>
+  <data name="MainView_WindowsTextCollections" xml:space="preserve">
+    <value>पाठ संग्रह</value>
+  </data>
+  <data name="Marble_Glosses" xml:space="preserve">
+    <value>ग्लोस:</value>
+  </data>
+  <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
+    <value>पेड़; फल</value>
+  </data>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
+  </data>
+  <data name="ProjectPicker_Paratext" xml:space="preserve">
+    <value>Paratext</value>
+  </data>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>एक शब्दार्थ डोमेन जोड़ें</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>ताज़ा करना</value>
+  </data>
+  <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
+    <value>पूर्व दर्शन</value>
+  </data>
+  <data name="Lexicon_DeleteLexeme" xml:space="preserve">
+    <value>इस लेक्सेम को हटा दें</value>
+  </data>
+  <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
+    <value>मानक लेआउट</value>
+  </data>
+  <data name="BiblicalTermsDomains_All" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="ProperCase_Philippians" xml:space="preserve">
+    <value>फिलिप्पियों</value>
+  </data>
+  <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
+    <value>अलौकिक प्राणी और शक्तियां</value>
+  </data>
+  <data name="Settings_EmailSendingError" xml:space="preserve">
+    <value>ईमेल भेजना त्रुटि</value>
+  </data>
+  <data name="FontSettings_Height" xml:space="preserve">
+    <value>ऊंचाई:</value>
+  </data>
+  <data name="Bcv_PreviousChapter" xml:space="preserve">
+    <value>पिछला अध्याय</value>
+  </data>
+  <data name="BulkAlignmentReview_Target" xml:space="preserve">
+    <value>लक्ष्य</value>
+  </data>
+  <data name="Settings_EmailVerificationCode" xml:space="preserve">
+    <value>ईमेल सत्यापन कोड</value>
+  </data>
+  <data name="NewProjectDialogView_EnterName" xml:space="preserve">
+    <value>कृपया अपनी परियोजना के लिए एक नाम दर्ज करें।</value>
+  </data>
+  <data name="ProperCase_Numbers" xml:space="preserve">
+    <value>नंबर</value>
+  </data>
+  <data name="Marble_Domains" xml:space="preserve">
+    <value>डोमेन:</value>
+  </data>
+  <data name="Delete_Project_Confirmation" xml:space="preserve">
+    <value>क्या आप सुनिश्चित हैं कि आप इस परियोजना को हटाना चाहते हैं?</value>
+  </data>
+  <data name="ProperCase_Genesis" xml:space="preserve">
+    <value>उत्पत्ति</value>
+  </data>
+  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+    <value>लक्ष्य भाषा</value>
+  </data>
+  <data name="Settings_SavedToRemoteServer" xml:space="preserve">
+    <value>दूरस्थ सर्वर के लिए सहेजा गया</value>
+  </data>
+  <data name="LexiconImport_TargetLanguage" xml:space="preserve">
+    <value>लक्ष्य भाषा</value>
+  </data>
+  <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
+    <value>स्तनधारियों; घरेलू जानवरों</value>
+  </data>
+  <data name="SlackMessageView_Message" xml:space="preserve">
+    <value>संदेश:</value>
+  </data>
+  <data name="MainView_FileNew" xml:space="preserve">
+    <value>नया</value>
+  </data>
+  <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
+    <value>टोकन को विभाजित करने के लिए स्थान का चयन करें:</value>
+  </data>
+  <data name="SlackMessageView_Send" xml:space="preserve">
+    <value>भेजना</value>
+  </data>
+  <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
+    <value>अस्वीकार कर देना</value>
+  </data>
+  <data name="1JN" xml:space="preserve">
+    <value>1JN</value>
+  </data>
+  <data name="BiblicalTermsForm_Counts" xml:space="preserve">
+    <value>गिनता</value>
+  </data>
+  <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
+    <value>नीचे दिए गए 'क्रिएट' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को तैयार करने, संरेखित करने और तैयार करने के लिए टोकन, संरेखित करेंगे। सभी कदम यहां दिखाई देंगे क्योंकि वे संसाधित किए जाते हैं। जब आप नीचे दिए गए लिंक पर क्लिक करने के लिए स्वतंत्र महसूस कर रहे हैं और ClearDashboard का उपयोग करके शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
+  </data>
+  <data name="WordMeaningsView_Domain" xml:space="preserve">
+    <value>कार्यक्षेत्र:</value>
+  </data>
+  <data name="Pds_Resource" xml:space="preserve">
+    <value>संसाधन</value>
+  </data>
+  <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
+    <value>Paratext वापस अनुवाद</value>
+  </data>
+  <data name="Bcv_NextBook" xml:space="preserve">
+    <value>अगली किताब</value>
+  </data>
+  <data name="ProperCase_2_Chronicles" xml:space="preserve">
+    <value>2 इतिहास</value>
+  </data>
+  <data name="Pds_ScaleToOneHundered" xml:space="preserve">
+    <value>सामग्री को 100% तक स्केल करें</value>
+  </data>
+  <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
+    <value>समझौता</value>
+  </data>
+  <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
+    <value>इस लेक्सेम को हटा दें?</value>
+  </data>
+  <data name="ProperCase_Hebrews" xml:space="preserve">
+    <value>इब्रा</value>
+  </data>
+  <data name="Bcv_Verse" xml:space="preserve">
+    <value>कविता</value>
+  </data>
+  <data name="ProperCase_Nehemiah" xml:space="preserve">
+    <value>नहेमायाह</value>
+  </data>
+  <data name="FontSettings_SourceFontSize" xml:space="preserve">
+    <value>स्रोत फ़ॉन्ट आकार:</value>
+  </data>
+  <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
+    <value>कविता</value>
+  </data>
+  <data name="Lexicon_ApplyTranslation" xml:space="preserve">
+    <value>अनुवाद लागू करें</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>NAM</value>
+  </data>
+  <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
+    <value>सम्मान, सम्मान, स्थिति</value>
+  </data>
+  <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
+    <value>बाइबिल की शर्तें</value>
+  </data>
+  <data name="2TH" xml:space="preserve">
+    <value>2TH</value>
+  </data>
+  <data name="Notes_AddNewNote" xml:space="preserve">
+    <value>एक नया नोट जोड़ें</value>
+  </data>
+  <data name="Marble_Chapter" xml:space="preserve">
+    <value>अध्याय</value>
+  </data>
+  <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
+    <value>से लेबल के साथ:</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>USFM की जाँच करना</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>के बारे में</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>कार्य रद्द कर दिया गया था</value>
+  </data>
+  <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
+    <value>ClearDashboard में आपका स्वागत है! कृपया अपनी पंजीकरण जानकारी दर्ज करें।</value>
+  </data>
+  <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
+    <value>धार्मिक गतिविधियाँ</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>मिटाना</value>
+  </data>
+  <data name="ProjectPicker_DeleteError" xml:space="preserve">
+    <value>आप उस परियोजना को नहीं हटा सकते हैं, एक अन्य एप्लिकेशन अभी भी इसका उपयोग कर रहा है।</value>
+  </data>
+  <data name="SlackMessageView_Combo4" xml:space="preserve">
+    <value>मेरा मैं यह करने का मन है...</value>
+  </data>
+  <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
+    <value>समानांतर कॉर्पोरा छंद</value>
+  </data>
+  <data name="FontSettings_NoteIndicators" xml:space="preserve">
+    <value>नोट संकेतक:</value>
+  </data>
+  <data name="Marble_VerseSense" xml:space="preserve">
+    <value>कविता</value>
+  </data>
+  <data name="Windows_TextCollection" xml:space="preserve">
+    <value>पाठ संग्रह</value>
+  </data>
+  <data name="ProperCase_2_Timothy" xml:space="preserve">
+    <value>2 तीमुथियुस</value>
+  </data>
+  <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
+    <value>बलिदान और प्रसाद</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>कोई नहीं</value>
+  </data>
+  <data name="BiblicalTermsBcv_Book" xml:space="preserve">
+    <value>किताब</value>
+  </data>
+  <data name="NewCollabUserView_FirstName" xml:space="preserve">
+    <value>पहला नाम</value>
+  </data>
+  <data name="LexiconIEdit_FindAll" xml:space="preserve">
+    <value>सब ढूँढ़ो</value>
+  </data>
+  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
+    <value>बाइबिल के ग्रंथों को शामिल करें?</value>
+  </data>
+  <data name="RegistrationView_FirstName" xml:space="preserve">
+    <value>कृपया अपना पहला नाम दें</value>
+  </data>
+  <data name="2KI" xml:space="preserve">
+    <value>2KI</value>
+  </data>
+  <data name="ProjectPicker_SearchRecent" xml:space="preserve">
+    <value>हाल ही में खोजें</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>प्रदर्शित होने वाला नाम</value>
+  </data>
+  <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
+    <value>वर्तमान परियोजना उपयोगकर्ता:</value>
+  </data>
+  <data name="ProjectPicker_DeleteProject" xml:space="preserve">
+    <value>प्रोजेक्ट हटाएं</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>संस्करण</value>
+  </data>
+  <data name="ProjectPicker_Version" xml:space="preserve">
+    <value>संस्करण:</value>
+  </data>
+  <data name="Pins_Stem" xml:space="preserve">
+    <value>तना</value>
+  </data>
+  <data name="FontSettings_Title" xml:space="preserve">
+    <value>शीर्षक:</value>
+  </data>
+  <data name="Notes_Note_Modified" xml:space="preserve">
+    <value>संशोधित</value>
+  </data>
+  <data name="Pds_SwitchParatextProject" xml:space="preserve">
+    <value>Paratext पर जाएं और परियोजनाओं को स्विच करें। वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ी Paratext प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट में कॉर्पस के समान नहीं है।</value>
+  </data>
+  <data name="Marble_RelatedLemmas" xml:space="preserve">
+    <value>संबंधित नींबू</value>
+  </data>
+  <data name="Pins_Match" xml:space="preserve">
+    <value>मिलान</value>
+  </data>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>देखने के लिए जोड़ें</value>
+  </data>
+  <data name="Marble_Sense" xml:space="preserve">
+    <value>समझ</value>
+  </data>
+  <data name="BiblicalTermsForm_Scope" xml:space="preserve">
+    <value>दायरा:</value>
+  </data>
+  <data name="1KI" xml:space="preserve">
+    <value>1KI</value>
+  </data>
+  <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
+    <value>शब्द संरेखण बनाएं</value>
+  </data>
+  <data name="LexiconImport_SourceWord" xml:space="preserve">
+    <value>स्रोत शब्द</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
+    <value>इंटरलीनियर</value>
+  </data>
+  <data name="LexiconIEdit_Translation" xml:space="preserve">
+    <value>अनुवाद</value>
+  </data>
+  <data name="Pins_Code" xml:space="preserve">
+    <value>कोड</value>
+  </data>
+  <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
+    <value>नए दृश्य में जोड़ें</value>
+  </data>
+  <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
+    <value>परटेटेक्स्ट कॉर्पस</value>
+  </data>
+  <data name="Landing_Project" xml:space="preserve">
+    <value>परियोजना</value>
+  </data>
+  <data name="JOS" xml:space="preserve">
+    <value>JOS</value>
+  </data>
+  <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
+    <value>अपडेट करें और नई किताबें जोड़ें</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>मदद</value>
+  </data>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>नया इंटरलाइन जोड़ें</value>
+  </data>
+  <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
+    <value>ग्लोस</value>
+  </data>
+  <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
+    <value>कॉरपस टोकन</value>
+  </data>
+  <data name="2PE" xml:space="preserve">
+    <value>2PE</value>
+  </data>
+  <data name="ProperCase_Zechariah" xml:space="preserve">
+    <value>जकर्याह</value>
+  </data>
+  <data name="ProperCase_1_Kings" xml:space="preserve">
+    <value>1 राजा</value>
+  </data>
+  <data name="Pins_LexemeType" xml:space="preserve">
+    <value>लेक्सेम प्रकार</value>
+  </data>
+  <data name="ShellView_ShowNotes" xml:space="preserve">
+    <value>रिलीज नोट्स</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>प्रतिलिपि</value>
+  </data>
+  <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
+    <value>समानांतर कॉर्पोरा के बीच कविता मानचित्रण सेट करें</value>
+  </data>
+  <data name="Marble_SubDomains" xml:space="preserve">
+    <value>उप डोमेन:</value>
+  </data>
+  <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
+    <value>स्नेह</value>
+  </data>
+  <data name="Pds_Xml" xml:space="preserve">
+    <value>एक्सएमएल</value>
+  </data>
+  <data name="Settings_UserAlreadyExists" xml:space="preserve">
+    <value>उपयोगकर्ता पहले से ही सर्वर पर मौजूद है</value>
+  </data>
+  <data name="Pds_Source" xml:space="preserve">
+    <value>स्रोत</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
+    <value>संरेखण</value>
+  </data>
+  <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
+    <value>बंद किया हुआ</value>
+  </data>
+  <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
+    <value>कॉर्पस को टोकन करने का चयन करें</value>
+  </data>
+  <data name="Settings_ValidateEmailCode" xml:space="preserve">
+    <value>मान्य ईमेल कोड</value>
+  </data>
+  <data name="Settings_MultiMonitorSupport" xml:space="preserve">
+    <value>बहुमाला समर्थन</value>
+  </data>
+  <data name="Bcv_Offset" xml:space="preserve">
+    <value>ओफ़्सेट</value>
+  </data>
+  <data name="Bcv_Sync" xml:space="preserve">
+    <value>साथ-साथ करना</value>
+  </data>
+  <data name="Settings_Email" xml:space="preserve">
+    <value>ईमेल</value>
+  </data>
+  <data name="EnhancedView_AddAlignment" xml:space="preserve">
+    <value>संरेखण जोड़ें?</value>
+  </data>
+  <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
+    <value>संरेखण हटाएं</value>
+  </data>
+  <data name="Settings_CollaborationSettings" xml:space="preserve">
+    <value>सहयोग सेटिंग्स</value>
+  </data>
+  <data name="Notes_FilterExpander" xml:space="preserve">
+    <value>फिल्टर</value>
+  </data>
+  <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
+    <value>घास</value>
+  </data>
+  <data name="ProperCase_Micah" xml:space="preserve">
+    <value>मीका</value>
+  </data>
+  <data name="ClockUserControl_Name" xml:space="preserve">
+    <value>आइटम का नाम</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
+    <value>एक नई परियोजना बनाएं</value>
+  </data>
+  <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
+    <value>अनुवाद</value>
+  </data>
+  <data name="EXO" xml:space="preserve">
+    <value>EXO</value>
+  </data>
+  <data name="Windows_Dashboard" xml:space="preserve">
+    <value>चकरानेवाला</value>
+  </data>
+  <data name="LUK" xml:space="preserve">
+    <value>LUK</value>
+  </data>
+  <data name="Windows_EnhancedView" xml:space="preserve">
+    <value>देखना</value>
+  </data>
+  <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
+    <value>सतह पाठ द्वारा गिनती</value>
+  </data>
+  <data name="ClockUserControl_Delete" xml:space="preserve">
+    <value>मिटाना</value>
+  </data>
+  <data name="LexiconIEdit_Partially" xml:space="preserve">
+    <value>आंशिक रूप से</value>
+  </data>
+  <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
+    <value>संरेखण हटाएं</value>
+  </data>
+  <data name="Lexicon_Concordance" xml:space="preserve">
+    <value>क़बूल</value>
+  </data>
+  <data name="Notes_LabelRemove" xml:space="preserve">
+    <value>इस लेबल को हटा दें</value>
+  </data>
+  <data name="MergeDialog_OperationComplete" xml:space="preserve">
+    <value>ऑपरेशन पूरा!</value>
+  </data>
+  <data name="Landing_NewProject" xml:space="preserve">
+    <value>नया काम</value>
   </data>
 </root>
