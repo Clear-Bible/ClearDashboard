@@ -147,7 +147,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             }
             else
             {
-                _logger.LogInformation($"Paratext Betat Install Path: {ParatextBetaInstallPath}\\paratext.exe");
+                _logger.LogInformation($"Paratext Beta Install Path: {ParatextBetaInstallPath}\\paratext.exe");
             }
             
 
