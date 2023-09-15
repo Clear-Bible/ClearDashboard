@@ -482,7 +482,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 ParatextProxy paratextUtils = new ParatextProxy(logger);
                 if (paratextUtils.IsParatextInstalled())
                 {
-                    _paratextInstallPath = paratextUtils.ParatextInstallPath;
+
+                    if (paratextUtils.ParatextInstallPath != string.Empty)
+                    {
+                        _paratextInstallPath = paratextUtils.ParatextInstallPath;
+                    }
+                    else if (paratextUtils.ParatextBetaInstallPath != string.Empty)
+                    {
+                        _paratextInstallPath = paratextUtils.ParatextBetaInstallPath;
+                    }
+
 
                     //run getting and deserializing all of these resources in parallel
                     await Task.WhenAll(
@@ -872,9 +881,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
                             {
                                 var verseReferences = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
-                                
+
                                 var orderedList = SortRefs(verseReferences); // sort the List  
-                                
+
                                 verseReferences.Clear();
                                 foreach (var orderedReference in orderedList)
                                 {
@@ -1160,17 +1169,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (itemDt.Gloss is null)
             {
-                return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
+                return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
                         || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
                         || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
-                    && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
+                    && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource] || _isAll);
             }
 
-            return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                    || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
+            return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                    || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
                     || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
                     || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
-                && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
+                && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource] || _isAll);
         }
 
         /// <summary>
@@ -1291,9 +1300,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 new NamedParameter("backTranslationFound", BackTranslationFound),
                 new NamedParameter("selectedItemVerses", SelectedItemVerses),
             };
-            
+
             _pinsVerseViewModel = LifetimeScope?.Resolve<PinsVerseViewModel>(parameters);
-            
+
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(_pinsVerseViewModel, null, settings);
             return false;
