@@ -14,6 +14,7 @@ using SIL.Machine.Utils;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -47,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         private GitLabUser _gitLabUser;
 
         private ILocalizationService _localizationService;
-        private string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
+        private string DialogTitle => $"{OkAction}: {ProjectName}";
 
         #endregion //Member Variables
 
@@ -102,7 +103,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         public bool CanCancel => true /* can always cancel */;
 
 
-        public string OkAction => CollaborationDialogAction.ToString();
+        public string OkAction
+        {
+            get
+            {
+                switch (CollaborationDialogAction)
+                {
+                    case CollaborationDialogAction.Commit:
+                        return "Send Changes";
+                    case CollaborationDialogAction.Import:
+                        return "Make Project Available for Collab";
+                    case CollaborationDialogAction.Initialize:
+                        return CollaborationDialogAction.ToString();
+                    case CollaborationDialogAction.Merge:
+                        return "Get Latest Updates";
+                    default:
+                        return CollaborationDialogAction.ToString();
+                }
+            }
+        }
 
         private bool _canOkAction;
         public bool CanOkAction
@@ -118,11 +137,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             set => Set(ref _canCancelAction, value);
         }
 
-        private string _cancelAction = "Close";
+        private string _cancelAction;
         public string CancelAction
         {
             get => _cancelAction;
-            set => Set(ref _cancelAction, value);
+            set
+            {
+                _cancelAction = value;
+                NotifyOfPropertyChange(() => CancelAction);
+            }
+        }
+
+        private System.Windows.Media.Brush _cancelColor;
+        public System.Windows.Media.Brush CancelColor
+        {
+            get => _cancelColor;
+            set
+            {
+                _cancelColor = value;
+                NotifyOfPropertyChange(() => CancelColor);
+            }
         }
 
         private ObservableCollection<string> _mergeProgressUpdates = new();
@@ -286,8 +320,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         private void PostAction()
         {
             _runningTask = null;
-
-            CancelAction = "Close";
+            
             ProgressBarVisibility = Visibility.Hidden;
         }
 
@@ -313,6 +346,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                 StatusMessageColor = System.Windows.Media.Brushes.Green;
+                CancelAction = "Done";
             }
             catch (OperationCanceledException)
             {
@@ -321,6 +355,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
                 StatusMessageColor = System.Windows.Media.Brushes.Orange;
+                CancelAction = "Close";
             }
             catch (Exception ex)
             {
@@ -330,6 +365,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationErrored"]; 
                 StatusMessageColor = System.Windows.Media.Brushes.Red;
+                CancelAction = "DCloseone";
             }
             finally
             {
@@ -374,7 +410,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                 StatusMessageColor = System.Windows.Media.Brushes.Green;
-                
+                CancelAction = "Done";
+
                 await EventAggregator.PublishOnUIThreadAsync(new RefreshCheckGitLab(), CancellationToken.None);
             }
             catch (OperationCanceledException)
@@ -384,6 +421,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
                 StatusMessageColor = System.Windows.Media.Brushes.Orange;
+                CancelAction = "Close";
             }
             catch (Exception ex)
             {
@@ -392,6 +430,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationErrored"];
                 StatusMessageColor = System.Windows.Media.Brushes.Red;
+                CancelAction = "Close";
             }
             finally
             {
@@ -456,6 +495,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                     StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                     StatusMessageColor = System.Windows.Media.Brushes.Green;
+                    CancelAction = "Done";
                 });
 
                 await _runningTask;
@@ -469,6 +509,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationCancelled"];
                 StatusMessageColor = System.Windows.Media.Brushes.Orange;
+                CancelAction = "Close";
             }
             catch (Exception ex)
             {
@@ -484,6 +525,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationErrored"];
                 StatusMessageColor = System.Windows.Media.Brushes.Red;
+                CancelAction = "Close";
             }
             finally
             {

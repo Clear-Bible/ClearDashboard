@@ -29,13 +29,15 @@ using System.Windows.Input;
 using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Wpf.Application.Services;
 using wpfKeyBoard;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 
 
 #pragma warning disable CS8618
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 {
-    public class MarbleViewModel : ToolViewModel, IHandle<VerseChangedMessage>
+    public class MarbleViewModel : ToolViewModel, IHandle<VerseChangedMessage>, IHandle<ParatextSyncMessage>
     {
         #region Commands
 
@@ -86,6 +88,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
 
         #region BCV
+        private Visibility _bcvUserControlVisibility = Visibility.Hidden;
+        public Visibility BcvUserControlVisibility
+        {
+            get => _bcvUserControlVisibility;
+            set
+            {
+                _bcvUserControlVisibility = value;
+                NotifyOfPropertyChange(() => BcvUserControlVisibility);
+            }
+        }
+
         private bool _paratextSync;
         public bool ParatextSync
         {
@@ -1032,7 +1045,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<MarbleView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<MarbleView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
         /// <summary>
@@ -1119,5 +1132,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public Task HandleAsync(ParatextSyncMessage message, CancellationToken cancellationToken)
+        {
+            var makeVisible = false;
+
+            if (message.Parent is MainViewModel mainViewModel)
+            {
+                foreach (var item in mainViewModel.Items)
+                {
+                    if (item is EnhancedViewModel enhancedViewModel && !enhancedViewModel.ParatextSync)
+                    {
+                        makeVisible = true;
+                        break;
+                    }
+                }
+            }
+
+            BcvUserControlVisibility = makeVisible ? Visibility.Visible : Visibility.Hidden;
+
+            return Task.CompletedTask;
+        }
     }
 }

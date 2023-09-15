@@ -1,12 +1,11 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +13,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.Alignment.Notes;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
+using System.Windows.Documents;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -60,6 +58,12 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<CollaborationUser> GetCollabUserExistsById(int userId)
         {
+
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new CollaborationUser();
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/{userId}");
 
             try
@@ -90,6 +94,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<CollaborationUser> GetCollabUserExistsByEmail(string email)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new CollaborationUser();
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
 
             try
@@ -126,6 +135,12 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<CollaborationUser>> GetAllCollabUsers()
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new List<CollaborationUser>();
+            }
+
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/users/");
 
             try
@@ -159,6 +174,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<DashboardUser> GetDashboardUserExistsById(Guid userId)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new DashboardUser();
+            }
+
             var query = new Dictionary<string, string>()
             {
                 ["api-version"] = "2.0",
@@ -191,6 +211,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<DashboardUser> GetDashboardUserExistsByEmail(string email)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new DashboardUser();
+            }
+
             var query = new Dictionary<string, string>()
             {
                 ["api-version"] = "2.0",
@@ -224,6 +249,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<DashboardUser>> GetAllDashboardUsers()
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return new List<DashboardUser>();
+            }
+
             var query = new Dictionary<string, string>()
             {
                 ["api-version"] = "2.0",
@@ -260,6 +290,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<bool> DeleteDashboardUserExistsById(Guid userId)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
             try
             {
                 var query = new Dictionary<string, string>()
@@ -281,6 +316,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<bool> DeleteCollaborationUserById(int userId)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/users/{userId}");
 
             try
@@ -310,6 +350,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<bool> UpdateDashboardUser(DashboardUser user)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
             string jsonUser = JsonSerializer.Serialize(user);
             var content = new System.Net.Http.StringContent(jsonUser, Encoding.UTF8, "application/json");
 
@@ -349,6 +394,11 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<bool> CreateNewCollabUser(GitLabUser user, string accessToken)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
             var encryptedPassword = Encryption.Encrypt(user.Password);
             var encryptedPersonalAccessToken = Encryption.Encrypt(accessToken);
 
@@ -385,6 +435,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<bool> CreateNewDashboardUser(DashboardUser user)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
             string jsonUser = JsonSerializer.Serialize(user);
             var content = new System.Net.Http.StringContent(jsonUser, Encoding.UTF8, "application/json");
 

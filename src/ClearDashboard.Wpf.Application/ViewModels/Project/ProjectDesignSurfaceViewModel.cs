@@ -343,7 +343,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // restore the nodes
                 if (designSurfaceData != null)
                 {
-                    foreach (var corpusId in topLevelProjectIds.CorpusIds.OrderBy(c=>c.Created))
+                    bool currentParatextProjectPresent = false;
+                    bool standardCorporaPresent = false;
+
+                    foreach (var corpusId in topLevelProjectIds.CorpusIds.OrderBy(c => c.Created))
                     {
                         if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
                         {
@@ -369,6 +372,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             {
                                 corpus.CorpusId.CorpusType = CorpusType.Resource.ToString();
                             }
+                            else
+                            {
+                                standardCorporaPresent = true;
+                                if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
+                                {
+                                    currentParatextProjectPresent = true;
+                                }
+                            }
                         }
                         
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
@@ -377,6 +388,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
+
+                    if (standardCorporaPresent  && !currentParatextProjectPresent)
+                    {
+                        var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                        if (confirmationViewPopupViewModel == null)
+                        {
+                            throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                        }
+
+                        confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.SwitchParatextProjectMessage;
+
+                        var result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                            SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                    }
+
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
                     //DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
@@ -1601,15 +1628,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (!wasTokenizing)
             {
-                var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<DeletingCorpusNodePopupViewModel>();
-                
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCorpusNodeConfirmation;
+
                 bool result = false;
                 OnUIThread(async () =>
                 {
-                    result = await _windowManager!.ShowDialogAsync(
-                        deletingCorpusNodePopupViewModel,
-                        null,
-                        SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
+                    result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                        SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
                 });
 
                 if (!result)

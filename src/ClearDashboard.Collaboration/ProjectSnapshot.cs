@@ -71,6 +71,8 @@ public class ProjectSnapshot
 
     public IModelSnapshot<Models.Project> Project { get => _projectGeneralModel; }
     public IEnumerable<IModelSnapshot<Models.User>> Users => GetGeneralModelList<Models.User>();
+    public IEnumerable<IModelSnapshot<Models.Lexicon_Lexeme>> LexiconLexemes => GetGeneralModelList<Models.Lexicon_Lexeme>();
+    public IEnumerable<IModelSnapshot<Models.Lexicon_SemanticDomain>> LexiconSemanticDomains => GetGeneralModelList<Models.Lexicon_SemanticDomain>();
     public IEnumerable<IModelSnapshot<Models.Corpus>> Corpora => GetGeneralModelList<Models.Corpus>();
     public IEnumerable<IModelSnapshot<Models.TokenizedCorpus>> TokenizedCorpora => GetGeneralModelList<Models.TokenizedCorpus>();
     public IEnumerable<IModelSnapshot<Models.ParallelCorpus>> ParallelCorpora => GetGeneralModelList<Models.ParallelCorpus>();

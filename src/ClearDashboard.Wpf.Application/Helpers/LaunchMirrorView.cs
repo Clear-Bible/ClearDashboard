@@ -21,7 +21,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
 {
     public static class LaunchMirrorView<TView> where TView : UserControl, new()
     {
-        public static void Show(object datacontext, double actualWidth, double actualHeight)
+        public static void Show(object datacontext, double actualWidth, double actualHeight, string title = "")
         {
             bool found = false;
             foreach (var window in App.Current.Windows)
@@ -123,6 +123,9 @@ namespace ClearDashboard.Wpf.Application.Helpers
             {
                 pinsViewModel.MainGrid.Tag = "True";
             }
+
+            mirror.Title = $"{title} Expanded View";
+
             // force the MirrorView to show
             mirror.Show();
             mirror.WindowState = WindowState.Maximized;

@@ -64,10 +64,10 @@
                             x:Name="nodeRectangle"
                             RadiusX="4"
                             RadiusY="4"
-                            Stroke="{StaticResource NodeBorderBrush}"
                             StrokeThickness="1.3">
                             <Rectangle.Style>
                                 <Style TargetType="Rectangle">
+                                    <Setter Property="Stroke" Value="{StaticResource NodeBorderBrush}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Auxiliary}">
                                             <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceAuxiliary}" />
@@ -283,7 +283,21 @@
                                 VerticalAlignment="Center"
                                 FontWeight="Bold"
                                 IsHitTestVisible="False"
-                                Text="{Binding Name}" />
+                                Text="{Binding Name}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource NodeBorderBrush}" />
+                                        <Style.Triggers>
+                                            <!--<DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptHebrew}">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptGreek}">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>-->
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
                             <!--  The project type of the node.  -->
                             <TextBlock
@@ -294,7 +308,21 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 IsHitTestVisible="False"
-                                Text="{Binding CorpusType}" />
+                                Text="{Binding CorpusType}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource NodeBorderBrush}" />
+                                        <Style.Triggers>
+                                            <!--<DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptHebrew}">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptGreek}">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>-->
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
                             <!--  Displays the node's input connectors.  -->
                             <ItemsControl
@@ -305,7 +333,7 @@
                                 ItemsSource="{Binding InputConnectors}" />
 
 
-                            <materialDesign:Chip
+                            <!--<materialDesign:Chip
                                 Grid.Row="0"
                                 Grid.RowSpan="2"
                                 Grid.Column="2"
@@ -321,7 +349,7 @@
                                         <Setter Property="Padding" Value="0" />
                                     </Style>
                                 </materialDesign:Chip.Style>
-                            </materialDesign:Chip>
+                            </materialDesign:Chip>-->
 
                             <!--  Displays the node's output connectors.  -->
                             <ItemsControl
@@ -440,7 +468,7 @@
                     Content="{helpers:Localization Pds_AddCorpora}"
                     FontSize="16"
                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
-                <TextBlock
+                <!--<TextBlock
                     Name="ProjectNameWide"
                     Grid.Row="0"
                     Grid.Column="1"
@@ -448,7 +476,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                    Text="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}" />
+                    Text="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}" />-->
 
 
                 <!--</WrapPanel>-->
