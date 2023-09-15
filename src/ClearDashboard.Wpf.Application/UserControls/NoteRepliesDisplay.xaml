@@ -19,9 +19,9 @@
                 <Separator Foreground="Blue" />
                 <userControls:NoteReplyDisplay
                     x:Name="NoteDisplay"
+                    CurrentUser="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentUser}"
                     NoteSeen="OnNoteSeen"
                     ParentNote="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext}"
-                    CurrentUser="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentUser}"
                     ReplyColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyColor}"
                     ReplyFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontFamily}"
                     ReplyFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"

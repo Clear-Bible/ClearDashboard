@@ -11,7 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string OriginID { get; set; } = string.Empty;
         public XmlSource XmlSource { get; set; }
         public string XmlSourceAbbreviation { get; set; } = string.Empty;
-        public string XmlPath { get; set; } = string.Empty;
+        public string XmlSourceDisplayName { get; set; } = string.Empty;
         public string Source { get; set; } = string.Empty;
         public string Lform { get; set; } = string.Empty;
         public string Gloss { get; set; } = string.Empty;

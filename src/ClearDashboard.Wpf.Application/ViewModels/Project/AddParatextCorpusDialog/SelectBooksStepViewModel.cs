@@ -36,6 +36,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         public RelayCommand NextCommand { get; }
         public RelayCommand BackCommand { get; }
 
+        private readonly ILocalizationService _localizationService;
+
         #endregion //Member Variables
 
 
@@ -51,15 +53,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         {
             get
             {
-                var somethingSelected = _selectedBooks.FirstOrDefault(t => t.IsEnabled && t.IsSelected);
-                if (somethingSelected is null)
+                var somethingSelected = false;
+                var newBooksSelected = false;
+                var oldBooksSelected = false;
+
+                foreach (var book in _selectedBooks)
                 {
-                    ContinueEnabled = false;
+                    if (book.IsEnabled && book.IsSelected && !somethingSelected)
+                    {
+                        somethingSelected = true;
+                    }
+
+                    if (!book.IsImported && book.IsEnabled && book.IsSelected)
+                    {
+                        newBooksSelected = true;
+                    }
+
+                    if (book.IsImported && book.IsEnabled && book.IsSelected)
+                    {
+                        oldBooksSelected = true;
+                    }
+
+                    if (somethingSelected && newBooksSelected && oldBooksSelected)
+                    {
+                        break;
+                    }
                 }
-                else
+
+                OkButtonText = newBooksSelected
+                    ? _localizationService.Get("UpdateParatextCorpusDialog_UpdateAndAdd")
+                    : _localizationService.Get("Update");
+
+                if (newBooksSelected && !oldBooksSelected)
                 {
-                    ContinueEnabled = true;
+                    OkButtonText = _localizationService.Get("UpdateParatextCorpusDialog_Add");
                 }
+
+                ContinueEnabled = somethingSelected;
 
                 return _selectedBooks;
             }
@@ -67,6 +97,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             {
                 _selectedBooks = value;
                 NotifyOfPropertyChange(() => SelectedBooks);
+            }
+        }
+
+        private string _okButtonText;
+        public string OkButtonText
+        {
+            get { return _okButtonText; }
+            set
+            {
+                _okButtonText = value;
+                NotifyOfPropertyChange(() => OkButtonText);
             }
         }
 
@@ -79,6 +120,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         }
         public Visibility NextVisibility { get; } = Visibility.Collapsed;
         public Visibility OkVisibility { get; } = Visibility.Visible;
+        public Visibility SelectBooksVisibility { get; } = Visibility.Collapsed;
+        public Visibility UpdateAddVisibility { get; } = Visibility.Visible;
 
         private bool _canOk;
         public bool CanOk
@@ -120,16 +163,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<SelectBooksStepViewModel> validator, ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
         {
+            _localizationService = localizationService;
+
             _projectManager = projectManager;
             if (selectBooksStepNextVisible)
             {
                 NextVisibility = Visibility.Visible;
                 OkVisibility = Visibility.Collapsed;
+
+                SelectBooksVisibility = Visibility.Visible;
+                UpdateAddVisibility = Visibility.Collapsed;
             }
             else
             {
                 NextVisibility = Visibility.Collapsed;
                 OkVisibility = Visibility.Visible;
+
+                SelectBooksVisibility = Visibility.Collapsed;
+                UpdateAddVisibility = Visibility.Visible;
             }
             DialogMode = dialogMode;
             CanMoveForwards = true;
@@ -214,8 +265,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 {
                     if (Int32.TryParse(book, out int index))
                     {
-                        SelectedBooks[index - 1].IsEnabled = false;
-                        SelectedBooks[index - 1].IsSelected = true;
+                        SelectedBooks[index - 1].IsImported = true;
+                        SelectedBooks[index - 1].IsEnabled = true;
+                        SelectedBooks[index - 1].IsSelected = false;
+                        SelectedBooks[index - 1].FontWeight = FontWeight.FromOpenTypeWeight(700);
                         SelectedBooks[index - 1].BookColor = new SolidColorBrush(Colors.Black);
                     }
                 }
@@ -270,7 +323,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                     ParentViewModel.BookIds.Add(book.Abbreviation);
                 }
             }
-            await MoveForwards();
+            ParentViewModel?.Ok();
         }
         public void BackAsync(object obj)
         {

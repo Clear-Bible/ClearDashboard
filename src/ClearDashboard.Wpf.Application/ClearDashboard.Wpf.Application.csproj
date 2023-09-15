@@ -7,9 +7,9 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.1.0.7</AssemblyVersion>
-    <FileVersion>1.1.0.7</FileVersion>
-    <Version>1.1.0.7</Version>
+    <AssemblyVersion>1.1.0.8</AssemblyVersion>
+    <FileVersion>1.1.0.8</FileVersion>
+    <Version>1.1.0.8</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
     <Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
@@ -140,6 +140,8 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.51" />
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="Markdig" Version="0.33.0" />
+    <PackageReference Include="MdXaml" Version="1.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" Version="2.21.0" />
@@ -291,11 +293,20 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
+    <None Update="Resources\Html2Adf\html2adf.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Html2Adf\htmltoadf.x86_64-pc-windows-gnu.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\markdown-cheat-sheet.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -464,6 +475,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\Html2Adf\" />
     <Folder Include="Resources\TailBlazor\" />
   </ItemGroup>
   <PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
