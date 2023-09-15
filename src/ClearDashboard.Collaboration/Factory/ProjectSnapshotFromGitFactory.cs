@@ -74,7 +74,7 @@ public class ProjectSnapshotFromGitFactory
         return LoadProject(commitSha, projectFolderName);
     }
 
-    public IEnumerable<GeneralModel<Models.User>> LoadUsers(string commitSha, Guid projectId)
+    public IEnumerable<GeneralModel<Models.User>> LoadUsers(string commitSha, Guid projectId, CancellationToken cancellationToken)
     {
         using (var repo = new Repository(_repositoryPath))
         {
@@ -91,7 +91,7 @@ public class ProjectSnapshotFromGitFactory
                 throw new SerializedDataException($"No '{topLevelEntityFolderNameMappings[typeof(Models.User)]}' entry found in top level project entries");
             }
 
-            return LoadTopLevelEntities<Models.User>(topLevelEntry, repo, commitSha, null);
+            return LoadTopLevelEntities<Models.User>(topLevelEntry, repo, commitSha, null, cancellationToken);
         }
     }
 
@@ -119,12 +119,13 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.AlignmentSet, Models.Alignment>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
-                        }));
+                            AddGeneralModelChild<Models.AlignmentSet, Models.Alignment>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        }, 
+                        cancellationToken));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
                 {
-                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Corpus>(topLevelEntry, repo, commitSha, null));
+                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Corpus>(topLevelEntry, repo, commitSha, null, cancellationToken));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Label)])
                 {
@@ -134,8 +135,9 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
-                        }));
+                            AddGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        },
+                        cancellationToken));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Note)])
                 {
@@ -145,9 +147,10 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
-                            AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
-                        }));
+                            AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                            AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        },
+                        cancellationToken));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.TokenizedCorpus)])
                 {
@@ -157,9 +160,10 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
-                            AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
-                        }));
+                            AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                            AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        },
+                        cancellationToken));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.ParallelCorpus)])
                 {
@@ -169,8 +173,9 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
-                        }));
+                            AddGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        },
+                        cancellationToken));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.TranslationSet)])
                 {
@@ -180,13 +185,57 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.TranslationSet, Models.Translation>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
-                        }));
+                            AddGeneralModelChild<Models.TranslationSet, Models.Translation>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        },
+                        cancellationToken));
 
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.User)])
                 {
-                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.User>(topLevelEntry, repo, commitSha, null));
+                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.User>(topLevelEntry, repo, commitSha, null, cancellationToken));
+                }
+                else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Lexicon_Lexeme)])
+                {
+                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Lexicon_Lexeme>(topLevelEntry, repo, commitSha,
+                        (IEnumerable<TreeEntry> entityItems,
+                        GeneralModel<Models.Lexicon_Lexeme> modelSnapshot,
+                        Repository repo,
+                        string commitSha) =>
+                        {
+                            AddGeneralModelChild<Models.Lexicon_Lexeme, Models.Lexicon_Meaning>(
+                                entityItems, 
+                                modelSnapshot, 
+                                repo, 
+                                commitSha,
+                                (IEnumerable<TreeEntry> childEntityItems,
+                                GeneralModel<Models.Lexicon_Meaning> childModelSnapshot,
+                                Repository repo,
+                                string commitSha) =>
+                                {
+                                    AddGeneralModelChild<Models.Lexicon_Meaning, Models.Lexicon_Translation>(childEntityItems, childModelSnapshot, repo, commitSha, null, cancellationToken);
+                                }, 
+                                cancellationToken);
+                            AddGeneralModelChild<Models.Lexicon_Lexeme, Models.Lexicon_Form>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        },
+                        cancellationToken));
+                }
+                else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Lexicon_SemanticDomain)])
+                {
+                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Lexicon_SemanticDomain>(topLevelEntry, repo, commitSha,
+                        (IEnumerable<TreeEntry> entityItems,
+                        GeneralModel<Models.Lexicon_SemanticDomain> modelSnapshot,
+                        Repository repo,
+                        string commitSha) =>
+                        {
+                            AddGeneralModelChild<Models.Lexicon_SemanticDomain, Models.Lexicon_SemanticDomainMeaningAssociation>(
+                                entityItems,
+                                modelSnapshot,
+                                repo,
+                                commitSha,
+                                null,
+                                cancellationToken);
+                        },
+                        cancellationToken));
                 }
             }
 
@@ -235,7 +284,8 @@ public class ProjectSnapshotFromGitFactory
         TreeEntry topLevelEntry,
         Repository repo,
         string commitSha,
-        AddGeneralModelChildDelegate<T>? addGeneralModelChildDelegate)
+        AddGeneralModelChildDelegate<T>? addGeneralModelChildDelegate,
+        CancellationToken cancellationToken)
         where T : notnull
     {
         var modelSnapshots = new List<GeneralModel<T>>();
@@ -244,6 +294,8 @@ public class ProjectSnapshotFromGitFactory
 
         foreach (var entityEntry in entityEntries.Where(te => te.TargetType == TreeEntryTargetType.Tree))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // Second level under project, containing specific items for a single entity id: 
             var entityItems = repo.Lookup<Tree>($"{commitSha}:{entityEntry.Path}");
             if (entityItems is null)
@@ -285,7 +337,13 @@ public class ProjectSnapshotFromGitFactory
         return modelSnapshot;
     }
 
-    private void AddGeneralModelChild<P,C>(IEnumerable<TreeEntry> entityEntries, GeneralModel<P> modelSnapshot, Repository repo, string commitSha, CancellationToken cancellationToken)
+    private void AddGeneralModelChild<P,C>(
+        IEnumerable<TreeEntry> entityEntries, 
+        GeneralModel<P> modelSnapshot, 
+        Repository repo, 
+        string commitSha,
+        AddGeneralModelChildDelegate<C>? addGeneralModelChildDelegate,
+        CancellationToken cancellationToken)
         where P : notnull
         where C : notnull
     {
@@ -350,7 +408,7 @@ public class ProjectSnapshotFromGitFactory
             else
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildren<GeneralModel<C>>(childEntityEntry, repo, commitSha, cancellationToken);
+                var childModelShapshots = LoadGeneralModelChildren(childEntityEntry, repo, commitSha, addGeneralModelChildDelegate, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
         }
@@ -384,6 +442,67 @@ public class ProjectSnapshotFromGitFactory
             }
 
             childModelShapshots.AddRange(childModelSnapshotGroup.Items);
+        }
+
+        return childModelShapshots;
+    }
+
+    private IEnumerable<GeneralModel<T>> LoadGeneralModelChildren<T>(
+        TreeEntry childEntry, 
+        Repository repo, 
+        string commitSha,
+        AddGeneralModelChildDelegate<T>? addGeneralModelChildDelegate,
+        CancellationToken cancellationToken)
+        where T : notnull
+    {
+        var childModelShapshots = new GeneralListModel<GeneralModel<T>>();
+
+        if (addGeneralModelChildDelegate is not null)
+        {
+            var entityEntries = repo.Lookup<Tree>($"{commitSha}:{childEntry.Path}").OrderBy(t => t.Name);
+
+            foreach (var entityEntry in entityEntries.Where(te => te.TargetType == TreeEntryTargetType.Tree))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var entityItems = repo.Lookup<Tree>($"{commitSha}:{entityEntry.Path}");
+                if (entityItems is null)
+                {
+                    throw new CommitObjectNotFoundException($"{commitSha}:{entityEntry.Path}");
+                }
+
+                var childModelSnapshot = LoadGeneralModelProperties<T>(entityItems);
+
+                addGeneralModelChildDelegate(entityItems, childModelSnapshot, repo, commitSha);
+
+                childModelShapshots.Add(childModelSnapshot);
+            }
+        }
+        else
+        {
+            var items = repo.Lookup<Tree>($"{commitSha}:{childEntry.Path}");
+            if (items is null)
+            {
+                throw new CommitObjectNotFoundException($"{commitSha}:{childEntry.Path}");
+            }
+
+            foreach (var item in items.Where(te => te.TargetType == TreeEntryTargetType.Blob).OrderBy(te => te.Name))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var serializedChildModelSnapshot = ((Blob)item.Target).GetContentText();
+
+                var childModelSnapshot = JsonSerializer.Deserialize<GeneralModel<T>>(
+                    serializedChildModelSnapshot,
+                    _jsonDeserializerOptions)!;
+
+                if (childModelSnapshot is null)
+                {
+                    throw new SerializedDataException($"Unable to deserialize type '{typeof(T).ShortDisplayName()}' properties at path {item.Path}");
+                }
+
+                childModelShapshots.Add(childModelSnapshot);
+            }
         }
 
         return childModelShapshots;

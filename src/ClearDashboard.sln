@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Generate Sematic Domain Lookup Sqlite.md = Generate Sematic Domain Lookup Sqlite.md
 		..\Localization-How-To.md = ..\Localization-How-To.md
 		Migration-How-To.md = Migration-How-To.md
+		Notes.md = Notes.md
 		..\NuGet-Configuration.md = ..\NuGet-Configuration.md
 		..\Paratext-Installation.md = ..\Paratext-Installation.md
 		..\Paratext_SendReceive_Documentation.md = ..\Paratext_SendReceive_Documentation.md
