@@ -252,7 +252,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     PaddingAfter = paddingAfter,
                     Translation = GetTranslationForToken(token, compositeToken),
                     AlignedToken = GetAlignedToken(token, compositeToken),
-                    NoteIds = await GetNoteIdsForToken(token.TokenId),
                     TokenNoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
                     IsSource = isSource,
                 };

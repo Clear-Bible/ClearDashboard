@@ -34,6 +34,7 @@
             ItemsSource="{Binding Verses}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.IsDeferredScrollingEnabled="True"
+         
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
             <b:Interaction.Triggers>
@@ -75,7 +76,8 @@
                         TitleVisibility="Collapsed"
                         TokenVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                        TranslationClicked="TranslationClicked"
+                        TranslationDoubleClicked="TranslationDoubleClicked"
+                        TranslationSet="TranslationSet"
                         TranslationFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TranslationFontFamily}"
                         TranslationFontSize="{Binding DataContext.TranslationsFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         TranslationVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
@@ -98,6 +100,12 @@
                             </b:EventTrigger>
                             <b:EventTrigger EventName="TokenMouseLeave">
                                 <b:CallMethodAction MethodName="TokenMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="TranslationClicked">
+                                <b:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="TranslationRightButtonDown">
+                                <b:CallMethodAction MethodName="TranslationRightButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
                             <b:EventTrigger EventName="TranslationMouseEnter">
                                 <b:CallMethodAction MethodName="TranslationMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />

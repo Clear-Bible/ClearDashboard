@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
 using System.Threading;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {

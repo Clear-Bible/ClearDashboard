@@ -319,7 +319,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        public void NoteAdded(NoteViewModel note)
+        public void TranslationNoteAdded(NoteViewModel note)
         {
             TranslationNoteIds.AddDistinct(note.NoteId!);
             NotifyOfPropertyChange(nameof(TranslationHasNote));
