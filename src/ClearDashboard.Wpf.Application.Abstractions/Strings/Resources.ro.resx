@@ -220,8 +220,8 @@
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Note</value>
   </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>CARTE</value>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Rezervat</value>
@@ -337,8 +337,8 @@
   <data name="EZK" xml:space="preserve">
     <value>EZK</value>
   </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>Toate</value>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>Paratext nu rulează</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
     <value>Creați o nouă tokenizare a corpusului</value>
@@ -370,8 +370,38 @@
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Adăugați o formă lexicală la această lemmă</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Definiția indisponibilă</value>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>Adăugați un domeniu semantic</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>Afișați sarcini de fundal</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>Verificarea USFM</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>Ezra</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>Adăugați text la vizualizare</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>Sarcina a fost anulată</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>Cuvânt:</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>Număr de tokenizări diferite</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Modelul simetrizat de antrenament?</value>

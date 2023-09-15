@@ -372,6 +372,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+
+        private Visibility _isParatextRegularInstalled = Visibility.Visible;
+        public Visibility IsParatextRegularInstalled
+        {
+            get => _isParatextRegularInstalled;
+            set 
+            { 
+                _isParatextRegularInstalled = value;
+                NotifyOfPropertyChange(() => IsParatextRegularInstalled);
+            }
+        }
+
+
+        private Visibility _isParatextBetaInstalled = Visibility.Collapsed;
+        public Visibility IsParatextBetaInstalled
+        {
+            get => _isParatextBetaInstalled;
+            set
+            {
+                _isParatextBetaInstalled = value;
+                NotifyOfPropertyChange(() => IsParatextBetaInstalled);
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -415,6 +439,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             _collaborationHttpClientServices=collaborationHttpClientServices;
+
+            _paratextProxy.IsParatextInstalled();
+            if (_paratextProxy.ParatextInstallPath != string.Empty)
+            {
+                IsParatextRegularInstalled = Visibility.Visible;
+            }
+            else
+            {
+                IsParatextRegularInstalled = Visibility.Collapsed;
+            }
+
+            if (_paratextProxy.ParatextBetaInstallPath != string.Empty)
+            {
+                IsParatextBetaInstalled = Visibility.Visible;
+            }
+            else
+            {
+                IsParatextBetaInstalled = Visibility.Collapsed;
+            }
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -498,6 +541,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
         }
+
+        public async Task StartParatextBeta()
+        {
+            if (!_paratextProxy.IsParatextRunning())
+            {
+                await _paratextProxy.StartParatextBetaAsync();
+            }
+
+            IsParatextRunning = _paratextProxy.IsParatextRunning();
+            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
+        }
+        
+
 
         public async Task RefreshCollabProjectList()
         {

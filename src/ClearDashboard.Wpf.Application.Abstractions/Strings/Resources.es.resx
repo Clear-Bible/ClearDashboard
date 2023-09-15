@@ -220,8 +220,8 @@
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Notas</value>
   </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>LIBRO</value>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reservado</value>
@@ -337,8 +337,8 @@
   <data name="EZK" xml:space="preserve">
     <value>EZK</value>
   </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>Todo</value>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>Paratext no se está ejecutando</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
     <value>Crear una nueva tokenización del corpus</value>
@@ -370,8 +370,38 @@
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Agregue una forma léxica a este lema</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Definición no disponible</value>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>Agregar un dominio semántico</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>Mostrar tareas de fondo</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>Verificar USFM</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>Ezra</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>Agregar texto a la vista</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>La tarea fue cancelada</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>Palabra:</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>Número de tokenizaciones diferentes</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>¿Modelo simetrizado de tren?</value>

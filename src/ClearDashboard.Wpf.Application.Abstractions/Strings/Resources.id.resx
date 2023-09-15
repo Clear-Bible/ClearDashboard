@@ -220,8 +220,8 @@
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Catatan</value>
   </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>BUKU</value>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Disimpan</value>
@@ -337,8 +337,8 @@
   <data name="EZK" xml:space="preserve">
     <value>EZK</value>
   </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>Semua</value>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>Paratext tidak berjalan</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
     <value>Buat tokenisasi corpus baru</value>
@@ -370,8 +370,38 @@
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Tambahkan bentuk leksikal ke lemma ini</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Definisi tidak tersedia</value>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>Tambahkan domain semantik</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>Tampilkan tugas latar belakang</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>Jenis</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>Memeriksa USFM</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>Ezra</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>Tambahkan teks untuk dilihat</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>Tugas dibatalkan</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Membatalkan</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>Kata:</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>Jumlah tokenisasi berbeda</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Latih model simetri?</value>

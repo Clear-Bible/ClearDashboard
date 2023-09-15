@@ -220,8 +220,8 @@
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>កំណត់ចំណាំ</value>
   </data>
-  <data name="Bcv_Book" xml:space="preserve">
-    <value>ស្យេវផោ</value>
+  <data name="EPH" xml:space="preserve">
+    <value>EPH</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>របវសិបកក្នុងបង្របក</value>
@@ -337,8 +337,8 @@
   <data name="EZK" xml:space="preserve">
     <value>EZK</value>
   </data>
-  <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>តាមងអស់</value>
+  <data name="ProjectPicker_NotRunning" xml:space="preserve">
+    <value>ParateXT មិនដំណើរការទេ</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
     <value>បង្កើតសញ្ញាតុក្កតារបស់ Corpus ថ្មី</value>
@@ -370,8 +370,38 @@
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>បន្ថែមទម្រង់ lexical មួយទៅ LEMMA នេះ</value>
   </data>
-  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>និយមន័យមិនអាចប្រើប្រាស់បាន</value>
+  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
+    <value>បន្ថែមដែន semantic</value>
+  </data>
+  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
+    <value>បង្ហាញភារកិច្ចផ្ទៃខាងក្រោយ</value>
+  </data>
+  <data name="BulkAlignmentReview_Type" xml:space="preserve">
+    <value>បុម្ពអកសរ</value>
+  </data>
+  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
+    <value>ពិនិត្យ USFM</value>
+  </data>
+  <data name="ProperCase_Ezra" xml:space="preserve">
+    <value>ហេហេរ៉ា</value>
+  </data>
+  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
+    <value>បន្ថែមអត្ថបទដើម្បីមើល</value>
+  </data>
+  <data name="LAM" xml:space="preserve">
+    <value>LAM</value>
+  </data>
+  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
+    <value>ភារកិច្ចត្រូវបានលុបចោល</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>លប់ចោល</value>
+  </data>
+  <data name="BiblicalTermsForm_Word" xml:space="preserve">
+    <value>ពាក្យ:</value>
+  </data>
+  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
+    <value>ចំនួននៃនិមិត្តសញ្ញាផ្សេងៗគ្នា</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>ម៉ូដែលហ្វឹកហាត់ម៉ូដែល?</value>
