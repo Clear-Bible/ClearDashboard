@@ -785,7 +785,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 else
                 {
                     verseText = "There was an issue getting the text for this verse.";
-                    Logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    //Logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 // get the Heb/Greek text

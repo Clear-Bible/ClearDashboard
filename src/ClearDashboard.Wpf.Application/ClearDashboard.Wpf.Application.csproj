@@ -73,6 +73,8 @@
     <None Remove="Resources\NewProject_Icon_128.png" />
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\OpenBook50.png" />
+    <None Remove="Resources\ParatextBeta_Connected32.png" />
+    <None Remove="Resources\ParatextBeta_Disconnected32.png" />
     <None Remove="Resources\Paratext_Connected32.png" />
     <None Remove="Resources\Paratext_Disconnected32.png" />
     <None Remove="Resources\Paratext_Send32.png" />
@@ -216,6 +218,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\OpenBook50.png" />
+    <Resource Include="Resources\ParatextBeta_Connected32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\ParatextBeta_Disconnected32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Paratext_Connected32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
