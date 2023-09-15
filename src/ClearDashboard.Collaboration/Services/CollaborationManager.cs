@@ -306,6 +306,12 @@ public class CollaborationManager
         try
         {
             var remoteHeadCommitSha = FindRemoteHeadCommitSha();
+            if (remoteHeadCommitSha is null)
+            {
+                return false;
+            }
+
+
             return project.LastMergedCommitSha != null && project.LastMergedCommitSha != remoteHeadCommitSha;
         }
         catch (Exception ex)

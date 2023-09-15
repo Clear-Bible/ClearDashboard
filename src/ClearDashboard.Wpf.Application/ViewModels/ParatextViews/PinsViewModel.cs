@@ -643,7 +643,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     var verseList = new List<string>();
 
                     // check against the BiblicalTermsList
-                    var bt = _biblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
+                    var bt = _biblicalTermsList.Term?.FindAll(t => t.Id == sourceWord);
+
+                    if (bt is null)
+                    {
+                        bt = new List<Term>();
+                    }
+
                     var gloss = "";
                     if (bt.Count > 0)
                     {
@@ -685,7 +691,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     else
                     {
                         // if not found in the Biblical Terms list, now check AllBiblicalTerms second
-                        var abt = _allBiblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
+                        var abt = _allBiblicalTermsList.Term?.FindAll(t => t.Id == sourceWord);
+                        if (abt is null)
+                        {
+                            abt = new List<Term>();
+                        }
+
+
                         if (abt.Count > 0)
                         {
                             gloss = abt[0].Gloss;

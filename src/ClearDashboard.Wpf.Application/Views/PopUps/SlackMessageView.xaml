@@ -67,7 +67,6 @@
                         BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                         BorderThickness="2"
                         FontSize="16"
-                        Foreground="{StaticResource SecondaryHueDarkForegroundBrush}"
                         SpellCheck.IsEnabled="True"
                         Text="{Binding UserMessage}"
                         TextWrapping="Wrap" />
@@ -148,7 +147,6 @@
                         BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                         BorderThickness="2"
                         FontSize="16"
-                        Foreground="{StaticResource SecondaryHueDarkForegroundBrush}"
                         SpellCheck.IsEnabled="True"
                         Text="{Binding JiraTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap" />
@@ -222,7 +220,6 @@
                                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                                     BorderThickness="2"
                                     FontSize="16"
-                                    Foreground="{StaticResource SecondaryHueDarkForegroundBrush}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Visible"
                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                                     SpellCheck.IsEnabled="True"
