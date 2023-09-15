@@ -199,11 +199,18 @@
                     TextWrapping="Wrap"
                     Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
+            <Grid Width="530" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
                 <Button
                     x:Name="StartParatext"
-                    Width="240"
+                    Grid.Column="0"
                     Height="60"
+                    MaxWidth="340"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
                     VerticalContentAlignment="Bottom"
                     cal:Message.Attach="StartParatext"
                     Style="{StaticResource TransparentStyle}"
@@ -239,7 +246,8 @@
                 </Button>
                 <Button
                     x:Name="StartParatextBeta"
-                    Width="240"
+                    Grid.Column="1"
+                    Width="250"
                     Height="60"
                     VerticalContentAlignment="Bottom"
                     cal:Message.Attach="StartParatextBeta"
@@ -269,13 +277,13 @@
                                 HorizontalAlignment="Center"
                                 FontSize="12"
                                 FontWeight="Bold"
-                                TextWrapping="Wrap"
-                                Text="{helpers:Localization ProjectPicker_BetaNotRunning}" />
+                                Text="{helpers:Localization ProjectPicker_BetaNotRunning}"
+                                TextWrapping="Wrap" />
                             <TextBlock HorizontalAlignment="Center" Text="{helpers:Localization ProjectPicker_StartParatext}" />
                         </StackPanel>
                     </StackPanel>
                 </Button>
-            </StackPanel>
+            </Grid>
         </StackPanel>
 
         <Line
