@@ -34,6 +34,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
@@ -1368,7 +1369,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
                         verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
                         verse.Inlines.Insert(0,
-                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = (SolidColorBrush?)System.Windows.Application.Current.FindResource("AccentHueBrush")
+                            });
 
                         // check if this was the last one
                         if (i == 0)

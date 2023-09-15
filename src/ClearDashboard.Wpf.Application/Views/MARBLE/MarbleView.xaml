@@ -10,6 +10,7 @@
     xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Marble"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -52,10 +53,25 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
-        <Style x:Key="ExpanderStyle" TargetType="{x:Type Expander}">
+        <Style x:Key="PrimaryExpanderStyle" TargetType="{x:Type Expander}">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}" />
+            <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
+        </Style>
+
+        <Style x:Key="SecondaryExpanderStyle" TargetType="{x:Type Expander}">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="{StaticResource SecondaryHueLightBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource SecondaryHueLightForegroundBrush}" />
+        </Style>
+
+        <Style
+            x:Key="SecondaryGroupBoxStyle"
+            BasedOn="{StaticResource MahApps.Styles.GroupBox}"
+            TargetType="{x:Type GroupBox}">
+            <Setter Property="BorderBrush" Value="{StaticResource SecondaryHueLightBrush}" />
+            <Setter Property="mah:ControlsHelper.ContentCharacterCasing" Value="Normal" />
+            <Setter Property="mah:HeaderedControlHelper.HeaderBackground" Value="{StaticResource SecondaryHueLightBrush}" />
         </Style>
 
         <marble:MarbleViewModel x:Key="ViewModelsSource" />
@@ -389,7 +405,7 @@
                             Margin="10,10,23,10"
                             Header="{helpers:Localization Marble_FrequencyGraph}"
                             IsExpanded="False"
-                            Style="{StaticResource ExpanderStyle}">
+                            Style="{StaticResource PrimaryExpanderStyle}">
                             <pieChart:PieChartLayout
                                 Margin="2"
                                 HorizontalAlignment="Stretch"
@@ -414,7 +430,8 @@
                             Width="Auto"
                             Margin="10,5,10,10"
                             Header="{helpers:Localization Marble_GeneralInformation}"
-                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
+                            Style="{StaticResource SecondaryGroupBoxStyle}">
                             <GroupBox.HeaderTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -485,7 +502,7 @@
                                         VerticalAlignment="Top"
                                         Header="{helpers:Localization Marble_StrongCodes}">
                                         <Expander.Style>
-                                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                            <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
                                                 <Setter Property="IsExpanded" Value="True" />
                                                 <Style.Triggers>
@@ -578,7 +595,7 @@
                                         VerticalAlignment="Top"
                                         Header="{helpers:Localization Marble_PartsOfSpeech}">
                                         <Expander.Style>
-                                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                            <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
                                                 <Setter Property="IsExpanded" Value="True" />
                                                 <Style.Triggers>
@@ -658,7 +675,7 @@
                                         VerticalAlignment="Top"
                                         Header="{helpers:Localization Marble_RelatedLemmas}">
                                         <Expander.Style>
-                                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                            <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
                                                 <Setter Property="IsExpanded" Value="True" />
                                                 <Style.Triggers>
@@ -781,7 +798,8 @@
                             Width="Auto"
                             Margin="5,5,10,10"
                             Header="{helpers:Localization Marble_Senses}"
-                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
+                            Style="{StaticResource SecondaryGroupBoxStyle}">
 
                             <ListView
                                 x:Name="SensesListView"
@@ -876,7 +894,7 @@
                                 <Expander
                                     Header="{helpers:Localization Marble_Definition}"
                                     IsExpanded="True"
-                                    Style="{StaticResource ExpanderStyle}">
+                                    Style="{StaticResource PrimaryExpanderStyle}">
                                     <StackPanel
                                         Margin="3"
                                         Background="{StaticResource MaterialDesignPaper}"
@@ -954,7 +972,7 @@
 
 
 
-                                <Expander Header="{helpers:Localization Marble_Verses}" Style="{StaticResource ExpanderStyle}">
+                                <Expander Header="{helpers:Localization Marble_Verses}" Style="{StaticResource SecondaryExpanderStyle}">
                                     <StackPanel
                                         Margin="3"
                                         Background="{StaticResource MaterialDesignPaper}"
@@ -1113,7 +1131,7 @@
 
                                 <Expander Header="Synonyms">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.Synonyms.Count}" Value="0">
@@ -1171,7 +1189,7 @@
 
                                 <Expander Header="Antonyms">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource SecondaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.Antonyms.Count}" Value="0">
@@ -1227,7 +1245,7 @@
 
                                 <Expander Header="{helpers:Localization Marble_DomainsTitle}">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.Domains.Count}" Value="0">
@@ -1326,7 +1344,7 @@
 
                                 <Expander Header="CoreDomains">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource SecondaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.CoreDomains.Count}" Value="0">
@@ -1379,7 +1397,7 @@
 
                                 <Expander Header="Valency">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.Valencies.Count}" Value="0">
@@ -1432,7 +1450,7 @@
 
                                 <Expander Header="Collocational Meanings">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource SecondaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.AlphabetTreeNodes.Count}" Value="0">
