@@ -1635,10 +1635,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
             //warn users 
-            var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<DeletingCorpusNodePopupViewModel>();
+            var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
 
             var result = await _windowManager!.ShowDialogAsync(
-                deletingCorpusNodePopupViewModel, 
+                deletingCorpusNodePopupViewModel,
                 null,
                 SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
 
