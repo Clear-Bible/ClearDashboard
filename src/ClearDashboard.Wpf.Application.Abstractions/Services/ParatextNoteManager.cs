@@ -163,7 +163,7 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
 
-        public static async Task<IEnumerable<(VerseRef verseRef, IEnumerable<TokenId> tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromParatextAsync(
+        public static async Task<IEnumerable<(VerseRef verseRef, List<TokenId> tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromParatextAsync(
             IMediator mediator, 
             TokenizedTextCorpusId tokenizedTextCorpusId, 
             int bookNumber, 
@@ -210,7 +210,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     return externalNotesGroupedByVerse
                         ?.Select(g => g
                             .Select(r => r)
-                            .AddVerseAndTokensContext(tokenTextRows.First(ttr => ((VerseRef)ttr.Ref).VerseNum.ToString() == g.Key).Tokens, engineStringDetokenizer))
+                            .AddVerseAndTokensContext(tokenTextRows.First(ttr => ((VerseRef)ttr.Ref).VerseNum.ToString() == g.Key), engineStringDetokenizer))
                         .SelectMany(r => r)
                             ?? throw new InvalidDataEngineException(name: "result.Data", value: "null", message: "result of GetNotesQuery is successful yet result.Data is null");
                 }

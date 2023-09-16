@@ -96,13 +96,72 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <param name="externalNotes"></param>
         /// <param name="verseTokens">All the tokens for a single verse</param>
         /// <param name="engineStringDetokenizer"></param>
-        /// <returns></returns>
-        public static IEnumerable<(VerseRef verseRef, IEnumerable<TokenId> tokenIds, ExternalNote externalNote)> AddVerseAndTokensContext(
+        /// <returns>
+        /// - Zero count of tokenIds with externalNote.IndexOfSelectedPlainTextInVersePainText > 0 means it identifies a location in between tokens. Since
+        /// Dashboard doesn't support 'marker' notes this would be rendered as pertaining to the entire verse.
+        /// - externalNote.IndexOfSelectedPlainTextInVersePainText == 0 means the note pertains to the verse.
+        /// 
+        /// </returns>
+        public static IEnumerable<(VerseRef verseRef, List<TokenId> tokenIds, ExternalNote externalNote)> AddVerseAndTokensContext(
             this IEnumerable<ExternalNote> externalNotes,
-            IEnumerable<Token> verseTokens,
+            TokensTextRow tokenTextRow,
             EngineStringDetokenizer engineStringDetokenizer)
         {
-            throw new Exception();
+            var tokensWithPadding = engineStringDetokenizer.Detokenize(tokenTextRow.Tokens.GetPositionalSortedBaseTokens());
+            var versePlainText = $"{tokensWithPadding.Aggregate(string.Empty, (constructedString, tokenWithPadding) => $"{constructedString}{tokenWithPadding.paddingBefore}{tokenWithPadding.token}{tokenWithPadding.paddingAfter}")}";
+            var verseRef = (VerseRef)tokenTextRow.Ref;
+
+            return externalNotes
+                .Select(en =>
+                {
+                    if (en.VersePlainText != versePlainText)
+                    {
+                        return (verseRef, new List<TokenId>(), en);
+                    }
+                    else
+                    {
+                        return (
+                            verseRef, 
+                            GetSelectedTokenIdsForSelection(tokensWithPadding, en.IndexOfSelectedPlainTextInVersePainText, en.SelectedPlainText), 
+                            en
+                        );
+                    }
+                });
+        }
+
+        private static List<TokenId> GetSelectedTokenIdsForSelection(
+            IEnumerable<(Token token, string paddingBefore, string paddingAfter)> tokensWithPadding, 
+            int indexOfSelectedPlainTextInVersePainText, 
+            string selectedPlainText)
+        {
+            var selectedTokenIds = new List<TokenId>();
+            if (selectedPlainText == null || selectedPlainText.Length == 0)
+            {
+                return selectedTokenIds;
+            }
+
+            int index = 0;
+            foreach (var tokenWithPadding in tokensWithPadding)
+            {
+                var tokenText = $"{tokenWithPadding.paddingBefore}{tokenWithPadding.token}{tokenWithPadding.paddingAfter}";
+
+                if (index >= indexOfSelectedPlainTextInVersePainText)
+                {
+                    if (selectedPlainText.Contains(tokenText))
+                    {
+                        selectedTokenIds.Add(tokenWithPadding.token.TokenId);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    index += tokenText.Length;
+                }
+            }
+            return selectedTokenIds;
         }
     }
 }
