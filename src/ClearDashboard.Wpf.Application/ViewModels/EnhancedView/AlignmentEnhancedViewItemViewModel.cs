@@ -583,6 +583,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     //await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                     //    exception: ex, cancellationToken: cancellationToken,
                     //    backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
+                    Logger.LogError(ex, "An unexpected error occurred while fetch PivotWords.");
                 }
                 finally
                 {

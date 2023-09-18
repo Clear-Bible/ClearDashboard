@@ -515,10 +515,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             catch (Exception ex)
             {
-                var s = ex.Message;
-                throw;
+               Logger!.LogError(ex, "An unexpected error occurred while activating a 'EnhancedViewItemViewModel'");
+               throw;
             }
-            ;
+            
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
