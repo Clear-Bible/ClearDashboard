@@ -18,6 +18,8 @@ using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellView
 using ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate;
 using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.CQRS;
+using MediatR;
 
 namespace ClearDashboard.Wpf.Application
 {
