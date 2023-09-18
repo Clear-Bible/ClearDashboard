@@ -1,7 +1,7 @@
 ﻿using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 
-namespace ClearDashboard.DAL.Tests.Mocks
+namespace ClearDashboard.WPF.Tests.Mocks
 {
     public  class ProjectProvider:  IProjectProvider
     {

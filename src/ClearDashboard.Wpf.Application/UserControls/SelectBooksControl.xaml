@@ -7,8 +7,9 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:cm="http://caliburnmicro.com"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -22,11 +23,15 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+            x:Name="SelectBookControl">
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <system:Boolean x:Key="True">True</system:Boolean>
+            <system:Boolean x:Key="False">False</system:Boolean>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -45,7 +50,16 @@
             Margin="15,15,0,0"
             HorizontalAlignment="Left"
             Content="{helpers:Localization AddParatextCorpusDialog_SelectBooks}"
-            FontSize="24" />
+            FontSize="20" 
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+        <Label
+            Grid.Row="0"
+            Margin="15,15,0,0"
+            HorizontalAlignment="Left"
+            Content="{helpers:Localization AddParatextCorpusDialog_SelectedBooks}"
+            FontSize="20" 
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -1685,7 +1699,8 @@
             Grid.Row="3"
             Grid.Column="0"
             Margin="5"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <Button
                 Margin="10,0,0,15"

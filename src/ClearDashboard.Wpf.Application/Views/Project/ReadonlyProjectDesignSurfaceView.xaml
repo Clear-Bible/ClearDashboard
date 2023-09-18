@@ -1,0 +1,613 @@
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.Views.Project.ReadonlyProjectDesignSurfaceView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
+    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
+    Width="500"
+    d:DataContext="{d:DesignInstance Type=project:ReadonlyProjectDesignSurfaceViewModel,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="450"
+    d:DesignWidth="500"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--
+                    Merge in the resource dictionary that is shared between the main window and the overview window.
+                -->
+
+                <ResourceDictionary Source="/Styles/ProjectDesignSurface/SharedVisualTemplates.xaml" />
+                <ResourceDictionary Source="ReadonlyProjectDesignSurfaceViewStyle.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <!--  Define a data-template for the 'NodeViewModel' class.  -->
+            <DataTemplate x:Name="NodeViewModelTemplate" DataType="{x:Type projectDesignSurface:CorpusNodeViewModel}">
+
+                <!--
+                    An adorned control is used, to represent the node.
+                    When the user hovers the mouse cursor over the node, the
+                    'delete node' adorner pops up and allows them to delete the node.
+                -->
+                <controls:AdornedControl
+                    AdornerOffsetX="-12"
+                    AdornerOffsetY="8"
+                    HorizontalAdornerPlacement="Outside"
+                    IsMouseOverShowEnabled="{Binding ElementName=ProjectDesignSurface, Path=IsNotDragging}"
+                    VerticalAdornerPlacement="Outside">
+
+                    <!--  The margin has been selected so that the selection rect nicely covers the entire node.  -->
+
+                    <Grid
+                        MinWidth="150"
+                        Margin="10,6,10,6"
+                        SizeChanged="OnCorpusNodeSizeChanged">
+
+                        <!--  This rectangle is the main visual for the node.  -->
+
+                        <Rectangle
+                            x:Name="nodeRectangle"
+                            RadiusX="4"
+                            RadiusY="4"
+                            Stroke="{StaticResource NodeBorderBrush}"
+                            StrokeThickness="1.3">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Auxiliary}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceAuxiliary}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.BackTranslation}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushBackTranslation}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ConsultantNotes}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceConsultantNotes}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Daughter}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceDaughter}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Dictionary}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceDictionary}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptHebrew}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptGreek}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Resource}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceResource}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Standard}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushStandard}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.StudyBible}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushStudyBible}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.StudyBibleAdditions}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushStudyBibleAdditions}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.SourceLanguage}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.TransliterationManual}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceUnknown}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.TransliterationWithEncoder}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceUnknown}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Unknown}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceUnknown}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Xml}">
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                            <Rectangle.ContextMenu>
+                                <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
+                                    <ContextMenu.Resources>
+
+                                        <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:CorpusNodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconPicolIcons
+                                                    Width="15"
+                                                    Height="15"
+                                                    Margin="5,5,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Kind="{Binding IconKind}" />
+                                                <TextBlock
+                                                    Margin="5,5,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource PrimaryHueMidBrush}"
+                                                    Text="{Binding Header}" />
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="Command" Value="{Binding Command}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                                <Separator />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+
+                                                <!--<DataTrigger Binding="{Binding IsSeparator}" Value="False">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <iconPacks:PackIconPicolIcons
+                                                                        Width="15"
+                                                                        VerticalAlignment="Center"
+                                                                        Margin="5 5 0 0"
+                                                                        Height="15"
+                                                                        Kind="{Binding IconKind}" />
+                                                                    <TextBlock
+                                                                        Margin="5,5,0,0"
+                                                                        VerticalAlignment="Center"
+                                                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                                        Text="{Binding Header}" />
+                                                                </StackPanel>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Command" Value="{Binding Command}" />
+                                                </DataTrigger>-->
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContextMenu.Resources>
+
+
+
+                                </ContextMenu>
+                            </Rectangle.ContextMenu>
+                        </Rectangle>
+
+
+                        <!--
+                            This grid contains the node's connectors.
+                            The margin is negative so that the connectors overlap the body of the node and it's selection border.
+                        -->
+                        <Grid Margin="-6,0,-6,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" MinWidth="10" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="Auto" />
+                                <!--  spacer  -->
+                                <RowDefinition Height="2" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--  The name of the node.  -->
+                            <TextBlock
+                                x:Name="tb1"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                IsHitTestVisible="False"
+                                Text="{Binding Name}" />
+
+                            <!--  The project type of the node.  -->
+                            <TextBlock
+                                x:Name="tb2"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False"
+                                Text="{Binding CorpusType}" />
+
+                            <!--  Displays the node's input connectors.  -->
+                            <ItemsControl
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Focusable="False"
+                                ItemTemplate="{StaticResource InputConnectorTemplate}"
+                                ItemsSource="{Binding InputConnectors}" />
+
+
+                            <materialDesign:Chip
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="2"
+                                Width="30"
+                                Height="30"
+                                Margin="0,-5,6,0"
+                                HorizontalAlignment="Right"
+                                Content="{Binding Path=TokenizationCount, UpdateSourceTrigger=PropertyChanged}"
+                                IsHitTestVisible="False"
+                                ToolTip="{helpers:Localization Pds_NumberOfDifferentTokenizations}">
+                                <materialDesign:Chip.Style>
+                                    <Style TargetType="materialDesign:Chip">
+                                        <Setter Property="Padding" Value="0" />
+                                    </Style>
+                                </materialDesign:Chip.Style>
+                            </materialDesign:Chip>
+
+                            <!--  Displays the node's output connectors.  -->
+                            <ItemsControl
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Focusable="False"
+                                ItemTemplate="{StaticResource OutputConnectorTemplate}"
+                                ItemsSource="{Binding OutputConnectors}" />
+                        </Grid>
+                    </Grid>
+
+                    <!--<controls:AdornedControl.AdornerContent>
+
+                        --><!--
+                            This is the adorner that pops up when the user hovers the mouse over the node.
+                            It displays a button that the user can click to delete the node.
+                        --><!--
+                        <Canvas
+                            x:Name="nodeAdornerCanvas"
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top">
+                            <Line
+                                Stroke="Black"
+                                StrokeThickness="1"
+                                X1="0"
+                                X2="15"
+                                Y1="30"
+                                Y2="15" />
+                            <Button
+                                x:Name="deleteNodeButton"
+                                Canvas.Left="10"
+                                Canvas.Top="0"
+                                Width="20"
+                                Height="20"
+                                Command="{StaticResource Commands.DeleteNode}"
+                                CommandParameter="{Binding}"
+                                Cursor="Hand"
+                                Focusable="False"
+                                Template="{StaticResource deleteButtonTemplate}" />
+                        </Canvas>
+                    </controls:AdornedControl.AdornerContent>-->
+                </controls:AdornedControl>
+            </DataTemplate>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <UserControl.InputBindings>
+
+        <!--  Bind input to commands.  -->
+
+        <!--<KeyBinding Key="Del" Command="{StaticResource Commands.DeleteSelectedNodes}" />-->
+        <KeyBinding Key="Minus" Command="{StaticResource Commands.ZoomOut}" />
+        <KeyBinding Key="Plus" Command="{StaticResource Commands.ZoomIn}" />
+        <KeyBinding Key="Backspace" Command="{StaticResource Commands.JumpBackToPrevZoom}" />
+        <KeyBinding Key="Space" Command="{StaticResource Commands.FitContent}" />
+
+    </UserControl.InputBindings>
+
+    <UserControl.CommandBindings>
+
+        <!--  Bind commands to event handlers.  -->
+
+        <!--<CommandBinding Command="{StaticResource Commands.DeleteSelectedNodes}" Executed="OnDeleteSelectedNodesExecuted" />-->
+        <!--<CommandBinding Command="{StaticResource Commands.CreateNode}" Executed="OnCreateCorpusNodeExecuted" />-->
+        <!--<CommandBinding Command="{StaticResource Commands.NodeProperties}" Executed="OnCorpusNodeProperties" />
+        <CommandBinding Command="{StaticResource Commands.ConnectionProperties}" Executed="OnConnectionProperties" />
+        <CommandBinding Command="{StaticResource Commands.DeleteNode}" Executed="OnDeleteCorpusNodeExecuted" />
+        <CommandBinding Command="{StaticResource Commands.DeleteConnection}" Executed="OnDeleteConnectionExecuted" />
+        <CommandBinding Command="{StaticResource Commands.ZoomOut}" Executed="ZoomOut_Executed" />
+        <CommandBinding Command="{StaticResource Commands.ZoomIn}" Executed="ZoomIn_Executed" />
+        <CommandBinding
+            CanExecute="JumpBackToPrevZoom_CanExecuted"
+            Command="{StaticResource Commands.JumpBackToPrevZoom}"
+            Executed="JumpBackToPrevZoom_Executed" />
+        <CommandBinding Command="{StaticResource Commands.FitContent}" Executed="FitContent_Executed" />
+        <CommandBinding Command="{StaticResource Commands.Fill}" Executed="Fill_Executed" />
+        <CommandBinding Command="{StaticResource Commands.OneHundredPercent}" Executed="OneHundredPercent_Executed" />-->
+        <!--<CommandBinding Command="{StaticResource Commands.ToggleCorpusVisibility}" Executed="ToggleCorpusVisibility_Executed" />-->
+
+    </UserControl.CommandBindings>
+
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <!--<RowDefinition Height="200" />-->
+        </Grid.RowDefinitions>
+        <!--<materialDesign:Card
+            Grid.Row="0"
+            Margin="0"
+            Padding="5"
+            Background="{DynamicResource PrimaryHueMidBrush}"
+            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+              --><!--IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"--><!--  
+            <Grid MinWidth="400">
+
+                --><!--<Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="50" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>-->
+
+                <!--<Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>--><!--
+                <StackPanel Orientation="Horizontal">
+                <Label HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Content="{helpers:Localization ProjectPicker_Project}"
+                       Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+
+                <Label
+                    Margin="10,0,35,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+
+                </StackPanel>
+
+            </Grid>
+        </materialDesign:Card>-->
+
+        <ProgressBar
+            Grid.Row="0"
+            Width="50"
+            Height="50"
+            Margin="0,0,50,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Value="0">
+            <ProgressBar.Style>
+                <Style BasedOn="{StaticResource MaterialDesignCircularProgressBar}" TargetType="ProgressBar">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsBusy}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ProgressBar.Style>
+        </ProgressBar>
+
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--<WrapPanel Margin="5,5,5,5" HorizontalAlignment="Center">
+                <Button
+                    Width="40"
+                    Margin="3"
+                    Padding="0"
+                    Command="{StaticResource Commands.FitContent}"
+                    Style="{StaticResource SmallTransparentStyle}"
+                    ToolTip="{helpers:Localization Pds_FitNodesToViewport}">
+                    <materialDesign:PackIcon Kind="FitToScreenOutline" />
+                </Button>
+
+                --><!--
+                    The fill button.  Causes the content to be scaled so that it fits in the viewport.
+                --><!--
+                <Button
+                    Width="40"
+                    Margin="3"
+                    Padding="0"
+                    Command="{StaticResource Commands.Fill}"
+                    Style="{StaticResource SmallTransparentStyle}"
+                    ToolTip="{helpers:Localization Pds_FitContentToViewport}">
+                    <materialDesign:PackIcon Kind="FitToPageOutline" />
+                </Button>
+
+                --><!--
+                    The 100% button.  Causes the content to be scaled to 100 percent.
+                --><!--
+                <Button
+                    Width="40"
+                    Margin="3"
+                    Padding="0"
+                    Command="{StaticResource Commands.OneHundredPercent}"
+                    Style="{StaticResource SmallTransparentStyle}"
+                    ToolTip="{helpers:Localization Pds_ScaleToOneHundered}">
+                    100%
+                </Button>
+
+                --><!--
+                    This is the label that shows what the current zoom level
+                    is while zooming in and out.
+                --><!--
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="tb3"
+                        Width="30"
+                        Margin="3,0,5,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
+
+                    <TextBlock
+                        x:Name="tb4"
+                        Width="15"
+                        Margin="-8,0,3,0"
+                        VerticalAlignment="Center"
+                        Text="%" />
+                </StackPanel>
+
+
+                --><!--  Button to zoom out.  --><!--
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        Width="35"
+                        Margin="3"
+                        Padding="0"
+                        Command="{StaticResource Commands.ZoomOut}"
+                        FontSize="25"
+                        Style="{StaticResource SmallTransparentStyle}"
+                        ToolTip="{helpers:Localization Pds_ZoomOut}">
+                        -
+                    </Button>
+
+                    --><!--  Slider to change the current zoom level.  --><!--
+                    <Slider
+                        Width="120"
+                        Height="40"
+                        Margin="1"
+                        VerticalAlignment="Bottom"
+                        LargeChange="20"
+                        Maximum="200"
+                        Minimum="1"
+                        SmallChange="10"
+                        TickFrequency="10"
+                        TickPlacement="TopLeft"
+                        ToolTip="{helpers:Localization Pds_ChangeZoom}"
+                        Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
+
+                    --><!--
+                        Button to zoom in.
+                    --><!--
+                    <Button
+                        Width="35"
+                        Margin="3"
+                        Padding="0"
+                        Command="{StaticResource Commands.ZoomIn}"
+                        FontSize="20"
+                        Style="{StaticResource SmallTransparentStyle}"
+                        ToolTip="{helpers:Localization Pds_ZoomIn}">
+                        +
+                    </Button>
+                </StackPanel>
+
+
+                --><!--  Stick a resize grip in the bottom right corner of the window.  -->
+                <!--<ResizeGrip Grid.Column="16" />--><!--
+
+            </WrapPanel>-->
+
+            <!--
+                The ScrollViewer displays scrollbars when the content is too big to fit in the viewport.
+                Focusable is set to False because it is only that ProjectDesignSurfaceView that I want to be focusable.
+            -->
+            <ScrollViewer
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="5,5,0,0"
+                CanContentScroll="True"
+                Focusable="False"
+                HorizontalScrollBarVisibility="Visible"
+                VerticalScrollBarVisibility="Hidden">
+
+                <!--
+                    The ZoomAndPanControl displays the ProjectDesignSurfaceView as its content.
+                    We can use the mouse to zoom and pan about the ProjectDesignSurfaceView.
+                -->
+                <controls:ZoomAndPanControl
+                    x:Name="zoomAndPanControl"
+                    Background="LightGray"
+                    ContentOffsetX="{Binding DesignSurfaceViewModel.ContentOffsetX, Mode=TwoWay}"
+                    ContentOffsetY="{Binding DesignSurfaceViewModel.ContentOffsetY, Mode=TwoWay}"
+                    ContentScale="{Binding DesignSurfaceViewModel.ContentScale, Mode=TwoWay}"
+                    ContentViewportHeight="{Binding DesignSurfaceViewModel.ContentViewportHeight, Mode=OneWayToSource}"
+                    ContentViewportWidth="{Binding DesignSurfaceViewModel.ContentViewportWidth, Mode=OneWayToSource}"
+                    Focusable="False">
+
+
+
+                    <!--
+                        We need to nest our ProjectDesignSurfaceView in an AdornerDecorator so that adorners work correct when
+                        we zoom in and out using the ZoomAndPanControl
+                    -->
+                    <AdornerDecorator>
+                        <!--
+                            This grid specifies the size of the ZoomAndPanControl's content.
+                            It wraps up both the ProjectDesignSurfaceView and drag-zooming Canvas.
+                        -->
+                        <Grid
+                            Width="{Binding DesignSurfaceViewModel.ContentWidth}"
+                            Height="{Binding DesignSurfaceViewModel.ContentHeight}"
+                            Background="Azure">
+
+                            <!--  In this sample the ProjectDesignSurfaceView is the content displayed by the ZoomAndPanControl.  -->
+
+                            <!--
+                                ConnectionDragCompleted="OnParallelCorpusConnectionDragCompleted"
+                                ConnectionDragStarted="OnProjectDesignSurfaceConnectionDragStarted"
+                                ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
+                                QueryConnectionFeedback="OnProjectDesignSurfaceQueryConnectionFeedback"
+                                
+                                
+                                ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
+                                
+                                [Event ConnectionDragging] = [Action OnParallelCorpusConnectionDragging($this, $eventArgs)];
+                                
+                                cm:Action.Target="{Binding DesignSurface}"
+                            -->
+
+
+                            <controls:ProjectDesignSurface
+                                x:Name="ProjectDesignSurface"
+                                cm:Action.TargetWithoutContext="{Binding ElementName=ProjectDesignSurface, Path=DataContext.DesignSurfaceViewModel}"
+                                cm:Message.Attach="[Event NodeDragCompleted] = [Action OnCorpusNodeDragCompleted($this,$eventArgs)];                                                    [Event ConnectionDragCompleted] = [Action OnParallelCorpusConnectionDragCompleted($this, $eventArgs)];                                                    [Event ConnectionDragStarted] = [Action OnParallelCorpusConnectionDragStarted($this, $eventArgs)];                                                    [Event QueryConnectionFeedback] = [Action OnProjectDesignSurfaceQueryConnectionFeedback($this, $eventArgs)];"
+                                ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
+                                ConnectionsSource="{Binding Path=DesignSurfaceViewModel.ParallelCorpusConnections}"
+                                MouseDown="OnDesignSurfaceMouseDown"
+                                MouseMove="OnDesignSurfaceMouseMove"
+                                MouseUp="OnDesignSurfaceMouseUp"
+                                MouseWheel="OnMouseWheel"
+                                NodesSource="{Binding DesignSurfaceViewModel.CorpusNodes}" />
+
+
+
+
+                            <!--
+                                This Canvas and Border are used as a very simple way to render a drag rectangle that the user
+                                uses to specify an area to zoom in on.
+                            -->
+                            <Canvas x:Name="DragZoomCanvas" Visibility="Collapsed">
+                                <Border
+                                    x:Name="DragZoomBorder"
+                                    Background="Silver"
+                                    BorderBrush="Black"
+                                    BorderThickness="1"
+                                    CornerRadius="1"
+                                    Opacity="0" />
+                            </Canvas>
+                        </Grid>
+                    </AdornerDecorator>
+                </controls:ZoomAndPanControl>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -352,6 +352,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Constructor
 
+
+
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
         public EnhancedViewModel(INavigationService navigationService,

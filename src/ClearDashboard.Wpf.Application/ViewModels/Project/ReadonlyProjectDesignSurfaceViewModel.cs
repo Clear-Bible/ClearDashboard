@@ -10,6 +10,7 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 //using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -48,7 +49,6 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Converters;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -59,7 +59,7 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable
+    public class ReadonlyProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable
     {
         public IEnhancedViewManager EnhancedViewManager { get; }
 
@@ -144,13 +144,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         // Required for design-time binding
 #pragma warning disable CS8618
-        public ProjectDesignSurfaceViewModel()
+        public ReadonlyProjectDesignSurfaceViewModel()
 #pragma warning restore CS8618
         {
             //no-op
         }
 
-        public ProjectDesignSurfaceViewModel(INavigationService navigationService,
+        public ReadonlyProjectDesignSurfaceViewModel(INavigationService navigationService,
             IWindowManager windowManager,
             ILogger<ProjectDesignSurfaceViewModel> logger,
             DashboardProjectManager? projectManager,
@@ -222,9 +222,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Logger!.LogError(ex.Message, ex);
             }
 
-            ProjectName = ProjectManager!.CurrentProject.ProjectName!;
-
-            await DrawDesignSurface();
+            //ProjectName = ProjectManager!.CurrentProject.ProjectName!;
+            //await DrawDesignSurface();
 
             _busyState.CollectionChanged += BusyStateOnCollectionChanged;
         }
@@ -269,33 +268,86 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Methods
 
 
+       // public async Task SaveDesignSurfaceData()
+       // {
+       //     _ = await Task.Factory.StartNew(async () =>
+       //     //_ = await Task.Run(async () =>
+
+       //{
+       //    var json = SerializeDesignSurface();
+
+       //    //ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
+
+       //    //Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
+
+       //    //try
+       //    //{
+       //    //    await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
+       //    //    await Task.Delay(250);
+       //    //}
+       //    //catch (Exception ex)
+       //    //{
+       //    //    Logger?.LogError(ex,
+       //    //        $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
+       //    //}
+       //});
+
+       // }
+
+
         public async Task SaveDesignSurfaceData()
         {
-            _ = await Task.Factory.StartNew(async () =>
-            //_ = await Task.Run(async () =>
 
-       {
-           var json = SerializeDesignSurface();
+            //if (ProjectManager == null || ProjectManager!.CurrentProject == null)
+            //{
+            //    Logger?.LogInformation("******************************* WARNING! - ProjectManager or its CurrentProject is null.  Cannot save layout. *****************************************");
+            //    return;
+            //}
 
-           ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
+            //_ = await Task.Factory.StartNew(async () =>
+            //    //_ = await Task.Run(async () =>
 
-           Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
+            //{
+            //    var json = SerializeDesignSurface();
 
-           try
-           {
-               await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
-               await Task.Delay(250);
-           }
-           catch (Exception ex)
-           {
-               Logger?.LogError(ex,
-                   $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
-           }
-       });
+            //    ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
+
+            //    Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
+
+            //    try
+            //    {
+            //        await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
+            //        await Task.Delay(250);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Logger?.LogError(ex,
+            //            $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
+            //    }
+            //});
 
         }
 
         public string SerializeDesignSurface()
+        {
+            var surface = GetProjectDesignSurfaceSerializationModel();
+
+            return SerializeDesignSurface(surface);
+        }
+
+        public string SerializeDesignSurface(ProjectDesignSurfaceSerializationModel surface)
+        {
+            JsonSerializerOptions options = new()
+            {
+                IncludeFields = true,
+                WriteIndented = false,
+                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+            };
+
+            return JsonSerializer.Serialize(surface, options);
+        }
+
+        public ProjectDesignSurfaceSerializationModel GetProjectDesignSurfaceSerializationModel()
         {
             var surface = new ProjectDesignSurfaceSerializationModel();
 
@@ -311,15 +363,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 });
             }
 
-            JsonSerializerOptions options = new()
-            {
-                IncludeFields = true,
-                WriteIndented = false,
-                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
-            };
-
-            return JsonSerializer.Serialize(surface, options);
-
+            return surface;
         }
 
         public async Task DrawDesignSurface()
@@ -338,16 +382,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 //_ = await Task.Factory.StartNew(async () =>
                 //{
-                var designSurfaceData = LoadDesignSurfaceData();
+                var designSurfaceData = LoadDesignSurfaceData(ProjectManager!.CurrentProject);
                 var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
                 // restore the nodes
                 if (designSurfaceData != null)
                 {
-                    bool currentParatextProjectPresent = false;
-                    bool standardCorporaPresent = false;
-
-                    foreach (var corpusId in topLevelProjectIds.CorpusIds.OrderBy(c => c.Created))
+                    foreach (var corpusId in topLevelProjectIds.CorpusIds)
                     {
                         if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
                         {
@@ -373,14 +414,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             {
                                 corpus.CorpusId.CorpusType = CorpusType.Resource.ToString();
                             }
-                            else
-                            {
-                                standardCorporaPresent = true;
-                                if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
-                                {
-                                    currentParatextProjectPresent = true;
-                                }
-                            }
                         }
                         
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
@@ -389,22 +422,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
-
-                    if (standardCorporaPresent  && !currentParatextProjectPresent)
-                    {
-                        var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
-
-                        if (confirmationViewPopupViewModel == null)
-                        {
-                            throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
-                        }
-
-                        confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.SwitchParatextProjectMessage;
-
-                        var result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
-                            SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
-                    }
-
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
                     //DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
@@ -457,7 +474,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        private ProjectDesignSurfaceSerializationModel? LoadDesignSurfaceData()
+        public ProjectDesignSurfaceSerializationModel? LoadDesignSurfaceData(DataAccessLayer.Models.Project project)
         {
             if (ProjectManager!.CurrentProject is null)
             {
@@ -468,8 +485,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 return null;
             }
 
-            var json = ProjectManager?.CurrentProject.DesignSurfaceLayout;
+            return DeserializeDesignSurfaceLayout(project.DesignSurfaceLayout);
+        }
 
+        public static ProjectDesignSurfaceSerializationModel? DeserializeDesignSurfaceLayout(string json)
+        {
+           
             if (string.IsNullOrEmpty(json))
             {
                 return null;
@@ -617,7 +638,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DeleteCorpusNode(corpusNode, true);
+                        DeleteCorpusNode(corpusNode);
                         // What other work needs to be done?  how do we know which steps have been executed?
                         DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
                     }
@@ -756,7 +777,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DeleteCorpusNode(corpusNode, true);
+                        DeleteCorpusNode(corpusNode);
                         DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
                     }
                     else
@@ -954,7 +975,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             _busyState.Remove(taskName);
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                DeleteCorpusNode(node, true);
+                                DeleteCorpusNode(node);
                             }
                             else
                             {
@@ -1310,36 +1331,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var connectionViewModel = connectionMenuItem.ConnectionViewModel;
             switch (connectionMenuItem.Id)
             {
-
-                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView:
-                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView:
-                    //await AddAlignmentsBatchReview(connectionMenuItem);
-                    if (connectionMenuItem.IsEnabled)
-                    {
-                        await EnhancedViewManager.AddMetadatumEnhancedView(new AlignmentEnhancedViewItemMetadatum
-                        {
-                            AlignmentSetId = connectionMenuItem.AlignmentSetId,
-                            DisplayName = connectionMenuItem.DisplayName,
-                            ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
-                                               throw new InvalidDataEngineException(name: "ParallelCorpusId",
-                                                   value: "null"),
-                            ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
-                            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            IsRtl = connectionMenuItem.IsRtl,
-                            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            IsTargetRtl = connectionMenuItem.IsTargetRtl,
-                            IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds
-                                .AddAlignmentsBatchReviewViewToNewEnhancedView,
-                            SourceParatextId = connectionMenuItem.SourceParatextId,
-                            TargetParatextId = connectionMenuItem.TargetParatextId,
-                            EditMode = EditMode.EditorViewOnly
-                        }, CancellationToken.None);
-                    }
-                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentViewAddedCount, 1);
-                    break;
-
-                    break;
-
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTranslationSet:
                     // find the right connection to send
                     var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
@@ -1433,38 +1424,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        //private async Task AddAlignmentsBatchReview(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
-        //{
-        //    await EnhancedViewManager.AddMetadatumEnhancedView(new AlignmentsBatchReviewEnhancedViewItemMetadatum
-        //        {
-
-        //            // TODO:  set this based on the menu id (add to existing or new enhanced view)
-        //            IsNewWindow = connectionMenuItem.Id ==
-        //                          DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView,
-        //            DisplayName = $"{connectionMenuItem.DisplayName} - Alignments Batch Review",
-        //            AlignmentSetId = connectionMenuItem.AlignmentSetId,
-              
-        //            ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
-        //                               throw new InvalidDataEngineException(name: "ParallelCorpusId",
-        //                                   value: "null"),
-        //            ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
-        //            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-        //            IsRtl = connectionMenuItem.IsRtl,
-        //            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-        //            IsTargetRtl = connectionMenuItem.IsTargetRtl,
-                  
-        //            SourceParatextId = connectionMenuItem.SourceParatextId,
-        //            TargetParatextId = connectionMenuItem.TargetParatextId
-        //    }, CancellationToken.None
-        //    );
-
-
-
-
-
-        //    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentBatchReviewCount, 1);
-        //}
-
         private async Task DeleteTranslationSet(ParallelCorpusConnectionMenuItemViewModel parallelCorpusConnectionMenuItemViewModel)
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
@@ -1548,7 +1507,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             switch (corpusNodeMenuItem.Id)
             {
-             
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddParatextCorpus:
                     // kick off the add new tokenization dialog
                     await AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);
@@ -1674,8 +1632,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             });
         }
 
-        public async void DeleteCorpusNode(CorpusNodeViewModel node, bool wasTokenizing)
+        public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
+            //warn users 
+            var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+            var result = await _windowManager!.ShowDialogAsync(
+                deletingCorpusNodePopupViewModel,
+                null,
+                SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
+
+            if (!result)
+            {
+                return;
+            }
+
             // check to see if is in the middle of working or not by tokenizing
             var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)
@@ -1690,29 +1661,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 return;
             }
 
-            if (!wasTokenizing)
-            {
-                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
-
-                if (confirmationViewPopupViewModel == null)
-                {
-                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
-                }
-
-                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCorpusNodeConfirmation;
-
-                bool result = false;
-                OnUIThread(async () =>
-                {
-                    result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
-                        SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
-                });
-
-                if (!result)
-                {
-                    return;
-                }
-            }
 
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {

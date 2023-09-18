@@ -4,9 +4,13 @@ using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -26,11 +30,54 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public static bool GoToSetup = false;
         public string Version { get; set; }
 
-        public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
+        private ParatextProjectMetadata? _selectedParatextProject;
+        public ParatextProjectMetadata? SelectedParatextProject
+        {
+            get => _selectedParatextProject;
+            set => Set(ref _selectedParatextProject, value);
+        }
+
+        private ParatextProjectMetadata? _selectedParatextBtProject;
+        public ParatextProjectMetadata? SelectedParatextBtProject
+        {
+            get => _selectedParatextBtProject;
+            set => Set(ref _selectedParatextBtProject, value);
+        }
+
+        private ParatextProjectMetadata? _selectedParatextLwcProject;
+        public ParatextProjectMetadata? SelectedParatextLwcProject
+        {
+            get => _selectedParatextLwcProject;
+            set => Set(ref _selectedParatextLwcProject, value);
+        }
+
+        public string ProjectName { get; set; }
+
+        public List<string?> ParatextProjectIds => new() {
+            SelectedParatextProject?.Id,
+            SelectedParatextBtProject?.Id,
+            SelectedParatextLwcProject?.Id};
+
+        private bool _includeBiblicalTexts = true;
+        public bool IncludeBiblicalTexts
+        {
+            get => _includeBiblicalTexts;
+            set => Set(ref _includeBiblicalTexts, value);
+        }
+
+        private IEnumerable<string>? _selectedBookIds = null;
+        public IEnumerable<string>? SelectedBookIds
+        {
+            get => _selectedBookIds;
+            set => Set(ref _selectedBookIds, value);
+        }
+
+        public StartupDialogViewModel(SelectedBookManager selectedBookManager, INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             ProjectManager = projectManager;
+            SelectedBookManager = selectedBookManager;
 
             CanOk = true;
 
@@ -53,11 +100,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'Startup'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
+            var projectTemplateViews = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("ProjectTemplate", "Order").ToArray();
+
+            if (projectTemplateViews == null || !projectTemplateViews.Any())
+            {
+                throw new DependencyRegistrationMissingException(
+                    "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'ProjectTemplate'.  Please check the dependency registration in your bootstrapper implementation.");
+            }
+
             _runRegistration = CheckLicenseToRunRegistration(IoC.Get<RegistrationDialogViewModel>());
 
             foreach (var view in views)
             {
                 Steps!.Add(view);
+            }
+
+            foreach (var projectTemplateView in projectTemplateViews)
+            {
+                Steps!.Add(projectTemplateView);
             }
 
             if (GoToSetup)
@@ -93,6 +153,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             await base.OnInitializeAsync(cancellationToken);
+        }
+
+        public SelectedBookManager SelectedBookManager { get; internal set; }
+
+        public void Reset()
+        {
+            // Reset everything in case the wizard is activated again:
+            SelectedParatextProject = null;
+            SelectedParatextBtProject = null;
+            SelectedParatextLwcProject = null;
+            IncludeBiblicalTexts = true;
+            SelectedBookIds = null;
+            SelectedBookManager.UnselectAllBooks();
+        }
+
+        public async Task GoToStep(int stepIndex, CancellationToken cancellationToken = default)
+        {
+            if (stepIndex >= 0 && stepIndex <= Steps!.Count - 1)
+            {
+                CurrentStep = Steps![stepIndex];
+                await ActivateItemAsync(CurrentStep, cancellationToken);
+            }
         }
         
         public bool CanCancel => true /* can always cancel */;
