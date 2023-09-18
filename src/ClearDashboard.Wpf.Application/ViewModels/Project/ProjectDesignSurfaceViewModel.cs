@@ -7,7 +7,6 @@ using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
-//using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
@@ -1432,38 +1431,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 //    break;
             }
         }
-
-        //private async Task AddAlignmentsBatchReview(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
-        //{
-        //    await EnhancedViewManager.AddMetadatumEnhancedView(new AlignmentsBatchReviewEnhancedViewItemMetadatum
-        //        {
-
-        //            // TODO:  set this based on the menu id (add to existing or new enhanced view)
-        //            IsNewWindow = connectionMenuItem.Id ==
-        //                          DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView,
-        //            DisplayName = $"{connectionMenuItem.DisplayName} - Alignments Batch Review",
-        //            AlignmentSetId = connectionMenuItem.AlignmentSetId,
-              
-        //            ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
-        //                               throw new InvalidDataEngineException(name: "ParallelCorpusId",
-        //                                   value: "null"),
-        //            ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
-        //            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-        //            IsRtl = connectionMenuItem.IsRtl,
-        //            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-        //            IsTargetRtl = connectionMenuItem.IsTargetRtl,
-                  
-        //            SourceParatextId = connectionMenuItem.SourceParatextId,
-        //            TargetParatextId = connectionMenuItem.TargetParatextId
-        //    }, CancellationToken.None
-        //    );
-
-
-
-
-
-        //    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentBatchReviewCount, 1);
-        //}
 
         private async Task DeleteTranslationSet(ParallelCorpusConnectionMenuItemViewModel parallelCorpusConnectionMenuItemViewModel)
         {
