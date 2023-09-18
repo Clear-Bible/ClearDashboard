@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Media;
 using Caliburn.Micro;
 
@@ -20,6 +21,10 @@ namespace ClearDashboard.Wpf.Application.Models
         }
 
         public string? BookName { get; set; }
+
+        public FontWeight FontWeight { get; set; }
+
+        public bool IsImported { get; set; }
 
         public bool IsSelected
         {

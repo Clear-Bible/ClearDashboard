@@ -1,14 +1,14 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog.SelectBooksStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:cm="http://caliburnmicro.com"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:addParatextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog"
     xmlns:addParatextCorpusDialog1="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -37,7 +37,8 @@
             Margin="10,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
-            <Button x:Name="Back"
+            <Button
+                x:Name="Back"
                 Width="90"
                 Margin="0,0,15,15"
                 HorizontalAlignment="Right"
@@ -45,26 +46,17 @@
                 Content="{helpers:Localization Back}"
                 FontSize="12"
                 Style="{StaticResource TransparentStyle}" />
-            <Button x:Name="Ok"
-                Width="90"
+            <Button
+                x:Name="Ok"
+                MinWidth="90"
                 Margin="0,0,15,15"
                 HorizontalAlignment="Right"
                 cm:Message.Attach="Ok()"
-                Content="{helpers:Localization Ok}"
+                Content="{Binding OkButtonText}"
                 FontSize="12"
                 IsEnabled="{Binding ContinueEnabled}"
                 Style="{StaticResource TransparentStyle}"
                 Visibility="{Binding OkVisibility}" />
-            <Button x:Name="Next"
-                Width="90"
-                Margin="0,0,15,15"
-                HorizontalAlignment="Right"
-                cm:Message.Attach="Next()"
-                Content="{helpers:Localization Next}"
-                FontSize="12"
-                IsEnabled="{Binding ContinueEnabled}"
-                Style="{StaticResource TransparentStyle}"
-                Visibility="{Binding NextVisibility}" />
         </StackPanel>
     </Grid>
 </UserControl>
