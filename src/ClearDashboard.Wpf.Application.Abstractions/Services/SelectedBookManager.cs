@@ -16,7 +16,7 @@ using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.Services;
 
-public class SelectedBookManager : Screen
+public class SelectedBookManager : PropertyChangedBase
 {
     private ObservableCollection<SelectedBook> _selectedBooks;
 
