@@ -9,7 +9,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
     public static class Helpers
     {
         /// <summary>
-        /// A function that takes in a book number and translatest that to a book name
+        /// A function that takes in a book number and translate that to a book name
         /// </summary>
         /// <param name="bookNum"></param>
         /// <returns></returns>

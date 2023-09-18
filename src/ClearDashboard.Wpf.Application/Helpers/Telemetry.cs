@@ -148,6 +148,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             NoteReplyCount,
             InterlinearViewAddedCount,
             AlignmentViewAddedCount,
+            AlignmentBatchReviewCount,
             VerseViewAddedCount,
             TimerStartCount
         }

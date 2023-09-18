@@ -41,14 +41,15 @@
     </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
+            <!--<Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsFocused}" Value="True">
                         <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
                     </DataTrigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
             <converters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
             <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <!--<converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />-->
@@ -569,8 +570,8 @@
 
                             <Border Grid.Column="1" BorderThickness="0">
                                 <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
-
-                                    <StackPanel Orientation="Horizontal">
+                                    <Grid>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                                         <Button
                                             Width="20"
                                             Height="20"
@@ -598,8 +599,28 @@
                                             FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                             FontWeight="Bold"
                                             Text="{Binding Title}" />
-
                                     </StackPanel>
+                                        <Button x:Name="EditMode" Content="{Binding EditModeButtonLabel}" 
+                                                HorizontalAlignment="Right"
+                                                Padding="4"
+                                                Margin="0 2 5 0"
+                                                IsEnabled="{Binding DisableDeleteButton}"
+                                                Visibility="{Binding ShowEditButton, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <cm:ActionMessage MethodName="ToggleEditMode" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <Button.Style>
+                                                <Style BasedOn="{StaticResource  MaterialDesignFlatButton}" TargetType="{x:Type Button}">
+                                                    <Setter Property="Padding" Value="2" />
+
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+
+                                   
+                                    </Grid>
                                     <ContentControl
                                         Name="VerseContentControl"
                                         HorizontalAlignment="Stretch"

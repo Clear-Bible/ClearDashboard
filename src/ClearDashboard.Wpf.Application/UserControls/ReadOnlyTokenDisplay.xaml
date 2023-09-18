@@ -1,0 +1,48 @@
+﻿<userControls:TokenDisplayBase
+    x:Class="ClearDashboard.Wpf.Application.UserControls.ReadOnlyTokenDisplay"
+    x:Name="TokenDisplayControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    d:DataContext="{d:DesignInstance Type=enhancedView:TokenDisplayViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    mc:Ignorable="d">
+
+    <StackPanel
+        Width="Auto"
+        HorizontalAlignment="Left"
+        Orientation="Vertical">
+        <Rectangle
+            Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+            Height="3"
+            HorizontalAlignment="Center"
+            Margin="0,0,0,0"
+            Fill="{Binding ElementName=TokenDisplayControl, Path=CompositeIndicatorComputedColor}"
+            Visibility="{Binding ElementName=TokenDisplayControl, Path=CompositeIndicatorVisibility}" />
+        <Border x:Name="TokenButton"
+                BorderBrush ="{Binding ElementName=TokenDisplayControl, Path=TokenBorder}"
+                BorderThickness="3"
+                Padding="0"
+                Margin ="{Binding ElementName=TokenDisplayControl, Path=TokenMargin}">
+            
+            <TextBlock
+                x:Name="TokenTextBlock"
+                Height="Auto"
+                Background="Transparent"
+                HorizontalAlignment="Center"
+                FlowDirection="{Binding ElementName=TokenDisplayControl, Path=FlowDirection}"
+                FontFamily="{Binding ElementName=TokenDisplayControl, Path=TokenFontFamily}"
+                FontSize="{Binding ElementName=TokenDisplayControl, Path=TokenFontSize}"
+                Foreground="Black"
+                Text="{Binding ElementName=TokenDisplayControl, Path=SurfaceText}" />
+
+        </Border>
+    </StackPanel>
+</userControls:TokenDisplayBase>

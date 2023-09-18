@@ -1,5 +1,8 @@
-﻿using AvalonDock.Layout;
+﻿using System;
+using AvalonDock.Layout;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Converters;
 using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using Dahomey.Json.Attributes;
 
@@ -9,6 +12,8 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
 public class AlignmentEnhancedViewItemMetadatum : ParallelCorpusEnhancedViewItemMetadatum
 {
     public string? AlignmentSetId { get; set; }
+
+    public EditMode EditMode { get; set; } = EditMode.MainViewOnly;
 
     public override LayoutDocument CreateLayoutDocument(IEnhancedViewModel viewModel)
     {
