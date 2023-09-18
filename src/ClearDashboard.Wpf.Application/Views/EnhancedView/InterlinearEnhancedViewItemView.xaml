@@ -1,21 +1,16 @@
-﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Application.Views.EnhancedView.VerseAwareEnhancedViewItemView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:cm="http://caliburnmicro.com"
-    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:foundation="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    d:DataContext="{d:DesignInstance Type=enhancedView:VerseAwareEnhancedViewItemViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
-
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.Views.EnhancedView.InterlinearEnhancedViewItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
+             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:input="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
 
@@ -35,10 +30,11 @@
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
             cm:Message.Attach="[Event SelectionChanged] = [Action VerseSelected($this, $eventArgs)]"
-            foundation:EnhancedFocusScope.IsEnhancedFocusScope="True"
+            input:EnhancedFocusScope.IsEnhancedFocusScope="True"
             ItemsSource="{Binding Verses}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.IsDeferredScrollingEnabled="True"
+         
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
             <b:Interaction.Triggers>
@@ -81,13 +77,11 @@
                         TokenVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                         TranslationDoubleClicked="TranslationDoubleClicked"
+                        TranslationSet="TranslationSet"
                         TranslationFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TranslationFontFamily}"
                         TranslationFontSize="{Binding DataContext.TranslationsFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
-                        TranslationSet="TranslationSet"
                         TranslationVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                        <!--  cm:Message.Attach="[Key Enter] = [EnterPressed]; [Gesture Ctrl+Enter] = [CtrlEnterPressed]; [Gesture Alt+Enter] = [AltEnterPressed]">  -->
-                        <!--  cm:Message.Attach="[Event TranslationClicked] = [Action TranslationClicked($this, $eventArgs)]"  -->
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="TokenCreateAlignment">
                                 <b:CallMethodAction MethodName="TokenCreateAlignment" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
@@ -163,6 +157,4 @@
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
     </Grid>
-
-
 </UserControl>

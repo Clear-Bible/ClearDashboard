@@ -15,8 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
-using ClearDashboard.DAL.CQRS;
-using MediatR;
+using ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate;
+using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -60,6 +61,7 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
             builder.RegisterType<TranslationManager>().AsSelf();
             builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
+            builder.RegisterType<SelectedBookManager>().AsSelf();
         }
 
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
@@ -95,6 +97,25 @@ namespace ClearDashboard.Wpf.Application
                 .WithMetadata("Order", 3); 
         }
 
+        public static void RegisterProjectTemplateDialogDependencies(this ContainerBuilder builder)
+        {
+            builder.RegisterType<ProjectSelectionStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ProjectTemplate")
+                .WithMetadata("Order", 1);
+
+            builder.RegisterType<UsfmCheckStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ProjectTemplate")
+                .WithMetadata("Order", 2);
+
+            builder.RegisterType<ScopeSelectionStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ProjectTemplate")
+                .WithMetadata("Order", 3);
+
+            builder.RegisterType<BuildProjectStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ProjectTemplate")
+                .WithMetadata("Order", 4);
+        }
+
         //public static void RegisterSmtModelDialogDependencies(this ContainerBuilder builder)
         //{
         //    builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
@@ -105,6 +126,8 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterParatextDialogDependencies(this ContainerBuilder builder)
         {
+            builder.RegisterType<SelectedBookManager>().AsSelf();
+
             builder.RegisterType<AddParatextCorpusStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
                 .WithMetadata("Order", 1);
@@ -154,6 +177,9 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<TailBlazerProxy>().AsSelf().SingleInstance();
             builder.RegisterType<SystemPowerModes>().AsSelf().SingleInstance();
 
+            builder.RegisterType<ProjectTemplateProcessRunner>().AsSelf();
+            builder.RegisterType<TranslationCommands>().AsSelf();
+
             builder.RegisterType<JsonDiscriminatorRegistrar>().As<IJsonDiscriminatorRegistrar>();
 
             builder.RegisterDatabaseDependencies();
@@ -162,6 +188,7 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterValidationDependencies();
             builder.RegisterLocalizationDependencies();
             builder.RegisterStartupDialogDependencies();
+            builder.RegisterProjectTemplateDialogDependencies();
             builder.RegisterParallelCorpusDialogDependencies();
             builder.RegisterParatextDialogDependencies();
 

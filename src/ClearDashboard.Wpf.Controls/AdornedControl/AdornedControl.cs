@@ -123,6 +123,8 @@ namespace ClearDashboard.Wpf.Controls
         /// </summary>
         public void FadeInAdorner()
         {
+          
+
             if (_adornerShowState == AdornerShowState.Visible ||
                 _adornerShowState == AdornerShowState.FadingIn)
             {
@@ -131,6 +133,11 @@ namespace ClearDashboard.Wpf.Controls
             }
 
             this.ShowAdorner();
+
+            if (_adorner == null)
+            {
+                return;
+            }
 
             if (_adornerShowState != AdornerShowState.FadingOut)
             {
@@ -151,6 +158,11 @@ namespace ClearDashboard.Wpf.Controls
         /// </summary>
         public void FadeOutAdorner()
         {
+            if (_adorner == null)
+            {
+                return;
+            }
+
             if (_adornerShowState == AdornerShowState.FadingOut)
             {
                 //

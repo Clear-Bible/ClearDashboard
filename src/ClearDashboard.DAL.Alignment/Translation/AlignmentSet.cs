@@ -70,23 +70,39 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <param name="cancellationToken"></param>
         /// <returns>Dictionary<sourceString, Dictionary<targetString, Dictionary<statusName, count>> if 
         /// sourceToTarget == true, reverse 'sourceString' and 'targetString' if false</returns>
-        public async Task<IDictionary<string, IDictionary<string, IDictionary<string, uint>>>> GetAlignmentCounts(bool sourceToTarget, bool totalsByTraining = true, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+        public async Task<IDictionary<string, IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)>>> GetAlignmentCounts(bool sourceToTarget, bool totalsByTraining = true, bool includeBookNumbers = false, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
         {
-            var result = await mediator_.Send(new GetAlignmentCountsByTrainingOrSurfaceTextQuery(AlignmentSetId, sourceToTarget, totalsByTraining, alignmentTypesToInclude), cancellationToken);
+            var result = await mediator_.Send(new GetAlignmentCountsByTrainingOrSurfaceTextQuery(AlignmentSetId, sourceToTarget, totalsByTraining, includeBookNumbers, alignmentTypesToInclude), cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
 
             return result.Data!;
         }
 
-        public async Task<IEnumerable<(
+        public async Task<(IEnumerable<(
             Alignment alignment,
             IEnumerable<Token> sourceVerseTokens,
             uint sourceVerseTokensIndex,
             IEnumerable<Token> targetVerseTokens,
             uint targetVerseTokensIndex
-        )>> GetAlignmentVerseContexts(string sourceString, string targetString, bool stringsAreTraining = true, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+            )> VerseContexts, string Cursor, bool HasNextPage)> GetAlignmentVerseContexts(string sourceString, string targetString, bool stringsAreTraining = true, int? bookNumber = null, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default)
         {
             var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(
+                AlignmentSetId,
+                sourceString,
+                targetString,
+                stringsAreTraining,
+                bookNumber,
+                alignmentTypesToInclude,
+                limit,
+                cursor), cancellationToken);
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data;
+        }
+
+        public async Task<IEnumerable<int>> GetBookNumbers(string sourceString, string targetString, bool stringsAreTraining = true, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
+        {
+            var result = await mediator_.Send(new GetBookNumbersByTrainingOrSurfaceTextQuery(
                 AlignmentSetId, 
                 sourceString, 
                 targetString,

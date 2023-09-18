@@ -11,17 +11,21 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.Wpf.Application.Converters;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
+
+
 public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 {
-    protected ILocalizationService LocalizationService { get; }
+    protected ILocalizationService LocalizationService => _localizationService;
 
     private Brush _borderColor = Brushes.Blue;
 
-    protected IEnhancedViewManager EnhancedViewManager { get; }
+    protected IEnhancedViewManager EnhancedViewManager => _enhancedViewManager;
+
     public Brush BorderColor
     {
         get => _borderColor;
@@ -34,6 +38,45 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
         get => _hasFocus;
         set => Set(ref _hasFocus, value);
     }
+
+    private bool _showEditButton;
+    public bool ShowEditButton
+    {
+        get => _showEditButton;
+        set => Set(ref _showEditButton, value);
+    }
+
+    private bool _enableEditMode;
+    public bool EnableEditMode
+    {
+        get => _enableEditMode;
+        set => Set(ref _enableEditMode, value);
+    }
+
+    public async void ToggleEditMode()
+    {
+        EnableEditMode = !EnableEditMode;
+
+        if (EnableEditMode)
+        {
+            await GetEditorData(CancellationToken.None);
+        }
+        
+    }
+
+    protected virtual async Task GetEditorData(CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+    }
+
+    private string _editModeButtonLabel;
+
+    public string EditModeButtonLabel
+    {
+        get => _editModeButtonLabel1;
+        set => Set(ref _editModeButtonLabel1, value);
+    }
+
 
     // public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
 
@@ -51,6 +94,11 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
     private bool _fetchData;
+    private readonly ILocalizationService _localizationService;
+    private readonly IEnhancedViewManager _enhancedViewManager;
+    private string _editModeButtonLabel1;
+    private EditMode _editMode;
+
 
     public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
     {
@@ -66,14 +114,22 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
     public virtual Task GetData(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
+
+    }
+
+    public EditMode EditMode
+    {
+        get => _editMode;
+        set => Set(ref _editMode, value);
     }
 
     protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
         INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
-        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService, EditMode editMode = EditMode.MainViewOnly) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
-        LocalizationService = localizationService;
-        EnhancedViewManager = enhancedViewManager;
+        _localizationService = localizationService;
+        _enhancedViewManager = enhancedViewManager;
+        EditMode = editMode;
 
     }       
 

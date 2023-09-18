@@ -1,0 +1,214 @@
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.UsfmErrorsDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <system:Boolean x:Key="True">True</system:Boolean>
+            <system:Boolean x:Key="False">False</system:Boolean>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <StackPanel Orientation="Vertical">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label
+                 Grid.Column="0"
+                 Margin="20,0"
+                 Content="{helpers:Localization AddParatextCorpusDialog_Check}"
+                 FontSize="18" />
+
+            <StackPanel Grid.Column="3" 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom">
+                <Button
+                    x:Name="SaveToFileButton"
+                    Click="OnSaveToFileButtonClicked"
+                    Width="30"
+                    Height="30"
+                    Margin="0,0,15,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    ToolTip="{helpers:Localization AddParatextCorpusDialog_SaveToFile}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
+                            <Setter Property="Padding" Value="0" />
+                        </Style>
+                    </Button.Style>
+                    <iconPacks:PackIconBootstrapIcons 
+                        Width="20"
+                        Height="20"
+                        Kind="Save2" />
+
+                </Button>
+                <Button
+                 x:Name="CopyToClipboard"
+                 Click="OnCopyToClipboardButtonClicked"
+                 Width="30"
+                 Height="30"
+                 Margin="0,0,15,0"
+                 HorizontalAlignment="Right"
+                 VerticalAlignment="Bottom"
+                 ToolTip="{helpers:Localization AddParatextCorpusDialog_CopyToClipboard}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
+                            <Setter Property="Padding" Value="0" />
+                        </Style>
+                    </Button.Style>
+                    <iconPacks:PackIconOcticons
+                         Width="20"
+                         Height="20"
+                         Kind="Clippy" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <ListView
+            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ListViewHeight}"
+            Margin="15,0,15,5"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding UsfmErrorsByProject}"
+            >
+            <ListView.Style>
+                <Style TargetType="{x:Type ListView}">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Count}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0,0,0,0" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+
+                    <GridViewColumn Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding ProjectName}"  Margin="2, 0" FontSize="16"></TextBlock>
+                                        <TextBlock FontSize="16"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding Path=ErrorTitle, Mode=OneWay}"
+                                                   Margin="2, 0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding UsfmErrors.Count, Mode=OneWay}" Value="0">
+                                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                        <TextBlock FontSize="16"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding Path=UsfmErrors.Count, Mode=OneWay}"
+                                                   Margin="2, 0"
+                                                   Visibility="{Binding HasUsfmErrors, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding UsfmErrors.Count, Mode=OneWay}" Value="0">
+                                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <ListView
+                                 Height="Auto"
+                                 Width="Auto"
+                                 Margin="0,0,0,5"
+                                 VerticalAlignment="Top"
+                                 ItemsSource="{Binding UsfmErrors}"
+                                 BorderThickness="0">
+                                <ListView.Style>
+                                    <Style TargetType="{x:Type ListView}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListView.Style>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListViewItem}">
+                                        <Setter Property="BorderBrush" Value="LightGray" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridView.ColumnHeaderContainerStyle>
+                                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </Style>
+                                        </GridView.ColumnHeaderContainerStyle>
+
+                                        <GridViewColumn Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Reference}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Width="400">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock
+                                         VerticalAlignment="Center"
+                                         Foreground="{StaticResource RedMidBrush}"
+                                         Text="{Binding Error}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                                   
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </StackPanel>
+</UserControl>

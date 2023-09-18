@@ -8,8 +8,10 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Converters;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -25,13 +27,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Token = ClearBible.Engine.Corpora.Token;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
-using SIL.Machine.Corpora;
 
 // ReSharper disable InconsistentNaming
 
@@ -47,8 +46,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
      
         public VerseAwareConductorOneActive ParentViewModel => (VerseAwareConductorOneActive)Parent;
-
-        //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 
         private Guid _corpusId;
         public Guid CorpusId
@@ -93,13 +90,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        //private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
-        //public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
-        //{
-        //    get => _enhancedViewItemMetadatum;
-        //    set => Set(ref _enhancedViewItemMetadatum, value);
-        //}
-
+ 
         #region FontFamily
 
         private FontFamily? _targetFontFamily;
@@ -159,7 +150,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
             INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
-            IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+            IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService, EditMode editMode = EditMode.MainViewOnly) : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService, editMode)
         {
             WindowManager = windowManager;
         }
@@ -167,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
       
         public async void VerseSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems != null && e.AddedItems.Count > 0)
+            if (e.AddedItems is { Count: > 0 })
             {
                 if (e.AddedItems[0] is VerseDisplayViewModel verseDisplayViewModel)
                 {
@@ -176,8 +167,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             }
         }
-
-
 
         public async  void TranslationClicked(object sender, TranslationEventArgs args)
         {
@@ -295,12 +284,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     if (result.Success && result.HasData)
                     {
                         metadata = result.Data!.FirstOrDefault(b =>
-                            b.Id == metadatum.ParatextProjectId!.Replace("-", ""));
+                            b.Id == metadatum.ParatextProjectId!.Replace("-", ""))!;
                         if (metadata is null)
                         {
                             Logger?.LogWarning("The Paratext project's metadata is null.");
-                            metadata =  new ParatextProjectMetadata();
-                            metadata.AvailableBooks = BookInfo.GenerateScriptureBookList();
+                            metadata =  new ParatextProjectMetadata
+                            {
+                                AvailableBooks = BookInfo.GenerateScriptureBookList()
+                            };
                         }
                     }
                     else
@@ -314,12 +305,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 if (reloadType == ReloadType.Force)
                 {
                     metadatum.TokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
-                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true);
+                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value),true, cancellationToken);
                 }
                 else
                 {
                     metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!,
-                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true);
+                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true, cancellationToken);
                 }
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;
@@ -364,15 +355,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     }
                     OnUIThread(() =>
                     {
-                        Title = CreateTitle(metadatum, tokensTextRowsRange, currentBcv);
-
                         Verses = verses;
                     });
                 }
-                else
-                {
-                    OnUIThread(() => { Title = CreateNoVerseDataTitle(metadatum); });
-                }
+               
+
+                CreateTitle(metadatum, tokensTextRowsRange, currentBcv, bookFound);
             }
             catch (Exception ex)
             {
@@ -393,17 +381,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return $"{metadatum.ProjectName} - {metadatum.TokenizationType}    {localizedMessage}";
         }
 
-        private string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
+        protected virtual string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
         {
             var localizedMessage = LocalizationService.Get("EnhancedView_NoVerseData"); 
             return $"{metadatum.ParallelCorpusDisplayName}   {localizedMessage}";
         }
 
-        private static string CreateTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum,
+        public virtual void CreateTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum,
+            IReadOnlyList<TokensTextRow>? tokensTextRowsRange, BookChapterVerseViewModel? currentBcv,
+            bool versesInRange = true)
+        {
+            if (versesInRange)
+            {
+                OnUIThread(() =>
+                {
+                    Title = CreateFullTitle(metadatum, tokensTextRowsRange, currentBcv);
+                });
+            }
+            else
+            {
+                OnUIThread(() =>
+                {
+                    Title = CreateNoVerseDataTitle(metadatum);
+                });
+            }
+        }
+
+
+        protected static string CreateBaseTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum)
+        {
+            return $"{metadatum.ProjectName} - {metadatum.TokenizationType}";
+        }
+        private static string CreateFullTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum,
             IReadOnlyList<TokensTextRow>? tokensTextRowsRange, BookChapterVerseViewModel? currentBcv)
         {
 
-            var title = $"{metadatum.ProjectName} - {metadatum.TokenizationType}";
+            var title = CreateBaseTitle(metadatum);
 
             // set the title to include the verse range
             if (tokensTextRowsRange!.Count == 1)
@@ -482,7 +495,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        private async Task GetAlignmentData(AlignmentEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        protected async Task GetAlignmentData(AlignmentEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
             try
             {
@@ -531,7 +544,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
+        protected virtual string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
         {
             var title = $"{metadatum.ParallelCorpusDisplayName ?? string.Empty} {LocalizationService.Get(localizationKey)}";
 
@@ -682,7 +695,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        private async Task<FontFamily> GetFontFamily(string paratextProjectId)
+        protected async Task<FontFamily> GetFontFamily(string paratextProjectId)
         {
             var fontFamilyName = await GetFontFamilyName(paratextProjectId);
 
