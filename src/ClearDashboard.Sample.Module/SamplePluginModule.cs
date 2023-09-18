@@ -6,6 +6,7 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Sample.Module.Menu;
 using ClearDashboard.Sample.Module.Services;
 using ClearDashboard.Sample.Module.Validators;
+using ClearDashboard.Sample.Module.ViewModels;
 using ClearDashboard.Sample.Module.ViewModels.Menus;
 using ClearDashboard.Sample.Module.ViewModels.SampleDialog;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -48,6 +49,9 @@ namespace ClearDashboard.Sample.Module
             builder.RegisterType<SampleLocalizationService>().AsSelf().Keyed<ILocalizationService>("Sample");
             builder.RegisterType<SampleCorpusAnalysisMenuItemViewModel>().AsSelf().WithAttributeFiltering();
 
+            // EnhancedView 
+
+            builder.RegisterType<SampleCorpusAnalysisEnhancedViewItemViewModel>().AsSelf().WithAttributeFiltering();
             //SampleDialog
 
             builder.RegisterType<SampleAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()

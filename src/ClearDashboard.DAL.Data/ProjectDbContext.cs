@@ -271,13 +271,15 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<VerseRow>().HasIndex(e => e.BookChapterVerse);
-            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 
-            modelBuilder.Entity<Token>().HasIndex(e => e.TokenizedCorpusId);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.TokenizedCorpusId);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.TrainingText);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.SurfaceText);
+
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.VerseNumber);
-            modelBuilder.Entity<Token>().HasIndex(e => e.TrainingText);
             //modelBuilder.Entity<Token>().HasIndex(e => e.WordNumber);
             //modelBuilder.Entity<Token>().HasIndex(e => e.SubwordNumber);
 

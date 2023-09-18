@@ -72,7 +72,7 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
             while (!stoppingToken.IsCancellationRequested)
             {
                 var waitTime = 30000; 
-                if (_projectProvider.HasCurrentProject)
+                if (_projectProvider.CanRunDenormalization)
                 {
                     _logger.LogDebug($"AlignmentTargetTextDenormalizer running denormalization.");
                     await RunDenormalization(stoppingToken);

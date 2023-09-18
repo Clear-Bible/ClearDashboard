@@ -31,6 +31,8 @@ namespace ClearDashboard.DAL.CQRS.Features
         {
             try
             {
+                Logger.LogDebug($"ProjectDbContextQueryHandler - current project name - {ProjectProvider?.CurrentProject?.ProjectName}");
+
                 if (ProjectNameDbContextFactory!.ServiceScope.Tag == Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag)
                 {
                     ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(
@@ -49,6 +51,8 @@ namespace ClearDashboard.DAL.CQRS.Features
                         requestScope).ConfigureAwait(false);
                     return await GetDataAsync(request, cancellationToken);
                 }
+
+               
             }
             catch (OperationCanceledException)
             {
