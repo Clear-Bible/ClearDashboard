@@ -220,8 +220,8 @@
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>टिप्पणियाँ</value>
   </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>किताब</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>सुरक्षित</value>
@@ -337,8 +337,8 @@
   <data name="EZK" xml:space="preserve">
     <value>EZK</value>
   </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext नहीं चल रहा है</value>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>सभी</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
     <value>नया कॉर्पस टोकन बनाएं</value>
@@ -370,38 +370,8 @@
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>इस लेम्मा में एक शाब्दिक रूप जोड़ें</value>
   </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>एक शब्दार्थ डोमेन जोड़ें</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>पृष्ठभूमि कार्य दिखाएं</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>प्रकार</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>USFM की जाँच करना</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>एजरा</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>देखने के लिए पाठ जोड़ें</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>कार्य रद्द कर दिया गया था</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>रद्द करना</value>
-  </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>शब्द:</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>अलग -अलग टोकन की संख्या</value>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>परिभाषा अनुपलब्ध है</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>ट्रेन सममित मॉडल?</value>

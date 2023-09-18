@@ -220,8 +220,8 @@
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Ghi chú</value>
   </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>SÁCH</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Kín đáo</value>
@@ -337,8 +337,8 @@
   <data name="EZK" xml:space="preserve">
     <value>EZK</value>
   </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext không chạy</value>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>Tất cả</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
     <value>Tạo mã thông báo mới</value>
@@ -370,38 +370,8 @@
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Thêm một hình thức từ vựng vào bổ đề này</value>
   </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>Thêm một miền ngữ nghĩa</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>Hiển thị các nhiệm vụ nền</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>Kiểu</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>Kiểm tra USFM</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm văn bản để xem</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>Nhiệm vụ đã bị hủy bỏ</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Hủy bỏ</value>
-  </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>Từ:</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>Số lượng mã thông báo khác nhau</value>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>Định nghĩa không có sẵn</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Mô hình Symmetrized Train?</value>

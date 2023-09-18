@@ -473,8 +473,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(connectionMenuItems);
             AddResetVerseMappings(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems);
-            AddMenuSeparator(connectionMenuItems);
-
+        
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
 
@@ -669,8 +668,26 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             new()
                             {
                                 // Add Verses to focused enhanced view
-                                Header = LocalizationService.Get("Pds_AddConnectionToEnhancedViewMenu"),
+                                Header = LocalizationService.Get("Pds_AddVerseViewToEnhancedViewMenu"),
                                 Id = DesignSurfaceMenuIds.AddAlignmentSetToCurrentEnhancedView,
+                                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                                IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
+                                AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                                DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                                ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                                ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                                IsEnabled = true,
+                                IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                                IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                                SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                                TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                                SmtModel = alignmentSetInfo.SmtModel,
+                            },
+                            new()
+                            {
+                                // Add Verses to focused enhanced view
+                                Header = LocalizationService.Get("Pds_AddBulkAlignmentApprovalToEnhancedViewMenu"),
+                                Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView,
                                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
                                 AlignmentSetId = alignmentSetInfo.Id.ToString(),
@@ -799,8 +816,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                                 IconKind = PackIconPicolIconsKind.DocumentText.ToString(),
                                 CorpusNodeViewModel = corpusNodeViewModel,
                                 Tokenizer = tokenizer.ToString(),
-                            }
-                        }
+                            },
+
+
+                }
                     };
 
                     var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();

@@ -53,6 +53,10 @@ namespace ClearDashboard.Aqua.Module
             builder.RegisterType<AquaLocalizationService>().AsSelf().Keyed<ILocalizationService>("Aqua");
             builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf().WithAttributeFiltering();
 
+            // Enhanced View
+
+            builder.RegisterType<AquaCorpusAnalysisEnhancedViewItemViewModel>().AsSelf().WithAttributeFiltering();
+
             //AquaDialog
 
             builder.RegisterType<AquaDialogViewModel>().AsSelf().WithAttributeFiltering();

@@ -48,6 +48,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Converters;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -1309,6 +1310,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var connectionViewModel = connectionMenuItem.ConnectionViewModel;
             switch (connectionMenuItem.Id)
             {
+
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView:
+                    //await AddAlignmentsBatchReview(connectionMenuItem);
+                    if (connectionMenuItem.IsEnabled)
+                    {
+                        await EnhancedViewManager.AddMetadatumEnhancedView(new AlignmentEnhancedViewItemMetadatum
+                        {
+                            AlignmentSetId = connectionMenuItem.AlignmentSetId,
+                            DisplayName = connectionMenuItem.DisplayName,
+                            ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
+                                               throw new InvalidDataEngineException(name: "ParallelCorpusId",
+                                                   value: "null"),
+                            ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
+                            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            IsRtl = connectionMenuItem.IsRtl,
+                            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            IsTargetRtl = connectionMenuItem.IsTargetRtl,
+                            IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds
+                                .AddAlignmentsBatchReviewViewToNewEnhancedView,
+                            SourceParatextId = connectionMenuItem.SourceParatextId,
+                            TargetParatextId = connectionMenuItem.TargetParatextId,
+                            EditMode = EditMode.EditorViewOnly
+                        }, CancellationToken.None);
+                    }
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentViewAddedCount, 1);
+                    break;
+
+                    break;
+
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTranslationSet:
                     // find the right connection to send
                     var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
@@ -1402,6 +1433,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        //private async Task AddAlignmentsBatchReview(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        //{
+        //    await EnhancedViewManager.AddMetadatumEnhancedView(new AlignmentsBatchReviewEnhancedViewItemMetadatum
+        //        {
+
+        //            // TODO:  set this based on the menu id (add to existing or new enhanced view)
+        //            IsNewWindow = connectionMenuItem.Id ==
+        //                          DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView,
+        //            DisplayName = $"{connectionMenuItem.DisplayName} - Alignments Batch Review",
+        //            AlignmentSetId = connectionMenuItem.AlignmentSetId,
+              
+        //            ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
+        //                               throw new InvalidDataEngineException(name: "ParallelCorpusId",
+        //                                   value: "null"),
+        //            ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
+        //            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+        //            IsRtl = connectionMenuItem.IsRtl,
+        //            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+        //            IsTargetRtl = connectionMenuItem.IsTargetRtl,
+                  
+        //            SourceParatextId = connectionMenuItem.SourceParatextId,
+        //            TargetParatextId = connectionMenuItem.TargetParatextId
+        //    }, CancellationToken.None
+        //    );
+
+
+
+
+
+        //    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentBatchReviewCount, 1);
+        //}
+
         private async Task DeleteTranslationSet(ParallelCorpusConnectionMenuItemViewModel parallelCorpusConnectionMenuItemViewModel)
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
@@ -1485,6 +1548,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             switch (corpusNodeMenuItem.Id)
             {
+             
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddParatextCorpus:
                     // kick off the add new tokenization dialog
                     await AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);

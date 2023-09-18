@@ -16,23 +16,23 @@ namespace ClearDashboard.Wpf.Application.Controls
 
         public static readonly DependencyProperty ExtendedPropertiesXmlProperty =
             DependencyProperty.Register(
-              name: "ExtendePropertiesXml",
+              name: "ExtendedPropertiesXml",
               propertyType: typeof(string),
               ownerType: typeof(ExtendedPropertiesTreeView),
               typeMetadata: new FrameworkPropertyMetadata("",
                   new PropertyChangedCallback(ExtendedPropertiesXmlPropertyChanged))
             );
 
-        public string? ExtendePropertiesXml
+        public string? ExtendedPropertiesXml
         {
-            get { return (string)GetValue(ExtendedPropertiesXmlProperty); }
-            set { SetValue(ExtendedPropertiesXmlProperty, value); }
+            get => (string)GetValue(ExtendedPropertiesXmlProperty);
+            set => SetValue(ExtendedPropertiesXmlProperty, value);
         }
         static void ExtendedPropertiesXmlPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             ExtendedPropertiesTreeView xmlTreeView = (ExtendedPropertiesTreeView)sender;
 
-            if (xmlTreeView.ExtendePropertiesXml == null)
+            if (xmlTreeView.ExtendedPropertiesXml == null)
             {
                 xmlTreeView.Visibility = Visibility.Collapsed;
                 return;
@@ -41,14 +41,14 @@ namespace ClearDashboard.Wpf.Application.Controls
             try
             {
                 xmlTreeView.Visibility = Visibility.Visible;
-                XElement.Parse(xmlTreeView.ExtendePropertiesXml!)
+                XElement.Parse(xmlTreeView.ExtendedPropertiesXml!)
                     .Elements()
                     .Select(e => xmlTreeView.Items.Add(BuildTreeViewItems(e)))
                     .ToList();
             }
             catch (Exception)
             {
-                throw new InvalidDataEngineException(name: "Xml", value: xmlTreeView.ExtendePropertiesXml ?? "null");
+                throw new InvalidDataEngineException(name: "Xml", value: xmlTreeView.ExtendedPropertiesXml ?? "null");
             }
         }
 

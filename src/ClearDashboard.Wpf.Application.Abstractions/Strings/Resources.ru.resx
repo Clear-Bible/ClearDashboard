@@ -220,8 +220,8 @@
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Примечания</value>
   </data>
-  <data name="EPH" xml:space="preserve">
-    <value>Еф.</value>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>КНИГА</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Сдержанный</value>
@@ -337,8 +337,8 @@
   <data name="EZK" xml:space="preserve">
     <value>Иез.</value>
   </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext не работает</value>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>Все</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
     <value>Создать новую токенизацию корпуса</value>
@@ -370,38 +370,8 @@
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Добавьте лексическую форму в эту лемму</value>
   </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>Добавить семантический домен</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>Показать фоновые задачи</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>Тип</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>Проверка USFM</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>1 Ездры</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>Добавьте текст в просмотр</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>Плач.</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>Задача была отменена</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Отмена</value>
-  </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>Слово:</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>Количество различных токенизаций</value>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>Определение недоступно</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>

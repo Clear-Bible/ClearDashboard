@@ -26,6 +26,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Converters;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -493,18 +494,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// EnhancedViewItemMetadatum suffix with EnhancedViewItemViewModel suffix.
         /// </summary>
         /// <param name="enhancedViewItemMetadatum"></param>
+        /// <param name="editMode"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         protected async Task<EnhancedViewItemViewModel> ActivateItemFromMetadatumAsync(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var viewModelType = enhancedViewItemMetadatum.ConvertToEnhancedViewItemViewModelType();
-            var viewModel = (EnhancedViewItemViewModel) LifetimeScope!.Resolve(viewModelType);
-            viewModel.Parent = this;
-            viewModel.ConductWith(this);
-            var view = ViewLocator.LocateForModel(viewModel, null, null);
-            ViewModelBinder.Bind(viewModel, view, null);
-            await ActivateItemAsync(viewModel, cancellationToken);
-            return viewModel;
+            try
+            {
+                var editMode = (enhancedViewItemMetadatum.GetType() == typeof(AlignmentEnhancedViewItemMetadatum))
+                    ? ((AlignmentEnhancedViewItemMetadatum)enhancedViewItemMetadatum).EditMode
+                    : EditMode.MainViewOnly;
+                var viewModelType = enhancedViewItemMetadatum.ConvertToEnhancedViewItemViewModelType();
+                var viewModel = (EnhancedViewItemViewModel)LifetimeScope!.Resolve(viewModelType, new NamedParameter("editMode", editMode));
+                viewModel.Parent = this;
+                viewModel.ConductWith(this);
+                var view = ViewLocator.LocateForModel(viewModel, null, null);
+                ViewModelBinder.Bind(viewModel, view, null);
+                await ActivateItemAsync(viewModel, cancellationToken);
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+                var s = ex.Message;
+                throw;
+            }
+            ;
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -618,7 +632,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return;
             }
 
-            if (ParatextSync == false)
+            if (ParatextSync == false && message.OverrideParatextSync == false)
             {
                 return;
             }

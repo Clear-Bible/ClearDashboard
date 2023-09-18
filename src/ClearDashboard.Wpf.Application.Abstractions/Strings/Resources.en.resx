@@ -220,8 +220,8 @@
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Notes</value>
   </data>
-  <data name="EPH" xml:space="preserve">
-    <value>EPH</value>
+  <data name="Bcv_Book" xml:space="preserve">
+    <value>BOOK</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reserved</value>
@@ -337,8 +337,8 @@
   <data name="EZK" xml:space="preserve">
     <value>EZK</value>
   </data>
-  <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext is not running</value>
+  <data name="BiblicalTermsBcv_All" xml:space="preserve">
+    <value>All</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
     <value>Create New Corpus Tokenization</value>
@@ -370,38 +370,8 @@
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Add a lexical form to this lemma</value>
   </data>
-  <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>Add a semantic domain</value>
-  </data>
-  <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>Show Background Tasks</value>
-  </data>
-  <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>Checking USFM</value>
-  </data>
-  <data name="ProperCase_Ezra" xml:space="preserve">
-    <value>Ezra</value>
-  </data>
-  <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>Add Text to View</value>
-  </data>
-  <data name="LAM" xml:space="preserve">
-    <value>LAM</value>
-  </data>
-  <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>Task was cancelled</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>Word:</value>
-  </data>
-  <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>Number of different tokenizations</value>
+  <data name="Marble_DefinitionUnavailable" xml:space="preserve">
+    <value>definition unavailable</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Train Symmetrized Model?</value>
