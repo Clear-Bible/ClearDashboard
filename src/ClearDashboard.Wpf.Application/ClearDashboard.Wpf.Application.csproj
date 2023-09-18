@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -7,9 +7,9 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.1.0.7</AssemblyVersion>
-    <FileVersion>1.1.0.7</FileVersion>
-    <Version>1.1.0.7</Version>
+    <AssemblyVersion>1.1.0.8</AssemblyVersion>
+    <FileVersion>1.1.0.8</FileVersion>
+    <Version>1.1.0.8</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
     <Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
@@ -73,6 +73,8 @@
     <None Remove="Resources\NewProject_Icon_128.png" />
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\OpenBook50.png" />
+    <None Remove="Resources\ParatextBeta_Connected32.png" />
+    <None Remove="Resources\ParatextBeta_Disconnected32.png" />
     <None Remove="Resources\Paratext_Connected32.png" />
     <None Remove="Resources\Paratext_Disconnected32.png" />
     <None Remove="Resources\Paratext_Send32.png" />
@@ -124,9 +126,9 @@
     <EmbeddedResource Include="Resources\plugin_disconnect.wav" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
-    <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
-    <PackageReference Include="ClearApplicationFoundation" Version="2.0.8" />
+	  <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
+	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
+	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.8" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.12" />
@@ -140,6 +142,9 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.51" />
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.PicolIcons" Version="4.11.0" />
+    <PackageReference Include="Markdig" Version="0.33.0" />
+    <PackageReference Include="MdXaml" Version="1.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" Version="2.21.0" />
@@ -213,6 +218,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\OpenBook50.png" />
+    <Resource Include="Resources\ParatextBeta_Connected32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\ParatextBeta_Disconnected32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Paratext_Connected32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -249,6 +260,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="UserControls\AlignmentBulkReview.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\Lexicon\ConcordanceDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -265,6 +279,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\NoteDisplay.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\SelectBooksControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -291,11 +308,20 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
+    <None Update="Resources\Html2Adf\html2adf.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Html2Adf\htmltoadf.x86_64-pc-windows-gnu.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\markdown-cheat-sheet.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -410,6 +436,9 @@
     <Page Update="Assets\ClearLogo.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
+    <Page Update="UserControls\AlignmentBulkReview.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControls\BcvUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
@@ -464,6 +493,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\Html2Adf\" />
     <Folder Include="Resources\TailBlazor\" />
   </ItemGroup>
   <PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
@@ -480,27 +510,35 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|x64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|x64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />

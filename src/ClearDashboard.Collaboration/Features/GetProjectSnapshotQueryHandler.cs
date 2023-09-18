@@ -56,6 +56,12 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
     {
         var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(builderContext));
 
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Lexicon_Lexeme>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Lexicon_SemanticDomain>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Corpus>().BuildModelSnapshots(builderContext));
         cancellationToken.ThrowIfCancellationRequested();
 

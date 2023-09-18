@@ -73,8 +73,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
 
-        private ObservableCollection<DashboardProject> _dashboardProjects = new();
-        public ObservableCollection<DashboardProject> DashboardProjects
+        private BindableCollection<DashboardProject> _dashboardProjects = new();
+        public BindableCollection<DashboardProject> DashboardProjects
         {
             get => _dashboardProjects;
             set
@@ -84,8 +84,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardCollabProject> _dashboardCollabProjects = new();
-        public ObservableCollection<DashboardCollabProject> DashboardCollabProjects
+        private BindableCollection<DashboardCollabProject> _dashboardCollabProjects = new();
+        public BindableCollection<DashboardCollabProject> DashboardCollabProjects
         {
             get => _dashboardCollabProjects;
             set
@@ -117,6 +117,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 _manageCollabVisibility = value;
                 NotifyOfPropertyChange(() => ManageCollabVisibility);
             }
+        }
+
+        private bool _useProjectTemplate;
+        public bool UseProjectTemplate
+        {
+            get => _useProjectTemplate;
+            set => Set(ref _useProjectTemplate, value);
         }
 
         private Visibility _showCollabUserInfo = Visibility.Visible;
@@ -290,13 +297,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if (SearchText == string.Empty || SearchText is null)
                 {
-                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
                     SearchBlankVisibility = Visibility.Collapsed;
                     NoProjectVisibility = Visibility.Visible;
                 }
                 else
                 {
-                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
                     _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ', '_')));
                 }
 
@@ -319,8 +326,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardProject>? _dashboardProjectsDisplay = new();
-        public ObservableCollection<DashboardProject>? DashboardProjectsDisplay
+        private BindableCollection<DashboardProject> _dashboardProjectsDisplay = new();
+        public BindableCollection<DashboardProject> DashboardProjectsDisplay
         {
             get => _dashboardProjectsDisplay;
             set
@@ -330,9 +337,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private ObservableCollection<DashboardCollabProject>? _dashboardCollabProjectsDisplay;
+        private BindableCollection<DashboardCollabProject> _dashboardCollabProjectsDisplay = new();
 
-        public ObservableCollection<DashboardCollabProject>? DashboardCollabProjectsDisplay
+        public BindableCollection<DashboardCollabProject> DashboardCollabProjectsDisplay
         {
             get => _dashboardCollabProjectsDisplay;
             set
@@ -365,9 +372,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+
+        private Visibility _isParatextRegularInstalled = Visibility.Visible;
+        public Visibility IsParatextRegularInstalled
+        {
+            get => _isParatextRegularInstalled;
+            set 
+            { 
+                _isParatextRegularInstalled = value;
+                NotifyOfPropertyChange(() => IsParatextRegularInstalled);
+            }
+        }
+
+
+        private Visibility _isParatextBetaInstalled = Visibility.Collapsed;
+        public Visibility IsParatextBetaInstalled
+        {
+            get => _isParatextBetaInstalled;
+            set
+            {
+                _isParatextBetaInstalled = value;
+                NotifyOfPropertyChange(() => IsParatextBetaInstalled);
+            }
+        }
+
         #endregion
 
         #region Constructor
+
+        public ProjectPickerViewModel()
+        {
+            // no-op
+        }
+
         public ProjectPickerViewModel(TranslationSource translationSource,
             DashboardProjectManager projectManager,
             ParatextProxy paratextProxy,
@@ -402,6 +439,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             _collaborationHttpClientServices=collaborationHttpClientServices;
+
+            _paratextProxy.IsParatextInstalled();
+            if (_paratextProxy.ParatextInstallPath != string.Empty)
+            {
+                IsParatextRegularInstalled = Visibility.Visible;
+            }
+            else
+            {
+                IsParatextRegularInstalled = Visibility.Collapsed;
+            }
+
+            if (_paratextProxy.ParatextBetaInstallPath != string.Empty)
+            {
+                IsParatextBetaInstalled = Visibility.Visible;
+            }
+            else
+            {
+                IsParatextBetaInstalled = Visibility.Collapsed;
+            }
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -486,6 +542,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
         }
 
+        public async Task StartParatextBeta()
+        {
+            if (!_paratextProxy.IsParatextRunning())
+            {
+                await _paratextProxy.StartParatextBetaAsync();
+            }
+
+            IsParatextRunning = _paratextProxy.IsParatextRunning();
+            IsParatextInstalled = _paratextProxy.IsParatextInstalled();
+        }
+        
+
+
         public async Task RefreshCollabProjectList()
         {
             await GetCollabProjects();
@@ -514,7 +583,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async Task CollabProjectManager()
         {
-            var localizedString = _localizationService!["MainView_About"];
+            var localizedString = _localizationService!["CollabProjectManagementView_CollaborationManagement"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -565,6 +634,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var licenseUser = LicenseManager.GetUserFromLicense();
 
             var dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
+            if (string.IsNullOrEmpty(dashboardUser.ParatextUserName))
+            {
+                dashboardUser.ParatextUserName = ParatextUserName;
+                await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+            }
+
 
             CollaborationUser collaborationUser;
             bool dashboardUserChanged = false;
@@ -782,7 +857,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
 
             DashboardProjectsDisplay.Clear();
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
 
             NotifyOfPropertyChange(() => DashboardProjectsDisplay);
         }
@@ -889,7 +964,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CollabButtonsEnabled = true;
             }
 
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
 
             NotifyOfPropertyChange(nameof(DashboardProjectsDisplay));
         }
@@ -934,29 +1009,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        public ObservableCollection<DashboardProject>? CopyDashboardProjectsToAnother(ObservableCollection<DashboardProject> original, ObservableCollection<DashboardProject>? copy)
+        public BindableCollection<DashboardProject> CopyDashboardProjectsToAnother(BindableCollection<DashboardProject> original)
         {
-            OnUIThread(() =>
+            BindableCollection<DashboardProject> copy = new();
+
+            foreach (var project in original)
             {
-                copy.Clear();
-                foreach (var project in original)
-                {
-                    copy.Add(project);
-                }
-            });
+                copy.Add(project);
+            }
+
             return copy;
         }
-        public ObservableCollection<DashboardCollabProject>? CopyDashboardCollabProjectsToAnother(ObservableCollection<DashboardCollabProject> original, ObservableCollection<DashboardCollabProject>? copy)
+        public BindableCollection<DashboardCollabProject> CopyDashboardCollabProjectsToAnother(BindableCollection<DashboardCollabProject> original)
         {
-            OnUIThread(() =>
+            BindableCollection<DashboardCollabProject> copy = new();
+
+            foreach (var project in original)
             {
-                copy.Clear();
-                foreach (var project in original)
-                {
-                    copy.Add(project);
-                }
-            });
-           
+                copy.Add(project);
+            }
+
             return copy;
         }
         public void AlertClose()
@@ -1088,17 +1160,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-
             // confirm the user wants to delete the project
-            var deletingProjectPopupViewModel = LifetimeScope!.Resolve<DeletingProjectPopupViewModel>();
+            var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+            if (confirmationViewPopupViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+            }
+
+            confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteProjectConfirmation;
 
             bool result = false;
             OnUIThread(async () =>
             {
-                result = await _windowManager!.ShowDialogAsync(
-                    deletingProjectPopupViewModel,
-                    null,
-                    SimpleMessagePopupViewModel.CreateDialogSettings(deletingProjectPopupViewModel.Title));
+                result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
             });
 
             if (!result)
@@ -1209,10 +1285,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             Settings.Default.Save();
         }
 
-        public void Create()
+        public async void Create()
         {
-            MoveForwards();
-            EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
+            await MoveForwards();
+            await EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
+        }
+
+       
+        public async Task CreateProjectWithProjectTemplate()
+        {
+            var projectTemplateItems = ParentViewModel.Steps.Skip(3);
+            //foreach (var item in projectTemplateItems)
+            //{
+            //    await item.Reset(CancellationToken.None);
+            //}
+
+            await ParentViewModel!.GoToStep(3);
+        }
+
+        public async void ShowCollaborationGetLatest(DashboardProject project)
+        {
+            await ProjectManager.LoadProject(project.ProjectName);
+            if (_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
+            {
+                var viewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+
+                if (viewModel is not null)
+                {
+                    
+                    viewModel.ProjectId = ProjectManager.CurrentProject.Id;
+                    viewModel.ProjectName = ProjectManager.CurrentProject.ProjectName;
+                    viewModel.CollaborationDialogAction = CollaborationDialogAction.Merge;
+
+                    this._windowManager.ShowDialogAsync(viewModel, null, viewModel.DialogSettings());
+
+                    if (viewModel.CommitSha is not null)
+                    {
+                        
+                        ProjectManager.CurrentProject.LastMergedCommitSha = viewModel.CommitSha;
+                        await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
+                        project.GitLabUpdateNeeded = false;
+                    }
+                }
+            }
         }
 
         #endregion  Methods

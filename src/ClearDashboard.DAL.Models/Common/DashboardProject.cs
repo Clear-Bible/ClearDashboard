@@ -130,7 +130,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public bool NeedsMigrationUpgrade { get; set; } = false;
         public bool IsCollabProject { get; set; }
 
-        public string CollabOwner { get; set; }
+        public string CollabOwner { get; set; } = string.Empty;
         public PermissionLevel PermissionLevel { get; set; } = PermissionLevel.None;
         public Guid Id { get; set; }
     }

@@ -7,7 +7,6 @@ using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
-//using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
@@ -48,6 +47,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Converters;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -306,6 +306,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     X = corpusNode.X,
                     Y = corpusNode.Y,
                     CorpusId = corpusNode.CorpusId,
+                    CorpusName = corpusNode.Name
                 });
             }
 
@@ -342,7 +343,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // restore the nodes
                 if (designSurfaceData != null)
                 {
-                    foreach (var corpusId in topLevelProjectIds.CorpusIds)
+                    bool currentParatextProjectPresent = false;
+                    bool standardCorporaPresent = false;
+
+                    foreach (var corpusId in topLevelProjectIds.CorpusIds.OrderBy(c => c.Created))
                     {
                         if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
                         {
@@ -368,6 +372,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             {
                                 corpus.CorpusId.CorpusType = CorpusType.Resource.ToString();
                             }
+                            else
+                            {
+                                standardCorporaPresent = true;
+                                if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
+                                {
+                                    currentParatextProjectPresent = true;
+                                }
+                            }
                         }
                         
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
@@ -376,6 +388,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
+
+                    if (standardCorporaPresent  && !currentParatextProjectPresent)
+                    {
+                        var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                        if (confirmationViewPopupViewModel == null)
+                        {
+                            throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                        }
+
+                        confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.SwitchParatextProjectMessage;
+
+                        var result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                            SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                    }
+
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
                     //DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
@@ -1281,6 +1309,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var connectionViewModel = connectionMenuItem.ConnectionViewModel;
             switch (connectionMenuItem.Id)
             {
+
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView:
+                    //await AddAlignmentsBatchReview(connectionMenuItem);
+                    if (connectionMenuItem.IsEnabled)
+                    {
+                        await EnhancedViewManager.AddMetadatumEnhancedView(new AlignmentEnhancedViewItemMetadatum
+                        {
+                            AlignmentSetId = connectionMenuItem.AlignmentSetId,
+                            DisplayName = connectionMenuItem.DisplayName,
+                            ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
+                                               throw new InvalidDataEngineException(name: "ParallelCorpusId",
+                                                   value: "null"),
+                            ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
+                            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            IsRtl = connectionMenuItem.IsRtl,
+                            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            IsTargetRtl = connectionMenuItem.IsTargetRtl,
+                            IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds
+                                .AddAlignmentsBatchReviewViewToNewEnhancedView,
+                            SourceParatextId = connectionMenuItem.SourceParatextId,
+                            TargetParatextId = connectionMenuItem.TargetParatextId,
+                            EditMode = EditMode.EditorViewOnly
+                        }, CancellationToken.None);
+                    }
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentViewAddedCount, 1);
+                    break;
+
+                    break;
+
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTranslationSet:
                     // find the right connection to send
                     var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
@@ -1457,6 +1515,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             switch (corpusNodeMenuItem.Id)
             {
+             
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddParatextCorpus:
                     // kick off the add new tokenization dialog
                     await AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);
@@ -1600,15 +1659,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (!wasTokenizing)
             {
-                var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<DeletingCorpusNodePopupViewModel>();
-                
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCorpusNodeConfirmation;
+
                 bool result = false;
                 OnUIThread(async () =>
                 {
-                    result = await _windowManager!.ShowDialogAsync(
-                        deletingCorpusNodePopupViewModel,
-                        null,
-                        SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
+                    result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                        SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
                 });
 
                 if (!result)

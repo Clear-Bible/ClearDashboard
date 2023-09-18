@@ -812,7 +812,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("EngineTokenId");
 
+                    b.HasIndex("SurfaceText");
+
                     b.HasIndex("TokenizedCorpusId");
+
+                    b.HasIndex("TrainingText");
 
                     b.HasIndex("VerseRowId");
 
@@ -1297,8 +1301,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("BookNumber");
 
                     b.HasIndex("ChapterNumber");
-
-                    b.HasIndex("TrainingText");
 
                     b.HasIndex("VerseNumber");
 

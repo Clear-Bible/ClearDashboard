@@ -30,13 +30,16 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         #endregion Internal Data Members
 
-        public ParallelCorpusConnectorViewModel(string name, string paratextProjectId, ConnectorType connectorType, IEventAggregator? eventAggregator)
+        public ParallelCorpusConnectorViewModel(string name, string paratextProjectId, ConnectorType connectorType, IEventAggregator? eventAggregator, string corpusType)
         {
             _eventAggregator = eventAggregator;
             Name = name;
             ConnectorType = connectorType;
             ParatextId = paratextProjectId;
+            CorpusType = corpusType;
         }
+
+        public string CorpusType { get; set; } = DataAccessLayer.Models.CorpusType.Standard.ToString();
 
         public string ParatextId { get; init; }
 

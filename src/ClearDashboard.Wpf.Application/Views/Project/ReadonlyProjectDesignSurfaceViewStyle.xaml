@@ -1,0 +1,388 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions">
+
+    <ResourceDictionary.MergedDictionaries>
+        <!--
+            Merge in the resource dictionary that is shared between the main window and the overview window.
+        -->
+
+        <ResourceDictionary Source="/Styles/ProjectDesignSurface/SharedVisualTemplates.xaml" />
+
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  UI commands.  -->
+    <!--<RoutedUICommand x:Key="Commands.DeleteSelectedNodes" />-->
+    <!--<RoutedUICommand x:Key="Commands.CreateNode" />-->
+    <RoutedUICommand x:Key="Commands.NodeProperties" />
+    <RoutedUICommand x:Key="Commands.ConnectionProperties" />
+    <RoutedUICommand x:Key="Commands.DeleteNode" />
+    <RoutedUICommand x:Key="Commands.DeleteConnection" />
+    <RoutedUICommand x:Key="Commands.ZoomOut" />
+    <RoutedUICommand x:Key="Commands.ZoomIn" />
+    <RoutedUICommand x:Key="Commands.JumpBackToPrevZoom" />
+    <RoutedUICommand x:Key="Commands.FitContent" />
+    <RoutedUICommand x:Key="Commands.Fill" />
+    <RoutedUICommand x:Key="Commands.OneHundredPercent" />
+    <!--<RoutedUICommand x:Key="Commands.ToggleCorpusVisibility" />-->
+
+    <!--
+        This converts from a scale value to a percentage value.
+        It is used to convert the value of 'ContentScale' to the percentage zoom level that is displayed in the UI.
+    -->
+    <converters:ScaleToPercentConverter x:Key="ScaleToPercentConverter" />
+    <converters:EnumToValuesConverter x:Key="EnumToValuesConverter" />
+    <converters:StringToMaterialDesignKindConverter x:Key="StringToMaterialDesignKindConverter" />
+    <BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+    <!--
+        This graphic is used to indicate that a connection cannot be made between two particular connectors.
+    -->
+    <DataTemplate DataType="{x:Type projectDesignSurface:ConnectionBadIndicator}">
+        <Grid Width="80">
+            <Image
+                Width="32"
+                Height="32"
+                HorizontalAlignment="Right"
+                Source="/Resources/block_16.png" />
+        </Grid>
+    </DataTemplate>
+
+    <!--
+        This graphic is used to indicate that a connection can be made between two particular connectors.
+    -->
+    <DataTemplate DataType="{x:Type projectDesignSurface:ConnectionOkIndicator}">
+        <Grid Width="80">
+            <Image
+                Width="32"
+                Height="32"
+                HorizontalAlignment="Right"
+                Source="/Resources/tick_16.png" />
+        </Grid>
+    </DataTemplate>
+
+    <!--
+        Define the visual style for a 'ConnectorItem'.
+    -->
+    <Style TargetType="{x:Type controls:ConnectorItem}">
+        <!--
+            Data-binding for the connector hotspot.
+            ConnectorItem automatically computes its center points and assings this value
+            to the 'Hotspot' property.  This data-binding then 'pushes' the value into the application
+            view-model.
+        -->
+        <Setter Property="Hotspot" Value="{Binding Hotspot, Mode=OneWayToSource}" />
+
+        <!--  The visual template.  -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ConnectorItem}">
+                    <!--  The visual for the connector.  -->
+                    <Ellipse Fill="{StaticResource ConnectorBackgroundBrush}" Stroke="{StaticResource NodeBorderBrush}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BigButton" TargetType="Button">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Height" Value="80" />
+        <Setter Property="MinWidth" Value="80" />
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+        <!--<Setter Property="FontWeight" Value="Bold" />-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="border"
+                        Background="{DynamicResource PrimaryHueDarkBrush}"
+                        CornerRadius="5">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <materialDesign:PackIcon
+                                Width="36"
+                                Height="36"
+                                Margin="5,5,5,5"
+                                HorizontalAlignment="Center"
+                                Kind="{TemplateBinding Tag,
+                                                       Converter={StaticResource StringToMaterialDesignKindConverter}}" />
+                            <ContentPresenter
+                                x:Name="ButtonContentPresenter"
+                                Margin="5,0,5,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="BigParatextButton" TargetType="Button">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Height" Value="80" />
+        <Setter Property="MinWidth" Value="80" />
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="border"
+                        Background="{DynamicResource PrimaryHueDarkBrush}"
+                        CornerRadius="5">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image
+                                Width="36"
+                                Height="36"
+                                Margin="5,5,5,5"
+                                HorizontalAlignment="Center"
+                                Source="/Resources/Paratext_white_Icon48.png" />
+
+                            <ContentPresenter
+                                x:Name="ButtonContentPresenter"
+                                Margin="5,0,5,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!--
+        Template for the contextmenu
+    -->
+    <ControlTemplate x:Key="mist" TargetType="{x:Type MenuItem}">
+        <Separator />
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="mict" TargetType="{x:Type MenuItem}">
+        <MenuItem Header="{Binding Caption}" />
+    </ControlTemplate>
+
+    <Style x:Key="cmics" TargetType="{x:Type MenuItem}">
+        <Setter Property="Template" Value="{StaticResource mict}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                <Setter Property="Template" Value="{StaticResource mist}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <!--
+        Template for the button that is used to delete nodes and connections in the graph.
+        This button is displayed in an adorner when the user hovers the mouse over a node or connection.
+    -->
+    <!--<ControlTemplate x:Key="deleteButtonTemplate" TargetType="{x:Type Button}">
+        <Grid x:Name="grid">
+            <Grid.RenderTransform>
+                <ScaleTransform CenterX="10" CenterY="10" ScaleX="1" ScaleY="1" />
+            </Grid.RenderTransform>
+            <Ellipse
+                x:Name="shadow"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Fill="Gray">
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="1.5" Y="1.5" />
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Ellipse
+                x:Name="ellipse"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Fill="White"
+                Stroke="Black" />
+            <Image Margin="2" Source="/Resources/scissors.png" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                --><!--
+                    Make the 'delete connection button' larger when the mouse
+                    cursor is hovered over it.
+                --><!--
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetName="grid"
+                            Storyboard.TargetProperty="RenderTransform.ScaleX"
+                            To="1.3"
+                            Duration="0:0:0.25" />
+                        <DoubleAnimation
+                            Storyboard.TargetName="grid"
+                            Storyboard.TargetProperty="RenderTransform.ScaleY"
+                            To="1.3"
+                            Duration="0:0:0.25" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                --><!--
+                    Return the 'delete connection button' to normal size when the mouse
+                    cursor is moved away.
+                --><!--
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetName="grid"
+                            Storyboard.TargetProperty="RenderTransform.ScaleX"
+                            To="1"
+                            Duration="0:0:0.05" />
+                        <DoubleAnimation
+                            Storyboard.TargetName="grid"
+                            Storyboard.TargetProperty="RenderTransform.ScaleY"
+                            To="1"
+                            Duration="0:0:0.05" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </ControlTemplate.Triggers>
+
+    </ControlTemplate>-->
+
+    <!--
+        Data-template for ConnectionViewModel.
+        
+        Note that the 'Start' and 'End' of the arrow are bound to 'SourceConnectorHotspot' and 'DestinationConnectorHotspot' in
+        the view-model.
+        
+        In this sample a curved arrow represents connections between nodes.
+    -->
+    <DataTemplate DataType="{x:Type projectDesignSurface:ParallelCorpusConnectionViewModel}">
+
+        <!--
+            An adorned control is used, to represent the connection.
+            When the user hovers the mouse cursor over the connection, the
+            'delete connection' adorner pops up and allows them to delete the connection.
+        -->
+        <controls:AdornedControl
+            HorizontalAdornerPlacement="Mouse"
+            IsMouseOverShowEnabled="{Binding ElementName=ProjectDesignSurface, Path=IsNotDragging}"
+            VerticalAdornerPlacement="Mouse">
+
+            <!--  The connection is represented by a curved arrow.  -->
+            <projectDesignSurface:CurvedArrow
+                ArrowHeadLength="14"
+                ArrowHeadWidth="14"
+                ConnectionId="{Binding Path=Id}"
+                Fill="{StaticResource ConnectionBrush}"
+                NodeSource="{Binding Path=SourceConnector}"
+                NodeTarget="{Binding Path=DestinationConnector}"
+                Points="{Binding Points}"
+                Stroke="{StaticResource ConnectionBrush}"
+                StrokeThickness="6">
+                <projectDesignSurface:CurvedArrow.ContextMenu>
+                    <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
+                        <ContextMenu.Resources>
+                            <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:ParallelCorpusConnectionMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                <StackPanel IsEnabled="{Binding IsEnabled}" Orientation="Horizontal">
+                                    <iconPacks:PackIconPicolIcons
+                                        Width="15"
+                                        Height="15"
+                                        Margin="5,5,0,0"
+                                        VerticalAlignment="Center"
+                                        Kind="{Binding IconKind}">
+                                        <iconPacks:PackIconPicolIcons.Style>
+                                            <Style TargetType="iconPacks:PackIconPicolIcons">
+                                                <Setter Property="Foreground" Value="Black" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IconKind}" Value="Cancel">
+                                                        <Setter Property="Foreground" Value="Red" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </iconPacks:PackIconPicolIcons.Style>
+                                    </iconPacks:PackIconPicolIcons>
+                                    <TextBlock
+                                        Margin="5,5,0,0"
+                                        VerticalAlignment="Center"
+                                        IsEnabled="{Binding IsEnabled}"
+                                        Text="{Binding Header}">
+                                        <TextBlock.Style>
+                                            <Style BasedOn="{StaticResource MahApps.Styles.TextBlock}" TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                        <Setter Property="Foreground" Value="{DynamicResource RedDarkBrush}" />
+                                                        <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <!--  Text="{Binding Header}"  -->
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Command" Value="{Binding Command}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                    <Separator />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContextMenu.Resources>
+                    </ContextMenu>
+                </projectDesignSurface:CurvedArrow.ContextMenu>
+            </projectDesignSurface:CurvedArrow>
+
+            <!--<controls:AdornedControl.AdornerContent>
+
+                --><!--
+                    This is the adorner that pops up when the user hovers the mouse over the connection.
+                    It displays a button that the user can click to delete the connection.
+                --><!--
+                <Canvas
+                    x:Name="connectionAdornerCanvas"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top">
+                    <Line
+                        IsHitTestVisible="False"
+                        Stroke="Black"
+                        StrokeThickness="1"
+                        X1="0"
+                        X2="15"
+                        Y1="30"
+                        Y2="15" />
+                    <Button
+                        x:Name="deleteConnectionButton"
+                        Canvas.Left="10"
+                        Canvas.Top="0"
+                        Width="20"
+                        Height="20"
+                        Command="{StaticResource Commands.DeleteConnection}"
+                        CommandParameter="{Binding}"
+                        Cursor="Hand"
+                        Focusable="False"
+                        Template="{StaticResource deleteButtonTemplate}" />
+                </Canvas>
+            </controls:AdornedControl.AdornerContent>-->
+        </controls:AdornedControl>
+    </DataTemplate>
+
+
+
+
+
+
+</ResourceDictionary>

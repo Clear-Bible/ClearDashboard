@@ -10,7 +10,7 @@ public enum Tokenizers
     //[Description("Latin Word Detokenizer")]
     //LatinWordDetokenizer,
 
-    [Description("Latin Word TokenizedCorpus (most common)")]
+    [Description("Latin Word (most common)")]
     LatinWordTokenizer,
 
     //[Description("Line Segment Tokenizer")]
@@ -31,7 +31,7 @@ public enum Tokenizers
     //[Description("Whitespace Detokenizer")]
     //WhitespaceDetokenizer,
 
-    [Description("Whitespace TokenizedCorpus")]
+    [Description("Whitespace")]
     // ReSharper disable once UnusedMember.Global
     WhitespaceTokenizer,
 
@@ -39,6 +39,6 @@ public enum Tokenizers
     //ZwspWordDetokenizer,
 
     // ReSharper disable once UnusedMember.Global
-    [Description("Zwsp Word TokenizedCorpus")]
+    [Description("Zwsp Word")]
     ZwspWordTokenizer
 }

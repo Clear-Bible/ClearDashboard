@@ -151,7 +151,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             sw.Start();
 
-            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, true, false, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(13, alignmentTrainingTextCounts.Count);
 
             var one = alignmentTrainingTextCounts.Skip(4).First();
@@ -161,9 +161,9 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Output.WriteLine($"Source training text:  {one.Key}");
             foreach (var one2 in one.Value)
             {
-                Assert.Equal(2, one2.Value.Count);
+                Assert.Equal(2, one2.Value.StatusCounts.Count);
                 Output.WriteLine($"\tTarget training text: {one2.Key}");
-                foreach (var one3 in one2.Value)
+                foreach (var one3 in one2.Value.StatusCounts)
                 {
                     Output.WriteLine($"\t\tStatus:  {one3.Key}    Count:  {one3.Value}");
                 }
@@ -171,7 +171,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Output.WriteLine("");
 
-            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+            var alignmentTrainingTextCounts2 = await alignmentSet.GetAlignmentCounts(false, true, false, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
             Assert.Equal(12, alignmentTrainingTextCounts2.Count);
 
             var verse = alignmentTrainingTextCounts2.Skip(1).First();
@@ -182,7 +182,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             foreach (var verse2 in verse.Value)
             {
                 Output.WriteLine($"\tSource training text: {verse2.Key}");
-                foreach (var verse3 in verse2.Value)
+                foreach (var verse3 in verse2.Value.StatusCounts)
                 {
                     Output.WriteLine($"\t\tStatus:  {verse3.Key}    Count:  {verse3.Value}");
                 }
@@ -264,6 +264,115 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         }
     }
 
+    //[Fact]
+    //public async Task AlignmentSet_GetAlignmentVerseContexts_Project2969()
+    //{
+    //    Stopwatch sw = new();
+
+    //    try
+    //    {
+    //        sw.Start();
+
+    //        var alignmentSet = await AlignmentSet.Get(new AlignmentSetId(Guid.Parse("1EAA0CF4-D16E-4BFC-89CF-F82FF93CD7B8")), Mediator!);
+
+    //        var alignmentTrainingTextCounts = await alignmentSet.GetAlignmentCounts(true, true, true, AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken.None);
+    //        Assert.Equal(13939, alignmentTrainingTextCounts.Count);
+
+    //        sw.Stop();
+    //        Output.WriteLine("Elapsed={0} - GetAlignmentCounts()", sw.Elapsed);
+    //        sw.Restart();
+
+    //        var alignmentBookNumbers = await alignmentSet.GetBookNumbers(
+    //            "וְ",
+    //            "kɨ",
+    //            true,
+    //            AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded,
+    //            CancellationToken.None);
+    //        Assert.Equal(39, alignmentBookNumbers.Count());
+
+    //        sw.Stop();
+    //        Output.WriteLine("Elapsed={0} - GetBookNumbers()", sw.Elapsed);
+    //        sw.Restart();
+
+    //        var hasNextPage = true;
+    //        string? cursor = null;
+    //        var sum = 0;
+    //        var alignmentIds = new List<Guid>();
+    //        while (hasNextPage)
+    //        {
+    //            Stopwatch swInner = new();
+    //            swInner.Start();
+
+    //            var alignmentSetVerseContextsInner = await alignmentSet.GetAlignmentVerseContexts(
+    //                "וְ",
+    //                "kɨ",
+    //                true,
+    //                null,
+    //                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded,
+    //                2000,
+    //                cursor,
+    //                CancellationToken.None);
+
+    //            swInner.Stop();
+
+    //            cursor = alignmentSetVerseContextsInner.Cursor;
+    //            hasNextPage = alignmentSetVerseContextsInner.HasNextPage;
+    //            if (alignmentSetVerseContextsInner.VerseContexts.Any())
+    //            {
+    //                Output.WriteLine($"\t{alignmentSetVerseContextsInner.VerseContexts.First().alignment.AlignedTokenPair.SourceToken.TokenId} to {alignmentSetVerseContextsInner.VerseContexts.Last().alignment.AlignedTokenPair.SourceToken.TokenId}: {alignmentSetVerseContextsInner.VerseContexts.Count()}  {swInner.Elapsed}");
+    //                sum += alignmentSetVerseContextsInner.VerseContexts.Count();
+    //            }
+    //            else
+    //            {
+    //                Output.WriteLine("\tNo more alignments");
+    //            }
+
+    //            alignmentIds.AddRange(alignmentSetVerseContextsInner.VerseContexts.Select(e => e.alignment!.AlignmentId!.Id));
+    //        }
+
+    //        Output.WriteLine($"\t SUM: {sum}");
+    //        Assert.Equal(15588, sum);
+
+    //        sw.Stop();
+    //        Output.WriteLine("Elapsed={0} - GetAlignmentVerseContexts(paging) all", sw.Elapsed);
+    //        sw.Restart();
+
+    //        var alignmentSetVerseContexts = await alignmentSet.GetAlignmentVerseContexts(
+    //            "וְ",
+    //            "kɨ",
+    //            true,
+    //            null,
+    //            AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded,
+    //            CancellationToken.None);
+    //        Assert.Equal(15588, alignmentSetVerseContexts.Count());
+
+    //        sw.Stop();
+    //        Output.WriteLine("Elapsed={0} - GetAlignmentVerseContexts(null booknumber) {1}", sw.Elapsed, alignmentSetVerseContexts.Count());
+    //        sw.Restart();
+
+    //        var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
+    //            "וְ",
+    //            "kɨ",
+    //            true,
+    //            1,
+    //            AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded,
+    //            CancellationToken.None);
+    //        Assert.Equal(1041, alignmentSetVerseContexts2.Count());
+
+    //        sw.Stop();
+    //        Output.WriteLine("Elapsed={0} - GetAlignmentVerseContexts(1 booknumber)", sw.Elapsed);
+    //        sw.Restart();
+
+    //    }
+    //    finally
+    //    {
+    //        //            await DeleteDatabaseContext();
+
+    //        sw.Stop();
+    //        Output.WriteLine("Elapsed={0} - Overall", sw.Elapsed);
+    //    }
+    //}
+
     [Fact]
     public async Task AlignmentSet_GetAlignmentVerseContexts()
     {
@@ -292,11 +401,21 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 "verse", 
                 "verse",
                 true,
-                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
+                null,
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, null, null,
                 CancellationToken.None);
-            Assert.Equal(12, alignmentSetVerseContexts.Count());
+            Assert.Equal(12, alignmentSetVerseContexts.VerseContexts.Count());
 
-            var one = alignmentSetVerseContexts.FirstOrDefault();
+            var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
+                "verse",
+                "verse",
+                true,
+                40,
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, null, null,
+                CancellationToken.None);
+            Assert.Equal(9, alignmentSetVerseContexts2.VerseContexts.Count());
+
+            var one = alignmentSetVerseContexts.VerseContexts.FirstOrDefault();
             Assert.True(one != default);
 
             Assert.Equal(6, one.sourceVerseTokens.Count());
@@ -319,15 +438,25 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Output.WriteLine("");
 
-            var alignmentSetVerseContexts2 = await alignmentSet.GetAlignmentVerseContexts(
+            var alignmentSetVerseContexts3 = await alignmentSet.GetAlignmentVerseContexts(
                 "one_verse_three", 
                 "three",
                 true,
-                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, 
+                null,
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, null, null,
                 CancellationToken.None);
-            Assert.Equal(2, alignmentSetVerseContexts2.Count());
+            Assert.Equal(2, alignmentSetVerseContexts3.VerseContexts.Count());
 
-            var two = alignmentSetVerseContexts2.FirstOrDefault();
+            var alignmentSetVerseContexts4 = await alignmentSet.GetAlignmentVerseContexts(
+                "one_verse_three",
+                "three",
+                true,
+                40,
+                AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, null, null,
+                CancellationToken.None);
+            Assert.Single(alignmentSetVerseContexts4.VerseContexts);
+
+            var two = alignmentSetVerseContexts3.VerseContexts.FirstOrDefault();
             Assert.True(two != default);
 
             Assert.Equal(4, two.sourceVerseTokens.Count());

@@ -16,7 +16,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Popups
     public enum SimpleMessagePopupMode
     {
         Add,
-        Delete
+        Delete,
+        DeleteCorpusNodeConfirmation,
+        DeleteProjectConfirmation,
+        CloseEnhancedViewConfirmation,
+        SwitchParatextProjectMessage
     }
 
     public abstract class SimpleMessagePopupViewModel : DashboardApplicationScreen
