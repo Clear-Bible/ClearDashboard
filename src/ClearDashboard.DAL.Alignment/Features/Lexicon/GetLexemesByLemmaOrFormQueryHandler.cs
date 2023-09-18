@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.Translations)
                         .ThenInclude(t => t.User)
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language == request.MeaningLanguage))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.SemanticDomainMeaningAssociations)
                         .ThenInclude(sda => sda.SemanticDomain)
                             .ThenInclude(sd => sd!.User)
