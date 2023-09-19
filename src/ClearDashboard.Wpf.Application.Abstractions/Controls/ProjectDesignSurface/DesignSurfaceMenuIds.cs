@@ -6,6 +6,8 @@ public partial class DesignSurfaceViewModel
     {
         public const string AddAlignmentSetToCurrentEnhancedView = "AddAlignmentSetToCurrentEnhancedView"; // was AddAlignmentToEnhancedViewId
         public const string AddAlignmentSetToNewEnhancedView = "AddAlignmentSetToNewEnhancedView"; //
+        public const string AddAlignmentsBatchReviewViewToCurrentEnhancedView = "AlignmentsBatchReviewViewToCurrentEnhancedView";
+        public const string AddAlignmentsBatchReviewViewToNewEnhancedView = "AlignmentsBatchReviewViewToNewEnhancedView";
         public const string DeleteAlignmentSet = "DeleteAlignmentSet"; //
         public const string DeleteTranslationSet = "DeleteTranslationSet";
         public const string AddTranslationSet = "AddTranslationSet"; // was AddTranslationSetId
