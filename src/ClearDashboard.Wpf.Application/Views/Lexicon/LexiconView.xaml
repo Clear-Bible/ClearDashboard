@@ -17,6 +17,6 @@
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              FlowDirection="{Binding WindowFlowDirection}">
     <Grid>
-        <lexicon1:LexiconImport />
+        <lexicon1:LexiconImport DataContext="{Binding .}" />
     </Grid>
 </UserControl>

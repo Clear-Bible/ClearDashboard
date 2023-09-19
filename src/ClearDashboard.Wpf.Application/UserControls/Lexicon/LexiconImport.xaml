@@ -10,9 +10,11 @@
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
 
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=lexicon:LexiconViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="{x:Type Label}">
@@ -63,10 +65,10 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <materialDesign:Card  Height="300"  Margin="5" >
+    <materialDesign:Card  Height="Auto"  Margin="5" >
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" ></RowDefinition>
+                <RowDefinition Height="40" ></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
@@ -91,8 +93,8 @@
                         />
              
             </Grid>
-            <DataGrid Grid.Row="1" Grid.Column="0" 
-                          x:Name="ApprovalDataGrid" 
+            <!--<DataGrid Grid.Row="1" Grid.Column="0" 
+                          x:Name="LexiconSelectionDataGrid" 
                           ItemsSource="{Binding PagedBulkAlignments}" 
                           AutoGenerateColumns="False" 
                           HorizontalAlignment="Stretch"
@@ -105,13 +107,28 @@
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
                           IsReadOnly="True"
-                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">-->
+            <DataGrid Grid.Row="1" Grid.Column="0" 
+                      x:Name="LexiconSelectionDataGrid" 
+                      ItemsSource="{Binding LexiconImports}"
+                      AutoGenerateColumns="False" 
+                      HorizontalAlignment="Stretch"
+                      Margin="4"
+                      VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      ScrollViewer.CanContentScroll="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
-                                <CheckBox x:Name="SelectAllCheckBox" >
-                                    <!--cm:Message.Attach="[Event Checked] = [Action OnToggleAllChecked($source)];[Event Unchecked] = [Action OnToggleAllChecked($source)]" -->
+                                <CheckBox x:Name="SelectAllCheckBox" 
+                                    cm:Message.Attach="[Event Checked] = [Action OnToggleAllChecked($source)];[Event Unchecked] = [Action OnToggleAllChecked($source)]" 
+                                    cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconSelectionDataGrid}"> 
                                     <CheckBox.Resources>
                                         <ToolTip x:Key="CheckedToolTip">
                                             <TextBlock Text="{helpers:Localization LexiconImport_SelectAll}"></TextBlock>
@@ -149,10 +166,11 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceWord}"  Binding="{Binding Type}" Width="150"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceLanguage}" Binding="{Binding SourceRef}" Width="200"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetWord}"  Binding="{Binding Type}" Width="150"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding SourceRef}" Width="200"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceWord}"  Binding="{Binding SourceWord}" Width="150"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceLanguage}" Binding="{Binding SourceLanguage}" Width="200"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceType}" Binding="{Binding SourceType}" Width="200"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetWord}"  Binding="{Binding TargetWord}" Width="150"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding TargetLanguage}" Width="200"/>
                     <!--<DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}" Width=".6*">
                         
                             <DataGridTemplateColumn.CellTemplate>

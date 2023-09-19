@@ -17,6 +17,9 @@ using Lexicon = ClearDashboard.DAL.Alignment.Lexicon.Lexicon;
 using Lexeme = ClearDashboard.DAL.Alignment.Lexicon.Lexeme;
 using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
 using System.Collections.ObjectModel;
+using ClearDashboard.DAL.Alignment.Features.Lexicon;
+using ClearDashboard.DataAccessLayer;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -444,6 +447,28 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        public async Task<Lexicon?> GetLexiconForProject(string? projectId)
+        {
+            var result = await Mediator.Send(new GetExternalLexiconQuery(projectId));
+            //var result = await Mediator.Send(new GetExternalLexiconQuery(null));
+            if (result.Success && result.HasData)
+            {
+                return result.Data;
+            }
+            else
+            {
+                Logger.LogError($"An unexpected error occurred while getting the lexicon for the Paratext project with id '{projectId}'");
+                return null;
+            }
+            
+        }
+
+        public async Task<Lexicon> GetExternalLexiconNotInInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
+        {
+            var internalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
+            return GetExternalLexiconNotInInternal(externalLexicon, internalLexicon);
         }
 
         public static Lexicon GetExternalLexiconNotInInternal(Lexicon externalLexicon, Lexicon internalLexicon)
