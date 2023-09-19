@@ -80,10 +80,11 @@
 
         <!--  ROW 0  -->
         <StackPanel Grid.Column="0" Orientation="Horizontal">
+
             <Button
-                Width="20"
-                Height="20"
-                Margin="5,5,50,0"
+                Width="25"
+                Height="25"
+                Margin="5,5,5,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
@@ -161,7 +162,7 @@
 
                     <Border
                         Grid.Column="1"
-                        Margin="5,3,0,0"
+                        Margin="5,3,2,2"
                         BorderBrush="Black"
                         BorderThickness="1">
                         <StackPanel Orientation="Vertical">
@@ -204,7 +205,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="2"
-                        Margin="5,3,10,0"
+                        Margin="5,3,10,2"
                         BorderBrush="Black"
                         BorderThickness="1">
                         <StackPanel Orientation="Vertical">
@@ -278,81 +279,93 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition x:Name="HeaderColumn" Width="*" />
+                        <ColumnDefinition x:Name="HeaderColumn" Width="73*" />
+                        <ColumnDefinition Width="723*" />
                     </Grid.ColumnDefinitions>
 
-                    <Button
-                        Name="SearchButton"
-                        Grid.Column="0"
-                        Width="25"
-                        Height="25"
-                        Margin="10"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
-                        CommandParameter="{x:Static Dock.Top}"
-                        ToolTip="{helpers:Localization ExpandView}">
-                        <Button.Style>
-                            <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
-                                <Setter Property="Padding" Value="0" />
-                                <Setter Property="Background" Value="Transparent" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                                        <Setter Property="RenderTransform">
-                                            <Setter.Value>
-                                                <ScaleTransform ScaleX="1.75" ScaleY="1.75" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <iconPacks:PackIconMaterial
-                            Width="25"
-                            Height="25"
-                            Background="Transparent"
-                            Foreground="{StaticResource PrimaryHueDarkBrush}"
-                            Kind="DatabaseSearch" />
-                    </Button>
+
 
 
                     <materialDesign:Card
                         Grid.Column="1"
+                        Grid.ColumnSpan="2"
                         Width="{Binding ActualWidth, ElementName=HeaderColumn, Converter={converters:WidthSubtraction}, ConverterParameter='30'}"
                         Margin="0,0,20,0"
                         materialDesign:ElevationAssist.Elevation="Dp0"
                         Background="#EEEBEB">
-                        <ListBox
-                            ItemsSource="{Binding LexicalLinks}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            SelectedValue="{Binding SelectedLexicalLink, Mode=TwoWay}">
-                            <ListBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignChoiceChipPrimaryListBox}" TargetType="ListBox">
-                                    <Setter Property="FlowDirection" Value="LeftToRight" />
-                                    <Setter Property="FontSize" Value="16" />
-                                    <Setter Property="FontFamily" Value="SBL Greek" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding LexicalLinks[0].IsRtl}" Value="True">
-                                            <Setter Property="FlowDirection" Value="RightToLeft" />
-                                            <Setter Property="FontSize" Value="20" />
-                                            <Setter Property="FontFamily" Value="SBL Hebrew" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListBox.Style>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,2">
-                                        <TextBlock Text="{Binding Word}">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock" />
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                Name="SearchButton"
+                                Grid.Column="0"
+                                Width="20"
+                                Height="20"
+                                Margin="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                                CommandParameter="{x:Static Dock.Top}"
+                                ToolTip="{helpers:Localization Marble_Search}">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                                <Setter Property="RenderTransform">
+                                                    <Setter.Value>
+                                                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <iconPacks:PackIconForkAwesome
+                                    Width="20"
+                                    Height="20"
+                                    Background="Transparent"
+                                    Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                    Kind="Search" />
+                            </Button>
+
+                            <ListBox
+                                Grid.Column="1"
+                                ItemsSource="{Binding LexicalLinks}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                SelectedValue="{Binding SelectedLexicalLink, Mode=TwoWay}">
+                                <ListBox.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignChoiceChipPrimaryListBox}" TargetType="ListBox">
+                                        <Setter Property="FlowDirection" Value="LeftToRight" />
+                                        <Setter Property="FontSize" Value="16" />
+                                        <Setter Property="FontFamily" Value="SBL Greek" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding LexicalLinks[0].IsRtl}" Value="True">
+                                                <Setter Property="FlowDirection" Value="RightToLeft" />
+                                                <Setter Property="FontSize" Value="20" />
+                                                <Setter Property="FontFamily" Value="SBL Hebrew" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.Style>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,2">
+                                            <TextBlock Text="{Binding Word}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock" />
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
                     </materialDesign:Card>
                 </Grid>
 
