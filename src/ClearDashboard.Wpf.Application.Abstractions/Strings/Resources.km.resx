@@ -752,7 +752,7 @@
     <value>លេខសម្ងាត់:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>url:</value>
+    <value>URL:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
     <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
@@ -1098,6 +1098,9 @@
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>វិសាលភាព:</value>
+  </data>
+  <data name="Marble_Search" xml:space="preserve">
+    <value>ការឆេកឆេ</value>
   </data>
   <data name="Marble_SearchEnglish" xml:space="preserve">
     <value>ស្វែងរកដោយភាសាអង់គ្លេសរលោង</value>

@@ -1099,6 +1099,9 @@
   <data name="Marble_Scope" xml:space="preserve">
     <value>Scope:</value>
   </data>
+  <data name="Marble_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
   <data name="Marble_SearchEnglish" xml:space="preserve">
     <value>Search by English Gloss</value>
   </data>
