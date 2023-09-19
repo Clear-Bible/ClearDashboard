@@ -71,6 +71,15 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         }
     }
 
+
+    private bool _SMTsReady = false;
+    public bool SMTsReady
+    {
+        get => _SMTsReady;
+        set => Set(ref _SMTsReady, value);
+    }
+
+
     #endregion //Observable Properties
 
 
@@ -158,13 +167,20 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
             }
 
             // select next available smt that is enabled
+            bool found = false;
             foreach (var smt in SmtList)
             {
                 if (smt.IsEnabled)
                 {
+                    found = true;
                     ParentViewModel.SelectedSmtAlgorithm = smt;
                     break;
                 }
+            }
+
+            if (found)
+            {
+                SMTsReady = true;
             }
         }
         catch (Exception e)
