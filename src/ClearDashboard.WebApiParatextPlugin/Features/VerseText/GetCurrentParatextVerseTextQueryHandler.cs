@@ -1,18 +1,11 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
@@ -63,8 +56,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
 
             if (string.IsNullOrEmpty(verseText))
             {
-                result.Data.Name = "USER UNKNOWN";
-                result.Message = "There are no users registered with Paratext";
+                result.Data.Name = "Verse Get";
+                result.Message = "No Verse Data";
                 result.Success = false;
             }
 

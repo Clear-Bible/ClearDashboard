@@ -61,7 +61,7 @@
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="2"
                     FontSize="16"
-                    Foreground="{StaticResource SecondaryHueDarkForegroundBrush}"
+                    Foreground="{StaticResource SecondaryHueLightForegroundBrush}"
                     ScrollViewer.HorizontalScrollBarVisibility="Visible"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     SpellCheck.IsEnabled="True"

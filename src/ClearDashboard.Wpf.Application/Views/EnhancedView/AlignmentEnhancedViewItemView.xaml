@@ -1,0 +1,160 @@
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.Views.EnhancedView.AlignmentEnhancedViewItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
+             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:input="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:userControls1="clr-namespace:ClearDashboard.Wpf.Application.UserControls;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=enhancedView:AlignmentEnhancedViewItemViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
+            <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
+            <converters1:EditModeToVisibilityConverter x:Key="EditModeToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <ListView
+                x:Name="InnerListView"
+                Width="{Binding ActualWidth, ElementName=FirstColumn, Converter={converters:WidthSubtraction}, ConverterParameter='130'}"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                cm:Message.Attach="[Event SelectionChanged] = [Action VerseSelected($this, $eventArgs)]"
+                input:EnhancedFocusScope.IsEnhancedFocusScope="True"
+                ItemsSource="{Binding Verses}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.IsDeferredScrollingEnabled="True"
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Recycling"
+                Visibility="{Binding EditMode, Converter={StaticResource EditModeToVisibilityConverter}, ConverterParameter={x:Static converters1:EditMode.MainViewOnly}}">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDown">
+                        <cm:ActionMessage MethodName="SetFocus" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Height" Value="Auto" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Style.Triggers>
+                            <Trigger Property="ListViewItem.IsSelected" Value="true">
+                                <Setter Property="Background" Value="LightCoral" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                        <userControls:VerseDisplay
+                        x:Name="VerseDisplay"
+                        Title=""
+                        HorizontalAlignment="Stretch"
+                        HorizontalSpacing="{Binding DataContext.SourceHorizontalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
+                        IsEnabled="True"
+                        NoteIndicatorHeight="{Binding DataContext.NoteIndicatorsSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
+                        Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
+                        ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                        ShowTranslations="{Binding DataContext.ShowTranslation, RelativeSource={RelativeSource AncestorType=ListView}}"
+                        SourceFontFamily="{Binding ElementName=InnerListView, Path=DataContext.SourceFontFamily}"
+                        SourceFontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
+                        TargetFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TargetFontFamily}"
+                        TargetFontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
+                        TitleFontSize="10"
+                        TitleVisibility="Collapsed"
+                        TokenVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
+                        TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                        TranslationClicked="TranslationClicked"
+                        TranslationFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TranslationFontFamily}"
+                        TranslationFontSize="{Binding DataContext.TranslationsFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
+                        TranslationVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
+                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="TokenCreateAlignment">
+                                    <b:CallMethodAction MethodName="TokenCreateAlignment" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenDeleteAlignment">
+                                    <b:CallMethodAction MethodName="TokenDeleteAlignment" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenClicked">
+                                    <b:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenRightButtonDown">
+                                    <b:CallMethodAction MethodName="TokenRightButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenMouseEnter">
+                                    <b:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenMouseLeave">
+                                    <b:CallMethodAction MethodName="TokenMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TranslationMouseEnter">
+                                    <b:CallMethodAction MethodName="TranslationMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TranslationMouseLeave">
+                                    <b:CallMethodAction MethodName="TranslationMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="NoteIndicatorMouseEnter">
+                                    <b:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="NoteCreate">
+                                    <b:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="FilterPins">
+                                    <b:CallMethodAction MethodName="FilterPins" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="FilterPinsByBiblicalTerms">
+                                    <b:CallMethodAction MethodName="FilterPinsByBiblicalTerms" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="Copy">
+                                    <b:CallMethodAction MethodName="Copy" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TranslateQuick">
+                                    <b:CallMethodAction MethodName="TranslateQuick" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenJoin">
+                                    <b:CallMethodAction MethodName="TokenJoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenJoinLanguagePair">
+                                    <b:CallMethodAction MethodName="TokenJoinLanguagePair" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenUnjoin">
+                                    <b:CallMethodAction MethodName="TokenUnjoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+                        </userControls:VerseDisplay>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <userControls:AlignmentBulkReview x:Name="AlignmentBulkReview" Visibility="{Binding EditMode, Converter={StaticResource EditModeToVisibilityConverter}, ConverterParameter={x:Static converters1:EditMode.EditorViewOnly}}" DataContext="{Binding .}"/>
+                               
+        </StackPanel>
+
+        <ProgressBar
+            Width="76"
+            Height="75"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgressBarVisibility}"
+            Value="0" />
+    </Grid>
+
+</UserControl>

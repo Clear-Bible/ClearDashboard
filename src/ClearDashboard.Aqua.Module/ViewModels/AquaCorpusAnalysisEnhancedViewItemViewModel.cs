@@ -18,6 +18,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MimeKit;
 using SIL.Scripture;
 using SkiaSharp;
 using System;
@@ -262,6 +263,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         {
             aquaManager_ = aquaManager;
             longRunningTaskManager_ = longRunningTaskManager;
+
+            var s = LocalizationService.Get("Pds_AquaDialogMenuId");
         }
 
         //public override Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)

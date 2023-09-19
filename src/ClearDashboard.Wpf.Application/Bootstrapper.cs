@@ -364,9 +364,19 @@ namespace ClearDashboard.Wpf.Application
         private void RemoveExtraParatextPluginInstance()
         {
             ParatextProxy paratextUtils = new ParatextProxy(null);
+            string paratextInstallPath = string.Empty;
             if (paratextUtils.IsParatextInstalled())
             {
-                var paratextInstallPath = paratextUtils.ParatextInstallPath;
+                if (paratextUtils.ParatextInstallPath != string.Empty)
+                {
+                    paratextInstallPath = paratextUtils.ParatextInstallPath;
+                }
+                else if (paratextUtils.ParatextBetaInstallPath != string.Empty)
+                {
+                    paratextInstallPath = paratextUtils.ParatextBetaInstallPath;
+                }
+
+                
                 paratextInstallPath = Path.Combine(paratextInstallPath, "plugins", "Clear Dashboard");
                 if (Directory.Exists(paratextInstallPath))
                 {

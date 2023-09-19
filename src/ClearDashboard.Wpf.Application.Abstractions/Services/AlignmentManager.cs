@@ -138,7 +138,7 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var alignment = new Alignment(new AlignedTokenPairs(sourceTokenDisplay.CompositeToken ?? sourceTokenDisplay.Token, 
                                                                     targetTokenDisplay.CompositeToken ?? targetTokenDisplay.Token, 1d),
-                                                                    "Verified");
+                                                                    alignmentPopupViewModel.Verification);
                 try
                 {
                     await AlignmentSet!.PutAlignment(alignment);

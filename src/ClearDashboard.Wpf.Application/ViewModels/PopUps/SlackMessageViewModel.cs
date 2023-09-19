@@ -462,15 +462,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             await Task.Delay(200);
 
             var jiraClient = IoC.Get<JiraClientServices>();
-            if (_jiraUser!.EmailAddress == string.Empty)
-            {
-                // does the user have a jira account?
-                _jiraUser = await jiraClient.GetUserByEmail(_jiraUsersList, _dashboardUser);
-            }
+            //if (_jiraUser!.EmailAddress == string.Empty)
+            //{
+            //    // does the user have a jira account?
+            //    _jiraUser = await jiraClient.GetUserByEmail(_jiraUsersList, _dashboardUser);
+            //}
 
+            _jiraUser = new JiraUser { AccountId = "5fff143cf7ea2a0107ff9f87", DisplayName = "dirk.kaiser@clear.bible", EmailAddress = "dirk.kaiser@clear.bible" };
+
+            // pre-append the user name to the markdown text
+            var markdown = $"REPORTED BY: **Dashboard User:** {_dashboardUser.FullName} \n**Paratext User:** {ParatextUser} \n**Email:** {_dashboardUser.Email} \n**Message:** \n{JiraDescription}";
+            
             // convert the markdown to html
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-            var html = Markdown.ToHtml(JiraDescription, pipeline);
+            var html = Markdown.ToHtml(markdown, pipeline);
 
             // convert html to ADF format
             var adf = await Html2Adf.Convert(html);
@@ -496,7 +501,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     break;
             }
 
-            JiraTicketResponse? result = await jiraClient.CreateTaskTicket(JiraTitle, adf, _jiraUser, jiraLabel);
+            JiraTicketResponse? result = await jiraClient.CreateTaskTicket(JiraTitle, adf, _jiraUser, jiraLabel, _dashboardUser);
 
             // show the icons
             if (result != null)
@@ -520,18 +525,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
 
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.NoResize;
-            settings.MinWidth = 500;
-            settings.MinHeight = 170;
+            //dynamic settings = new ExpandoObject();
+            //settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //settings.ResizeMode = ResizeMode.NoResize;
+            //settings.MinWidth = 500;
+            //settings.MinHeight = 170;
 
-            var viewModel = IoC.Get<JiraResultsViewModel>();
-            viewModel.JiraTicketResponse = result!;
-            viewModel.JiraUser = _jiraUser;
+            //var viewModel = IoC.Get<JiraResultsViewModel>();
+            //viewModel.JiraTicketResponse = result!;
+            //viewModel.JiraUser = _jiraUser;
 
-            IWindowManager manager = new WindowManager();
-            await manager.ShowDialogAsync(viewModel, null, settings);
+            //IWindowManager manager = new WindowManager();
+            //await manager.ShowDialogAsync(viewModel, null, settings);
         }
 
 
