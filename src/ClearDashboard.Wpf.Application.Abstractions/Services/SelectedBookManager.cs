@@ -86,7 +86,7 @@ public class SelectedBookManager : PropertyChangedBase
 
     private async Task<IEnumerable<SelectedBook>> InitializeBooksInternal(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
     {
-        var books = CreateBooks(true);
+        var books = CreateBooks();
 
         // get those books which actually have text in them from Paratext
         var requestFromParatext = await _mediator.Send(new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId), cancellationToken);
