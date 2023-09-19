@@ -1,19 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
-using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
-using ClearDashboard.DAL.Alignment.Features.Lexicon;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Lexicon;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Lexicon = ClearDashboard.DAL.Alignment.Lexicon.Lexicon;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
@@ -21,16 +19,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
     {
 
         private LexiconManager LexiconManager { get; }
+
+        private Visibility _progressBarVisibility = Visibility.Hidden;
+        public Visibility ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set => Set(ref _progressBarVisibility, value);
+        }
         public LexiconViewModel()
         {
-            
+
         }
-        public LexiconViewModel(INavigationService navigationService, 
-            ILogger<LexiconViewModel> logger, 
-            DashboardProjectManager dashboardProjectManager, 
-            IEventAggregator eventAggregator, 
-            IMediator mediator, 
-            ILifetimeScope lifetimeScope, 
+        public LexiconViewModel(INavigationService navigationService,
+            ILogger<LexiconViewModel> logger,
+            DashboardProjectManager dashboardProjectManager,
+            IEventAggregator eventAggregator,
+            IMediator mediator,
+            ILifetimeScope lifetimeScope,
             ILocalizationService localizationService,
             LexiconManager lexiconManager) :
             base(navigationService, logger, dashboardProjectManager, eventAggregator, mediator, lifetimeScope, localizationService)
@@ -48,19 +53,117 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            var projectLexicon = await LexiconManager.GetLexiconForProject(null);
-            if (projectLexicon != null)
+            await Task.Run(async () =>
             {
-                var externalLexicon = await LexiconManager.GetExternalLexiconNotInInternal(projectLexicon, cancellationToken);
+                ProgressBarVisibility = Visibility.Visible;
+                var list = new List<LexiconImportViewModel>();
+                var stopWatch = Stopwatch.StartNew();
+                try
+                {
+                   
+                    var projectLexicon = await LexiconManager.GetLexiconForProject(null);
+                    if (projectLexicon != null)
+                    {
+                        var externalLexicon = await LexiconManager.GetExternalLexiconNotInInternal(projectLexicon, cancellationToken);
 
-                //Logger.LogDebug("************************************************");
-                //Logger.LogDebug(JsonConvert.SerializeObject(projectLexicon, Formatting.Indented));
-                //Logger.LogDebug("************************************************");
+                        //var intersectedLexemes =
+                        //    externalLexicon.Lexemes.IntersectIdsByLexemeTranslationMatch(projectLexicon.Lexemes);
 
-                LexiconImports = new BindableCollection<LexiconImportViewModel>(projectLexicon.Lexemes.Select(lexeme => new LexiconImportViewModel {SourceLanguage = lexeme.Language}));
-            }
+                        foreach (var lexeme in projectLexicon.Lexemes)
+                        {
+                            var externalLexeme =
+                                externalLexicon.Lexemes.FirstOrDefault(l => l.LexemeId.Id == lexeme.LexemeId.Id);
+                            var showAddTargetAsTranslationButton = externalLexeme != null &&
+                                                                  lexeme.Forms.Any(f => f.Text == externalLexeme.Lemma);
+
+                            foreach (var meaning in lexeme.Meanings)
+                            {
+                                foreach (var translation in meaning.Translations)
+                                {
+                                    var vm = new LexiconImportViewModel
+                                    {
+                                        SourceLanguage = lexeme.Language,
+                                        SourceWord = lexeme.Lemma,
+                                        SourceType = lexeme.Type,
+                                        TargetLanguage = meaning.Language,
+                                        TargetWord = translation.Text,
+                                        ShowAddAsFormButton = externalLexeme != null && externalLexeme.Meanings.ToImmutableArray().Any(m => m.Translations.Contains(translation)),
+                                        ShowAddTargetAsTranslationButton = showAddTargetAsTranslationButton
+                                    };
+                                    list.Add(vm);
+                                }
+                            }
+                        }
+                    }
+                    Execute.OnUIThread(() =>
+                    {
+                        LexiconImports.AddRange(list);
+                        ProgressBarVisibility = Visibility.Hidden;
+                    });
+                }
+                finally
+                {
+                    stopWatch.Stop();
+                    Logger!.LogInformation($"Loaded lexicon data in {stopWatch.ElapsedMilliseconds} milliseconds.");
+                }
+            });
             await base.OnActivateAsync(cancellationToken);
         }
+
+
+        //protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        //{
+
+        //    await Task.Run(async () =>
+        //    {
+        //        var stopWatch = Stopwatch.StartNew();
+        //        try
+        //        {
+        //            var projectLexicon = await LexiconManager.GetLexiconForProject(null);
+        //            if (projectLexicon != null)
+        //            {
+        //                var externalLexicon = await LexiconManager.GetExternalLexiconNotInInternal(projectLexicon, cancellationToken);
+
+        //                //var intersectedLexemes =
+        //                //    externalLexicon.Lexemes.IntersectIdsByLexemeTranslationMatch(projectLexicon.Lexemes);
+
+        //                foreach (var vm in from lexeme in projectLexicon.Lexemes.ToImmutableArray()
+        //                                       //let externalLexeme =
+        //                                       //    externalLexicon.Lexemes.FirstOrDefault(l => l.LexemeId.Id == lexeme.LexemeId.Id)
+        //                                       //let showAddTargetAsTranslationButton = externalLexeme != null &&
+        //                                       //                                       lexeme.Forms.Any(f =>
+        //                                       //                                           f.Text == externalLexeme.Lemma)
+        //                                   from vm in lexeme.Meanings.ToImmutableArray()
+        //                                       .SelectMany(meaning => meaning.Translations.ToImmutableArray().Select(
+        //                                           translation => new LexiconImportViewModel
+        //                                           {
+        //                                               SourceLanguage = lexeme.Language,
+        //                                               SourceWord = lexeme.Lemma,
+        //                                               SourceType = lexeme.Type,
+        //                                               TargetLanguage = meaning.Language,
+        //                                               TargetWord = translation.Text,
+        //                                               //ShowAddAsFormButton = externalLexeme != null && externalLexeme.Meanings
+        //                                               //    .ToImmutableArray().Any(m => m.Translations.Contains(translation)),
+        //                                               //ShowAddTargetAsTranslationButton = showAddTargetAsTranslationButton
+        //                                           }))
+        //                                   select vm)
+        //                {
+        //                    Execute.OnUIThread(() => LexiconImports.Add(vm));
+        //                }
+        //            }
+        //        }
+        //        finally
+        //        {
+        //            stopWatch.Stop();
+        //            Logger.LogInformation($"Loaded lexicon data in {stopWatch.ElapsedMilliseconds} milliseconds.");
+        //        }
+
+
+        //    });
+
+
+        //    await base.OnActivateAsync(cancellationToken);
+        //}
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
@@ -83,15 +186,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
 
-        public void OnToggleAllChecked(CheckBox? checkBox) 
+        public void OnToggleAllChecked(CheckBox? checkBox)
         {
-            //if (checkBox != null && BulkAlignments is { Count: > 0 })
-            //{
-            //    foreach (var bulkAlignment in BulkAlignments)
-            //    {
-            //        bulkAlignment.IsSelected = checkBox.IsChecked ?? false;
-            //    }
-            //}
+            if (checkBox != null && LexiconImports is { Count: > 0 })
+            {
+                foreach (var lexicon in LexiconImports)
+                {
+                    lexicon.IsSelected = checkBox.IsChecked ?? false;
+                }
+            }
         }
     }
 }

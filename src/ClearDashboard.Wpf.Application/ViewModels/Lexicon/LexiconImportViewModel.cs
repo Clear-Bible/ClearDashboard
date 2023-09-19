@@ -6,6 +6,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
     public class LexiconImportViewModel : PropertyChangedBase
     {
         private bool _isSelected;
+        private bool _showAddAsFormButton;
+        private bool _showAddTargetAsTranslationButton;
+
         private string? _sourceWord;
         private string? _sourceLanguage;
         private string? _sourceType;
@@ -17,6 +20,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         {
             get => _isSelected;
             set => Set(ref _isSelected, value);
+        }
+
+        public bool ShowAddAsFormButton
+        {
+            get => _showAddAsFormButton;
+            set => Set(ref _showAddAsFormButton, value);
+        }
+
+        public bool ShowAddTargetAsTranslationButton
+        {
+            get => _showAddTargetAsTranslationButton;
+            set => Set(ref _showAddTargetAsTranslationButton, value);
         }
 
         public string? SourceWord

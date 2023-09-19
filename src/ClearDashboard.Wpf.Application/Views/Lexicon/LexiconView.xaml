@@ -18,5 +18,17 @@
              FlowDirection="{Binding WindowFlowDirection}">
     <Grid>
         <lexicon1:LexiconImport DataContext="{Binding .}" />
+        <ProgressBar
+            x:Name="ProgressBarVisibility"
+            Grid.Column="0"
+            Width="100"
+            Height="100"
+            Margin="15,50,5,0"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgressBarVisibility}"
+            Value="0" />
     </Grid>
 </UserControl>

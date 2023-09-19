@@ -167,29 +167,37 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceWord}"  Binding="{Binding SourceWord}" Width="150"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceLanguage}" Binding="{Binding SourceLanguage}" Width="200"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceType}" Binding="{Binding SourceType}" Width="200"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceLanguage}" Binding="{Binding SourceLanguage}" Width="150"/>
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceType}" Binding="{Binding SourceType}" Width="150"/>
                     <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetWord}"  Binding="{Binding TargetWord}" Width="150"/>
-                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding TargetLanguage}" Width="200"/>
-                    <!--<DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}" Width=".6*">
+                    <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding TargetLanguage}" Width="150"/>
+                    <DataGridTemplateColumn  Width="150">
                         
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
                                              Style="{StaticResource SmallTransparentStyle}" 
-                                             Content="{iconPacks:PicolIcons Kind=Synchronize}"></Button>
+                                             Content="{iconPacks:PicolIcons Kind=Synchronize}"
+                                             Width="100"
+                                             Margin="10"
+                                             Padding="0"
+                                             Visibility="{Binding ShowAddAsFormButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{helpers:Localization Bcv_Sync}" Width="75">
+                    <DataGridTemplateColumn  Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
                                              Style="{StaticResource SmallTransparentStyle}" 
-                                             Content="{iconPacks:PicolIcons Kind=Synchronize}"></Button>
+                                             Content="{iconPacks:PicolIcons Kind=Synchronize}"
+                                             Width="100"
+                                             Margin="10"
+                                             Padding="0"
+                                             Visibility="{Binding ShowAddTargetAsTranslationButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
