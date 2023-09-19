@@ -16,6 +16,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Windows.Forms;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -136,11 +137,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                             .SingleOrDefault();
             };
 
-            services.AddTransient<ILexiconObtainable>(x => 
+            services.AddTransient<ILexiconObtainable>(x =>
                 new Features.Lexicon.LexiconFromXmlFiles(
                     x.GetRequiredService<ILogger<LexiconFromXmlFiles>>(),
                     getParatextProjectMetadata,
-                    Directory.GetCurrentDirectory() /* paratextAppPath */
+                    Path.GetDirectoryName(Application.ExecutablePath) /* paratextAppPath */
                 ));
 
             services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
