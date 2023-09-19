@@ -11,12 +11,14 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.ComponentModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 
 public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, SelectBooksStepViewModel>
 {
-    
+    private readonly ILocalizationService _localizationService;
+    public readonly bool IsUpdateCorpusDialog;
     public SelectedBookManager SelectedBookManager { get; private set; }
 
     #region Public Properties
@@ -56,6 +58,31 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
         set => Set(ref _continueEnabled, value);
     }
 
+    private string _okButtonText;
+    public string OkButtonText
+    {
+        get
+        {
+            return _okButtonText;
+        }
+        set
+        {
+            _okButtonText = value;
+            NotifyOfPropertyChange(() => OkButtonText);
+        }
+    }
+
+    private string _selectBooksLabelText;
+    public string SelectBooksLabelText
+    {
+        get { return _selectBooksLabelText; }
+        set
+        {
+            _selectBooksLabelText = value;
+            NotifyOfPropertyChange(() => SelectBooksLabelText);
+        }
+    }
+
     #endregion //Observable Properties
 
 
@@ -66,23 +93,26 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
         // no-op
     }
 
-    public SelectBooksStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager, bool selectBooksStepNextVisible, SelectedBookManager selectedBookManager,
+    public SelectBooksStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager, bool isUpdateCorpusDialog, SelectedBookManager selectedBookManager,
         INavigationService navigationService, ILogger<SelectBooksStepViewModel> logger, IEventAggregator eventAggregator,
         IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<SelectBooksStepViewModel> validator, ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
     {
-      
+        _localizationService = localizationService;
+        IsUpdateCorpusDialog = isUpdateCorpusDialog;
         SelectedBookManager = selectedBookManager;
-        if (selectBooksStepNextVisible)
+
+        if (IsUpdateCorpusDialog)
         {
-            NextVisibility = Visibility.Visible;
-            OkVisibility = Visibility.Collapsed;
+            SelectBooksLabelText = _localizationService.Get("UpdateParatextCorpusDialog_SelectBooks");
+            OkButtonText = _localizationService.Get("UpdateParatextCorpusDialog_Add");
         }
         else
         {
-            NextVisibility = Visibility.Collapsed;
-            OkVisibility = Visibility.Visible;
+            SelectBooksLabelText = _localizationService.Get("AddParatextCorpusDialog_SelectedBooks");
+            OkButtonText = _localizationService.Get("Ok");
         }
+
         DialogMode = dialogMode;
         CanMoveForwards = true;
         CanMoveBackwards = true;
@@ -97,12 +127,19 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
 
     protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
+        SelectedBookManager.PropertyChanged += OnSelectedBookManagerPropertyChanged;
         await SelectedBookManager.InitializeBooks(ParentViewModel.UsfmErrors, ParentViewModel.SelectedProject.Id, true, new CancellationToken());
-        ContinueEnabled = SelectedBookManager.SelectedBooks.Any();
+        ContinueEnabled = SelectedBookManager.SelectedBooks.Any(book => book.IsSelected);
         await base.OnActivateAsync(cancellationToken);
     }
 
-      #endregion //Constructor
+    protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+    {
+        SelectedBookManager.PropertyChanged -= OnSelectedBookManagerPropertyChanged;
+        return base.OnDeactivateAsync(close, cancellationToken);
+    }
+
+    #endregion //Constructor
 
 
     #region Methods
@@ -117,11 +154,6 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
         ParentViewModel?.Ok();
     }
 
-    public async void Next()
-    {
-        ParentViewModel?.BookIds?.AddRange(SelectedBookManager.SelectedAndEnabledBookAbbreviations);
-        await MoveForwards();
-    }
     public async void Back()
     {
        await MoveBackwards();
@@ -149,6 +181,50 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
     public void SelectOldTestamentBooks()
     {
        SelectedBookManager.SelectOldTestamentBooks();
+    }
+
+    private void OnSelectedBookManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        var somethingSelected = false;
+        var newBooksSelected = false;
+        var oldBooksSelected = false;
+
+        foreach (var book in SelectedBookManager.SelectedBooks)
+        {
+            if (book.IsEnabled && book.IsSelected && !somethingSelected)
+            {
+                somethingSelected = true;
+            }
+
+            if (!book.IsImported && book.IsEnabled && book.IsSelected)
+            {
+                newBooksSelected = true;
+            }
+
+            if (book.IsImported && book.IsEnabled && book.IsSelected)
+            {
+                oldBooksSelected = true;
+            }
+
+            if (somethingSelected && newBooksSelected && oldBooksSelected)
+            {
+                break;
+            }
+        }
+
+        if (IsUpdateCorpusDialog)
+        {
+            OkButtonText = newBooksSelected
+                ? _localizationService.Get("UpdateParatextCorpusDialog_UpdateAndAdd")
+                : _localizationService.Get("Update");
+
+            if (newBooksSelected && !oldBooksSelected)
+            {
+                OkButtonText = _localizationService.Get("UpdateParatextCorpusDialog_Add");
+            }
+        }
+        
+        ContinueEnabled = somethingSelected;
     }
 
     #endregion // Methods

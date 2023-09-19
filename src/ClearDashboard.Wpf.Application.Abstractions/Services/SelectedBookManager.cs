@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using Caliburn.Micro;
-using ClearDashboard.Wpf.Application.Extensions;
+﻿using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Models;
 using MediatR;
-using SIL.Extensions;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.Services;
 
@@ -87,7 +86,7 @@ public class SelectedBookManager : PropertyChangedBase
 
     private async Task<IEnumerable<SelectedBook>> InitializeBooksInternal(IEnumerable<UsfmError>? usfmErrors, string paratextProjectId, bool enableTokenizedBooks, CancellationToken cancellationToken)
     {
-        var books = CreateBooks(true);
+        var books = CreateBooks();
 
         // get those books which actually have text in them from Paratext
         var requestFromParatext = await _mediator.Send(new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId), cancellationToken);
@@ -130,8 +129,10 @@ public class SelectedBookManager : PropertyChangedBase
                     {
                         if (int.TryParse(book, out var index))
                         {
+                            books[index - 1].IsImported = true;
                             books[index - 1].IsEnabled = true;
-                            books[index - 1].IsSelected = true;
+                            books[index - 1].IsSelected = false;
+                            books[index - 1].FontWeight = FontWeight.FromOpenTypeWeight(700);
                             books[index - 1].BookColor = new SolidColorBrush(Colors.Black);
                         }
                     }
