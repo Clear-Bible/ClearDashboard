@@ -20,17 +20,26 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             var (versePlainText, plainTextTokensWithIndexes) = project.GetUSFMTokens(verseRef.BookNum, verseRef.ChapterNum, verseRef.VerseNum)
                 .GetPlainTextTokensAndIndexes();
 
-            var tokenOfLastSmallerOrEqualUsfmIndex = plainTextTokensWithIndexes
-                    .OrderBy(i => i.indexOfTokenInVerseRawUsfm)
-                    .Where(i => i.indexOfTokenInVerseRawUsfm < projectNote.Anchor.Offset)
-                    .Last();
+            int? indexOfSelectedPlainTextInVersePainText;
+            if (projectNote.Anchor.Offset == 0) // a note applied to the whole verse
+            {
+                indexOfSelectedPlainTextInVersePainText = null;
+            }
+            else
+            {
+                var tokenOfLastSmallerOrEqualUsfmIndex = plainTextTokensWithIndexes
+                        .OrderBy(i => i.indexOfTokenInVerseRawUsfm)
+                        .Where(i => i.indexOfTokenInVerseRawUsfm <= projectNote.Anchor.Offset)
+                        .Last();
+                indexOfSelectedPlainTextInVersePainText = tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVersePlainText +
+                    (projectNote.Anchor.Offset - tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVerseRawUsfm);
+            }
 
             return new ExternalNote()
             {
                 VersePlainText = versePlainText,
                 SelectedPlainText = projectNote.Anchor.SelectedText,
-                IndexOfSelectedPlainTextInVersePainText = tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVersePlainText + 
-                    (projectNote.Anchor.Offset - tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVerseRawUsfm),
+                IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
                 VerseRefString = verseRef.ToString(),
                 Body = SerializeNoteBody(projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum)))
             };
@@ -47,6 +56,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             public string Language { get; set; }
             [DataMember]
             public string AssignedUserName { get; set; }
+            [DataMember]
+            public string Author { get; set; }
         }
         [DataContract]
         public class Body
@@ -92,12 +103,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             body.VerseUsfmBeforeSelectedText = projectNote.Anchor.BeforeContext;
             body.VerseUsfmAfterSelectedText = projectNote.Anchor.AfterContext;
             body.VerseUsfmText = verseUsfmText;
+            body.Comments = new List<BodyComment>();
             projectNote.Comments.ForEach(comment =>
             {
                 var bodyComment = new BodyComment();
                 bodyComment.Created = comment.Created.ToString();
                 bodyComment.Language = comment.Language.Id;
                 bodyComment.AssignedUserName = comment.AssignedUser.Name;
+                bodyComment.Author = comment.Author.Name;
 
                 bodyComment.Paragraphs = new List<string>();
 
@@ -108,6 +121,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                         bodyComment.Paragraphs.Add(paragraph.ToString());
                     }
                 }
+                body.Comments.Add(bodyComment);
             });
             return body;
         }
@@ -129,7 +143,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                     indexInPlainText += textToken.Text.Length; //FIXME: ask dirk about TrimStart()
                 }
             });
-            return (versePlainText.ToString(), plainTextTokenTuples);
+            return (versePlainText.ToString().Trim(), plainTextTokenTuples);
         }
     }
 }

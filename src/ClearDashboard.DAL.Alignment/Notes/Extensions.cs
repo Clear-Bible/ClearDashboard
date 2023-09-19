@@ -94,7 +94,8 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// 
         /// </summary>
         /// <param name="externalNotes"></param>
-        /// <param name="verseTokens">All the tokens for a single verse</param>
+        /// <param name="verseTokens">All the tokens for a single verse. Empty list means applies to the whole verse. Null means the external verse plain text
+        /// and verse plain text (verse row) calculated from tokens don't match.</param>
         /// <param name="engineStringDetokenizer"></param>
         /// <returns>
         /// - Zero count of tokenIds with externalNote.IndexOfSelectedPlainTextInVersePainText > 0 means it identifies a location in between tokens. Since
@@ -102,7 +103,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// - externalNote.IndexOfSelectedPlainTextInVersePainText == 0 means the note pertains to the verse.
         /// 
         /// </returns>
-        public static IEnumerable<(VerseRef verseRef, List<TokenId> tokenIds, ExternalNote externalNote)> AddVerseAndTokensContext(
+        public static IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> AddVerseAndTokensContext(
             this IEnumerable<ExternalNote> externalNotes,
             TokensTextRow tokenTextRow,
             EngineStringDetokenizer engineStringDetokenizer)
@@ -116,7 +117,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 {
                     if (en.VersePlainText != versePlainText)
                     {
-                        return (verseRef, new List<TokenId>(), en);
+                        return (verseRef, null, en);
                     }
                     else
                     {
@@ -129,36 +130,52 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 });
         }
 
-        private static List<TokenId> GetSelectedTokenIdsForSelection(
+        private static List<TokenId>? GetSelectedTokenIdsForSelection(
             IEnumerable<(Token token, string paddingBefore, string paddingAfter)> tokensWithPadding, 
-            int indexOfSelectedPlainTextInVersePainText, 
+            int? indexOfSelectedPlainTextInVersePainText, 
             string selectedPlainText)
         {
+            
             var selectedTokenIds = new List<TokenId>();
-            if (selectedPlainText == null || selectedPlainText.Length == 0)
+            if (selectedPlainText == null || selectedPlainText.Length == 0 || indexOfSelectedPlainTextInVersePainText == null)
             {
                 return selectedTokenIds;
             }
 
             int index = 0;
+            bool firstTokenFound = false;
+            string remainingSelectedPlainText = selectedPlainText;
+
             foreach (var tokenWithPadding in tokensWithPadding)
             {
-                var tokenText = $"{tokenWithPadding.paddingBefore}{tokenWithPadding.token}{tokenWithPadding.paddingAfter}";
+                var tokenPaddingBeforeText = $"{tokenWithPadding.paddingBefore}";
+                var tokenTextWithoutPaddingBefore = $"{tokenWithPadding.token}{tokenWithPadding.paddingAfter}"; ;
+                var tokenText = $"{tokenPaddingBeforeText}{tokenTextWithoutPaddingBefore}";
 
-                if (index >= indexOfSelectedPlainTextInVersePainText)
+                if (!firstTokenFound)
                 {
-                    if (selectedPlainText.Contains(tokenText))
+                    if (index + tokenPaddingBeforeText.Length < indexOfSelectedPlainTextInVersePainText)
+                    {
+                        index += tokenText.Length;
+                    }
+                    else
+                    {
+                        firstTokenFound = true;
+                    }
+                }
+                
+                if (firstTokenFound)
+                {
+                    if (remainingSelectedPlainText.Contains(tokenTextWithoutPaddingBefore))
                     {
                         selectedTokenIds.Add(tokenWithPadding.token.TokenId);
+                        var indexNextToken = remainingSelectedPlainText.IndexOf(tokenTextWithoutPaddingBefore) + tokenTextWithoutPaddingBefore.Length;
+                        remainingSelectedPlainText = remainingSelectedPlainText.Substring(indexNextToken, remainingSelectedPlainText.Length - indexNextToken);
                     }
                     else
                     {
                         break;
                     }
-                }
-                else
-                {
-                    index += tokenText.Length;
                 }
             }
             return selectedTokenIds;
