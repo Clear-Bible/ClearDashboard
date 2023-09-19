@@ -11,15 +11,15 @@ namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes
         public string ExternalProjectId { get; set; } = string.Empty;
 
         /// <summary>
-        /// if Book, Chapter, and Verse are not all set to a positive value then will attempt to apply note to the current verse paratext is set to.
+        /// if Book, Chapter, and Verse are not all set to a positive value then will attempt to apply note to the current verse the external drafting tool is set to.
         /// </summary>
         public int Book { get; set; } = -1;
         /// <summary>
-        /// if Book, Chapter, and Verse are not all set to a positive value then will attempt to apply note to the current verse paratext is set to.
+        /// if Book, Chapter, and Verse are not all set to a positive value then will attempt to apply note to the current verse the external drafting tool is set to.
         /// </summary>
         public int Chapter { get; set; } = -1;
         /// <summary>
-        /// if Book, Chapter, and Verse are not all set to a positive value then will attempt to apply note to the current verse paratext is set to.
+        /// if Book, Chapter, and Verse are not all set to a positive value then will attempt to apply note to the current verse the external drafting tool is set to.
         /// </summary>
         public int Verse { get; set; } = -1;
 
@@ -29,6 +29,6 @@ namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes
         public string SelectedText { get; set; } = string.Empty;
         public int OccuranceIndexOfSelectedTextInVerseText { get; set; } = -1;
         public List<string> NoteParagraphs { get; set; } = new List<string>();
-        public string? ParatextUser { get; set; }
+        public string UserName { get; set; }
     }
 }

@@ -13,18 +13,18 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// 
         /// </summary>
         /// <param name="addNoteCommandParam"></param>
-        /// <param name="paratextProjectId"></param>
+        /// <param name="externalProjectId"></param>
         /// <param name="verseTokens">All tokens must be from the same book, chapter, and verse. Applies note to the first token's book, chapter, verse. </param>
         /// <param name="verseContiguousSelectedTokens">If empty, apply note to entire verse. When non-empty, all tokens must be also included in the prior parameter.</param>        /// <param name="engineStringDetokenizer"></param>
         /// <param name="noteText"></param>
         /// <param name="assignedUser"></param>
-        /// <param name="book">if book, chapter, or verse not set the current paratext setting for the current project will be used.</param>
-        /// <param name="chapter">if book, chapter, or verse not set the current paratext setting for the current project will be used.</param>
-        /// <param name="verse">if book, chapter, or verse not set the current paratext setting for the current project will be used.</param>
+        /// <param name="book">if book, chapter, or verse not set the current external setting for the current project will be used.</param>
+        /// <param name="chapter">if book, chapter, or verse not set the current external setting for the current project will be used.</param>
+        /// <param name="verse">if book, chapter, or verse not set the current external setting for the current project will be used.</param>
         /// <exception cref="Exception"></exception>
         public static void SetProperties(
             this AddNoteCommandParam addNoteCommandParam,
-            string paratextProjectId,
+            string externalProjectId,
             IEnumerable<Token> verseTokens,
             IEnumerable<Token> verseContiguousSelectedTokens,
             EngineStringDetokenizer engineStringDetokenizer,
@@ -32,14 +32,14 @@ namespace ClearDashboard.DAL.Alignment.Notes
             int book = -1,
             int chapter = -1,
             int verse = -1,
-            User? assignedUser = null)
+            string? userName = null)
         {
             if (verseTokens.Count() == 0)
             {
                 throw new Exception("Must supply a non-zero amount of verse tokens");
             }
 
-            addNoteCommandParam.ExternalProjectId = paratextProjectId;
+            addNoteCommandParam.ExternalProjectId = externalProjectId;
             addNoteCommandParam.Book = book;
             addNoteCommandParam.Chapter = chapter;
             addNoteCommandParam.Verse = verse;
@@ -86,8 +86,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
             addNoteCommandParam.NoteParagraphs = noteText.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            //ParatextUser
-             addNoteCommandParam.ParatextUser = assignedUser?.ParatextUserName;
+             addNoteCommandParam.UserName = userName;
         }
 
         /// <summary>

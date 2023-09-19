@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
@@ -17,35 +16,36 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public class ParatextNoteManager
+    public class ExternalNoteManager
     {
         /// <summary>
-        /// Gets relevant Paratext project information for the entities associated with a note.
+        /// Gets relevant External drafting tool project information for the entities associated with a note.
         /// </summary>
         /// <remarks>
-        /// In order for Paratext information to be returned:
+        /// In order for external information to be returned:
         /// 
         /// 1) All of the associated entities need to be tokens;
-        /// 2) All of the tokens must originate from the same Paratext corpus;
+        /// 2) All of the tokens must originate from the same external corpus;
         /// 3) All of the tokens must be contiguous in the corpus.
         /// </remarks>
         /// <param name="mediator">The <see cref="Mediator"/> to use to populate the project information.</param>
-        /// <param name="noteId">The note for which to get the Paratext information.</param>
+        /// <param name="noteId">The note for which to get the external information.</param>
         /// <param name="logger">A <see cref="ILogger"/> for logging the operation.</param>
         /// <returns>
         /// If all three conditions are met, a tuple containing:
-        /// * The Paratext project ID;
-        /// * The <see cref="TokenizedTextCorpusId"/> for the related Paratext corpus;
+        /// * The external project ID;
+        /// * The <see cref="TokenizedTextCorpusId"/> for the related external corpus;
         /// * An <see cref="IEnumerable{Token}"/> of the tokens making up the surrounding verse.
         /// Otherwise, null.
         /// </returns>
-        private static async Task<ParatextSendNoteInformation?> GetParatextSendNoteInformationAsync(IMediator mediator, NoteId noteId, IUserProvider userProvider, ILogger? logger = null)
+        public static async Task<ExternalSendNoteInformation?> GetExternalSendNoteInformationAsync(IMediator mediator, NoteId noteId, IUserProvider userProvider, ILogger? logger = null)
         {
             try
             {
@@ -55,29 +55,29 @@ namespace ClearDashboard.Wpf.Application.Services
                 var result = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(mediator, noteId);
 
                 stopwatch.Stop();
-                logger?.LogInformation($"Retrieved Paratext information for note {noteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                logger?.LogInformation($"Retrieved External information for note {noteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                var paratextUserName = userProvider.CurrentUser?.ParatextUserName;
+                var externalUserName = userProvider.CurrentUser?.ParatextUserName;
                 var canAddNoteForProjectAndUerQuery = false;
-                if (result != null && !string.IsNullOrWhiteSpace(paratextUserName))
+                if (result != null && !string.IsNullOrWhiteSpace(externalUserName))
                 {
                     stopwatch.Restart();
-                    var r = await mediator.Send(new CanAddNoteForProjectAndUserQuery(paratextUserName, result.Value.paratextId));
+                    var r = await mediator.Send(new CanAddNoteForProjectAndUserQuery(externalUserName, result.Value.paratextId));
                     stopwatch.Stop();
 
                     if (r.Success)
                     {
                         canAddNoteForProjectAndUerQuery = r.Data;
-                        logger?.LogInformation($"Checked can add note for project {result.Value.paratextId} and user {paratextUserName}. Result is {canAddNoteForProjectAndUerQuery}");
+                        logger?.LogInformation($"Checked can add note for project {result.Value.paratextId} and user {externalUserName}. Result is {canAddNoteForProjectAndUerQuery}");
                     }
                     else
                     {
-                        logger?.LogCritical($"Error checking can add note for project {result.Value.paratextId} and user {paratextUserName}: {r.Message}");
+                        logger?.LogCritical($"Error checking can add note for project {result.Value.paratextId} and user {externalUserName}: {r.Message}");
                         //throw new MediatorErrorEngineException(r.Message);
                     }
                 }
 
-                return (result != null && canAddNoteForProjectAndUerQuery) ? new ParatextSendNoteInformation(ParatextId: result.Value.paratextId, 
+                return (result != null && canAddNoteForProjectAndUerQuery) ? new ExternalSendNoteInformation(ExternalProjectId: result.Value.paratextId, 
                                                                         TokenizedTextCorpusId: result.Value.tokenizedTextCorpusId,
                                                                         VerseTokens: result.Value.verseTokens)
                                       : null;
@@ -90,37 +90,15 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         /// <summary>
-        /// Populates a <see cref="NoteViewModel"/> with information needed to send the note to Paratext.
+        /// Sends a note to the external drafting tool.
         /// </summary>
-        /// <remarks>
-        /// In order for a note to be sent to Paratext:
-        /// 
-        /// 1) All of the associated entities need to be tokens;
-        /// 2) All of the tokens must originate from the same Paratext corpus;
-        /// 3) All of the tokens must be contiguous in the corpus.
-        /// 
-        /// If any of these three conditions are false, then <see cref="NoteViewModel.ParatextSendNoteInformation"/> will be null.
-        /// </remarks>
-        /// <param name="mediator">The <see cref="Mediator"/> to use to populate the project information.</param>
-        /// <param name="note">The note for which to populate the Paratext project ID.</param>
-        /// <param name="userProvider">User provider for obtaining user details.</param>
+        /// <param name="mediator">The <see cref="Mediator"/> to use to send the note to external.</param>
+        /// <param name="note">The note to send to the external drafting tool.</param>
         /// <param name="logger">A <see cref="ILogger"/> for logging the operation.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public static async Task PopulateParatextDetailsAsync(IMediator mediator, NoteViewModel note, IUserProvider userProvider, ILogger? logger = null)
+        public static async Task SendToExternalAsync(IMediator mediator, NoteViewModel note, ILogger? logger = null, CancellationToken cancellationToken = default)
         {
-            note.ParatextSendNoteInformation = await GetParatextSendNoteInformationAsync(mediator, note.NoteId!, userProvider, logger);
-        }
-
-        /// <summary>
-        /// Sends a note to Paratext.
-        /// </summary>
-        /// <param name="mediator">The <see cref="Mediator"/> to use to send the note to Paratext.</param>
-        /// <param name="note">The note to send to Paratext.</param>
-        /// <param name="logger">A <see cref="ILogger"/> for logging the operation.</param>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public static async Task SendToParatextAsync(IMediator mediator, NoteViewModel note, ILogger? logger = null, CancellationToken cancellationToken = default)
-        {
-            if (note.ParatextSendNoteInformation == null) throw new ArgumentException($"Cannot send note {note.NoteId?.Id} to Paratext.");
+            if (note.ParatextSendNoteInformation == null) throw new ArgumentException($"Cannot send note {note.NoteId?.Id} to external.");
 
             try
             {
@@ -133,7 +111,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var addNoteCommandParam = new AddNoteCommandParam();
                 addNoteCommandParam.SetProperties(
-                    note.ParatextSendNoteInformation.ParatextId.ToString(),
+                    note.ParatextSendNoteInformation.ExternalProjectId.ToString(),
                     sortedVerseTokens,
                     associatedTokens,
                     note.ParatextSendNoteInformation.TokenizedTextCorpusId.Detokenizer,
@@ -147,11 +125,11 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 if (result.Success)
                 {
-                    logger?.LogInformation($"Sent note {note.NoteId?.Id} to Paratext in {stopwatch.ElapsedMilliseconds} ms");
+                    logger?.LogInformation($"Sent note {note.NoteId?.Id} to external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
                 }
                 else
                 {
-                    logger?.LogCritical($"Error sending {note.NoteId?.Id} to Paratext: {result.Message}");
+                    logger?.LogCritical($"Error sending {note.NoteId?.Id} to external drafting tool: {result.Message}");
                     throw new MediatorErrorEngineException(result.Message);
                 }
             }
@@ -162,15 +140,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-
-        public static async Task<IEnumerable<(VerseRef verseRef, List<TokenId> tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromParatextAsync(
+        public static async Task<IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromExternalAsync(
             IMediator mediator, 
             TokenizedTextCorpusId tokenizedTextCorpusId, 
             int bookNumber, 
             int chapterNumber, 
             EngineStringDetokenizer engineStringDetokenizer,
-            ILogger? logger = null,
-            CancellationToken cancellationToken = default)
+            ILogger? logger,
+            CancellationToken cancellationToken)
         {
             try
             {
@@ -225,6 +202,40 @@ namespace ClearDashboard.Wpf.Application.Services
                 logger?.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        private record Chapter(int BookNumber, int BhapterNumber);
+
+        private Dictionary<Chapter, IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> ChapterExternalNotesMap { get; set; } = new();
+
+        public async Task<IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetExternalNotes(
+            IMediator mediator,
+            TokenizedTextCorpusId tokenizedTextCorpusId,
+            int bookNumber,
+            int chapterNumber,
+            int verseNumber,
+            EngineStringDetokenizer engineStringDetokenizer,
+            ILogger? logger = null,
+            CancellationToken cancellationToken = default)
+        {
+            var chapter = new Chapter(bookNumber, chapterNumber);
+            IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? externalNotesForChapter;
+            if (ChapterExternalNotesMap.TryGetValue(chapter, out externalNotesForChapter)) 
+            {
+            }
+            else
+            {
+                externalNotesForChapter = await GetNotesForChapterFromExternalAsync(mediator, tokenizedTextCorpusId, bookNumber, chapterNumber, engineStringDetokenizer, logger, cancellationToken);
+                ChapterExternalNotesMap.Add(chapter, externalNotesForChapter);
+            }
+
+            return externalNotesForChapter
+                .Where(t => t.verseRef.VerseNum == verseNumber);
+        }
+
+        public void InvalidateExternalNotesCache()
+        {
+            ChapterExternalNotesMap.Clear();
         }
     }
 }

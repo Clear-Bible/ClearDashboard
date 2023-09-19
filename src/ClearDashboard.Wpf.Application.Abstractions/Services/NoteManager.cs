@@ -179,7 +179,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
                 if (doGetParatextSendNoteInformation)
-                    await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, UserProvider, Logger);
+                    noteViewModel.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteViewModel.NoteId!, UserProvider, Logger);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
@@ -368,7 +368,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public async Task SendToParatextAsync(NoteViewModel note)
         {
-            await ParatextNoteManager.SendToParatextAsync(Mediator, note, Logger);
+            await ExternalNoteManager.SendToExternalAsync(Mediator, note, Logger);
         }
 
         /// <summary>
