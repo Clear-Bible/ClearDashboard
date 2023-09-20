@@ -113,9 +113,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                     case CollaborationDialogAction.Commit:
                         return "Send Changes";
                     case CollaborationDialogAction.Import:
-                        return "Make Project Available for Collab";
-                    case CollaborationDialogAction.Initialize:
                         return CollaborationDialogAction.ToString();
+                    case CollaborationDialogAction.Initialize:
+                        return "Make Project Available for Collab";
                     case CollaborationDialogAction.Merge:
                         return "Get Latest Updates";
                     default:

@@ -73,8 +73,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
 
-        private BindableCollection<DashboardProject> _dashboardProjects = new();
-        public BindableCollection<DashboardProject> DashboardProjects
+        private List<DashboardProject> _dashboardProjects = new();
+        public List<DashboardProject> DashboardProjects
         {
             get => _dashboardProjects;
             set
@@ -297,17 +297,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if (SearchText == string.Empty || SearchText is null)
                 {
-                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+                    DashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
                     SearchBlankVisibility = Visibility.Collapsed;
                     NoProjectVisibility = Visibility.Visible;
                 }
                 else
                 {
-                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
-                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ', '_')));
+                    DashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+                    DashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ', '_')));
                 }
 
-                if (_dashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count > 0)
+                if (DashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count > 0)
                 {
                     NoProjectVisibility = Visibility.Hidden;
                     SearchBlankVisibility = Visibility.Visible;
@@ -862,6 +862,113 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             NotifyOfPropertyChange(() => DashboardProjectsDisplay);
         }
 
+        private async Task RefreshDashboardProjectsList()
+        {
+            var projectsToAdd = new List<DashboardProject>();
+
+            // check for Projects subfolder
+            var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
+            
+            foreach (var directoryName in directories)
+            {
+                var directoryInfo = new DirectoryInfo(directoryName);
+                if (DashboardProjects.All(x => x.ProjectName != directoryInfo.Name))
+                {
+                    // find the Alignment JSONs
+                    var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName), "*.sqlite");
+                    foreach (var file in files)
+                    {
+                        var fileInfo = new FileInfo(file);
+
+                        string version = "unavailable";
+
+                        var results = await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
+                        if (results.Success && results.HasData)
+                        {
+                            version = results.Data ?? version;
+                        }
+
+                        Guid guid = Guid.Empty;
+                        results = await ExecuteRequest(new GetProjectIdQuery(fileInfo.FullName), CancellationToken.None);
+                        if (results.Success && results.HasData)
+                        {
+                            try
+                            {
+                                guid = Guid.Parse(results.Data.ToString());
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                                throw;
+                            }
+                        }
+
+                        string gitLabSha = string.Empty;
+                        bool shaPresent = false;
+                        results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
+                        if (results.Success && results.HasData)
+                        {
+                            if (results.Data.ToString() != "")
+                            {
+                                shaPresent = true;
+                                gitLabSha = results.Data.ToString();
+                            }
+                        }
+
+                        // add as ListItem
+                        var dashboardProject = new DashboardProject
+                        {
+                            Modified = fileInfo.LastWriteTime,
+                            ProjectName = directoryInfo.Name,
+                            ShortFilePath = fileInfo.Name,
+                            FullFilePath = fileInfo.FullName,
+                            Version = version,
+                            IsCollabProject = shaPresent,
+                            GitLabSha = gitLabSha,
+                            Id = guid,
+                        };
+
+                        projectsToAdd.Add(dashboardProject);
+                    }
+                }
+            }
+
+            // check for database compatibility
+            foreach (var project in projectsToAdd)
+            {
+                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version);
+
+                if (project.IsCompatibleVersion)
+                {
+                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
+                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
+                }
+            }
+
+            // get the collab most recent Sha
+            foreach (var project in projectsToAdd)
+            {
+                if (project.IsCollabProject)
+                {
+                    var results = await ExecuteRequest(new GetGitLabUpdatedNeededQuery(project), CancellationToken.None);
+                    if (results.Success && results.HasData)
+                    {
+                        if (results.Data == true)
+                        {
+                            project.GitLabUpdateNeeded = true;
+                        }
+                    }
+                }
+            }
+
+            DashboardProjects.AddRange(projectsToAdd);
+            DashboardProjects.Sort();
+
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+
+            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+        }
+
         public async void UpdateDatabase(DashboardProject project)
         {
             var localizedString = _localizationService!["Migrate_Header"];
@@ -1009,7 +1116,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        public BindableCollection<DashboardProject> CopyDashboardProjectsToAnother(BindableCollection<DashboardProject> original)
+        public BindableCollection<DashboardProject> CopyDashboardProjectsToAnother(List<DashboardProject> original)
         {
             BindableCollection<DashboardProject> copy = new();
 
@@ -1132,7 +1239,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if(result)
                 {
-                    await GetProjectsVersion();
+                    await RefreshDashboardProjectsList();
                     await GetCollabProjects();
                 }
             }
