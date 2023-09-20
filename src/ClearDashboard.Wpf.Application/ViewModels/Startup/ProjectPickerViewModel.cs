@@ -767,93 +767,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     "*.sqlite");
                 foreach (var file in files)
                 {
-                    var fileInfo = new FileInfo(file);
-
-                    string version = "unavailable";
-
-
-                    var results =
-                        await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
-                    if (results.Success && results.HasData)
-                    {
-                        version = results.Data;
-                    }
-
-
-                    Guid guid = Guid.Empty;
-                    results =
-                        await ExecuteRequest(new GetProjectIdQuery(fileInfo.FullName), CancellationToken.None);
-                    if (results.Success && results.HasData)
-                    {
-                        try
-                        {
-                            guid = Guid.Parse(results.Data.ToString());
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                            throw;
-                        }
-                    }
-
-
-                    string gitLabSha = string.Empty;
-                    bool shaPresent = false;
-                    results =
-                        await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
-                    if (results.Success && results.HasData)
-                    {
-                        if (results.Data.ToString() != "")
-                        {
-                            shaPresent = true;
-                            gitLabSha = results.Data.ToString();
-                        }
-                    }
-
-                    // add as ListItem
-                    var dashboardProject = new DashboardProject
-                    {
-                        Modified = fileInfo.LastWriteTime,
-                        ProjectName = directoryInfo.Name,
-                        ShortFilePath = fileInfo.Name,
-                        FullFilePath = fileInfo.FullName,
-                        Version = version,
-                        IsCollabProject = shaPresent,
-                        GitLabSha = gitLabSha,
-                        Id = guid,
-                    };
+                    var dashboardProject = await FileToDashboardProject(file, directoryInfo);
 
                     DashboardProjects.Add(dashboardProject);
                 }
             }
 
-            // check for database compatibility
-            foreach (var project in DashboardProjects)
-            {
-                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version);
+            await SetDatabaseCompatibility(DashboardProjects);
 
-                if (project.IsCompatibleVersion)
-                {
-                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
-                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
-                }
-            }
-
-            // get the collab most recent Sha
-            foreach (var project in DashboardProjects)
-            {
-                if (project.IsCollabProject)
-                {
-                    var results = await ExecuteRequest(new GetGitLabUpdatedNeededQuery(project), CancellationToken.None);
-                    if (results.Success && results.HasData)
-                    {
-                        if (results.Data == true)
-                        {
-                            project.GitLabUpdateNeeded = true;
-                        }
-                    }
-                }
-            }
+            await SetGitLabUpdateNeeded(DashboardProjects);
 
 
             DashboardProjectsDisplay.Clear();
@@ -878,75 +800,83 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName), "*.sqlite");
                     foreach (var file in files)
                     {
-                        var fileInfo = new FileInfo(file);
-
-                        string version = "unavailable";
-
-                        var results = await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
-                        if (results.Success && results.HasData)
-                        {
-                            version = results.Data ?? version;
-                        }
-
-                        Guid guid = Guid.Empty;
-                        results = await ExecuteRequest(new GetProjectIdQuery(fileInfo.FullName), CancellationToken.None);
-                        if (results.Success && results.HasData)
-                        {
-                            try
-                            {
-                                guid = Guid.Parse(results.Data.ToString());
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                                throw;
-                            }
-                        }
-
-                        string gitLabSha = string.Empty;
-                        bool shaPresent = false;
-                        results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
-                        if (results.Success && results.HasData)
-                        {
-                            if (results.Data.ToString() != "")
-                            {
-                                shaPresent = true;
-                                gitLabSha = results.Data.ToString();
-                            }
-                        }
-
-                        // add as ListItem
-                        var dashboardProject = new DashboardProject
-                        {
-                            Modified = fileInfo.LastWriteTime,
-                            ProjectName = directoryInfo.Name,
-                            ShortFilePath = fileInfo.Name,
-                            FullFilePath = fileInfo.FullName,
-                            Version = version,
-                            IsCollabProject = shaPresent,
-                            GitLabSha = gitLabSha,
-                            Id = guid,
-                        };
+                        var dashboardProject = await FileToDashboardProject(file, directoryInfo);
 
                         projectsToAdd.Add(dashboardProject);
                     }
                 }
             }
 
-            // check for database compatibility
-            foreach (var project in projectsToAdd)
-            {
-                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version);
+            await SetDatabaseCompatibility(projectsToAdd);
 
-                if (project.IsCompatibleVersion)
+            await SetGitLabUpdateNeeded(projectsToAdd);
+
+            DashboardProjects.AddRange(projectsToAdd);
+            DashboardProjects.Sort();
+
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+
+            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+        }
+
+        private async Task<DashboardProject> FileToDashboardProject(string file, DirectoryInfo directoryInfo)
+        {
+            var fileInfo = new FileInfo(file);
+
+            string version = "unavailable";
+
+            var results = await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                version = results.Data ?? version;
+            }
+
+            Guid guid = Guid.Empty;
+            results = await ExecuteRequest(new GetProjectIdQuery(fileInfo.FullName), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                try
                 {
-                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
-                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
+                    guid = Guid.Parse(results.Data.ToString());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
                 }
             }
 
+            string gitLabSha = string.Empty;
+            bool shaPresent = false;
+            results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                if (results.Data.ToString() != "")
+                {
+                    shaPresent = true;
+                    gitLabSha = results.Data.ToString();
+                }
+            }
+
+            // add as ListItem
+            var dashboardProject = new DashboardProject
+            {
+                Modified = fileInfo.LastWriteTime,
+                ProjectName = directoryInfo.Name,
+                ShortFilePath = fileInfo.Name,
+                FullFilePath = fileInfo.FullName,
+                Version = version,
+                IsCollabProject = shaPresent,
+                GitLabSha = gitLabSha,
+                Id = guid,
+            };
+            return dashboardProject;
+        }
+
+        private async Task SetGitLabUpdateNeeded(List<DashboardProject> projects)
+        {
             // get the collab most recent Sha
-            foreach (var project in projectsToAdd)
+            foreach (var project in projects)
             {
                 if (project.IsCollabProject)
                 {
@@ -960,13 +890,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     }
                 }
             }
+        }
 
-            DashboardProjects.AddRange(projectsToAdd);
-            DashboardProjects.Sort();
+        private static async Task SetDatabaseCompatibility(List<DashboardProject> projects)
+        {
+            // check for database compatibility
+            foreach (var project in projects)
+            {
+                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version);
 
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
-
-            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+                if (project.IsCompatibleVersion)
+                {
+                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
+                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
+                }
+            }
         }
 
         public async void UpdateDatabase(DashboardProject project)
