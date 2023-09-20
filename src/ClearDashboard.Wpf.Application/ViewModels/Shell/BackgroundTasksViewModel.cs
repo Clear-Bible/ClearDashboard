@@ -157,10 +157,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
-            if (message.Status.TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed)
-            {
-                _longRunningTaskManager.TaskComplete(message.Status.Name);
-            }
 
             var backgroundTaskStatus = message.Status;
 
