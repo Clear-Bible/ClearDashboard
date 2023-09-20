@@ -103,8 +103,8 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <TextBlock Text="{Binding SMTsReady}" />
-            <TextBlock Text="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}" />
+            <!--<TextBlock Text="{Binding SMTsReady}" />
+            <TextBlock Text="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}" />-->
         </StackPanel>
 
     </Grid>

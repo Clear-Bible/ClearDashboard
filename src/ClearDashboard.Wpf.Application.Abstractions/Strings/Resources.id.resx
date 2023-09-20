@@ -122,7 +122,7 @@
     <value>Pilih cara tokenize corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Penyelarasan</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Memeriksa USFM</value>
@@ -137,7 +137,7 @@
     <value>Interlinear</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Tidak ada kesalahan</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>Simpan kesalahan USFM untuk mengajukan</value>
@@ -173,7 +173,7 @@
     <value>BAB</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Buku berikutnya</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>Bab selanjutnya</value>
@@ -212,7 +212,7 @@
     <value>Ayat</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>kasih sayang</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>pertanian</value>
@@ -248,7 +248,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>batu permata</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -272,19 +272,19 @@
     <value>mamalia; Hewan liar</value>
   </data>
   <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>Monumen</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
     <value>moral dan etika</value>
   </data>
   <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>duka</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
     <value>alam</value>
   </data>
   <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>kekafiran</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_People" xml:space="preserve">
     <value>rakyat</value>
@@ -455,7 +455,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian Sumber</value>
+    <value>Bagian sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -494,7 +494,7 @@
     <value>Beri nama itemnya</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>grup baru</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>individu baru</value>
@@ -527,7 +527,7 @@
     <value>Pemilik proyek</value>
   </data>
   <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>Proyek</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>Pilih Proyek</value>
@@ -581,7 +581,7 @@
     <value>Align '{0}' dengan '{1}'?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Penyelarasan</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>Hapus tampilan ini?</value>
@@ -596,7 +596,7 @@
     <value>Hapus Penyelarasan?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Hapus Alignment untuk '{0}'?</value>
@@ -605,7 +605,7 @@
     <value>Hapus semua keberpihakan?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Token '{0}' memiliki banyak keberpihakan yang ditentukan. Mengklik '{1}' akan menghapus semua keberpihakan.</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>Pencarian istilah filter</value>
@@ -632,7 +632,7 @@
     <value>Mark Alignment sebagai 'valid'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Token Baru</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Catatan</value>
@@ -698,7 +698,7 @@
     <value>Sumber Font Ukuran:</value>
   </data>
   <data name="FontSettings_Target" xml:space="preserve">
-    <value>Teks Target:</value>
+    <value>Teks target:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
     <value>Ukuran font target:</value>
@@ -749,13 +749,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Kata sandi:</value>
+    <value>Loading...</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>URL:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Nama belakang:</value>
+    <value>Loading...</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -782,10 +782,10 @@
     <value>Proyek</value>
   </data>
   <data name="Landing_Projects" xml:space="preserve">
-    <value>Proyek</value>
+    <value>Loading...</value>
   </data>
   <data name="Landing_Settings" xml:space="preserve">
-    <value>Pengaturan</value>
+    <value>Loading...</value>
   </data>
   <data name="Language [UID_Key]" xml:space="preserve">
     <value>Indoneasian [id]</value>
@@ -863,7 +863,7 @@
     <value>Lexeme untuk sudah ada untuk Lemma</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Makna:</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Terjemahan baru</value>
@@ -902,7 +902,7 @@
     <value>Dan</value>
   </data>
   <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Temukan semua</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconIEdit_Fully" xml:space="preserve">
     <value>Sepenuhnya</value>
@@ -911,13 +911,13 @@
     <value>Sepenuhnya cocok</value>
   </data>
   <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Cocok</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconIEdit_Or" xml:space="preserve">
     <value>Atau</value>
   </data>
   <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Sebagian</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
     <value>Bahasa target</value>
@@ -939,6 +939,9 @@
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>Bahasa sumber</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>Jenis</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>Kata sumber</value>
@@ -1010,10 +1013,10 @@
     <value>COBOL COBULSI TERSEDIA</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
-    <value>Pengaturan</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_ShowLog" xml:space="preserve">
-    <value>Tampilkan log</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_Windows" xml:space="preserve">
     <value>Windows</value>
@@ -1028,7 +1031,7 @@
     <value>Token Corpus</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Dasbor</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>Melihat</value>
@@ -1037,7 +1040,7 @@
     <value>MARMER</value>
   </data>
   <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Pemandangan baru</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>DAFTAR CATATAN</value>
@@ -1088,7 +1091,7 @@
     <value>Informasi Umum</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>Glosses:</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
     <value>Bagian dari pidato</value>
@@ -1136,7 +1139,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Membuat database ...</value>
+    <value>Membuat basis data ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>Gabungkan ... Antarmuka Muat Ulang</value>
@@ -1205,13 +1208,13 @@
     <value>Kelompok:</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Nama keluarga</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>Pengguna Kolaborasi Baru</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Kata sandi:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>Disimpan ke server jarak jauh</value>
@@ -1223,7 +1226,7 @@
     <value>Pengguna sudah ada di server</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Nama belakang:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>Pengguna sudah ada di sistem!</value>
@@ -1265,7 +1268,7 @@
     <value>Filter</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Oleh label</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>Dengan catatan teks</value>
@@ -1284,6 +1287,15 @@
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Tambahkan label</value>
+  </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Apakah Anda ingin membuat label:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>dan kaitkan dengan grup label:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>dan melepaskannya dari grup label:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Tambahkan grup label</value>
@@ -1312,11 +1324,14 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Hapus label ini</value>
   </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>Apakah Anda ingin menghapus label:</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Dibuat</value>
   </data>
   <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Diubah</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
     <value>Pengguna</value>
@@ -1426,6 +1441,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Tambahkan persetujuan curah untuk dilihat</value>
   </data>
@@ -1457,7 +1475,7 @@
     <value>Tambahkan tampilan ayat untuk dilihat</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Bantu</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>Backtranslation</value>
@@ -1481,7 +1499,7 @@
     <value>Anak perempuan</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Hapus Interlinear</value>
@@ -1526,7 +1544,7 @@
     <value>Setel ulang pemetaan ayat ke versifikasi default</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>Sumber</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>Skala konten hingga 100%</value>
@@ -1541,7 +1559,7 @@
     <value>Bahasa sumber</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
-    <value>Standar</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Studibible</value>
@@ -1595,7 +1613,7 @@
     <value>Gloss</value>
   </data>
   <data name="Pins_Language" xml:space="preserve">
-    <value>Bahasa</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
@@ -1643,7 +1661,7 @@
     <value>PRO</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Tambahkan Pengguna Kolaborasi Baru</value>
+    <value>Tambahkan pengguna kolaborasi baru</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
@@ -1691,7 +1709,7 @@
     <value>Sertakan teks Alkitab?</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Centang kotak ini untuk memasukkan teks -teks Alkitab Yunani dan Ibrani saat membuat proyek Anda.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Kelola proyek kolaborasi</value>
@@ -1703,7 +1721,7 @@
     <value>Sepi disini. Harap buat proyek baru.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext tidak diinstal. Harap instal Paratext dan rerun aplikasi ClearDashboard.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext tidak berjalan</value>
@@ -1712,7 +1730,7 @@
     <value>Buka baru -baru ini</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Terjemahan paratext kembali</value>
@@ -1727,7 +1745,7 @@
     <value>Proyek Paratext</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Proyek:</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Kami hampir sampai!</value>
@@ -1754,7 +1772,7 @@
     <value>Klik di sini untuk memulai Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versi: kapan:</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Harap masukkan nama untuk proyek Anda</value>
@@ -1767,6 +1785,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Nama proyek yang diberikan terlalu panjang.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>
@@ -1790,7 +1811,7 @@
     <value>1 Tesalonika</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotius</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Tawarikh</value>
@@ -1814,7 +1835,7 @@
     <value>2 Tesalonika</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Timotius</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 John</value>
@@ -1838,7 +1859,7 @@
     <value>Pengkhotbah</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Efesus</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>Esther</value>
@@ -1853,13 +1874,13 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Galatia</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Asal</value>
   </data>
   <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Habakuk</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Haggai" xml:space="preserve">
     <value>Haggai</value>
@@ -1877,7 +1898,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Yeremia</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Pekerjaan</value>
@@ -1904,7 +1925,7 @@
     <value>Ratapan</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Leviticus</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>Luke</value>
@@ -1925,7 +1946,7 @@
     <value>Nahum</value>
   </data>
   <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Nehemia</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Numbers" xml:space="preserve">
     <value>Angka</value>
@@ -1934,13 +1955,13 @@
     <value>Obadiah</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Filemon</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>Filipi</value>
   </data>
   <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>Peribahasa</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Psalms" xml:space="preserve">
     <value>Mazmur</value>
@@ -1961,10 +1982,10 @@
     <value>Titus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zakharia</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
+    <value>Loading...</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -1976,13 +1997,13 @@
     <value>Tutup aplikasi</value>
   </data>
   <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>Daftar</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Kunci yang disediakan salah. Ketika didekripsi, elemen -elemen JSON tertentu tidak dapat ditemukan.</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Isi kunci lisensi yang didekripsi tidak sesuai dengan informasi yang Anda berikan.</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>Kunci lisensi Anda hilang atau rusak.</value>
@@ -2057,7 +2078,7 @@
     <value>Izinkan ClearDashboard untuk mengubah mode daya selama acara komputasi tinggi</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
-    <value>Disimpan</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_ReservedCaption" xml:space="preserve">
     <value>Dicadangkan untuk ekspansi di masa depan</value>
@@ -2084,7 +2105,7 @@
     <value>Tampilkan tampilan cermin di monitor yang berbeda dari dasbor</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Untuk sistem dengan tiga monitor atau lebih, tunjukkan tampilan cermin di monitor ketiga</value>
+    <value>Untuk sistem dengan tiga monitor atau lebih, tunjukkan tampilan mirror di monitor ketiga</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Koleksi Teks</value>
@@ -2093,7 +2114,7 @@
     <value>Pengguna sudah ada di server</value>
   </data>
   <data name="Settings_UserName" xml:space="preserve">
-    <value>Nama belakang</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_ValidateEmailCode" xml:space="preserve">
     <value>Validasi kode email</value>
@@ -2144,7 +2165,7 @@
     <value>Saya akan melakukan...</value>
   </data>
   <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>Pesan:</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Tidak ada internet</value>
@@ -2165,7 +2186,7 @@
     <value>Pratinjau</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Kerasnya:</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>Judul:</value>
@@ -2183,7 +2204,7 @@
     <value>Status</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Diformat</value>
+    <value>Loading...</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>Tidak diformat</value>
@@ -2192,7 +2213,7 @@
     <value>Perbesar</value>
   </data>
   <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>Zoom out</value>
+    <value>Loading...</value>
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
@@ -2225,7 +2246,7 @@
     <value>Token Corpus</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Dasbor</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>Melihat</value>
