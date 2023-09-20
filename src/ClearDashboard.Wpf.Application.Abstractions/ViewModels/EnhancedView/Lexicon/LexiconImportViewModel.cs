@@ -1,10 +1,12 @@
 ﻿
+using System;
 using Caliburn.Micro;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
+namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 {
     public class LexiconImportViewModel : PropertyChangedBase
     {
+        private Guid _lexemeId;
         private bool _isSelected;
         private bool _showAddAsFormButton;
         private bool _showAddTargetAsTranslationButton;
@@ -16,10 +18,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         private string? _targetWord;
         private string? _targetLanguage;
 
+
         public bool IsSelected
         {
             get => _isSelected;
             set => Set(ref _isSelected, value);
+        }
+
+        public Guid LexemeId
+        {
+            get => _lexemeId;
+            set => Set(ref _lexemeId, value);
         }
 
         public bool ShowAddAsFormButton

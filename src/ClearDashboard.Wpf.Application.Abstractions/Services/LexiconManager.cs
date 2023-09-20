@@ -7,6 +7,7 @@ using Caliburn.Micro;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
@@ -20,6 +21,7 @@ using System.Collections.ObjectModel;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
 using ClearDashboard.DataAccessLayer;
 using System.Threading;
+using System.Windows.Documents;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -465,6 +467,96 @@ namespace ClearDashboard.Wpf.Application.Services
             
         }
 
+
+        public List<LexiconImportViewModel> LexiconImportViewModels { get; private set; }
+
+        public ObservableCollection<Lexeme>? ManagedLexemes { get; private set; }
+
+        public Lexicon? ManagedLexicon { get; private set; }
+
+        public List<LexiconImportViewModel> ImportedLexiconViewModels { get; private set; }
+
+
+        //ImportedLexiconViewModels
+        public async Task<List<LexiconImportViewModel>> GetImportedLexiconViewModels(string? projectId, CancellationToken cancellationToken)
+        {
+            ImportedLexiconViewModels = new List<LexiconImportViewModel>();
+            var internalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
+            if (internalLexicon != null)
+            {
+                //ManagedLexicon = await GetExternalLexiconNotInInternal(internalLexicon, cancellationToken);
+                //ManagedLexemes = ManagedLexicon.Lexemes;
+
+                foreach (var lexeme in internalLexicon.Lexemes)
+                {
+                                                     
+
+                    foreach (var meaning in lexeme.Meanings)
+                    {
+                        foreach (var translation in meaning.Translations)
+                        {
+                            var vm = new LexiconImportViewModel
+                            {
+                                LexemeId = lexeme.LexemeId.Id,
+                                SourceLanguage = lexeme.Language,
+                                SourceWord = lexeme.Lemma,
+                                SourceType = lexeme.Type,
+                                TargetLanguage = meaning.Language,
+                                TargetWord = translation.Text,
+                                //IsSelected = externalLexeme != null,
+                                //ShowAddAsFormButton = externalLexeme != null && externalLexeme.Meanings.ToImmutableArray().Any(m => m.Translations.Contains(translation)),
+                                //ShowAddTargetAsTranslationButton = showAddTargetAsTranslationButton
+                            };
+                            ImportedLexiconViewModels.Add(vm);
+                        }
+                    }
+                }
+            }
+
+            return ImportedLexiconViewModels;
+        }
+
+        public async Task<List<LexiconImportViewModel>> GetLexiconImportViewModels(string? projectId, CancellationToken cancellationToken)
+        {
+            LexiconImportViewModels = new List<LexiconImportViewModel>();
+            var externalLexicon = await GetLexiconForProject(null);
+            if (externalLexicon != null)
+            {
+                ManagedLexicon = await GetExternalLexiconNotInInternal(externalLexicon, cancellationToken);
+                ManagedLexemes = ManagedLexicon.Lexemes;
+
+                foreach (var lexeme in ManagedLexemes = ManagedLexicon.Lexemes)
+                {
+                    //var externalLexeme =
+                    //    externalLexicon.Lexemes.FirstOrDefault(l => l.LexemeId.Id == lexeme.LexemeId.Id);
+                    //var showAddTargetAsTranslationButton = externalLexeme != null &&
+                    //                                      lexeme.Forms.Any(f => f.Text == externalLexeme.Lemma);
+                    
+                    foreach (var meaning in lexeme.Meanings)
+                    {
+                        foreach (var translation in meaning.Translations)
+                        {
+                            var vm = new LexiconImportViewModel
+                            {
+                                LexemeId = lexeme.LexemeId.Id,
+                                SourceLanguage = lexeme.Language,
+                                SourceWord = lexeme.Lemma,
+                                SourceType = lexeme.Type,
+                                TargetLanguage = meaning.Language,
+                                TargetWord = translation.Text,
+                                //IsSelected = externalLexeme != null,
+                                //ShowAddAsFormButton = externalLexeme != null && externalLexeme.Meanings.ToImmutableArray().Any(m => m.Translations.Contains(translation)),
+                                //ShowAddTargetAsTranslationButton = showAddTargetAsTranslationButton
+                            };
+                            LexiconImportViewModels.Add(vm);
+                        }
+                    }
+                }
+            }
+
+            return LexiconImportViewModels;
+        }
+
         public async Task<Lexicon> GetExternalLexiconNotInInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
         {
             var internalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
@@ -504,10 +596,41 @@ namespace ClearDashboard.Wpf.Application.Services
             };
         }
 
-        public static void Save(Lexicon lexicon)
+        public async Task ProcessImportedLexicon()
         {
+            if (ManagedLexemes != null)
+            {
+                var selectedLexemesToImport = LexiconImportViewModels.Where(vm => vm.IsSelected)
+                    .Select(vm => ManagedLexemes.First(lexeme => lexeme.LexemeId.Id == vm.LexemeId));
+
+                var lexicon = new Lexicon
+                {
+                    Lexemes = new ObservableCollection<Lexeme>(selectedLexemesToImport)
+                };
+
+                await lexicon.SaveAsync(Mediator);
+            }
 
         }
+
+        public async Task ProcessLexiconImportsToDelete()
+        {
+            if (ManagedLexemes != null)
+            {
+                var selectedLexemesToDelete = ImportedLexiconViewModels.Where(vm => vm.IsSelected)
+                    .Select(vm => ManagedLexemes.First(lexeme => lexeme.LexemeId.Id == vm.LexemeId).LexemeId);
+
+                //var lexicon = new Lexicon
+                //{
+                //   LexemeIdsToDelete = selectedLexemesToDelete
+                //};
+
+                //await lexicon.SaveAsync(Mediator);
+            }
+
+        }
+
+
 
         /// <summary>
         /// Creates an <see cref="LexiconManager"/> instance using the specified DI container.
