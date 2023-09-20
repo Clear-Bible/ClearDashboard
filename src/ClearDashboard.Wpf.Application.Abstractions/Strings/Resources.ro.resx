@@ -122,7 +122,7 @@
     <value>Selectați cum se tokenizează corpusul</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Aliniere</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Verificarea USFM</value>
@@ -137,7 +137,7 @@
     <value>Interlinear</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Fără erori</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>Salvați erorile USFM la fișier</value>
@@ -173,7 +173,7 @@
     <value>CAPITOL</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Următoarea carte</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>Capitolul următor</value>
@@ -212,7 +212,7 @@
     <value>Verset</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>Loading...</value>
+    <value>afecţiune</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>agricultură</value>
@@ -248,10 +248,10 @@
     <value>fructe</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Loading...</value>
+    <value>pietre prețioase</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>Iarbă</value>
+    <value>ierburi</value>
   </data>
   <data name="BiblicalTermsDomains_Group" xml:space="preserve">
     <value>grup</value>
@@ -272,19 +272,19 @@
     <value>mamifere; animale salbatice</value>
   </data>
   <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>Loading...</value>
+    <value>monument</value>
   </data>
   <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
     <value>moravuri și etică</value>
   </data>
   <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>Loading...</value>
+    <value>doliu</value>
   </data>
   <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
     <value>natură</value>
   </data>
   <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>Loading...</value>
+    <value>păgânism</value>
   </data>
   <data name="BiblicalTermsDomains_People" xml:space="preserve">
     <value>oameni</value>
@@ -494,7 +494,7 @@
     <value>Numiți elementul</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>Loading...</value>
+    <value>grup nou</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>individ nou</value>
@@ -527,7 +527,7 @@
     <value>Detinatorul proiectului</value>
   </data>
   <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Proiecte</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>Selectați proiect</value>
@@ -581,7 +581,7 @@
     <value>Aliniați '{0}' cu '{1}'?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Aliniere</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>Ștergeți această viziune?</value>
@@ -605,7 +605,7 @@
     <value>Ștergeți toate alinierile?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Token '{0}' are mai multe alinieri definite. Făcând clic pe '{1}' va șterge toate alinierile.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>Căutare la termen de filtrare</value>
@@ -632,13 +632,13 @@
     <value>Marcați alinierea drept „valabilă”</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Loading...</value>
+    <value>NOU JEDIC</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest interval de versuri.</value>
+    <value>Nu există date de versuri în acest game de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>Îndepărtați corpusul</value>
@@ -749,13 +749,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Parola:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>URL:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nume de utilizator:</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -782,10 +782,10 @@
     <value>Proiect</value>
   </data>
   <data name="Landing_Projects" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Proiecte</value>
   </data>
   <data name="Landing_Settings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Setări</value>
   </data>
   <data name="Language [UID_Key]" xml:space="preserve">
     <value>Romanian [ro]</value>
@@ -848,7 +848,7 @@
     <value>Introduceți o nouă traducere</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>Lemma</value>
+    <value>LEMMA</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -863,13 +863,13 @@
     <value>Există deja un lexeme pentru lemma</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Sensuri:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Noi traducere</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Scoateți acest domeniu semantic din acest sens</value>
+    <value>Îndepărtați acest domeniu semantic din acest sens</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>Scoateți această formă lexicală din această lemmă</value>
@@ -902,7 +902,7 @@
     <value>Și</value>
   </data>
   <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Găsiți toate</value>
   </data>
   <data name="LexiconIEdit_Fully" xml:space="preserve">
     <value>Complet</value>
@@ -911,13 +911,13 @@
     <value>Potrivirea completă</value>
   </data>
   <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Potrivire</value>
   </data>
   <data name="LexiconIEdit_Or" xml:space="preserve">
     <value>Sau</value>
   </data>
   <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Parţial</value>
   </data>
   <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
     <value>Limbă țintă</value>
@@ -1013,10 +1013,10 @@
     <value>Modificări de colab disponibile</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Setări</value>
   </data>
   <data name="MainView_ShowLog" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Arată jurnal</value>
   </data>
   <data name="MainView_Windows" xml:space="preserve">
     <value>Ferestre</value>
@@ -1031,7 +1031,7 @@
     <value>Jetoane de corpus</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Bord</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>Vedere</value>
@@ -1040,7 +1040,7 @@
     <value>MARMURĂ</value>
   </data>
   <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Vizualizare nouă</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>Lista de note</value>
@@ -1091,7 +1091,7 @@
     <value>Informații generale</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>Loading...</value>
+    <value>GLUSE:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
     <value>Fragmente din discurs</value>
@@ -1208,13 +1208,13 @@
     <value>Grup:</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nume</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>Nou utilizator de colaborare</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Parola:</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>Salvat pe serverul de la distanță</value>
@@ -1226,7 +1226,7 @@
     <value>Utilizatorul există deja pe server</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nume de utilizator:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>Utilizatorul este deja pe sistem!</value>
@@ -1268,7 +1268,7 @@
     <value>Filtre</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Prin etichete</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>Prin text de notă</value>
@@ -1331,7 +1331,7 @@
     <value>Creată</value>
   </data>
   <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Modificat</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
     <value>Utilizator</value>
@@ -1442,7 +1442,7 @@
     <value>Corpus paratext</value>
   </data>
   <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Selectați un algoritm SMT pentru a vă antrena</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
@@ -1475,7 +1475,7 @@
     <value>Adăugați vizualizarea versului pentru vizualizare</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Auxiliar</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>Backtranslație</value>
@@ -1544,7 +1544,7 @@
     <value>Resetați mapări de versuri la versificarea implicită</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Resursă</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>Scalați conținutul la 100%</value>
@@ -1559,7 +1559,7 @@
     <value>Limba-sursă</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Standard</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Studiu</value>
@@ -1613,7 +1613,7 @@
     <value>Luciu</value>
   </data>
   <data name="Pins_Language" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Limba</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1688,7 +1688,7 @@
     <value>Bază de date:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acest proiect, o altă aplicație îl folosește în continuare.</value>
+    <value>Nu puteți șterge acel proiect, o altă aplicație îl folosește în continuare.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Ștergeți proiectul</value>
@@ -1709,7 +1709,7 @@
     <value>Includeți texte biblice?</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Verificați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gestionați proiectele de colaborare</value>
@@ -1721,7 +1721,7 @@
     <value>Este singuratic aici. Vă rugăm să creați un nou proiect.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Paratext nu este instalat. Vă rugăm să instalați Paratext și să reluați aplicația ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext nu rulează</value>
@@ -1730,7 +1730,7 @@
     <value>Deschideți recent</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Paratext</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Paratext traducere înapoi</value>
@@ -1739,19 +1739,19 @@
     <value>Biblia interlinear (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext rulează, dar nu este conectat.</value>
+    <value>Paratext funcționează, dar nu este conectat.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>Proiect paratext</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Proiect:</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Suntem aproape acolo!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Faceți clic aici pentru a vizualiza videoclipurile „tabloul de bord”</value>
+    <value>Faceți clic aici pentru a vizualiza videoclipurile „bordul de bord”</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
@@ -1772,7 +1772,7 @@
     <value>Faceți clic aici pentru a începe Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Versiune:</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Vă rugăm să introduceți un nume pentru proiectul dvs.</value>
@@ -1811,7 +1811,7 @@
     <value>1 Tesaloniceni</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>1 Timotei</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Cronici</value>
@@ -1835,7 +1835,7 @@
     <value>2 Tesaloniceni</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>2 Timotei</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 Ioan</value>
@@ -1859,7 +1859,7 @@
     <value>Eclesiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Efeseni</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>Esther</value>
@@ -1874,13 +1874,13 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Galateni</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Geneză</value>
   </data>
   <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Habakkuk</value>
   </data>
   <data name="ProperCase_Haggai" xml:space="preserve">
     <value>Haggai</value>
@@ -1898,7 +1898,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Ieremia</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Loc de munca</value>
@@ -1925,7 +1925,7 @@
     <value>Lamentări</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Levitic</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>Luca</value>
@@ -1946,7 +1946,7 @@
     <value>Nahum</value>
   </data>
   <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Neemia</value>
   </data>
   <data name="ProperCase_Numbers" xml:space="preserve">
     <value>Numere</value>
@@ -1955,13 +1955,13 @@
     <value>Obadia</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Philemon</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>Filipeni</value>
   </data>
   <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Proverbe</value>
   </data>
   <data name="ProperCase_Psalms" xml:space="preserve">
     <value>Psalmi</value>
@@ -1982,10 +1982,10 @@
     <value>Tit</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Zaharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Zephaniah</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -1997,13 +1997,13 @@
     <value>Aplicație închidere</value>
   </data>
   <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Inregistreaza-te</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Cheia furnizată este defectuoasă. Când sunt decriptate, anumite elemente JSON nu au putut fi găsite.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Conținutul cheii de licență decriptate nu se potrivește cu informațiile furnizate.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>Cheia dvs. de licență este lipsită sau ruptă.</value>
@@ -2012,7 +2012,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți prenumele dvs.</value>
+    <value>Vă rugăm să introduceți numele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2078,7 +2078,7 @@
     <value>Permiteți ClearDashboard să schimbe modurile de putere în timpul evenimentelor de calcul înalte</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Rezervat</value>
   </data>
   <data name="Settings_ReservedCaption" xml:space="preserve">
     <value>Rezervat pentru extinderea viitoare</value>
@@ -2105,7 +2105,7 @@
     <value>Afișați vizualizări în oglindă pe un monitor diferit de tabloul de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sisteme cu trei sau mai multe monitoare, afișați oglindă pe a treia monitor</value>
+    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați oglindă pe a treia monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colecția de text</value>
@@ -2114,7 +2114,7 @@
     <value>Utilizatorul există deja pe server</value>
   </data>
   <data name="Settings_UserName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nume de utilizator</value>
   </data>
   <data name="Settings_ValidateEmailCode" xml:space="preserve">
     <value>Validați codul de e -mail</value>
@@ -2165,7 +2165,7 @@
     <value>As dori sa fac...</value>
   </data>
   <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Mesaj:</value>
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Fara Internet</value>
@@ -2186,7 +2186,7 @@
     <value>previzualizare</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Severitate:</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>Titlu:</value>
@@ -2204,7 +2204,7 @@
     <value>stare</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Formatat</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>Neformat</value>
@@ -2213,7 +2213,7 @@
     <value>A mari</value>
   </data>
   <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>Loading...</value>
+    <value>A micsora</value>
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
@@ -2246,7 +2246,7 @@
     <value>Jetoane de corpus</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Bord</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>Vedere</value>

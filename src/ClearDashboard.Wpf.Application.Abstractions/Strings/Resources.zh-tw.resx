@@ -122,7 +122,7 @@
     <value>選擇如何象徵語料庫</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>結盟</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>檢查USFM</value>
@@ -137,7 +137,7 @@
     <value>線性</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Loading...</value>
+    <value>沒有錯誤</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>將USFM錯誤保存到文件</value>
@@ -173,7 +173,7 @@
     <value>章節</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Loading...</value>
+    <value>下一本書</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>下一章</value>
@@ -212,7 +212,7 @@
     <value>詩</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>Loading...</value>
+    <value>感情</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>農業</value>
@@ -236,7 +236,7 @@
     <value>建造;宗教活動</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>建築；畜牧業</value>
+    <value>構造；畜牧業</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧業</value>
@@ -248,7 +248,7 @@
     <value>水果</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Loading...</value>
+    <value>寶石</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>草</value>
@@ -272,19 +272,19 @@
     <value>哺乳動物；野生動物</value>
   </data>
   <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>Loading...</value>
+    <value>紀念碑</value>
   </data>
   <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
     <value>道德和道德</value>
   </data>
   <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>Loading...</value>
+    <value>喪</value>
   </data>
   <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
     <value>自然</value>
   </data>
   <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>Loading...</value>
+    <value>異教</value>
   </data>
   <data name="BiblicalTermsDomains_People" xml:space="preserve">
     <value>人們</value>
@@ -494,7 +494,7 @@
     <value>命名項目</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>Loading...</value>
+    <value>新小組</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>新個人</value>
@@ -527,7 +527,7 @@
     <value>項目擁有者</value>
   </data>
   <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>Loading...</value>
+    <value>專案</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>選擇項目</value>
@@ -581,7 +581,7 @@
     <value>用'{1}'對齊'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>結盟</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>刪除此視圖？</value>
@@ -599,13 +599,13 @@
     <value>刪除對齊</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>刪除“ {0}”的對齊？</value>
+    <value>刪除“ {0}”的對齊方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>刪除所有路線？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Loading...</value>
+    <value>令牌'{0}'具有多個對齊定義。單擊'{1}'將刪除所有對齊。</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>過濾期搜索</value>
@@ -632,7 +632,7 @@
     <value>標記對齊為“有效”</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Loading...</value>
+    <value>新令牌</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>筆記</value>
@@ -749,13 +749,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>密碼：</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>URL：</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>使用者名稱:</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -782,10 +782,10 @@
     <value>專案</value>
   </data>
   <data name="Landing_Projects" xml:space="preserve">
-    <value>Loading...</value>
+    <value>專案</value>
   </data>
   <data name="Landing_Settings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>設定</value>
   </data>
   <data name="Language [UID_Key]" xml:space="preserve">
     <value>Chinese [zh-tw]</value>
@@ -863,7 +863,7 @@
     <value>引理已經存在的詞彙</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>含義：</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>新翻譯</value>
@@ -902,7 +902,7 @@
     <value>和</value>
   </data>
   <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Loading...</value>
+    <value>找到所有</value>
   </data>
   <data name="LexiconIEdit_Fully" xml:space="preserve">
     <value>完全</value>
@@ -911,13 +911,13 @@
     <value>完全匹配</value>
   </data>
   <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Loading...</value>
+    <value>匹配</value>
   </data>
   <data name="LexiconIEdit_Or" xml:space="preserve">
     <value>或者</value>
   </data>
   <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Loading...</value>
+    <value>部分</value>
   </data>
   <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
     <value>目標語言</value>
@@ -1013,10 +1013,10 @@
     <value>可用的合作更改</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>設定</value>
   </data>
   <data name="MainView_ShowLog" xml:space="preserve">
-    <value>Loading...</value>
+    <value>顯示日誌</value>
   </data>
   <data name="MainView_Windows" xml:space="preserve">
     <value>視窗</value>
@@ -1031,7 +1031,7 @@
     <value>語料庫令牌</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>儀表板</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>看法</value>
@@ -1040,7 +1040,7 @@
     <value>大理石</value>
   </data>
   <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Loading...</value>
+    <value>新視圖</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>筆記清單</value>
@@ -1079,7 +1079,7 @@
     <value>定義不可用</value>
   </data>
   <data name="Marble_Domains" xml:space="preserve">
-    <value>Loading...</value>
+    <value>域：</value>
   </data>
   <data name="Marble_DomainsTitle" xml:space="preserve">
     <value>域</value>
@@ -1091,7 +1091,7 @@
     <value>一般信息</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>Loading...</value>
+    <value>光澤：</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
     <value>演講的一部分</value>
@@ -1208,13 +1208,13 @@
     <value>團體：</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>新的合作用戶</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>密碼：</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>保存到遠程服務器</value>
@@ -1226,7 +1226,7 @@
     <value>用戶已經存在於服務器上</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>使用者名稱:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>用戶已經在系統上！</value>
@@ -1268,7 +1268,7 @@
     <value>過濾器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Loading...</value>
+    <value>通過標籤</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通過注意文本</value>
@@ -1331,7 +1331,7 @@
     <value>創建</value>
   </data>
   <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Loading...</value>
+    <value>修改的</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
     <value>用戶</value>
@@ -1442,7 +1442,7 @@
     <value>Paratext語料庫</value>
   </data>
   <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
-    <value>Loading...</value>
+    <value>選擇一種SMT算法進行訓練</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>增加大量批准以查看</value>
@@ -1475,7 +1475,7 @@
     <value>添加經文視圖以查看</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Loading...</value>
+    <value>輔助的</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>退縮</value>
@@ -1544,7 +1544,7 @@
     <value>將詩歌映射重置為默認差異</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>Loading...</value>
+    <value>資源</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>將內容擴展到100％</value>
@@ -1559,7 +1559,7 @@
     <value>源語言</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>標準</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>可學習</value>
@@ -1613,7 +1613,7 @@
     <value>光澤</value>
   </data>
   <data name="Pins_Language" xml:space="preserve">
-    <value>Loading...</value>
+    <value>語言</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
@@ -1673,7 +1673,7 @@
     <value>協作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>創建您的項目以開始。</value>
+    <value>創建您的項目以入門。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>創建一個新項目</value>
@@ -1709,7 +1709,7 @@
     <value>包括聖經文本？</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Loading...</value>
+    <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>管理協作項目</value>
@@ -1721,7 +1721,7 @@
     <value>這裡很孤單。請創建一個新項目。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Loading...</value>
+    <value>未安裝paratext。請安裝Paratext並重新運行ClearDashboard應用程序。</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>paratext不運行</value>
@@ -1730,7 +1730,7 @@
     <value>近期開放</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Loading...</value>
+    <value>PARATEXT</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>PARATEXT背面翻譯</value>
@@ -1745,7 +1745,7 @@
     <value>PARATEXT項目</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Loading...</value>
+    <value>專案:</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>我們快到了！</value>
@@ -1772,7 +1772,7 @@
     <value>單擊此處啟動Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Loading...</value>
+    <value>版本：</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>請輸入您的項目的名稱</value>
@@ -1811,7 +1811,7 @@
     <value>1個帖撒羅尼迦人</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>1蒂莫西</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>歷代志下</value>
@@ -1835,7 +1835,7 @@
     <value>帖撒羅尼迦後書</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>2蒂莫西</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3約翰</value>
@@ -1859,7 +1859,7 @@
     <value>傳道書</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>以弗所書</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>以斯帖記</value>
@@ -1874,7 +1874,7 @@
     <value>以斯拉記</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>加拉太書</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>創世紀</value>
@@ -1925,7 +1925,7 @@
     <value>哀嘆</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Loading...</value>
+    <value>利未記</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>路加福音</value>
@@ -1946,7 +1946,7 @@
     <value>那鴻書</value>
   </data>
   <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>尼希米</value>
   </data>
   <data name="ProperCase_Numbers" xml:space="preserve">
     <value>民數記 </value>
@@ -1961,7 +1961,7 @@
     <value>腓立比人</value>
   </data>
   <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>Loading...</value>
+    <value>諺語</value>
   </data>
   <data name="ProperCase_Psalms" xml:space="preserve">
     <value>詩篇</value>
@@ -1997,16 +1997,16 @@
     <value>關閉申請</value>
   </data>
   <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>Loading...</value>
+    <value>登記</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Loading...</value>
+    <value>提供的密鑰是錯誤的。解密時，找不到某些JSON元素。</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Loading...</value>
+    <value>解密許可證密鑰的內容與您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的許可密鑰丟失或損壞。</value>
+    <value>您的許可證密鑰要么缺少或損壞。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>歡迎來到Cleardashboard！請輸入您的註冊信息。</value>
@@ -2078,7 +2078,7 @@
     <value>允許ClearDashboard在高計算事件中更改電源模式</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
-    <value>Loading...</value>
+    <value>預訂的</value>
   </data>
   <data name="Settings_ReservedCaption" xml:space="preserve">
     <value>保留用於未來擴展</value>
@@ -2114,7 +2114,7 @@
     <value>用戶已經存在於服務器上</value>
   </data>
   <data name="Settings_UserName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>使用者名稱</value>
   </data>
   <data name="Settings_ValidateEmailCode" xml:space="preserve">
     <value>驗證電子郵件代碼</value>
@@ -2165,7 +2165,7 @@
     <value>我想要做...</value>
   </data>
   <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>訊息:</value>
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>沒有互聯網</value>
@@ -2186,7 +2186,7 @@
     <value>預覽</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Loading...</value>
+    <value>嚴重性：</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>標題：</value>
@@ -2204,7 +2204,7 @@
     <value>地位</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Loading...</value>
+    <value>格式化</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>毫無形態</value>
@@ -2213,7 +2213,7 @@
     <value>放大</value>
   </data>
   <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>Loading...</value>
+    <value>縮小</value>
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
@@ -2246,7 +2246,7 @@
     <value>語料庫令牌</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>儀表板</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>看法</value>

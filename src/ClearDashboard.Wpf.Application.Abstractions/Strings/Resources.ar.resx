@@ -122,7 +122,7 @@
     <value>حدد كيفية تميز الجسم</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>تنسيق</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>التحقق من USFM</value>
@@ -137,7 +137,7 @@
     <value>مراوح</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Loading...</value>
+    <value>لا اخطاء</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>حفظ أخطاء USFM للملف</value>
@@ -173,7 +173,7 @@
     <value>الفصل</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Loading...</value>
+    <value>الكتاب التالي</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>الفصل التالي</value>
@@ -212,7 +212,7 @@
     <value>بيت شعر</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>Loading...</value>
+    <value>عاطِفَة</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>زراعة</value>
@@ -248,7 +248,7 @@
     <value>الفاكهة</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Loading...</value>
+    <value>الأحجار الكريمة</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>الأعشاب</value>
@@ -272,19 +272,19 @@
     <value>الثدييات الحيوانات البرية</value>
   </data>
   <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>Loading...</value>
+    <value>نصب تذكاري</value>
   </data>
   <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
     <value>الأخلاق والأخلاق</value>
   </data>
   <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>Loading...</value>
+    <value>الحداد</value>
   </data>
   <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
     <value>طبيعة</value>
   </data>
   <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>Loading...</value>
+    <value>الوثنية</value>
   </data>
   <data name="BiblicalTermsDomains_People" xml:space="preserve">
     <value>الناس</value>
@@ -437,7 +437,7 @@
     <value>مارك تم اختياره على أنه "غير صالح"</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>علامة تم اختيارها على أنها "مراجعة احتياجات"</value>
+    <value>علامة تم اختيارها كـ "مراجعة احتياجات"</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
     <value>تم اختيار علامة "صالحة"</value>
@@ -494,7 +494,7 @@
     <value>اسم العنصر</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>Loading...</value>
+    <value>مجموعة جديدة</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>فرد جديد</value>
@@ -527,7 +527,7 @@
     <value>صاحب المشروع</value>
   </data>
   <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>Loading...</value>
+    <value>المشاريع</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
     <value>حدد المشروع</value>
@@ -581,7 +581,7 @@
     <value>محاذاة '{0}' مع '{1}'؟</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>تنسيق</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>حذف هذا العرض؟</value>
@@ -605,7 +605,7 @@
     <value>حذف جميع المحاذاة؟</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Loading...</value>
+    <value>الرمز المميز '{0}' له محاذاة متعددة محددة. سيؤدي النقر فوق "{1} إلى حذف جميع المحاذاة.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>تصفية البحث عن مصطلح</value>
@@ -632,7 +632,7 @@
     <value>مارك محاذاة على أنها "صالحة"</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Loading...</value>
+    <value>رمز جديد</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>ملحوظات</value>
@@ -749,13 +749,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>كلمة المرور:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>URL:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>اسم المستخدم:</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -782,10 +782,10 @@
     <value>مشروع</value>
   </data>
   <data name="Landing_Projects" xml:space="preserve">
-    <value>Loading...</value>
+    <value>المشاريع</value>
   </data>
   <data name="Landing_Settings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>إعدادات</value>
   </data>
   <data name="Language [UID_Key]" xml:space="preserve">
     <value>Arabic [ar]</value>
@@ -863,7 +863,7 @@
     <value>يوجد معكم بالفعل لـ Lemma</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>المعاني:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>ترجمة جديدة</value>
@@ -872,7 +872,7 @@
     <value>قم بإزالة هذا المجال الدلالي من هذا المعنى</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>قم بإزالة هذا النموذج المعجمي من هذا الليمون</value>
+    <value>قم بإزالة هذا النموذج المعجمي من هذا ليمما</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>تعيين ترجمة ل</value>
@@ -902,7 +902,7 @@
     <value>و</value>
   </data>
   <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Loading...</value>
+    <value>جد كل</value>
   </data>
   <data name="LexiconIEdit_Fully" xml:space="preserve">
     <value>تماما</value>
@@ -911,13 +911,13 @@
     <value>مطابقة تماما</value>
   </data>
   <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Loading...</value>
+    <value>مطابقة</value>
   </data>
   <data name="LexiconIEdit_Or" xml:space="preserve">
     <value>أو</value>
   </data>
   <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Loading...</value>
+    <value>جزئيا</value>
   </data>
   <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
     <value>اللغة المستهدفة</value>
@@ -1013,10 +1013,10 @@
     <value>تغييرات التعاون المتاحة</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>إعدادات</value>
   </data>
   <data name="MainView_ShowLog" xml:space="preserve">
-    <value>Loading...</value>
+    <value>إظهار السجل</value>
   </data>
   <data name="MainView_Windows" xml:space="preserve">
     <value>شبابيك</value>
@@ -1031,7 +1031,7 @@
     <value>رموز كوربوس</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>لوحة القيادة</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>منظر</value>
@@ -1040,7 +1040,7 @@
     <value>رخام</value>
   </data>
   <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Loading...</value>
+    <value>عرض جديد</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>قائمة الملاحظات</value>
@@ -1091,7 +1091,7 @@
     <value>معلومات عامة</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>Loading...</value>
+    <value>اللمعان:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
     <value>أجزاء من الكلام</value>
@@ -1157,7 +1157,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header2" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1208,13 +1208,13 @@
     <value>مجموعة:</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>اسم العائلة</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>مستخدم تعاون جديد</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>كلمة المرور:</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>تم حفظه على الخادم البعيد</value>
@@ -1226,7 +1226,7 @@
     <value>المستخدم موجود بالفعل على الخادم</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>اسم المستخدم:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>المستخدم بالفعل على النظام!</value>
@@ -1268,7 +1268,7 @@
     <value>المرشحات</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Loading...</value>
+    <value>بواسطة التسميات</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>بالملاحظة نص</value>
@@ -1295,7 +1295,7 @@
     <value>وربطها مع مجموعة الملصقات:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>وفرزها عن مجموعة الملصقات:</value>
+    <value>وفرزها من مجموعة الملصقات:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>أضف مجموعة التسمية</value>
@@ -1304,7 +1304,7 @@
     <value>أضف مجموعة تسمية</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>توجد مجموعة تسمية بالفعل مع الاسم</value>
+    <value>مجموعة تسمية موجودة بالفعل مع الاسم</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>تهيئة مجموعة الملصقات</value>
@@ -1316,7 +1316,7 @@
     <value>اسم مجموعة التسمية</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>إزالة مجموعة الملصقات هذه؟</value>
+    <value>إزالة مجموعة التسمية هذه؟</value>
   </data>
   <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
     <value>قم بإزالة مجموعة الملصقات هذه</value>
@@ -1331,7 +1331,7 @@
     <value>مخلوق</value>
   </data>
   <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Loading...</value>
+    <value>معدل</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
     <value>مستخدم</value>
@@ -1418,7 +1418,7 @@
     <value>JSON METADATA</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>موازية آيات كوربورا</value>
+    <value>موازاة آيات كوربورا</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>خوارزمية محاذاة كلمة الجهاز</value>
@@ -1442,7 +1442,7 @@
     <value>Paratext Corpus</value>
   </data>
   <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
-    <value>Loading...</value>
+    <value>حدد خوارزمية SMT للتدريب</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>أضف موافقة بالجملة للعرض</value>
@@ -1460,7 +1460,7 @@
     <value>إنشاء محاذاة كلمات جديدة</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>قم بإنشاء رمز كوربوس جديد</value>
+    <value>قم بإنشاء رمز جسم جديد</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>أضف Interlinear جديد</value>
@@ -1475,7 +1475,7 @@
     <value>أضف عرض الآية للعرض</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Loading...</value>
+    <value>مساعد</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>ترجمة خلفية</value>
@@ -1541,10 +1541,10 @@
     <value>ملكيات</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>Loading...</value>
+    <value>مورد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>قم بتوسيع المحتوى إلى 100 ٪</value>
@@ -1559,7 +1559,7 @@
     <value>Sourcelanguage</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>معيار</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>الدراسة</value>
@@ -1613,7 +1613,7 @@
     <value>لمعان</value>
   </data>
   <data name="Pins_Language" xml:space="preserve">
-    <value>Loading...</value>
+    <value>لغة</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
     <value>لكلية</value>
@@ -1709,7 +1709,7 @@
     <value>تشمل النصوص التوراتية؟</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Loading...</value>
+    <value>حدد هذا المربع لتشمل النصوص التوراتية اليونانية والعبرية عند إنشاء مشروعك.</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>إدارة مشاريع التعاون</value>
@@ -1721,7 +1721,7 @@
     <value>إنه وحيد هنا. يرجى إنشاء مشروع جديد.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Loading...</value>
+    <value>لم يتم تثبيت Paratext. يرجى تثبيت Paratext وإعادة تشغيل تطبيق ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext لا يعمل</value>
@@ -1730,7 +1730,7 @@
     <value>فتح في الآونة الأخيرة</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Paratext</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>ترجمة BARATEXT</value>
@@ -1739,13 +1739,13 @@
     <value>الكتاب المقدس بين الخط (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext قيد التشغيل ولكن غير متصل.</value>
+    <value>Paratext قيد التشغيل ولكنه غير متصل.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>مشروع Paratext</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Loading...</value>
+    <value>مشروع:</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>نحن هناك تقريبا!</value>
@@ -1763,7 +1763,7 @@
     <value>معالج قالب المشروع: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>قم بتحديث قائمة مشاريع التعاون</value>
+    <value>قائمة مشاريع التعاون</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>البحث في الآونة الأخيرة</value>
@@ -1772,7 +1772,7 @@
     <value>انقر هنا لبدء paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Loading...</value>
+    <value>إصدار:</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>الرجاء إدخال اسم لمشروعك</value>
@@ -1811,7 +1811,7 @@
     <value>1 تسالونيكي</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>1 تيموثي</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 سجلات</value>
@@ -1835,7 +1835,7 @@
     <value>2 تسالونيكي</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>2 تيموثي</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 جون</value>
@@ -1859,7 +1859,7 @@
     <value>سفر الجامعة</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>أفسس</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>استير</value>
@@ -1874,13 +1874,13 @@
     <value>عزرا</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>غلاطية</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>منشأ</value>
   </data>
   <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Habakkuk</value>
   </data>
   <data name="ProperCase_Haggai" xml:space="preserve">
     <value>هاجاي</value>
@@ -1898,7 +1898,7 @@
     <value>جوامع</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>إرميا</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>وظيفة</value>
@@ -1925,7 +1925,7 @@
     <value>الرثاء</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Loading...</value>
+    <value>سفر اللاويين</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>لوقا</value>
@@ -1946,7 +1946,7 @@
     <value>ناحوم</value>
   </data>
   <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>نحميا</value>
   </data>
   <data name="ProperCase_Numbers" xml:space="preserve">
     <value>أعداد</value>
@@ -1955,13 +1955,13 @@
     <value>أوباديا</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Loading...</value>
+    <value>فليمون</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>فيلبي</value>
   </data>
   <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>Loading...</value>
+    <value>الأمثال</value>
   </data>
   <data name="ProperCase_Psalms" xml:space="preserve">
     <value>مزامير</value>
@@ -1970,7 +1970,7 @@
     <value>وحي</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>رومان</value>
+    <value>رومية</value>
   </data>
   <data name="ProperCase_Ruth" xml:space="preserve">
     <value>روث</value>
@@ -1982,10 +1982,10 @@
     <value>تيتوس</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>زكريا</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>زيفانيا</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -1997,13 +1997,13 @@
     <value>تطبيق وثيقة</value>
   </data>
   <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>Loading...</value>
+    <value>يسجل</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Loading...</value>
+    <value>المفتاح المقدم هو معيب. عندما تم فك تشفيرها ، لا يمكن العثور على بعض عناصر JSON.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Loading...</value>
+    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم تفكيكه مع المعلومات التي قدمتها.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
@@ -2078,7 +2078,7 @@
     <value>السماح ClearDashboard بتغيير أوضاع الطاقة أثناء الأحداث الحسابية العالية</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
-    <value>Loading...</value>
+    <value>محجوز</value>
   </data>
   <data name="Settings_ReservedCaption" xml:space="preserve">
     <value>مخصصة للتوسع في المستقبل</value>
@@ -2114,7 +2114,7 @@
     <value>المستخدم موجود بالفعل على الخادم</value>
   </data>
   <data name="Settings_UserName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>اسم المستخدم</value>
   </data>
   <data name="Settings_ValidateEmailCode" xml:space="preserve">
     <value>التحقق من صحة رمز البريد الإلكتروني</value>
@@ -2165,7 +2165,7 @@
     <value>أود أن أفعل ...</value>
   </data>
   <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>رسالة:</value>
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>لا انترنت</value>
@@ -2186,7 +2186,7 @@
     <value>معاينة</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Loading...</value>
+    <value>خطورة:</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>عنوان:</value>
@@ -2204,7 +2204,7 @@
     <value>حالة</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Loading...</value>
+    <value>منسقة</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>غير مهتم</value>
@@ -2213,7 +2213,7 @@
     <value>تكبير</value>
   </data>
   <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>Loading...</value>
+    <value>تصغير</value>
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
@@ -2246,7 +2246,7 @@
     <value>رموز كوربوس</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>لوحة القيادة</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>منظر</value>
