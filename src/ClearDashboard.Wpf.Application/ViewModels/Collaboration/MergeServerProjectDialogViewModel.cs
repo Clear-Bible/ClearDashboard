@@ -49,6 +49,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private ILocalizationService _localizationService;
         private string DialogTitle => $"{OkAction}: {ProjectName}";
+        private bool _completedTask = false;
 
         #endregion //Member Variables
 
@@ -326,6 +327,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         private async Task Import()
         {
+            _completedTask = false;
             IProgress<ProgressStatus> progress = new Progress<ProgressStatus>(Report);
             try
             {
@@ -343,6 +345,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 progress.Report(new ProgressStatus(0, "Operation Finished!"));
                 PlaySound.PlaySoundFromResource();
+
+                _completedTask = true;
 
                 StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                 StatusMessageColor = System.Windows.Media.Brushes.Green;
@@ -365,7 +369,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 StatusMessage = _localizationService["MergeDialog_OperationErrored"]; 
                 StatusMessageColor = System.Windows.Media.Brushes.Red;
-                CancelAction = "DCloseone";
+                CancelAction = "Close";
             }
             finally
             {
@@ -407,7 +411,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
                 progress.Report(new ProgressStatus(0, "Operation Finished!"));
                 PlaySound.PlaySoundFromResource();
-
+                
                 StatusMessage = _localizationService["MergeDialog_OperationComplete"];
                 StatusMessageColor = System.Windows.Media.Brushes.Green;
                 CancelAction = "Done";
@@ -578,7 +582,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
             else
             {
-                await TryCloseAsync(false);
+                await TryCloseAsync(_completedTask);
             }
         }
 
