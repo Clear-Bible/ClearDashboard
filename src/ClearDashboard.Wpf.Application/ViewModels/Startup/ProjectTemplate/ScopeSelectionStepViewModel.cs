@@ -20,7 +20,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
     {
         #region Member Variables
 
-        private bool _controlsEnabled;
 
         #endregion //Member Variables
 
@@ -43,6 +42,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _continueEnabled, value);
         }
 
+        private bool _controlsEnabled;
         public bool ControlsEnabled
         {
             get => _controlsEnabled;
