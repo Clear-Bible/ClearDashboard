@@ -18,7 +18,6 @@ using MediatR;
 using ClearDashboard.DAL.Alignment.Features;
 using Microsoft.EntityFrameworkCore;
 using SIL.Machine.FeatureModel;
-using SIL.Extensions;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
