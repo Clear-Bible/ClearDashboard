@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Usuários atuais do projeto:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Excluir projeto</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Você tem outros usuários conectados a este projeto. Este projeto também será removido para eles. Tem certeza de que você deseja excluir este projeto?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir este projeto?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Descrição</value>
   </data>
@@ -881,7 +890,7 @@
     <value>Editar</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formulários</value>
+    <value>Formas</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
@@ -1607,7 +1616,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formulários</value>
+    <value>Formas</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>

@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>የአሁኑ ፕሮጀክት ተጠቃሚዎች</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>ፕሮጀክት ሰርዝ</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>ከዚህ ፕሮጀክት ጋር የተገናኙ ሌሎች ተጠቃሚዎች አለዎት. ይህ ፕሮጀክት ለእነሱም ይወገዳል. ይህንን ፕሮጀክት መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ይህንን ፕሮጀክት መሰረዝ ይፈልጋሉ?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>መግለጫ</value>
   </data>

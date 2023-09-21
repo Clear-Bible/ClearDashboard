@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Pengguna proyek saat ini:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Hapus proyek</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Anda memiliki pengguna lain yang terhubung ke proyek ini. Proyek ini akan dihapus untuk mereka juga. Apakah Anda ingin menghapus proyek ini?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus proyek ini?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Keterangan</value>
   </data>

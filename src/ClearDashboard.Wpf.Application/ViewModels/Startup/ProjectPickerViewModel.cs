@@ -1257,7 +1257,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 var path = Path.Combine(_collaborationManager.GetRespositoryBasePath(), "P_" + project.Id);
                 if (Directory.Exists(path))
                 {
-                    SetNormalFileAttributes(path);
+                    FileAttributesHelper.SetNormalFileAttributes(path);
 
                     directoryInfo = new DirectoryInfo(path);
                     foreach (var file in directoryInfo.GetFiles())
@@ -1281,21 +1281,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
 
-        // recursively iterate through all the files in a directory and set their attributes to normal
-        // so they can be deleted
-        private void SetNormalFileAttributes(string path)
-        {
-            var directoryInfo = new DirectoryInfo(path);
-            foreach (var file in directoryInfo.GetFiles())
-            {
-                // take off the read-only attribute
-                File.SetAttributes(file.FullName, FileAttributes.Normal);
-            }
-            foreach (var directory in directoryInfo.GetDirectories())
-            {
-                SetNormalFileAttributes(directory.FullName);
-            }
-        }
+
 
 
         public void SetLanguage()

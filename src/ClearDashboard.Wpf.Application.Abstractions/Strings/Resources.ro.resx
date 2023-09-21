@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Utilizatorii actuali ai proiectului:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Ștergeți proiectul</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Aveți alți utilizatori conectați la acest proiect. Acest proiect va fi eliminat și pentru ei. Sunteți sigur că doriți să ștergeți acest proiect?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Ești sigur că vrei să ștergi acest proiect?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Descriere</value>
   </data>

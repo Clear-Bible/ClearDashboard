@@ -419,7 +419,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобрять</value>
+    <value>Не одобряют</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -516,6 +516,15 @@
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Текущие пользователи проекта:</value>
+  </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Удалить проект</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>У вас есть другие пользователи, подключенные к этому проекту. Этот проект будет удален и для них. Уверены, что вы хотите удалить этот проект?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить этот проект?</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Описание</value>

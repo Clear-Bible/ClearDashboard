@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Usuarios actuales del proyecto:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Proyecto Eliminar</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Tiene otros usuarios conectados a este proyecto. Este proyecto también se eliminará para ellos. ¿Está seguro de que desea eliminar este proyecto?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>¿Estás seguro de que quieres eliminar este proyecto?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Descripción</value>
   </data>
