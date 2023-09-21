@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>የአሁኑ ፕሮጀክት ተጠቃሚዎች</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>ፕሮጀክት ሰርዝ</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>ከዚህ ፕሮጀክት ጋር የተገናኙ ሌሎች ተጠቃሚዎች አለዎት. ይህ ፕሮጀክት ለእነሱም ይወገዳል. ይህንን ፕሮጀክት መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ይህንን ፕሮጀክት መሰረዝ ይፈልጋሉ?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>መግለጫ</value>
   </data>
@@ -940,6 +949,9 @@
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>ምንጭ</value>
   </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>ዓይነት</value>
+  </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>ምንጭ</value>
   </data>
@@ -1285,6 +1297,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>መለያ ያክሉ</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>መለያ መፍጠር ይፈልጋሉ?</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>እና ከእሱ መለያ ቡድን ጋር ያቆራኙ</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>እና ከላቢል ቡድን ያራግፉ</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>መለያ ቡድን ያክሉ</value>
   </data>
@@ -1311,6 +1332,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>ይህን መለያ ያስወግዱ</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>መለያዎን ማስወገድ ይፈልጋሉ?</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>ተፈጠረ</value>
@@ -1425,6 +1449,9 @@
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>CallatSt Corpus corpus</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>ለማሰልጠን አንድ የ SMT Alogorm ይምረጡ</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>ለመመልከት የጅምላ ማረጋገጫ ያክሉ</value>
@@ -1767,6 +1794,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>ተመሳሳይ ስም ያለው ፕሮጀክት ቀድሞውኑ አለ. እባክዎን ልዩ ስም ይምረጡ.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>የተሰጠው የፕሮጀክት ስም በጣም ረጅም ነው.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 ዜና መዋዕል</value>

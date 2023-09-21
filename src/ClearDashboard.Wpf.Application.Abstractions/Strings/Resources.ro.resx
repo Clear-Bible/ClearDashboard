@@ -335,7 +335,7 @@
     <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Înțelepciune, înțelegere</value>
+    <value>înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Utilizatorii actuali ai proiectului:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Ștergeți proiectul</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Aveți alți utilizatori conectați la acest proiect. Acest proiect va fi eliminat și pentru ei. Sunteți sigur că doriți să ștergeți acest proiect?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Ești sigur că vrei să ștergi acest proiect?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Descriere</value>
   </data>
@@ -638,10 +647,10 @@
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest interval de versuri.</value>
+    <value>Nu există date de versuri în acest game de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Eliminați corpusul</value>
+    <value>Îndepărtați corpusul</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Afișați controalele de vizualizare</value>
@@ -940,6 +949,9 @@
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>Limba-sursă</value>
   </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>Tip</value>
+  </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>Cuvânt sursă</value>
   </data>
@@ -947,7 +959,7 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvânt țintă</value>
+    <value>Cuvântul țintă</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Deselectează tot</value>
@@ -1285,6 +1297,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Adăugați o etichetă</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Doriți să creați etichetă:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>și asociați -l cu Grupul de etichete:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>și descurajați -l de la Grupul de etichete:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
   </data>
@@ -1311,6 +1332,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Scoateți această etichetă</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>Doriți să eliminați eticheta:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creată</value>
@@ -1400,7 +1424,7 @@
     <value>Creați interlinear</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>Metadate JSON</value>
+    <value>JSON Metadate</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
     <value>Paralelizează versetele corporale</value>
@@ -1425,6 +1449,9 @@
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus paratext</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Selectați un algoritm SMT pentru a vă antrena</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
@@ -1670,7 +1697,7 @@
     <value>Bază de date:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acest proiect, o altă aplicație îl folosește în continuare.</value>
+    <value>Nu puteți șterge acel proiect, o altă aplicație îl folosește în continuare.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Ștergeți proiectul</value>
@@ -1767,6 +1794,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Există deja un proiect cu același nume. Vă rugăm să alegeți un nume unic.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Numele proiectului dat este prea lung.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Cronici</value>
@@ -2033,7 +2063,7 @@
     <value>Adresa de e-mail</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>E -mail de trimitere</value>
+    <value>Eroare de trimitere prin e -mail</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Cod de verificare a e -mailului</value>

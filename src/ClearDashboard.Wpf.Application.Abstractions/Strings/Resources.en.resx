@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Current Project Users:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Delete Project</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>You have other users connected to this project.  This project will be removed for them as well. Are sure you want to delete this project?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Are you sure you want to delete this project?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Description</value>
   </data>
@@ -940,6 +949,9 @@
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>Source Language</value>
   </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>Type</value>
+  </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>Source Word</value>
   </data>
@@ -1285,6 +1297,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Add a label</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Do you want to create label:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>and associate it with label group:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>and disassociate it from label group:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Add Label Group</value>
   </data>
@@ -1311,6 +1332,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Remove this label</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>Do you want to remove label:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>
@@ -1425,6 +1449,9 @@
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Select an SMT algorithm to train</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Add Bulk Approval to View</value>
@@ -1767,6 +1794,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>A project with the same name already exists. Please choose a unique name.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>The given project name is too long.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Chronicles</value>
