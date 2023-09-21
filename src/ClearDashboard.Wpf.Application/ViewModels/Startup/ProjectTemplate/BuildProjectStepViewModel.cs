@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         private readonly ProjectTemplateProcessRunner _processRunner;
         private Task _runningTask = Task.CompletedTask;
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private CancellationToken? _cancellationToken;
         private readonly ProjectDbContextFactory _projectNameDbContextFactory;
 
@@ -218,6 +218,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 await ParentViewModel!.GoToStep(1);
                 return;
             }
+            _cancellationTokenSource = new CancellationTokenSource();
+
             _cancellationToken = _cancellationTokenSource.Token;
 
             BackOrCancelAction = _cancelAction;

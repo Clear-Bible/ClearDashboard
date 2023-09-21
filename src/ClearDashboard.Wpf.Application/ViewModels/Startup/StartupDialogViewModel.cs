@@ -5,6 +5,7 @@ using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -103,9 +104,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
         public StartupDialogViewModel(SelectedBookManager selectedBookManager, INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager, ProjectBuilderStatusViewModel backgroundTasksViewModel)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            // reset the background tasks view model
+            backgroundTasksViewModel = new ProjectBuilderStatusViewModel();
+
             ProjectManager = projectManager;
             SelectedBookManager = selectedBookManager;
 
