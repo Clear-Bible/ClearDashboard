@@ -32,7 +32,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
 
         private List<GitUser> _gitLabUsers = new();
-        
+        private bool _inStartup = true;
+
 
 
         #endregion //Member Variables
@@ -67,6 +68,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 _selectedProject = value;
                 NotifyOfPropertyChange(() => SelectedProject);
 
+                if (_inStartup)
+                {
+                    return;
+                }
+
                 if (_selectedProject != null && _selectedProject.Name != "")
                 {
                     IsGitLabUserListEnabled = true;
@@ -96,15 +102,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     if (user.IsOwner)
                     {
                         ProjectOwners.Add(user);
-                        ProjectOwners.Add(user);
                     }
                     else
                     {
                         ProjectParticipants.Add(user);
-                        ProjectParticipants.Add(user);
                     }
                 }
-                
+
                 NotifyOfPropertyChange(() => ProjectUsers);
             }
         }
@@ -131,7 +135,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-       // public ObservableCollection<GitLabProjectUser> ProjectParticipants => ProjectUsers .(x => x.IsOwner);
+        // public ObservableCollection<GitLabProjectUser> ProjectParticipants => ProjectUsers .(x => x.IsOwner);
 
         //public ObservableCollection<GitLabProjectUser> ProjectOwners => (ObservableCollection<GitLabProjectUser>)ProjectUsers.Where(x => !x.IsOwner);
 
@@ -264,6 +268,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
+
+            
             Projects = await _gitLabHttpClientServices.GetProjectsForUserWhereOwner(ProjectOwner);
             _gitLabUsers = await _gitLabHttpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
@@ -275,9 +281,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var org = _gitLabUsers.Select(x => x.Organization).Distinct().ToList();
             Organization = new ObservableCollection<string>(org);
 
+
+            _inStartup = false;
             AttemptToSelectCurrentProject();
 
-            if (SelectedProject is null )
+            if (SelectedProject is null)
             {
                 IsGitLabUserListEnabled = false;
             }
@@ -306,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             if (obj is GitUser user)
             {
-                if (user.Name!.ToUpper().Contains((FilterText ?? string.Empty).ToUpper()) && 
+                if (user.Name!.ToUpper().Contains((FilterText ?? string.Empty).ToUpper()) &&
                     user.Organization.ToUpper().Contains((SelectedOrganization ?? string.Empty).ToUpper()))
                 {
                     return true;
