@@ -986,10 +986,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             return found;
         }
 
-        private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection)
+        private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection, 
+            ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
-            var sourceParatextProjectId = parallelCorpusConnection.SourceConnector!.ParentNode!.CorpusId;
-            var targetParatextProjectId = parallelCorpusConnection.DestinationConnector.ParentNode.CorpusId;
+            var sourceParatextProjectId = parallelCorpusConnectorDraggedOut.ParentNode!.CorpusId;
+            var targetParatextProjectId = parallelCorpusConnectorDraggedOver.ParentNode.CorpusId;
 
             List<ParallelCorpusId> parallelCorpusIds = new();
             foreach (var parallel in topLevelProjectIds.ParallelCorpusIds)
@@ -1325,6 +1326,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 return;
             }
 
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            if (IsAlreadyAligned(topLevelProjectIds, newParallelCorpusConnection, parallelCorpusConnectorDraggedOut, parallelCorpusConnectorDraggedOver))
+            {
+                ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                return;
+            }
+
             //
             // Only allow connections from output connector to input connector (ie each
             // connector must have a different type).
@@ -1389,12 +1397,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 if (string.IsNullOrEmpty(destinationParatextProjectId))
                 {
                     ParallelCorpusConnections.Remove(newParallelCorpusConnection);
-                    return;
-                }
-
-                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                if (IsAlreadyAligned(topLevelProjectIds, newParallelCorpusConnection))
-                {
                     return;
                 }
 
