@@ -18,6 +18,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
     public class ScopeSelectionStepViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>
     {
+        #region Member Variables
+
+        private bool _controlsEnabled;
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        public Dictionary<string, IEnumerable<UsfmError>>? UsfmErrors;
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
         public SelectedBookManager SelectedBookManager { get; private set; }
 
         private bool _continueEnabled;
@@ -40,6 +56,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _progressIndicatorVisibility, value);
         }
 
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
         public ScopeSelectionStepViewModel(DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, ILocalizationService localizationService)
@@ -51,6 +72,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ControlsEnabled = false;
         }
 
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
+            await base.OnActivateAsync(cancellationToken);
+        }
+
+        #endregion //Constructor
+
+
+        #region Methods
+
         private void OnSelectedBookManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             ContinueEnabled = SelectedBookManager.SelectedBooks.Any(book=>book.IsSelected);
@@ -61,9 +93,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             SelectedBookManager.PropertyChanged -= OnSelectedBookManagerPropertyChanged;
             return base.OnDeactivateAsync(close, cancellationToken);
         }
-
-        public Dictionary<string, IEnumerable<UsfmError>>? UsfmErrors;
-        private bool _controlsEnabled;
 
         public override async Task Initialize(CancellationToken cancellationToken)
         {
@@ -142,12 +171,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await base.Reset(cancellationToken);
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            await Initialize(cancellationToken);
-            await base.OnActivateAsync(cancellationToken);
-        }
-
         public override async Task MoveForwardsAction()
         {
             ParentViewModel!.SelectedBookIds = SelectedBookManager.SelectedAndEnabledBookAbbreviations;
@@ -177,5 +200,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         {
             SelectedBookManager.SelectOldTestamentBooks();
         }
+
+        #endregion // Methods
     }
 }
