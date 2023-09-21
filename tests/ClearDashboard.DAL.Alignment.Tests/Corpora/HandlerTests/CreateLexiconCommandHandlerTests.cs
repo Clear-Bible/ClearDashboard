@@ -177,7 +177,17 @@ public class CreateLexiconCommandHandlerTests : TestBase
             //    .ToList();
 
             sw.Stop();
-            Output.WriteLine($"{sw.Elapsed}");
+            Output.WriteLine($"IntersectIdsByLexemeTranslationMatch:  {sw.Elapsed}");
+
+            sw.Restart();
+
+            var externalNotInInternal = externalLexiconResult2.Data!.Lexemes.ExceptByLexemeTranslationMatch(internalLexiconResult2!.Data!.Lexemes);
+            var externalLexemesIdsNotInInternal = externalNotInInternal.Lexemes.Select(e => e.LexemeId.Id);
+            Assert.False(externalNotInInternal.LemmaOrFormMatchesOnly.Except(externalLexemesIdsNotInInternal).Any());
+            Assert.False(externalNotInInternal.TranslationMatchesOnly.Except(externalLexemesIdsNotInInternal).Any());
+
+            sw.Stop();
+            Output.WriteLine($"ExceptByLexemeTranslationMatch:  {sw.Elapsed}");
         }
         finally
         {

@@ -133,7 +133,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             Func<string, DataAccessLayer.Models.ParatextProjectMetadata> getParatextProjectMetadata = (string projectId) =>
             {
                 return _mainWindow.GetProjectMetadata()
-                            .Where(e => e.Id == (projectId ?? _mainWindow.Project.ID))
+                            .Where(e => e.Id == (!string.IsNullOrEmpty(projectId) ? projectId : _mainWindow.Project.ID))
                             .SingleOrDefault();
             };
 
