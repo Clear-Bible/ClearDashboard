@@ -623,14 +623,75 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
+        private async Task<bool> SmtIsAvailable(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var SmtList = new List<ClearDashboard.Wpf.Application.Models.SmtAlgorithm>();
+            var newParallelCorpusConnection = ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            var sourceCorpusNode = CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.SourceConnector!.ParentNode!.Id);
+            var targetCorpusNode = CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.DestinationConnector!.ParentNode!.Id);
 
-        private void AddAlignmentSetMenu(
+            var parallelCorpa = topLevelProjectIds.ParallelCorpusIds.Where(x =>
+                x.SourceTokenizedCorpusId!.CorpusId!.Id == sourceCorpusNode.CorpusId
+                && x.TargetTokenizedCorpusId!.CorpusId!.Id == targetCorpusNode.CorpusId
+            ).ToList();
+
+            List<string> smts = new();
+            foreach (var parallelCorpusId in parallelCorpa)
+            {
+                var alignments =
+                    topLevelProjectIds.AlignmentSetIds.Where(x =>
+                        x.ParallelCorpusId!.Id == parallelCorpusId.Id);
+                foreach (var alignment in alignments)
+                {
+                    smts.Add(alignment.SmtModel!);
+                }
+            }
+
+            var list = Enum.GetNames(typeof(SmtModelType)).ToList();
+            foreach (var smt in list)
+            {
+                if (smts.Contains(smt))
+                {
+                    SmtList.Add(new ClearDashboard.Wpf.Application.Models.SmtAlgorithm
+                    {
+                        SmtName = smt,
+                        IsEnabled = false,
+                    });
+                }
+                else
+                {
+                    // ReSharper disable once InconsistentNaming
+                    var newSMT = new ClearDashboard.Wpf.Application.Models.SmtAlgorithm
+                    {
+                        SmtName = smt,
+                        IsEnabled = true,
+                    };
+                    
+                    SmtList.Add(newSMT);
+                }
+            }
+
+            // select next available smt that is enabled
+            bool found = false;
+            foreach (var smt in SmtList)
+            {
+                if (smt.IsEnabled)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            return found;
+        }
+
+        private async void AddAlignmentSetMenu(
             ParallelCorpusConnectionViewModel parallelCorpusConnection,
             TopLevelProjectIds topLevelProjectIds, IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
             BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
         {
-
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            var connectionItem = new ParallelCorpusConnectionMenuItemViewModel
             {
                 Header = LocalizationService.Get("Pds_CreateNewAlignmentSetMenu"),
                 Id = DesignSurfaceMenuIds.CreateNewAlignmentSet,
@@ -642,9 +703,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 IsRtl = parallelCorpusConnection.IsRtl,
                 SourceParatextId = parallelCorpusConnection.SourceConnector?.ParatextId,
                 TargetParatextId = parallelCorpusConnection.DestinationConnector?.ParatextId,
-            });
+            };
 
-            AddMenuSeparator(connectionMenuItems);
+            if (await SmtIsAvailable(connectionItem))
+            {
+                connectionMenuItems.Add(connectionItem);
+                AddMenuSeparator(connectionMenuItems);
+            }
 
             var parallelCorpusIds = topLevelProjectIds.ParallelCorpusIds.Where(x =>
                 x.TargetTokenizedCorpusId.IdEquals(parallelCorpusConnection.ParallelCorpusId.TargetTokenizedCorpusId) &&
