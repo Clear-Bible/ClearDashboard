@@ -58,10 +58,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
                 if (value is not null)
                 {
                     CanCreate = true;
+                    AlignmentsAvailable = true;
                 }
                 else
                 {
                     CanCreate = false;
+                    AlignmentsAvailable = false;
                 }
             }
         }
@@ -89,6 +91,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             get => _canCancel;
             set => Set(ref _canCancel, value);
         }
+
+
+        private bool _alignmentsAvailable;
+        public bool AlignmentsAvailable
+        {
+            get => _alignmentsAvailable;
+            set => Set(ref _alignmentsAvailable, value);
+        }
+
 
 
         private string? _translationSetDisplayName = "";
@@ -182,6 +193,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             CanCreate = false;
             CanCancel = true;
 
+
+            if (AlignmentSets.Count > 0)
+            {
+                AlignmentsAvailable = true;
+            } 
+            
+            
             if (AlignmentSets.Count == 1)
             {
                 SelectedAlignmentSet = AlignmentSets[0];
@@ -191,6 +209,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
             {
                 SelectedAlignmentSet = null;
             }
+
+
 
             if (translationSets.Count > 0)
             {
@@ -211,6 +231,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 
         public async void Create()
         {
+            if (SelectedAlignmentSet is null)
+            {
+                return;
+            }
+
             SpinnerVisibility = Visibility.Visible;
             await Task.Delay(200);
             await AddTranslationSet(TranslationSetDisplayName);
