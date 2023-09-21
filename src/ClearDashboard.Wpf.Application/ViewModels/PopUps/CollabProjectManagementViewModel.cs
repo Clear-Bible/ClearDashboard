@@ -521,7 +521,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 // remove the collaboration project directory
                 try
                 {
-                    var path = Path.Combine(_collaborationManager.GetRespositoryBasePath(), "P_" + SelectedProject.Id);
+                    var path = Path.Combine(_collaborationManager.GetRespositoryBasePath(), SelectedProject.Path);
                     if (Directory.Exists(path))
                     {
                         FileAttributesHelper.SetNormalFileAttributes(path);
