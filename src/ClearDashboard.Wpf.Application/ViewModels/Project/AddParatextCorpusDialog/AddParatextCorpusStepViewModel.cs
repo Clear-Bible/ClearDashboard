@@ -120,10 +120,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             get => _selectedProject;
             set
             {
-                if (value == null && _selectedProject != null)
-                {
-                    return;
-                }
                 Set(ref _selectedProject, value);
             }
         }
@@ -243,7 +239,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
                 currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
 
-                Projects = result.Data.Where(c=>!currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
+                if (Projects == null)
+                {
+                    Projects = result.Data.Where(c => !currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
+                }
 
                 if (!string.IsNullOrEmpty(_initialParatextProjectId))
                 {
