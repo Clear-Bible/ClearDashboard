@@ -120,6 +120,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             get => _selectedProject;
             set
             {
+                if (value == null && _selectedProject != null)
+                {
+                    return;
+                }
                 Set(ref _selectedProject, value);
             }
         }

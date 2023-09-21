@@ -784,7 +784,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             NotifyOfPropertyChange(() => DashboardProjectsDisplay);
         }
 
-        private async Task RefreshDashboardProjectsList()
+        private async Task AddNewToDashboardProjectsList()
         {
             var projectsToAdd = new List<DashboardProject>();
 
@@ -1177,7 +1177,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if(result)
                 {
-                    await RefreshDashboardProjectsList();
+                    await AddNewToDashboardProjectsList();
                     await GetCollabProjects();
                 }
             }
