@@ -1467,10 +1467,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // see if this is the last one or not
                 var alignmentSetIdCount = topLevelProjectIds.AlignmentSetIds.Where(x =>
                     x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId).ToList();
+
+                var parallelCorpusConnectionViewModel = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(x =>
+                    x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId);
+
                 if (alignmentSetIdCount.Count == 1)
                 {
-                    var parallelCorpusConnectionViewModel = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(x =>
-                        x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId);
 
                     if (parallelCorpusConnectionViewModel != null)
                     {
@@ -1491,12 +1493,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
 
                 DesignSurfaceViewModel!.DeleteAlignmentFromMenus(alignmentSetId);
-                
+
 #pragma warning disable CS4014
                 Task.Factory.StartNew(async () =>
                 {
-                    await AlignmentSet.Delete(Mediator!, alignmentSetId); 
+                    await AlignmentSet.Delete(Mediator!, alignmentSetId);
 
+                    topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                    
+                    DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(parallelCorpusConnectionViewModel, topLevelProjectIds);
                 });
 #pragma warning restore CS4014
             }
