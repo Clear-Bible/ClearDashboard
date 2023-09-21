@@ -159,6 +159,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
+
             var backgroundTaskStatus = message.Status;
 
             // check for duplicate entries

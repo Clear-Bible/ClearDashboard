@@ -794,6 +794,39 @@ namespace ClearDashboard.Wpf.Application.Services
             return false;
         }
 
+        public async Task<bool> DeleteProject(GitLabProject project)
+        { 
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"projects/{project.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Accepted)
+                {
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return false;
+        }
+
         #endregion // Delete requests
 
 

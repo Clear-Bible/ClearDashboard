@@ -824,18 +824,23 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
                     var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
 
-                    AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
-
-                    corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                    // do not allow MACULA to be updated
+                    if ((corpusNodeViewModel.CorpusType == CorpusType.ManuscriptGreek || corpusNodeViewModel.CorpusType == CorpusType.ManuscriptHebrew) ==false)
                     {
-                        // Show Verses in New Windows
-                        Header = LocalizationService.Get("Pds_GetLatestFromParatext"),
-                        Id = DesignSurfaceMenuIds.UpdateParatextCorpus,
-                        ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                        IconKind = PackIconPicolIconsKind.Edit.ToString(),
-                        CorpusNodeViewModel = corpusNodeViewModel,
-                        Tokenizer = tokenizer.ToString(),
-                    });
+                        AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
+
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        {
+                            // Show Verses in New Windows
+                            Header = LocalizationService.Get("Pds_GetLatestFromParatext"),
+                            Id = DesignSurfaceMenuIds.UpdateParatextCorpus,
+                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                            IconKind = PackIconPicolIconsKind.Edit.ToString(),
+                            CorpusNodeViewModel = corpusNodeViewModel,
+                            Tokenizer = tokenizer.ToString(),
+                        });
+                    }
+
 
                     foreach (var menuBuilder in menuBuilders)
                     {
