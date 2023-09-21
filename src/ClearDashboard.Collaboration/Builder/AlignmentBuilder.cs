@@ -11,7 +11,9 @@ namespace ClearDashboard.Collaboration.Builder;
 public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
 {
     public const string SOURCE_TOKEN_LOCATION = "SourceTokenLocation";
+    public const string SOURCE_TOKEN_SURFACE_TEXT = "SourceTokenSurfaceText";
     public const string TARGET_TOKEN_LOCATION = "TargetTokenLocation";
+    public const string TARGET_TOKEN_SURFACE_TEXT = "TargetTokenSurfaceText";
     public const string BOOK_CHAPTER_LOCATION = "Location";
 
     public override string IdentityKey => BuildPropertyRefName();
@@ -20,7 +22,9 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
         {
             { BuildPropertyRefName(), typeof(string) },
             { SOURCE_TOKEN_LOCATION, typeof(string) },
+            { SOURCE_TOKEN_SURFACE_TEXT, typeof(string) },
             { TARGET_TOKEN_LOCATION, typeof(string) },
+            { TARGET_TOKEN_SURFACE_TEXT, typeof(string) },
             { BOOK_CHAPTER_LOCATION, typeof(string) }
         };
 
@@ -79,8 +83,12 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
 
         modelProperties.Add(SOURCE_TOKEN_LOCATION,
             (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenLocation));
+        modelProperties.Add(SOURCE_TOKEN_SURFACE_TEXT,
+            (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenSurfaceText));
         modelProperties.Add(TARGET_TOKEN_LOCATION,
             (typeof(string), ((TokenRef)targetTokenComponentRef.value!).TokenLocation));
+        modelProperties.Add(TARGET_TOKEN_SURFACE_TEXT,
+            (typeof(string), ((TokenRef)targetTokenComponentRef.value!).TokenSurfaceText));
         modelProperties.Add(BOOK_CHAPTER_LOCATION,
             (typeof(string), $"{alignment.leadingToken.BookNumber:000}{alignment.leadingToken.ChapterNumber:000}"));
 

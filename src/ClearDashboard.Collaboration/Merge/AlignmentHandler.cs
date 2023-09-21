@@ -15,6 +15,7 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Collaboration.Exceptions;
 using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -158,17 +159,29 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
             new[] { nameof(Models.Alignment.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Alignment), "SourceTokenLocation"),
+            (typeof(Models.Alignment), AlignmentBuilder.SOURCE_TOKEN_LOCATION),
             new[] { nameof(Models.Alignment.SourceTokenComponentId) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Alignment), "TargetTokenLocation"),
+            (typeof(Models.Alignment), AlignmentBuilder.TARGET_TOKEN_LOCATION),
             new[] { nameof(Models.Alignment.TargetTokenComponentId) });
 
         // By mapping Location to an empty property name string, we effectively
         // leave it out of the inserting/updating part of Merge:
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Alignment), "Location"),
+            (typeof(Models.Alignment), AlignmentBuilder.BOOK_CHAPTER_LOCATION),
+            Enumerable.Empty<string>());
+
+        // By mapping SourceTokenSurfaceText to an empty property name string, we effectively
+        // leave it out of the inserting/updating part of Merge:
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.Alignment), AlignmentBuilder.SOURCE_TOKEN_SURFACE_TEXT),
+            Enumerable.Empty<string>());
+
+        // By mapping TargetTokenSurfaceText to an empty property name string, we effectively
+        // leave it out of the inserting/updating part of Merge:
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.Alignment), AlignmentBuilder.TARGET_TOKEN_SURFACE_TEXT),
             Enumerable.Empty<string>());
     }
 }

@@ -35,6 +35,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         public List<Models.TokenizedCorpus> TokenizedCorpora { get; private set; } = new();
         public List<Models.ParallelCorpus> ParallelCorpora { get; private set; } = new();
         public List<Models.TokenComposite> TokenComposites { get; private set; } = new();
+        public List<Models.Token> Tokens { get; private set; } = new();
         public List<Models.AlignmentSet> AlignmentSets { get; private set; } = new();
         public List<Models.Alignment> Alignments { get; private set; } = new();
         public List<Models.TranslationSet> TranslationSets { get; private set; } = new();
@@ -83,7 +84,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             { 
                 "001001001002001-001001001003001",
                 "001001001005001-001001001006001-001001001008001"
-            }));
+            },
+            null,
+            null));
         }
 
         public ProjectSnapshot ToProjectSnapshot()
@@ -94,7 +97,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(testProject));
             projectSnapshot.AddGeneralModelList(ToUserBuilder(Users).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToCorpusBuilder(Corpora).BuildModelSnapshots(builderContext));
-            projectSnapshot.AddGeneralModelList(ToTokenizedCorpusBuilder(TokenizedCorpora, TokenComposites).BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(ToTokenizedCorpusBuilder(TokenizedCorpora, TokenComposites, Tokens).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToParallelCorpusBuilder(ParallelCorpora, TokenComposites).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToAlignmentSetBuilder(AlignmentSets, Alignments).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToTranslationSetBuilder(TranslationSets, Translations).BuildModelSnapshots(builderContext));
@@ -302,25 +305,24 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             };
         }
 
-        public static IEnumerable<Models.TokenComposite> BuildTestTokenComposites(Models.TokenizedCorpus tokenizedCorpus, Models.ParallelCorpus? parallelCorpus, IEnumerable<string> engineTokenIds)
+        public static IEnumerable<Models.TokenComposite> BuildTestTokenComposites(Models.TokenizedCorpus tokenizedCorpus, Models.ParallelCorpus? parallelCorpus, IEnumerable<string> engineTokenIds, IEnumerable<string>? surfaceTrainingTexts, IEnumerable<string>? originTokenLocations)
         {
             var tokenComposites = new List<Models.TokenComposite>();
 
-            foreach (var engineTokenId in engineTokenIds.Where(e => e.Contains('-')))
+            foreach (var valueIndex in engineTokenIds
+                .Select((x, i) => new { Value = x, Index = i }))
             {
-                var tokenComposite = new Models.TokenComposite
-                {
-                    Id = Guid.NewGuid(),
-                    TokenizedCorpus = tokenizedCorpus,
-                    TokenizedCorpusId = tokenizedCorpus.Id,
-                    ParallelCorpus = parallelCorpus,
-                    ParallelCorpusId = parallelCorpus?.Id,
-                    EngineTokenId = engineTokenId
-                };
+                var engineTokenIdComposite = valueIndex.Value;
+                var surfaceTrainingTextComposite = surfaceTrainingTexts?.ElementAtOrDefault(valueIndex.Index);
+                var originTokenLocationComposite = originTokenLocations?.ElementAtOrDefault(valueIndex.Index);
 
-                var tokenLocations = engineTokenId.Split('-');
-                tokenComposite.TokenCompositeTokenAssociations = tokenLocations.Select(e => BuildTestTokenCompositeTokenAssociation(tokenComposite, e)).ToList();
-                tokenComposite.Tokens = tokenComposite.TokenCompositeTokenAssociations.Select(e => e.Token!).ToList();
+                var tokenComposite = BuildTestTokenComposite(
+                    tokenizedCorpus,
+                    parallelCorpus,
+                    engineTokenIdComposite,
+                    surfaceTrainingTextComposite,
+                    originTokenLocationComposite
+                );
 
                 tokenComposites.Add(tokenComposite);
             }
@@ -328,9 +330,39 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return tokenComposites;
         }
 
-        protected static Models.TokenCompositeTokenAssociation BuildTestTokenCompositeTokenAssociation(Models.TokenComposite tokenComposite, string engineTokenId)
+        public static Models.TokenComposite BuildTestTokenComposite(Models.TokenizedCorpus tokenizedCorpus, Models.ParallelCorpus? parallelCorpus, string engineTokenIdComposite, string? surfaceTrainingTextComposite, string? originTokenLocationComposite)
         {
-            var token = BuildTestToken(tokenComposite.TokenizedCorpus!, engineTokenId);
+            var tokenComposite = new Models.TokenComposite
+            {
+                Id = Guid.NewGuid(),
+                TokenizedCorpus = tokenizedCorpus,
+                TokenizedCorpusId = tokenizedCorpus.Id,
+                ParallelCorpus = parallelCorpus,
+                ParallelCorpusId = parallelCorpus?.Id,
+                EngineTokenId = engineTokenIdComposite,
+                SurfaceText = surfaceTrainingTextComposite,
+                TrainingText = surfaceTrainingTextComposite
+            };
+
+            var engineTokenIdSet = engineTokenIdComposite.Split('-');
+            var surfaceTrainingTextSet = surfaceTrainingTextComposite?.Split('_');
+            var originTokenLocationSet = originTokenLocationComposite?.Split('-')
+                .Select(s => string.IsNullOrEmpty(s) ? null : s).ToArray();
+
+            tokenComposite.TokenCompositeTokenAssociations = engineTokenIdSet.Select((ea, ia) => BuildTestTokenCompositeTokenAssociation(
+                tokenComposite,
+                ea,
+                surfaceTrainingTextSet?.ElementAtOrDefault(ia),
+                originTokenLocationSet?.ElementAtOrDefault(ia))).ToList();
+
+            tokenComposite.Tokens = tokenComposite.TokenCompositeTokenAssociations.Select(e => e.Token!).ToList();
+
+            return tokenComposite;
+        }
+
+        protected static Models.TokenCompositeTokenAssociation BuildTestTokenCompositeTokenAssociation(Models.TokenComposite tokenComposite, string engineTokenId, string? surfaceTrainingText, string? originTokenLocation)
+        {
+            var token = BuildTestToken(tokenComposite.TokenizedCorpus!, engineTokenId, surfaceTrainingText, originTokenLocation);
             var association =  new Models.TokenCompositeTokenAssociation
             {
                 Id = Guid.NewGuid(),
@@ -346,7 +378,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return association;
         }
 
-        public static Models.Token BuildTestToken(Models.TokenizedCorpus tokenizedCorpus, string engineTokenId)
+        public static Models.Token BuildTestToken(Models.TokenizedCorpus tokenizedCorpus, string engineTokenId, string? surfaceTrainingText = null, string? originTokenLocation = null, DateTimeOffset? deleted = null)
         {
             return new Models.Token
             {
@@ -358,7 +390,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 ChapterNumber = int.Parse(engineTokenId.Substring(3, 3)),
                 VerseNumber = int.Parse(engineTokenId.Substring(6, 3)),
                 WordNumber = int.Parse(engineTokenId.Substring(9, 3)),
-                SubwordNumber = int.Parse(engineTokenId.Substring(12, 3))
+                SubwordNumber = int.Parse(engineTokenId.Substring(12, 3)),
+                SurfaceText = surfaceTrainingText,
+                TrainingText = surfaceTrainingText,
+                OriginTokenLocation = originTokenLocation,
+                Deleted = deleted
             };
         }
 
@@ -621,7 +657,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         public static TokenizedCorpusBuilder ToTokenizedCorpusBuilder(
             IEnumerable<Models.TokenizedCorpus> tokenizedCorpora,
-            IEnumerable<Models.TokenComposite> tokenComposites)
+            IEnumerable<Models.TokenComposite> tokenComposites,
+            IEnumerable<Models.Token> tokens)
         {
             var tokenizedCorpusBuilder = new TokenizedCorpusBuilder
             {
@@ -650,7 +687,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                             : Enumerable.Empty<Models.VerseRow>();
                     }
                 },
-                TokenBuilder = new TokenBuilder()
+                TokenCompositeBuilder = new TokenCompositeBuilder()
                 {
                     GetTokenizedCorpusCompositeTokens = (projectDbContext, tokenizedCorpusId) =>
                     {
@@ -662,6 +699,15 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                     GetParallelCorpusCompositeTokens = (projectDbContext, parallelCorpusId) =>
                     {
                         return Enumerable.Empty<(Models.TokenComposite, IEnumerable<Models.Token>)>();
+                    }
+                },
+                TokenBuilder = new TokenBuilder()
+                {
+                    GetTokenizedCorpusTokens = (projectDbContext, tokenizedCorpusId) =>
+                    {
+                        return TokenBuilder.OrganizeTokensByOriginTokenLocation(tokens
+                            .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
+                        );
                     }
                 }
             };
@@ -679,7 +725,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 {
                     return parallelCorpora;
                 },
-                TokenBuilder = new TokenBuilder()
+                TokenCompositeBuilder = new TokenCompositeBuilder()
                 {
                     GetTokenizedCorpusCompositeTokens = (projectDbContext, tokenizedCorpusId) =>
                     {

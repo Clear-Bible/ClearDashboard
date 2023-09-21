@@ -14,6 +14,7 @@ using MediatR;
 using ClearDashboard.DAL.Alignment.Corpora;
 using SIL.Machine.Utils;
 using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -25,16 +26,12 @@ public class TokenCompositeHandler : DefaultMergeHandler<IModelSnapshot<Models.T
             entityType: typeof(Models.TokenComposite),
             (TableEntityType: typeof(Models.TokenComponent), DiscriminatorColumnName: "Discriminator", DiscriminatorColumnValue: "TokenComposite")
         );
-        mergeContext.MergeBehavior.AddEntityTypeDiscriminatorMapping(
-            entityType: typeof(Models.Token),
-            (TableEntityType: typeof(Models.TokenComponent), DiscriminatorColumnName: "Discriminator", DiscriminatorColumnValue: "Token")
-        );
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.TokenComposite), nameof(Models.TokenComposite.VerseRowId)),
             entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.PropertyValues.TryGetValue(TokenBuilder.VERSE_ROW_LOCATION, out var verseRowLocation) &&
+                if (modelSnapshot.PropertyValues.TryGetValue(TokenCompositeBuilder.VERSE_ROW_LOCATION, out var verseRowLocation) &&
                     modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusId))
                 {
                     var verseRowId = projectDbContext.VerseRows
@@ -53,12 +50,51 @@ public class TokenCompositeHandler : DefaultMergeHandler<IModelSnapshot<Models.T
 
             });
 
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.TokenComposite), nameof(Models.TokenComposite.Id)),
+            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+
+                if (modelSnapshot is not IModelSnapshot<Models.TokenComposite>)
+                {
+                    throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.TokenComposite>");
+                }
+
+                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusId) &&
+                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.EngineTokenId), out var engineTokenId))
+                {
+                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.ParallelCorpusId), out var parallelCorpusId);
+
+                    var tokenCompositeId = projectDbContext.TokenComposites
+                        .Where(e => e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
+                        .Where(e => e.ParallelCorpusId == (Guid?)parallelCorpusId)
+                        .Where(e => e.EngineTokenId == (string)engineTokenId!)
+                        .Select(e => e.Id)
+                        .FirstOrDefault();
+
+                    if (tokenCompositeId == default)
+                    {
+                        tokenCompositeId = Guid.NewGuid();
+                        logger.LogDebug($"No TokenComposite Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / ParallelCorpusId ('{parallelCorpusId}') / EngineTokenId ('{engineTokenId}').  Using: '{tokenCompositeId}'");
+                    }
+                    else
+                    {
+                        logger.LogDebug($"Resolved TokenizedCorpusId ('{tokenizedCorpusId}') / ParallelCorpusId ('{parallelCorpusId}') / EngineTokenId ('{engineTokenId}') to TokenComposite Id ('{tokenCompositeId}')");
+                    }
+
+                    return tokenCompositeId;
+                }
+                else
+                {
+                    throw new PropertyResolutionException($"TokenComposite snapshot does not have all:  Ref+TokenizedCorpusId+EngineTokenId, which are required for Id resolution.");
+                }
+            });
+
         mergeContext.MergeBehavior.AddPropertyNameMapping(  
-            (typeof(Models.TokenComposite), TokenBuilder.VERSE_ROW_LOCATION),
+            (typeof(Models.TokenComposite), TokenCompositeBuilder.VERSE_ROW_LOCATION),
             new[] { nameof(Models.TokenComposite.VerseRowId) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.TokenComposite), TokenBuilder.TOKEN_LOCATIONS),
+            (typeof(Models.TokenComposite), TokenCompositeBuilder.TOKEN_LOCATIONS),
             Enumerable.Empty<string>());
     }
 

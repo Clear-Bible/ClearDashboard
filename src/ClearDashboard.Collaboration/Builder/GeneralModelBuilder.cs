@@ -264,7 +264,7 @@ public abstract class GeneralModelBuilder : IModelBuilder
             //Type modelType when modelType == typeof(GeneralModel<Models.TranslationSet>) => new TranslationSetBuilder(),
             Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_Lexeme>) => new LexiconBuilder(),
             Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_SemanticDomain>) => new SemanticDomainBuilder(),
-            Type modelType when modelType == typeof(GeneralModel<Models.TokenComposite>) => new TokenBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.TokenComposite>) => new TokenCompositeBuilder(),
             _ => BuildDefaultModelBuilder(generalModelType)
 //            _ => throw new ArgumentOutOfRangeException(generalModelType.ShortDisplayName(), $"No IModelBuilder found for type argument")
 

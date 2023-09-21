@@ -166,11 +166,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         childTextPairs[i].surfaceText,
                         childTextPairs[i].trainingText)
                     {
-                        ExtendedProperties = tokenDb.ExtendedProperties
+                        ExtendedProperties = tokenDb.ExtendedProperties,
                     };
 
+                    var newModelToken = BuildModelToken(newToken, tokenDb.TokenizedCorpusId, tokenDb.VerseRowId);
+                    newModelToken.OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
+
                     newChildTokens.Add(newToken);
-                    newChildTokensDb.Add(BuildModelToken(newToken, tokenDb.TokenizedCorpusId, tokenDb.VerseRowId));
+                    newChildTokensDb.Add(newModelToken);
 
                     var tokenDbNoteAssociations = noteAssociationsDb
                         .Where(e => e.DomainEntityIdGuid == tokenDb.Id)
@@ -204,7 +207,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 tokenDb.Deleted = currentDateTime;
 
                 // Find any tokens with a BCVW that matches the current tokenDb and
-                // with a SubwordNumber that is greater than the last new split token,
+                // with a SubwordNumber that is greater than the token that was split,
                 // and do a Subword renumbering
                 nextSubwordNumber++;
                 var tokensHavingSubwordsToRenumberDb = ProjectDbContext.Tokens
@@ -218,6 +221,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 for (int i = 0; i < tokensHavingSubwordsToRenumberDb.Length; i++)
                 {
+                    tokensHavingSubwordsToRenumberDb[i].OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
                     tokensHavingSubwordsToRenumberDb[i].SubwordNumber = nextSubwordNumber + i;
                 }
             }
