@@ -475,7 +475,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             return new Lexicon
             {
-                Lexemes = new ObservableCollection<Lexeme>(lexemesExternalExceptInternal)
+                Lexemes = new ObservableCollection<Lexeme>(lexemesExternalExceptInternal.Lexemes)
             };
         }
 
