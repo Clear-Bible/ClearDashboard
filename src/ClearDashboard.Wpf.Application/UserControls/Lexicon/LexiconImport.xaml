@@ -10,7 +10,8 @@
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
-
+             Background="{DynamicResource MaterialDesignPaper}"
+             Foreground="{DynamicResource MaterialDesignBody}"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=lexicon:LexiconViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -72,39 +73,58 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Button x:Name="ProcessImportedLexicon"
-                            cm:Message.Attach="ProcessImportedLexicon"
-                            Grid.Row="0" 
-                            Grid.Column="0" 
-                            Width="100"
-                            Height="30"
-                            Margin="10, 0"
-                            Foreground="{DynamicResource MaterialDesignBody}"
-                            HorizontalAlignment="Left"
-                            Content="{helpers:Localization LexiconImport_ImportChecked}" 
-                            Style="{StaticResource SmallTransparentButtonStyle}"
-                    />
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <Button x:Name="ProcessImportedLexicon"
+                                cm:Message.Attach="ProcessImportedLexicon"
+                                Width="100"
+                                Height="30"
+                                Margin="10, 0"
+                                Foreground="{DynamicResource MaterialDesignBody}"
+                                HorizontalAlignment="Left"
+                                Content="{helpers:Localization LexiconImport_ImportChecked}" 
+                                Style="{StaticResource SmallTransparentButtonStyle}"/>
+                        <StackPanel Orientation="Horizontal" Margin="10,5,5,5">
+                            <Label Margin="10, 0, 0, 0" Content="Corpus:"></Label>
+                            <ComboBox
+                                x:Name="ParatextProjectsComboBox"
+                                MinWidth="150"
+                                Margin="10,0,5,0"
+                                IsEditable="False"
+                                ItemsSource="{Binding ProjectCorpora}"
+                                SelectedItem="{Binding SelectedProjectCorpus, Mode=TwoWay}"
+                                cm:Message.Attach="ProjectCorpusSelected">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock FontSize="16" Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                   
                     <DataGrid Grid.Row="1" Grid.Column="0" 
-              x:Name="LexiconSelectionDataGrid" 
-              ItemsSource="{Binding LexiconImports}"
-              AutoGenerateColumns="False" 
-              HorizontalAlignment="Stretch"
-              Margin="4"
-              VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-              VirtualizingPanel.VirtualizationMode="Recycling"
-              VirtualizingPanel.IsVirtualizing="True"
-              SelectionMode="Single"
-              SelectionUnit="FullRow"
-              ScrollViewer.CanContentScroll="True"
-              ScrollViewer.VerticalScrollBarVisibility="Visible"
-              IsReadOnly="True">
+                          x:Name="LexiconSelectionDataGrid" 
+                          ItemsSource="{Binding LexiconImports}"
+                          AutoGenerateColumns="False" 
+                          HorizontalAlignment="Stretch"
+                          Margin="4"
+                          VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                          IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.HeaderTemplate>
                                     <DataTemplate>
                                         <CheckBox x:Name="SelectAllCheckBox" 
-                            cm:Message.Attach="[Event Checked] = [Action OnToggleAllChecked($source)];[Event Unchecked] = [Action OnToggleAllChecked($source)]" 
-                            cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconSelectionDataGrid}">
+                                            cm:Message.Attach="[Event Checked] = [Action OnToggleAllChecked($source)];[Event Unchecked] = [Action OnToggleAllChecked($source)]" 
+                                            cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconSelectionDataGrid}">
                                             <CheckBox.Resources>
                                                 <ToolTip x:Key="CheckedToolTip">
                                                     <TextBlock Text="{helpers:Localization LexiconImport_SelectAll}"></TextBlock>
@@ -113,7 +133,6 @@
                                                     <TextBlock Text="{helpers:Localization LexiconImport_UnselectAll}"></TextBlock>
                                                 </ToolTip>
                                             </CheckBox.Resources>
-
                                             <CheckBox.Style>
                                                 <Style TargetType="CheckBox">
                                                     <Style.Triggers>
@@ -128,10 +147,6 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </CheckBox.Style>
-
-                                            <!--<CheckBox.ToolTip>
-                                <TextBlock Text="{helpers:Localization LexiconImport_SelectAll}"></TextBlock>
-                            </CheckBox.ToolTip>-->
                                         </CheckBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.HeaderTemplate>

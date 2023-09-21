@@ -519,7 +519,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task<List<LexiconImportViewModel>> GetLexiconImportViewModels(string? projectId, CancellationToken cancellationToken)
         {
             LexiconImportViewModels = new List<LexiconImportViewModel>();
-            var externalLexicon = await GetLexiconForProject(null);
+            var externalLexicon = await GetLexiconForProject(projectId);
             if (externalLexicon != null)
             {
                 ManagedLexicon = await GetExternalLexiconNotInInternal(externalLexicon, cancellationToken);

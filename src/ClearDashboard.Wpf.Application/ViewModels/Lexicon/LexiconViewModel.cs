@@ -12,7 +12,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.DAL.Alignment;
+using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
@@ -54,6 +57,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
 
+        public List<CorpusId> ProjectCorpora { get; } = new List<CorpusId>();
+        public CorpusId? SelectedProjectCorpus { get; set; }
+
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await Task.Run(async () =>
@@ -62,19 +68,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 var stopWatch = Stopwatch.StartNew();
                 try
                 {
-                    var lexiconImports = await LexiconManager.GetLexiconImportViewModels(null, cancellationToken);
-                    Execute.OnUIThread(() =>
-                    {
-                        LexiconImports.AddRange(lexiconImports);
-                       
-                    });
+                    await GetParatextProjects(); 
+                    //await GetLexiconImportViewModels(cancellationToken);
 
-                    var importedLexicon = await LexiconManager.GetImportedLexiconViewModels(null, cancellationToken);
-                    Execute.OnUIThread(() =>
-                    {
-                        ImportedLexicon.AddRange(importedLexicon);
-                       
-                    });
+                    await GetImportedLexiconViewModels(cancellationToken);
                 }
                 finally
                 {
@@ -88,6 +85,54 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 }
             }, cancellationToken);
             await base.OnActivateAsync(cancellationToken);
+        }
+
+        private async Task GetParatextProjects()
+        {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c=> c.CorpusType == CorpusType.Standard.ToString() || c.CorpusType != CorpusType.BackTranslation.ToString()).OrderBy(c => c.Created))
+            {
+               ProjectCorpora.Add(corpusId);
+            }
+
+            await Task.CompletedTask;
+        }
+        private async Task GetImportedLexiconViewModels(CancellationToken cancellationToken)
+        {
+            ImportedLexicon.Clear();
+            var importedLexicon = await LexiconManager.GetImportedLexiconViewModels(null, cancellationToken);
+            Execute.OnUIThread(() => { ImportedLexicon.AddRange(importedLexicon); });
+        }
+
+        private async Task GetLexiconImportViewModels(CancellationToken cancellationToken)
+        {
+            try
+            {
+                ProgressBarVisibility = Visibility.Visible;
+                LexiconImports.Clear();
+                var projectId = SelectedProjectCorpus?.ParatextGuid;
+                var lexiconImports = await LexiconManager.GetLexiconImportViewModels(projectId, cancellationToken);
+                Execute.OnUIThread(() => { LexiconImports.AddRange(lexiconImports); });
+            }
+            finally
+            {
+                Execute.OnUIThread(() =>
+                {
+                    ProgressBarVisibility = Visibility.Hidden;
+                });
+            }
+           
+        }
+
+        public async Task ProjectCorpusSelected(SelectionChangedEventArgs args)
+        {
+            var selectedCorpusId = (CorpusId?)args.AddedItems[0];
+            await GetLexiconImportViewModels(CancellationToken.None);
+        }
+
+        public async Task ProjectCorpusSelected()
+        {
+            await GetLexiconImportViewModels(CancellationToken.None);
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
@@ -124,7 +169,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async Task ProcessImportedLexicon()
         {
-            await LexiconManager.ProcessImportedLexicon();
+            try
+            {
+                ProgressBarVisibility = Visibility.Visible;
+                await LexiconManager.ProcessImportedLexicon();
+
+                SelectedProjectCorpus = null;
+                LexiconImports.Clear();
+                await GetImportedLexiconViewModels(CancellationToken.None);
+            }
+            finally
+            {
+                ProgressBarVisibility = Visibility.Hidden;
+            }
+           
         }
     }
 }
