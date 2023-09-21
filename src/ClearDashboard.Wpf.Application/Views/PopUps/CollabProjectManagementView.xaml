@@ -13,7 +13,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{helpers:Localization CollabProjectManagementView_CollaborationManagement}"
     Width="700"
-    Height="580"
+    Height="590"
     d:DataContext="{d:DesignInstance Type=popUps:CollabProjectManagementViewModel,
                                      IsDesignTimeCreatable=True}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -451,6 +451,46 @@
             Style="{StaticResource MaterialDesignCircularProgressBar}"
             Visibility="{Binding ShowProgressBar}"
             Value="35" />
+
+
+        <!--  DELETE PROJECT PANEL  -->
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="5"
+            Orientation="Horizontal"
+            Visibility="{Binding ShowDeleteProjectPanel}">
+            <Button x:Name="DeleteProject" Height="60">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MaterialDesignRaisedErrorButton}" TargetType="Button">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedProject}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon
+                        Grid.Row="0"
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Center"
+                        Kind="DeleteCircleOutline" />
+                    <TextBlock Grid.Row="1" Text="{helpers:Localization CollabProjectManagementView_Delete}" />
+                </Grid>
+            </Button>
+        </StackPanel>
+
+
+
         <!--  CLOSE BUTTON  -->
         <Button
             x:Name="Close"

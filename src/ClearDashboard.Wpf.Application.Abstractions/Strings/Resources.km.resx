@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>អ្នកប្រើប្រាស់គម្រោងបច្ចុប្បន្ន:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>លុបគម្រោង</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>អ្នកមានអ្នកប្រើប្រាស់ផ្សេងទៀតភ្ជាប់នឹងគម្រោងនេះ។ គម្រោងនេះនឹងត្រូវបានដកចេញសម្រាប់ពួកគេផងដែរ។ តើអ្នកប្រាកដថាអ្នកចង់លុបគំរោងនេះទេ?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុបគម្រោងនេះឬ?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>ការបិបន៍នា</value>
   </data>
@@ -940,6 +949,9 @@
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>ភាសាប្រភព</value>
   </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>បុម្ពអកសរ</value>
+  </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>ពាក្យប្រភព</value>
   </data>
@@ -1285,6 +1297,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>បន្ថែមស្លាកមួយ</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>តើអ្នកចង់បង្កើតស្លាក:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>ហើយភ្ជាប់វាជាមួយស្លាកក្រុម:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>និងផ្តាច់វាចេញពីស្លាកក្រុម:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>បន្ថែមតារាងស្លាក</value>
   </data>
@@ -1311,6 +1332,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>យកស្លាកនេះចេញ</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>តើអ្នកចង់យកស្លាកចេញ:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
@@ -1425,6 +1449,9 @@
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>paratext propus propus</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>ជ្រើសរើសក្បួនដោះស្រាយ SMT ទៅរថភ្លើង</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមការអនុម័តច្រើនក្នុងការមើល</value>
@@ -1767,6 +1794,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>គម្រោងដែលមានឈ្មោះដូចគ្នាមានរួចហើយ។ សូមជ្រើសរើសឈ្មោះតែមួយ។</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>ឈ្មោះគម្រោងដែលបានផ្តល់ឱ្យវែងពេក។</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>របាក្សត្រ 1</value>

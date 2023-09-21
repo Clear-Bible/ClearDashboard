@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>वर्तमान परियोजना उपयोगकर्ता:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>प्रोजेक्ट हटाएं</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>आपके पास इस परियोजना से जुड़े अन्य उपयोगकर्ता हैं। इस परियोजना को उनके लिए भी हटा दिया जाएगा। क्या आप इस परियोजना को हटाना चाहते हैं?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>क्या आप सुनिश्चित हैं कि आप इस परियोजना को हटाना चाहते हैं?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>विवरण</value>
   </data>
@@ -620,7 +629,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -939,6 +948,9 @@
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>स्रोत भाषा</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>प्रकार</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>स्रोत शब्द</value>
@@ -1285,6 +1297,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>एक लेबल जोड़ें</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>क्या आप लेबल बनाना चाहते हैं:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>और इसे लेबल समूह के साथ संबद्ध करें:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>और इसे लेबल समूह से अलग करना:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>लेबल समूह जोड़ें</value>
   </data>
@@ -1311,6 +1332,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>इस लेबल को हटा दें</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>क्या आप लेबल निकालना चाहते हैं:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>बनाया था</value>
@@ -1425,6 +1449,9 @@
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>परटेटेक्स्ट कॉर्पस</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>प्रशिक्षित करने के लिए एक एसएमटी एल्गोरिथ्म का चयन करें</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>देखने के लिए थोक अनुमोदन जोड़ें</value>
@@ -1658,7 +1685,7 @@
     <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नई परियोजना बनाएं</value>
+    <value>एक नया प्रोजेक्ट बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>प्रोजेक्ट बनाएं:</value>
@@ -1685,7 +1712,7 @@
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर प्रोजेक्ट</value>
+    <value>आयात सर्वर परियोजना</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
     <value>बाइबिल के ग्रंथों को शामिल करें?</value>
@@ -1767,6 +1794,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>एक ही नाम के साथ एक परियोजना पहले से मौजूद है। कृपया एक अनूठा नाम चुनें।</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>दी गई परियोजना का नाम बहुत लंबा है।</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 इतिहास</value>
@@ -2246,7 +2276,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>उपडोमेन:</value>
+    <value>सबडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

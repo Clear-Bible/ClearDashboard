@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -25,6 +27,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class CollabProjectManagementViewModel : DashboardApplicationScreen
     {
+        private readonly ILogger<AboutViewModel> _logger;
+        private readonly ILocalizationService _localizationService;
         private readonly GitLabHttpClientServices _gitLabHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private readonly CollaborationConfiguration _collaborationConfiguration;
@@ -33,7 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private List<GitUser> _gitLabUsers = new();
         private bool _inStartup = true;
-
+        private List<GitLabProjectUser> _totalProjectUsers;
 
 
         #endregion //Member Variables
@@ -68,23 +72,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 _selectedProject = value;
                 NotifyOfPropertyChange(() => SelectedProject);
 
-                if (_inStartup)
+                if (_inStartup || _selectedProject is null)
                 {
+                    IsGitLabUserListEnabled = false;
                     return;
                 }
 
-                if (_selectedProject != null && _selectedProject.Name != "")
+                if (_selectedProject.Name != "")
                 {
                     IsGitLabUserListEnabled = true;
                 }
-                else
-                {
-                    IsGitLabUserListEnabled = false;
-                }
 
                 _ = GetUsersForProject();
+
+
+                if (ProjectOwner.RemoteUserName == SelectedProject.RemoteOwner.Username)
+                {
+                    ShowDeleteProjectPanel = Visibility.Visible;
+                }
+                else
+                {
+                    ShowDeleteProjectPanel = Visibility.Hidden;
+                }
+
             }
         }
+
+
+        private Visibility _showDeleteProjectPanel = Visibility.Hidden;
+        public Visibility ShowDeleteProjectPanel
+        {
+            get => _showDeleteProjectPanel;
+            set
+            {
+                _showDeleteProjectPanel = value;
+                NotifyOfPropertyChange(() => ShowDeleteProjectPanel);
+            }
+        }
+
+
 
         private List<GitLabProjectUser> _projectUsers = new();
         public List<GitLabProjectUser> ProjectUsers
@@ -258,6 +284,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             CollaborationConfiguration collaborationConfiguration)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
+            _logger = logger;
+            _localizationService = localizationService;
             _gitLabHttpClientServices = gitLabHttpClientServices;
             _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
@@ -269,7 +297,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // get the user's projects
             ProjectOwner = _collaborationManager.GetConfig();
 
-            
+
             Projects = await _gitLabHttpClientServices.GetProjectsForUserWhereOwner(ProjectOwner);
             _gitLabUsers = await _gitLabHttpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
@@ -338,8 +366,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             ShowProgressBar = Visibility.Visible;
 
-            var users = await _gitLabHttpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);
-            ProjectUsers = new List<GitLabProjectUser>(users);
+            
+            _totalProjectUsers = await _gitLabHttpClientServices.GetUsersForProject(_collaborationConfiguration, SelectedProject.Id);
+            ProjectUsers = new List<GitLabProjectUser>(_totalProjectUsers);
 
             // remove existing users from the selectable list
             _collabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
@@ -454,6 +483,78 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 user.IsSelected = !user.IsSelected;
             }
             CollabeUserCollectionView.Refresh();
+        }
+
+
+        public async void DeleteProject()
+        {
+            if (SelectedProject is null)
+            {
+                return;
+            }
+
+            var users = _totalProjectUsers;
+
+            users.RemoveAll(x => x.Id == ProjectOwner.UserId);
+
+            MessageBoxResult result;
+            if (users.Count > 0)
+            {
+                // show extended confirmation dialog as there are other users
+                result = MessageBox.Show(_localizationService["CollabProjectManagementView_DeleteConfirmExtended"], _localizationService["CollabProjectManagementView_Delete"], MessageBoxButton.YesNo, MessageBoxImage.Question);
+            }
+            else
+            {
+                // show simple confirmation dialog
+                result = MessageBox.Show(_localizationService["CollabProjectManagementView_DeleteConfirmSimple"], _localizationService["CollabProjectManagementView_Delete"], MessageBoxButton.YesNo, MessageBoxImage.Question);
+            }
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var ret = await _gitLabHttpClientServices.DeleteProject(SelectedProject);
+                if (ret)
+                {
+                    await Task.Delay(500);
+                    Projects.Remove(SelectedProject);
+                }
+
+                // remove the collaboration project directory
+                try
+                {
+                    var path = Path.Combine(_collaborationManager.GetRespositoryBasePath(), "P_" + SelectedProject.Id);
+                    if (Directory.Exists(path))
+                    {
+                        FileAttributesHelper.SetNormalFileAttributes(path);
+
+                        var directoryInfo = new DirectoryInfo(path);
+                        foreach (var file in directoryInfo.GetFiles())
+                        {
+                            file.Delete();
+                        }
+                        foreach (var directory in directoryInfo.GetDirectories())
+                        {
+                            directory.Delete(true);
+                        }
+
+                        directoryInfo.Delete();
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error deleting collaboration project directory");
+                }
+
+                // clean up the UI
+                _collabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
+                ProjectParticipants = new ObservableCollection<GitLabProjectUser>();
+                ProjectOwners = new ObservableCollection<GitLabProjectUser>();
+                SelectedCurrentUser = null;
+
+                SelectedProject = null;
+                ShowDeleteProjectPanel = Visibility.Hidden;
+
+
+            }
         }
 
         #endregion // Methods
