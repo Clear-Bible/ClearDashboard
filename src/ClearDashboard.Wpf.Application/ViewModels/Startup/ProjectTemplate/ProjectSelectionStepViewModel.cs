@@ -144,6 +144,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            ProjectName = string.Empty; 
+
             await Initialize(cancellationToken);
             await base.OnActivateAsync(cancellationToken);
         }
