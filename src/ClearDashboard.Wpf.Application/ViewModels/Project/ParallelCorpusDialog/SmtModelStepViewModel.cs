@@ -1,25 +1,25 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.Models;
-using System.Linq;
-using ClearDashboard.DAL.Alignment;
-using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
 public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<IParallelCorpusDialogViewModel>
 {
+    private readonly ILocalizationService _localizationService;
+
     #region Member Variables   
 
     #endregion //Member Variables
@@ -60,32 +60,47 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         set => Set(ref _canTrain, value);
     }
 
-    private bool _isTrainedSymmetrizedModel = false;
+    private bool _isTrainedSymmetrizedModel;
     public bool IsTrainedSymmetrizedModel
     {
         get => _isTrainedSymmetrizedModel;
         set
         {
             Set(ref _isTrainedSymmetrizedModel, value);
-            ParentViewModel.IsTrainedSymmetrizedModel = value;
+            ParentViewModel!.IsTrainedSymmetrizedModel = value;
         }
     }
+
+
+    // ReSharper disable once InconsistentNaming
+    private bool _SMTsReady;
+    // ReSharper disable once InconsistentNaming
+    public bool SMTsReady
+    {
+        get => _SMTsReady;
+        set => Set(ref _SMTsReady, value);
+    }
+
 
     #endregion //Observable Properties
 
 
     #region Constructor
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public SmtModelStepViewModel()
     {
-
+        // no op
     }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 
     public SmtModelStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
-        IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, ILocalizationService localizationService)
+        IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
+        _localizationService = localizationService;
         DialogMode = dialogMode;
         CanMoveForwards = true;
         CanMoveBackwards = true;
@@ -95,7 +110,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
 
     protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        ParentViewModel.CurrentStepTitle =
+        ParentViewModel!.CurrentStepTitle =
             LocalizationService!.Get("ParallelCorpusDialog_TrainSmtModel");
 
         if (ParentViewModel.UseDefaults)
@@ -106,8 +121,8 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         try
         {
             var parallelCorpa = ParentViewModel.TopLevelProjectIds.ParallelCorpusIds.Where(x =>
-                x.SourceTokenizedCorpusId.CorpusId.Id == ParentViewModel.SourceCorpusNodeViewModel.CorpusId
-                && x.TargetTokenizedCorpusId.CorpusId.Id == ParentViewModel.TargetCorpusNodeViewModel.CorpusId
+                x.SourceTokenizedCorpusId!.CorpusId!.Id == ParentViewModel.SourceCorpusNodeViewModel.CorpusId
+                && x.TargetTokenizedCorpusId!.CorpusId!.Id == ParentViewModel.TargetCorpusNodeViewModel.CorpusId
             ).ToList();
 
             List<string> smts = new();
@@ -115,10 +130,10 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
             {
                 var alignments =
                     ParentViewModel.TopLevelProjectIds.AlignmentSetIds.Where(x =>
-                        x.ParallelCorpusId.Id == parallelCorpusId.Id);
+                        x.ParallelCorpusId!.Id == parallelCorpusId.Id);
                 foreach (var alignment in alignments)
                 {
-                    smts.Add(alignment.SmtModel);
+                    smts.Add(alignment.SmtModel!);
                 }
             }
 
@@ -144,6 +159,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
                 }
                 else
                 {
+                    // ReSharper disable once InconsistentNaming
                     var newSMT = new SmtAlgorithm
                     {
                         SmtName = smt,
@@ -158,13 +174,20 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
             }
 
             // select next available smt that is enabled
+            bool found = false;
             foreach (var smt in SmtList)
             {
                 if (smt.IsEnabled)
                 {
+                    found = true;
                     ParentViewModel.SelectedSmtAlgorithm = smt;
                     break;
                 }
+            }
+
+            if (found)
+            {
+                SMTsReady = true;
             }
         }
         catch (Exception e)
@@ -174,7 +197,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         }
 
 
-        base.OnActivateAsync(cancellationToken);
+        await base.OnActivateAsync(cancellationToken);
     }
 
     #endregion //Constructor
@@ -184,6 +207,15 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
 
     public async void Train()
     {
+        if (ParentViewModel.SelectedSmtAlgorithm is null)
+        {
+            var msg = _localizationService["ParatextCorpusDialog_SelectSmt"];
+            ParentViewModel.Message = msg;
+
+            return;
+        }
+
+        ParentViewModel.Message = "";
         await Train(true);
     }
 
@@ -216,7 +248,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ParentViewModel!.Cancel();
             }
