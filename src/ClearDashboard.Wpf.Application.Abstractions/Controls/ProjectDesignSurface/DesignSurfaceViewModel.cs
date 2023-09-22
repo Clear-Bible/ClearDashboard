@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -28,6 +29,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 
@@ -984,6 +986,36 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             return found;
         }
 
+        private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection, 
+            ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
+        {
+            var sourceParatextProjectId = parallelCorpusConnectorDraggedOut.ParentNode!.CorpusId;
+            var targetParatextProjectId = parallelCorpusConnectorDraggedOver.ParentNode.CorpusId;
+
+            List<ParallelCorpusId> parallelCorpusIds = new();
+            foreach (var parallel in topLevelProjectIds.ParallelCorpusIds)
+            {
+                if (parallel.TargetTokenizedCorpusId.CorpusId.Id == targetParatextProjectId  &&
+                    parallel.SourceTokenizedCorpusId.CorpusId.Id==sourceParatextProjectId)
+                {
+                    parallelCorpusIds.Add(parallel);
+                }
+            }
+
+            List<string> smts = new();
+            foreach (var parallelCorpusId in parallelCorpusIds)
+            {
+                var alignments =
+                    topLevelProjectIds.AlignmentSetIds.Where(x =>
+                        x.ParallelCorpusId!.Id == parallelCorpusId.Id);
+                foreach (var alignment in alignments)
+                {
+                    smts.Add(alignment.SmtModel!);
+                }
+            }
+
+            return smts.Count >= 1;
+        }
 
         /// <summary>
         /// Delete the currently selected nodes from the view-model.
@@ -1294,6 +1326,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 return;
             }
 
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            if (IsAlreadyAligned(topLevelProjectIds, newParallelCorpusConnection, parallelCorpusConnectorDraggedOut, parallelCorpusConnectorDraggedOver))
+            {
+                ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                return;
+            }
+
             //
             // Only allow connections from output connector to input connector (ie each
             // connector must have a different type).
@@ -1343,7 +1382,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 newParallelCorpusConnection.SourceConnector = parallelCorpusConnectorDraggedOver;
                 added = true;
             }
-
+            
             if (added)
             {
                 // check to see if we somehow didn't get a source/target id properly.  If so remove the line
