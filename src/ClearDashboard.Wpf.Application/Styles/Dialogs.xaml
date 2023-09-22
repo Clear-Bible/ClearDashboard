@@ -30,13 +30,28 @@
                 <ControlTemplate TargetType="Button">
                     <Border>
                         <Border.Style>
+
                             <Style TargetType="{x:Type Border}">
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="Gray" />
+                                <Setter Property="CornerRadius" Value="5" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Button.Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect
+                                                    BlurRadius="5"
+                                                    Direction="320"
+                                                    Opacity="0.5"
+                                                    ShadowDepth="1"
+                                                    Color="Black" />
+                                            </Setter.Value>
+                                        </Setter>
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
                                         <Setter Property="Background" Value="#EEEBEB" />
+                                        <Setter Property="Cursor" Value="Hand" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
                                         <Setter Property="Background" Value="Transparent" />
