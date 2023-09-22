@@ -1537,8 +1537,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Hebräisch (OT) Macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Marmorressource</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Anzahl verschiedener Tokenisierungen</value>
@@ -1677,6 +1677,9 @@
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext Beta läuft nicht</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Stornierung ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Zusammenarbeitsprojekte</value>

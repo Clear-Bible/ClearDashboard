@@ -105,6 +105,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         }
 
 
+        private Visibility _cancelTextVisibility = Visibility.Collapsed;
+        public Visibility CancelTextVisibility
+        {
+            get => _cancelTextVisibility;
+            set => Set(ref _cancelTextVisibility, value);
+        }
+
+
         #endregion //Observable Properties
 
 
@@ -138,6 +146,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            CancelTextVisibility = Visibility.Collapsed;
+
             _runningTask = Task.CompletedTask;
             _cancellationToken = null;
 
@@ -162,20 +172,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             await BackgroundTasksViewModel.ActivateAsync();
 
-
             await base.OnActivateAsync(cancellationToken);
         }
-
-        #endregion //Constructor
-
-
-        #region Methods
 
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             await BackgroundTasksViewModel.DeactivateAsync(true);
             await base.OnDeactivateAsync(close, cancellationToken);
         }
+
+        #endregion //Constructor
+
+
+        #region Methods
 
         private async Task ActivateProjectDesignSurface(CancellationToken cancellationToken)
         {
@@ -696,6 +705,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         {
             if (_cancellationToken is not null && !(_cancellationToken?.IsCancellationRequested ?? false))
             {
+                CancelTextVisibility = Visibility.Visible;
+                
                 CanMoveBackwards = false;
 
                 _cancellationTokenSource.Cancel();
