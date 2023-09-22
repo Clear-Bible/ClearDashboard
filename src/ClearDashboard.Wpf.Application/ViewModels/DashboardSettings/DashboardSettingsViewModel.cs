@@ -510,7 +510,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         public void EnableAlignmentEditing(bool value)
         {
             AbstractionsSettingsHelper.SaveEnabledAlignmentEditing(IsAlignmentEditingEnabled);
-            _eventAggregator.PublishOnUIThreadAsync(new RedrawProjectDesignSurface());
+            _eventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus());
         }
 
         // ReSharper disable once UnusedParameter.Global
