@@ -654,7 +654,7 @@
                                         cal:Message.Attach="ShowCollaborationGetLatest($dataContext)"
                                         Background="{StaticResource GreenLightBrush}">
                                         <Button.Style>
-                                            <Style TargetType="Button">
+                                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible" />
