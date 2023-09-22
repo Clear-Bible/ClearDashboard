@@ -40,12 +40,12 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label
+        <TextBlock
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Margin="12,0,0,0"
-            Content="{Binding DisplayName}"
-            FontSize="24" />
+            FontSize="24"
+            Text="{Binding DisplayName}" />
         <project:ReadonlyProjectDesignSurfaceView
             x:Name="ProjectDesignSurfaceControl"
             Grid.Row="1"
