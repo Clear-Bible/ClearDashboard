@@ -40,12 +40,12 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label
+        <TextBlock
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Margin="12,0,0,0"
-            Content="{Binding DisplayName}"
-            FontSize="24" />
+            FontSize="24"
+            Text="{Binding DisplayName}" />
         <project:ReadonlyProjectDesignSurfaceView
             x:Name="ProjectDesignSurfaceControl"
             Grid.Row="1"
@@ -61,7 +61,7 @@
             <Label
                 Margin="20,0"
                 HorizontalAlignment="Center"
-                Content="We're almost there!"
+                Content="{helpers:Localization ProjectPicker_ProjectBuilderAlmostThere}"
                 FontSize="24" />
             <TextBlock
                 Margin="20,10"
@@ -93,6 +93,34 @@
             Margin="10,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
+
+            <TextBlock
+                x:Name="CancelText"
+                Margin="0,0,15,15"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Foreground="{StaticResource OrangeMidBrush}"
+                Text="{helpers:Localization ProjectPicker_Cancelling}"
+                Visibility="{Binding CancelTextVisibility}">
+                <!--<TextBlock.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames
+                                    RepeatBehavior="Forever"
+                                    Storyboard.TargetProperty="Visibility"
+                                    Duration="Forever">
+
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Hidden}" />
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </TextBlock.Triggers>-->
+
+            </TextBlock>
 
             <Button
                 x:Name="BackOrCancel"
