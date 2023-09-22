@@ -1537,8 +1537,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Hebrew (OT) Macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>MarbleResource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>MARBLE Resource</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Number of different tokenizations</value>

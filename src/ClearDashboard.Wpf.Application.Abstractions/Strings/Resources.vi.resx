@@ -1537,8 +1537,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Tiếng Do Thái (OT) macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Cá bốngusource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Tài nguyên đá cẩm thạch</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Số lượng mã thông báo khác nhau</value>

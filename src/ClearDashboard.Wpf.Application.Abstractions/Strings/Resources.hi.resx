@@ -1537,8 +1537,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>हिब्रू (ओटी) मैकुला</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>मार्बलसोर्स</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>संगमरमर संसाधन</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>अलग -अलग टोकन की संख्या</value>

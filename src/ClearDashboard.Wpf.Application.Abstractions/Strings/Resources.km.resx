@@ -1537,8 +1537,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>ម៉ាក់ (អូអេដ) ម៉ារ៉េល</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>ធនធានថ្មម៉ាប</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>ចំនួននៃនិមិត្តសញ្ញាផ្សេងៗគ្នា</value>
