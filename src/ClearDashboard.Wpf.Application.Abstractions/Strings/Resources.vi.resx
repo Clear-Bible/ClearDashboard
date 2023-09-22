@@ -2071,6 +2071,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Mã xác minh email</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Bật chỉnh sửa căn chỉnh</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Thực nghiệm</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Nhóm</value>
   </data>

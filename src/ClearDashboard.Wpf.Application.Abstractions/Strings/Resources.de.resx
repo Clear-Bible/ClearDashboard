@@ -2071,6 +2071,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>E -Mail -Überprüfungscode</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Aktivieren Sie die Bearbeitung der Ausrichtung</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Experimental</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Gruppe</value>
   </data>

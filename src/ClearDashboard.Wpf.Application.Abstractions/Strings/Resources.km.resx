@@ -2071,6 +2071,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>លេខកូដផ្ទៀងផ្ទាត់អ៊ីមែល</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>ដេលល្បាប់</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>រកុម</value>
   </data>

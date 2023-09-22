@@ -2071,6 +2071,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Включить редактирование выравнивания</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Экспериментальный</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Группа</value>
   </data>

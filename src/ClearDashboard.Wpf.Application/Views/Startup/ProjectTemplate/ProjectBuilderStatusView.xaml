@@ -8,12 +8,12 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:projectTemplate="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:threading="clr-namespace:ClearDashboard.DataAccessLayer.Threading;assembly=ClearDashboard.DAL"
-    xmlns:projectTemplate="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate"
+    Height="700"
     MinWidth="300"
     MinHeight="200"
-    Height="700"
     d:DataContext="{d:DesignInstance Type=projectTemplate:ProjectBuilderStatusViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="200"
@@ -33,15 +33,16 @@
         </Grid.RowDefinitions>
 
         <!--  BackGround Tasks  -->
-        <ListView Grid.Row="0"
-                          x:Name="TasksListView"
-                          Margin="5"
-                          VerticalContentAlignment="Top"
-                          materialDesign:RippleAssist.IsDisabled="True"
-                          ItemsSource="{Binding BackgroundTaskStatuses}"
-                          ScrollViewer.CanContentScroll="False"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible"
-                          Style="{StaticResource MaterialDesignListBox}">
+        <ListView
+            x:Name="TasksListView"
+            Grid.Row="0"
+            Margin="5"
+            VerticalContentAlignment="Top"
+            materialDesign:RippleAssist.IsDisabled="True"
+            ItemsSource="{Binding BackgroundTaskStatuses}"
+            ScrollViewer.CanContentScroll="False"
+            ScrollViewer.VerticalScrollBarVisibility="Visible"
+            Style="{StaticResource MaterialDesignListBox}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -53,13 +54,13 @@
                     <Grid Tag="{Binding DataContext, ElementName=GridLayout}">
                         <materialDesign:Card Height="60" Padding="10,0,0,0">
 
-                            <StackPanel materialDesign:RippleAssist.Feedback="Transparent" Orientation="Horizontal" >
+                            <StackPanel materialDesign:RippleAssist.Feedback="Transparent" Orientation="Horizontal">
                                 <!--  ISCOMPLETED ICON  -->
                                 <materialDesign:PackIcon
-                                            Width="18"
-                                            Height="18"
-                                            VerticalAlignment="Center"
-                                            RenderTransformOrigin="0.5, 0.5">
+                                    Width="18"
+                                    Height="18"
+                                    VerticalAlignment="Center"
+                                    RenderTransformOrigin="0.5, 0.5">
                                     <materialDesign:PackIcon.RenderTransform>
                                         <RotateTransform x:Name="noFreeze" />
                                     </materialDesign:PackIcon.RenderTransform>
@@ -76,10 +77,10 @@
                                                         <BeginStoryboard>
                                                             <Storyboard>
                                                                 <DoubleAnimation
-                                                                            RepeatBehavior="Forever"
-                                                                            Storyboard.TargetProperty="(Rectangle.RenderTransform).(RotateTransform.Angle)"
-                                                                            To="360"
-                                                                            Duration="0:0:5" />
+                                                                    RepeatBehavior="Forever"
+                                                                    Storyboard.TargetProperty="(Rectangle.RenderTransform).(RotateTransform.Angle)"
+                                                                    To="360"
+                                                                    Duration="0:0:5" />
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </DataTrigger.EnterActions>
@@ -87,9 +88,9 @@
                                                         <BeginStoryboard>
                                                             <Storyboard>
                                                                 <DoubleAnimation
-                                                                            Storyboard.TargetProperty="(Rectangle.RenderTransform).(RotateTransform.Angle)"
-                                                                            To="0"
-                                                                            Duration="0:0:0.1" />
+                                                                    Storyboard.TargetProperty="(Rectangle.RenderTransform).(RotateTransform.Angle)"
+                                                                    To="0"
+                                                                    Duration="0:0:0.1" />
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </DataTrigger.ExitActions>
@@ -114,21 +115,20 @@
                                 <StackPanel Margin="5,10,0,0" Orientation="Vertical">
                                     <!--  TASK NAME  -->
                                     <TextBlock
-                                               
-                                                HorizontalAlignment="Left"
-                                                FontSize="12"
-                                                FontWeight="Bold"
-                                                Foreground="{StaticResource BlueMidBrush}"
-                                                Text="{Binding Name}" />
-                                <!--  TASK DESCRIPTION  -->
+                                        HorizontalAlignment="Left"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource BlueMidBrush}"
+                                        Text="{Binding Name}" />
+                                    <!--  TASK DESCRIPTION  -->
                                     <TextBlock
-                                                Width="400"
-                                                Height="48"
-                                                HorizontalAlignment="Left"
-                                                FontSize="12"
-                                                FontWeight="Bold"
-                                                Text="{Binding Description}"
-                                                TextWrapping="Wrap">
+                                        Width="400"
+                                        Height="48"
+                                        HorizontalAlignment="Left"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Text="{Binding Description}"
+                                        TextWrapping="Wrap">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>

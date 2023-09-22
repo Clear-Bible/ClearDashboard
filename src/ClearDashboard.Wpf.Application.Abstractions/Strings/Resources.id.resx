@@ -2071,6 +2071,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Kode Verifikasi Email</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Aktifkan pengeditan penyelarasan</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Eksperimental</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Kelompok</value>
   </data>

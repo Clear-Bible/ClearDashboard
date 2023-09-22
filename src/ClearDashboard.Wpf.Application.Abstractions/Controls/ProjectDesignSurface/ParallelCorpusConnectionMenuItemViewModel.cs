@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
@@ -38,6 +39,8 @@ public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<Paral
             NotifyOfPropertyChange(() => IsEnabled);
         }
     }
+
+    public Visibility Visibility = Visibility.Visible;
 
 
     protected override void Execute()

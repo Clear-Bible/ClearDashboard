@@ -2071,6 +2071,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>电子邮件验证代码</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>启用对齐编辑</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>实验</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>团体</value>
   </data>

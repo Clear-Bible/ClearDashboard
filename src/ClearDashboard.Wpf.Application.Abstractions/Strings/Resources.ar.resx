@@ -2071,6 +2071,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>رمز التحقق من البريد الإلكتروني</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>تمكين تحرير المحاذاة</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>تجريبي</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>مجموعة</value>
   </data>
