@@ -10,6 +10,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
@@ -26,7 +27,6 @@ using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
@@ -55,6 +55,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
+        private readonly LongRunningTaskManager _longRunningTaskManager;
+        private bool _initializationComplete = false;
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
@@ -418,7 +420,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             GitLabHttpClientServices gitLabHttpClientServices,
             GitLabClient gitLabClient,
             CollaborationManager collaborationManager,
-            CollaborationServerHttpClientServices collaborationHttpClientServices)
+            CollaborationServerHttpClientServices collaborationHttpClientServices,
+            LongRunningTaskManager longRunningTaskManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
@@ -439,6 +442,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             _collaborationHttpClientServices=collaborationHttpClientServices;
+            _longRunningTaskManager = longRunningTaskManager;
 
             _paratextProxy.IsParatextInstalled();
             if (_paratextProxy.ParatextInstallPath != string.Empty)
@@ -462,14 +466,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-
-
+            _longRunningTaskManager.CancellationTokenSource= new CancellationTokenSource();
             await base.OnActivateAsync(cancellationToken);
         }
 
 
         protected override async void OnViewLoaded(object view)
         {
+            if (_initializationComplete)
+            {
+                return;
+            }
+
             EventAggregator.Subscribe(this);
 
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
@@ -507,6 +515,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await GetRemoteUser();
 
             base.OnViewLoaded(view);
+
+            _initializationComplete = true;
         }
 
         #endregion Constructor
