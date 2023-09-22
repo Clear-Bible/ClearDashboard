@@ -3,15 +3,12 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -22,13 +19,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class StartupDialogViewModel : WorkflowShellViewModel, IStartupDialog
     {
+
+        #region Member Variables
+
         private DashboardProjectManager ProjectManager { get; }
         public bool MimicParatextConnection { get; set; }
         public static bool InitialStartup = true;
-        private bool _licenseCleared = false;
-        private bool _runRegistration = false;
         public static bool GoToSetup = false;
         public string Version { get; set; }
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        private bool _licenseCleared = false;
+        private bool _runRegistration = false;
+        public string ProjectName { get; set; }
+
+        public List<string?> ParatextProjectIds => new() {
+            SelectedParatextProject?.Id,
+            SelectedParatextBtProject?.Id,
+            SelectedParatextLwcProject?.Id};
+
+        public SelectedBookManager SelectedBookManager { get; internal set; }
+        public object? ExtraData { get; set; }
+        public bool CanCancel => true /* can always cancel */;
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
 
         private ParatextProjectMetadata? _selectedParatextProject;
         public ParatextProjectMetadata? SelectedParatextProject
@@ -51,13 +72,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _selectedParatextLwcProject, value);
         }
 
-        public string ProjectName { get; set; }
-
-        public List<string?> ParatextProjectIds => new() {
-            SelectedParatextProject?.Id,
-            SelectedParatextBtProject?.Id,
-            SelectedParatextLwcProject?.Id};
-
         private bool _includeBiblicalTexts = true;
         public bool IncludeBiblicalTexts
         {
@@ -72,23 +86,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _selectedBookIds, value);
         }
 
+        private bool _canOk;
+        public bool CanOk
+        {
+            get => _canOk;
+            set => Set(ref _canOk, value);
+        }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
+        public StartupDialogViewModel() 
+        {
+            // no op
+        }
+
         public StartupDialogViewModel(SelectedBookManager selectedBookManager, INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager, ProjectBuilderStatusViewModel backgroundTasksViewModel)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            // reset the background tasks view model
+            backgroundTasksViewModel = new ProjectBuilderStatusViewModel();
+
             ProjectManager = projectManager;
             SelectedBookManager = selectedBookManager;
 
             CanOk = true;
 
             //get the assembly version
-            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            var thisVersion = Assembly.GetEntryAssembly()!.GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
             DisplayName = "ClearDashboard " + Version;
         }
-
-        public StartupDialogViewModel() { }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -155,7 +187,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await base.OnInitializeAsync(cancellationToken);
         }
 
-        public SelectedBookManager SelectedBookManager { get; internal set; }
+        #endregion //Constructor
+
+
+        #region Methods
 
         public void Reset()
         {
@@ -176,20 +211,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 await ActivateItemAsync(CurrentStep, cancellationToken);
             }
         }
-        
-        public bool CanCancel => true /* can always cancel */;
+
         public async void Cancel()
         {
             await TryCloseAsync(false);
         }
 
-
-        private bool _canOk;
-        public bool CanOk
-        {
-            get => _canOk;
-            set => Set(ref _canOk, value);
-        }
 
         public async void Ok()
         {
@@ -207,7 +234,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             return false;
         }
 
-        public object? ExtraData { get; set; }
-
+        #endregion // Methods
     }
 }
