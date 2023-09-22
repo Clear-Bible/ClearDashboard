@@ -1678,6 +1678,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>BARATEXT BETA لا يعمل</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>إلغاء ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>مشاريع التعاون</value>
   </data>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>رمز التحقق من البريد الإلكتروني</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>تمكين تحرير المحاذاة</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>تجريبي</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>مجموعة</value>

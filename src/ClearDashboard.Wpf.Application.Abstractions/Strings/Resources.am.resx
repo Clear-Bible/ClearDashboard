@@ -1678,6 +1678,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>የጥበቃው ቤታ ቤታ እየሰራ አይደለም</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>መሰረዝ ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>የትብብር ፕሮጄክቶች</value>
   </data>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>የኢሜል ማረጋገጫ ኮድ</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>የምደባ አርት editing ትን አንቃ</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>ሙከራ</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>ቡድን</value>

@@ -1678,6 +1678,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>La version bêta de paratext ne fonctionne pas</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Annulation ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projets de collaboration</value>
   </data>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Code de vérification par e-mail</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Activer l'édition d'alignement</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Expérimental</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Groupe</value>

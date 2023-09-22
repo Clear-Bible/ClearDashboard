@@ -229,6 +229,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
         public void StartRegistration()
         {
             backgroundTasksToRun.Clear();
+            LongRunningTaskManager.CancellationTokenSource = new CancellationTokenSource();
         }
 
         public string RegisterManuscriptCorpusTask(CorpusType corpusType, string? taskName = null)
@@ -388,6 +389,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             var trainSmtModelTasksByName = new Dictionary<string, Task<TrainSmtModelSet>>();
             var alignmentSetTasksByName = new Dictionary<string, Task<AlignmentSet>>();
 
+            LongRunningTaskManager.Tasks.Clear();
+
             var endOfSequenceTasks = new Dictionary<string, Task>();
 
             foreach (var backgroundTaskToRun in backgroundTasksToRun)
@@ -458,6 +461,11 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     }
                         break;
                 }
+            }
+
+            foreach (var value in endOfSequenceTasks.Values)
+            {
+                Debug.WriteLine($"EndOfSequenceTask: {value}");
             }
 
             return Task.WhenAll(endOfSequenceTasks.Values);

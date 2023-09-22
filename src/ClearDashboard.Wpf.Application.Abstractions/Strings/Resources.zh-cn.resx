@@ -1678,6 +1678,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>paratext beta不运行</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>取消...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>协作项目</value>
   </data>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>电子邮件验证代码</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>启用对齐编辑</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>实验</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>团体</value>

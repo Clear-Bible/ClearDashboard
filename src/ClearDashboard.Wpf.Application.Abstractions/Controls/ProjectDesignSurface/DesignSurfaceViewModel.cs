@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -28,6 +29,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 
@@ -653,6 +655,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 AddMenuSeparator(connectionMenuItems);
             }
 
+            var enableAlignmentEditing = Settings.Default.IsAlignmentEditingEnabled;
+
             foreach (var parallelCorpusId in parallelCorpusIds)
             {
                 var alignmentSets = topLevelProjectIds.AlignmentSetIds.Where(alignmentSet =>
@@ -660,88 +664,172 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 // ALIGNMENT SETS
                 foreach (var alignmentSetInfo in alignmentSets)
                 {
+
+                    var menuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>();
+                    menuItems.Add(new()
+                    {
+                        // Add Verses to focused enhanced view
+                        Header = LocalizationService.Get("Pds_AddVerseViewToEnhancedViewMenu"),
+                        Id = DesignSurfaceMenuIds.AddAlignmentSetToCurrentEnhancedView,
+                        ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                        IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
+                        AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                        DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                        IsEnabled = true,
+                        IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                        IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                        SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                        TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                        SmtModel = alignmentSetInfo.SmtModel,
+                    });
+
+                    if (enableAlignmentEditing)
+                    {
+                        menuItems.Add(new()
+                        {
+                            // Add Bulk Alignment Approval to focused enhanced view
+                            Header = LocalizationService.Get("Pds_AddBulkAlignmentApprovalToEnhancedViewMenu"),
+                            Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView,
+                            ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                            IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
+                            AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                            DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                            ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                            ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                            IsEnabled = true,
+                            IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                            IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                            SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                            TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                            SmtModel = alignmentSetInfo.SmtModel,
+                        });
+                    }
+
+
+                    menuItems.Add(new()
+                    {
+                        // Add Verses to new enhanced view
+                        Header = LocalizationService.Get("Pds_AddConnectionToNewEnhancedViewMenu"),
+                        Id = DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
+                        ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                        IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
+                        AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                        DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                        IsEnabled = true,
+                        IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                        IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                        SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                        TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                        SmtModel = alignmentSetInfo.SmtModel,
+                    });
+
+                    menuItems.Add(new()
+                    {
+                        // Add Verses to new enhanced view
+                        Header = LocalizationService.Get("Pds_DeleteAlignmentSet"),
+                        Id = DesignSurfaceMenuIds.DeleteAlignmentSet,
+                        ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                        IconKind = PackIconPicolIconsKind.Cancel.ToString(),
+                        AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                        DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                        IsEnabled = true,
+                        IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                        IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                        SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                        TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                        SmtModel = alignmentSetInfo.SmtModel,
+                    });
+
+
                     connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
                     {
                         Header = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
                         Id = alignmentSetInfo.Id.ToString(),
                         IconKind = PackIconPicolIconsKind.Sitemap.ToString(),
                         IsEnabled = true,
-                        MenuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>
-                        {
-                            new()
-                            {
-                                // Add Verses to focused enhanced view
-                                Header = LocalizationService.Get("Pds_AddVerseViewToEnhancedViewMenu"),
-                                Id = DesignSurfaceMenuIds.AddAlignmentSetToCurrentEnhancedView,
-                                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                                IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
-                                AlignmentSetId = alignmentSetInfo.Id.ToString(),
-                                DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
-                                ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
-                                ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
-                                IsEnabled = true,
-                                IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
-                                IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
-                                SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
-                                TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
-                                SmtModel = alignmentSetInfo.SmtModel,
-                            },
-                            new()
-                            {
-                                // Add Verses to focused enhanced view
-                                Header = LocalizationService.Get("Pds_AddBulkAlignmentApprovalToEnhancedViewMenu"),
-                                Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView,
-                                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                                IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
-                                AlignmentSetId = alignmentSetInfo.Id.ToString(),
-                                DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
-                                ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
-                                ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
-                                IsEnabled = true,
-                                IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
-                                IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
-                                SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
-                                TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
-                                SmtModel = alignmentSetInfo.SmtModel,
-                            },
-                            new()
-                            {
-                                // Add Verses to new enhanced view
-                                Header = LocalizationService.Get("Pds_AddConnectionToNewEnhancedViewMenu"),
-                                Id = DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
-                                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                                IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
-                                AlignmentSetId = alignmentSetInfo.Id.ToString(),
-                                DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
-                                ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
-                                ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
-                                IsEnabled = true,
-                                IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
-                                IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
-                                SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
-                                TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
-                                SmtModel = alignmentSetInfo.SmtModel,
-                            }
-                            ,
-                            new()
-                            {
-                                // Add Verses to new enhanced view
-                                Header = LocalizationService.Get("Pds_DeleteAlignmentSet"),
-                                Id = DesignSurfaceMenuIds.DeleteAlignmentSet,
-                                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                                IconKind = PackIconPicolIconsKind.Cancel.ToString(),
-                                AlignmentSetId = alignmentSetInfo.Id.ToString(),
-                                DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
-                                ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
-                                ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
-                                IsEnabled = true,
-                                IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
-                                IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
-                                SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
-                                TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
-                                SmtModel = alignmentSetInfo.SmtModel,
-                            }
-                        }
+                        MenuItems = menuItems
+                        //MenuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>
+                        //{
+                        //    new()
+                        //    {
+                        //        // Add Verses to focused enhanced view
+                        //        Header = LocalizationService.Get("Pds_AddVerseViewToEnhancedViewMenu"),
+                        //        Id = DesignSurfaceMenuIds.AddAlignmentSetToCurrentEnhancedView,
+                        //        ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                        //        IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
+                        //        AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                        //        DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                        //        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                        //        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                        //        IsEnabled = true,
+                        //        IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                        //        IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                        //        SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                        //        TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                        //        SmtModel = alignmentSetInfo.SmtModel,
+                        //    },
+                        //    new()
+                        //    {
+                        //        // Add Bulk Alignment Approval to focused enhanced view
+                        //        Header = LocalizationService.Get("Pds_AddBulkAlignmentApprovalToEnhancedViewMenu"),
+                        //        Id = DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView,
+                        //        ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                        //        IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
+                        //        AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                        //        DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                        //        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                        //        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                        //        IsEnabled = enableAlignmentEditing,                               
+                        //        IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                        //        IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                        //        SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                        //        TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                        //        SmtModel = alignmentSetInfo.SmtModel,
+                        //    },
+                        //    new()
+                        //    {
+                        //        // Add Verses to new enhanced view
+                        //        Header = LocalizationService.Get("Pds_AddConnectionToNewEnhancedViewMenu"),
+                        //        Id = DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
+                        //        ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                        //        IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
+                        //        AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                        //        DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                        //        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                        //        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                        //        IsEnabled = true,
+                        //        IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                        //        IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                        //        SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                        //        TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                        //        SmtModel = alignmentSetInfo.SmtModel,
+                        //    }
+                        //    ,
+                        //    new()
+                        //    {
+                        //        // Add Verses to new enhanced view
+                        //        Header = LocalizationService.Get("Pds_DeleteAlignmentSet"),
+                        //        Id = DesignSurfaceMenuIds.DeleteAlignmentSet,
+                        //        ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                        //        IconKind = PackIconPicolIconsKind.Cancel.ToString(),
+                        //        AlignmentSetId = alignmentSetInfo.Id.ToString(),
+                        //        DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
+                        //        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
+                        //        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
+                        //        IsEnabled = true,
+                        //        IsRtl = parallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
+                        //        IsTargetRtl = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
+                        //        SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
+                        //        TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                        //        SmtModel = alignmentSetInfo.SmtModel,
+                        //    }
+                        //}
                     });
                 }
             }
@@ -984,6 +1072,36 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             return found;
         }
 
+        private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection, 
+            ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
+        {
+            var sourceParatextProjectId = parallelCorpusConnectorDraggedOut.ParentNode!.CorpusId;
+            var targetParatextProjectId = parallelCorpusConnectorDraggedOver.ParentNode.CorpusId;
+
+            List<ParallelCorpusId> parallelCorpusIds = new();
+            foreach (var parallel in topLevelProjectIds.ParallelCorpusIds)
+            {
+                if (parallel.TargetTokenizedCorpusId.CorpusId.Id == targetParatextProjectId  &&
+                    parallel.SourceTokenizedCorpusId.CorpusId.Id==sourceParatextProjectId)
+                {
+                    parallelCorpusIds.Add(parallel);
+                }
+            }
+
+            List<string> smts = new();
+            foreach (var parallelCorpusId in parallelCorpusIds)
+            {
+                var alignments =
+                    topLevelProjectIds.AlignmentSetIds.Where(x =>
+                        x.ParallelCorpusId!.Id == parallelCorpusId.Id);
+                foreach (var alignment in alignments)
+                {
+                    smts.Add(alignment.SmtModel!);
+                }
+            }
+
+            return smts.Count >= 1;
+        }
 
         /// <summary>
         /// Delete the currently selected nodes from the view-model.
@@ -1294,6 +1412,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 return;
             }
 
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            if (IsAlreadyAligned(topLevelProjectIds, newParallelCorpusConnection, parallelCorpusConnectorDraggedOut, parallelCorpusConnectorDraggedOver))
+            {
+                ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                return;
+            }
+
             //
             // Only allow connections from output connector to input connector (ie each
             // connector must have a different type).
@@ -1343,7 +1468,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 newParallelCorpusConnection.SourceConnector = parallelCorpusConnectorDraggedOver;
                 added = true;
             }
-
+            
             if (added)
             {
                 // check to see if we somehow didn't get a source/target id properly.  If so remove the line

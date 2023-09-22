@@ -1678,6 +1678,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext beta không chạy</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Hủy bỏ ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Các dự án hợp tác</value>
   </data>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Mã xác minh email</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Bật chỉnh sửa căn chỉnh</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Thực nghiệm</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Nhóm</value>

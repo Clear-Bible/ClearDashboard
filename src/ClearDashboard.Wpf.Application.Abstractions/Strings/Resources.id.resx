@@ -1678,6 +1678,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext Beta tidak berjalan</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Membatalkan ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Proyek Kolaborasi</value>
   </data>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Kode Verifikasi Email</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Aktifkan pengeditan penyelarasan</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Eksperimental</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Kelompok</value>
