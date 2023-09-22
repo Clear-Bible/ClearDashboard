@@ -623,14 +623,17 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
-
-        private void AddAlignmentSetMenu(
+        private async void AddAlignmentSetMenu(
             ParallelCorpusConnectionViewModel parallelCorpusConnection,
             TopLevelProjectIds topLevelProjectIds, IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
             BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
         {
 
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            var parallelCorpusIds = topLevelProjectIds.ParallelCorpusIds.Where(x =>
+                x.TargetTokenizedCorpusId.IdEquals(parallelCorpusConnection.ParallelCorpusId.TargetTokenizedCorpusId) &&
+                x.SourceTokenizedCorpusId.IdEquals(parallelCorpusConnection.ParallelCorpusId.SourceTokenizedCorpusId));
+
+            var connectionItem = new ParallelCorpusConnectionMenuItemViewModel
             {
                 Header = LocalizationService.Get("Pds_CreateNewAlignmentSetMenu"),
                 Id = DesignSurfaceMenuIds.CreateNewAlignmentSet,
@@ -642,13 +645,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 IsRtl = parallelCorpusConnection.IsRtl,
                 SourceParatextId = parallelCorpusConnection.SourceConnector?.ParatextId,
                 TargetParatextId = parallelCorpusConnection.DestinationConnector?.ParatextId,
-            });
+            };
 
-            AddMenuSeparator(connectionMenuItems);
-
-            var parallelCorpusIds = topLevelProjectIds.ParallelCorpusIds.Where(x =>
-                x.TargetTokenizedCorpusId.IdEquals(parallelCorpusConnection.ParallelCorpusId.TargetTokenizedCorpusId) &&
-                x.SourceTokenizedCorpusId.IdEquals(parallelCorpusConnection.ParallelCorpusId.SourceTokenizedCorpusId));
+            if (await IsSmtAvailable(topLevelProjectIds, parallelCorpusIds.ToList()))
+            {
+                connectionMenuItems.Add(connectionItem);
+                AddMenuSeparator(connectionMenuItems);
+            }
 
             foreach (var parallelCorpusId in parallelCorpusIds)
             {
@@ -744,7 +747,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
-
+        
         public async Task CreateCorpusNodeMenu(CorpusNodeViewModel corpusNodeViewModel, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora)
         {
             corpusNodeViewModel.MenuItems.Clear();
@@ -925,6 +928,60 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
 
             return isResource;
+        }
+
+        private async Task<bool> IsSmtAvailable(TopLevelProjectIds topLevelProjectIds, List<ParallelCorpusId> parallelCorpa)
+        {
+            var SmtList = new List<ClearDashboard.Wpf.Application.Models.SmtAlgorithm>();
+
+            List<string> smts = new();
+            foreach (var parallelCorpusId in parallelCorpa)
+            {
+                var alignments =
+                    topLevelProjectIds.AlignmentSetIds.Where(x =>
+                        x.ParallelCorpusId!.Id == parallelCorpusId.Id);
+                foreach (var alignment in alignments)
+                {
+                    smts.Add(alignment.SmtModel!);
+                }
+            }
+
+            var list = Enum.GetNames(typeof(SmtModelType)).ToList();
+            foreach (var smt in list)
+            {
+                if (smts.Contains(smt))
+                {
+                    SmtList.Add(new ClearDashboard.Wpf.Application.Models.SmtAlgorithm
+                    {
+                        SmtName = smt,
+                        IsEnabled = false,
+                    });
+                }
+                else
+                {
+                    // ReSharper disable once InconsistentNaming
+                    var newSMT = new ClearDashboard.Wpf.Application.Models.SmtAlgorithm
+                    {
+                        SmtName = smt,
+                        IsEnabled = true,
+                    };
+
+                    SmtList.Add(newSMT);
+                }
+            }
+
+            // select next available smt that is enabled
+            bool found = false;
+            foreach (var smt in SmtList)
+            {
+                if (smt.IsEnabled)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            return found;
         }
 
 

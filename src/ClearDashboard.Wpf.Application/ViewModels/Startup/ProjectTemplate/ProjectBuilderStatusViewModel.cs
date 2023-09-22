@@ -5,10 +5,8 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +15,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate;
 
 public partial class ProjectBuilderStatusViewModel : Screen, IHandle<BackgroundTaskChangedMessage>, IHandle<ToggleBackgroundTasksVisibilityMessage>
 {
+    #region Member Variables   
+    
     private readonly LongRunningTaskManager? _longRunningTaskManager;
     private readonly ILocalizationService _localizationService;
     private readonly IEventAggregator? _eventAggregator;
@@ -28,6 +28,50 @@ public partial class ProjectBuilderStatusViewModel : Screen, IHandle<BackgroundT
 
     private Timer? _timer;
     private bool _cleanUpOldBackgroundTasks;
+
+    #endregion //Member Variables
+
+
+    #region Public Properties
+
+    #endregion //Public Properties
+
+
+    #region Observable Properties
+
+    private Visibility _showTaskView = Visibility.Collapsed;
+    public Visibility ShowTaskView
+    {
+        get => _showTaskView;
+        set => Set(ref _showTaskView, value);
+    }
+
+    private ObservableCollection<BackgroundTaskStatus> _backgroundTaskStatuses = new();
+    public ObservableCollection<BackgroundTaskStatus> BackgroundTaskStatuses
+    {
+        get => _backgroundTaskStatuses;
+        set => Set(ref _backgroundTaskStatuses, value);
+    }
+
+    private Visibility _showSpinner = Visibility.Collapsed;
+    private bool _showPopup;
+
+    public Visibility ShowSpinner
+    {
+        get => _showSpinner;
+        set => Set(ref _showSpinner, value);
+    }
+
+    public bool ShowPopup
+    {
+        get => _showPopup;
+        set => Set(ref _showPopup, value);
+    }
+
+    #endregion //Observable Properties
+
+
+    #region Constructor
 
     public ProjectBuilderStatusViewModel()
     {
@@ -64,6 +108,11 @@ public partial class ProjectBuilderStatusViewModel : Screen, IHandle<BackgroundT
 
         return base.OnDeactivateAsync(close, cancellationToken);
     }
+
+    #endregion //Constructor
+
+
+    #region Methods
 
     private void TimerElapsed(object? state)
     {
@@ -156,77 +205,6 @@ public partial class ProjectBuilderStatusViewModel : Screen, IHandle<BackgroundT
         }
     }
 
-    public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
-    {
-        var backgroundTaskStatus = message.Status;
-
-        // check for duplicate entries
-        var taskExists = false;
-        foreach (var status in BackgroundTaskStatuses)
-        {
-            if (status.Name == backgroundTaskStatus.Name)
-            {
-                taskExists = true;
-
-                status.Description = backgroundTaskStatus.Description;
-                if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
-                {
-                    if (backgroundTaskStatus.ErrorMessage.Contains("InvalidParameterEngineException"))
-                    {
-                        status.Description = backgroundTaskStatus.Name + " Failed:\n " + "An unfitting tokenizer was used for the selected corpus.  For example, the ZWSP tokenizer for the NIV84 corpus.";
-                    }
-                    else
-                    {
-                        status.Description = backgroundTaskStatus.Name + " Failed:\n " + backgroundTaskStatus.ErrorMessage;
-                    }
-                    ShowPopup = true;
-                }
-
-                if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
-                {
-                    CancelTask(backgroundTaskStatus);
-                    backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Cancelled;
-                }
-                status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
-
-                NotifyOfPropertyChange(() => BackgroundTaskStatuses);
-                break;
-            }
-        }
-
-        if (taskExists == false)
-        {
-            BackgroundTaskStatuses.Insert(0, backgroundTaskStatus);
-        }
-
-        ToggleSpinner();
-
-        await Task.CompletedTask;
-    }
-
-    private Visibility _showTaskView = Visibility.Collapsed;
-    public Visibility ShowTaskView
-    {
-        get => _showTaskView;
-        set => Set(ref _showTaskView, value);
-    }
-
-    private ObservableCollection<BackgroundTaskStatus> _backgroundTaskStatuses = new();
-    public ObservableCollection<BackgroundTaskStatus> BackgroundTaskStatuses
-    {
-        get => _backgroundTaskStatuses;
-        set => Set(ref _backgroundTaskStatuses, value);
-    }
-
-    private Visibility _showSpinner = Visibility.Collapsed;
-    private bool _showPopup;
-
-    public Visibility ShowSpinner
-    {
-        get => _showSpinner;
-        set => Set(ref _showSpinner, value);
-    }
-
     public void CloseTaskBox()
     {
         ShowTaskView = Visibility.Collapsed;
@@ -242,22 +220,6 @@ public partial class ProjectBuilderStatusViewModel : Screen, IHandle<BackgroundT
         ShowSpinner = runningTasks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
-
-    public bool ShowPopup
-    {
-        get => _showPopup;
-        set => Set(ref _showPopup, value);
-    }
-
-    public async Task HandleAsync(ToggleBackgroundTasksVisibilityMessage message, CancellationToken cancellationToken)
-    {
-        ShowTaskView = ShowTaskView == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
-        OnUIThread(() =>
-        {
-            ShowPopup = !ShowPopup;
-        });
-        await Task.CompletedTask;
-    }
 
     /// <summary>
     /// Get the number of running tasks that are flagged as high performance mode
@@ -364,4 +326,64 @@ public partial class ProjectBuilderStatusViewModel : Screen, IHandle<BackgroundT
     {
         Clipboard.SetText(status.Name + ": " + status.Description);
     }
+
+    public async Task HandleAsync(ToggleBackgroundTasksVisibilityMessage message, CancellationToken cancellationToken)
+    {
+        ShowTaskView = ShowTaskView == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+        OnUIThread(() =>
+        {
+            ShowPopup = !ShowPopup;
+        });
+        await Task.CompletedTask;
+    }
+
+    public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+    {
+        var backgroundTaskStatus = message.Status;
+
+        // check for duplicate entries
+        var taskExists = false;
+        foreach (var status in BackgroundTaskStatuses)
+        {
+            if (status.Name == backgroundTaskStatus.Name)
+            {
+                taskExists = true;
+
+                status.Description = backgroundTaskStatus.Description;
+                if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
+                {
+                    if (backgroundTaskStatus.ErrorMessage.Contains("InvalidParameterEngineException"))
+                    {
+                        status.Description = backgroundTaskStatus.Name + " Failed:\n " + "An unfitting tokenizer was used for the selected corpus.  For example, the ZWSP tokenizer for the NIV84 corpus.";
+                    }
+                    else
+                    {
+                        status.Description = backgroundTaskStatus.Name + " Failed:\n " + backgroundTaskStatus.ErrorMessage;
+                    }
+                    ShowPopup = true;
+                }
+
+                if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
+                {
+                    CancelTask(backgroundTaskStatus);
+                    backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Cancelled;
+                }
+                status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
+
+                NotifyOfPropertyChange(() => BackgroundTaskStatuses);
+                break;
+            }
+        }
+
+        if (taskExists == false)
+        {
+            BackgroundTaskStatuses.Insert(0, backgroundTaskStatus);
+        }
+
+        ToggleSpinner();
+
+        await Task.CompletedTask;
+    }
+
+    #endregion // Methods
 }

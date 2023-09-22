@@ -1,22 +1,23 @@
-﻿<UserControl x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate.BuildProjectStepView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:cm="http://caliburnmicro.com"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
-             xmlns:projectTemplate="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate"
-             xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
-             xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.Views.Shell"
-             xmlns:projectTemplate1="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate"
-             xmlns:extension="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-             d:DataContext="{d:DesignInstance Type=projectTemplate:BuildProjectStepViewModel,
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate.BuildProjectStepView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extension="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
+    xmlns:projectTemplate="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate"
+    xmlns:projectTemplate1="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.Views.Shell"
+    Width="1010"
+    Height="700"
+    d:DataContext="{d:DesignInstance Type=projectTemplate:BuildProjectStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    Width="1010"
-    Height="700"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
@@ -35,28 +36,53 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0"  Grid.ColumnSpan="2" Content="{Binding DisplayName}" FontSize="24" Margin="12,0,0,0"></Label>
+        <Label
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Margin="12,0,0,0"
+            Content="{Binding DisplayName}"
+            FontSize="24" />
         <project:ReadonlyProjectDesignSurfaceView
-                x:Name="ProjectDesignSurfaceControl"
-                Grid.Column="0" Grid.Row="1"
-                Height="565"
-                DataContext="{Binding ProjectDesignSurfaceViewModel}" />
+            x:Name="ProjectDesignSurfaceControl"
+            Grid.Row="1"
+            Grid.Column="0"
+            Height="565"
+            DataContext="{Binding ProjectDesignSurfaceViewModel}" />
 
-        <StackPanel x:Name="ProjectOverviewText" Grid.Row="1" Grid.Column="1" Visibility="{Binding  ShowProjectOverviewMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Label Content="We're almost there!" Margin="20,0" FontSize="24" HorizontalAlignment="Center"></Label>
-            <TextBlock Margin="20, 10" FontSize="20" TextWrapping="Wrap" Text="{helpers:Localization ProjectPicker_ProjectBuilderOverview}"></TextBlock>
+        <StackPanel
+            x:Name="ProjectOverviewText"
+            Grid.Row="1"
+            Grid.Column="1"
+            Visibility="{Binding ShowProjectOverviewMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label
+                Margin="20,0"
+                HorizontalAlignment="Center"
+                Content="We're almost there!"
+                FontSize="24" />
+            <TextBlock
+                Margin="20,10"
+                FontSize="20"
+                Text="{helpers:Localization ProjectPicker_ProjectBuilderOverview}"
+                TextWrapping="Wrap" />
         </StackPanel>
-        <projectTemplate1:ProjectBuilderStatusView   Grid.Row="1" Grid.Column="1"  Visibility="{Binding  ElementName=ProjectOverviewText, Path=DataContext.ShowProjectOverviewMessage, Converter={StaticResource InverseBooleanToVisibilityConverter}}" x:Name="BackgroundTasksView" DataContext="{Binding BackgroundTasksViewModel}" />
+        <projectTemplate1:ProjectBuilderStatusView
+            x:Name="BackgroundTasksView"
+            Grid.Row="1"
+            Grid.Column="1"
+            DataContext="{Binding BackgroundTasksViewModel}"
+            Visibility="{Binding ElementName=ProjectOverviewText, Path=DataContext.ShowProjectOverviewMessage, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
         <!--<ListBox Grid.Row="1" Grid.Column="1"  ItemsSource="{Binding Messages}"></ListBox>-->
-        <TextBlock  Grid.Row="2" Grid.Column="0" Margin="40, 20">
-            <Hyperlink NavigateUri="https://cleardashboard.org"
-                       extension:HyperlinkExtensions.IsExternal="true">
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="40,20">
+            <Hyperlink extension:HyperlinkExtensions.IsExternal="true" NavigateUri="https://cleardashboard.org">
                 <Hyperlink.Inlines>
-                    <Run Text="{helpers:Localization ProjectPicker_ProjectBuilderHelpfulVideos}"/>
+                    <Run Text="{helpers:Localization ProjectPicker_ProjectBuilderHelpfulVideos}" />
                 </Hyperlink.Inlines>
             </Hyperlink>
         </TextBlock>
@@ -68,16 +94,18 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal">
 
-            <Button x:Name="BackOrCancel"
-                    Width="90"
-                    Margin="0,0,15,15"
-                    HorizontalAlignment="Right"
-                    cm:Message.Attach="BackOrCancel()"
-                    Content="{Binding BackOrCancelAction}"
-                    FontSize="12"
-                    IsEnabled="{Binding CanMoveBackwards}"
-                    Style="{StaticResource TransparentStyle}" />
-            <Button x:Name="CreateOrClose"
+            <Button
+                x:Name="BackOrCancel"
+                Width="90"
+                Margin="0,0,15,15"
+                HorizontalAlignment="Right"
+                cm:Message.Attach="BackOrCancel()"
+                Content="{Binding BackOrCancelAction}"
+                FontSize="12"
+                IsEnabled="{Binding CanMoveBackwards}"
+                Style="{StaticResource TransparentStyle}" />
+            <Button
+                x:Name="CreateOrClose"
                 Width="90"
                 Margin="0,0,15,15"
                 HorizontalAlignment="Right"
@@ -85,7 +113,7 @@
                 Content="{Binding CreateOrCloseAction}"
                 FontSize="12"
                 IsEnabled="{Binding CanMoveForwards}"
-                Style="{StaticResource TransparentStyle}"/>
+                Style="{StaticResource TransparentStyle}" />
         </StackPanel>
         <ProgressBar
             Grid.Row="1"

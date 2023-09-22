@@ -171,6 +171,7 @@
                 Height="40"
                 MaxWidth="175"
                 Margin="5,0,5,0"
+                IsEnabled="{Binding AlignmentsAvailable}"
                 Style="{StaticResource TransparentStyle}">
                 Create Interlinear
             </Button>
