@@ -1,27 +1,24 @@
 ﻿//#define DEMO
 
-using System.Threading.Tasks;
 using Autofac;
-using MediatR;
 using Caliburn.Micro;
-using Microsoft.Extensions.Logging;
-using System.Diagnostics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ClearDashboard.DAL.Alignment.Features.Lexicon;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using ClearDashboard.Wpf.Application.Messages.Lexicon;
-using ClearDashboard.DataAccessLayer.Models;
-using Lexicon = ClearDashboard.DAL.Alignment.Lexicon.Lexicon;
-using Lexeme = ClearDashboard.DAL.Alignment.Lexicon.Lexeme;
-using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ClearDashboard.DAL.Alignment.Features.Lexicon;
-using ClearDashboard.DataAccessLayer;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
-using System.Windows.Documents;
+using System.Threading.Tasks;
+using Lexeme = ClearDashboard.DAL.Alignment.Lexicon.Lexeme;
+using Lexicon = ClearDashboard.DAL.Alignment.Lexicon.Lexicon;
+using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -451,10 +448,9 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task<Lexicon?> GetLexiconForProject(string? projectId)
+        private async Task<Lexicon?> GetLexiconForProject(string? projectId)
         {
             var result = await Mediator.Send(new GetExternalLexiconQuery(projectId));
-            //var result = await Mediator.Send(new GetExternalLexiconQuery(null));
             if (result.Success && result.HasData)
             {
                 return result.Data;
@@ -472,25 +468,23 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ObservableCollection<Lexeme>? ManagedLexemes { get; private set; }
 
-        public Lexicon? ManagedLexicon { get; private set; }
+        public (IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> LemmaOrFormMatchesOnly, IEnumerable<Guid> TranslationMatchesOnly) ManagedLexicon { get; private set; }
 
         public List<LexiconImportViewModel> ImportedLexiconViewModels { get; private set; }
-
-
-        //ImportedLexiconViewModels
+        
+        /// <summary>
+        /// This method is used purely for a sanity check on the data imported into the Project database,
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<List<LexiconImportViewModel>> GetImportedLexiconViewModels(string? projectId, CancellationToken cancellationToken)
         {
             ImportedLexiconViewModels = new List<LexiconImportViewModel>();
             var internalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
-            if (internalLexicon != null)
-            {
-                //ManagedLexicon = await GetExternalLexiconNotInInternal(internalLexicon, cancellationToken);
-                //ManagedLexemes = ManagedLexicon.Lexemes;
-
+           
                 foreach (var lexeme in internalLexicon.Lexemes)
                 {
-                                                     
-
                     foreach (var meaning in lexeme.Meanings)
                     {
                         foreach (var translation in meaning.Translations)
@@ -503,16 +497,11 @@ namespace ClearDashboard.Wpf.Application.Services
                                 SourceType = lexeme.Type,
                                 TargetLanguage = meaning.Language,
                                 TargetWord = translation.Text,
-                                //IsSelected = externalLexeme != null,
-                                //ShowAddAsFormButton = externalLexeme != null && externalLexeme.Meanings.ToImmutableArray().Any(m => m.Translations.Contains(translation)),
-                                //ShowAddTargetAsTranslationButton = showAddTargetAsTranslationButton
                             };
                             ImportedLexiconViewModels.Add(vm);
                         }
                     }
                 }
-            }
-
             return ImportedLexiconViewModels;
         }
 
@@ -523,17 +512,16 @@ namespace ClearDashboard.Wpf.Application.Services
             if (externalLexicon != null)
             {
                 ManagedLexicon = await GetExternalLexiconNotInInternal(externalLexicon, cancellationToken);
-                ManagedLexemes = ManagedLexicon.Lexemes;
+                ManagedLexemes = new ObservableCollection<Lexeme>(ManagedLexicon.Lexemes);
 
-                foreach (var lexeme in ManagedLexemes = ManagedLexicon.Lexemes)
+                foreach (var lexeme in ManagedLexemes)
                 {
-                    //var externalLexeme =
-                    //    externalLexicon.Lexemes.FirstOrDefault(l => l.LexemeId.Id == lexeme.LexemeId.Id);
-                    //var showAddTargetAsTranslationButton = externalLexeme != null &&
-                    //                                      lexeme.Forms.Any(f => f.Text == externalLexeme.Lemma);
-                    
+                   
                     foreach (var meaning in lexeme.Meanings)
                     {
+                       var lemmaOrFormMatch = ManagedLexicon.LemmaOrFormMatchesOnly.Contains(lexeme.LexemeId.Id);
+                       var translationMatch = ManagedLexicon.TranslationMatchesOnly.Contains(lexeme.LexemeId.Id);
+
                         foreach (var translation in meaning.Translations)
                         {
                             var vm = new LexiconImportViewModel
@@ -544,9 +532,9 @@ namespace ClearDashboard.Wpf.Application.Services
                                 SourceType = lexeme.Type,
                                 TargetLanguage = meaning.Language,
                                 TargetWord = translation.Text,
-                                //IsSelected = externalLexeme != null,
-                                //ShowAddAsFormButton = externalLexeme != null && externalLexeme.Meanings.ToImmutableArray().Any(m => m.Translations.Contains(translation)),
-                                //ShowAddTargetAsTranslationButton = showAddTargetAsTranslationButton
+                                IsSelected = !lemmaOrFormMatch && !translationMatch,
+                                ShowAddAsFormButton = lemmaOrFormMatch,
+                                ShowAddTargetAsTranslationButton = translationMatch
                             };
                             LexiconImportViewModels.Add(vm);
                         }
@@ -557,13 +545,13 @@ namespace ClearDashboard.Wpf.Application.Services
             return LexiconImportViewModels;
         }
 
-        public async Task<Lexicon> GetExternalLexiconNotInInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
+        private async Task<(IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> LemmaOrFormMatchesOnly, IEnumerable<Guid> TranslationMatchesOnly)> GetExternalLexiconNotInInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
         {
             var internalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
             return GetExternalLexiconNotInInternal(externalLexicon, internalLexicon);
         }
 
-        public static Lexicon GetExternalLexiconNotInInternal(Lexicon externalLexicon, Lexicon internalLexicon)
+        private static (IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> LemmaOrFormMatchesOnly, IEnumerable<Guid> TranslationMatchesOnly) GetExternalLexiconNotInInternal(Lexicon externalLexicon, Lexicon internalLexicon)
         {
             // Include each external Lexeme for which there are not any internal lexemes for which:
             //  Any of the external lemma/forms match any of the internal lemma/forms AND
@@ -587,13 +575,10 @@ namespace ClearDashboard.Wpf.Application.Services
             //                ).Any()
             //        ));
 
-            var lexemesExternalExceptInternal = externalLexicon.Lexemes
+            return externalLexicon.Lexemes
                 .ExceptByLexemeTranslationMatch(internalLexicon.Lexemes);
 
-            return new Lexicon
-            {
-                Lexemes = new ObservableCollection<Lexeme>(lexemesExternalExceptInternal.Lexemes)
-            };
+           
         }
 
         public async Task ProcessImportedLexicon()
@@ -613,22 +598,22 @@ namespace ClearDashboard.Wpf.Application.Services
 
         }
 
-        public async Task ProcessLexiconImportsToDelete()
-        {
-            if (ManagedLexemes != null)
-            {
-                var selectedLexemesToDelete = ImportedLexiconViewModels.Where(vm => vm.IsSelected)
-                    .Select(vm => ManagedLexemes.First(lexeme => lexeme.LexemeId.Id == vm.LexemeId).LexemeId);
+        //public async Task ProcessLexiconImportsToDelete()
+        //{
+        //    if (ManagedLexemes != null)
+        //    {
+        //        var selectedLexemesToDelete = ImportedLexiconViewModels.Where(vm => vm.IsSelected)
+        //            .Select(vm => ManagedLexemes.First(lexeme => lexeme.LexemeId.Id == vm.LexemeId).LexemeId);
 
-                //var lexicon = new Lexicon
-                //{
-                //   LexemeIdsToDelete = selectedLexemesToDelete
-                //};
+        //        //var lexicon = new Lexicon
+        //        //{
+        //        //   LexemeIdsToDelete = selectedLexemesToDelete
+        //        //};
 
-                //await lexicon.SaveAsync(Mediator);
-            }
+        //        //await lexicon.SaveAsync(Mediator);
+        //    }
 
-        }
+        //}
 
 
 
@@ -639,6 +624,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns>The constructed LexiconManager.</returns>
         public static async Task<LexiconManager> CreateAsync(IComponentContext componentContext)
         {
+            await Task.CompletedTask;
             var manager = componentContext.Resolve<LexiconManager>();
             return manager;
         }

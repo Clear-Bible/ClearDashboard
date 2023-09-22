@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Current Project Users:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Delete Project</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>You have other users connected to this project.  This project will be removed for them as well. Are sure you want to delete this project?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Are you sure you want to delete this project?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Description</value>
   </data>
@@ -926,13 +935,22 @@
     <value>Translation</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>As as form for...</value>
+    <value>Add as form for...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Find full or partial lexeme or form matches for source</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>As target as transalation for ...</value>
+    <value>Add target as transalation for ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Find lexemes that have one or more translation that matches target</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import Checked</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme or form matches</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Select All</value>
@@ -951,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Target Word</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Translation matches</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Unselect All</value>
@@ -1288,6 +1309,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Add a label</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Do you want to create label:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>and associate it with label group:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>and disassociate it from label group:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Add Label Group</value>
   </data>
@@ -1314,6 +1344,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Remove this label</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>Do you want to remove label:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>
@@ -1429,6 +1462,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Select an SMT algorithm to train</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Add Bulk Approval to View</value>
   </data>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Hebrew (OT) Macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>MarbleResource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>MARBLE Resource</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Number of different tokenizations</value>
@@ -1654,6 +1690,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext Beta is not running</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Cancelling...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Collaboration Projects</value>
   </data>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>A project with the same name already exists. Please choose a unique name.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>The given project name is too long.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Chronicles</value>
@@ -2040,6 +2082,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Email Verification Code</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Enable Alignment Editing</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Experimental</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Group</value>

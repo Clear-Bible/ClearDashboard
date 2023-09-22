@@ -135,6 +135,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             await GetLexiconImportViewModels(CancellationToken.None);
         }
 
+        public async Task OnAddAsFormButtonClicked(LexiconImportViewModel lexiconImport)
+        {
+            await Task.CompletedTask;
+        }
+
+        public async Task OnTargetAsTranslationButtonClicked(LexiconImportViewModel lexiconImport)
+        {
+            await Task.CompletedTask;
+        }
+
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             return base.OnDeactivateAsync(close, cancellationToken);

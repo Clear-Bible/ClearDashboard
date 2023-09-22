@@ -449,7 +449,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞密性的單詞</value>
+    <value>樞紐的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -464,7 +464,7 @@
     <value>目標</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>目標零件</value>
+    <value>目標部分</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
     <value>類型</value>
@@ -516,6 +516,15 @@
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>當前的項目用戶：</value>
+  </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>刪除項目</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>您將其他用戶連接到此項目。該項目也將為他們刪除。確定您想刪除這個項目嗎？</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>您確定要刪除這個項目嗎？</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>描述</value>
@@ -926,13 +935,22 @@
     <value>翻譯</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>作為...的形式</value>
+    <value>添加為...的形式</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>查找源的完整或部分詞彙或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>作為...的目標</value>
+    <value>將目標添加為...的橫向</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>查找具有與目標匹配的一個或多個翻譯的詞彙</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>導入檢查</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme或形式匹配</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>全選</value>
@@ -951,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>目標詞</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>翻譯匹配</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消選擇</value>
@@ -1288,6 +1309,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>添加標籤</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>您想創建標籤：</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>並將其與標籤組相關聯：</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>並將其與標籤組分離：</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>添加標籤組</value>
   </data>
@@ -1314,6 +1344,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>刪除此標籤</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>您想刪除標籤：</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
@@ -1367,7 +1400,7 @@
     <value>將此註釋發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象徵化的語料庫</value>
+    <value>令牌化語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1429,6 +1462,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext語料庫</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>選擇一種SMT算法進行訓練</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>增加大量批准以查看</value>
   </data>
@@ -1451,7 +1487,7 @@
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文本查看</value>
+    <value>添加文字以查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>將文本添加到新視圖</value>
@@ -1472,7 +1508,7 @@
     <value>更改內容的縮放級別</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顧問Notes</value>
+    <value>顧問說明</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>希伯來人黃斑</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>大理石資源</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>不同的引導數量</value>
@@ -1628,7 +1664,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示反向翻譯</value>
+    <value>展示退縮</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -1652,7 +1688,10 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>paratext beta不運行</value>
+    <value>PARATEXT BETA未運行</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>取消...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>協作項目</value>
@@ -1712,7 +1751,7 @@
     <value>paratext不運行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>近期開放</value>
+    <value>公開最近</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>一個具有相同名稱的項目已經存在。請選擇一個唯一名稱。</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>給定的項目名稱太長。</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>歷代志上</value>
@@ -2041,6 +2083,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>電子郵件驗證代碼</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>啟用對齊編輯</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>實驗</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>團體</value>
   </data>
@@ -2123,7 +2171,7 @@
     <value>發行說明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>顯示預發行</value>
+    <value>顯示預釋放</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>

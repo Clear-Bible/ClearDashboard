@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>مستخدمي المشروع الحاليين:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>حذف المشروع</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم أيضًا. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد حذف هذا المشروع؟</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>وصف</value>
   </data>
@@ -653,7 +662,7 @@
     <value>حدد موقعًا لتقسيم الرمز المميز:</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>un incin composite token</value>
+    <value>un incin مركب مركب</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -707,7 +716,7 @@
     <value>عنوان:</value>
   </data>
   <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>حجم خط الخط:</value>
+    <value>حجم خط العنوان:</value>
   </data>
   <data name="FontSettings_Translations" xml:space="preserve">
     <value>الترجمات:</value>
@@ -854,13 +863,13 @@
     <value>ليما/النماذج:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma من أجل Lexeme الجديد:</value>
+    <value>Lemma من أجل lexeme الجديد:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>لكلية</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>يوجد معجم ل lemma بالفعل</value>
+    <value>يوجد معكم بالفعل لـ Lemma</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>المعاني:</value>
@@ -872,7 +881,7 @@
     <value>قم بإزالة هذا المجال الدلالي من هذا المعنى</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>قم بإزالة هذا النموذج المعجمي من هذا الليمون</value>
+    <value>قم بإزالة هذا النموذج المعجمي من هذا ليمما</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>تعيين ترجمة ل</value>
@@ -926,13 +935,22 @@
     <value>ترجمة</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>كشكل ل ...</value>
+    <value>أضف كشكل لـ ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>ابحث عن lexeme الكامل أو الجزئي أو مباريات النموذج للمصدر</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>كهدف مثل transalation لـ ...</value>
+    <value>أضف الهدف كـ Transalation لـ ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>ابحث عن lexemes التي تحتوي على ترجمة واحدة أو أكثر تتطابق مع الهدف</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>استيراد فحص</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>lexeme أو مباريات النموذج</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>اختر الكل</value>
@@ -951,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>الكلمة الهدف</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>مباريات الترجمة</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>إلغاء تحديد الكل</value>
@@ -1259,7 +1280,7 @@
     <value>أضف ملاحظة جديدة</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>حذف هذه الملاحظة؟</value>
+    <value>حذف هذه المذكرة؟</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>من قبل الجمعيات</value>
@@ -1288,6 +1309,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>إضافة تسمية</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>هل تريد إنشاء تسمية:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>وربطها مع مجموعة الملصقات:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>وفرزها من مجموعة الملصقات:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>أضف مجموعة التسمية</value>
   </data>
@@ -1295,7 +1325,7 @@
     <value>أضف مجموعة ملصقات</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>توجد مجموعة تسمية بالفعل مع الاسم</value>
+    <value>مجموعة تسمية موجودة بالفعل مع الاسم</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>تهيئة مجموعة الملصقات</value>
@@ -1310,10 +1340,13 @@
     <value>إزالة مجموعة الملصقات هذه؟</value>
   </data>
   <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
-    <value>قم بإزالة مجموعة الملصقات هذه</value>
+    <value>قم بإزالة مجموعة التسمية هذه</value>
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>أزل هذا التسمية</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>هل تريد إزالة التسمية:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>مخلوق</value>
@@ -1403,10 +1436,10 @@
     <value>إنشاء interlinear</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>بيانات التعريف json</value>
+    <value>JSON METADATA</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>موازية آيات كوربورا</value>
+    <value>موازاة آيات كوربورا</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>خوارزمية محاذاة كلمة الجهاز</value>
@@ -1429,8 +1462,11 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>حدد خوارزمية SMT للتدريب</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>أضف موافقة كبيرة للعرض</value>
+    <value>أضف موافقة بالجملة للعرض</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>أضف للعرض</value>
@@ -1445,7 +1481,7 @@
     <value>إنشاء محاذاة كلمات جديدة</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>قم بإنشاء رمز كوربوس جديد</value>
+    <value>قم بإنشاء رمز جسم جديد</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>أضف Interlinear جديد</value>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>العبرية (OT) Macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>مربى</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>مورد الرخام</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>عدد الرموز المختلفة</value>
@@ -1541,7 +1577,7 @@
     <value>مصدر</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Sourcelanguage</value>
+    <value>SourceLanguage</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>معيار</value>
@@ -1654,6 +1690,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>BARATEXT BETA لا يعمل</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>إلغاء ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>مشاريع التعاون</value>
   </data>
@@ -1748,7 +1787,7 @@
     <value>معالج قالب المشروع: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>قم بتحديث قائمة مشاريع التعاون</value>
+    <value>قائمة مشاريع التعاون</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>البحث في الآونة الأخيرة</value>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>مشروع مع نفس الاسم موجود بالفعل. الرجاء اختيار اسم فريد.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>اسم المشروع المحدد طويل جدًا.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 سجلات</value>
@@ -1850,7 +1892,7 @@
     <value>خروج</value>
   </data>
   <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>حزن</value>
+    <value>حزقيال</value>
   </data>
   <data name="ProperCase_Ezra" xml:space="preserve">
     <value>عزرا</value>
@@ -1985,7 +2027,7 @@
     <value>المفتاح المقدم هو معيب. عندما تم فك تشفيرها ، لا يمكن العثور على بعض عناصر JSON.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم فك تشفيره مع المعلومات التي قدمتها.</value>
+    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم تفكيكه مع المعلومات التي قدمتها.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
@@ -2041,6 +2083,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>رمز التحقق من البريد الإلكتروني</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>تمكين تحرير المحاذاة</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>تجريبي</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>مجموعة</value>
   </data>
@@ -2087,7 +2135,7 @@
     <value>إظهار طرق عرض المرآة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض Mirror View على الشاشة الثالثة</value>
+    <value>للأنظمة التي لديها ثلاثة شاشات أو أكثر ، عرض المرآة على الشاشة الثالثة</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>جمع النص</value>
@@ -2174,7 +2222,7 @@
     <value>عنوان:</value>
   </data>
   <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>أرسل رسالة الركود</value>
+    <value>إرسال رسالة الركود</value>
   </data>
   <data name="SNG" xml:space="preserve">
     <value>SNG</value>
@@ -2207,7 +2255,7 @@
     <value>اضف جديد</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>تحديث وإضافة كتب جديدة</value>
+    <value>تحديث وأضف كتبًا جديدة</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
     <value>حدد الكتب</value>

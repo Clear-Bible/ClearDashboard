@@ -134,7 +134,7 @@
     <value>Количество ошибок:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Межлинейно</value>
+    <value>Межлинейный</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
     <value>Нет ошибок</value>
@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Текущие пользователи проекта:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Удалить проект</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>У вас есть другие пользователи, подключенные к этому проекту. Этот проект будет удален и для них. Уверены, что вы хотите удалить этот проект?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить этот проект?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Описание</value>
   </data>
@@ -608,13 +617,13 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск фильтра</value>
+    <value>Поиск по фильтру</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск членов фильтра</value>
+    <value>Поиск члена фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Межлинейно</value>
+    <value>Межлинейный</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
     <value>Присоединяйтесь к токенам</value>
@@ -926,13 +935,22 @@
     <value>Перевод</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Как форма для ...</value>
+    <value>Добавить в качестве формы для ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Найдите полные или частичные совпадения Lexeme или Form для источника</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Такая же цель, как трансалация для ...</value>
+    <value>Добавьте цель в качестве трансалации для ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme или Form Matches</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Выбрать все</value>
@@ -951,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Целевое слово</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Перевод совпадает</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Снять все</value>
@@ -1121,7 +1142,7 @@
     <value>Сильные коды</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Подпагнические домены:</value>
+    <value>Субсины:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Стих</value>
@@ -1157,7 +1178,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header2" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1175,7 +1196,7 @@
     <value>Токен доступа:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Проверьте доступность пользователя</value>
@@ -1288,6 +1309,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Добавить этикетку</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Вы хотите создать этикетку:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>и связывать это с группой лейблов:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>и отделить его от группы лейблов:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Добавить группу метки</value>
   </data>
@@ -1304,7 +1334,7 @@
     <value>с ярлыками от:</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Название группы на этикетке</value>
+    <value>Название группы лейбла</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
     <value>Удалить эту группу этикетки?</value>
@@ -1314,6 +1344,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Удалите эту метку</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>Вы хотите удалить этикетку:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1409,10 +1442,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1428,6 +1461,9 @@
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Выберите алгоритм SMT, чтобы тренироваться</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте массовое разрешение на просмотр</value>
@@ -1448,7 +1484,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интернетальный</value>
+    <value>Добавить новый интерлинеар</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1499,7 +1535,7 @@
     <value>Установите всю область контента в просмотр</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Установите все узлы в Viewport</value>
+    <value>Подключить все узлы к видовому доку</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Получите последние из Paratext</value>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Иврит (OT) макула</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Мраморный ресурс</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Количество различных токенизаций</value>
@@ -1526,7 +1562,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1562,7 +1598,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIntEncoder</value>
+    <value>Транслитерация WithIteChoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1571,7 +1607,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить содержание</value>
+    <value>Увеличить контент</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1628,7 +1664,7 @@
     <value>Префикс</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Покажите Backtranslation</value>
+    <value>Показать переходное время</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Корень</value>
@@ -1653,6 +1689,9 @@
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext Beta не работает</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Отмена ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Совместные проекты</value>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Проект с тем же названием уже существует. Пожалуйста, выберите уникальное имя.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Данное название проекта слишком длинное.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Паралипоменон</value>
@@ -2021,7 +2063,7 @@
     <value>Включить экспериментальный плагин Aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Настройки сотрудничества</value>
@@ -2036,10 +2078,16 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка отправки</value>
+    <value>По электронной почте ошибка</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Включить редактирование выравнивания</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Экспериментальный</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Группа</value>
@@ -2216,7 +2264,7 @@
     <value>Обновить и добавить новый</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создайте использование дефолтов</value>
+    <value>Создать использование дефолтов</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

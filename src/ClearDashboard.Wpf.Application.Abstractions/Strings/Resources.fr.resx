@@ -383,7 +383,7 @@
     <value>Tous</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendements manquants</value>
+    <value>Rendages manquants</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Mots alignés</value>
@@ -497,7 +497,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>Nouveau individu</value>
+    <value>nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -516,6 +516,15 @@
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Utilisateurs actuels du projet:</value>
+  </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Supprimer le projet</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Vous avez d'autres utilisateurs connectés à ce projet. Ce projet sera également supprimé pour eux. Vous souhaitez supprimer ce projet?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer ce projet?</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Description</value>
@@ -587,7 +596,7 @@
     <value>Supprimer cette vue?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer l'alignement</value>
+    <value>Créer un alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
     <value>Afficher / créer des notes</value>
@@ -926,13 +935,22 @@
     <value>Traduction</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Comme une forme pour ...</value>
+    <value>Ajouter comme formulaire pour ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Trouvez des matchs de lexème ou de formulaire complet ou partiel pour la source</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Aussi cible que la transalation pour ...</value>
+    <value>Ajouter la cible comme transalation pour ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Trouver des lexèmes qui ont une ou plusieurs traductions qui correspondent à la cible</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>IMPORT VÉRÉE</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexème ou les correspondances de forme</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Tout sélectionner</value>
@@ -951,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Mot cible</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Matchs de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1288,6 +1309,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Ajouter une étiquette</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Voulez-vous créer une étiquette:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>Et associez-le à un groupe d'étiquettes:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>et le dissocier du groupe d'étiquettes:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Ajouter un groupe d'étiquettes</value>
   </data>
@@ -1314,6 +1344,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Supprimer cette étiquette</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>Voulez-vous supprimer l'étiquette:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Créé</value>
@@ -1421,13 +1454,16 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de la machine à train</value>
+    <value>Aligneur de mot de machine de train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus paratext</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Sélectionnez un algorithme SMT pour s'entraîner</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Ajouter l'approbation en vrac pour afficher</value>
@@ -1469,7 +1505,7 @@
     <value>Calculer le nouveau modèle de traduction</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Changer le niveau de zoom du contenu</value>
+    <value>Modifier le niveau de zoom du contenu</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Consultant Notes</value>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Hébreu (OT) Macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbrersource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Ressource en marbre</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Nombre de tokennisations différentes</value>
@@ -1553,7 +1589,7 @@
     <value>StudyBibleadditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Allez dans PARATEXT et changez de projets. Le projet PARATEXT actuellement connecté au plugin ClearDashboard n'est pas le même que le corpus dans ce projet Cleardashboard.</value>
+    <value>Allez dans PARATEXT et changez de projets. Le projet PARATEXT actuellement connecté au plugin ClearDashboard n'est pas le même que le corpus de ce projet Cleardashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Cible</value>
@@ -1654,6 +1690,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>La version bêta de paratext ne fonctionne pas</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Annulation ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projets de collaboration</value>
   </data>
@@ -1679,7 +1718,7 @@
     <value>Supprimer le projet</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Activer la sélection des livres</value>
+    <value>Activer la sélection du livre</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>En cas de vérification, vous pourrez sélectionner les livres à traiter.</value>
@@ -1715,7 +1754,7 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
+    <value>Paratex</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
@@ -1727,7 +1766,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet PARATEXT</value>
+    <value>Projet de parattex</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -1748,7 +1787,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Rafraîchir la liste des projets de collaboration</value>
+    <value>Refreindre la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Un projet avec le même nom existe déjà. Veuillez choisir un nom unique.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Le nom de projet donné est trop long.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Chroniques</value>
@@ -1838,7 +1880,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -1892,7 +1934,7 @@
     <value>John</value>
   </data>
   <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jona</value>
+    <value>Jonie</value>
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
@@ -1964,7 +2006,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharia</value>
+    <value>Zécharie</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2041,6 +2083,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Code de vérification par e-mail</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Activer l'édition d'alignement</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Expérimental</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Groupe</value>
   </data>
@@ -2066,7 +2114,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de la collaboration</value>
+    <value>Restaurer l'utilisateur de collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>
@@ -2216,7 +2264,7 @@
     <value>Mettre à jour et ajouter nouveau</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Créer en utilisant les valeurs par défaut</value>
+    <value>Créer à l'aide de valeurs par défaut</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Outil d'alignement</value>

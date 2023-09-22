@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>当前的项目用户：</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>删除项目</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>您将其他用户连接到此项目。该项目也将为他们删除。确定您想删除这个项目吗？</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>您确定要删除这个项目吗？</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>描述</value>
   </data>
@@ -578,7 +587,7 @@
     <value>添加对齐方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>用'{1}'对齐'{0}'？</value>
+    <value>与'{1}'对齐'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>结盟</value>
@@ -647,7 +656,7 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>拆分令牌</value>
+    <value>分开令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>选择要拆分令牌的位置：</value>
@@ -926,13 +935,22 @@
     <value>翻译</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>作为...的形式</value>
+    <value>添加为...的形式</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>查找源的完整或部分词汇或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>作为...的目标</value>
+    <value>将目标添加为...的横向</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>查找具有与目标匹配的一个或多个翻译的词汇</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>导入检查</value>
+    <value>进口检查</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme或形式匹配</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>全选</value>
@@ -951,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>目标词</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>翻译匹配</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消选择</value>
@@ -1268,7 +1289,7 @@
     <value>过滤器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>通过标签</value>
+    <value>由标签</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通过注意文本</value>
@@ -1287,6 +1308,15 @@
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>添加标签</value>
+  </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>您想创建标签：</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>并将其与标签组相关联：</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>并将其与标签组分离：</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>添加标签组</value>
@@ -1314,6 +1344,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>删除此标签</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>您想删除标签：</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>创建</value>
@@ -1429,6 +1462,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext语料库</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>选择一种SMT算法进行训练</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>增加大量批准以查看</value>
   </data>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>希伯来人黄斑</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>大理石资源</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>不同的引导数量</value>
@@ -1574,7 +1610,7 @@
     <value>放大内容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>从内容中缩小</value>
+    <value>缩小内容</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1653,6 +1689,9 @@
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>paratext beta不运行</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>取消...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>协作项目</value>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>一个具有相同名称的项目已经存在。请选择一个唯一名称。</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>给定的项目名称太长。</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>历代志上</value>
@@ -2041,6 +2083,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>电子邮件验证代码</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>启用对齐编辑</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>实验</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>团体</value>
   </data>
@@ -2135,7 +2183,7 @@
     <value>错误报告</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>我在一个项目中丢失了数据</value>
+    <value>我在项目中丢失了数据</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
     <value>我无法完成任务</value>
@@ -2210,7 +2258,7 @@
     <value>更新并添加新书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>选择书籍</value>
+    <value>选择书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新并添加新</value>

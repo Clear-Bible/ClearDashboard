@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>អ្នកប្រើប្រាស់គម្រោងបច្ចុប្បន្ន:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>លុបគម្រោង</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>អ្នកមានអ្នកប្រើប្រាស់ផ្សេងទៀតភ្ជាប់នឹងគម្រោងនេះ។ គម្រោងនេះនឹងត្រូវបានដកចេញសម្រាប់ពួកគេផងដែរ។ តើអ្នកប្រាកដថាអ្នកចង់លុបគំរោងនេះទេ?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុបគម្រោងនេះឬ?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>ការបិបន៍នា</value>
   </data>
@@ -926,13 +935,22 @@
     <value>ការបករេប</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>ដូចទម្រង់សម្រាប់ ...</value>
+    <value>បន្ថែមជាទម្រង់សម្រាប់ ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>រកឃើញ lexme ពេញឬផ្នែកខ្លះនៃការផ្គូផ្គងប្រភព</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>ជាគោលដៅជាការផ្លាស់ប្តូរសម្រាប់ ...</value>
+    <value>បន្ថែមគោលដៅជាការផ្លាស់ប្តូរសម្រាប់ ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>ស្វែងរក Lexemes ដែលមានការបកប្រែមួយឬច្រើនដែលត្រូវនឹងគោលដៅ</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>ការត្រួតពិនិត្យការនាំចូល</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>lexme ឬទម្រង់ការប្រកួត</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>ជ្រើសរើស​ទាំងអស់</value>
@@ -951,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>ពាក្យគោលដៅ</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>ការផ្គូផ្គងការបកប្រែ</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>មិនជ្រើសរើសទាំងអស់</value>
@@ -1288,6 +1309,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>បន្ថែមស្លាកមួយ</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>តើអ្នកចង់បង្កើតស្លាក:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>ហើយភ្ជាប់វាជាមួយស្លាកក្រុម:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>និងផ្តាច់វាចេញពីស្លាកក្រុម:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>បន្ថែមតារាងស្លាក</value>
   </data>
@@ -1314,6 +1344,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>យកស្លាកនេះចេញ</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>តើអ្នកចង់យកស្លាកចេញ:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
@@ -1429,6 +1462,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>paratext propus propus</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>ជ្រើសរើសក្បួនដោះស្រាយ SMT ទៅរថភ្លើង</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមការអនុម័តច្រើនក្នុងការមើល</value>
   </data>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>ម៉ាក់ (អូអេដ) ម៉ារ៉េល</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>ធនធានថ្មម៉ាប</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>ចំនួននៃនិមិត្តសញ្ញាផ្សេងៗគ្នា</value>
@@ -1654,6 +1690,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratextet Beta មិនដំណើរការទេ</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>បោះបង់ ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>គម្រោងសហការ</value>
   </data>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>គម្រោងដែលមានឈ្មោះដូចគ្នាមានរួចហើយ។ សូមជ្រើសរើសឈ្មោះតែមួយ។</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>ឈ្មោះគម្រោងដែលបានផ្តល់ឱ្យវែងពេក។</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>របាក្សត្រ 1</value>
@@ -2040,6 +2082,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>លេខកូដផ្ទៀងផ្ទាត់អ៊ីមែល</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>ដេលល្បាប់</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>រកុម</value>

@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>वर्तमान परियोजना उपयोगकर्ता:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>प्रोजेक्ट हटाएं</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>आपके पास इस परियोजना से जुड़े अन्य उपयोगकर्ता हैं। इस परियोजना को उनके लिए भी हटा दिया जाएगा। क्या आप इस परियोजना को हटाना चाहते हैं?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>क्या आप सुनिश्चित हैं कि आप इस परियोजना को हटाना चाहते हैं?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>विवरण</value>
   </data>
@@ -620,7 +629,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -926,13 +935,22 @@
     <value>अनुवाद</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>के रूप में के रूप में ... के लिए ...</value>
+    <value>के लिए फॉर्म के रूप में जोड़ें ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>स्रोत के लिए पूर्ण या आंशिक लेक्सेम या फॉर्म मैच खोजें</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>के लिए ट्रांसलेशन के रूप में लक्ष्य के रूप में ...</value>
+    <value>ट्रांसलेशन के रूप में लक्ष्य जोड़ें ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>उन लेक्समेस को खोजें जिनमें एक या एक से अधिक अनुवाद है जो लक्ष्य से मेल खाता है</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>आयात चेक किया गया</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>लेक्सेम या फॉर्म मैच</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>सबका चयन करें</value>
@@ -951,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>लक्ष्य शब्द</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>अनुवाद मैच</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>सभी को अचयनित करें</value>
@@ -1288,6 +1309,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>एक लेबल जोड़ें</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>क्या आप लेबल बनाना चाहते हैं:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>और इसे लेबल समूह के साथ संबद्ध करें:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>और इसे लेबल समूह से अलग करना:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>लेबल समूह जोड़ें</value>
   </data>
@@ -1314,6 +1344,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>इस लेबल को हटा दें</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>क्या आप लेबल निकालना चाहते हैं:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>बनाया था</value>
@@ -1429,6 +1462,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>परटेटेक्स्ट कॉर्पस</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>प्रशिक्षित करने के लिए एक एसएमटी एल्गोरिथ्म का चयन करें</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>देखने के लिए थोक अनुमोदन जोड़ें</value>
   </data>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>हिब्रू (ओटी) मैकुला</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>मार्बलसोर्स</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>संगमरमर संसाधन</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>अलग -अलग टोकन की संख्या</value>
@@ -1654,6 +1690,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext बीटा नहीं चल रहा है</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>रद्द करना ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>सहयोग परियोजनाएं</value>
   </data>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>एक ही नाम के साथ एक परियोजना पहले से मौजूद है। कृपया एक अनूठा नाम चुनें।</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>दी गई परियोजना का नाम बहुत लंबा है।</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 इतिहास</value>
@@ -1937,7 +1979,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दाई</value>
+    <value>दामाद</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>
@@ -2040,6 +2082,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>ईमेल सत्यापन कोड</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>संरेखण संपादन सक्षम करें</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>प्रयोगात्मक</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>समूह</value>
@@ -2249,7 +2297,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
+    <value>उपडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

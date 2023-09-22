@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:cm="http://caliburnmicro.com"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -20,10 +19,13 @@
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" />
         </Style>
-        <Style x:Key="SmallTransparentButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Style x:Key="RowButtonStyle" TargetType="{x:Type Button}" >
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Height" Value="50" />
+            <Setter Property="MinHeight" Value="50" />
+            <Setter Property="Width" Value="170"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Padding" Value="5"></Setter>
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -64,8 +66,8 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <materialDesign:Card  Height="Auto"  Margin="5" >
-        <TabControl HorizontalContentAlignment="Left">
+    <!--<materialDesign:Card  Height="Auto"  Margin="5" >-->
+        <TabControl HorizontalContentAlignment="Left" Margin="5">
             <TabItem Header="Import">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -82,7 +84,7 @@
                                 Foreground="{DynamicResource MaterialDesignBody}"
                                 HorizontalAlignment="Left"
                                 Content="{helpers:Localization LexiconImport_ImportChecked}" 
-                                Style="{StaticResource SmallTransparentButtonStyle}"/>
+                                Style="{StaticResource SmallTransparentStyle}"/>
                         <StackPanel Orientation="Horizontal" Margin="10,5,5,5">
                             <Label Margin="10, 0, 0, 0" Content="Corpus:"></Label>
                             <ComboBox
@@ -103,13 +105,13 @@
                             </ComboBox>
                         </StackPanel>
                     </StackPanel>
-                   
+
                     <DataGrid Grid.Row="1" Grid.Column="0" 
                           x:Name="LexiconSelectionDataGrid" 
                           ItemsSource="{Binding LexiconImports}"
                           AutoGenerateColumns="False" 
                           HorizontalAlignment="Stretch"
-                          Margin="4"
+                          Margin="5"
                           VirtualizingPanel.IsVirtualizingWhenGrouping="True"
                           VirtualizingPanel.VirtualizationMode="Recycling"
                           VirtualizingPanel.IsVirtualizing="True"
@@ -162,30 +164,37 @@
                             <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceType}" Binding="{Binding SourceType}" Width="150"/>
                             <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetWord}"  Binding="{Binding TargetWord}" Width="150"/>
                             <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding TargetLanguage}" Width="150"/>
-                            <DataGridTemplateColumn  Width="150">
-
-                                <DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn  Width="250" Header="{helpers:Localization LexiconImport_LexemeOrFormMatches}" SortMemberPath="ShowAddAsFormButton" CanUserSort="True">
+                               <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
-                                     Style="{StaticResource SmallTransparentStyle}" 
-                                     Content="{iconPacks:PicolIcons Kind=Synchronize}"
-                                     Width="100"
-                                     Margin="10"
-                                     Padding="0"
-                                     Visibility="{Binding ShowAddAsFormButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <Button  cm:Message.Attach="[Event Click] = [Action OnAddAsFormButtonClicked($dataContext)]" 
+                                                 cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconSelectionDataGrid}"
+                                     Style="{StaticResource RowButtonStyle}" 
+                                     ToolTip="{helpers:Localization LexiconImport_AddFormButtonTooltip}"
+                                     Visibility="{Binding ShowAddAsFormButton, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                            <Button.ContentTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{helpers:Localization LexiconImport_AddFormButtonText}" TextWrapping="Wrap"></TextBlock>
+                                                </DataTemplate>
+                                            </Button.ContentTemplate>
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn  Width="150">
-                                <DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn  Width="250" Header="{helpers:Localization LexiconImport_TranslationMatches}" SortMemberPath="ShowAddTargetAsTranslationButton" CanUserSort="True">
+                              <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
-                                     Style="{StaticResource SmallTransparentStyle}" 
-                                     Content="{iconPacks:PicolIcons Kind=Synchronize}"
-                                     Width="100"
-                                     Margin="10"
-                                     Padding="0"
-                                     Visibility="{Binding ShowAddTargetAsTranslationButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <Button  cm:Message.Attach="[Event Click] = [Action OnTargetAsTranslationButtonClicked($dataContext)]" 
+                                                 cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconSelectionDataGrid}"
+                                     Style="{StaticResource RowButtonStyle}" 
+                                     ToolTip="{helpers:Localization LexiconImport_AddTargetButtonTooltip}"
+                                     Visibility="{Binding ShowAddTargetAsTranslationButton, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                            <Button.ContentTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{helpers:Localization LexiconImport_AddTargetButtonText}" TextWrapping="Wrap" ></TextBlock>
+                                                </DataTemplate>
+                                            </Button.ContentTemplate>
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -200,16 +209,6 @@
                         <RowDefinition Height="40" ></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <!--<Button x:Name="DeleteSelectedLexemes"
-                      cm:Message.Attach="DeleteSelectedLexemes"
-                      Grid.Row="0" 
-                      Width="100"
-                      Height="30"
-                      Margin="10, 0"
-                      Foreground="{DynamicResource MaterialDesignBody}"
-                      HorizontalAlignment="Left"
-                      Content="{helpers:Localization LexiconImport_ImportChecked}" 
-                      Style="{StaticResource SmallTransparentButtonStyle}"/>-->
                     <DataGrid Grid.Row="1" Grid.Column="0" 
                         x:Name="ImportedLexiconSelectionDataGrid" 
                         ItemsSource="{Binding ImportedLexicon}"
@@ -225,85 +224,17 @@
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
                         IsReadOnly="True">
                         <DataGrid.Columns>
-                            <!--<DataGridTemplateColumn>
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <CheckBox x:Name="SelectAllCheckBox" 
-              cm:Message.Attach="[Event Checked] = [Action OnToggleAllChecked($source)];[Event Unchecked] = [Action OnToggleAllChecked($source)]" 
-              cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=ImportedLexiconSelectionDataGrid}">
-                                            <CheckBox.Resources>
-                                                <ToolTip x:Key="CheckedToolTip">
-                                                    <TextBlock Text="{helpers:Localization LexiconImport_SelectAll}"></TextBlock>
-                                                </ToolTip>
-                                                <ToolTip x:Key="UncheckedToolTip">
-                                                    <TextBlock Text="{helpers:Localization LexiconImport_UnselectAll}"></TextBlock>
-                                                </ToolTip>
-                                            </CheckBox.Resources>
-
-                                            <CheckBox.Style>
-                                                <Style TargetType="CheckBox">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=SelectAllCheckBox, Path=IsChecked}" Value="False">
-                                                            <Setter Property="CheckBox.ToolTip"
-                                      Value="{StaticResource CheckedToolTip}"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding ElementName=SelectAllCheckBox, Path=IsChecked}" Value="True">
-                                                            <Setter Property="CheckBox.ToolTip"
-                                     Value="{StaticResource UncheckedToolTip}"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </CheckBox.Style>
-
-
-                                        </CheckBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox Focusable="False" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>-->
                             <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceWord}"  Binding="{Binding SourceWord}" Width="150"/>
                             <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceLanguage}" Binding="{Binding SourceLanguage}" Width="150"/>
                             <DataGridTextColumn Header="{helpers:Localization LexiconImport_SourceType}" Binding="{Binding SourceType}" Width="150"/>
                             <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetWord}"  Binding="{Binding TargetWord}" Width="150"/>
                             <DataGridTextColumn Header="{helpers:Localization LexiconImport_TargetLanguage}" Binding="{Binding TargetLanguage}" Width="150"/>
-                            <DataGridTemplateColumn  Width="150">
-
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
-                                           Style="{StaticResource SmallTransparentStyle}" 
-                                           Content="{iconPacks:PicolIcons Kind=Synchronize}"
-                                           Width="100"
-                                           Margin="10"
-                                           Padding="0"
-                                           Visibility="{Binding ShowAddAsFormButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn  Width="150">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
-                                           Style="{StaticResource SmallTransparentStyle}" 
-                                           Content="{iconPacks:PicolIcons Kind=Synchronize}"
-                                           Width="100"
-                                           Margin="10"
-                                           Padding="0"
-                                           Visibility="{Binding ShowAddTargetAsTranslationButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>
 
-    </materialDesign:Card>
+    <!--</materialDesign:Card>-->
 
 </UserControl>

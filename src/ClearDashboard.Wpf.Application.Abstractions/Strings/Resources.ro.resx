@@ -131,7 +131,7 @@
     <value>Copiați erorile USFM pe clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul erorilor:</value>
+    <value>Numărul de erori:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
     <value>Interlinear</value>
@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Utilizatorii actuali ai proiectului:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Ștergeți proiectul</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Aveți alți utilizatori conectați la acest proiect. Acest proiect va fi eliminat și pentru ei. Sunteți sigur că doriți să ștergeți acest proiect?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Ești sigur că vrei să ștergi acest proiect?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Descriere</value>
   </data>
@@ -608,7 +617,7 @@
     <value>Token '{0}' are mai multe alinieri definite. Făcând clic pe '{1}' va șterge toate alinierile.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Căutare pe termen</value>
+    <value>Căutare la termen de filtrare</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
     <value>Căutarea termenului de filtrare după termeni cheie</value>
@@ -926,13 +935,22 @@
     <value>Traducere</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Ca formă pentru ...</value>
+    <value>Adăugați ca formă pentru ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Găsiți potriviri complete sau parțiale de lexeme sau formular pentru sursă</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>La fel de țintă ca transalarea pentru ...</value>
+    <value>Adăugați ținta ca transalare pentru ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu ținta</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import verificat</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme sau Form se potrivește</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Selectează tot</value>
@@ -950,7 +968,10 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvânt țintă</value>
+    <value>Cuvântul țintă</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Meciuri de traducere</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Deselectează tot</value>
@@ -1130,7 +1151,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sense verset</value>
+    <value>Simțul versetului</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1288,6 +1309,15 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Adăugați o etichetă</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Doriți să creați etichetă:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>și asociați -l cu Grupul de etichete:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>și descurajați -l de la Grupul de etichete:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
   </data>
@@ -1314,6 +1344,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Scoateți această etichetă</value>
+  </data>
+  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
+    <value>Doriți să eliminați eticheta:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creată</value>
@@ -1429,6 +1462,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus paratext</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Selectați un algoritm SMT pentru a vă antrena</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
   </data>
@@ -1454,7 +1490,7 @@
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la vizualizare nouă</value>
+    <value>Adăugați text la New View</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați vizualizarea versului pentru vizualizare</value>
@@ -1513,8 +1549,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Ebraică (OT) macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>MarbleResource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Resursă de marmură</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Număr de tokenizări diferite</value>
@@ -1553,7 +1589,7 @@
     <value>StudiuBibleAdDitions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Accesați paratext și schimbați proiecte. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
+    <value>Accesați paratext și schimbați proiectele. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ţintă</value>
@@ -1628,7 +1664,7 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Afișați backtranslația</value>
+    <value>Arată backtranslație</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Tulpină</value>
@@ -1654,6 +1690,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext beta nu rulează</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Anularea ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Proiecte de colaborare</value>
   </data>
@@ -1673,7 +1712,7 @@
     <value>Bază de date:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acel proiect, o altă aplicație îl folosește în continuare.</value>
+    <value>Nu puteți șterge acest proiect, o altă aplicație îl folosește în continuare.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Ștergeți proiectul</value>
@@ -1770,6 +1809,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Există deja un proiect cu același nume. Vă rugăm să alegeți un nume unic.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Numele proiectului dat este prea lung.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Cronici</value>
@@ -2036,10 +2078,16 @@
     <value>Adresa de e-mail</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>Eroare de trimitere prin e -mail</value>
+    <value>E -mail de trimitere</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Cod de verificare a e -mailului</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Activați editarea alinierii</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Experimental</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>grup</value>
