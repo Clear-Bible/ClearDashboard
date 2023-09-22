@@ -1537,8 +1537,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Ebraică (OT) macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>MarbleResource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Resursă de marmură</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Număr de tokenizări diferite</value>
@@ -1677,6 +1677,9 @@
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext beta nu rulează</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Anularea ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Proiecte de colaborare</value>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Cod de verificare a e -mailului</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Activați editarea alinierii</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Experimental</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>grup</value>

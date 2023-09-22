@@ -1537,8 +1537,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>ម៉ាក់ (អូអេដ) ម៉ារ៉េល</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>ធនធានថ្មម៉ាប</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>ចំនួននៃនិមិត្តសញ្ញាផ្សេងៗគ្នា</value>
@@ -1677,6 +1677,9 @@
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratextet Beta មិនដំណើរការទេ</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>បោះបង់ ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>គម្រោងសហការ</value>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>លេខកូដផ្ទៀងផ្ទាត់អ៊ីមែល</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>ដេលល្បាប់</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>រកុម</value>

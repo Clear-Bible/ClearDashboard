@@ -59,7 +59,7 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable
+    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawProjectDesignSurface>
     {
         public IEnhancedViewManager EnhancedViewManager { get; }
 
@@ -1768,8 +1768,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+
+        public async Task HandleAsync(RedrawProjectDesignSurface message, CancellationToken cancellationToken)
+        {
+            await DrawDesignSurface();
+        }
+
         #endregion
 
         #endregion // Methods
+
+
     }
 }

@@ -1334,7 +1334,7 @@
     <value>Elimina esta etiqueta</value>
   </data>
   <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>¿Quieres eliminar la etiqueta?</value>
+    <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
@@ -1537,8 +1537,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Hebreo (ot) mácula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marqueource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Recurso de mármol</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Número de tokenizaciones diferentes</value>
@@ -1677,6 +1677,9 @@
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext beta no se está ejecutando</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Cancelado...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Proyectos de colaboración</value>
@@ -2067,6 +2070,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Código de verificación de correo electrónico</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Habilitar la edición de alineación</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Experimental</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Grupo</value>

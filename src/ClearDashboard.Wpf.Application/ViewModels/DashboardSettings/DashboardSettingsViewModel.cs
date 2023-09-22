@@ -80,6 +80,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+
+        private bool _isAlignmentEditingEnabled;
+        public bool IsAlignmentEditingEnabled
+        {
+            get => _isAlignmentEditingEnabled;
+            set
+            {
+                _isAlignmentEditingEnabled = value;
+                NotifyOfPropertyChange(() => IsAlignmentEditingEnabled);
+            }
+        }
+
+
         private bool _runAquaInstall;
         public bool RunAquaInstall
         {
@@ -363,6 +376,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             DifferentMonitor = Settings.Default.DifferentMonitor;
             ThirdMonitor = Settings.Default.ThirdMonitor;
 
+            IsAlignmentEditingEnabled = AbstractionsSettingsHelper.GetEnabledAlignmentEditing();
+
+
             base.OnViewReady(view);
         }
 
@@ -488,6 +504,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             Settings.Default.Save();
+        }
+
+
+        public void EnableAlignmentEditing(bool value)
+        {
+            AbstractionsSettingsHelper.SaveEnabledAlignmentEditing(IsAlignmentEditingEnabled);
+            _eventAggregator.PublishOnUIThreadAsync(new RedrawProjectDesignSurface());
         }
 
         // ReSharper disable once UnusedParameter.Global
