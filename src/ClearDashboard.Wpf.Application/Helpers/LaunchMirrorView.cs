@@ -101,6 +101,9 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 }
             }
 
+            // turn off the mirror's close button
+            mirror.WindowStyle = WindowStyle.None;
+
             var mirroredView = new TView();
 
             // get the instance of the MirrorView's grid
