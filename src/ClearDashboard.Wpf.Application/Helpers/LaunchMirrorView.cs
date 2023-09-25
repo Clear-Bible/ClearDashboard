@@ -1,21 +1,13 @@
-﻿using System;
-using System.Diagnostics.Eventing.Reader;
-using System.IO;
+﻿using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
+using ClearDashboard.Wpf.Application.Views;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.Xml;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using CefSharp.DevTools.Database;
-using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Marble;
-using ClearDashboard.Wpf.Application.Views;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using MahApps.Metro.IconPacks.Converter;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
@@ -57,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             var thisApp = App.Current.MainWindow;
 
             // get the monitor that the app is on
-            var thisMonitor = monitors.FirstOrDefault();//x => x.Bounds.Left <= thisApp.Left && x.Bounds.Right >= thisApp.Left + thisApp.Width
+            var thisMonitor = monitors.FirstOrDefault();  // x => x.Bounds.Left >= thisApp.Left && x.Bounds.Left <= thisApp.Left + thisApp.Width
 
             foreach (var monitor in monitors)
             {
@@ -73,7 +65,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 mirror.Left = thisMonitor.Bounds.Left;
                 mirror.Top = thisMonitor.Bounds.Top;
             }
-            else if (monitors.Count > 2 && thirdMonitor)
+            else if (monitors.Count > 2 && thirdMonitor && differentMonitor)
             {
                 // throw on third monitor
                 mirror.Left = monitors[2].Bounds.Left;
