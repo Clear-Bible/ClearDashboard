@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ClearDashboard"
-#define MyAppVersion "1.1.0.8"
+#define MyAppVersion "1.2.0.2"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -41,6 +41,7 @@ UninstallIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_Ic
 DisableDirPage=yes
 ArchitecturesInstallIn64BitMode=x64
 PrivilegesRequired=admin
+SetupLogging=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -316,11 +317,10 @@ begin
     begin
       ParatextBetaInstallationPath := ExtractFileDir(Value);
       Log(Format('APPLICATION installed to %s', [ParatextBetaInstallationPath]));
-      Result := True;
     end
   else
     begin
-      Result := False;
+      ParatextBetaInstallationPath := '';
     end;
 end;
 
