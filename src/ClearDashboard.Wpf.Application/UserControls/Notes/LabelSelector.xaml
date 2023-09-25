@@ -7,6 +7,7 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:notes="clr-namespace:ClearDashboard.DAL.Alignment.Notes;assembly=ClearDashboard.DAL.Alignment"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -60,12 +61,38 @@
                         Height="Auto"
                         Background="{DynamicResource MaterialDesignPaper}"
                         BorderThickness="0.5"
-                        DisplayMemberPath="Text"
                         Foreground="{DynamicResource MaterialDesignBody}"
                         ScrollViewer.CanContentScroll="False"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         SelectionChanged="OnLabelListSelectionChanged"
-                        Visibility="Collapsed" />
+                        Visibility="Collapsed"
+                        Grid.IsSharedSizeScope="True"
+                        >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="notes:Label">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Key"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Text}"/>
+                                <Button Grid.Column="1" x:Name="DeleteLabelButton"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Click="DeleteLabelClicked"
+                                        FontWeight="SemiBold"
+                                        Margin="20,-5,5,0"
+                                        Padding="0,0,0,0"
+                                        ToolTip="{helpers:Localization Notes_LabelRemove}">
+                                    <Image Height="14" Width="24" Source="/Resources/close24.png" />
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Popup>
         </Grid>
 

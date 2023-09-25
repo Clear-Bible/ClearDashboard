@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -13,7 +16,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
     /// <summary>
     /// A control for displaying a collection of <see cref="NotesLabel"/> values.
     /// </summary>
-    public partial class LabelsDisplay
+    public partial class LabelsDisplay : INotifyPropertyChanged
     {
         #region Static Routed Events
 
@@ -21,7 +24,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the LabelRemovedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
-            ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsDisplay));
+            (nameof(LabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsDisplay));
+        
+        /// <summary>
+        /// Identifies the LabelUpdatedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelUpdatedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelUpdated), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsDisplay));
         
         #endregion
         #region Static DependencyProperties
@@ -65,7 +74,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the LabelMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelMarginProperty = DependencyProperty.Register(nameof(LabelMargin), typeof(Thickness), typeof(LabelsDisplay),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+            new PropertyMetadata(new Thickness(0, 0, 0, 2)));
 
         /// <summary>
         /// Identifies the LabelPadding dependency property.
@@ -114,6 +123,92 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 RaiseLabelEvent(LabelRemovedEvent, label);
             }
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        private NotesLabel _currentLabel;
+        private string? _currentLabelText;
+        private string? _currentLabelTemplate;
+
+        /// <summary>
+        /// Gets or sets the label being edited.
+        /// </summary>
+        public NotesLabel CurrentLabel
+        {
+            get => _currentLabel;
+            set
+            {
+                _currentLabel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the text of the label being edited.
+        /// </summary>
+        public string? CurrentLabelText
+        {
+            get => _currentLabelText;
+            set
+            {
+                if (value == _currentLabelText) return;
+                _currentLabelText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the template of the label being edited.
+        /// </summary>
+        public string? CurrentLabelTemplate
+        {
+            get => _currentLabelTemplate;
+            set
+            {
+                if (value == _currentLabelTemplate) return;
+                _currentLabelTemplate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void OnEditLabelClicked(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                CurrentLabel = item.DataContext as NotesLabel;
+                CurrentLabelText = CurrentLabel?.Text;
+                CurrentLabelTemplate = CurrentLabel?.TemplateText ?? string.Empty;
+            }
+
+            EditLabelTextPopup.IsOpen = true;
+            LabelTemplateTextBox.Focus();
+        }
+
+        private void OnEditLabelConfirmed(object sender, RoutedEventArgs e)
+        {
+            if (CurrentLabel.TemplateText != CurrentLabelTemplate)
+            {
+                CurrentLabel.TemplateText = CurrentLabelTemplate;
+                RaiseLabelEvent(LabelUpdatedEvent, CurrentLabel);
+            }
+            EditLabelTextPopup.IsOpen = false;
+        }
+
+        private void OnEditLabelCancelled(object sender, RoutedEventArgs e)
+        {
+            EditLabelTextPopup.IsOpen = false;
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion
@@ -231,19 +326,30 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #endregion Public properties
         #region Public events
         /// <summary>
-        /// Occurs when an new label is removed.
+        /// Occurs when a label is removed.
         /// </summary>
         public event RoutedEventHandler LabelRemoved
         {
             add => AddHandler(LabelRemovedEvent, value);
             remove => RemoveHandler(LabelRemovedEvent, value);
+        }        
+        
+        /// <summary>
+        /// Occurs when a label is updated.
+        /// </summary>
+        public event RoutedEventHandler LabelUpdated
+        {
+            add => AddHandler(LabelUpdatedEvent, value);
+            remove => RemoveHandler(LabelUpdatedEvent, value);
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         #endregion
 
         public LabelsDisplay()
         {
             InitializeComponent();
         }
-
     }
 }

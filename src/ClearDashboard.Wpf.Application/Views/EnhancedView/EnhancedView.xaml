@@ -695,11 +695,29 @@
                             <i:EventTrigger EventName="LabelAdded">
                                 <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelDeleted">
+                                <i:CallMethodAction MethodName="LabelDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelDisassociated">
+                                <i:CallMethodAction MethodName="LabelDisassociated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
                             <i:EventTrigger EventName="LabelGroupAdded">
                                 <i:CallMethodAction MethodName="LabelGroupAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupLabelAdded">
+                                <i:CallMethodAction MethodName="LabelGroupLabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupRemoved">
+                                <i:CallMethodAction MethodName="LabelGroupRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupSelected">
+                                <i:CallMethodAction MethodName="LabelGroupSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
                             <i:EventTrigger EventName="LabelRemoved">
                                 <i:CallMethodAction MethodName="LabelRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelUpdated">
+                                <i:CallMethodAction MethodName="LabelUpdated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
                             <i:EventTrigger EventName="CloseRequested">
                                 <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />

@@ -1026,14 +1026,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task LabelAddedAsync(LabelEventArgs e)
         {
-            // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
             {
-                await NoteManager.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
+                var newLabel = await NoteManager.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
+                Message = $"Label '{e.Label.Text}' added for note";
+
+                if (newLabel != null && e.LabelGroup is { LabelGroupId: not null })
+                {
+                    await NoteManager.AssociateLabelToLabelGroupAsync(e.LabelGroup, newLabel);
+                    Message += $" and associated to label group {e.LabelGroup.Name}";
+                }
             }
-            Message = $"Label '{e.Label.Text}' added for note";
+        }
+        public void LabelDeleted(object sender, LabelEventArgs e)
+        {
+            NoteManager.DeleteLabel(e.Label);
+            Message = $"Label '{e.Label.Text}' deleted";
         }
 
+        public void LabelDisassociated(object sender, LabelEventArgs e)
+        {
+            Task.Run(() => LabelDisassociatedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelDisassociatedAsync(LabelEventArgs e)
+        {
+            await NoteManager.DetachLabelFromLabelGroupAsync(e.LabelGroup, e.Label);
+            Message = $"Label '{e.Label.Text}' detached from label group '{e.LabelGroup.Name}'";
+        }
 
         public void LabelSelected(object sender, LabelEventArgs e)
         {
@@ -1063,6 +1083,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Message = $"Label '{e.Label.Text}' removed for note";
         }
 
+        public void LabelUpdated(object sender, LabelEventArgs e)
+        {
+            Task.Run(() => LabelUpdatedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelUpdatedAsync(LabelEventArgs e)
+        {
+            await NoteManager.UpdateLabelAsync(e.Label);
+            Message = $"Label '{e.Label.Text}' updated";
+        }
+
         public void LabelGroupAdded(object sender, LabelGroupAddedEventArgs e)
         {
             Task.Run(() => LabelGroupAddedAsync(e).GetAwaiter());
@@ -1077,9 +1108,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Message = $"Label group '{e.LabelGroup.Name}' added";
         }
 
+        public void LabelGroupLabelAdded(object sender, LabelGroupLabelEventArgs e)
+        {
+            Task.Run(() => LabelGroupLabelAddedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelGroupLabelAddedAsync(LabelGroupLabelEventArgs e)
+        {
+            if (e.LabelGroup.LabelGroupId == null)
+            {
+            }
+            Message = $"Label group '{e.LabelGroup.Name}' added";
+        }
+
+        public void LabelGroupRemoved(object sender, LabelGroupEventArgs e)
+        {
+            Task.Run(() => LabelGroupRemovedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelGroupRemovedAsync(LabelGroupEventArgs e)
+        {
+            if (e.LabelGroup.LabelGroupId != null)
+            {
+                await NoteManager.RemoveLabelGroupAsync(e.LabelGroup);
+            }
+            Message = $"Label group '{e.LabelGroup.Name}' removed";
+        }
+
         public void LabelGroupSelected(object sender, LabelGroupEventArgs e)
         {
-            NoteManager.SaveLabelGroupDefault(e.LabelGroup);
+            if (e.LabelGroup.LabelGroupId != null)
+            {
+                NoteManager.SaveLabelGroupDefault(e.LabelGroup);
+            }
+            Message = $"Label group '{e.LabelGroup.Name}' selected";
         }
 
         public void CloseNotePaneRequested(object sender, RoutedEventArgs args)

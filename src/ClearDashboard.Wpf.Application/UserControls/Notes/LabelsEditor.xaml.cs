@@ -23,7 +23,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
     /// <summary>
     /// A control that displays and edits the collection of labels associated with a note, optionally grouped by label groups.
     /// </summary>
-    public partial class LabelsEditor : INotifyPropertyChanged, IHandle<LabelGroupAddedMessage>
+    public partial class LabelsEditor : INotifyPropertyChanged, IHandle<LabelGroupAddedMessage>, IHandle<NoteLabelDetachedMessage>
     {
         #region Static Routed Events
 
@@ -32,6 +32,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
+
+        /// <summary>
+        /// Identifies the LabelAssociatedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelAssociatedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelAssociated), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
+
+        /// <summary>
+        /// Identifies the LabelDeletedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelDeletedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
+
+        /// <summary>
+        /// Identifies the LabelDisassociatedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelDisassociatedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelDisassociated), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
 
         /// <summary>
         /// Identifies the LabelGroupAddedEvent routed event.
@@ -74,6 +92,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
+
+        /// <summary>
+        /// Identifies the LabelUpdatedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelUpdatedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelUpdated), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
 
         #endregion Static Routed Events
         #region Static Dependency Properties
@@ -176,12 +200,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #endregion
         #region Private Methods
 
-        private void RaiseLabelEvent(RoutedEvent routedEvent, LabelEventArgs args)
+        private void RaiseLabelEvent(RoutedEvent routedEvent)
         {
             RaiseEvent(new LabelEventArgs
             {
                 RoutedEvent = routedEvent,
-                Label = args.Label,
+                Label = CurrentLabel,
+                LabelGroup = CurrentLabelGroup,
                 Note = Note
             });
         }
@@ -227,28 +252,113 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #endregion
         #region Private Event Handlers
 
+        private void CacheCurrentLabel(RoutedEventArgs args)
+        {
+            if (args is LabelEventArgs labelEventArgs)
+            {
+                CurrentLabel = labelEventArgs.Label;
+                CurrentLabelName = CurrentLabel?.Text;
+
+                if (CurrentLabelGroup?.LabelGroupId == null)
+                {
+                    CurrentLabelName += " ?";
+                }
+            }
+            CurrentLabelGroupName = CurrentLabelGroup?.LabelGroupId != null ? CurrentLabelGroup.Name : string.Empty;
+        }
+
+        private void AddCurrentLabel()
+        {
+            Labels.AddDistinct(CurrentLabel);
+            OnPropertyChanged(nameof(Labels));
+        }
+
+        private void RemoveCurrentLabel()
+        {
+            Labels.RemoveIfExists(CurrentLabel);
+            OnPropertyChanged(nameof(Labels));
+        }
+
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
-            var labelEventArgs = e as LabelEventArgs;
-            RaiseLabelEvent(LabelAddedEvent, labelEventArgs!);
+            CacheCurrentLabel(e);
+            ConfirmAddLabelPopup.IsOpen = true;
+        }
 
-            Labels.AddDistinct(labelEventArgs!.Label);
-            OnPropertyChanged(nameof(Labels));
+        private void OnLabelAddConfirmed(object sender, RoutedEventArgs e)
+        {
+            RaiseLabelEvent(LabelAddedEvent);
+            AddCurrentLabel();
+            ConfirmAddLabelPopup.IsOpen = false;
+        }
+
+        private void OnLabelAddCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmAddLabelPopup.IsOpen = false;
         }
 
         private void OnLabelSelected(object sender, RoutedEventArgs e)
         {
-            var labelEventArgs = e as LabelEventArgs;
-            RaiseLabelEvent(LabelSelectedEvent, labelEventArgs!);
+            CacheCurrentLabel(e);
+            RaiseLabelEvent(LabelSelectedEvent);
+            AddCurrentLabel();
+        }
 
-            Labels.AddDistinct(labelEventArgs!.Label);
-            OnPropertyChanged(nameof(Labels));
+        private void OnLabelDeleted(object sender, RoutedEventArgs e)
+        {
+            CacheCurrentLabel(e);
+
+            if (CurrentLabelGroup?.LabelGroupId != null)
+            {
+                ConfirmDisassociateLabelPopup.IsOpen = true;
+            }
+            else
+            {
+                ConfirmDeleteLabelPopup.IsOpen = true;
+            }
+        }
+
+        private void OnLabelDeleteConfirmed(object sender, RoutedEventArgs e)
+        {
+            RemoveCurrentLabel();
+            RaiseLabelEvent(LabelDeletedEvent);
+            ConfirmDeleteLabelPopup.IsOpen = false;
+        }
+
+        private void OnLabelDeleteCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeleteLabelPopup.IsOpen = false;
+        }
+
+        private void OnLabelDisassociateConfirmed(object sender, RoutedEventArgs e)
+        {
+            RaiseLabelEvent(LabelDisassociatedEvent);
+            ConfirmDisassociateLabelPopup.IsOpen = false;
+        }
+
+        private void OnLabelDisassociateCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmDisassociateLabelPopup.IsOpen = false;
         }
 
         private void OnLabelRemoved(object sender, RoutedEventArgs e)
         {
-            var labelEventArgs = e as LabelEventArgs;
-            RaiseLabelEvent(LabelRemovedEvent, labelEventArgs!);
+            if (e is LabelEventArgs args)
+            {
+                CurrentLabel = args.Label;
+                RemoveCurrentLabel();
+                RaiseLabelEvent(LabelRemovedEvent);
+            }
+        }
+
+        private void OnLabelUpdated(object sender, RoutedEventArgs e)
+        {
+            var args = e as LabelEventArgs;
+            RaiseEvent(new LabelEventArgs
+            {
+                RoutedEvent = LabelUpdatedEvent,
+                Label = args!.Label,
+            });
         }
 
         private void OnLabelGroupAddClicked(object sender, RoutedEventArgs e)
@@ -316,8 +426,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             ConfirmDeleteLabelGroupPopup.IsOpen = true;
         }
 
-        private void OnDeleteLabelGroupConfirmed(object sender, RoutedEventArgs e)
+        private void OnLabelGroupRemoveConfirmed(object sender, RoutedEventArgs e)
         {
+            if (LabelGroupComboBox.SelectedItem is LabelGroupViewModel labelGroup)
+            {
+                RaiseLabelGroupEvent(LabelGroupRemovedEvent, labelGroup);
+                CurrentLabelGroup = LabelGroups.First();
+            }
+
             ConfirmDeleteLabelGroupPopup.IsOpen = false;
         }
 
@@ -334,6 +450,54 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         #endregion Private event handlers
         #region Public Properties
+
+        private string? _currentLabelName;
+        private string? _currentLabelGroupName;
+        private NotesLabel _currentLabel;
+
+        /// <summary>
+        /// Gets or sets the label pending addition or removal.
+        /// </summary>
+        public NotesLabel CurrentLabel
+        {
+            get => _currentLabel;
+            set
+            {
+                _currentLabel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the label name for the Add/Remove Label confirmation.
+        /// </summary>
+        public string? CurrentLabelName
+        {
+            get => _currentLabelName;
+            set
+            {
+                if (value == _currentLabelName) return;
+                _currentLabelName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the label group name for the Add/Remove Label confirmation.
+        /// </summary>
+        public string? CurrentLabelGroupName
+        {
+            get => _currentLabelGroupName;
+            set
+            {
+                if (value == _currentLabelGroupName) return;
+                _currentLabelGroupName = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(PopupLabelGroupVisibility));
+            }
+        }
+
+        public Visibility PopupLabelGroupVisibility => string.IsNullOrWhiteSpace(CurrentLabelGroupName) ? Visibility.Collapsed : Visibility.Visible;
 
         /// <summary>
         /// Gets or sets the currently-selected label group.
@@ -545,6 +709,33 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Occurs when an new label is associated to a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelAssociated
+        {
+            add => AddHandler(LabelAssociatedEvent, value);
+            remove => RemoveHandler(LabelAssociatedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a label is deleted.
+        /// </summary>
+        public event RoutedEventHandler LabelDeleted
+        {
+            add => AddHandler(LabelDeletedEvent, value);
+            remove => RemoveHandler(LabelDeletedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a label is disassociated.
+        /// </summary>
+        public event RoutedEventHandler LabelDisassociated
+        {
+            add => AddHandler(LabelDisassociatedEvent, value);
+            remove => RemoveHandler(LabelDisassociatedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when an new label group is added.
         /// </summary>
         public event RoutedEventHandler LabelGroupAdded
@@ -606,6 +797,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             add => AddHandler(LabelSelectedEvent, value);
             remove => RemoveHandler(LabelSelectedEvent, value);
         }
+        
+        /// <summary>
+        /// Occurs when an existing label is updated.
+        /// </summary>
+        public event RoutedEventHandler LabelUpdated
+        {
+            add => AddHandler(LabelUpdatedEvent, value);
+            remove => RemoveHandler(LabelUpdatedEvent, value);
+        }
 
         /// <summary>
         /// Occurs when a property value changes.
@@ -619,6 +819,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             InitializeComponent();
 
             EventAggregator?.SubscribeOnUIThread(this);
+        }
+
+        public Task HandleAsync(NoteLabelDetachedMessage message, CancellationToken cancellationToken)
+        {
+            Labels.RemoveIfExists(message.Label);
+            return Task.CompletedTask;
         }
 
         ~LabelsEditor()

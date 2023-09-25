@@ -180,7 +180,8 @@
             </StackPanel>
 
             <!-- Note properties: Labels, Associations, Replies, etc. -->
-            <StackPanel Margin="0,10,0,0"
+            <StackPanel x:Name="NotePropertiesPanel" 
+                        Margin="0,10,0,0"
                         Visibility="{Binding ElementName=NotesDisplayControl, Path=NotePropertiesVisibility}">
 
                 <!-- Labels -->
@@ -195,14 +196,19 @@
                                         LabelAdded="OnLabelAdded"
                                         LabelBackground="{Binding ElementName=NotesDisplayControl, Path=LabelBackground}"
                                         LabelCornerRadius="{Binding ElementName=NotesDisplayControl, Path=LabelCornerRadius}"
+                                        LabelDeleted="OnLabelDeleted"
+                                        LabelDisassociated="OnLabelDisassociated"
                                         LabelFontSize="{Binding ElementName=NotesDisplayControl, Path=LabelFontSize}"
                                         LabelGroupAdded="OnLabelGroupAdded"
+                                        LabelGroupLabelAdded="OnLabelGroupLabelAdded"
+                                        LabelGroupRemoved="OnLabelGroupRemoved"
                                         LabelGroupSelected="OnLabelGroupSelected"
                                         LabelGroups="{Binding ElementName=NotesDisplayControl, Path=LabelGroups}"
                                         LabelMargin="{Binding ElementName=NotesDisplayControl, Path=LabelMargin}"
                                         LabelPadding="{Binding ElementName=NotesDisplayControl, Path=LabelPadding}"
                                         LabelRemoved="OnLabelRemoved"
                                         LabelSelected="OnLabelSelected"
+                                        LabelUpdated="OnLabelUpdated"
                                         Labels="{Binding ElementName=NotesDisplayControl, Path=Note.Labels}"
                                         Margin="0,0,0,10"
                                         Note="{Binding ElementName=NotesDisplayControl, Path=Note}" />
@@ -234,14 +240,14 @@
                                                NoteAssociationRightButtonUp="OnNoteAssociationRightButtonUp"/>
                 </userControls:TogglePanel>
 
-                <!-- Associations -->
-                <userControls:TogglePanel IsOpen="False">
+                <!-- Replies -->
+                <!--<userControls:TogglePanel IsOpen="False">
                     <userControls:TogglePanel.Header>
                         <Label Content="{helpers:Localization Notes_NoteReplies}"
                                FontSize="13"
                                FontWeight="SemiBold" />
                     </userControls:TogglePanel.Header>
-                </userControls:TogglePanel>
+                </userControls:TogglePanel>-->
             </StackPanel>
             <!-- Labels -->
             <!--<Grid Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelSelectorVisibility}">

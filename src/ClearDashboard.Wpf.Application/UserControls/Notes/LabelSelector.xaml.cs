@@ -27,6 +27,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             (nameof(LabelAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
         
         /// <summary>
+        /// Identifies the LabelDeletedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelDeletedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
+
+        /// <summary>
         /// Identifies the LabelSelectedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
@@ -126,6 +132,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
         }
 
+        private void DeleteLabelClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseLabelEvent(LabelDeletedEvent, (sender as Button).DataContext as NotesLabel);
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -159,6 +170,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             add => AddHandler(LabelAddedEvent, value);
             remove => RemoveHandler(LabelAddedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user asks to remove an existing label suggestion.
+        /// </summary>
+        public event RoutedEventHandler LabelDeleted
+        {
+            add => AddHandler(LabelDeletedEvent, value);
+            remove => RemoveHandler(LabelDeletedEvent, value);
         }
 
         /// <summary>

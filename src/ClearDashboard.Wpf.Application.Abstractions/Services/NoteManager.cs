@@ -465,7 +465,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="note">The <see cref="NoteViewModel"/> to which to associate the label.</param>
         /// <param name="labelText">The text of the new <see cref="Label"/>.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task CreateAssociateNoteLabelAsync(NoteViewModel note, string labelText)
+        public async Task<Label?> CreateAssociateNoteLabelAsync(NoteViewModel note, string labelText)
         {
             try
             {
@@ -473,10 +473,11 @@ namespace ClearDashboard.Wpf.Application.Services
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
+                Label? newLabel = null;
                 // For thread safety, because Note.CreateAssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
                 async void CreateAssociateLabel()
                 {
-                    var newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText, null);
+                    newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText, null);
                     LabelSuggestions.Add(newLabel);
                     LabelSuggestions = new LabelCollection(LabelSuggestions.OrderBy(l => l.Text));
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
@@ -487,6 +488,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
 #endif
+                return newLabel;
             }
             catch (Exception e)
             {
@@ -564,6 +566,62 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         /// <summary>
+        /// Deletes an existing <see cref="Label"/>.
+        /// </summary>
+        /// <param name="label">The <see cref="Label"/> to delete.</param>
+        public void DeleteLabel(Label label)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                LabelSuggestions.RemoveIfExists(label);
+                label.Delete(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Deleted label {label.Text} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing <see cref="Label"/>.
+        /// </summary>
+        /// <param name="label">The <see cref="Label"/> to update.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        public async Task UpdateLabelAsync(Label label, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                async void UpdateLabel()
+                {
+                    await label.CreateOrUpdate(Mediator, cancellationToken);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(UpdateLabel);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Updated label {label.Text} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Creates a new <see cref="LabelGroup"/> and optionally initialize it with a collection of <see cref="Label"/>s from another label group.
         /// </summary>
         /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> containing the new label group.</param>
@@ -603,6 +661,112 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation(sourceLabelGroup != null
                     ? $"Created label group {labelGroup.Name} and initialized it with {sourceLabelGroup.Labels.Count} in {stopwatch.ElapsedMilliseconds} ms"
                     : $"Created label group {labelGroup.Name} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Associates a <see cref="Label"/> to a <see cref="LabelGroup"/>.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> to which to add the label.</param>
+        /// <param name="label">The label to add.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task AssociateLabelToLabelGroupAsync(LabelGroupViewModel labelGroup, Label label, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                // For thread safety, we need to invoke the operation on the dispatcher.
+                async void AssociateLabel()
+                {
+                    await labelGroup.Entity.AssociateLabel(Mediator, label, cancellationToken);
+
+                    labelGroup.Labels.Add(label);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation(
+                    $"Associated label '{label.Text}' ({label.LabelId}) to label group '{labelGroup.Name}' ({labelGroup.LabelGroupId}) in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Detaches a <see cref="Label"/> from a <see cref="LabelGroup"/>.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> from which to disassociate the label.</param>
+        /// <param name="label">The label to disassociate.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task DetachLabelFromLabelGroupAsync(LabelGroupViewModel labelGroup, Label label, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                // For thread safety, we need to invoke the operation on the dispatcher.
+                async void DetachLabelAsync()
+                {
+                    labelGroup.Labels.RemoveIfExists(label);
+                    await labelGroup.Entity.DetachLabel(Mediator, label, cancellationToken);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(DetachLabelAsync);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Detached label '{label.Text}' ({label.LabelId}) from label group '{labelGroup.Name}' ({labelGroup.LabelGroupId}) in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Removes an existing <see cref="LabelGroup"/>.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> containing the new label group.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task RemoveLabelGroupAsync(LabelGroupViewModel labelGroup, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                // For thread safety, because LabelGroup.CreateOrUpdate() modifies an observable collection, we need to invoke the operation on the dispatcher.
+                async void RemoveLabelGroupViewModelAsync()
+                {
+                    labelGroup.Entity.Delete(Mediator, cancellationToken);
+
+                    LabelGroups.Remove(labelGroup);
+
+                    //await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup), cancellationToken);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(RemoveLabelGroupViewModelAsync);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Removed label group {labelGroup.Name} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
             }
             catch (Exception e)
