@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -9,7 +10,7 @@ namespace ClearDashboard.DataAccessLayer.Threading
 {
     public class LongRunningTaskManager : IDisposable
     {
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        public CancellationTokenSource CancellationTokenSource;
         public readonly ConcurrentDictionary<string, LongRunningTask?> Tasks;
         private readonly ILogger<LongRunningTaskManager> _logger;
 
@@ -17,16 +18,16 @@ namespace ClearDashboard.DataAccessLayer.Threading
         {
             _logger = logger;
             Tasks = new ConcurrentDictionary<string, LongRunningTask?>();
-            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationTokenSource = new CancellationTokenSource();
         }
 
         public void CancelAllTasks()
         {
-            if (!_cancellationTokenSource.IsCancellationRequested)
+            if (!CancellationTokenSource.IsCancellationRequested)
             {
                 try
                 {
-                    _cancellationTokenSource.Cancel();
+                    CancellationTokenSource.Cancel();
                     return;
 
                 }
@@ -103,7 +104,7 @@ namespace ClearDashboard.DataAccessLayer.Threading
         {
             if (!HasTask(taskName))
             {
-                var longRunningTask = new LongRunningTask(taskName, CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token), status);
+                var longRunningTask = new LongRunningTask(taskName, CancellationTokenSource.CreateLinkedTokenSource(CancellationTokenSource.Token), status);
                 try
                 {
                     Tasks[taskName] = longRunningTask;
@@ -135,6 +136,8 @@ namespace ClearDashboard.DataAccessLayer.Threading
 
         public bool HasTask(string taskName)
         {
+            Debug.WriteLine($"Checking for task named: {taskName}");
+
             return Tasks.ContainsKey(taskName);
         }
 
@@ -165,11 +168,11 @@ namespace ClearDashboard.DataAccessLayer.Threading
 
         public void Dispose()
         {
-            if (!_cancellationTokenSource.IsCancellationRequested)
+            if (!CancellationTokenSource.IsCancellationRequested)
             {
-                _cancellationTokenSource.Cancel();
+                CancellationTokenSource.Cancel();
             }
-            _cancellationTokenSource.Dispose();
+            CancellationTokenSource.Dispose();
             DisposeTasks();
         }
     }

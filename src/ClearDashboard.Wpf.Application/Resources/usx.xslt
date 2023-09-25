@@ -9,10 +9,11 @@
         <!-- <link rel="stylesheet" href="bible.css" /> -->
         <style>
           body {
+          font-family: "Segoe UI";
           }
           /* HTML5 display-role reset for older browsers */
           font-size: 20px;
-          font-family: "Noto Serif", serif;
+          
           line-height: 25px;
 
           -webkit-font-smoothing: antialiased;
@@ -796,10 +797,10 @@
           /* Links inside the navbar */
           .navbar a {
           margin-right:5;
-          background-color: #333;
+          background-color: #003A70;
           border-radius: 25px;
           float: left;
-          color: #f2f2f2;
+          color: #fff;
           text-align: center;
           padding: 12px 12px;
           text-decoration: none;
@@ -808,20 +809,19 @@
 
           /* Change background on mouse-over */
           .navbar a:hover {
-          background: #ddd;
+          background: #C1CD42;
           color: black;
           }
 
           .navbar .active{
-          background: #aaa;
-          color: black;
+          background: #7DA1C4;
+          color: 000;
           }
 
           summary{
           vertical-align:text-top;
           font-size:23px;
-          color:#0069C0;
-          }
+          color:#003A70;
 
           .w{
           margin-left:4px;

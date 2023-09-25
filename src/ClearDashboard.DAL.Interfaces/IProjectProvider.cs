@@ -8,4 +8,5 @@ public interface IProjectProvider
     ParatextProject? CurrentParatextProject { get; set; }
     bool HasCurrentProject { get; }
     bool HasCurrentParatextProject { get;  }
+    bool CanRunDenormalization { get; }
 }

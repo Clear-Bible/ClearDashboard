@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the plane jane resources.resx file.
+        ///   Looks up a localized string similar to the plain jane resources.resx file.
         /// </summary>
         public static string language {
             get {

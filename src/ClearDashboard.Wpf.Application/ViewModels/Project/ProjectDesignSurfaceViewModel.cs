@@ -5,14 +5,16 @@ using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
-//using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Converters;
 using ClearDashboard.Wpf.Application.Enums;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -58,7 +60,7 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable
+    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>
     {
         public IEnhancedViewManager EnhancedViewManager { get; }
 
@@ -306,6 +308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     X = corpusNode.X,
                     Y = corpusNode.Y,
                     CorpusId = corpusNode.CorpusId,
+                    CorpusName = corpusNode.Name
                 });
             }
 
@@ -342,7 +345,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // restore the nodes
                 if (designSurfaceData != null)
                 {
-                    foreach (var corpusId in topLevelProjectIds.CorpusIds)
+                    bool currentParatextProjectPresent = false;
+                    bool standardCorporaPresent = false;
+
+                    foreach (var corpusId in topLevelProjectIds.CorpusIds.OrderBy(c => c.Created))
                     {
                         if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
                         {
@@ -368,6 +374,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             {
                                 corpus.CorpusId.CorpusType = CorpusType.Resource.ToString();
                             }
+                            else
+                            {
+                                standardCorporaPresent = true;
+                                if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
+                                {
+                                    currentParatextProjectPresent = true;
+                                }
+                            }
                         }
                         
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
@@ -376,6 +390,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
+
+                    if (standardCorporaPresent  && !currentParatextProjectPresent)
+                    {
+                        var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                        if (confirmationViewPopupViewModel == null)
+                        {
+                            throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                        }
+
+                        confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.SwitchParatextProjectMessage;
+
+                        var result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                            SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                    }
+
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
                     //DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
@@ -910,7 +940,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                         catch (Exception ex)
                         {
-                            Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
+                            Logger!.LogError(ex, $"An unexpected error occurred while creating the corpus for {selectedProject.Name} ");
                             if (!cancellationToken.IsCancellationRequested)
                             {
                                 soundType = SoundType.Error;
@@ -1153,9 +1183,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 cancellationToken
                             );
 
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                               description: $"Updating verses in tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
-
                             var tokenizedTextCorpusId = (await TokenizedTextCorpus.GetAllTokenizedCorpusIds(
                                     Mediator!,
                                     new CorpusId(node.CorpusId)))
@@ -1174,6 +1201,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             await EventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
 
                             _longRunningTaskManager.TaskComplete(taskName);
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                                description: $"Updating verses in tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
                         }
                         catch (OperationCanceledException)
                         {
@@ -1271,6 +1301,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ErrorMessage = exception != null ? $"{exception}" : null,
                 TaskLongRunningProcessStatus = status,
                 BackgroundTaskType = backgroundTaskMode,
+                BackgroundTaskSource = typeof(ProjectDesignSurfaceViewModel)
             };
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
@@ -1281,6 +1312,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var connectionViewModel = connectionMenuItem.ConnectionViewModel;
             switch (connectionMenuItem.Id)
             {
+
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentsBatchReviewViewToNewEnhancedView:
+                    //await AddAlignmentsBatchReview(connectionMenuItem);
+                    if (connectionMenuItem.IsEnabled)
+                    {
+                        await EnhancedViewManager.AddMetadatumEnhancedView(new AlignmentEnhancedViewItemMetadatum
+                        {
+                            AlignmentSetId = connectionMenuItem.AlignmentSetId,
+                            DisplayName = connectionMenuItem.DisplayName,
+                            ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
+                                               throw new InvalidDataEngineException(name: "ParallelCorpusId",
+                                                   value: "null"),
+                            ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
+                            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            IsRtl = connectionMenuItem.IsRtl,
+                            //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            IsTargetRtl = connectionMenuItem.IsTargetRtl,
+                            IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds
+                                .AddAlignmentsBatchReviewViewToNewEnhancedView,
+                            SourceParatextId = connectionMenuItem.SourceParatextId,
+                            TargetParatextId = connectionMenuItem.TargetParatextId,
+                            EditMode = EditMode.EditorViewOnly
+                        }, CancellationToken.None);
+                    }
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.AlignmentViewAddedCount, 1);
+                    break;
+
+                    break;
+
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTranslationSet:
                     // find the right connection to send
                     var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
@@ -1408,10 +1469,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // see if this is the last one or not
                 var alignmentSetIdCount = topLevelProjectIds.AlignmentSetIds.Where(x =>
                     x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId).ToList();
+
+                var parallelCorpusConnectionViewModel = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(x =>
+                    x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId);
+
                 if (alignmentSetIdCount.Count == 1)
                 {
-                    var parallelCorpusConnectionViewModel = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(x =>
-                        x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId);
 
                     if (parallelCorpusConnectionViewModel != null)
                     {
@@ -1432,12 +1495,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
 
                 DesignSurfaceViewModel!.DeleteAlignmentFromMenus(alignmentSetId);
-                
+
 #pragma warning disable CS4014
                 Task.Factory.StartNew(async () =>
                 {
-                    await AlignmentSet.Delete(Mediator!, alignmentSetId); 
+                    await AlignmentSet.Delete(Mediator!, alignmentSetId);
 
+                    topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                    
+                    DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(parallelCorpusConnectionViewModel, topLevelProjectIds);
                 });
 #pragma warning restore CS4014
             }
@@ -1457,6 +1523,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             switch (corpusNodeMenuItem.Id)
             {
+             
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddParatextCorpus:
                     // kick off the add new tokenization dialog
                     await AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);
@@ -1600,15 +1667,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (!wasTokenizing)
             {
-                var deletingCorpusNodePopupViewModel = LifetimeScope!.Resolve<DeletingCorpusNodePopupViewModel>();
-                
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCorpusNodeConfirmation;
+
                 bool result = false;
                 OnUIThread(async () =>
                 {
-                    result = await _windowManager!.ShowDialogAsync(
-                        deletingCorpusNodePopupViewModel,
-                        null,
-                        SimpleMessagePopupViewModel.CreateDialogSettings(deletingCorpusNodePopupViewModel.Title));
+                    result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                        SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
                 });
 
                 if (!result)
@@ -1698,8 +1770,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+
+        public async Task HandleAsync(RedrawParallelCorpusMenus message, CancellationToken cancellationToken)
+        {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            foreach (var parallel in DesignSurfaceViewModel.ParallelCorpusConnections)
+            {
+                DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(parallel, topLevelProjectIds);
+            }
+        }
+
         #endregion
 
         #endregion // Methods
+
+
     }
 }

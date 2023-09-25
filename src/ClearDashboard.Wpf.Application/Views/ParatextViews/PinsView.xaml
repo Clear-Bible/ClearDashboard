@@ -94,7 +94,7 @@
                 </Button.Style>
                 <materialDesign:PackIcon
                     Background="Transparent"
-                    Foreground="{StaticResource SecondaryHueDarkBrush}"
+                    Foreground="{StaticResource AccentHueBrush}"
                     Kind="ArrowExpandAll" />
             </Button>
 
@@ -125,38 +125,43 @@
                 Content="All" />
             <RadioButton
                 Name="AllXmlSourceRadio"
+                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsAll}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="KT" />
+                Content="Key Terms" />
             <RadioButton
                 Name="BtXmlSourceRadio"
+                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsBt}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="ABT" />
+                Content="All Biblical Terms" />
             <RadioButton
                 Name="AbtXmlSourceRadio"
+                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsAbt}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="TR" />
+                Content="Term Renderings" />
             <RadioButton
                 Name="TrXmlSourceRadio"
+                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsTr}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="LX" />
+                Content="Lexicon" />
             <RadioButton
                 Name="LxXmlSourceRadio"
+                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsLx}" />
 
@@ -215,7 +220,7 @@
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}" />
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate>
@@ -249,14 +254,14 @@
                                 Margin="-13,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                                BorderBrush="{StaticResource PrimaryHueLightBrush}"
                                 BorderThickness="2"
                                 CornerRadius="10">
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Text="{Binding Path='XmlSourceAbbreviation'}"
-                                    ToolTip="{Binding Path='XmlPath'}" />
+                                    ToolTip="{Binding Path='XmlSourceDisplayName'}" />
                             </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -281,10 +286,11 @@
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>
                                 <Button.Style>
-                                    <Style BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}" TargetType="Button">
+                                    <Style BasedOn="{StaticResource ClearDashboardRaisedAccentButton}" TargetType="Button">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SimpRefs}" Value="0">
-                                                <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
+                                                <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -497,7 +503,7 @@
             Height="100"
             Margin="15,0,5,0"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
 
@@ -511,7 +517,7 @@
             DialogOpened="DialogHost_OnDialogOpened"
             DialogTheme="Inherit"
             IsOpen="{Binding VerseRefDialogOpen}"
-            OverlayBackground="{DynamicResource PrimaryHueMidBrush}">
+            OverlayBackground="{DynamicResource PrimaryHueLightBrush}">
             <materialDesign:DialogHost.DialogContent>
                 <Border
                     x:Name="LowerBorder"
@@ -537,7 +543,7 @@
                                     FontFamily="{Binding ElementName=PinsViewWindow, Path=DataContext.FontFamily}"
                                     FontSize="{Binding ElementName=PinsViewWindow, Path=DataContext.FontSize}"
                                     FontWeight="Bold"
-                                    Foreground="Orange"
+                                    Foreground="{StaticResource AccentHueBrush}"
                                     Text="{Binding LastSelectedPinsDataTableSource}" />
                                 <Run Text="{helpers:Localization Pins_Occurences}" />
                             </TextBlock>
@@ -557,7 +563,7 @@
                                 Name="ShowBackTranslationCheckBox"
                                 Margin="50,0,0,0"
                                 Content="{helpers:Localization Pins_ShowBackTranslation}"
-                                Foreground="Green"
+                                Foreground="{StaticResource SecondaryHueMidBrush}"
                                 IsChecked="{Binding ShowBackTranslation}"
                                 IsEnabled="{Binding BackTranslationFound}" />
                         </StackPanel>
@@ -600,11 +606,11 @@
                                                     <materialDesign:PackIcon.Style>
                                                         <Style TargetType="materialDesign:PackIcon">
                                                             <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
-                                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                            <Setter Property="Foreground" Value="{StaticResource SecondaryHueMidBrush}" />
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding Found}" Value="False">
                                                                     <Setter Property="Kind" Value="CloseBox" />
-                                                                    <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                                    <Setter Property="Foreground" Value="{DynamicResource AccentHueBrush}" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -621,7 +627,7 @@
                                                     VerticalAlignment="Center"
                                                     Cursor="Hand"
                                                     FontStyle="Italic"
-                                                    Foreground="{StaticResource BlueMidBrush}">
+                                                    Foreground="{StaticResource PrimaryHueDarkBrush}">
                                                     <TextBlock.InputBindings>
                                                         <MouseBinding
                                                             Command="{Binding Path=DataContext.VerseClickCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
@@ -676,7 +682,7 @@
                                                         Name="BackTranslation"
                                                         Margin="10,10,0,0"
                                                         FontStyle="Italic"
-                                                        Foreground="Green"
+                                                        Foreground="{StaticResource SecondaryHueMidBrush}"
                                                         Text="{Binding BackTranslation}"
                                                         TextWrapping="Wrap"
                                                         Visibility="{Binding ShowBackTranslation, Converter={BoolToVisibilityConverter}}" />
@@ -694,7 +700,7 @@
             </materialDesign:DialogHost.DialogContent>
             <Border
                 MinWidth="256"
-                BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                BorderBrush="{StaticResource PrimaryHueLightBrush}"
                 BorderThickness="0"
                 ClipToBounds="True" />
         </materialDesign:DialogHost>

@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     xmlns:resx="clr-namespace:ClearDashboard.Aqua.Module.Strings"
     xmlns:cm="http://caliburnmicro.com"
@@ -12,6 +11,7 @@
     xmlns:viewModel="clr-namespace:ClearDashboard.Aqua.Module.ViewModels"
     xmlns:converters="clr-namespace:ClearDashboard.Aqua.Module.Converters"
     xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     mc:Ignorable="d" 
     d:DataContext="{d:DesignInstance Type=viewModel:AquaCorpusAnalysisEnhancedViewItemViewModel}"
     d:DesignHeight="450" d:DesignWidth="800"
@@ -191,7 +191,7 @@
             VerticalAlignment="Center"
             Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
     </Grid>

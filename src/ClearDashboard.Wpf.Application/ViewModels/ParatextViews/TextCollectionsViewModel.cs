@@ -16,6 +16,7 @@ using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using HtmlAgilityPack;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,13 +26,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class TextCollectionsViewModel : ToolViewModel,
         IHandle<VerseChangedMessage>,
-        IHandle<RefreshTextCollectionsMessage>
+        IHandle<RefreshTextCollectionsMessage>,
+        IHandle<ParatextSyncMessage>
     {
         private readonly DashboardProjectManager? _projectManager;
 
@@ -110,6 +116,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                 _paratextSync = value;
                 NotifyOfPropertyChange(() => ParatextSync);
+            }
+        }
+
+        private Visibility _bcvUserControlVisibility = Visibility.Hidden;
+        public Visibility BcvUserControlVisibility
+        {
+            get => _bcvUserControlVisibility;
+            set
+            {
+                _bcvUserControlVisibility = value;
+                NotifyOfPropertyChange(() => BcvUserControlVisibility);
             }
         }
 
@@ -300,7 +317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     }
                                     var currentBody = htmlSnippet.DocumentNode.SelectNodes("//body");
 
-                                    endPart = currentBody.FirstOrDefault().InnerHtml;
+                                    endPart = currentBody.FirstOrDefault().InnerHtml.Replace("> ", ">").Replace(">", "> ");
                                 }
                                 catch (Exception e)
                                 {
@@ -313,6 +330,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     classSpecification = "class=\"vh\"";
                                 }
 
+                                var fontQueryResult = await ExecuteRequest(new GetProjectFontFamilyQuery(textCollection.Id), CancellationToken.None);
+                                var fontFamily = FontNames.DefaultFontFamily;
+                                if (fontQueryResult.Success)
+                                {
+                                    fontFamily = fontQueryResult.Data;
+                                }
+
                                 collectiveBody +=
                                     "<div id='"+startPart+"'>" +
                                     "<details open>" +
@@ -320,10 +344,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     startPart+":" +
                                     "</summary>"
                                     +"<span " +
-                                    classSpecification +
+                                classSpecification +
+                                    "style=\"font-family:"+fontFamily+";\""+
                                     ">"
                                     +endPart+
-                                    "</p>"+
+                                    "</span>"+
                                     "</details>" +
                                     "</div>" +
                                     "<hr>";
@@ -369,7 +394,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
@@ -392,6 +417,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public Task HandleAsync(RefreshTextCollectionsMessage message, CancellationToken cancellationToken)
         {
             Refresh(null);
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ParatextSyncMessage message, CancellationToken cancellationToken)
+        {
+            var makeVisible = false;
+
+            if (message.Parent is MainViewModel mainViewModel)
+            {
+                foreach (var item in mainViewModel.Items)
+                {
+                    if (item is EnhancedViewModel enhancedViewModel && !enhancedViewModel.ParatextSync)
+                    {
+                        makeVisible = true;
+                        break;
+                    }
+                }
+            }
+
+            BcvUserControlVisibility = makeVisible ? Visibility.Visible : Visibility.Hidden;
+
             return Task.CompletedTask;
         }
     }

@@ -31,6 +31,12 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
 
     protected static GeneralModel<T> ExtractUsingModelIds(object modelInstance, IEnumerable<String>? ignorePropertyNames = null)
     {
+        return ExtractUsingModelIds<T>(modelInstance, ignorePropertyNames);
+    }
+
+    protected static GeneralModel<E> ExtractUsingModelIds<E>(object modelInstance, IEnumerable<String>? ignorePropertyNames = null)
+        where E : Models.IdentifiableEntity
+    {
         var identityPropertyName = string.Empty;
         Guid? identityPropertyValue = null;
         var modelProperties = new Dictionary<string, (Type type, object? value)>();
@@ -74,7 +80,7 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
             modelProperties.Add(property.Name, (property.PropertyType, property.GetValue(modelInstance, null)));
         }
 
-        var generalModel = new GeneralModel<T>(identityPropertyName, identityPropertyValue);
+        var generalModel = new GeneralModel<E>(identityPropertyName, identityPropertyValue);
         AddPropertyValuesToGeneralModel(generalModel, modelProperties);
 
         return generalModel;
@@ -157,7 +163,8 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
         return modelProperties;
     }
 
-    internal static void AddPropertyValuesToGeneralModel(GeneralModel<T> generalModel, IReadOnlyDictionary<string, (Type type, object? value)> modelPropertiesTypes)
+    internal static void AddPropertyValuesToGeneralModel<E>(GeneralModel<E> generalModel, IReadOnlyDictionary<string, (Type type, object? value)> modelPropertiesTypes)
+        where E : Models.IdentifiableEntity
     {
         foreach (var kvp in modelPropertiesTypes)
         {
@@ -255,6 +262,8 @@ public abstract class GeneralModelBuilder : IModelBuilder
             //Type modelType when modelType == typeof(GeneralModel<Models.ParallelCorpus>) => new ParallelCorpusBuilder(),
             //Type modelType when modelType == typeof(GeneralModel<Models.TokenizedCorpus>) => new TokenizedCorpusBuilder(),
             //Type modelType when modelType == typeof(GeneralModel<Models.TranslationSet>) => new TranslationSetBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_Lexeme>) => new LexiconBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_SemanticDomain>) => new SemanticDomainBuilder(),
             Type modelType when modelType == typeof(GeneralModel<Models.TokenComposite>) => new TokenBuilder(),
             _ => BuildDefaultModelBuilder(generalModelType)
 //            _ => throw new ArgumentOutOfRangeException(generalModelType.ShortDisplayName(), $"No IModelBuilder found for type argument")

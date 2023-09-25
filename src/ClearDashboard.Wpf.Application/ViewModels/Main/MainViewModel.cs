@@ -19,6 +19,7 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -168,7 +169,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task CollabProjectManager()
         {
-            var localizedString = _localizationService!["MainView_About"];
+            var localizedString = _localizationService!["CollabProjectManagementView_CollaborationManagement"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -799,7 +800,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     new EnhancedViewLayout
                     {
                         ParatextSync = true,
-                        Title = "⳼ ENHANCED VIEW",
+                        Title = "⳼ View",
                         VerseOffset = 0
                     }
                 };
@@ -1265,19 +1266,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // Save Current Layout
                 new MenuItemViewModel
                 {
-                    Header = "Initialize Server with Project", Id = MenuIds.CollaborationInitialize,
+                    Header = "Make Project Available for Collab", Id = MenuIds.CollaborationInitialize,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Get Latest from Server", Id = MenuIds.CollaborationGetLatest,
+                    Header = "Get Latest Project Updates", Id = MenuIds.CollaborationGetLatest,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Commit Changes to Server", Id = MenuIds.CollaborationCommit,
+                    Header = "Send Changes to Shared Project", Id = MenuIds.CollaborationCommit,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() &&
                                 !_collaborationManager.AreUnmergedChanges() &&
@@ -1791,11 +1792,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     windowPane.ToggleAutoHide();
                 }
-                else if (windowPane.IsHidden)
+                if (windowPane.IsHidden)
                 {
                     windowPane.Show();
                 }
-                else if (windowPane.IsVisible)
+                if (windowPane.IsVisible)
                 {
                     windowPane.IsActive = true;
                 }
@@ -2300,10 +2301,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // ReSharper disable once PossibleNullReferenceException
                         if (content.PaneId == windowGuid)
                         {
-                            var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
+                            var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
 
-                            var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
-                                SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
+                            if (confirmationViewPopupViewModel == null)
+                            {
+                                throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                            }
+
+                            confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.CloseEnhancedViewConfirmation;
+
+                            var result = await WindowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null, 
+                                SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
 
                             if (result == true)
                             {

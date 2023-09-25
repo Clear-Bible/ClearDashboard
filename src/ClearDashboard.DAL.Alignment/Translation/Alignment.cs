@@ -48,7 +48,7 @@ public class Alignment
     /// Use this one to create manual alignments
     /// </summary>
     /// <param name="alignedTokenPair"></param>
-    /// <param name="alignmentVerification">Valid values are:  "Unverified", "Verified", "Question" only</param>
+    /// <param name="alignmentVerification">Valid values are:  "Unverified", "Verified", "Invalid" only</param>
     public Alignment(AlignedTokenPairs alignedTokenPair, string verification)
     {
         AlignedTokenPair = alignedTokenPair;

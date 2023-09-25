@@ -34,6 +34,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
@@ -448,7 +449,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
             if (_generateDataRunning)
@@ -468,6 +468,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
+        #endregion //Constructor
+
+        #region Methods
 
         /// <summary>
         /// Main logic for building the data
@@ -476,13 +479,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GenerateInitialData(CancellationToken cancellationToken)
         {
             //ReSharper disable once MethodSupportsCancellation
-            _ = await Task.Run(async () =>
+            _ = await Task.Run<bool>(async () =>
             {
                 var logger = LifetimeScope.Resolve<ILogger<ParatextProxy>>();
                 ParatextProxy paratextUtils = new ParatextProxy(logger);
                 if (paratextUtils.IsParatextInstalled())
                 {
-                    _paratextInstallPath = paratextUtils.ParatextInstallPath;
+
+                    if (paratextUtils.ParatextInstallPath != string.Empty)
+                    {
+                        _paratextInstallPath = paratextUtils.ParatextInstallPath;
+                    }
+                    else if (paratextUtils.ParatextBetaInstallPath != string.Empty)
+                    {
+                        _paratextInstallPath = paratextUtils.ParatextBetaInstallPath;
+                    }
+
 
                     //run getting and deserializing all of these resources in parallel
                     await Task.WhenAll(
@@ -520,7 +532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     else
                     {
                         _termRenderingsList.TermRendering[i].Id =
-                                    CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
+                            CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
@@ -533,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         if (_biblicalTermsList.Term[i].Id != "")
                         {
                             _biblicalTermsList.Term[i].Id =
-                                        CorrectUnicode(_biblicalTermsList.Term[i].Id);
+                                CorrectUnicode(_biblicalTermsList.Term[i].Id);
                         }
 
                         cancellationToken.ThrowIfCancellationRequested();
@@ -547,7 +559,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         if (_allBiblicalTermsList.Term[i].Id != "")
                         {
                             _allBiblicalTermsList.Term[i].Id =
-                                        CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
+                                CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
                         }
 
                         cancellationToken.ThrowIfCancellationRequested();
@@ -570,12 +582,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
                         // place Sense in braces  
                         biblicalTermsSense = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)] + " {" +
-                                                     sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
-                                                     "}";
+                                             sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
+                                             "}";
 
                         // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
                         biblicalTermsSpelling =
-                                    sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
+                            sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
                     }
                     else if (sourceWord.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
                     {
@@ -595,7 +607,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     try
                     {
                         spellingRecords = _spellingStatus.Status?.FindAll(s => string.Equals(s.Word,
-                                    biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
+                            biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
                     }
                     catch (Exception e)
                     {
@@ -643,7 +655,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     var verseList = new List<string>();
 
                     // check against the BiblicalTermsList
-                    var bt = _biblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
+                    var bt = _biblicalTermsList.Term?.FindAll(t => t.Id == sourceWord);
+
+                    if (bt is null)
+                    {
+                        bt = new List<Term>();
+                    }
+
                     var gloss = "";
                     if (bt.Count > 0)
                     {
@@ -663,7 +681,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
                             XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
+                            XmlSourceDisplayName = "Key Terms",//Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
                             Code = "KeyTerm",
                             OriginID = terms.Id,
                             Gloss = gloss,
@@ -685,7 +703,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     else
                     {
                         // if not found in the Biblical Terms list, now check AllBiblicalTerms second
-                        var abt = _allBiblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
+                        var abt = _allBiblicalTermsList.Term?.FindAll(t => t.Id == sourceWord);
+                        if (abt is null)
+                        {
+                            abt = new List<Term>();
+                        }
+
+
                         if (abt.Count > 0)
                         {
                             gloss = abt[0].Gloss;
@@ -704,7 +728,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
                                 XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
+                                XmlSourceDisplayName = "All Biblical Terms",//Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -735,8 +759,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
                                 XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,
-                                    "TermRenderings.xml"),
+                                XmlSourceDisplayName = "Term Renderings", //Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,"TermRenderings.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -769,7 +792,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> GenerateLexiconData(CancellationToken cancellationToken)
         {
-            _ = await Task.Run(async () =>
+            _ = await Task.Run<bool>(async () =>
             {
                 await GenerateLexiconDataCalculations(cancellationToken);
                 return true;
@@ -861,9 +884,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
                             {
                                 var verseReferences = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
-                                
+
                                 var orderedList = SortRefs(verseReferences); // sort the List  
-                                
+
                                 verseReferences.Clear();
                                 foreach (var orderedReference in orderedList)
                                 {
@@ -888,7 +911,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
                             XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlPath = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
+                            XmlSourceDisplayName = "Lexicon",//Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
                             Code = senseEntry.Id,
                             Gloss = senseEntry.Gloss.Text,
                             Lang = senseEntry.Gloss.Language,
@@ -1093,10 +1116,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             return false;
         }
 
-        #endregion //Constructor
-
-        #region Methods
-
         private void CheckAndRefreshGrid()
         {
             if (_gridData != null && GridCollectionView is not null)
@@ -1149,17 +1168,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (itemDt.Gloss is null)
             {
-                return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
+                return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
                         || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
                         || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
-                    && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
+                    && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource] || _isAll);
             }
 
-            return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                    || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
+            return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                    || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
                     || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
                     || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
-                && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
+                && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource] || _isAll);
         }
 
         /// <summary>
@@ -1231,7 +1250,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 else
                 {
                     verseText = "There was an issue getting the text for this verse.";
-                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    //_logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 var backTranslationResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum, true), CancellationToken.None);
@@ -1250,7 +1269,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 }
                 else
                 {
-                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    //_logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 SelectedItemVerses.Add(new PinsVerseListViewModel
@@ -1280,9 +1299,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 new NamedParameter("backTranslationFound", BackTranslationFound),
                 new NamedParameter("selectedItemVerses", SelectedItemVerses),
             };
-            
+
             _pinsVerseViewModel = LifetimeScope?.Resolve<PinsVerseViewModel>(parameters);
-            
+
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(_pinsVerseViewModel, null, settings);
             return false;
@@ -1369,7 +1388,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
                         verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
                         verse.Inlines.Insert(0,
-                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = (SolidColorBrush?)System.Windows.Application.Current.FindResource("AccentHueBrush")
+                            });
 
                         // check if this was the last one
                         if (i == 0)
@@ -1413,7 +1433,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
         void VerseCollection_Filter(object sender, FilterEventArgs e)

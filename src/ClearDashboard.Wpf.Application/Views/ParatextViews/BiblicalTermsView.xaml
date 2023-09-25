@@ -100,7 +100,7 @@
                     </Button.Style>
                     <materialDesign:PackIcon
                         Background="Transparent"
-                        Foreground="{StaticResource SecondaryHueDarkBrush}"
+                        Foreground="{StaticResource AccentHueBrush}"
                         Kind="ArrowExpandAll" />
                 </Button>
 
@@ -484,9 +484,8 @@
             Height="100"
             Margin="15,50,5,0"
             VerticalAlignment="Top"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
 
@@ -534,7 +533,8 @@
                             Text="{helpers:Localization BiblicalTermsForm_GlossLower}" />
                         <TextBlock
                             Width="{Binding ActualWidth, ElementName=SelectedItemVerses, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
-                            Foreground="{StaticResource SecondaryHueMidBrush}"
+                            FontWeight="Bold"
+                            Foreground="Black"
                             Text="{Binding Gloss}"
                             TextWrapping="Wrap" />
                     </StackPanel>

@@ -35,7 +35,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
             var factory = new ProjectSnapshotFromGitFactory(request.RepositoryPath, _logger);
 
             var projectModelSnapshot = factory.LoadProject(request.CommitSha, request.ProjectId);
-            var userModelSnapshots = factory.LoadUsers(request.CommitSha, request.ProjectId);
+            var userModelSnapshots = factory.LoadUsers(request.CommitSha, request.ProjectId, cancellationToken);
 
             request.Progress.Report(new ProgressStatus(0, "MergeDialog_CreatingDatabase"));
 
@@ -156,7 +156,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
         }
     }
 
-    private static Action<ILogger>? GetErrorCleanupAction(ProjectDbContext? projectContext, ILogger logger)
+    public static Action<ILogger>? GetErrorCleanupAction(ProjectDbContext? projectContext, ILogger logger)
     {
         if (projectContext is not null)
         {
