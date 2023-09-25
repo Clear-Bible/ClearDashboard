@@ -131,7 +131,7 @@
     <value>Copiați erorile USFM pe clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul de erori:</value>
+    <value>Numărul erorilor:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
     <value>Interlinear</value>
@@ -935,13 +935,22 @@
     <value>Traducere</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Ca formă pentru ...</value>
+    <value>Adăugați ca formă pentru ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Găsiți potriviri complete sau parțiale de lexeme sau formular pentru sursă</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>La fel de țintă ca transalarea pentru ...</value>
+    <value>Adăugați ținta ca transalare pentru ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu ținta</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import verificat</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme sau Form se potrivește</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Selectează tot</value>
@@ -959,7 +968,10 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvântul țintă</value>
+    <value>Cuvânt țintă</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Meciuri de traducere</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Deselectează tot</value>
@@ -1007,7 +1019,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Aspecte de proiect</value>
+    <value>Machete de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1106,7 +1118,7 @@
     <value>Fragmente din discurs</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lematele înrudite</value>
+    <value>Lemnițe înrudite</value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Domeniu de aplicare:</value>
@@ -1303,8 +1315,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>și asociați -l cu Grupul de etichete:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Doriți să ștergeți eticheta:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>și descurajați -l de la Grupul de etichete:</value>
+    <value>Doriți să dezasociați eticheta:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>din Grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
@@ -1333,8 +1351,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Scoateți această etichetă</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Doriți să eliminați eticheta:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Text atașat la etichetă</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creată</value>
@@ -1424,7 +1442,7 @@
     <value>Creați interlinear</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>JSON Metadate</value>
+    <value>Metadate JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
     <value>Paralelizează versetele corporale</value>
@@ -1577,7 +1595,7 @@
     <value>StudiuBibleAdDitions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Accesați paratext și schimbați proiecte. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
+    <value>Accesați paratext și schimbați proiectele. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ţintă</value>
@@ -2024,7 +2042,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele dvs.</value>
+    <value>Vă rugăm să introduceți prenumele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2066,7 +2084,7 @@
     <value>Adresa de e-mail</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>Eroare de trimitere prin e -mail</value>
+    <value>E -mail de trimitere</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Cod de verificare a e -mailului</value>
@@ -2120,10 +2138,10 @@
     <value>Setări ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Afișați vizualizări în oglindă pe un monitor diferit de tabloul de bord</value>
+    <value>Afișați vizualizări extinse pe un monitor diferit de tabloul de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați oglindă pe a treia monitor</value>
+    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați o vizualizare extinsă pe a treia monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colecția de text</value>

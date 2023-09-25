@@ -407,7 +407,7 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对准评论</value>
+    <value>批量对齐审查</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
@@ -449,7 +449,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢纽的单词</value>
+    <value>枢密性的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -587,7 +587,7 @@
     <value>添加对齐方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>与'{1}'对齐'{0}'？</value>
+    <value>用'{1}'对齐'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>结盟</value>
@@ -608,7 +608,7 @@
     <value>删除对齐</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“ {0}”的对齐？</value>
+    <value>删除“ {0}”的对齐方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>删除所有路线？</value>
@@ -656,7 +656,7 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>分开令牌</value>
+    <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>选择要拆分令牌的位置：</value>
@@ -833,7 +833,7 @@
     <value>更改所有不设置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果检查了，这将改变此词的所有不设置</value>
+    <value>如果检查了，这将改变此词的所有不设置的情况</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -935,13 +935,22 @@
     <value>翻译</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>作为...的形式</value>
+    <value>添加为...的形式</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>查找源的完整或部分词汇或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>作为...的目标</value>
+    <value>将目标添加为...的横向</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>查找具有与目标匹配的一个或多个翻译的词汇</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>导入检查</value>
+    <value>进口检查</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme或形式匹配</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>全选</value>
@@ -960,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>目标词</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>翻译匹配</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消选择</value>
@@ -1277,7 +1289,7 @@
     <value>过滤器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>由标签</value>
+    <value>通过标签</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通过注意文本</value>
@@ -1303,8 +1315,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>并将其与标签组相关联：</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>您想删除标签：</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>并将其与标签组分离：</value>
+    <value>您想拆卸标签：</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>来自标签组：</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>添加标签组</value>
@@ -1313,7 +1331,7 @@
     <value>添加标签组</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>一个标签组已经存在</value>
+    <value>标签组已经存在，名称为</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化标签组</value>
@@ -1333,8 +1351,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>删除此标签</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>您想删除标签：</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>标签附加的文字</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>创建</value>
@@ -1388,7 +1406,7 @@
     <value>将此注释发送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象征化的语料库</value>
+    <value>令牌化语料库</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻译集</value>
@@ -1430,10 +1448,10 @@
     <value>并行化语料库经文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>机器字对准算法</value>
+    <value>机词对齐算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>机器字对准算法</value>
+    <value>机词对齐算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火车对称模型？</value>
@@ -1469,7 +1487,7 @@
     <value>创建新单词对齐</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>创建新的语料库令牌化</value>
+    <value>创建新的语料库</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
@@ -1685,7 +1703,7 @@
     <value>协作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始。</value>
+    <value>创建您的项目以入门。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>
@@ -2048,7 +2066,7 @@
     <value>节省</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>启用实验性水上插件</value>
+    <value>启用实验水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>检查您的电子邮件并输入验证代码：</value>
@@ -2120,10 +2138,10 @@
     <value>ClearDashboard设置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>在与仪表板不同的显示器上显示镜像</value>
+    <value>显示与仪表板不同的显示器上展示的视图</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>对于具有三个或三个或以上显示器的系统，请在第三台显示器上显示镜像视图</value>
+    <value>对于具有三个或三个或以上监视器的系统，在第三监视器上显示扩展的视图</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>文字收集</value>
@@ -2138,7 +2156,7 @@
     <value>验证电子邮件代码</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>启用逐节的文本集合显示</value>
+    <value>启用逐一文字集合显示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任务</value>

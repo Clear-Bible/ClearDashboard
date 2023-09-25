@@ -617,10 +617,10 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск по фильтру</value>
+    <value>Поиск фильтра</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск члена фильтра</value>
+    <value>Поиск членов фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Межлинейный</value>
@@ -863,7 +863,7 @@
     <value>Лемма/формы:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Лемма для новой лексеме:</value>
+    <value>Лемма для новой лексем:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>Лекса</value>
@@ -935,13 +935,22 @@
     <value>Перевод</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Как форма для ...</value>
+    <value>Добавить в качестве формы для ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Найдите полные или частичные совпадения Lexeme или Form для источника</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Такая же цель, как трансалация для ...</value>
+    <value>Добавьте цель в качестве трансалации для ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme или Form Matches</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Выбрать все</value>
@@ -960,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Целевое слово</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Перевод совпадает</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Снять все</value>
@@ -1019,7 +1031,7 @@
     <value>Предпочтения</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Изменения в сотрудничестве доступны</value>
+    <value>Коллабные изменения доступны</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -1166,7 +1178,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header2" xml:space="preserve">
-    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
+    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1303,14 +1315,20 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>и связывать это с группой лейблов:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Вы хотите удалить этикетку:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>и отделить его от группы лейблов:</value>
+    <value>Вы хотите понизить этикетку:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>Из группы лейбла:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу этикетки</value>
+    <value>Добавить группу ярлыков</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -1322,7 +1340,7 @@
     <value>с ярлыками от:</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Название группы лейбла</value>
+    <value>Название группы на этикетке</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
     <value>Удалить эту группу этикетки?</value>
@@ -1333,8 +1351,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Удалите эту метку</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Вы хотите удалить этикетку:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Текст, прикрепленный к этикетке</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1523,7 +1541,7 @@
     <value>Установите всю область контента в просмотр</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Подключить все узлы к видовому доку</value>
+    <value>Установите все узлы в Viewport</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Получите последние из Paratext</value>
@@ -1550,7 +1568,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
+    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1586,7 +1604,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIteChoder</value>
+    <value>Транслитерация WithIntEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1595,7 +1613,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1631,7 +1649,7 @@
     <value>Тип лекса</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Загрузить ссылки</value>
+    <value>Загружать ссылки</value>
   </data>
   <data name="Pins_Match" xml:space="preserve">
     <value>Соответствовать</value>
@@ -2066,7 +2084,7 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка отправки</value>
+    <value>По электронной почте ошибка</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
@@ -2102,7 +2120,7 @@
     <value>Зарезервировано для будущего расширения</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Восстановите пользователя сотрудничества</value>
+    <value>Восстановить пользователь сотрудничества</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Сохраняется на удаленном сервере</value>
@@ -2120,10 +2138,10 @@
     <value>Настройки ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Показать зеркальные виды на другом мониторе, чем панель панели</value>
+    <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать зеркальное представление о третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>

@@ -434,7 +434,7 @@
     <value>Maschine</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Markieren Sie als "ungültig" ausgewählt.</value>
+    <value>Markieren Sie als "ungültig" ausgewählt</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
     <value>Markieren Sie als "Bedarfsüberprüfung" ausgewählt.</value>
@@ -455,7 +455,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellteil</value>
+    <value>Quellenteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -935,13 +935,22 @@
     <value>Übersetzung</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Als Form für ...</value>
+    <value>Fügen Sie als Form für ... hinzu</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Als Ziel als Transalation für ...</value>
+    <value>Fügen Sie das Ziel als Transalation für ... hinzu</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Importiert</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme oder Form sind überein</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Wählen Sie Alle</value>
@@ -960,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Zielwort</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Übersetzungsübereinstimmungen</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Alles wiederufen</value>
@@ -1271,7 +1283,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Assoziationen</value>
+    <value>Durch Verbände</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1303,8 +1315,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>und verbinden Sie es mit der Labelgruppe:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Möchten Sie das Etikett löschen:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>und zerlegen es von der Etikettengruppe:</value>
+    <value>Möchten Sie das Etikett disassoziieren:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>aus der Labelgruppe:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Etikettengruppe hinzufügen</value>
@@ -1313,7 +1331,7 @@
     <value>Fügen Sie eine Etikettengruppe hinzu</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Eine Etikettengruppe existiert bereits mit Namen</value>
+    <value>Eine Labelgruppe existiert bereits mit Namen</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>Labelgruppe initialisieren</value>
@@ -1333,8 +1351,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Entfernen Sie dieses Etikett</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Möchten Sie das Etikett entfernen:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Text an Etikett angehängt</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Erstellt</value>
@@ -1430,10 +1448,10 @@
     <value>Korpora -Verse parallelisieren</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithmus für maschinelle Wortausrichtungen</value>
+    <value>Algorithmus für maschinelles Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithmus für maschinelle Wortausrichtungen</value>
+    <value>Algorithmus für maschinelles Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Zuges symmetisiertes Modell?</value>
@@ -1481,7 +1499,7 @@
     <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Verse View zur Anzeige hinzu</value>
+    <value>Fügen Sie Vers anzeigen, um anzeigen</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Hilfs</value>
@@ -1559,7 +1577,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>
@@ -1721,7 +1739,7 @@
     <value>Biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Kooperationsprojekte verwalten</value>
@@ -1775,7 +1793,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierungsprojekte Liste aktualisieren</value>
+    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>
@@ -1823,7 +1841,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timothy</value>
+    <value>1 Timotheus</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2120,10 +2138,10 @@
     <value>Cleardashboard -Einstellungen</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Zeigen Sie Spiegelansichten auf einem anderen Monitor als Dashboard</value>
+    <value>Zeigen Sie erweiterte Ansichten auf einem anderen Monitor als Dashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Für Systeme mit drei oder mehr Monitoren zeigen Sie Spiegelansicht auf dem dritten Monitor</value>
+    <value>Für Systeme mit drei oder mehr Monitoren zeigen Sie die erweiterte Ansicht auf den dritten Monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Textsammlung</value>

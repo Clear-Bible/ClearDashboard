@@ -935,13 +935,22 @@
     <value>Translation</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>As as form for...</value>
+    <value>Add as form for...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Find full or partial lexeme or form matches for source</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>As target as transalation for ...</value>
+    <value>Add target as transalation for ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Find lexemes that have one or more translation that matches target</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import Checked</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme or form matches</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Select All</value>
@@ -960,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Target Word</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Translation matches</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Unselect All</value>
@@ -1303,8 +1315,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>and associate it with label group:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Do you want to delete label:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>and disassociate it from label group:</value>
+    <value>Do you want to disassociate label:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>from label group:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Add Label Group</value>
@@ -1333,8 +1351,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Remove this label</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Do you want to remove label:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Text attached to label</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>
@@ -2120,10 +2138,10 @@
     <value>ClearDashboard Settings</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Show Mirror Views on a different monitor than Dashboard</value>
+    <value>Show Expanded Views on a different monitor than Dashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>For systems with three or more monitors, show Mirror View on third monitor</value>
+    <value>For systems with three or more monitors, show Expanded View on third monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Text Collection</value>

@@ -236,7 +236,7 @@
     <value>建造;宗教活動</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>構造；畜牧業</value>
+    <value>建築；畜牧業</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧業</value>
@@ -449,7 +449,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞紐的單詞</value>
+    <value>樞密性的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -608,7 +608,7 @@
     <value>刪除對齊</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>刪除“ {0}”的對齊方式？</value>
+    <value>刪除“ {0}”的對齊？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>刪除所有路線？</value>
@@ -833,7 +833,7 @@
     <value>更改所有不設置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果檢查了，這將改變此詞的所有不設置</value>
+    <value>如果檢查了，這將改變此詞的所有不設置的情況</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -935,13 +935,22 @@
     <value>翻譯</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>作為...的形式</value>
+    <value>添加為...的形式</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>查找源的完整或部分詞彙或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>作為...的目標</value>
+    <value>將目標添加為...的橫向</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>查找具有與目標匹配的一個或多個翻譯的詞彙</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>導入檢查</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme或形式匹配</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>全選</value>
@@ -960,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>目標詞</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>翻譯匹配</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消選擇</value>
@@ -1303,8 +1315,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>並將其與標籤組相關聯：</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>您想刪除標籤：</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>並將其與標籤組分離：</value>
+    <value>您想拆卸標籤：</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>來自標籤組：</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>添加標籤組</value>
@@ -1333,8 +1351,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>刪除此標籤</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>您想刪除標籤：</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>標籤附加的文字</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
@@ -1430,10 +1448,10 @@
     <value>並行化語料庫經文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>機詞對齊算法</value>
+    <value>機器字對準算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>機詞對齊算法</value>
+    <value>機器字對準算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火車對稱模型？</value>
@@ -1496,7 +1514,7 @@
     <value>更改內容的縮放級別</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顧問Notes</value>
+    <value>顧問說明</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
@@ -1685,7 +1703,7 @@
     <value>協作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>創建您的項目以入門。</value>
+    <value>創建您的項目以開始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>創建一個新項目</value>
@@ -1721,7 +1739,7 @@
     <value>包括聖經文本？</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
+    <value>選中此框，以在創建項目時包括希臘語和希伯來語聖經文本。</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>管理協作項目</value>
@@ -1847,7 +1865,7 @@
     <value>帖撒羅尼迦後書</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2蒂莫西</value>
+    <value>2提摩太</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3約翰</value>
@@ -2018,7 +2036,7 @@
     <value>解密許可證密鑰的內容與您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的許可證密鑰要么缺少或損壞。</value>
+    <value>您的許可密鑰丟失或損壞。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>歡迎來到Cleardashboard！請輸入您的註冊信息。</value>
@@ -2120,10 +2138,10 @@
     <value>ClearDashboard設置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>在與儀表板不同的顯示器上顯示鏡像</value>
+    <value>顯示出與儀表板不同的顯示器上擴展的視圖</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>對於具有三個或三個或以上顯示器的系統，請在第三台顯示器上顯示鏡像視圖</value>
+    <value>對於具有三個或三個或以上監視器的系統，在第三監視器上顯示擴展的視圖</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>文字收集</value>
