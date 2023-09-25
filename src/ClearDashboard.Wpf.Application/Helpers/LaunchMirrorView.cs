@@ -79,16 +79,8 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
                 var sortedMonitors = monitors.OrderBy(x => x.Bounds.Left).ToList();
 
-                if (sortedMonitors.Count > 1)
-                {
-                    mirror.Left = monitors[1].Bounds.Left;
-                    mirror.Top = monitors[1].Bounds.Top;
-                }
-                else
-                {
-                    mirror.Left = monitors[0].Bounds.Left;
-                    mirror.Top = monitors[0].Bounds.Top;
-                }
+                mirror.Left = monitors[0].Bounds.Left;
+                mirror.Top = monitors[0].Bounds.Top;
             }
 
             // turn off the mirror's close button
