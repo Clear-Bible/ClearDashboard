@@ -162,7 +162,7 @@
                 HorizontalAlignment="Left"
                 Foreground="{StaticResource PrimaryHueMidBrush}"
                 IsIndeterminate="True"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                Style="{StaticResource ClearDashboardCircularProgressBar}"
                 Visibility="{Binding SpinnerVisibility}"
                 Value="75" />
             <Button

@@ -31,7 +31,7 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
+        <!--<Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Height" Value="50" />
@@ -74,7 +74,7 @@
                     <Setter Property="Background" Value="LightGray" />
                 </Trigger>
             </Style.Triggers>
-        </Style>
+        </Style>-->
 
 
         <!--<Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
@@ -175,7 +175,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 IsIndeterminate="True"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                Style="{StaticResource ClearDashboardCircularProgressBar}"
                 Visibility="{Binding ShowSpinner}" />
 
             <StackPanel Grid.Row="2" Orientation="Vertical">

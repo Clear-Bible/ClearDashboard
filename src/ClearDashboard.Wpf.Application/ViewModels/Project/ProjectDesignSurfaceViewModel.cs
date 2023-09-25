@@ -940,7 +940,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                         catch (Exception ex)
                         {
-                            Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
+                            Logger!.LogError(ex, $"An unexpected error occurred while creating the corpus for {selectedProject.Name} ");
                             if (!cancellationToken.IsCancellationRequested)
                             {
                                 soundType = SoundType.Error;
@@ -1301,6 +1301,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ErrorMessage = exception != null ? $"{exception}" : null,
                 TaskLongRunningProcessStatus = status,
                 BackgroundTaskType = backgroundTaskMode,
+                BackgroundTaskSource = typeof(ProjectDesignSurfaceViewModel)
             };
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
