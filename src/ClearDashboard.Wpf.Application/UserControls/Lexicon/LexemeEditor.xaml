@@ -4,11 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    MaxHeight="900"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -61,7 +60,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*" MaxHeight="400" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Button
@@ -355,13 +354,14 @@
 
         </Grid>
 
-        <ItemsControl
-            Grid.Row="4"
-            Focusable="False"
-            ItemTemplate="{StaticResource MeaningDisplayTemplate}"
-            ItemsPanel="{StaticResource MeaningPanelTemplate}"
-            ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme.Meanings}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}" />
-
+        <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto">
+            <ItemsControl
+                Grid.Row="4"
+                Focusable="False"
+                ItemTemplate="{StaticResource MeaningDisplayTemplate}"
+                ItemsPanel="{StaticResource MeaningPanelTemplate}"
+                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme.Meanings}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}" />
+        </ScrollViewer>
     </Grid>
 </UserControl>
