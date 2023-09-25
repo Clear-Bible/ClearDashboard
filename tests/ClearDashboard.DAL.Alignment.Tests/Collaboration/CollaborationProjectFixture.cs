@@ -20,6 +20,8 @@ using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DataAccessLayer;
 using System.Xml.Linq;
 using ClearBible.Engine.Corpora;
+using Autofac;
+using ClearDashboard.DataAccessLayer.Data;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
@@ -107,6 +109,21 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             projectSnapshot.AddGeneralModelList(ToSemanticDomainBuilder(LexiconSemanticDomains).BuildModelSnapshots(builderContext));
 
             return projectSnapshot;
+        }
+
+        public async Task ExecuteInNewProjectDbContext(Func<ProjectDbContext, CancellationToken, Task> projectDbContextFunc, CancellationToken cancellationToken)
+        {
+            var factory = Container!.Resolve<ProjectDbContextFactory>();
+
+            await using var requestScope = factory!.ServiceScope
+                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+
+            var dbContext = await factory!.GetDatabaseContext(
+                ProjectName,
+                false,
+                requestScope).ConfigureAwait(false);
+
+            await projectDbContextFunc(dbContext, cancellationToken);
         }
 
         public async Task MergeIntoDatabase(string commitShaToMerge, ProjectSnapshot snapshotLastMerged, ProjectSnapshot snapshotToMerge, IProgress<ProgressStatus> progress)
@@ -321,7 +338,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                     parallelCorpus,
                     engineTokenIdComposite,
                     surfaceTrainingTextComposite,
-                    originTokenLocationComposite
+                    originTokenLocationComposite,
+                    null
                 );
 
                 tokenComposites.Add(tokenComposite);
@@ -330,7 +348,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return tokenComposites;
         }
 
-        public static Models.TokenComposite BuildTestTokenComposite(Models.TokenizedCorpus tokenizedCorpus, Models.ParallelCorpus? parallelCorpus, string engineTokenIdComposite, string? surfaceTrainingTextComposite, string? originTokenLocationComposite)
+        public static Models.TokenComposite BuildTestTokenComposite(Models.TokenizedCorpus tokenizedCorpus, Models.ParallelCorpus? parallelCorpus, string engineTokenIdComposite, string? surfaceTrainingTextComposite, string? originTokenLocationComposite, Models.VerseRow? verseRow)
         {
             var tokenComposite = new Models.TokenComposite
             {
@@ -341,7 +359,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 ParallelCorpusId = parallelCorpus?.Id,
                 EngineTokenId = engineTokenIdComposite,
                 SurfaceText = surfaceTrainingTextComposite,
-                TrainingText = surfaceTrainingTextComposite
+                TrainingText = surfaceTrainingTextComposite,
+                VerseRow = verseRow,
+                VerseRowId = verseRow?.Id
             };
 
             var engineTokenIdSet = engineTokenIdComposite.Split('-');
@@ -353,16 +373,17 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 tokenComposite,
                 ea,
                 surfaceTrainingTextSet?.ElementAtOrDefault(ia),
-                originTokenLocationSet?.ElementAtOrDefault(ia))).ToList();
+                originTokenLocationSet?.ElementAtOrDefault(ia),
+                verseRow)).ToList();
 
             tokenComposite.Tokens = tokenComposite.TokenCompositeTokenAssociations.Select(e => e.Token!).ToList();
 
             return tokenComposite;
         }
 
-        protected static Models.TokenCompositeTokenAssociation BuildTestTokenCompositeTokenAssociation(Models.TokenComposite tokenComposite, string engineTokenId, string? surfaceTrainingText, string? originTokenLocation)
+        protected static Models.TokenCompositeTokenAssociation BuildTestTokenCompositeTokenAssociation(Models.TokenComposite tokenComposite, string engineTokenId, string? surfaceTrainingText, string? originTokenLocation, Models.VerseRow? verseRow)
         {
-            var token = BuildTestToken(tokenComposite.TokenizedCorpus!, engineTokenId, surfaceTrainingText, originTokenLocation);
+            var token = BuildTestToken(tokenComposite.TokenizedCorpus!, engineTokenId, surfaceTrainingText, originTokenLocation, verseRow);
             var association =  new Models.TokenCompositeTokenAssociation
             {
                 Id = Guid.NewGuid(),
@@ -378,13 +399,15 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return association;
         }
 
-        public static Models.Token BuildTestToken(Models.TokenizedCorpus tokenizedCorpus, string engineTokenId, string? surfaceTrainingText = null, string? originTokenLocation = null, DateTimeOffset? deleted = null)
+        public static Models.Token BuildTestToken(Models.TokenizedCorpus tokenizedCorpus, string engineTokenId, string? surfaceTrainingText = null, string? originTokenLocation = null, Models.VerseRow? verseRow = null, DateTimeOffset? deleted = null)
         {
             return new Models.Token
             {
                 Id = Guid.NewGuid(),
                 TokenizedCorpus = tokenizedCorpus,
                 TokenizedCorpusId = tokenizedCorpus.Id,
+                VerseRow = verseRow,
+                VerseRowId = verseRow?.Id,
                 EngineTokenId = engineTokenId,
                 BookNumber = int.Parse(engineTokenId.Substring(0, 3)),
                 ChapterNumber = int.Parse(engineTokenId.Substring(3, 3)),

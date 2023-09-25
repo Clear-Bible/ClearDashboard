@@ -1,5 +1,4 @@
 ﻿using Models = ClearDashboard.DataAccessLayer.Models;
-using SIL.Machine.FiniteState;
 using SIL.Machine.Utils;
 using System;
 using System.Collections.Generic;
@@ -11,13 +10,10 @@ using Xunit;
 using Xunit.Abstractions;
 using ClearDashboard.Collaboration.Builder;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Collaboration.Factory;
 using SIL.Scripture;
-using MediatR;
-using ClearDashboard.DAL.Alignment.Features;
 using Microsoft.EntityFrameworkCore;
-using SIL.Machine.FeatureModel;
+using System.Threading;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
@@ -37,17 +33,6 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Fact]
         [Trait("Category", "Collaboration")]
         public async Task Test00()
-        {
-            var boo1 = "000-NULL-002".Split('-').Select(s => s == "{NULL}" ? null : s).ToArray();
-            var boo2 = "NULL-001-002".Split('-');
-            var boo3 = "000-001-NULL".Split('-');
-            var boo4 = "NULL-NULL-002".Split('-');
-        }
-
-
-        [Fact]
-        [Trait("Category", "Collaboration")]
-        public async Task Test0()
         {
             await DoMerge();
 
@@ -75,7 +60,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test1()
+        public async Task Test01()
         {
             // Add custom versification of tokenized corpus
 
@@ -117,7 +102,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test2()
+        public async Task Test02()
         {
             // Change custom versification of first tokenized corpus (should trigger rebuilding of 
             // the verse mappings of the parallel corpus)
@@ -169,7 +154,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             // Verify versification change:
             var testTokenizedCorpusFromDb = _fixture.ProjectDbContext.TokenizedCorpora
-                .Include(e => e.Tokens)
+                .Include(e => e.TokenComponents)
                 .Where(e => e.Id == testTokenizedCorpus.Id).FirstOrDefault();
             Assert.NotNull(testTokenizedCorpusFromDb);
             Assert.False(string.IsNullOrEmpty(testTokenizedCorpusFromDb.CustomVersData));
@@ -178,7 +163,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             // Should not have merged any of the tokens above into the database/
             // because none of them were soft deleted (i.e. split tokens)
-            Assert.Empty(testTokenizedCorpusFromDb.Tokens);
+            Assert.Equal(23, testTokenizedCorpusFromDb.TokenComponents.Where(e => e.GetType() == typeof(Models.Token)).Count());
+            Assert.Equal(2, testTokenizedCorpusFromDb.TokenComponents.Where(e => e.GetType() == typeof(Models.TokenComposite)).Count());
 
             Assert.True(_fixture.ProjectDbContext.VerseMappings.Count() > 30000);           // 31163
             Assert.True(_fixture.ProjectDbContext.Verses.Count() > 60000);                  // 62335
@@ -195,7 +181,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test3()
+        public async Task Test03()
         {
             var testUser = _fixture.Users.First();
 
@@ -275,7 +261,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test4()
+        public async Task Test04()
         {
             // Add some notes and associate with tokens
 
@@ -357,7 +343,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test5()
+        public async Task Test05()
         {
             // Add a label 
 
@@ -388,7 +374,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test6()
+        public async Task Test06()
         {
             // Remove a note association
             var testNote3 = _fixture.Notes.Where(e => e.Text!.Contains("three")).FirstOrDefault();
@@ -421,7 +407,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test7()
+        public async Task Test07()
         {
             var testNote2 = _fixture.Notes.Where(e => e.Text!.Contains("two")).FirstOrDefault();
             Assert.NotNull(testNote2);
@@ -442,7 +428,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test8()
+        public async Task Test08()
         {
             var newNoteText = "new text in old note";
 
@@ -461,7 +447,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
         [Fact]
         [Trait("Category", "Collaboration")]
-        public async Task Test9()
+        public async Task Test09()
         {
             var newTranslationText = "translation change in lexicon";
 
@@ -495,69 +481,91 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Trait("Category", "Collaboration")]
         public async Task Test10()
         {
-            var testTokenizedCorpus = _fixture.TokenizedCorpora.FirstOrDefault();
+            var testTokenizedCorpus = _fixture.ProjectDbContext.TokenizedCorpora
+                .Where(e => e.DisplayName == "test tokenized corpus one")
+                .FirstOrDefault();
             Assert.NotNull(testTokenizedCorpus);
 
-            // Token that was split (target system):
-            var splitSource1 = CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002001001", "splitSource", null, DateTimeOffset.Now);
+            await _fixture.ExecuteInNewProjectDbContext(async (ProjectDbContext dbContext, CancellationToken cancellationToken) => {
 
-            // Tokens/composite that result from split (target system):
-            var splitComposite1 = CollaborationProjectFixture.BuildTestTokenComposite(
-                testTokenizedCorpus,
-                null,
-                "001001002001001-001001002001002-001001002001003-001001002001004",
-                "spl_itSou_rce_other0",
-                "001001002001001-001001002001001-001001002001001-" );
+                var tokenizedCorpus = dbContext.TokenizedCorpora
+                    .Where(e => e.Id == testTokenizedCorpus.Id)
+                    .FirstOrDefault();
+                Assert.NotNull(tokenizedCorpus);
 
-            // Additional tokens in same word and/or verse (target system):
-            var extraTokens1 = new Models.Token[]
-            {
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002001005", "other1", "001001002001003"),
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002001006", "other2", "001001002001004"),
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002002001", "other3"),
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002002002", "other4"),
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002003001", "other5"),
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002004001", "other6")
-            };
+                var verseRow = CollaborationProjectFixture.BuildTestVerseRow(Guid.NewGuid(), tokenizedCorpus.Id, "001001020", "splitSource other0 other1 other2 other3 other4 other5 other6", tokenizedCorpus.UserId);
 
-            // Need the database to first have some tokens:
-            _fixture.ProjectDbContext.Add(splitSource1);
-            _fixture.ProjectDbContext.Add(splitComposite1);
-            _fixture.ProjectDbContext.AddRange(extraTokens1);
+                // Token that was split (target system):
+                var splitSource1 = CollaborationProjectFixture.BuildTestToken(tokenizedCorpus, "001001020001001", "splitSource", null, verseRow, DateTimeOffset.Now);
 
-            await _fixture.ProjectDbContext.SaveChangesAsync();
+                // Tokens/composite that result from split (target system):
+                var splitComposite1 = CollaborationProjectFixture.BuildTestTokenComposite(
+                    tokenizedCorpus,
+                    null,
+                    "001001020001001-001001020001002-001001020001003-001001020001004",
+                    "spl_itSou_rce_other0",
+                    "001001020001001-001001020001001-001001020001001-",
+                    verseRow);
+
+                // Additional tokens in same word and/or verse (target system):
+                var extraTokens1 = new Models.Token[]
+                {
+                    CollaborationProjectFixture.BuildTestToken(tokenizedCorpus, "001001020001005", "other1", "001001020001003", verseRow),
+                    CollaborationProjectFixture.BuildTestToken(tokenizedCorpus, "001001020001006", "other2", "001001020001004", verseRow),
+                    CollaborationProjectFixture.BuildTestToken(tokenizedCorpus, "001001020002001", "other3", null, verseRow),
+                    CollaborationProjectFixture.BuildTestToken(tokenizedCorpus, "001001020002002", "other4", null, verseRow),
+                    CollaborationProjectFixture.BuildTestToken(tokenizedCorpus, "001001020003001", "other5", null, verseRow),
+                    CollaborationProjectFixture.BuildTestToken(tokenizedCorpus, "001001020004001", "other6", null, verseRow)
+                };
+
+                // Need the database to first have some tokens:
+                dbContext.Add(verseRow);
+                dbContext.Add(splitSource1);
+                dbContext.Add(splitComposite1);
+                dbContext.AddRange(extraTokens1);
+
+                await dbContext.SaveChangesAsync(cancellationToken);
+
+            }, CancellationToken.None);
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Single(_fixture.ProjectDbContext.TokenComposites);
-            Assert.Equal(10, _fixture.ProjectDbContext.Tokens.Count());
+            var verseRow = _fixture.ProjectDbContext.VerseRows
+                .Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id)
+                .Where(e => e.BookChapterVerse == "001001020")
+                .FirstOrDefault();
+
+            Assert.Equal(3, _fixture.ProjectDbContext.TokenComposites.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
+            Assert.Equal(34, _fixture.ProjectDbContext.Tokens.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
 
             // Token that was split (source system - to be merged into target):
-            var splitSource2 = CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002001001", "splitSource", null, DateTimeOffset.Now);
+            var splitSource2 = CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001020001001", "splitSource", null, verseRow, DateTimeOffset.Now);
 
             // Tokens/composite that result from split (source system - to be merged into target):
             var splitComposite2 = CollaborationProjectFixture.BuildTestTokenComposite(
                 testTokenizedCorpus,
                 null,
-                "001001002001001-001001002001002",
+                "001001020001001-001001020001002",
                 "split_Source",
-                "001001002001001-001001002001001");
+                "001001020001001-001001020001001",
+                verseRow);
 
             // Additional tokens/composite in same word and/or verse (source system - to be merged into target):
             var extraComposite2 = CollaborationProjectFixture.BuildTestTokenComposite(
                 testTokenizedCorpus,
                 null,
-                "001001002001004-001001002001005-001001002004001",
+                "001001020001004-001001020001005-001001020004001",
                 "other1_other2_other6",
-                "001001002001003-001001002001004-");
+                "001001020001003-001001020001004-",
+                verseRow);
 
             // Additional tokens in same word and/or verse (source system - to be merged into target):
             var extraTokens2 = new Models.Token[]
             {
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002001003", "other0", "001001002001002"),
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002002001", "other3"),
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002002002", "other4"),
-                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001002003001", "other5")
+                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001020001003", "other0", "001001020001002", verseRow),
+                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001020002001", "other3", null, verseRow),
+                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001020002002", "other4", null, verseRow),
+                CollaborationProjectFixture.BuildTestToken(testTokenizedCorpus, "001001020003001", "other5", null, verseRow)
             };
 
             _fixture.Tokens.Add(splitSource2);
@@ -571,17 +579,19 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(2, _fixture.ProjectDbContext.TokenComposites.Count());
-            Assert.Equal(9, _fixture.ProjectDbContext.Tokens.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.TokenComposites.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
+            Assert.Equal(9, _fixture.ProjectDbContext.Tokens.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
 
             var splitCompositeDb = _fixture.ProjectDbContext.TokenComposites
                 .Include(e => e.Tokens.OrderBy(t => t.EngineTokenId))
-                .Where(e => e.EngineTokenId == "001001002001001-001001002001002")
+                .Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id)
+                .Where(e => e.EngineTokenId == "001001020001001-001001020001002")
                 .FirstOrDefault();
 
             var extraCompositeDb = _fixture.ProjectDbContext.TokenComposites
                 .Include(e => e.Tokens.OrderBy(t => t.EngineTokenId))
-                .Where(e => e.EngineTokenId != "001001002001001-001001002001002")
+                .Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id)
+                .Where(e => e.EngineTokenId != "001001020001001-001001020001002")
                 .FirstOrDefault();
 
             Assert.NotNull(splitCompositeDb);
@@ -605,14 +615,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Assert.Equal(4, tokensWord1Db[3].SubwordNumber);
             Assert.Equal(5, tokensWord1Db[4].SubwordNumber);
 
-            Assert.Equal("001001002001001", splitCompositeDb.Tokens.First().OriginTokenLocation);
-            Assert.Equal("001001002001001", splitCompositeDb.Tokens.Last().OriginTokenLocation);
+            Assert.Equal("001001020001001", splitCompositeDb.Tokens.First().OriginTokenLocation);
+            Assert.Equal("001001020001001", splitCompositeDb.Tokens.Last().OriginTokenLocation);
 
             var extraCompositeTokensDb = extraCompositeDb.Tokens.ToArray();
             Assert.Equal(3, extraCompositeTokensDb.Length);
-            Assert.Equal("001001002001004", extraCompositeTokensDb[0].EngineTokenId);
-            Assert.Equal("001001002001005", extraCompositeTokensDb[1].EngineTokenId);
-            Assert.Equal("001001002004001", extraCompositeTokensDb[2].EngineTokenId);
+            Assert.Equal("001001020001004", extraCompositeTokensDb[0].EngineTokenId);
+            Assert.Equal("001001020001005", extraCompositeTokensDb[1].EngineTokenId);
+            Assert.Equal("001001020004001", extraCompositeTokensDb[2].EngineTokenId);
         }
 
         protected async Task DoMerge()

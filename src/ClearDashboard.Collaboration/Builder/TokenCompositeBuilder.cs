@@ -51,17 +51,14 @@ public class TokenCompositeBuilder : GeneralModelBuilder<Models.TokenComposite>
 
     public static GeneralModel<Models.TokenComposite> BuildModelSnapshot(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> childTokens, BuilderContext builderContext)
     {
-        var modelSnapshot = ExtractUsingModelIds(
-            tokenComposite,
-            new List<string>() { "VerseRowId" });
-
         var modelProperties = ExtractUsingModelRefs(
             tokenComposite,
             builderContext,
             new List<string>() { "Id", "VerseRowId" });
 
-        modelSnapshot.Add(VERSE_ROW_LOCATION, tokenComposite.VerseRow?.BookChapterVerse, typeof(string));
-        modelSnapshot.Add(TOKEN_LOCATIONS, childTokens.Select(t => TokenBuilder.BuildTokenLocation(t)).ToGeneralListModel<string>());
+
+        modelProperties.Add(VERSE_ROW_LOCATION, (typeof(string), tokenComposite.VerseRow?.BookChapterVerse));
+        modelProperties.Add(TOKEN_LOCATIONS, (typeof(IEnumerable<string>), childTokens.Select(t => TokenBuilder.BuildTokenLocation(t)).ToGeneralListModel<string>()));
 
         var refValue = CalculateRef(
             tokenComposite.TokenizedCorpusId,

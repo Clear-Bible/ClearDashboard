@@ -59,34 +59,7 @@ public class TokenCompositeHandler : DefaultMergeHandler<IModelSnapshot<Models.T
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.TokenComposite>");
                 }
 
-                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusId) &&
-                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.EngineTokenId), out var engineTokenId))
-                {
-                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.ParallelCorpusId), out var parallelCorpusId);
-
-                    var tokenCompositeId = projectDbContext.TokenComposites
-                        .Where(e => e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
-                        .Where(e => e.ParallelCorpusId == (Guid?)parallelCorpusId)
-                        .Where(e => e.EngineTokenId == (string)engineTokenId!)
-                        .Select(e => e.Id)
-                        .FirstOrDefault();
-
-                    if (tokenCompositeId == default)
-                    {
-                        tokenCompositeId = Guid.NewGuid();
-                        logger.LogDebug($"No TokenComposite Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / ParallelCorpusId ('{parallelCorpusId}') / EngineTokenId ('{engineTokenId}').  Using: '{tokenCompositeId}'");
-                    }
-                    else
-                    {
-                        logger.LogDebug($"Resolved TokenizedCorpusId ('{tokenizedCorpusId}') / ParallelCorpusId ('{parallelCorpusId}') / EngineTokenId ('{engineTokenId}') to TokenComposite Id ('{tokenCompositeId}')");
-                    }
-
-                    return tokenCompositeId;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"TokenComposite snapshot does not have all:  Ref+TokenizedCorpusId+EngineTokenId, which are required for Id resolution.");
-                }
+                return ExtractTokenCompositeId((IModelSnapshot<Models.TokenComposite>)modelSnapshot, projectDbContext, logger);
             });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(  
@@ -135,6 +108,38 @@ DELETE FROM TokenComponent WHERE Id IN
             };
     }
 
+    protected static Guid ExtractTokenCompositeId(IModelSnapshot<Models.TokenComposite> modelSnapshot, ProjectDbContext projectDbContext, ILogger logger)
+    {
+        if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusId) &&
+            modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.EngineTokenId), out var engineTokenId))
+        {
+            modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.ParallelCorpusId), out var parallelCorpusId);
+
+            var tokenCompositeId = projectDbContext.TokenComposites
+                .Where(e => e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
+                .Where(e => e.ParallelCorpusId == (Guid?)parallelCorpusId)
+                .Where(e => e.EngineTokenId == (string)engineTokenId!)
+                .Select(e => e.Id)
+                .FirstOrDefault();
+
+            if (tokenCompositeId == default)
+            {
+                tokenCompositeId = Guid.NewGuid();
+                logger.LogDebug($"No TokenComposite Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / ParallelCorpusId ('{parallelCorpusId}') / EngineTokenId ('{engineTokenId}').  Using: '{tokenCompositeId}'");
+            }
+            else
+            {
+                logger.LogDebug($"Resolved TokenizedCorpusId ('{tokenizedCorpusId}') / ParallelCorpusId ('{parallelCorpusId}') / EngineTokenId ('{engineTokenId}') to TokenComposite Id ('{tokenCompositeId}')");
+            }
+
+            return tokenCompositeId;
+        }
+        else
+        {
+            throw new PropertyResolutionException($"TokenComposite snapshot does not have all:  TokenizedCorpusId+EngineTokenId, which are required for Id resolution.");
+        }
+    }
+
     // FIXME:  need to talk out this logic with someone.  I think what I need to do
     // is approach this at a low level - no business logic - and assume that the
     // snapshot carries across changes to affected Translations and Alignments.
@@ -156,7 +161,8 @@ DELETE FROM TokenComponent WHERE Id IN
             $"In HandleCreateAsync associating new TokenComposite with child Tokens",
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                var tokenCompositeId = (Guid)itemToCreate.PropertyValues["Id"]!;
+                var tokenCompositeId = ExtractTokenCompositeId(itemToCreate, projectDbContext, logger);
+
                 var tokenizedCorpusId = (Guid)itemToCreate.PropertyValues["TokenizedCorpusId"]!;
                 var parallelCorpusId = (Guid?)itemToCreate.PropertyValues["ParallelCorpusId"];
                 var tokenLocations = (IEnumerable<string>)itemToCreate.PropertyValues["TokenLocations"]!;
@@ -224,7 +230,7 @@ DELETE FROM TokenComponent WHERE Id IN
             $"Applying TokenComposite 'TokenLocations' property ListMembershipDifference (OnlyIn1: {string.Join(", ", tokenLocationsOnlyIn1)}, OnlyIn2: {string.Join(", ", tokenLocationsOnlyIn2)})", 
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                var tokenCompositeId = (Guid)snapshot.PropertyValues["Id"]!;
+                var tokenCompositeId = ExtractTokenCompositeId(snapshot, projectDbContext, logger);
                 var tokenizedCorpusId = (Guid)snapshot.PropertyValues["TokenizedCorpusId"]!;
                 var parallelCorpusId = (Guid?)snapshot.PropertyValues["ParallelCorpusId"];
 
