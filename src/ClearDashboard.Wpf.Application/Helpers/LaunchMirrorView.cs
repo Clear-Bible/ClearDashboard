@@ -1,21 +1,13 @@
-﻿using System;
-using System.Diagnostics.Eventing.Reader;
-using System.IO;
+﻿using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
+using ClearDashboard.Wpf.Application.Views;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.Xml;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using CefSharp.DevTools.Database;
-using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Marble;
-using ClearDashboard.Wpf.Application.Views;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using MahApps.Metro.IconPacks.Converter;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
@@ -44,6 +36,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 //WindowState = WindowState.Maximized
             };
 
+            mirror.WindowStartupLocation = WindowStartupLocation.Manual;
 
             // load in the monitor settings
             var differentMonitor = Settings.Default.DifferentMonitor;
@@ -51,53 +44,49 @@ namespace ClearDashboard.Wpf.Application.Helpers
             // get the number and sizes of the monitors on the system
             var monitors = Monitor.AllMonitors.ToList();
 
-            if (monitors.Count > 2 && thirdMonitor)
+
+            // figure out which monitor the app is on
+            var thisApp = App.Current.MainWindow;
+
+            // get the monitor that the app is on
+            var thisMonitor = monitors.FirstOrDefault();  // x => x.Bounds.Left >= thisApp.Left && x.Bounds.Left <= thisApp.Left + thisApp.Width
+
+            foreach (var monitor in monitors)
+            {
+                if (Math.Abs(monitor.Bounds.Left - thisApp.Left) < Math.Abs(thisMonitor.Bounds.Left - thisApp.Left))
+                {
+                    thisMonitor = monitor;
+                }
+            }
+
+            // put on primary monitor
+            if ((differentMonitor == false && thirdMonitor == false) || monitors.Count == 0)
+            {
+                mirror.Left = thisMonitor.Bounds.Left;
+                mirror.Top = thisMonitor.Bounds.Top;
+            }
+            else if (monitors.Count > 2 && thirdMonitor && differentMonitor)
             {
                 // throw on third monitor
-                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
                 mirror.Left = monitors[2].Bounds.Left;
                 mirror.Top = monitors[2].Bounds.Top;
             }
             else
             {
-                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
-
-                // get this applications position on the screen
-                var thisApp = App.Current.MainWindow;
-
                 if (differentMonitor)
                 {
-                    Monitor leftMonitor = monitors.FirstOrDefault();
-                    Monitor rightMonitor = monitors.LastOrDefault();
-                    foreach (var monitor in monitors)
-                    {
-                        if (monitor.Bounds.TopLeft == new Point(0,0))
-                        {
-                            leftMonitor = monitor;
-                        }
-                        else
-                        {
-                            rightMonitor = monitor;
-                        }
-                    }
+                    // remove the monitor that the app is on
+                    monitors.Remove(thisMonitor);
 
-                    if ((thisApp.RestoreBounds.Left + thisApp.RestoreBounds.Right)/2 < leftMonitor.Bounds.Right)
-                    {
-                        // throw on second monitor
-                        mirror.Left = rightMonitor.Bounds.Left;
-                        mirror.Top = rightMonitor.Bounds.Top;
-                    }
-                    else
-                    {
-                        // throw on first monitor
-                        mirror.Left = leftMonitor.Bounds.Left;
-                        mirror.Top = leftMonitor.Bounds.Top;
-                    }
+                    var sortedMonitors = monitors.OrderBy(x => x.Bounds.Left).ToList();
+
+                    mirror.Left = monitors[0].Bounds.Left;
+                    mirror.Top = monitors[0].Bounds.Top;
                 }
                 else
                 {
-                    mirror.Left = thisApp.Left;
-                    mirror.Top = thisApp.Top;
+                    mirror.Left = thisMonitor.Bounds.Left;
+                    mirror.Top = thisMonitor.Bounds.Top;
                 }
             }
 
