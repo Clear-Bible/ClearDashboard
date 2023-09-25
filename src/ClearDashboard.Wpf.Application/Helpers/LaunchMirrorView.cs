@@ -57,8 +57,15 @@ namespace ClearDashboard.Wpf.Application.Helpers
             var thisApp = App.Current.MainWindow;
 
             // get the monitor that the app is on
-            var thisMonitor = monitors.FirstOrDefault(x => x.Bounds.Left <= thisApp.Left && x.Bounds.Right >= thisApp.Left + thisApp.Width);
+            var thisMonitor = monitors.FirstOrDefault();//x => x.Bounds.Left <= thisApp.Left && x.Bounds.Right >= thisApp.Left + thisApp.Width
 
+            foreach (var monitor in monitors)
+            {
+                if (Math.Abs(monitor.Bounds.Left - thisApp.Left) < Math.Abs(thisMonitor.Bounds.Left - thisApp.Left))
+                {
+                    thisMonitor = monitor;
+                }
+            }
 
             // put on primary monitor
             if ((differentMonitor == false && thirdMonitor == false) || monitors.Count == 0)
