@@ -22,6 +22,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
             get => Entity.Text ?? string.Empty;
             set
             {
+                if (value.Trim() == string.Empty) return;
                 if (Equals(value, Entity.Text)) return;
                 Entity.Text = value;
                 NotifyOfPropertyChange();
