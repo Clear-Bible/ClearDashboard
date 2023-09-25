@@ -73,13 +73,21 @@ namespace ClearDashboard.Wpf.Application.Helpers
             }
             else
             {
-                // remove the monitor that the app is on
-                monitors.Remove(thisMonitor);
+                if (differentMonitor)
+                {
+                    // remove the monitor that the app is on
+                    monitors.Remove(thisMonitor);
 
-                var sortedMonitors = monitors.OrderBy(x => x.Bounds.Left).ToList();
+                    var sortedMonitors = monitors.OrderBy(x => x.Bounds.Left).ToList();
 
-                mirror.Left = monitors[0].Bounds.Left;
-                mirror.Top = monitors[0].Bounds.Top;
+                    mirror.Left = monitors[0].Bounds.Left;
+                    mirror.Top = monitors[0].Bounds.Top;
+                }
+                else
+                {
+                    mirror.Left = thisMonitor.Bounds.Left;
+                    mirror.Top = thisMonitor.Bounds.Top;
+                }
             }
 
             // turn off the mirror's close button
