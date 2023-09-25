@@ -51,7 +51,15 @@ namespace ClearDashboard.Wpf.Application.Helpers
             // get the number and sizes of the monitors on the system
             var monitors = Monitor.AllMonitors.ToList();
 
-            if (monitors.Count > 2 && thirdMonitor)
+            // put on primary monitor
+            if ((differentMonitor == false && thirdMonitor == false) || monitors.Count == 0)
+            {
+                var primaryMonitor = monitors.FirstOrDefault(x => x.IsPrimary);
+                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
+                mirror.Left = primaryMonitor.Bounds.Left;
+                mirror.Top = primaryMonitor.Bounds.Top;
+            }
+            else if (monitors.Count > 2 && thirdMonitor)
             {
                 // throw on third monitor
                 mirror.WindowStartupLocation = WindowStartupLocation.Manual;
@@ -60,44 +68,19 @@ namespace ClearDashboard.Wpf.Application.Helpers
             }
             else
             {
+                var sortedMonitors = monitors.OrderBy(x => x.Bounds.Left).ToList();
+
                 mirror.WindowStartupLocation = WindowStartupLocation.Manual;
 
-                // get this applications position on the screen
-                var thisApp = App.Current.MainWindow;
-
-                if (differentMonitor)
+                if (sortedMonitors.Count > 1)
                 {
-                    Monitor leftMonitor = monitors.FirstOrDefault();
-                    Monitor rightMonitor = monitors.LastOrDefault();
-                    foreach (var monitor in monitors)
-                    {
-                        if (monitor.Bounds.TopLeft == new Point(0,0))
-                        {
-                            leftMonitor = monitor;
-                        }
-                        else
-                        {
-                            rightMonitor = monitor;
-                        }
-                    }
-
-                    if ((thisApp.RestoreBounds.Left + thisApp.RestoreBounds.Right)/2 < leftMonitor.Bounds.Right)
-                    {
-                        // throw on second monitor
-                        mirror.Left = rightMonitor.Bounds.Left;
-                        mirror.Top = rightMonitor.Bounds.Top;
-                    }
-                    else
-                    {
-                        // throw on first monitor
-                        mirror.Left = leftMonitor.Bounds.Left;
-                        mirror.Top = leftMonitor.Bounds.Top;
-                    }
+                    mirror.Left = monitors[1].Bounds.Left;
+                    mirror.Top = monitors[1].Bounds.Top;
                 }
                 else
                 {
-                    mirror.Left = thisApp.Left;
-                    mirror.Top = thisApp.Top;
+                    mirror.Left = monitors[0].Bounds.Left;
+                    mirror.Top = monitors[0].Bounds.Top;
                 }
             }
 

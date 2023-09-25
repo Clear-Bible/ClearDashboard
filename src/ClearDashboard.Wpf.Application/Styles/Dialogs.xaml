@@ -50,7 +50,7 @@
                                         </Setter>
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                    <Setter Property="Background" Value="#EEEBEB" />
+                                        <Setter Property="Background" Value="#EEEBEB" />
                                         <Setter Property="Cursor" Value="Hand" />
                                         <Setter Property="Background" Value="#7DA1C4" />
                                     </Trigger>
