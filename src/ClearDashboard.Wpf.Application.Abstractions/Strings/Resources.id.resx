@@ -662,7 +662,7 @@
     <value>Pilih lokasi untuk membagi token:</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token Komposit Unjoin</value>
+    <value>Unjoin Token Komposit</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -935,13 +935,22 @@
     <value>Terjemahan</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Sebagai bentuk untuk ...</value>
+    <value>Tambahkan sebagai formulir untuk ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Sebagai target sebagai transalasi untuk ...</value>
+    <value>Tambahkan target sebagai transalasi untuk ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Temukan leksem yang memiliki satu atau lebih terjemahan yang cocok dengan target</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Impor diperiksa</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Pencocokan leksem atau bentuk</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Pilih Semua</value>
@@ -960,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Kata target</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Kecocokan terjemahan</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Batalkan terpilih semua</value>
@@ -1301,10 +1313,16 @@
     <value>Apakah Anda ingin membuat label:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>dan asosiasikan dengan grup label:</value>
+    <value>dan kaitkan dengan grup label:</value>
+  </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Apakah Anda ingin menghapus label:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>dan melepaskannya dari grup label:</value>
+    <value>Apakah Anda ingin memisahkan label:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>dari grup label:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Tambahkan grup label</value>
@@ -1333,8 +1351,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Hapus label ini</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Apakah Anda ingin menghapus label:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Teks terlampir pada label</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Dibuat</value>
@@ -1454,7 +1472,7 @@
     <value>Pilih algoritma SMT untuk berlatih</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Tambahkan persetujuan massal untuk dilihat</value>
+    <value>Tambahkan persetujuan curah untuk dilihat</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Tambahkan ke tampilan</value>
@@ -1766,7 +1784,7 @@
     <value>Klik di sini untuk melihat video 'Dashboard Memulai'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>Setelah Anda mengklik tombol 'Buat' di bawah ini, kami akan menjadi tokenisasi, menyelaraskan, dan menyiapkan proyek Anda. Semua langkah akan muncul di sini saat diproses. Sementara Anda menunggu untuk mengklik tautan di bawah ini dan menonton beberapa video bermanfaat untuk memulai menggunakan ClearDashboard!</value>
+    <value>Setelah Anda mengklik tombol 'Buat' di bawah ini, kami akan menjadi tokenisasi, menyelaraskan, dan menyiapkan proyek Anda. Semua langkah akan muncul di sini saat diproses. Saat Anda menunggu, jangan ragu untuk mengklik tautan di bawah ini dan menonton beberapa video bermanfaat untuk memulai menggunakan ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
     <value>Wizard Template Proyek</value>
@@ -1799,7 +1817,7 @@
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Nama proyek yang diberikan terlalu panjang.</value>
+    <value>Nama proyek yang diberikan terlalu lama.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>
@@ -1943,7 +1961,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
+    <value>Maleakhi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>
@@ -2120,10 +2138,10 @@
     <value>Pengaturan ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Tampilkan tampilan cermin di monitor yang berbeda dari dasbor</value>
+    <value>Tampilkan tampilan yang diperluas pada monitor yang berbeda dari dasbor</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Untuk sistem dengan tiga monitor atau lebih, tunjukkan tampilan mirror di monitor ketiga</value>
+    <value>Untuk sistem dengan tiga monitor atau lebih, tunjukkan tampilan yang diperluas pada monitor ketiga</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Koleksi Teks</value>

@@ -935,13 +935,22 @@
     <value>ትርጉም</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>እንደ ቅጽ ...</value>
+    <value>እንደ ቅጽ ያክሉ ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>ሙሉ ወይም ከፊል lexeme ወይም ከፊል lexeme ወይም ለመቅጠር ግጥሚያዎች ያግኙ</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>እንደ ዲስክ እንደ ግብይት</value>
+    <value>Target ላማውን እንደ ግብይት ያክሉ ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>ከ target ላማ ጋር የሚዛመድ አንድ ወይም ከዚያ በላይ ትርጉም ያላቸው lexememe ያግኙ</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>ማስመጣት ምልክት ተደርጎበታል</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexyme ወይም ቅጽ ግጥሚያዎች</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>ሁሉንም ምረጥ</value>
@@ -960,6 +969,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Target ላማው ቃል</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>የትርጉም ግጥሚያዎች</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>ሁሉንም አይምረጡ</value>
@@ -1303,8 +1315,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>እና ከእሱ መለያ ቡድን ጋር ያቆራኙ</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>መለያ መሰረዝ ይፈልጋሉ</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>እና ከላቢል ቡድን ያራግፉ</value>
+    <value>የመለያ መለዋወጫውን ማገድ ይፈልጋሉ?</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>ከላቢል ቡድን</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>መለያ ቡድን ያክሉ</value>
@@ -1333,8 +1351,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>ይህን መለያ ያስወግዱ</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>መለያዎን ማስወገድ ይፈልጋሉ?</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>ጽሑፍ ከመሰየም ጋር ተያይ attached ል</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>ተፈጠረ</value>
@@ -2120,10 +2138,10 @@
     <value>Cleardashashboard ቅንብሮች</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>ዳሽቦርድ ከሚገኘው የተለየ መዘሪያ ላይ የመስታወት እይታዎችን ያሳዩ</value>
+    <value>ከዳሽቦርድ ይልቅ በተዘዋዋሪ ላይ የተስፋፋ እይታዎችን አሳይ</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>ከሶስት ወይም ከዚያ በላይ መቆጣጠሪያዎች ያሉት ስርዓቶች በሦስተኛው ቁጥጥር ላይ የመስተዋት እይታን ያሳዩ</value>
+    <value>ከሶስት ወይም ከዚያ በላይ መቆጣጠሪያዎች ያሉት ስርዓቶች በሦስተኛው ቁጥጥር ላይ የተስፋፋ እይታ አሳይ</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>የጽሑፍ ስብስብ</value>
