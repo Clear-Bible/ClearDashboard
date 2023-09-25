@@ -44,6 +44,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 //WindowState = WindowState.Maximized
             };
 
+            mirror.WindowStartupLocation = WindowStartupLocation.Manual;
 
             // load in the monitor settings
             var differentMonitor = Settings.Default.DifferentMonitor;
@@ -51,26 +52,32 @@ namespace ClearDashboard.Wpf.Application.Helpers
             // get the number and sizes of the monitors on the system
             var monitors = Monitor.AllMonitors.ToList();
 
+
+            // figure out which monitor the app is on
+            var thisApp = App.Current.MainWindow;
+
+            // get the monitor that the app is on
+            var thisMonitor = monitors.FirstOrDefault(x => x.Bounds.Left <= thisApp.Left && x.Bounds.Right >= thisApp.Left + thisApp.Width);
+
+
             // put on primary monitor
             if ((differentMonitor == false && thirdMonitor == false) || monitors.Count == 0)
             {
-                var primaryMonitor = monitors.FirstOrDefault(x => x.IsPrimary);
-                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
-                mirror.Left = primaryMonitor.Bounds.Left;
-                mirror.Top = primaryMonitor.Bounds.Top;
+                mirror.Left = thisMonitor.Bounds.Left;
+                mirror.Top = thisMonitor.Bounds.Top;
             }
             else if (monitors.Count > 2 && thirdMonitor)
             {
                 // throw on third monitor
-                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
                 mirror.Left = monitors[2].Bounds.Left;
                 mirror.Top = monitors[2].Bounds.Top;
             }
             else
             {
-                var sortedMonitors = monitors.OrderBy(x => x.Bounds.Left).ToList();
+                // remove the monitor that the app is on
+                monitors.Remove(thisMonitor);
 
-                mirror.WindowStartupLocation = WindowStartupLocation.Manual;
+                var sortedMonitors = monitors.OrderBy(x => x.Bounds.Left).ToList();
 
                 if (sortedMonitors.Count > 1)
                 {
