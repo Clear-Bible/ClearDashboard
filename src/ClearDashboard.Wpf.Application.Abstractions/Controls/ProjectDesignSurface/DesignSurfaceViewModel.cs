@@ -40,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     /// <summary>
     /// Defines a design surface with nodes and connections between the nodes.
     /// </summary>
-    public partial class DesignSurfaceViewModel : Screen
+    public partial class DesignSurfaceViewModel : Screen, IHandle<BackgroundDeletionTaskRunning>
     {
 
         #region Internal Data Members
@@ -1316,7 +1316,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             var connectorDraggedOut = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
             var connectorDraggedOver = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOver;
             var newConnection = (ParallelCorpusConnectionViewModel)e.Connection;
-            ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
+
+
+            EventAggregator.PublishOnUIThreadAsync(new IsBackgroundDeletionTaskRunning("Alignment Deletion", connectorDraggedOut, connectorDraggedOver, newConnection));
+
+            //ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
         }
 
         public async void OnCorpusNodeDragCompleted(object? sender, NodeDragCompletedEventArgs? e)
@@ -1572,6 +1576,22 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     }
                 }
             }
+        }
+
+
+        public Task HandleAsync(BackgroundDeletionTaskRunning message, CancellationToken cancellationToken)
+        {
+            if (message.Result)
+            {
+                // is running so cancel this
+            }
+            else
+            {
+                // is not running to complete the connection
+                ConnectionDragCompleted(message.NewConnection, message.ConnectorDraggedOut, message.ConnectorDraggedOver);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
