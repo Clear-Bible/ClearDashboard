@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Collections.Notes;
 
 // These need to be specified explicitly to resolve ambiguity with ClearDashboard.DataAccessLayer.Models.
 using Token = ClearBible.Engine.Corpora.Token;
