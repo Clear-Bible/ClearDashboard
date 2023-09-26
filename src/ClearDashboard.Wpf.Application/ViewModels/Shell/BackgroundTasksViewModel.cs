@@ -400,13 +400,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Check to see if there is a background task for alignment deletion already in progress
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task HandleAsync(IsBackgroundDeletionTaskRunning message, CancellationToken cancellationToken)
         {
             var tasks = BackgroundTaskStatuses.FirstOrDefault(x => x.Name == message.TaskName);
 
             bool taskRunning = tasks is not null;
 
-            // no deletion task running
+            if (tasks.TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed)
+            {
+                // no deletion task running actively
+                taskRunning = false;
+            }
+
             await _eventAggregator.PublishOnUIThreadAsync(new BackgroundDeletionTaskRunning(taskRunning, message.ConnectorDraggedOut, message.ConnectorDraggedOver, message.NewConnection));
         }
     }

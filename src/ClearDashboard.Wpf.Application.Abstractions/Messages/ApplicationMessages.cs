@@ -2,10 +2,8 @@
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
-using System.Collections.Generic;
-using Caliburn.Micro;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.Messages
 {
