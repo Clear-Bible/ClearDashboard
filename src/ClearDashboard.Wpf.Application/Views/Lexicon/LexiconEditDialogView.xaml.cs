@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClearDashboard.Wpf.Application.Views.Collaboration
+namespace ClearDashboard.Wpf.Application.Views.Lexicon
 {
     /// <summary>
-    /// Interaction logic for CollabManagerView.xaml
+    /// Interaction logic for LexiconEditDialogView.xaml
     /// </summary>
-    public partial class CollabManagerView : Window
+    public partial class LexiconEditDialogView : UserControl
     {
-        public CollabManagerView()
+        public LexiconEditDialogView()
         {
             InitializeComponent();
         }

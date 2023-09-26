@@ -14,5 +14,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         Task SaveDesignSurfaceData();
 
         bool IsBusy { get; }
+       
     }
 }

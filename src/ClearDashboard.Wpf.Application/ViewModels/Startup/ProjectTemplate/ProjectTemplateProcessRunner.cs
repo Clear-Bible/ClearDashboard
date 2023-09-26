@@ -1,43 +1,46 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
-using ClearBible.Engine.Utils;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.DAL.Alignment;
+using ClearDashboard.DAL.Alignment.BackgroundServices;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
-using Caliburn.Micro;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.Machine.Translation;
+using SIL.Machine.Utils;
+using SIL.ObjectModel;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using SIL.Machine.Corpora;
-using SIL.Machine.Translation;
-using SIL.ObjectModel;
-using SIL.Scripture;
+using ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using BookInfo = ClearDashboard.DataAccessLayer.Models.BookInfo;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using ParatextProjectMetadata = ClearDashboard.DataAccessLayer.Models.ParatextProjectMetadata;
-using SIL.Machine.Utils;
-using System.Text.RegularExpressions;
-using ClearDashboard.DAL.Alignment.BackgroundServices;
-using ClearDashboard.DAL.Alignment.Features.Denormalization;
 
 namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 {
     public class ProjectTemplateProcessRunner
     {
+
+        #region Member Variables   
+
         private abstract record BackgroundTask
         {
             public BackgroundTask(Type taskReturnType, string? taskName = null) { TaskReturnType = taskReturnType; TaskName = taskName ?? Guid.NewGuid().ToString(); }
@@ -56,10 +59,10 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         private record ManuscriptCorpusBackgroundTask : CorpusBackgroundTask
         {
-            public ManuscriptCorpusBackgroundTask(string taskName, CorpusType corpusType) : 
-                base(typeof(TokenizedTextCorpus), taskName) 
-            { 
-                CorpusType = corpusType; 
+            public ManuscriptCorpusBackgroundTask(string taskName, CorpusType corpusType) :
+                base(typeof(TokenizedTextCorpus), taskName)
+            {
+                CorpusType = corpusType;
             }
 
             public CorpusType CorpusType { get; init; }
@@ -154,10 +157,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
         }
 
         private readonly List<BackgroundTask> backgroundTasksToRun = new();
-
-        public Tokenizers Tokenizers { get; init; }
-
         private IMediator Mediator { get; init; }
+
         private ILogger Logger { get; init; }
         private IEventAggregator EventAggregator { get; init; }
 
@@ -171,16 +172,54 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         private readonly ObservableDictionary<string, bool> _busyState = new();
 
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        public Tokenizers Tokenizers { get; init; }
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
         public bool IsBusy => _busyState.Count > 0;
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
+        public ProjectTemplateProcessRunner(
+            ILogger<ProjectTemplateProcessRunner> logger,
+            IMediator mediator,
+            IEventAggregator eventAggregator,
+            TranslationCommands translationCommands,
+            LongRunningTaskManager longRunningTaskManager,
+            SystemPowerModes systemPowerModes)
+        {
+            Logger = logger;
+            Mediator = mediator;
+            EventAggregator = eventAggregator;
+            TranslationCommands = translationCommands;
+            LongRunningTaskManager = longRunningTaskManager;
+            SystemPowerModes = systemPowerModes;
+        }
+
+        #endregion //Constructor
+
+
+        #region Methods
 
         public static string DefaultManuscriptCorpusTaskName(CorpusType corpusType) => $"Add{corpusType}Corpus";
         public static string DefaultParatextPojectCorpusTaskName(string paratextProjectName) => $"AddParatextProject{paratextProjectName}Corpus";
 
         public static IDictionary<Type, string> DefaultParallizationTaskNameSet(string sourceCorpusName, string targetCorpusName) => new Dictionary<Type, string> {
-                { typeof(ParallelCorpus), $"AddParallelCorpus_{sourceCorpusName}_{targetCorpusName}" },
-                { typeof(TrainSmtModelSet), $"TrainSmtModel_{sourceCorpusName}_{targetCorpusName}" },
-                { typeof(AlignmentSet), $"AddAlignmentSet_{sourceCorpusName}_{targetCorpusName}" },
-                { typeof(TranslationSet), $"AddTranslationSet_{sourceCorpusName}_{targetCorpusName}" } };
+            { typeof(ParallelCorpus), $"AddParallelCorpus_{sourceCorpusName}_{targetCorpusName}" },
+            { typeof(TrainSmtModelSet), $"TrainSmtModel_{sourceCorpusName}_{targetCorpusName}" },
+            { typeof(AlignmentSet), $"AddAlignmentSet_{sourceCorpusName}_{targetCorpusName}" },
+            { typeof(TranslationSet), $"AddTranslationSet_{sourceCorpusName}_{targetCorpusName}" } };
 
         public void Cancel()
         {
@@ -190,6 +229,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
         public void StartRegistration()
         {
             backgroundTasksToRun.Clear();
+            LongRunningTaskManager.CancellationTokenSource = new CancellationTokenSource();
         }
 
         public string RegisterManuscriptCorpusTask(CorpusType corpusType, string? taskName = null)
@@ -259,12 +299,12 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 parallelizationTaskNameSet[typeof(AlignmentSet)],
                 parallelizationTaskNameSet[typeof(TrainSmtModelSet)],
                 parallelizationTaskNameSet[typeof(ParallelCorpus)]
-                );
+            );
             RegisterTranslationSetTask(
                 parallelizationTaskNameSet[typeof(TranslationSet)],
                 parallelizationTaskNameSet[typeof(TrainSmtModelSet)],
                 parallelizationTaskNameSet[typeof(AlignmentSet)]
-                );
+            );
 
             return parallelizationTaskNameSet;
         }
@@ -308,9 +348,9 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 throw new ArgumentException($"Background task with name '{taskName}' already exists", nameof(taskName));
 
             if (!backgroundTasksToRun
-                .Any(e => 
-                    e.TaskName == trainSmtModelTaskName && 
-                    e.TaskReturnType == typeof(TrainSmtModelSet)))
+                    .Any(e => 
+                        e.TaskName == trainSmtModelTaskName && 
+                        e.TaskReturnType == typeof(TrainSmtModelSet)))
                 throw new ArgumentException($"BackgroundTaskId not found: {trainSmtModelTaskName}", nameof(trainSmtModelTaskName));
 
             if (!backgroundTasksToRun.Any(e => e.TaskName == parallelCorpusTaskName && e.TaskReturnType == typeof(ParallelCorpus)))
@@ -328,9 +368,9 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 throw new ArgumentException($"Background task with name '{taskName}' already exists", nameof(taskName));
 
             if (!backgroundTasksToRun
-                .Any(e =>
-                    e.TaskName == trainSmtModelTaskName &&
-                    e.TaskReturnType == typeof(TrainSmtModelSet)))
+                    .Any(e =>
+                        e.TaskName == trainSmtModelTaskName &&
+                        e.TaskReturnType == typeof(TrainSmtModelSet)))
                 throw new ArgumentException($"BackgroundTaskId not found: {trainSmtModelTaskName}", nameof(trainSmtModelTaskName));
 
             if (!backgroundTasksToRun.Any(e => e.TaskName == alignmentSetTaskName && e.TaskReturnType == typeof(AlignmentSet)))
@@ -349,6 +389,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             var trainSmtModelTasksByName = new Dictionary<string, Task<TrainSmtModelSet>>();
             var alignmentSetTasksByName = new Dictionary<string, Task<AlignmentSet>>();
 
+            LongRunningTaskManager.Tasks.Clear();
+
             var endOfSequenceTasks = new Dictionary<string, Task>();
 
             foreach (var backgroundTaskToRun in backgroundTasksToRun)
@@ -364,61 +406,66 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                         endOfSequenceTasks.Add(task.TaskName, corpusTasksByName[task.TaskName]);
                         break;
                     case ParallelCorpusBackgroundTask task:
-                        {
-                            var sourceTask = corpusTasksByName[task.SourceBackgroundTaskName];
-                            var targetTask = corpusTasksByName[task.TargetBackgroundTaskName];
-                            parallelCorpusTasksByName.Add(task.TaskName, AwaitRunAddParallelCorpusTask(sw, task.TaskName, sourceTask, targetTask));
+                    {
+                        var sourceTask = corpusTasksByName[task.SourceBackgroundTaskName];
+                        var targetTask = corpusTasksByName[task.TargetBackgroundTaskName];
+                        parallelCorpusTasksByName.Add(task.TaskName, AwaitRunAddParallelCorpusTask(sw, task.TaskName, sourceTask, targetTask));
 
-                            //endOfSequenceTasks.Remove(task.SourceBackgroundTaskName);
-                            //endOfSequenceTasks.Remove(task.TargetBackgroundTaskName);
-                            endOfSequenceTasks.Add(task.TaskName, parallelCorpusTasksByName[task.TaskName]);
-                        }
+                        //endOfSequenceTasks.Remove(task.SourceBackgroundTaskName);
+                        //endOfSequenceTasks.Remove(task.TargetBackgroundTaskName);
+                        endOfSequenceTasks.Add(task.TaskName, parallelCorpusTasksByName[task.TaskName]);
+                    }
                         break;
                     case TrainSmtModelBackgroundTask task:
-                        {
-                            var parallelCorpusTask = parallelCorpusTasksByName[task.ParallelCorpusBackgroundTaskName];
-                            trainSmtModelTasksByName.Add(task.TaskName, AwaitRunTrainSmtModelTask(
-                                sw,
-                                task.TaskName,
-                                parallelCorpusTask,
-                                task.IsTrainedSymmetrizedModel,
-                                task.SmtModelName,
-                                task.GenerateAlignedTokenPairs));
+                    {
+                        var parallelCorpusTask = parallelCorpusTasksByName[task.ParallelCorpusBackgroundTaskName];
+                        trainSmtModelTasksByName.Add(task.TaskName, AwaitRunTrainSmtModelTask(
+                            sw,
+                            task.TaskName,
+                            parallelCorpusTask,
+                            task.IsTrainedSymmetrizedModel,
+                            task.SmtModelName,
+                            task.GenerateAlignedTokenPairs));
 
-                            //endOfSequenceTasks.Remove(task.ParallelCorpusBackgroundTaskName);
-                            endOfSequenceTasks.Add(task.TaskName, trainSmtModelTasksByName[task.TaskName]);
-                        }
+                        //endOfSequenceTasks.Remove(task.ParallelCorpusBackgroundTaskName);
+                        endOfSequenceTasks.Add(task.TaskName, trainSmtModelTasksByName[task.TaskName]);
+                    }
                         break;
                     case AlignmentSetBackgroundTask task:
-                        {
-                            var trainSmtModelTask = trainSmtModelTasksByName[task.TrainSmtModelBackgroundTaskName];
-                            var parallelCorpusTask = parallelCorpusTasksByName[task.ParallelCorpusBackgroundTaskName];
-                            alignmentSetTasksByName.Add(task.TaskName, AwaitRunAddAlignmentSetTask(
-                                sw,
-                                task.TaskName,
-                                trainSmtModelTask,
-                                parallelCorpusTask));
+                    {
+                        var trainSmtModelTask = trainSmtModelTasksByName[task.TrainSmtModelBackgroundTaskName];
+                        var parallelCorpusTask = parallelCorpusTasksByName[task.ParallelCorpusBackgroundTaskName];
+                        alignmentSetTasksByName.Add(task.TaskName, AwaitRunAddAlignmentSetTask(
+                            sw,
+                            task.TaskName,
+                            trainSmtModelTask,
+                            parallelCorpusTask));
 
-                            //endOfSequenceTasks.Remove(task.TrainSmtModelBackgroundTaskName);
-                            //endOfSequenceTasks.Remove(task.ParallelCorpusBackgroundTaskName);
-                            endOfSequenceTasks.Add(task.TaskName, alignmentSetTasksByName[task.TaskName]);
-                        }
+                        //endOfSequenceTasks.Remove(task.TrainSmtModelBackgroundTaskName);
+                        //endOfSequenceTasks.Remove(task.ParallelCorpusBackgroundTaskName);
+                        endOfSequenceTasks.Add(task.TaskName, alignmentSetTasksByName[task.TaskName]);
+                    }
                         break;
                     case TranslationSetBackgroundTask task:
-                        {
-                            var trainSmtModelTask = trainSmtModelTasksByName[task.TrainSmtModelBackgroundTaskName];
-                            var alignmentSetTask = alignmentSetTasksByName[task.AlignmentSetBackgroundTaskName];
+                    {
+                        var trainSmtModelTask = trainSmtModelTasksByName[task.TrainSmtModelBackgroundTaskName];
+                        var alignmentSetTask = alignmentSetTasksByName[task.AlignmentSetBackgroundTaskName];
 
-                            //endOfSequenceTasks.Remove(task.TrainSmtModelBackgroundTaskName);
-                            //endOfSequenceTasks.Remove(task.AlignmentSetBackgroundTaskName);
-                            endOfSequenceTasks.Add(task.TaskName, AwaitRunAddTranslationSetTask(
-                                sw,
-                                task.TaskName,
-                                trainSmtModelTask,
-                                alignmentSetTask));
-                        }
+                        //endOfSequenceTasks.Remove(task.TrainSmtModelBackgroundTaskName);
+                        //endOfSequenceTasks.Remove(task.AlignmentSetBackgroundTaskName);
+                        endOfSequenceTasks.Add(task.TaskName, AwaitRunAddTranslationSetTask(
+                            sw,
+                            task.TaskName,
+                            trainSmtModelTask,
+                            alignmentSetTask));
+                    }
                         break;
                 }
+            }
+
+            foreach (var value in endOfSequenceTasks.Values)
+            {
+                Debug.WriteLine($"EndOfSequenceTask: {value}");
             }
 
             return Task.WhenAll(endOfSequenceTasks.Values);
@@ -496,16 +543,16 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             Logger.LogInformation($"{nameof(AwaitRunAddAlignmentSetTask)} '{parallelCorpusTask.Result.ParallelCorpusId.DisplayName}' before run  Elapsed={sw.Elapsed}");
 
             var alignmentSet = await RunBackgroundLongRunningTaskAsync(
-                 (string taskName, CancellationToken cancellationToken) => AddAlignmentSetAsync(
-                     taskName,
-                     $"AlignmentSet for {parallelCorpusTask.Result.ParallelCorpusId.DisplayName}",
-                     trainSmtModelTask.Result.IsTrainedSymmetrizedModel,
-                     trainSmtModelTask.Result.SmtModelType,
-                     parallelCorpusTask.Result,
-                     trainSmtModelTask.Result.WordAlignmentModel,
-                     trainSmtModelTask.Result.AlignedTokenPairs,
-                     cancellationToken),
-                 taskName);
+                (string taskName, CancellationToken cancellationToken) => AddAlignmentSetAsync(
+                    taskName,
+                    $"AlignmentSet for {parallelCorpusTask.Result.ParallelCorpusId.DisplayName}",
+                    trainSmtModelTask.Result.IsTrainedSymmetrizedModel,
+                    trainSmtModelTask.Result.SmtModelType,
+                    parallelCorpusTask.Result,
+                    trainSmtModelTask.Result.WordAlignmentModel,
+                    trainSmtModelTask.Result.AlignedTokenPairs,
+                    cancellationToken),
+                taskName);
 
             Logger.LogInformation($"{nameof(AwaitRunAddAlignmentSetTask)} '{parallelCorpusTask.Result.ParallelCorpusId.DisplayName}' after run  Elapsed={sw.Elapsed}");
 
@@ -526,14 +573,14 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             Logger.LogInformation($"{nameof(AwaitRunAddTranslationSetTask)} '{alignmentSetTask.Result.ParallelCorpusId.DisplayName}' before run  Elapsed={sw.Elapsed}");
 
             var translationSet = await RunBackgroundLongRunningTaskAsync(
-                 (string taskName, CancellationToken cancellationToken) => AddTranslationSetAsync(
-                     taskName,
-                     $"TranslationSet for {alignmentSetTask.Result.ParallelCorpusId.DisplayName}",
-                     alignmentSetTask.Result.AlignmentSetId,
-                     alignmentSetTask.Result.ParallelCorpusId,
-                     trainSmtModelTask.Result.WordAlignmentModel,
-                     cancellationToken),
-                 taskName);
+                (string taskName, CancellationToken cancellationToken) => AddTranslationSetAsync(
+                    taskName,
+                    $"TranslationSet for {alignmentSetTask.Result.ParallelCorpusId.DisplayName}",
+                    alignmentSetTask.Result.AlignmentSetId,
+                    alignmentSetTask.Result.ParallelCorpusId,
+                    trainSmtModelTask.Result.WordAlignmentModel,
+                    cancellationToken),
+                taskName);
 
             Logger.LogInformation($"{nameof(AwaitRunAddTranslationSetTask)} '{alignmentSetTask.Result.ParallelCorpusId.DisplayName}' after run  Elapsed={sw.Elapsed}");
 
@@ -837,9 +884,9 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             var engineParallelTextCorpus =
                 await Task.Run(() => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
-                    new SourceTextIdToVerseMappingsFromVerseMappings(EngineParallelTextCorpus.VerseMappingsForAllVerses(
-                        sourceTokenizedTextCorpus.Versification,
-                        targetTokenizedTextCorpus.Versification))),
+                        new SourceTextIdToVerseMappingsFromVerseMappings(EngineParallelTextCorpus.VerseMappingsForAllVerses(
+                            sourceTokenizedTextCorpus.Versification,
+                            targetTokenizedTextCorpus.Versification))),
                     cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -913,7 +960,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 {
                     alignedTokenPairs =
                         TranslationCommands.PredictAllAlignedTokenIdPairs(wordAlignmentModel, parallelCorpus)
-                        .ToList();
+                            .ToList();
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         cancellationToken, $"Generated AlignedTokenPairs '{smtModelType}'.");
@@ -942,19 +989,19 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 //await semaphoreSlim.WaitAsync(cancellationToken);
                 //try
                 //{
-                    // Accessing alignedTokenPairs later, during alignedTokenPairs.Create (i.e. without
-                    // doing a ToList() here) would periodically throw an exception when creating alignment
-                    // sets from multiple threads:
-                    //  Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')
-                    //  at System.Collections.Generic.List`1.get_Item(Int32 index)
-                    //  at ClearBible.Engine.Translation.Extensions.GetAlignedTokenPairs(EngineParallelTextRow engineParallelTextRow, WordAlignmentMatrix alignment) + MoveNext() in D:\dev\Clients\ClearBible\ClearEngine\src\ClearBible.Engine\Translation\Extensions.cs:line 15
-                    //  at System.Linq.Enumerable.SelectManySingleSelectorIterator`2.MoveNext()
-                    //  at System.Linq.Enumerable.SelectEnumerableIterator`2.GetCount(Boolean onlyIfCheap)
-                    //  at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
-                    // So, doing a ToList() here to manifest the result and inside of a Monitor.Lock
-                    // to hopefully prevent the exception above.  
-                    alignedTokenPairs =
-                        TranslationCommands.PredictAllAlignedTokenIdPairs(wordAlignmentModel, parallelCorpus)
+                // Accessing alignedTokenPairs later, during alignedTokenPairs.Create (i.e. without
+                // doing a ToList() here) would periodically throw an exception when creating alignment
+                // sets from multiple threads:
+                //  Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')
+                //  at System.Collections.Generic.List`1.get_Item(Int32 index)
+                //  at ClearBible.Engine.Translation.Extensions.GetAlignedTokenPairs(EngineParallelTextRow engineParallelTextRow, WordAlignmentMatrix alignment) + MoveNext() in D:\dev\Clients\ClearBible\ClearEngine\src\ClearBible.Engine\Translation\Extensions.cs:line 15
+                //  at System.Linq.Enumerable.SelectManySingleSelectorIterator`2.MoveNext()
+                //  at System.Linq.Enumerable.SelectEnumerableIterator`2.GetCount(Boolean onlyIfCheap)
+                //  at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+                // So, doing a ToList() here to manifest the result and inside of a Monitor.Lock
+                // to hopefully prevent the exception above.  
+                alignedTokenPairs =
+                    TranslationCommands.PredictAllAlignedTokenIdPairs(wordAlignmentModel, parallelCorpus)
                         .ToList();
                 //}
                 //finally
@@ -966,13 +1013,13 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             cancellationToken.ThrowIfCancellationRequested();
 
             AlignmentSet alignmentSet = await alignedTokenPairs.Create(displayName: displayName,
-                    smtModel: smtModelType.ToString(),
-                    isSyntaxTreeAlignerRefined: false,
-                    isSymmetrized: isTrainedSymmetrizedModel,
-                    metadata: new(),
-                    parallelCorpusId: parallelCorpus.ParallelCorpusId,
-                    Mediator,
-                    cancellationToken);
+                smtModel: smtModelType.ToString(),
+                isSyntaxTreeAlignerRefined: false,
+                isSymmetrized: isTrainedSymmetrizedModel,
+                metadata: new(),
+                parallelCorpusId: parallelCorpus.ParallelCorpusId,
+                Mediator,
+                cancellationToken);
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                 cancellationToken, $"Completed creation of the AlignmentSet '{displayName}'.");
@@ -981,9 +1028,9 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             await Mediator.Send(
                 new DenormalizeAlignmentTopTargetsCommand(
-                            alignmentSet.AlignmentSetId.Id, 
-                            new LongRunningProgressReporter(nameof(DenormalizeAlignmentTopTargetsCommand), this, cancellationToken)),
-                       cancellationToken);
+                    alignmentSet.AlignmentSetId.Id, 
+                    new LongRunningProgressReporter(nameof(DenormalizeAlignmentTopTargetsCommand), this, cancellationToken)),
+                cancellationToken);
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                 cancellationToken, $"Completed denormalization of the AlignmentSet '{displayName}'.");
@@ -1044,58 +1091,6 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
 
-        public ProjectTemplateProcessRunner(
-            ILogger<ProjectTemplateProcessRunner> logger,
-            IMediator mediator,
-            IEventAggregator eventAggregator,
-            TranslationCommands translationCommands,
-            LongRunningTaskManager longRunningTaskManager,
-            SystemPowerModes systemPowerModes)
-        {
-            Logger = logger;
-            Mediator = mediator;
-            EventAggregator = eventAggregator;
-            TranslationCommands = translationCommands;
-            LongRunningTaskManager = longRunningTaskManager;
-            SystemPowerModes = systemPowerModes;
-        }
-
-        public class LongRunningProgressReporter : ILongRunningProgress<ProgressStatus>
-        {
-            private readonly string _taskName;
-            private readonly ProjectTemplateProcessRunner _processRunner;
-            private readonly CancellationToken _cancellationToken;
-            public LongRunningProgressReporter(string taskName, ProjectTemplateProcessRunner processRunner, CancellationToken cancellationToken)
-            {
-                _taskName = taskName;
-                _processRunner = processRunner;
-                _cancellationToken = cancellationToken;
-            }
-
-            public async void Report(ProgressStatus status)
-            {
-                var message = Regex.Replace(status.Message ?? string.Empty, "{PercentCompleted(:.*)?}", "{0$1}");
-                var description = Regex.IsMatch(message, "{0(:.*)?}") ?
-                    string.Format(message, status.PercentCompleted) :
-                    message;
-
-                await _processRunner.SendBackgroundStatus(_taskName, LongRunningTaskStatus.Running, _cancellationToken, description, null);
-            }
-
-            public async void ReportCompleted(string? description = null)
-            {
-                await _processRunner.SendBackgroundStatus(_taskName, LongRunningTaskStatus.Completed, _cancellationToken, description, null);
-            }
-
-            public async void ReportException(Exception exception)
-            {
-                await _processRunner.SendBackgroundStatus(_taskName, LongRunningTaskStatus.Failed, _cancellationToken, null, exception);
-            }
-
-            public async void ReportCancelRequestReceived(string? description = null)
-            {
-                await _processRunner.SendBackgroundStatus(_taskName, LongRunningTaskStatus.CancellationRequested, _cancellationToken, description, null);
-            }
-        }
+        #endregion // Methods
     }
 }

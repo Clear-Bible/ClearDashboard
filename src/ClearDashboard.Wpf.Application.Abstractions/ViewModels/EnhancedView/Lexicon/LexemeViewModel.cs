@@ -10,7 +10,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
     {
         public Lexeme Entity { get; }
 
-        public LexemeId? LexemeId
+        public LexemeId LexemeId
         {
             get => Entity.LexemeId;
             set

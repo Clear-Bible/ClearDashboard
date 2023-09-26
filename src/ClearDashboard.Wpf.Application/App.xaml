@@ -46,10 +46,9 @@
                     <!--  secondary  -->
                     <Color x:Key="SecondaryHueLight">#C1CD42</Color>
                     <Color x:Key="SecondaryHueLightForeground">#000000</Color>
-                    <Color x:Key="SecondaryHueMid">#FFC107</Color>
-                    <!--  #FFC107  -->
+                    <Color x:Key="SecondaryHueMid">#7A9A01</Color>
                     <Color x:Key="SecondaryHueMidForeground">#000000</Color>
-                    <Color x:Key="SecondaryHueDark">#7A9A01</Color>
+                    <Color x:Key="SecondaryHueDark">#283500</Color>
                     <Color x:Key="SecondaryHueDarkForeground">#FFFFFF</Color>
                     <!--  accent  -->
                     <Color x:Key="AccentHue">#EDC54C</Color>
@@ -58,8 +57,11 @@
                     <Color x:Key="ErrorHue">#C1292E</Color>
                     <Color x:Key="ErrorHueForeground">#FFFFFF</Color>
                     <!--  secondary button  -->
-                    <Color x:Key="SecondaryButtonHue">#808080</Color>
-                    <Color x:Key="SecondaryButtonHueForeground">#000000</Color>
+                    <Color x:Key="AlternativeButtonHue">#808080</Color>
+                    <Color x:Key="AlternativeButtonHueForeground">#000000</Color>
+
+                    <Color x:Key="MaroonHue">#6F1542</Color>
+                    <Color x:Key="MaroonHueForeground">#FFFFFF</Color>
 
                     <!--  primary  -->
                     <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{DynamicResource PrimaryHueLight}" />
@@ -82,6 +84,13 @@
                     <SolidColorBrush x:Key="ErrorHueBrush" Color="{DynamicResource ErrorHue}" />
                     <SolidColorBrush x:Key="ErrorHueForegroundBrush" Color="{DynamicResource ErrorHueForeground}" />
 
+                    <SolidColorBrush x:Key="AlternativeButtonHueBrush" Color="{DynamicResource AlternativeButtonHue}" />
+                    <SolidColorBrush x:Key="AlternativeButtonHueForegroundBrush" Color="{DynamicResource AlternativeButtonHueForeground}" />
+
+                    <SolidColorBrush x:Key="MaroonHueBrush" Color="{DynamicResource MaroonHue}" />
+                    <SolidColorBrush x:Key="MaroonHueForegroundBrush" Color="{DynamicResource MaroonHueForeground}" />
+
+
                     <Style
                         x:Key="MaterialDesignRaisedPrimaryLightButton"
                         BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
@@ -92,12 +101,21 @@
                     </Style>
 
                     <Style
-                        x:Key="MaterialDesignRaisedAccentButton"
-                        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
-                        TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="{StaticResource AccentHueBrush}" />
-                        <Setter Property="BorderBrush" Value="{StaticResource AccentHueBrush}" />
-                        <!--<Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForeground}" />-->
+                        x:Key="ClearDashboardPrimaryHueDarkButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="ClearDashboardSecondaryHueLightButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource SecondaryHueLightBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueLightBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource SecondaryHueLightForegroundBrush}" />
                     </Style>
 
                     <Style
@@ -108,6 +126,15 @@
                     </Style>
 
                     <Style
+                        x:Key="ClearDashboardRaisedAccentButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+                        TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource AccentHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentHueBrush}" />
+                        <!--<Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForeground}" />-->
+                    </Style>
+
+                    <Style
                         x:Key="MaterialDesignRaisedErrorButton"
                         BasedOn="{StaticResource MaterialDesignRaisedButton}"
                         TargetType="{x:Type ButtonBase}">
@@ -115,6 +142,51 @@
                         <Setter Property="BorderBrush" Value="{DynamicResource ErrorHueBrush}" />
                         <Setter Property="Foreground" Value="{DynamicResource ErrorHueForegroundBrush}" />
                     </Style>
+
+                    <Style
+                        x:Key="ClearDashboardCircularProgressBar"
+                        BasedOn="{StaticResource MaterialDesignCircularProgressBar}"
+                        TargetType="{x:Type ProgressBar}">
+                        <Setter Property="Foreground" Value="{DynamicResource AccentHueBrush}" />
+                    </Style>
+
+                    <SolidColorBrush x:Key="OwnerHueBrush" Color="{DynamicResource PrimaryHueDark}" />
+                    <SolidColorBrush x:Key="OwnerHueForegroundBrush" Color="{DynamicResource PrimaryHueDarkForeground}" />
+
+                    <SolidColorBrush x:Key="ReadWriteHueBrush" Color="{DynamicResource SecondaryHueLight}" />
+                    <SolidColorBrush x:Key="ReadWriteHueForegroundBrush" Color="{DynamicResource SecondaryHueLightForeground}" />
+
+                    <SolidColorBrush x:Key="ReadOnlyHueBrush" Color="{DynamicResource MaroonHue}" />
+                    <SolidColorBrush x:Key="ReadOnlyHueForegroundBrush" Color="{DynamicResource MaroonHueForeground}" />
+
+                    <Style
+                        x:Key="OwnerHueButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource OwnerHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource OwnerHueBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource OwnerHueForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="ReadWriteHueButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter Property="Background" Value="{DynamicResource ReadWriteHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource ReadWriteHueBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ReadWriteHueForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="ReadOnlyHueButton"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource ReadOnlyHueBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource ReadOnlyHueBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource ReadOnlyHueForegroundBrush}" />
+                    </Style>
+
+
 
                 </ResourceDictionary>
 

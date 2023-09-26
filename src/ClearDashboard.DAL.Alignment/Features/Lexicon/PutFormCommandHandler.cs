@@ -27,7 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             CancellationToken cancellationToken)
         {
             Models.Lexicon_Form? form = null;
-            if (request.Form.FormId != null)
+            if (request.Form.FormId.Created != null)
             {
                 form = ProjectDbContext!.Lexicon_Forms.FirstOrDefault(f => f.Id == request.Form.FormId.Id);
                 if (form == null)
@@ -45,7 +45,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             {
                 form = new Models.Lexicon_Form
                 {
-                    Id = request.Form.FormId?.Id ?? Guid.NewGuid(),
+                    Id = request.Form.FormId.Id,
                     Text = request.Form.Text,
                     LexemeId = request.LexemeId.Id
                 };
@@ -54,7 +54,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             }
 
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
-            return new RequestResult<FormId>(new FormId(form.Id));
+            form = ProjectDbContext.Lexicon_Forms
+                .Include(t => t.User)
+                .First(t => t.Id == form.Id);
+
+            return new RequestResult<FormId>(ModelHelper.BuildFormId(form));
         }
     }
 }

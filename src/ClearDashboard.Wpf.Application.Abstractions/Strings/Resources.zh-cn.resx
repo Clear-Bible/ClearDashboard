@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>当前的项目用户：</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>删除项目</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>您将其他用户连接到此项目。该项目也将为他们删除。确定您想删除这个项目吗？</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>您确定要删除这个项目吗？</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>描述</value>
   </data>
@@ -599,7 +608,7 @@
     <value>删除对齐</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“ {0}”的对齐？</value>
+    <value>删除“ {0}”的对齐方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>删除所有路线？</value>
@@ -824,7 +833,7 @@
     <value>更改所有不设置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果检查了，这将改变此词的所有不设置</value>
+    <value>如果检查了，这将改变此词的所有不设置的情况</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -877,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>设定翻译</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>和</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>编辑</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>找到所有</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>形式</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>完全</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>完全匹配</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>匹配</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>含义[翻译]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>或者</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>部分</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>保存更改</value>
@@ -895,50 +928,50 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>源语言</value>
   </data>
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
+    <value>目标语言</value>
+  </data>
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>词典编辑</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
+    <value>翻译</value>
+  </data>
   <data name="LexiconEdit_Type" xml:space="preserve">
     <value>类型</value>
   </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>和</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>找到所有</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>完全</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>完全匹配</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>匹配</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>或者</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>部分</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
-    <value>目标语言</value>
-  </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
-    <value>翻译</value>
-  </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>作为...的形式</value>
+    <value>添加为...的形式</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>查找源的完整或部分词汇或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>作为...的目标</value>
+    <value>将目标添加为...的翻译</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>查找具有与目标匹配的一个或多个翻译的词汇</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>导入检查</value>
+    <value>进口检查</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme或形式匹配</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>没有更多的记录要导入。</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>请选择一个语料库。</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>全选</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>源语言</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>类型</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>源字</value>
@@ -948,6 +981,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>目标词</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>翻译匹配</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消选择</value>
@@ -1285,6 +1321,21 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>添加标签</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>您想创建标签：</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>并将其与标签组相关联：</value>
+  </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>您想删除标签：</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>您想拆卸标签：</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>来自标签组：</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>添加标签组</value>
   </data>
@@ -1311,6 +1362,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>删除此标签</value>
+  </data>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>标签附加的文字</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>创建</value>
@@ -1364,7 +1418,7 @@
     <value>将此注释发送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象征化的语料库</value>
+    <value>令牌化语料库</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻译集</value>
@@ -1425,6 +1479,9 @@
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext语料库</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>选择一种SMT算法进行训练</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>增加大量批准以查看</value>
@@ -1510,8 +1567,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>希伯来人黄斑</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>大理石资源</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>不同的引导数量</value>
@@ -1651,11 +1708,14 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>paratext beta不运行</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>取消...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>协作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始。</value>
+    <value>创建您的项目以入门。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>
@@ -1767,6 +1827,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>一个具有相同名称的项目已经存在。请选择一个唯一名称。</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>给定的项目名称太长。</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>历代志上</value>
@@ -2015,7 +2078,7 @@
     <value>节省</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>启用实验性水上插件</value>
+    <value>启用实验水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>检查您的电子邮件并输入验证代码：</value>
@@ -2037,6 +2100,12 @@
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>电子邮件验证代码</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>启用对齐编辑</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>实验</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>团体</value>
@@ -2081,10 +2150,10 @@
     <value>ClearDashboard设置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>在与仪表板不同的显示器上显示镜像</value>
+    <value>显示与仪表板不同的显示器上展示的视图</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>对于具有三个或三个或以上显示器的系统，请在第三台显示器上显示镜像视图</value>
+    <value>对于具有三个或三个或以上监视器的系统，在第三监视器上显示扩展的视图</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>文字收集</value>

@@ -455,7 +455,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian Sumber</value>
+    <value>Bagian sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -516,6 +516,15 @@
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Pengguna proyek saat ini:</value>
+  </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Hapus proyek</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Anda memiliki pengguna lain yang terhubung ke proyek ini. Proyek ini akan dihapus untuk mereka juga. Apakah Anda ingin menghapus proyek ini?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus proyek ini?</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Keterangan</value>
@@ -596,7 +605,7 @@
     <value>Hapus Penyelarasan?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Hapus Alignment untuk '{0}'?</value>
@@ -653,7 +662,7 @@
     <value>Pilih lokasi untuk membagi token:</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token Komposit Unjoin</value>
+    <value>Unjoin Token Komposit</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -698,7 +707,7 @@
     <value>Sumber Font Ukuran:</value>
   </data>
   <data name="FontSettings_Target" xml:space="preserve">
-    <value>Teks Target:</value>
+    <value>Teks target:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
     <value>Ukuran font target:</value>
@@ -877,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Tetapkan terjemahan untuk</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Dan</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Membatalkan</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Temukan semua</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formulir</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Sepenuhnya</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Sepenuhnya cocok</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Cocok</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Makna [terjemahan]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Atau</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Sebagian</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Simpan perubahan</value>
@@ -895,50 +928,50 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Bahasa sumber</value>
   </data>
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
+    <value>Bahasa target</value>
+  </data>
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Edit Leksikon</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
+    <value>Terjemahan</value>
+  </data>
   <data name="LexiconEdit_Type" xml:space="preserve">
     <value>Jenis</value>
   </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Dan</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Temukan semua</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Sepenuhnya</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Sepenuhnya cocok</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Cocok</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Atau</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Sebagian</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
-    <value>Bahasa target</value>
-  </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
-    <value>Terjemahan</value>
-  </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Sebagai bentuk untuk ...</value>
+    <value>Tambahkan sebagai formulir untuk ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Sebagai target sebagai transalasi untuk ...</value>
+    <value>Tambahkan target sebagai terjemahan untuk ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Temukan leksem yang memiliki satu atau lebih terjemahan yang cocok dengan target</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Impor diperiksa</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Pencocokan leksem atau bentuk</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Tidak ada lagi catatan untuk diimpor.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Pilih corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Pilih Semua</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>Bahasa sumber</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>Jenis</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>Kata sumber</value>
@@ -948,6 +981,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Kata target</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Kecocokan terjemahan</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Batalkan terpilih semua</value>
@@ -1136,7 +1172,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Membuat database ...</value>
+    <value>Membuat basis data ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>Gabungkan ... Antarmuka Muat Ulang</value>
@@ -1285,6 +1321,21 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Tambahkan label</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Apakah Anda ingin membuat label:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>dan kaitkan dengan grup label:</value>
+  </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Apakah Anda ingin menghapus label:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>Apakah Anda ingin memisahkan label:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>dari grup label:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Tambahkan grup label</value>
   </data>
@@ -1311,6 +1362,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Hapus label ini</value>
+  </data>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Teks terlampir pada label</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Dibuat</value>
@@ -1426,6 +1480,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Pilih algoritma SMT untuk berlatih</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Tambahkan persetujuan curah untuk dilihat</value>
   </data>
@@ -1481,7 +1538,7 @@
     <value>Anak perempuan</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Hapus Interlinear</value>
@@ -1510,8 +1567,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Makula Ibrani (OT)</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Sumber daya marmer</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Jumlah tokenisasi berbeda</value>
@@ -1643,13 +1700,16 @@
     <value>PRO</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Tambahkan Pengguna Kolaborasi Baru</value>
+    <value>Tambahkan pengguna kolaborasi baru</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext Beta tidak berjalan</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Membatalkan ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Proyek Kolaborasi</value>
@@ -1736,7 +1796,7 @@
     <value>Klik di sini untuk melihat video 'Dashboard Memulai'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>Setelah Anda mengklik tombol 'Buat' di bawah ini, kami akan menjadi tokenisasi, menyelaraskan, dan menyiapkan proyek Anda. Semua langkah akan muncul di sini saat diproses. Sementara Anda menunggu untuk mengklik tautan di bawah ini dan menonton beberapa video bermanfaat untuk memulai menggunakan ClearDashboard!</value>
+    <value>Setelah Anda mengklik tombol 'Buat' di bawah ini, kami akan menjadi tokenisasi, menyelaraskan, dan menyiapkan proyek Anda. Semua langkah akan muncul di sini saat diproses. Saat Anda menunggu, jangan ragu untuk mengklik tautan di bawah ini dan menonton beberapa video bermanfaat untuk memulai menggunakan ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
     <value>Wizard Template Proyek</value>
@@ -1767,6 +1827,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Nama proyek yang diberikan terlalu lama.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>
@@ -2038,6 +2101,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Kode Verifikasi Email</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Aktifkan pengeditan penyelarasan</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Eksperimental</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Kelompok</value>
   </data>
@@ -2081,10 +2150,10 @@
     <value>Pengaturan ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Tampilkan tampilan cermin di monitor yang berbeda dari dasbor</value>
+    <value>Tampilkan tampilan yang diperluas pada monitor yang berbeda dari dasbor</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Untuk sistem dengan tiga monitor atau lebih, tunjukkan tampilan cermin di monitor ketiga</value>
+    <value>Untuk sistem dengan tiga monitor atau lebih, tunjukkan tampilan yang diperluas pada monitor ketiga</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Koleksi Teks</value>

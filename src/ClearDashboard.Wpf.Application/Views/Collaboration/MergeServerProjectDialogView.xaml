@@ -125,9 +125,8 @@
             Height="75"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
 
@@ -198,7 +197,7 @@
                                                                 <Condition Binding="{Binding CancelAction}" Value="Done" />
                                                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
                                                             </MultiDataTrigger.Conditions>
-                                                            <Setter Property="Background" Value="{StaticResource SecondaryHueDarkBrush}" />
+                                                            <Setter Property="Background" Value="{StaticResource SecondaryHueMidBrush}" />
                                                         </MultiDataTrigger>
 
                                                         <MultiDataTrigger>

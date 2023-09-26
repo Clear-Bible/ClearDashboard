@@ -10,6 +10,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
@@ -26,7 +27,6 @@ using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
@@ -55,6 +55,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
+        private readonly LongRunningTaskManager _longRunningTaskManager;
+        private bool _initializationComplete = false;
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
@@ -73,8 +75,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
 
-        private BindableCollection<DashboardProject> _dashboardProjects = new();
-        public BindableCollection<DashboardProject> DashboardProjects
+        private List<DashboardProject> _dashboardProjects = new();
+        public List<DashboardProject> DashboardProjects
         {
             get => _dashboardProjects;
             set
@@ -297,17 +299,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if (SearchText == string.Empty || SearchText is null)
                 {
-                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+                    DashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
                     SearchBlankVisibility = Visibility.Collapsed;
                     NoProjectVisibility = Visibility.Visible;
                 }
                 else
                 {
-                    _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
-                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ', '_')));
+                    DashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+                    DashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ', '_')));
                 }
 
-                if (_dashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count > 0)
+                if (DashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count > 0)
                 {
                     NoProjectVisibility = Visibility.Hidden;
                     SearchBlankVisibility = Visibility.Visible;
@@ -418,7 +420,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             GitLabHttpClientServices gitLabHttpClientServices,
             GitLabClient gitLabClient,
             CollaborationManager collaborationManager,
-            CollaborationServerHttpClientServices collaborationHttpClientServices)
+            CollaborationServerHttpClientServices collaborationHttpClientServices,
+            LongRunningTaskManager longRunningTaskManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
@@ -439,6 +442,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             _collaborationHttpClientServices=collaborationHttpClientServices;
+            _longRunningTaskManager = longRunningTaskManager;
 
             _paratextProxy.IsParatextInstalled();
             if (_paratextProxy.ParatextInstallPath != string.Empty)
@@ -462,14 +466,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-
-
+            _longRunningTaskManager.CancellationTokenSource= new CancellationTokenSource();
             await base.OnActivateAsync(cancellationToken);
         }
 
 
         protected override async void OnViewLoaded(object view)
         {
+            if (_initializationComplete)
+            {
+                return;
+            }
+
             EventAggregator.Subscribe(this);
 
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
@@ -507,6 +515,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await GetRemoteUser();
 
             base.OnViewLoaded(view);
+
+            _initializationComplete = true;
         }
 
         #endregion Constructor
@@ -767,80 +777,116 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     "*.sqlite");
                 foreach (var file in files)
                 {
-                    var fileInfo = new FileInfo(file);
-
-                    string version = "unavailable";
-
-
-                    var results =
-                        await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
-                    if (results.Success && results.HasData)
-                    {
-                        version = results.Data;
-                    }
-
-
-                    Guid guid = Guid.Empty;
-                    results =
-                        await ExecuteRequest(new GetProjectIdQuery(fileInfo.FullName), CancellationToken.None);
-                    if (results.Success && results.HasData)
-                    {
-                        try
-                        {
-                            guid = Guid.Parse(results.Data.ToString());
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                            throw;
-                        }
-                    }
-
-
-                    string gitLabSha = string.Empty;
-                    bool shaPresent = false;
-                    results =
-                        await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
-                    if (results.Success && results.HasData)
-                    {
-                        if (results.Data.ToString() != "")
-                        {
-                            shaPresent = true;
-                            gitLabSha = results.Data.ToString();
-                        }
-                    }
-
-                    // add as ListItem
-                    var dashboardProject = new DashboardProject
-                    {
-                        Modified = fileInfo.LastWriteTime,
-                        ProjectName = directoryInfo.Name,
-                        ShortFilePath = fileInfo.Name,
-                        FullFilePath = fileInfo.FullName,
-                        Version = version,
-                        IsCollabProject = shaPresent,
-                        GitLabSha = gitLabSha,
-                        Id = guid,
-                    };
+                    var dashboardProject = await FileToDashboardProject(file, directoryInfo);
 
                     DashboardProjects.Add(dashboardProject);
                 }
             }
 
-            // check for database compatibility
-            foreach (var project in DashboardProjects)
-            {
-                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version);
+            await SetDatabaseCompatibility(DashboardProjects);
 
-                if (project.IsCompatibleVersion)
+            await SetGitLabUpdateNeeded(DashboardProjects);
+
+
+            DashboardProjectsDisplay.Clear();
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+
+            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+        }
+
+        private async Task AddNewToDashboardProjectsList()
+        {
+            var projectsToAdd = new List<DashboardProject>();
+
+            // check for Projects subfolder
+            var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
+            
+            foreach (var directoryName in directories)
+            {
+                var directoryInfo = new DirectoryInfo(directoryName);
+                if (DashboardProjects.All(x => x.ProjectName != directoryInfo.Name))
                 {
-                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
-                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
+                    // find the Alignment JSONs
+                    var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName), "*.sqlite");
+                    foreach (var file in files)
+                    {
+                        var dashboardProject = await FileToDashboardProject(file, directoryInfo);
+
+                        projectsToAdd.Add(dashboardProject);
+                    }
                 }
             }
 
+            await SetDatabaseCompatibility(projectsToAdd);
+
+            await SetGitLabUpdateNeeded(projectsToAdd);
+
+            DashboardProjects.AddRange(projectsToAdd);
+            DashboardProjects.Sort();
+
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+
+            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+        }
+
+        private async Task<DashboardProject> FileToDashboardProject(string file, DirectoryInfo directoryInfo)
+        {
+            var fileInfo = new FileInfo(file);
+
+            string version = "unavailable";
+
+            var results = await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                version = results.Data ?? version;
+            }
+
+            Guid guid = Guid.Empty;
+            results = await ExecuteRequest(new GetProjectIdQuery(fileInfo.FullName), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                try
+                {
+                    guid = Guid.Parse(results.Data.ToString());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            string gitLabSha = string.Empty;
+            bool shaPresent = false;
+            results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                if (results.Data.ToString() != "")
+                {
+                    shaPresent = true;
+                    gitLabSha = results.Data.ToString();
+                }
+            }
+
+            // add as ListItem
+            var dashboardProject = new DashboardProject
+            {
+                Modified = fileInfo.LastWriteTime,
+                ProjectName = directoryInfo.Name,
+                ShortFilePath = fileInfo.Name,
+                FullFilePath = fileInfo.FullName,
+                Version = version,
+                IsCollabProject = shaPresent,
+                GitLabSha = gitLabSha,
+                Id = guid,
+            };
+            return dashboardProject;
+        }
+
+        private async Task SetGitLabUpdateNeeded(List<DashboardProject> projects)
+        {
             // get the collab most recent Sha
-            foreach (var project in DashboardProjects)
+            foreach (var project in projects)
             {
                 if (project.IsCollabProject)
                 {
@@ -854,12 +900,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     }
                 }
             }
+        }
 
+        private static async Task SetDatabaseCompatibility(List<DashboardProject> projects)
+        {
+            // check for database compatibility
+            foreach (var project in projects)
+            {
+                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version);
 
-            DashboardProjectsDisplay.Clear();
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
-
-            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+                if (project.IsCompatibleVersion)
+                {
+                    MigrationChecker migrationChecker = new MigrationChecker(project.Version);
+                    project.NeedsMigrationUpgrade = migrationChecker.CheckForResetVerseMappings();
+                }
+            }
         }
 
         public async void UpdateDatabase(DashboardProject project)
@@ -1009,7 +1064,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        public BindableCollection<DashboardProject> CopyDashboardProjectsToAnother(BindableCollection<DashboardProject> original)
+        public BindableCollection<DashboardProject> CopyDashboardProjectsToAnother(List<DashboardProject> original)
         {
             BindableCollection<DashboardProject> copy = new();
 
@@ -1132,7 +1187,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if(result)
                 {
-                    await GetProjectsVersion();
+                    await AddNewToDashboardProjectsList();
                     await GetCollabProjects();
                 }
             }
@@ -1212,7 +1267,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 var path = Path.Combine(_collaborationManager.GetRespositoryBasePath(), "P_" + project.Id);
                 if (Directory.Exists(path))
                 {
-                    SetNormalFileAttributes(path);
+                    FileAttributesHelper.SetNormalFileAttributes(path);
 
                     directoryInfo = new DirectoryInfo(path);
                     foreach (var file in directoryInfo.GetFiles())
@@ -1236,21 +1291,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
 
 
-        // recursively iterate through all the files in a directory and set their attributes to normal
-        // so they can be deleted
-        private void SetNormalFileAttributes(string path)
-        {
-            var directoryInfo = new DirectoryInfo(path);
-            foreach (var file in directoryInfo.GetFiles())
-            {
-                // take off the read-only attribute
-                File.SetAttributes(file.FullName, FileAttributes.Normal);
-            }
-            foreach (var directory in directoryInfo.GetDirectories())
-            {
-                SetNormalFileAttributes(directory.FullName);
-            }
-        }
+
 
 
         public void SetLanguage()
@@ -1294,6 +1335,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
        
         public async Task CreateProjectWithProjectTemplate()
         {
+            ParentViewModel.Reset();    
+
             var projectTemplateItems = ParentViewModel.Steps.Skip(3);
             //foreach (var item in projectTemplateItems)
             //{

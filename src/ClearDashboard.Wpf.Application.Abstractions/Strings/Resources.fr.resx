@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Utilisateurs actuels du projet:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Supprimer le projet</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Vous avez d'autres utilisateurs connectés à ce projet. Ce projet sera également supprimé pour eux. Vous souhaitez supprimer ce projet?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer ce projet?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Description</value>
   </data>
@@ -877,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Définir une traduction pour</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Et</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Modifier</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Trouver tout</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formes</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Pleinement</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Entièrement assorti</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Correspondant à</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Significations [traductions]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Ou</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Partiellement</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Sauvegarder les modifications</value>
@@ -895,50 +928,50 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Langue originelle</value>
   </data>
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
+    <value>Langue cible</value>
+  </data>
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Modifier le lexique</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
+    <value>Traduction</value>
+  </data>
   <data name="LexiconEdit_Type" xml:space="preserve">
     <value>Taper</value>
   </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Et</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Trouver tout</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Pleinement</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement assorti</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Correspondant à</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Ou</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Partiellement</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
-    <value>Langue cible</value>
-  </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
-    <value>Traduction</value>
-  </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Comme une forme pour ...</value>
+    <value>Ajouter comme formulaire pour ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Trouvez des matchs de lexème ou de formulaire complet ou partiel pour la source</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Aussi cible que la transalation pour ...</value>
+    <value>Ajouter la cible comme traduction pour ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Trouver des lexèmes qui ont une ou plusieurs traductions qui correspondent à la cible</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>IMPORT VÉRÉE</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexème ou les correspondances de forme</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Il n'y a plus d'enregistrements à importer.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Veuillez choisir un corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Tout sélectionner</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>Langue originelle</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>Taper</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>Mot source</value>
@@ -948,6 +981,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Mot cible</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Correspondance de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1285,6 +1321,21 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Ajouter une étiquette</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Voulez-vous créer une étiquette:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>Et associez-le à un groupe d'étiquettes:</value>
+  </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Voulez-vous supprimer l'étiquette:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>Voulez-vous dissocier l'étiquette:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>du groupe d'étiquettes:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Ajouter un groupe d'étiquettes</value>
   </data>
@@ -1311,6 +1362,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Supprimer cette étiquette</value>
+  </data>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Texte attaché à l'étiquette</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Créé</value>
@@ -1426,6 +1480,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus paratext</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Sélectionnez un algorithme SMT pour s'entraîner</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Ajouter l'approbation en vrac pour afficher</value>
   </data>
@@ -1510,8 +1567,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Hébreu (OT) Macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbrersource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Ressource en marbre</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Nombre de tokennisations différentes</value>
@@ -1550,7 +1607,7 @@
     <value>StudyBibleadditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Allez dans PARATEXT et changez de projets. Le projet PARATEXT actuellement connecté au plugin ClearDashboard n'est pas le même que le corpus dans ce projet Cleardashboard.</value>
+    <value>Allez dans PARATEXT et changez de projets. Le projet PARATEXT actuellement connecté au plugin ClearDashboard n'est pas le même que le corpus de ce projet Cleardashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Cible</value>
@@ -1650,6 +1707,9 @@
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>La version bêta de paratext ne fonctionne pas</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Annulation ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projets de collaboration</value>
@@ -1767,6 +1827,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Un projet avec le même nom existe déjà. Veuillez choisir un nom unique.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Le nom de projet donné est trop long.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Chroniques</value>
@@ -1889,7 +1952,7 @@
     <value>John</value>
   </data>
   <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jona</value>
+    <value>Jonie</value>
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
@@ -1907,7 +1970,7 @@
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Las</value>
+    <value>Luck</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2038,6 +2101,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Code de vérification par e-mail</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Activer l'édition d'alignement</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Expérimental</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Groupe</value>
   </data>
@@ -2081,10 +2150,10 @@
     <value>Paramètres de ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Afficher les vues de miroir sur un moniteur différent de celui de tableau de bord</value>
+    <value>Afficher les vues élargies sur un moniteur différent de celui de tableau de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pour les systèmes avec trois moniteurs ou plus, montrez une vue miroir sur le troisième moniteur</value>
+    <value>Pour les systèmes avec trois moniteurs ou plus, affichez une vue élargie sur le troisième moniteur</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Collection de texte</value>
