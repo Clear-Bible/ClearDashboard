@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.Views.Panes
 {
@@ -69,6 +70,11 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             }
 
             if (item is PinsViewModel)
+            {
+                return ToolStyle;
+            }
+
+            if (item is LexiconViewModel)
             {
                 return ToolStyle;
             }

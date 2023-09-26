@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Lexicon_Form : IdentifiableEntity
+    public class Lexicon_Form : SynchronizableTimestampedEntity
     {
         public Lexicon_Form()
         {

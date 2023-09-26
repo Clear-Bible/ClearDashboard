@@ -6,6 +6,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
@@ -47,7 +48,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                             s.Language,
                             s.Translations.Select(t => new Alignment.Lexicon.Translation(
                                 ModelHelper.BuildTranslationId(t),
-                                t.Text ?? string.Empty
+                                t.Text ?? string.Empty,
+                                t.OriginatedFrom
                             )).ToList(),
                             s.SemanticDomains.Select(sd => new SemanticDomain(
                                 ModelHelper.BuildSemanticDomainId(sd),
@@ -55,7 +57,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                             )).ToList()
                     )).ToList(),
                     l.Forms.Select(f => new Form(
-                        new FormId(f.Id),
+                        ModelHelper.BuildFormId(f),
                         f.Text!
                     )).ToList()
                 )).FirstOrDefault();

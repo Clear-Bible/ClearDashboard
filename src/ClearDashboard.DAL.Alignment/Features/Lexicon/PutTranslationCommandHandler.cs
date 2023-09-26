@@ -27,7 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             CancellationToken cancellationToken)
         {
             Models.Lexicon_Translation? translation = null;
-            if (request.Translation.TranslationId != null)
+            if (request.Translation.TranslationId.Created != null)
             {
                 translation = ProjectDbContext!.Lexicon_Translations.Include(t => t.User).FirstOrDefault(t => t.Id == request.Translation.TranslationId.Id);
                 if (translation == null)
@@ -45,7 +45,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             {
                 translation = new Models.Lexicon_Translation
                 {
-                    Id = request.Translation.TranslationId?.Id ?? Guid.NewGuid(),
+                    Id = request.Translation.TranslationId.Id,
                     Text = request.Translation.Text,
                     MeaningId = request.MeaningId.Id
                 };

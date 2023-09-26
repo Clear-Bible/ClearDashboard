@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.EventsAndDelegates;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
@@ -30,20 +31,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 #endif
 
             var lexemesByLemmaOrForms = await ProjectDbContext.Lexicon_Lexemes
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language == request.MeaningLanguage))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.User)
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language == request.MeaningLanguage))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.Translations)
                         .ThenInclude(t => t.User)
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language == request.MeaningLanguage))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.SemanticDomainMeaningAssociations)
                         .ThenInclude(sda => sda.SemanticDomain)
                             .ThenInclude(sd => sd!.User)
                 .Include(e => e.Forms)
                 .Include(e => e.User)
-                .Where(e => 
-                    (e.Lemma == request.LemmaOrForm || e.Forms.Any(f => f.Text == request.LemmaOrForm)) && 
-                    (string.IsNullOrEmpty(request.Language) || e.Language == request.Language))
+                .Where(e =>
+                    (e.Lemma == request.LemmaOrForm || e.Forms.Any(f => f.Text == request.LemmaOrForm)) &&
+                    (string.IsNullOrEmpty(request.Language) || e.Language!.StartsWith(request.Language)))
                 .ToListAsync();
 
 #if DEBUG
@@ -66,7 +67,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                             s.Language,
                             s.Translations.Select(t => new Alignment.Lexicon.Translation(
                                 ModelHelper.BuildTranslationId(t),
-                                t.Text ?? string.Empty
+                                t.Text ?? string.Empty,
+                                t.OriginatedFrom
                             )).ToList(),
                             s.SemanticDomains.Select(sd => new SemanticDomain(
                                 ModelHelper.BuildSemanticDomainId(sd),
@@ -74,7 +76,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                             )).ToList()
                     )).ToList(),
                     l.Forms.Select(f => new Form(
-                        new FormId(f.Id),
+                        ModelHelper.BuildFormId(f),
                         f.Text!
                     )).ToList()
                 ))

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
@@ -7,9 +8,9 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public class Translation
+    public class Translation : IEquatable<Translation>
     {
-        public TranslationId? TranslationId
+        public TranslationId TranslationId
         {
             get;
 #if DEBUG
@@ -20,28 +21,56 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             set;
 #endif
         }
-        public string? Text { get; set; }
+
+        private string? text_;
+        public string? Text
+        {
+            get => text_;
+            set
+            {
+                text_ = value;
+                IsDirty = true;
+            }
+        }
+
+        public string? OriginatedFrom { get; init; }
+
+        public bool IsDirty { get; internal set; } = false;
+        public bool IsInDatabase { get => TranslationId.Created is not null; }
 
         public Translation()
         {
+            TranslationId = TranslationId.Create(Guid.NewGuid());
         }
-        internal Translation(TranslationId translationId, string text)
+        internal Translation(TranslationId translationId, string text, string? originatedFrom)
         {
             TranslationId = translationId;
-            Text = text;
+            text_ = text;
+            OriginatedFrom = originatedFrom;
         }
 
-        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        internal void PostSave(TranslationId? translationId)
         {
-            if (TranslationId == null)
-            {
-                return;
-            }
-
-            var command = new DeleteTranslationCommand(TranslationId);
-
-            var result = await mediator.Send(command, token);
-            result.ThrowIfCanceledOrFailed();
+            TranslationId = translationId ?? TranslationId;
+            IsDirty = false;
         }
+
+        internal void PostSaveAll(IDictionary<Guid, IId> createdIIdsByGuid)
+        {
+            createdIIdsByGuid.TryGetValue(TranslationId.Id, out var translationId);
+            PostSave((TranslationId?)translationId);
+        }
+
+        public override bool Equals(object? obj) => Equals(obj as Translation);
+        public bool Equals(Translation? other)
+        {
+            if (other is null) return false;
+            if (!TranslationId.Id.Equals(TranslationId.Id)) return false;
+
+            return true;
+        }
+        public override int GetHashCode() => TranslationId.Id.GetHashCode();
+        public static bool operator ==(Translation? e1, Translation? e2) => Equals(e1, e2);
+        public static bool operator !=(Translation? e1, Translation? e2) => !(e1 == e2);
     }
 }
