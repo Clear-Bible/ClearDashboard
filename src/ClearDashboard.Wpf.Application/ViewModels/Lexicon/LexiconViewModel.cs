@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         private LexiconManager LexiconManager { get; }
 
         private Visibility _progressBarVisibility = Visibility.Hidden;
-        private bool _enableButtons;
+        private bool _showDialog;
         private bool _hasLexiconImports;
         private CorpusId? _selectedProjectCorpus;
 
@@ -92,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             await Task.Run(async () =>
             {
                 // TODO:  change to true when feature is ready.
-                EnableButtons = false;
+                ShowDialog = false;
                 ProgressBarVisibility = Visibility.Visible;
                 var stopWatch = Stopwatch.StartNew();
                 try
@@ -119,7 +119,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         private async Task GetParatextProjects()
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-            foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c=> c.CorpusType == CorpusType.Standard.ToString() || c.CorpusType != CorpusType.BackTranslation.ToString()).OrderBy(c => c.Created))
+            foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c=> c.CorpusType == CorpusType.Standard.ToString() || c.CorpusType == CorpusType.BackTranslation.ToString() || c.CorpusType == CorpusType.Resource.ToString()).OrderBy(c => c.Created))
             {
                ProjectCorpora.Add(corpusId);
             }
@@ -171,6 +171,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async Task OnAddAsFormButtonClicked(LexiconImportViewModel lexiconImport)
         {
+            if (!ShowDialog)
+            {
+                return;
+            }
+
             var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>();
             if (dialogViewModel != null)
             {
@@ -187,14 +192,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
 
-        public bool EnableButtons
+        public bool ShowDialog
         {
-            get => _enableButtons;
-            set => Set(ref _enableButtons, value);
+            get => _showDialog;
+            set => Set(ref _showDialog, value);
         }
 
         public async Task OnTargetAsTranslationButtonClicked(LexiconImportViewModel lexiconImport)
         {
+
+            if (!ShowDialog)
+            {
+                return;
+            }
             var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>();
             if (dialogViewModel != null)
             {
@@ -254,6 +264,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
                     //SelectedProjectCorpus = null;
                     LexiconImports.Clear();
+                    NotifyOfPropertyChange(()=>HasLexiconImports);
+                    NotifyOfPropertyChange(() => ShowNoRecordsToManageMessage);
+                    
+
                     await GetImportedLexiconViewModels(CancellationToken.None);
                 }
                 catch (Exception ex)
