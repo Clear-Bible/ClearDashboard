@@ -412,7 +412,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             bool taskRunning = tasks is not null;
 
-            if (tasks.TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed)
+            if (taskRunning && tasks.TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed)
             {
                 // no deletion task running actively
                 taskRunning = false;
