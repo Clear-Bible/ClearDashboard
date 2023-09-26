@@ -527,14 +527,26 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
-            var labelEventArgs = e as LabelEventArgs;
-
-            if (labelEventArgs != null && !string.IsNullOrEmpty(labelEventArgs.Label.TemplateText))
+            if (e is LabelEventArgs labelEventArgs)
             {
-                Note.Text += labelEventArgs.Label.TemplateText;
-            }
+                if (!string.IsNullOrEmpty(labelEventArgs.Label.TemplateText))
+                {
+                    Note.Text += labelEventArgs.Label.TemplateText;
+                    OnPropertyChanged(nameof(Note));
+                }
 
-            RaiseLabelEvent(LabelAddedEvent, labelEventArgs!);
+                // If the label text matches an existing label, act as if that was selected rather than adding a new one.
+                var existingLabel = LabelGroups.GetLabel(labelEventArgs.Label.Text);
+                if (existingLabel != null)
+                {
+                    labelEventArgs.Label = existingLabel;
+                    RaiseLabelEvent(LabelSelectedEvent, labelEventArgs);
+                }
+                else
+                {
+                    RaiseLabelEvent(LabelAddedEvent, labelEventArgs!);
+                }
+            }
         }
 
         private void OnLabelDeleted(object sender, RoutedEventArgs e)
