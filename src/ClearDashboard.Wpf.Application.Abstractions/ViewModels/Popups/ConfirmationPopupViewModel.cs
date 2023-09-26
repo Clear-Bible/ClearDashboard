@@ -50,6 +50,9 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
                     return "Confirmation";
                 case SimpleMessagePopupMode.DeleteCorpusNodeConfirmation:
                     return "Confirmation";
+                case SimpleMessagePopupMode.DeleteCollabProjectSimple:
+                case SimpleMessagePopupMode.DeleteCollabProjectExtended:
+                    return LocalizationService!["CollabProjectManagementView_Delete"];
                 case SimpleMessagePopupMode.DeleteProjectConfirmation:
                     return LocalizationService!["Delete_Project"];
                 case SimpleMessagePopupMode.SwitchParatextProjectMessage:
@@ -99,7 +102,11 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
             case SimpleMessagePopupMode.CloseEnhancedViewConfirmation:
                 return LocalizationService!["EnhancedView_ClosingEnhancedView"];
             case SimpleMessagePopupMode.DeleteCorpusNodeConfirmation:
-                return LocalizationService!["Pds_DeletingCorpusNode"]; 
+                return LocalizationService!["Pds_DeletingCorpusNode"];
+            case SimpleMessagePopupMode.DeleteCollabProjectSimple:
+                return LocalizationService!["CollabProjectManagementView_DeleteConfirmSimple"];
+            case SimpleMessagePopupMode.DeleteCollabProjectExtended:
+                return LocalizationService!["CollabProjectManagementView_DeleteConfirmExtended"];
             case SimpleMessagePopupMode.DeleteProjectConfirmation:
                 return LocalizationService!["Delete_Project_Confirmation"]; 
             case SimpleMessagePopupMode.SwitchParatextProjectMessage:

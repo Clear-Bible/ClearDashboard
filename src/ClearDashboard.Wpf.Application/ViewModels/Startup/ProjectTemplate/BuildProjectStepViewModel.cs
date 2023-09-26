@@ -713,6 +713,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 _processRunner.Cancel();
 
                 await Task.WhenAny(tasks: new[] { _runningTask, Task.Delay(30000) });
+
+                ParentViewModel!.ProjectName = string.Empty;
             }
             else
             {

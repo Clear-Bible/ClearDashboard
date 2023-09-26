@@ -6,6 +6,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
@@ -32,6 +33,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly GitLabHttpClientServices _gitLabHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
         private readonly CollaborationConfiguration _collaborationConfiguration;
+        private readonly IWindowManager _windowManager;
 
         #region Member Variables   
 
@@ -281,7 +283,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ILocalizationService localizationService,
             GitLabHttpClientServices gitLabHttpClientServices,
             CollaborationManager collaborationManager,
-            CollaborationConfiguration collaborationConfiguration)
+            CollaborationConfiguration collaborationConfiguration,
+            IWindowManager windowManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _logger = logger;
@@ -289,6 +292,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _gitLabHttpClientServices = gitLabHttpClientServices;
             _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
+            _windowManager = windowManager;
         }
 #pragma warning restore CS8618
 
@@ -497,19 +501,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             users.RemoveAll(x => x.Id == ProjectOwner.UserId);
 
-            MessageBoxResult result;
+            // confirm the user wants to delete the project
+            var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+            if (confirmationViewPopupViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+            }
+
+            confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteProjectConfirmation;
+
             if (users.Count > 0)
             {
                 // show extended confirmation dialog as there are other users
-                result = MessageBox.Show(_localizationService["CollabProjectManagementView_DeleteConfirmExtended"], _localizationService["CollabProjectManagementView_Delete"], MessageBoxButton.YesNo, MessageBoxImage.Question);
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCollabProjectExtended;
             }
             else
             {
                 // show simple confirmation dialog
-                result = MessageBox.Show(_localizationService["CollabProjectManagementView_DeleteConfirmSimple"], _localizationService["CollabProjectManagementView_Delete"], MessageBoxButton.YesNo, MessageBoxImage.Question);
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCollabProjectSimple;
             }
 
-            if (result == MessageBoxResult.Yes)
+            bool result = false;
+            OnUIThread(async () =>
+            {
+                result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+            });
+
+            if (result)
             {
                 var ret = await _gitLabHttpClientServices.DeleteProject(SelectedProject);
                 if (ret)

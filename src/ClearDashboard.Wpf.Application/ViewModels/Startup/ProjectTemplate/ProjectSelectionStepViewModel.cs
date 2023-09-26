@@ -144,7 +144,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            ProjectName = string.Empty; 
+            ProjectName = ParentViewModel.ProjectName ?? string.Empty; 
 
             await Initialize(cancellationToken);
             await base.OnActivateAsync(cancellationToken);
@@ -355,6 +355,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         public override async Task MoveBackwardsAction()
         {
             ProjectName = string.Empty;
+            ParentViewModel.ProjectName = ProjectName;
             ParentViewModel!.Reset();
             await ParentViewModel!.GoToStep(1);
         }
