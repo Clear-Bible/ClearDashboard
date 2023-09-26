@@ -166,7 +166,7 @@
             Margin="25,0,0,0"
             HorizontalAlignment="Left"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressCircle}"
             Value="0" />
 

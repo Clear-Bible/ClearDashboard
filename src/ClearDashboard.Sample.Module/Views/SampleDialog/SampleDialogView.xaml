@@ -86,7 +86,7 @@
                             VerticalAlignment="Center"
                             Foreground="{StaticResource GreenMidBrush}"
                             IsIndeterminate="True"
-                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            Style="{StaticResource ClearDashboardCircularProgressBar}"
                             Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Value="60" />
                     </Grid>

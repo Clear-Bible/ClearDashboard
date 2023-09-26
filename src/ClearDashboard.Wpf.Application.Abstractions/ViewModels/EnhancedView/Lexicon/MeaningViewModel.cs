@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
     {
         public Meaning Entity { get; }
 
-        public MeaningId? MeaningId
+        public MeaningId MeaningId
         {
             get => Entity.MeaningId;
             set => Entity.MeaningId = value;
@@ -22,6 +22,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
             get => Entity.Text ?? string.Empty;
             set
             {
+                if (value.Trim() == string.Empty) return;
                 if (Equals(value, Entity.Text)) return;
                 Entity.Text = value;
                 NotifyOfPropertyChange();

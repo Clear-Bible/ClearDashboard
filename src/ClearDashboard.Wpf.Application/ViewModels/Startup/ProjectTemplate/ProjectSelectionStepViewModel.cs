@@ -21,6 +21,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
     public class ProjectSelectionStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<StartupDialogViewModel, ProjectSelectionStepViewModel>
     {
+        #region Member Variables
+
+        private bool _selectionChanging = false;
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
         private BindableCollection<ParatextProjectMetadata>? _projects;
         public BindableCollection<ParatextProjectMetadata>? Projects
         {
@@ -111,18 +125,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             }
         }
 
-        private bool _selectionChanging = false;
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
+        public ProjectSelectionStepViewModel(DashboardProjectManager projectManager,
+            INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ProjectSelectionStepViewModel> validator,
+            ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
+        {
+            ProjectName = string.Empty;
+            CanMoveForwards = true;
+            CanMoveBackwards = true;
+            EnableControls = true;
+        }
+
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            ProjectName = ParentViewModel.ProjectName ?? string.Empty; 
+
+            await Initialize(cancellationToken);
+            await base.OnActivateAsync(cancellationToken);
+        }
+
+        #endregion //Constructor
+
+
+        #region Methods
 
         private BindableCollection<ParatextProjectMetadata>? GetSelectableParatextProjects()
         {
             if (Projects != null)
             {
                 var otherSelectedIds = new List<string?>
-                {
-                    SelectedParatextBtProject?.Id,
-                    SelectedParatextLwcProject?.Id
-                }
-                .Where(p => p != null);
+                    {
+                        SelectedParatextBtProject?.Id,
+                        SelectedParatextLwcProject?.Id
+                    }
+                    .Where(p => p != null);
 
                 return new(Projects.Where(project => project.CorpusType != CorpusType.BackTranslation && !otherSelectedIds.Contains(project.Id)));
             }
@@ -134,11 +176,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             if (Projects != null)
             {
                 var otherSelectedIds = new List<string?>
-                {
-                    SelectedParatextProject?.Id,
-                    SelectedParatextLwcProject?.Id
-                }
-                .Where(p => p != null);
+                    {
+                        SelectedParatextProject?.Id,
+                        SelectedParatextLwcProject?.Id
+                    }
+                    .Where(p => p != null);
 
                 return new(Projects.Where(project => project.CorpusType == CorpusType.BackTranslation && !otherSelectedIds.Contains(project.Id)));
             }
@@ -150,11 +192,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             if (Projects != null)
             {
                 var otherSelectedIds = new List<string?>
-                {
-                    SelectedParatextProject?.Id,
-                    SelectedParatextBtProject?.Id
-                }
-                .Where(p => p != null);
+                    {
+                        SelectedParatextProject?.Id,
+                        SelectedParatextBtProject?.Id
+                    }
+                    .Where(p => p != null);
 
                 return new(Projects.Where(project => project.CorpusType != CorpusType.BackTranslation && !otherSelectedIds.Contains(project.Id)));
             }
@@ -256,18 +298,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             SelectedParatextLwcProject = null;
         }
 
-        public ProjectSelectionStepViewModel(DashboardProjectManager projectManager,
-            INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ProjectSelectionStepViewModel> validator,
-            ILocalizationService localizationService)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
-        {
-            ProjectName = string.Empty;
-            CanMoveForwards = true;
-            CanMoveBackwards = true;
-            EnableControls = true;
-        }
-
         public override async Task Reset(CancellationToken cancellationToken)
         {
             await Initialize(cancellationToken);
@@ -306,12 +336,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await base.Initialize(cancellationToken);
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            await Initialize(cancellationToken);
-            await base.OnActivateAsync(cancellationToken);
-        }
-
         public async Task CreateAsync()
         {
 
@@ -331,6 +355,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         public override async Task MoveBackwardsAction()
         {
             ProjectName = string.Empty;
+            ParentViewModel.ProjectName = ProjectName;
             ParentViewModel!.Reset();
             await ParentViewModel!.GoToStep(1);
         }
@@ -354,6 +379,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         {
             return (!string.IsNullOrEmpty(ProjectName)) ? Validator!.Validate(this) : null;
         }
+
+        #endregion // Methods
     }
 
 

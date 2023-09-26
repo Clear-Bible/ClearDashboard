@@ -34,6 +34,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
@@ -448,7 +449,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
             if (_generateDataRunning)
@@ -468,6 +468,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
+        #endregion //Constructor
+
+        #region Methods
 
         /// <summary>
         /// Main logic for building the data
@@ -476,7 +479,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GenerateInitialData(CancellationToken cancellationToken)
         {
             //ReSharper disable once MethodSupportsCancellation
-            _ = await Task.Run(async () =>
+            _ = await Task.Run<bool>(async () =>
             {
                 var logger = LifetimeScope.Resolve<ILogger<ParatextProxy>>();
                 ParatextProxy paratextUtils = new ParatextProxy(logger);
@@ -529,7 +532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     else
                     {
                         _termRenderingsList.TermRendering[i].Id =
-                                    CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
+                            CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
@@ -542,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         if (_biblicalTermsList.Term[i].Id != "")
                         {
                             _biblicalTermsList.Term[i].Id =
-                                        CorrectUnicode(_biblicalTermsList.Term[i].Id);
+                                CorrectUnicode(_biblicalTermsList.Term[i].Id);
                         }
 
                         cancellationToken.ThrowIfCancellationRequested();
@@ -556,7 +559,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         if (_allBiblicalTermsList.Term[i].Id != "")
                         {
                             _allBiblicalTermsList.Term[i].Id =
-                                        CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
+                                CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
                         }
 
                         cancellationToken.ThrowIfCancellationRequested();
@@ -579,12 +582,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
                         // place Sense in braces  
                         biblicalTermsSense = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)] + " {" +
-                                                     sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
-                                                     "}";
+                                             sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
+                                             "}";
 
                         // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
                         biblicalTermsSpelling =
-                                    sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
+                            sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
                     }
                     else if (sourceWord.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
                     {
@@ -604,7 +607,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     try
                     {
                         spellingRecords = _spellingStatus.Status?.FindAll(s => string.Equals(s.Word,
-                                    biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
+                            biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
                     }
                     catch (Exception e)
                     {
@@ -789,7 +792,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> GenerateLexiconData(CancellationToken cancellationToken)
         {
-            _ = await Task.Run(async () =>
+            _ = await Task.Run<bool>(async () =>
             {
                 await GenerateLexiconDataCalculations(cancellationToken);
                 return true;
@@ -1113,10 +1116,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             return false;
         }
 
-        #endregion //Constructor
-
-        #region Methods
-
         private void CheckAndRefreshGrid()
         {
             if (_gridData != null && GridCollectionView is not null)
@@ -1389,7 +1388,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
                         verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
                         verse.Inlines.Insert(0,
-                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = (SolidColorBrush?)System.Windows.Application.Current.FindResource("AccentHueBrush")
+                            });
 
                         // check if this was the last one
                         if (i == 0)

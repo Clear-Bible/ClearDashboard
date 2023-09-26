@@ -17,6 +17,17 @@ namespace ClearDashboard.DAL.Alignment.Features
             };
             return current;
         }
+
+        public static T Create(Guid id, UserId userId)
+        {
+            var current = new T
+            {
+                Id = id,
+                UserId = userId
+            };
+            return current;
+        }
+
         public static T Create(Guid id)
         {
             var current = new T
@@ -28,6 +39,7 @@ namespace ClearDashboard.DAL.Alignment.Features
 
         public DateTimeOffset? Created { get; protected set; }
         public UserId? UserId { get; protected set; }
+        public bool IsInDatabase { get => Created is not null; }
 
         public override bool Equals(object? obj) => Equals(obj as T);
         public bool Equals(T? other)

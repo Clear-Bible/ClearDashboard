@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClearDashboard.Wpf.Application.Views.PopUps
+namespace ClearDashboard.Wpf.Application.Views.Lexicon
 {
     /// <summary>
-    /// Interaction logic for JiraResultsView.xaml
+    /// Interaction logic for LexiconView.xaml
     /// </summary>
-    public partial class JiraResultsView : Window
+    public partial class LexiconView : UserControl
     {
-        public JiraResultsView()
+        public LexiconView()
         {
             InitializeComponent();
         }

@@ -100,6 +100,10 @@ namespace ClearDashboard.DataAccessLayer.Data
                 //await Database.GetPendingMigrationsAsync();
                 if ((await Database.GetPendingMigrationsAsync()).Any())
                 {
+                    // Should convert languageNames to languageTags in database,
+                    // if it hasn't been done already:
+                    await Migrations.languagenames.MigrateData(this, _logger, CancellationToken.None);
+
                     _logger?.LogInformation("Migration required, migrating...");
                     await Database.MigrateAsync();
                     //await Database.CloseConnectionAsync();
@@ -334,7 +338,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .UsingEntity<Lexicon_SemanticDomainMeaningAssociation>();
 
             modelBuilder.Entity<Lexicon_Lexeme>()
-                .HasIndex(e => new { e.Lemma, e.Language })
+                .HasIndex(e => new { e.Lemma, e.Type, e.Language })
                 .IsUnique();
             // =============
         }
