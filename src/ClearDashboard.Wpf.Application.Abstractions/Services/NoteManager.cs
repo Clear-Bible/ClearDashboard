@@ -99,7 +99,7 @@ namespace ClearDashboard.Wpf.Application.Services
             private set => Set(ref _currentNotes, value);
         }
 
-        private static string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
+        private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
             if (associatedEntityId is TokenId)
             {
