@@ -444,7 +444,7 @@
             Grid.Row="0"
             Margin="0"
             Padding="5"
-            Background="{DynamicResource PrimaryHueMidBrush}"
+            Background="{DynamicResource PrimaryHueLightBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
             <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"  -->
             <Grid MinWidth="400">
@@ -560,11 +560,10 @@
             Margin="0,0,50,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
             Value="0">
             <ProgressBar.Style>
-                <Style BasedOn="{StaticResource MaterialDesignCircularProgressBar}" TargetType="ProgressBar">
+                <Style BasedOn="{StaticResource ClearDashboardCircularProgressBar}" TargetType="ProgressBar">
                     <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsBusy}" Value="False">

@@ -1,6 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Caliburn.Micro;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Media;
-using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
@@ -20,6 +21,10 @@ namespace ClearDashboard.Wpf.Application.Models
         }
 
         public string? BookName { get; set; }
+
+        public FontWeight FontWeight { get; set; }
+
+        public bool IsImported { get; set; }
 
         public bool IsSelected
         {
@@ -52,30 +57,30 @@ namespace ClearDashboard.Wpf.Application.Models
                 {
                     // OT
                     case BookColors.Pentateuch:
-                        BookColor = Brushes.Cyan;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("PrimaryHueDarkBrush");
                         break;
                     case BookColors.Historical:
-                        BookColor = Brushes.Coral;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("SecondaryHueDarkBrush");
                         break;
                     case BookColors.Wisdom:
-                        BookColor = Brushes.LimeGreen;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("PrimaryHueDarkBrush");
                         break;
                     case BookColors.Prophets:
-                        BookColor = Brushes.Magenta;
+                        BookColor =(SolidColorBrush?)System.Windows.Application.Current.FindResource("SecondaryHueDarkBrush");
                         break;
 
                     // NT
                     case BookColors.Gospels:
-                        BookColor = Brushes.MediumPurple;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("PrimaryHueDarkBrush");
                         break;
                     case BookColors.Acts:
-                        BookColor = Brushes.Gold;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("SecondaryHueDarkBrush");
                         break;
                     case BookColors.Epistles:
-                        BookColor = Brushes.MediumSpringGreen;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("PrimaryHueDarkBrush");
                         break;
                     case BookColors.Revelation:
-                        BookColor = Brushes.Turquoise;
+                        BookColor = (SolidColorBrush?)System.Windows.Application.Current.FindResource("SecondaryHueDarkBrush");
                         break;
 
                 }
@@ -90,6 +95,5 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public bool IsOldTestament { get; set; }
 
-        }
     }
-
+}

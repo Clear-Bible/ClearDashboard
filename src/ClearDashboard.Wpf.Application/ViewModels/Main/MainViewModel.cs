@@ -1801,11 +1801,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     windowPane.ToggleAutoHide();
                 }
-                else if (windowPane.IsHidden)
+                if (windowPane.IsHidden)
                 {
                     windowPane.Show();
                 }
-                else if (windowPane.IsVisible)
+                if (windowPane.IsVisible)
                 {
                     windowPane.IsActive = true;
                 }

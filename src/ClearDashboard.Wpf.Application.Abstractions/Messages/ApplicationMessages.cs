@@ -9,6 +9,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 namespace ClearDashboard.Wpf.Application.Messages
 {
 
+    public record RedrawParallelCorpusMenus();
     public record SetIsCheckedAlignment(AlignmentSetId AlignmentSetId, bool IsChecked);
 
     public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);

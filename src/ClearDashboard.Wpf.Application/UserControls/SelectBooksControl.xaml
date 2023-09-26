@@ -1,15 +1,17 @@
-﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.SelectBooksControl"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.UserControls.SelectBooksControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:addParatextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog"
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:cm="http://caliburnmicro.com"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    x:Name="SelectBookControl"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -23,15 +25,14 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d"
-            x:Name="SelectBookControl">
+    mc:Ignorable="d">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <system:Boolean x:Key="True">True</system:Boolean>
             <system:Boolean x:Key="False">False</system:Boolean>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            
+
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -50,16 +51,16 @@
             Margin="15,15,0,0"
             HorizontalAlignment="Left"
             Content="{helpers:Localization AddParatextCorpusDialog_SelectBooks}"
-            FontSize="20" 
-            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            FontSize="20"
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}}" />
 
         <Label
             Grid.Row="0"
             Margin="15,15,0,0"
             HorizontalAlignment="Left"
-            Content="{helpers:Localization AddParatextCorpusDialog_SelectedBooks}"
-            FontSize="20" 
-            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
+            Content="{Binding SelectBooksLabelText}"
+            FontSize="20"
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}" />
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -136,7 +137,7 @@
                     Grid.RowSpan="5"
                     Grid.Column="0"
                     Padding="2"
-                    Background="Cyan"
+                    Background="{StaticResource PrimaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -146,7 +147,7 @@
                     Grid.RowSpan="12"
                     Grid.Column="0"
                     VerticalAlignment="Stretch"
-                    Background="Coral"
+                    Background="{StaticResource SecondaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="2"
@@ -155,7 +156,7 @@
                     Grid.Row="17"
                     Grid.RowSpan="3"
                     Grid.Column="0"
-                    Background="LimeGreen"
+                    Background="{StaticResource PrimaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -164,7 +165,7 @@
                     Grid.Row="0"
                     Grid.RowSpan="2"
                     Grid.Column="1"
-                    Background="LimeGreen"
+                    Background="{StaticResource PrimaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -173,7 +174,7 @@
                     Grid.Row="2"
                     Grid.RowSpan="17"
                     Grid.Column="1"
-                    Background="Magenta"
+                    Background="{StaticResource SecondaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -182,7 +183,7 @@
                     Grid.Row="0"
                     Grid.RowSpan="4"
                     Grid.Column="3"
-                    Background="MediumPurple"
+                    Background="{StaticResource PrimaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -190,7 +191,7 @@
                 <Border
                     Grid.Row="4"
                     Grid.Column="3"
-                    Background="Gold"
+                    Background="{StaticResource SecondaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -199,7 +200,7 @@
                     Grid.Row="5"
                     Grid.RowSpan="15"
                     Grid.Column="3"
-                    Background="MediumSpringGreen"
+                    Background="{StaticResource PrimaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -208,7 +209,7 @@
                     Grid.Row="0"
                     Grid.RowSpan="6"
                     Grid.Column="4"
-                    Background="MediumSpringGreen"
+                    Background="{StaticResource PrimaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -216,7 +217,7 @@
                 <Border
                     Grid.Row="6"
                     Grid.Column="4"
-                    Background="Bisque"
+                    Background="{StaticResource SecondaryHueLightBrush}"
                     BorderBrush="{StaticResource MaterialDesignBody}"
                     BorderThickness="2"
                     CornerRadius="4"
@@ -239,6 +240,7 @@
                         x:Name="Chk01"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[0].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[0].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[0].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[0].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[0].IsEnabled}" />
@@ -261,6 +263,7 @@
                         x:Name="Chk02"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[1].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[1].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[1].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[1].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[1].IsEnabled}" />
@@ -284,6 +287,7 @@
                         x:Name="Chk03"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[2].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[2].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[2].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[2].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[2].IsEnabled}" />
@@ -306,6 +310,7 @@
                         x:Name="Chk04"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[3].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[3].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[3].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[3].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[3].IsEnabled}" />
@@ -328,6 +333,7 @@
                         x:Name="Chk05"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[4].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[4].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[4].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[4].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[4].IsEnabled}" />
@@ -350,6 +356,7 @@
                         x:Name="Chk06"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[5].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[5].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[5].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[5].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[5].IsEnabled}" />
@@ -372,6 +379,7 @@
                         x:Name="Chk07"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[6].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[6].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[6].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[6].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[6].IsEnabled}" />
@@ -394,6 +402,7 @@
                         x:Name="Chk08"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[7].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[7].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[7].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[7].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[7].IsEnabled}" />
@@ -416,6 +425,7 @@
                         x:Name="Chk09"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[8].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[8].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[8].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[8].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[8].IsEnabled}" />
@@ -438,6 +448,7 @@
                         x:Name="Chk10"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[9].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[9].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[9].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[9].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[9].IsEnabled}" />
@@ -461,6 +472,7 @@
                         x:Name="Chk11"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[10].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[10].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[10].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[10].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[10].IsEnabled}" />
@@ -484,6 +496,7 @@
                         x:Name="Chk12"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[11].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[11].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[11].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[11].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[11].IsEnabled}" />
@@ -507,6 +520,7 @@
                         x:Name="Chk13"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[12].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[12].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[12].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[12].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[12].IsEnabled}" />
@@ -530,6 +544,7 @@
                         x:Name="Chk14"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[13].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[13].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[13].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[13].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[13].IsEnabled}" />
@@ -553,6 +568,7 @@
                         x:Name="Chk15"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[14].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[14].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[14].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[14].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[14].IsEnabled}" />
@@ -576,6 +592,7 @@
                         x:Name="Chk16"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[15].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[15].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[15].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[15].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[15].IsEnabled}" />
@@ -599,6 +616,7 @@
                         x:Name="Chk17"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[16].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[16].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[16].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[16].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[16].IsEnabled}" />
@@ -622,6 +640,7 @@
                         x:Name="Chk18"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[17].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[17].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[17].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[17].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[17].IsEnabled}" />
@@ -644,6 +663,7 @@
                         x:Name="Chk19"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[18].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[18].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[18].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[18].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[18].IsEnabled}" />
@@ -666,6 +686,7 @@
                         x:Name="Chk20"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[19].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[19].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[19].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[19].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[19].IsEnabled}" />
@@ -689,6 +710,7 @@
                         x:Name="Chk21"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[20].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[20].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[20].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[20].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[20].IsEnabled}" />
@@ -711,6 +733,7 @@
                         x:Name="Chk22"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[21].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[21].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[21].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[21].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[21].IsEnabled}" />
@@ -733,6 +756,7 @@
                         x:Name="Chk23"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[22].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[22].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[22].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[22].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[22].IsEnabled}" />
@@ -755,6 +779,7 @@
                         x:Name="Chk24"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[23].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[23].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[23].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[23].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[23].IsEnabled}" />
@@ -777,6 +802,7 @@
                         x:Name="Chk25"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[24].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[24].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[24].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[24].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[24].IsEnabled}" />
@@ -799,6 +825,7 @@
                         x:Name="Chk26"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[25].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[25].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[25].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[25].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[25].IsEnabled}" />
@@ -821,6 +848,7 @@
                         x:Name="Chk27"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[26].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[26].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[26].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[26].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[26].IsEnabled}" />
@@ -843,6 +871,7 @@
                         x:Name="Chk28"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[27].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[27].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[27].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[27].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[27].IsEnabled}" />
@@ -865,6 +894,7 @@
                         x:Name="Chk29"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[28].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[28].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[28].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[28].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[28].IsEnabled}" />
@@ -887,6 +917,7 @@
                         x:Name="Chk30"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[29].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[29].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[29].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[29].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[29].IsEnabled}" />
@@ -910,6 +941,7 @@
                         x:Name="Chk31"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[30].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[30].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[30].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[30].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[30].IsEnabled}" />
@@ -932,6 +964,7 @@
                         x:Name="Chk32"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[31].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[31].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[31].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[31].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[31].IsEnabled}" />
@@ -954,6 +987,7 @@
                         x:Name="Chk33"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[32].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[32].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[32].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[32].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[32].IsEnabled}" />
@@ -976,6 +1010,7 @@
                         x:Name="Chk34"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[33].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[33].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[33].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[33].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[33].IsEnabled}" />
@@ -998,6 +1033,7 @@
                         x:Name="Chk35"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[34].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[34].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[34].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[34].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[34].IsEnabled}" />
@@ -1020,6 +1056,7 @@
                         x:Name="Chk36"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[35].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[35].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[35].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[35].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[35].IsEnabled}" />
@@ -1042,6 +1079,7 @@
                         x:Name="Chk37"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[36].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[36].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[36].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[36].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[36].IsEnabled}" />
@@ -1064,6 +1102,7 @@
                         x:Name="Chk38"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[37].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[37].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[37].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[37].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[37].IsEnabled}" />
@@ -1086,6 +1125,7 @@
                         x:Name="Chk39"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[38].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[38].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[38].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[38].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[38].IsEnabled}" />
@@ -1111,6 +1151,7 @@
                         x:Name="Chk40"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[39].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[39].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[39].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[39].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[39].IsEnabled}" />
@@ -1133,6 +1174,7 @@
                         x:Name="Chk41"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[40].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[40].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[40].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[40].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[40].IsEnabled}" />
@@ -1155,6 +1197,7 @@
                         x:Name="Chk42"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[41].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[41].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[41].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[41].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[41].IsEnabled}" />
@@ -1177,6 +1220,7 @@
                         x:Name="Chk43"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[42].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[42].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[42].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[42].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[42].IsEnabled}" />
@@ -1199,6 +1243,7 @@
                         x:Name="Chk44"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[43].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[43].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[43].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[43].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[43].IsEnabled}" />
@@ -1221,6 +1266,7 @@
                         x:Name="Chk45"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[44].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[44].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[44].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[44].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[44].IsEnabled}" />
@@ -1243,6 +1289,7 @@
                         x:Name="Chk46"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[45].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[45].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[45].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[45].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[45].IsEnabled}" />
@@ -1265,6 +1312,7 @@
                         x:Name="Chk47"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[46].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[46].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[46].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[46].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[46].IsEnabled}" />
@@ -1287,6 +1335,7 @@
                         x:Name="Chk48"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[47].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[47].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[47].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[47].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[47].IsEnabled}" />
@@ -1309,6 +1358,7 @@
                         x:Name="Chk49"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[48].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[48].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[48].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[48].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[48].IsEnabled}" />
@@ -1331,6 +1381,7 @@
                         x:Name="Chk50"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[49].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[49].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[49].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[49].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[49].IsEnabled}" />
@@ -1356,6 +1407,7 @@
                         x:Name="Chk51"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[50].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[50].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[50].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[50].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[50].IsEnabled}" />
@@ -1378,6 +1430,7 @@
                         x:Name="Chk52"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[51].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[51].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[51].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[51].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[51].IsEnabled}" />
@@ -1400,6 +1453,7 @@
                         x:Name="Chk53"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[52].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[52].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[52].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[52].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[52].IsEnabled}" />
@@ -1422,6 +1476,7 @@
                         x:Name="Chk54"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[53].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[53].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[53].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[53].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[53].IsEnabled}" />
@@ -1444,6 +1499,7 @@
                         x:Name="Chk55"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[54].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[54].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[54].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[54].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[54].IsEnabled}" />
@@ -1466,6 +1522,7 @@
                         x:Name="Chk56"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[55].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[55].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[55].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[55].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[55].IsEnabled}" />
@@ -1488,6 +1545,7 @@
                         x:Name="Chk57"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[56].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[56].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[56].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[56].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[56].IsEnabled}" />
@@ -1510,6 +1568,7 @@
                         x:Name="Chk58"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[57].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[57].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[57].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[57].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[57].IsEnabled}" />
@@ -1532,6 +1591,7 @@
                         x:Name="Chk59"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[58].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[58].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[58].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[58].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[58].IsEnabled}" />
@@ -1556,6 +1616,7 @@
                         x:Name="Chk60"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[59].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[59].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[59].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[59].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[59].IsEnabled}" />
@@ -1578,6 +1639,7 @@
                         x:Name="Chk61"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[60].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[60].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[60].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[60].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[60].IsEnabled}" />
@@ -1600,6 +1662,7 @@
                         x:Name="Chk62"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[61].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[61].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[61].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[61].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[61].IsEnabled}" />
@@ -1622,6 +1685,7 @@
                         x:Name="Chk63"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[62].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[62].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[62].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[62].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[62].IsEnabled}" />
@@ -1644,6 +1708,7 @@
                         x:Name="Chk64"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[63].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[63].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[63].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[63].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[63].IsEnabled}" />
@@ -1666,6 +1731,7 @@
                         x:Name="Chk65"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[64].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[64].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[64].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[64].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[64].IsEnabled}" />
@@ -1688,6 +1754,7 @@
                         x:Name="Chk66"
                         Grid.Column="1"
                         Content="{Binding SelectedBookManager.SelectedBooks[65].Abbreviation}"
+                        FontWeight="{Binding SelectedBookManager.SelectedBooks[65].FontWeight}"
                         Foreground="{Binding SelectedBookManager.SelectedBooks[65].BookColor}"
                         IsChecked="{Binding SelectedBookManager.SelectedBooks[65].IsSelected, Mode=TwoWay}"
                         IsEnabled="{Binding SelectedBookManager.SelectedBooks[65].IsEnabled}" />
@@ -1725,9 +1792,10 @@
                 FontSize="12"
                 Style="{StaticResource TransparentStyle}" />
 
-            <Button x:Name="SelectNewTestamentBooks"
-                cm:Message.Attach="SelectNewTestamentBooks()"
+            <Button
+                x:Name="SelectNewTestamentBooks"
                 Margin="10,0,0,15"
+                cm:Message.Attach="SelectNewTestamentBooks()"
                 Content="{helpers:Localization NewTestament}"
                 FontSize="12"
                 Style="{StaticResource TransparentStyle}" />

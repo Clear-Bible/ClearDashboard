@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.Wpf.Application.Helpers;
+using System.Diagnostics;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -28,7 +29,7 @@ namespace ClearDashboard.Wpf.Application.Services
         #region Member Variables
 
         private const string ProjectKey = "DUF";
-        private string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[EMAIL]]\"},\"description\": [[TEXTHERE]],\"labels\": [\"[[LABEL]]\"]}}";
+        private string _jsonTemplate = "{\"fields\": {\"project\": {\"key\": \"[[PROJECT]]\"},\"summary\": \"[[SUMMARY]]\",\"issuetype\": {\"name\": \"Task\"},\"reporter\": {\"accountId\": \"[[ACCOUNTID]]\",\"emailAddress\": \"[[EMAIL]]\",\"displayName\": \"[[DASHBOARDUSER]]\"},\"description\": [[TEXTHERE]],\"labels\": [\"[[LABEL]]\"]}}";
 
         private readonly string _secretsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets");
         private const string SecretsFileName = "jiraUser.json";
@@ -74,7 +75,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <exception cref="Exception"></exception>
         public async Task<JiraTicketResponse?> CreateTaskTicket(string jiraTitle, string summaryDetail,
-            JiraUser? jiraUser, JiraTicketLabel ticketLabel)
+            JiraUser? jiraUser, JiraTicketLabel ticketLabel, DashboardUser dashboardUser)
         {
             if (await NetworkHelper.IsConnectedToInternet() == false)
             {
@@ -94,10 +95,14 @@ namespace ClearDashboard.Wpf.Application.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthentication);
 
             var json = _jsonTemplate;
+
+            Debug.WriteLine(json);
+
             json = json.Replace("[[PROJECT]]", ProjectKey);
             json = json.Replace("[[SUMMARY]]", jiraTitle);
             json = json.Replace("[[ACCOUNTID]]", jiraUser.AccountId);
             json = json.Replace("[[EMAIL]]", jiraUser.EmailAddress);
+            json = json.Replace("[[DASHBOARDUSER]]", dashboardUser.FullName);
             json = json.Replace("[[TEXTHERE]]", summaryDetail);
             json = json.Replace("[[LABEL]]", ticketLabel.ToString());
 

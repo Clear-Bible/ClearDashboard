@@ -5,13 +5,16 @@ using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Converters;
 using ClearDashboard.Wpf.Application.Enums;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -47,7 +50,6 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Converters;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -58,7 +60,7 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable
+    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>
     {
         public IEnhancedViewManager EnhancedViewManager { get; }
 
@@ -938,7 +940,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                         catch (Exception ex)
                         {
-                            Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
+                            Logger!.LogError(ex, $"An unexpected error occurred while creating the corpus for {selectedProject.Name} ");
                             if (!cancellationToken.IsCancellationRequested)
                             {
                                 soundType = SoundType.Error;
@@ -1181,9 +1183,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 cancellationToken
                             );
 
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                               description: $"Updating verses in tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
-
                             var tokenizedTextCorpusId = (await TokenizedTextCorpus.GetAllTokenizedCorpusIds(
                                     Mediator!,
                                     new CorpusId(node.CorpusId)))
@@ -1202,6 +1201,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             await EventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
 
                             _longRunningTaskManager.TaskComplete(taskName);
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                                description: $"Updating verses in tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
                         }
                         catch (OperationCanceledException)
                         {
@@ -1299,6 +1301,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ErrorMessage = exception != null ? $"{exception}" : null,
                 TaskLongRunningProcessStatus = status,
                 BackgroundTaskType = backgroundTaskMode,
+                BackgroundTaskSource = typeof(ProjectDesignSurfaceViewModel)
             };
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
@@ -1466,10 +1469,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // see if this is the last one or not
                 var alignmentSetIdCount = topLevelProjectIds.AlignmentSetIds.Where(x =>
                     x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId).ToList();
+
+                var parallelCorpusConnectionViewModel = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(x =>
+                    x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId);
+
                 if (alignmentSetIdCount.Count == 1)
                 {
-                    var parallelCorpusConnectionViewModel = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(x =>
-                        x.ParallelCorpusId!.Id.ToString() == parallelCorpusConnectionMenuItemViewModel.ParallelCorpusId);
 
                     if (parallelCorpusConnectionViewModel != null)
                     {
@@ -1490,12 +1495,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
 
                 DesignSurfaceViewModel!.DeleteAlignmentFromMenus(alignmentSetId);
-                
+
 #pragma warning disable CS4014
                 Task.Factory.StartNew(async () =>
                 {
-                    await AlignmentSet.Delete(Mediator!, alignmentSetId); 
+                    await AlignmentSet.Delete(Mediator!, alignmentSetId);
 
+                    topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                    
+                    DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(parallelCorpusConnectionViewModel, topLevelProjectIds);
                 });
 #pragma warning restore CS4014
             }
@@ -1762,8 +1770,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+
+        public async Task HandleAsync(RedrawParallelCorpusMenus message, CancellationToken cancellationToken)
+        {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            foreach (var parallel in DesignSurfaceViewModel.ParallelCorpusConnections)
+            {
+                DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(parallel, topLevelProjectIds);
+            }
+        }
+
         #endregion
 
         #endregion // Methods
+
+
     }
 }
