@@ -232,6 +232,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             ILifetimeScope lifetimeScope,
             IMediator mediator,
             ParatextProxy paratextProxy,
+            DashboardProjectManager? projectManager,
             ILocalizationService localizationService)
         {
             Logger = logger;
@@ -239,6 +240,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             LifetimeScope = lifetimeScope;
             Mediator = mediator;
             _paratextProxy = paratextProxy;
+            _projectManager = projectManager;
             LocalizationService = localizationService;
         }
 
@@ -307,23 +309,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         //    return base.OnDeactivateAsync(close, cancellationToken);
         //}
 
-        public DesignSurfaceViewModel(
-            ILogger<DesignSurfaceViewModel>? logger,
-            IEventAggregator? eventEventAggregator,
-            ILifetimeScope lifetimeScope,
-            IMediator mediator,
-            ParatextProxy paratextProxy,
-            DashboardProjectManager? projectManager,
-            ILocalizationService localizationService)
-        {
-            Logger = logger;
-            EventAggregator = eventEventAggregator;
-            LifetimeScope = lifetimeScope;
-            Mediator = mediator;
-            _paratextProxy = paratextProxy;
-            _projectManager = projectManager;
-            LocalizationService = localizationService;
-        }
+
 
         #endregion
 
