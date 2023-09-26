@@ -140,7 +140,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salvar erros USFM no arquivo</value>
+    <value>Salve erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Defina uma tradução para</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>E</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editar</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formas</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Completamente</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Totalmente correspondente</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Coincidindo</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Significados [traduções]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Ou</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Parcialmente</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Salvar alterações</value>
@@ -904,44 +928,26 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Linguagem de origem</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Tipo</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>E</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Encontrar tudo</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Completamente</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Totalmente correspondente</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Coincidindo</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Ou</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Parcialmente</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Linguagem alvo</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>LEXICON EDIT</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Tradução</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Tipo</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Adicione como forma para ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Encontre correspondências ou formulários completos ou parciais para a fonte</value>
+    <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Adicione o alvo como transalação para ...</value>
+    <value>Adicione o alvo como tradução para ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Encontre lexemes que tenham uma ou mais tradução que corresponda ao alvo</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme ou formulário correspondem</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Não há mais registros para importar.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Escolha um corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -1151,7 +1163,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sentido do verso</value>
+    <value>Verso senso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1196,7 +1208,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1315,8 +1327,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Você quer excluir o rótulo:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>e desassociá -lo do grupo de etiquetas:</value>
+    <value>Você deseja desassociar o rótulo:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>do grupo de etiquetas:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adicione o grupo de etiquetas</value>
@@ -1345,8 +1363,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Remova este rótulo</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Você deseja remover o rótulo:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Texto anexado ao rótulo</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Criada</value>
@@ -1457,7 +1475,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento do verso entre corpora paralela</value>
+    <value>Defina o mapeamento de versos entre corpora paralela</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
@@ -1475,7 +1493,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corporal</value>
+    <value>Adicione corpora</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1640,7 +1658,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme tipo</value>
+    <value>Lexeme Type</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1691,7 +1709,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelamento ...</value>
+    <value>Cancelando ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1775,7 +1793,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
+    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -1793,7 +1811,7 @@
     <value>Pesquise recente</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Clique aqui para começar a Paratext</value>
+    <value>Clique aqui para começar o Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
     <value>Versão:</value>
@@ -2063,7 +2081,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>
@@ -2132,10 +2150,10 @@
     <value>Configurações do ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Mostre vistas de espelho em um monitor diferente do painel</value>
+    <value>Mostrar visualizações expandidas em um monitor diferente do painel</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Para sistemas com três ou mais monitores, mostre a visão espelhada no terceiro monitor</value>
+    <value>Para sistemas com três ou mais monitores, mostre visualização expandida no terceiro monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Coleção de texto</value>

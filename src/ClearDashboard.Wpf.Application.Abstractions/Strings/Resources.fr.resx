@@ -119,7 +119,7 @@
     <value>Ajouter</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Sélectionnez comment tokenize le corpus</value>
+    <value>Sélectionnez comment tokensize le corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alignement</value>
@@ -440,7 +440,7 @@
     <value>Mark sélectionné comme «Revue des besoins»</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Marque sélectionnée comme «valide»</value>
+    <value>Mark sélectionné comme «valide»</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Besoin d'examen</value>
@@ -497,7 +497,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>nouveau individu</value>
+    <value>Nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -596,7 +596,7 @@
     <value>Supprimer cette vue?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer un alignement</value>
+    <value>Créer l'alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
     <value>Afficher / créer des notes</value>
@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Définir une traduction pour</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Et</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Modifier</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Trouver tout</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formes</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Pleinement</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Entièrement assorti</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Correspondant à</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Significations [traductions]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Ou</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Partiellement</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Sauvegarder les modifications</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Langue originelle</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Taper</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Et</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Trouver tout</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Pleinement</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement assorti</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Correspondant à</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Ou</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Partiellement</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Langue cible</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Modifier le lexique</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Traduction</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Taper</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Ajouter comme formulaire pour ...</value>
@@ -941,7 +947,7 @@
     <value>Trouvez des matchs de lexème ou de formulaire complet ou partiel pour la source</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Ajouter la cible comme transalation pour ...</value>
+    <value>Ajouter la cible comme traduction pour ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Trouver des lexèmes qui ont une ou plusieurs traductions qui correspondent à la cible</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexème ou les correspondances de forme</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Il n'y a plus d'enregistrements à importer.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Veuillez choisir un corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Tout sélectionner</value>
@@ -971,7 +983,7 @@
     <value>Mot cible</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Matchs de traduction</value>
+    <value>Correspondance de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1315,8 +1327,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>Et associez-le à un groupe d'étiquettes:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Voulez-vous supprimer l'étiquette:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>et le dissocier du groupe d'étiquettes:</value>
+    <value>Voulez-vous dissocier l'étiquette:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>du groupe d'étiquettes:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Ajouter un groupe d'étiquettes</value>
@@ -1345,8 +1363,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Supprimer cette étiquette</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Voulez-vous supprimer l'étiquette:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Texte attaché à l'étiquette</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Créé</value>
@@ -1454,7 +1472,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de mot de machine de train</value>
+    <value>Aligneur de la machine à train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1754,7 +1772,7 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratex</value>
+    <value>Paratext</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
@@ -1766,7 +1784,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet de parattex</value>
+    <value>Projet PARATEXT</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -1787,7 +1805,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Refreindre la liste des projets de collaboration</value>
+    <value>Rafraîchir la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -1880,7 +1898,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiastes</value>
+    <value>Ecclésiaste</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -1946,13 +1964,13 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentations</value>
+    <value>Lamentation</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Las</value>
+    <value>Luck</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2006,7 +2024,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharie</value>
+    <value>Zécharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2114,7 +2132,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de collaboration</value>
+    <value>Restaurer l'utilisateur de la collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>
@@ -2132,10 +2150,10 @@
     <value>Paramètres de ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Afficher les vues de miroir sur un moniteur différent de celui de tableau de bord</value>
+    <value>Afficher les vues élargies sur un moniteur différent de celui de tableau de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pour les systèmes avec trois moniteurs ou plus, montrez une vue miroir sur le troisième moniteur</value>
+    <value>Pour les systèmes avec trois moniteurs ou plus, affichez une vue élargie sur le troisième moniteur</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Collection de texte</value>

@@ -131,7 +131,7 @@
     <value>Copiați erorile USFM pe clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul de erori:</value>
+    <value>Numărul erorilor:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
     <value>Interlinear</value>
@@ -335,7 +335,7 @@
     <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Înțelepciune, înțelegere</value>
+    <value>înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Se stabili o traducere pentru</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Și</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editați | ×</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Găsiți toate</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Forme</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Complet</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Potrivirea completă</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Potrivire</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Semnificații [traduceri]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Sau</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Parţial</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Salvează modificările</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Limba-sursă</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Tip</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Și</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Găsiți toate</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Complet</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Potrivire completă</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Potrivire</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Sau</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Parţial</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Limbă țintă</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Lexicon Edit</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Traducere</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Tip</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Adăugați ca formă pentru ...</value>
@@ -941,7 +947,7 @@
     <value>Găsiți potriviri complete sau parțiale de lexeme sau formular pentru sursă</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Adăugați ținta ca transalare pentru ...</value>
+    <value>Adăugați ținta ca traducere pentru ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu ținta</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme sau Form se potrivește</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Nu mai există înregistrări de importat.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Vă rugăm să alegeți un corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Selectează tot</value>
@@ -968,7 +980,7 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvântul țintă</value>
+    <value>Cuvânt țintă</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Meciuri de traducere</value>
@@ -1019,7 +1031,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Aspecte de proiect</value>
+    <value>Machete de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1118,7 +1130,7 @@
     <value>Fragmente din discurs</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lematele înrudite</value>
+    <value>Lemnițe înrudite</value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Domeniu de aplicare:</value>
@@ -1315,8 +1327,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>și asociați -l cu Grupul de etichete:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Doriți să ștergeți eticheta:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>și descurajați -l de la Grupul de etichete:</value>
+    <value>Doriți să dezasociați eticheta:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>din Grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
@@ -1345,8 +1363,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Scoateți această etichetă</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Doriți să eliminați eticheta:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Text atașat la etichetă</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creată</value>
@@ -1712,7 +1730,7 @@
     <value>Bază de date:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acest proiect, o altă aplicație îl folosește în continuare.</value>
+    <value>Nu puteți șterge acel proiect, o altă aplicație îl folosește în continuare.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Ștergeți proiectul</value>
@@ -2036,7 +2054,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele dvs.</value>
+    <value>Vă rugăm să introduceți prenumele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2132,10 +2150,10 @@
     <value>Setări ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Afișați vizualizări în oglindă pe un monitor diferit de tabloul de bord</value>
+    <value>Afișați vizualizări extinse pe un monitor diferit de tabloul de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați oglindă pe a treia monitor</value>
+    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați o vizualizare extinsă pe a treia monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colecția de text</value>

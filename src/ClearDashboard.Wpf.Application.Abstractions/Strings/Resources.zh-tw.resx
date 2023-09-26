@@ -449,7 +449,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞紐的單詞</value>
+    <value>樞密性的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -464,7 +464,7 @@
     <value>目標</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>目標部分</value>
+    <value>目標零件</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
     <value>類型</value>
@@ -833,7 +833,7 @@
     <value>更改所有不設置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果檢查了，這將改變此詞的所有不設置</value>
+    <value>如果檢查了，這將改變此詞的所有不設置的情況</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>設定翻譯</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>和</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>編輯</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>找到所有</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>形式</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>完全</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>完全匹配</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>匹配</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>含義[翻譯]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>或者</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>部分</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>保存更改</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>源語言</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>類型</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>和</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>找到所有</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>完全</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>完全匹配</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>匹配</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>或者</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>部分</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>目標語言</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>詞典編輯</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>翻譯</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>類型</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>添加為...的形式</value>
@@ -941,7 +947,7 @@
     <value>查找源的完整或部分詞彙或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>將目標添加為...的橫向</value>
+    <value>將目標添加為...的翻譯</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>查找具有與目標匹配的一個或多個翻譯的詞彙</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme或形式匹配</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>沒有更多的記錄要導入。</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>請選擇一個語料庫。</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>全選</value>
@@ -1315,8 +1327,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>並將其與標籤組相關聯：</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>您想刪除標籤：</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>並將其與標籤組分離：</value>
+    <value>您想拆卸標籤：</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>來自標籤組：</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>添加標籤組</value>
@@ -1345,8 +1363,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>刪除此標籤</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>您想刪除標籤：</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>標籤附加的文字</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
@@ -1400,7 +1418,7 @@
     <value>將此註釋發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>令牌化語料庫</value>
+    <value>象徵化的語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1442,10 +1460,10 @@
     <value>並行化語料庫經文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>機詞對齊算法</value>
+    <value>機器字對準算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>機詞對齊算法</value>
+    <value>機器字對準算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火車對稱模型？</value>
@@ -1487,7 +1505,7 @@
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文字以查看</value>
+    <value>添加文本查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>將文本添加到新視圖</value>
@@ -1664,7 +1682,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示退縮</value>
+    <value>展示反向翻譯</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -1688,7 +1706,7 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>PARATEXT BETA未運行</value>
+    <value>paratext beta不運行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
     <value>取消...</value>
@@ -1733,7 +1751,7 @@
     <value>包括聖經文本？</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
+    <value>選中此框，以在創建項目時包括希臘語和希伯來語聖經文本。</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>管理協作項目</value>
@@ -1751,7 +1769,7 @@
     <value>paratext不運行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>公開最近</value>
+    <value>近期開放</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -1859,7 +1877,7 @@
     <value>帖撒羅尼迦後書</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2蒂莫西</value>
+    <value>2提摩太</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3約翰</value>
@@ -2132,10 +2150,10 @@
     <value>ClearDashboard設置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>在與儀表板不同的顯示器上顯示鏡像</value>
+    <value>顯示出與儀表板不同的顯示器上擴展的視圖</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>對於具有三個或三個或以上顯示器的系統，請在第三台顯示器上顯示鏡像視圖</value>
+    <value>對於具有三個或三個或以上監視器的系統，在第三監視器上顯示擴展的視圖</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>文字收集</value>
@@ -2171,7 +2189,7 @@
     <value>發行說明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>顯示預釋放</value>
+    <value>顯示預發行</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>

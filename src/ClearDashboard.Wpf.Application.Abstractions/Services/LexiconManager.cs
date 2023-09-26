@@ -585,9 +585,12 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             if (ManagedLexemes != null)
             {
-                var selectedLexemesToImport = LexiconImportViewModels.Where(vm => vm.IsSelected)
-                    .Select(vm => ManagedLexemes.First(lexeme => lexeme.LexemeId.Id == vm.LexemeId));
 
+                //var selectedLexemesToImport = LexiconImportViewModels.Where(vm => vm.IsSelected)
+                //    .Select(vm => ManagedLexemes.First(lexeme => lexeme.LexemeId.Id == vm.LexemeId)).;
+
+                var selectedLexemesToImportIds = LexiconImportViewModels.Where(vm => vm.IsSelected).Select(vm=>vm.LexemeId).Distinct(); 
+                var selectedLexemesToImport = ManagedLexemes.IntersectBy(selectedLexemesToImportIds, l => l.LexemeId.Id);
                 var lexicon = new Lexicon
                 {
                     Lexemes = new ObservableCollection<Lexeme>(selectedLexemesToImport)

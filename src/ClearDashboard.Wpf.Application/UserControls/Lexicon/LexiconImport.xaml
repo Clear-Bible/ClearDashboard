@@ -8,6 +8,8 @@
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
+             xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              Background="{DynamicResource MaterialDesignPaper}"
              Foreground="{DynamicResource MaterialDesignBody}"
@@ -15,6 +17,11 @@
              d:DataContext="{d:DesignInstance Type=lexicon:LexiconViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+       
+        <!--<system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />-->
+      
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" />
@@ -66,7 +73,6 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <!--<materialDesign:Card  Height="Auto"  Margin="5" >-->
         <TabControl HorizontalContentAlignment="Left" Margin="5">
             <TabItem Header="Import">
                 <Grid>
@@ -84,7 +90,8 @@
                                 Foreground="{DynamicResource MaterialDesignBody}"
                                 HorizontalAlignment="Left"
                                 Content="{helpers:Localization LexiconImport_ImportChecked}" 
-                                Style="{StaticResource SmallTransparentStyle}"/>
+                                Style="{StaticResource SmallTransparentStyle}"
+                                IsEnabled="{Binding HasLexiconImports}"/>
                         <StackPanel Orientation="Horizontal" Margin="10,5,5,5">
                             <Label Margin="10, 0, 0, 0" Content="Corpus:"></Label>
                             <ComboBox
@@ -105,8 +112,17 @@
                             </ComboBox>
                         </StackPanel>
                     </StackPanel>
-
-                    <DataGrid Grid.Row="1" Grid.Column="0" 
+                    <materialDesign:Card Grid.Row="1" Grid.Column="0" Visibility="{Binding HasSelectedProjectCorpus, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        <StackPanel>
+                        <TextBlock FontSize="18" Margin="10" Text="{helpers:Localization LexiconImport_PleaseChooseACorpus}" ></TextBlock>
+                        </StackPanel>
+                    </materialDesign:Card>
+                <materialDesign:Card Grid.Row="1" Grid.Column="0" Visibility="{Binding ShowNoRecordsToManageMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                        <TextBlock FontSize="18" Margin="10" Text="{helpers:Localization LexiconImport_NoMoreRecordsToImport}" ></TextBlock>
+                        </StackPanel>
+                    </materialDesign:Card>
+                <DataGrid Grid.Row="1" Grid.Column="0" 
                           x:Name="LexiconSelectionDataGrid" 
                           ItemsSource="{Binding LexiconImports}"
                           AutoGenerateColumns="False" 
@@ -119,8 +135,10 @@
                           SelectionUnit="FullRow"
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
-                          IsReadOnly="True">
-                        <DataGrid.Columns>
+                          IsReadOnly="True"
+                          Visibility="{Binding HasLexiconImports, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <DataGrid.Columns>
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.HeaderTemplate>
                                     <DataTemplate>
@@ -169,9 +187,9 @@
                                     <DataTemplate>
                                         <Button  cm:Message.Attach="[Event Click] = [Action OnAddAsFormButtonClicked($dataContext)]" 
                                                  cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconSelectionDataGrid}"
-                                     Style="{StaticResource RowButtonStyle}" 
-                                     ToolTip="{helpers:Localization LexiconImport_AddFormButtonTooltip}"
-                                     Visibility="{Binding ShowAddAsFormButton, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                                Style="{StaticResource RowButtonStyle}" 
+                                                ToolTip="{helpers:Localization LexiconImport_AddFormButtonTooltip}"
+                                                 Visibility="{Binding ShowAddAsFormButton, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <Button.ContentTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{helpers:Localization LexiconImport_AddFormButtonText}" TextWrapping="Wrap"></TextBlock>
@@ -186,9 +204,9 @@
                                     <DataTemplate>
                                         <Button  cm:Message.Attach="[Event Click] = [Action OnTargetAsTranslationButtonClicked($dataContext)]" 
                                                  cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconSelectionDataGrid}"
-                                     Style="{StaticResource RowButtonStyle}" 
-                                     ToolTip="{helpers:Localization LexiconImport_AddTargetButtonTooltip}"
-                                     Visibility="{Binding ShowAddTargetAsTranslationButton, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                                Style="{StaticResource RowButtonStyle}" 
+                                                ToolTip="{helpers:Localization LexiconImport_AddTargetButtonTooltip}"
+                                                Visibility="{Binding ShowAddTargetAsTranslationButton, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <Button.ContentTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{helpers:Localization LexiconImport_AddTargetButtonText}" TextWrapping="Wrap" ></TextBlock>

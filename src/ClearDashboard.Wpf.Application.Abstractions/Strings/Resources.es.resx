@@ -458,7 +458,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Reflexión de origen</value>
+    <value>Fuente Ref.</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -662,7 +662,7 @@
     <value>Seleccione la ubicación para dividir el token:</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unir un token compuesto</value>
+    <value>Un si unión a la token compuesta</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Establecer una traducción para</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editar</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Encuentra todos</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formularios</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Completamente</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Completamente coincidente</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Pareo</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Significados [traducciones]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>O</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Parcialmente</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Guardar cambios</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Lenguaje fuente</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Tipo</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Y</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Encuentra todos</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Completamente</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Completamente coincidente</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Pareo</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>O</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Parcialmente</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Lengua de llegada</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Léxico editar</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Traducción</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Tipo</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Agregar como forma para ...</value>
@@ -941,7 +947,7 @@
     <value>Encuentre coincidencias de lexeme o formulario completa o parcial para la fuente</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Agregue el objetivo como transalación para ...</value>
+    <value>Agregue el objetivo como traducción para ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Encuentre lexemas que tengan una o más traducción que coincida con el objetivo</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme o coincidencias de formulario</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>No hay más registros para importar.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Elija un corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Seleccionar todo</value>
@@ -1315,8 +1327,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>y asociarlo con el grupo de etiquetas:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>¿Quieres eliminar la etiqueta:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>y disociarlo del grupo de etiquetas:</value>
+    <value>¿Quieres disociar la etiqueta?</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>del grupo de etiquetas:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Agregar grupo de etiquetas</value>
@@ -1345,8 +1363,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Elimina esta etiqueta</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>¿Quieres eliminar la etiqueta:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Texto adjunto a la etiqueta</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
@@ -1397,7 +1415,7 @@
     <value>¿Enviar esta nota a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envíe esta nota a Paratext</value>
+    <value>Envía esta nota a Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1502,7 +1520,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcule el nuevo modelo de traducción</value>
+    <value>Calcular el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -1898,7 +1916,7 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Gálatas</value>
+    <value>Gálate</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
@@ -1940,7 +1958,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Judío</value>
+    <value>Yacuana</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>
@@ -2132,10 +2150,10 @@
     <value>Configuración de ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Mostrar vistas de espejo en un monitor diferente al tablero</value>
+    <value>Mostrar vistas ampliadas en un monitor diferente al tablero</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Para sistemas con tres o más monitores, muestre la vista de espejo en el tercer monitor</value>
+    <value>Para sistemas con tres o más monitores, muestre una vista ampliada en el tercer monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colección de texto</value>
@@ -2150,7 +2168,7 @@
     <value>Validar el código de correo electrónico</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Habilitar visualización de colecciones de texto verso por verso</value>
+    <value>Habilitar visualización de colecciones de texto verso a versiones</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Cancelar tarea</value>

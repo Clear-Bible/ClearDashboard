@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Set a translation for</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>And</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Find All</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Forms</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Fully</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Fully Matching</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Matching</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Meanings [translations]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Partially</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Save Changes</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Source Language</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>And</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Find All</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Fully</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Fully Matching</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Matching</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Or</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Partially</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Target Language</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Lexicon Edit</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Translation</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Type</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Add as form for...</value>
@@ -941,7 +947,7 @@
     <value>Find full or partial lexeme or form matches for source</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Add target as transalation for ...</value>
+    <value>Add target as translation for ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Find lexemes that have one or more translation that matches target</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme or form matches</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>There are no more records to import.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Please choose a corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Select All</value>
@@ -1315,8 +1327,14 @@
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>and associate it with label group:</value>
   </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Do you want to delete label:</value>
+  </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>and disassociate it from label group:</value>
+    <value>Do you want to disassociate label:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>from label group:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Add Label Group</value>
@@ -1345,8 +1363,8 @@
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Remove this label</value>
   </data>
-  <data name="Notes_LabelRemoveConfirm" xml:space="preserve">
-    <value>Do you want to remove label:</value>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Text attached to label</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>
@@ -2132,10 +2150,10 @@
     <value>ClearDashboard Settings</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Show Mirror Views on a different monitor than Dashboard</value>
+    <value>Show Expanded Views on a different monitor than Dashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>For systems with three or more monitors, show Mirror View on third monitor</value>
+    <value>For systems with three or more monitors, show Expanded View on third monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Text Collection</value>
