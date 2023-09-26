@@ -156,6 +156,10 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        /// <summary>
+        /// Gets the default label group for the current user.
+        /// </summary>
+        /// <returns>A <see cref="LabelGroupViewModel"/> to use by default.</returns>
         private async Task<LabelGroupViewModel?> GetUserDefaultLabelGroupAsync()
         {
             try
@@ -813,6 +817,45 @@ namespace ClearDashboard.Wpf.Application.Services
         public void SaveLabelGroupDefault(LabelGroupViewModel labelGroup, CancellationToken cancellationToken = default)
         {
             SaveLabelGroupDefault(labelGroup, CurrentUserId!, cancellationToken);
+            DefaultLabelGroup = labelGroup;
+        }        
+        
+        /// <summary>
+        /// Clears the <see cref="LabelGroup"/> default for a user.
+        /// </summary>
+        /// <param name="userId">The <see cref="UserId"/> for the user.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        private async Task ClearLabelGroupDefault(UserId userId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                await LabelGroup.PutUserDefault(Mediator, null, userId, cancellationToken);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Cleared label group default for user {userId.DisplayName}");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Clears the <see cref="LabelGroup"/> for the current user.
+        /// </summary>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task ClearLabelGroupDefault(CancellationToken cancellationToken = default)
+        {
+            await ClearLabelGroupDefault(CurrentUserId!, cancellationToken);
+            DefaultLabelGroup = NoneLabelGroup;
         }
 
         public async Task InitializeAsync()

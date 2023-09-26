@@ -27,6 +27,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.UserControls.Notes;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -1137,11 +1138,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void LabelGroupSelected(object sender, LabelGroupEventArgs e)
         {
-            if (e.LabelGroup.LabelGroupId != null)
+            Task.Run(() => LabelGroupSelectedAsync(e.LabelGroup).GetAwaiter());
+        }
+
+        public async Task LabelGroupSelectedAsync(LabelGroupViewModel labelGroup)
+        {
+            if (labelGroup.LabelGroupId != null)
             {
-                NoteManager.SaveLabelGroupDefault(e.LabelGroup);
+                NoteManager.SaveLabelGroupDefault(labelGroup);
+                Message = $"Label group '{labelGroup.Name}' selected";
             }
-            Message = $"Label group '{e.LabelGroup.Name}' selected";
+            else
+            {
+                await NoteManager.ClearLabelGroupDefault();
+            }
         }
 
         public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
