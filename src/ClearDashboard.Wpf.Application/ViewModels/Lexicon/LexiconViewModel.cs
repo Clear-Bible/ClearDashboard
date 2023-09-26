@@ -263,12 +263,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     await LexiconManager.ProcessImportedLexicon();
 
                     //SelectedProjectCorpus = null;
-                    LexiconImports.Clear();
-                    NotifyOfPropertyChange(()=>HasLexiconImports);
-                    NotifyOfPropertyChange(() => ShowNoRecordsToManageMessage);
+                    //LexiconImports.Clear();
+                    //NotifyOfPropertyChange(()=>HasLexiconImports);
+                    //NotifyOfPropertyChange(() => ShowNoRecordsToManageMessage);
                     
 
                     await GetImportedLexiconViewModels(CancellationToken.None);
+                    await GetLexiconImportViewModels(CancellationToken.None);
                 }
                 catch (Exception ex)
                 {
