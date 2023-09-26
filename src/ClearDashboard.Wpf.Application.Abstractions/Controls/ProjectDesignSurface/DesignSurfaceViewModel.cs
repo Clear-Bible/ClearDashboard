@@ -30,8 +30,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
+using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
+using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
@@ -64,6 +67,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         protected IEventAggregator? EventAggregator { get; }
         protected IMediator Mediator { get; }
         private readonly ParatextProxy _paratextProxy;
+        private readonly DashboardProjectManager? _projectManager;
         protected readonly ILocalizationService LocalizationService;
 
 
@@ -277,6 +281,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             ILifetimeScope lifetimeScope,
             IMediator mediator,
             ParatextProxy paratextProxy,
+            DashboardProjectManager? projectManager,
             ILocalizationService localizationService)
         {
             Logger = logger;
@@ -284,6 +289,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             LifetimeScope = lifetimeScope;
             Mediator = mediator;
             _paratextProxy = paratextProxy;
+            _projectManager = projectManager;
             LocalizationService = localizationService;
         }
         #endregion
@@ -475,7 +481,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(connectionMenuItems);
             AddResetVerseMappings(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems);
-        
+
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
 
@@ -521,27 +527,53 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
 
 
-        private void AddInterlinearMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection,
-        TopLevelProjectIds topLevelProjectIds, IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
-        BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
+        private async Task AddInterlinearMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection,
+            TopLevelProjectIds topLevelProjectIds, IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
+            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
         {
 
-            var alignmentSetCount = topLevelProjectIds.AlignmentSetIds.Count(alignmentSet =>
-                alignmentSet.ParallelCorpusId!.IdEquals(parallelCorpusConnection.ParallelCorpusId!));
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            // get all the existing alignment sets for this parallelcorpusid
+            var alignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
+                    Mediator!,
+                    parallelCorpusConnection.ParallelCorpusId,
+                    new UserId(_projectManager!.CurrentUser.Id, _projectManager.CurrentUser.FullName!)))
+                .ToList();
+
+            // get all the existing translation sets for this parallelcorpusid
+            var translationSetsInModel = (await TranslationSet.GetAllTranslationSetIds(Mediator!, parallelCorpusConnection.ParallelCorpusId)).ToList();
+
+            //_topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            // parse down to only those which we do not have an existing translation set
+            for (var index = alignmentSets.Count - 1; index >= 0; index--)
             {
-                Header = LocalizationService.Get("Pds_CreateNewInterlinear"),
-                Id = DesignSurfaceMenuIds.CreateNewInterlinear,
-                IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
-                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                ConnectionId = parallelCorpusConnection.Id,
-                Enabled = (alignmentSetCount > 0),
-                ParallelCorpusId = parallelCorpusConnection.Id.ToString(),
-            });
+                var translationSet = translationSetsInModel.FirstOrDefault(x => x.AlignmentSetGuid == alignmentSets[index].Id);
+                if (translationSet != null)
+                {
+                    alignmentSets.RemoveAt(index);
+                }
+            }
+
+            // there are SMTs without an alignment set
+            if (alignmentSets.Count > 0)
+            {
+
+                var alignmentSetCount = topLevelProjectIds.AlignmentSetIds.Count(alignmentSet =>
+                    alignmentSet.ParallelCorpusId!.IdEquals(parallelCorpusConnection.ParallelCorpusId!));
+                connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                {
+                    Header = LocalizationService.Get("Pds_CreateNewInterlinear"),
+                    Id = DesignSurfaceMenuIds.CreateNewInterlinear,
+                    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
+                    ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                    ConnectionId = parallelCorpusConnection.Id,
+                    Enabled = (alignmentSetCount > 0),
+                    ParallelCorpusId = parallelCorpusConnection.Id.ToString(),
+                });
 
 
-            AddMenuSeparator(connectionMenuItems);
-
+                AddMenuSeparator(connectionMenuItems);
+            }
 
             var parallelCorpusIds = topLevelProjectIds.ParallelCorpusIds.Where(x =>
                 x.TargetTokenizedCorpusId.IdEquals(parallelCorpusConnection.ParallelCorpusId.TargetTokenizedCorpusId) &&
@@ -623,6 +655,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     });
                 }
             }
+
         }
 
         private async void AddAlignmentSetMenu(
@@ -835,7 +868,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
-        
+
         public async Task CreateCorpusNodeMenu(CorpusNodeViewModel corpusNodeViewModel, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora)
         {
             corpusNodeViewModel.MenuItems.Clear();
@@ -869,7 +902,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 //});
                 //addSeparator = true;
             }
-            
+
             foreach (var tokenizedCorpus in tokenizedCorpora)
             {
                 if (!string.IsNullOrEmpty(tokenizedCorpus.TokenizationFunction))
@@ -916,7 +949,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
 
                     // do not allow MACULA to be updated
-                    if ((corpusNodeViewModel.CorpusType == CorpusType.ManuscriptGreek || corpusNodeViewModel.CorpusType == CorpusType.ManuscriptHebrew) ==false)
+                    if ((corpusNodeViewModel.CorpusType == CorpusType.ManuscriptGreek || corpusNodeViewModel.CorpusType == CorpusType.ManuscriptHebrew) == false)
                     {
                         AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
 
@@ -951,7 +984,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     {
                         corpusNodeViewModel.MenuItems.AddRange(corpusNodeMenuViewModel.MenuItems);
                     }
-                    
+
                     corpusNodeViewModel.TokenizationCount++;
                 }
             }
@@ -1072,7 +1105,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             return found;
         }
 
-        private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection, 
+        private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
             var sourceParatextProjectId = parallelCorpusConnectorDraggedOut.ParentNode!.CorpusId;
@@ -1081,8 +1114,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             List<ParallelCorpusId> parallelCorpusIds = new();
             foreach (var parallel in topLevelProjectIds.ParallelCorpusIds)
             {
-                if (parallel.TargetTokenizedCorpusId.CorpusId.Id == targetParatextProjectId  &&
-                    parallel.SourceTokenizedCorpusId.CorpusId.Id==sourceParatextProjectId)
+                if (parallel.TargetTokenizedCorpusId.CorpusId.Id == targetParatextProjectId &&
+                    parallel.SourceTokenizedCorpusId.CorpusId.Id == sourceParatextProjectId)
                 {
                     parallelCorpusIds.Add(parallel);
                 }
@@ -1468,7 +1501,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 newParallelCorpusConnection.SourceConnector = parallelCorpusConnectorDraggedOver;
                 added = true;
             }
-            
+
             if (added)
             {
                 // check to see if we somehow didn't get a source/target id properly.  If so remove the line
