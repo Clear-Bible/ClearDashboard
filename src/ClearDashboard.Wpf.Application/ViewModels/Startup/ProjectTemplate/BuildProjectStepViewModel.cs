@@ -46,6 +46,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private readonly string _backAction;
         private readonly string _cancelAction;
 
+        private DataAccessLayer.Models.Project _oldProject;
+        private string? _oldProjectName;
+
         /// <summary>
         /// This is the design surface that is displayed in the window.
         /// It is the main part of the view-model.
@@ -141,6 +144,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             _backOrCancelAction = _backAction;
             _createOrCloseAction = _createAction;
 
+            _oldProject = ProjectManager!.CurrentProject;
+            _oldProjectName = ProjectManager.CurrentDashboardProject.ProjectName;
 
         }
 
@@ -277,21 +282,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 await _startupDialogViewModel!.TryCloseAsync(true);
 
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException ex)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
-                ProjectManager!.CurrentDashboardProject.ProjectName = null;
-                ProjectManager!.CurrentProject = null;
+                ProjectManager!.CurrentDashboardProject.ProjectName = _oldProjectName;
+                ProjectManager!.CurrentProject = _oldProject;
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
 
                 await _startupDialogViewModel!.GoToStep(1);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
-                ProjectManager!.CurrentDashboardProject.ProjectName = null;
-                ProjectManager!.CurrentProject = null;
+                ProjectManager!.CurrentDashboardProject.ProjectName = _oldProjectName;
+                ProjectManager!.CurrentProject = _oldProject;
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
 
