@@ -111,7 +111,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return projectSnapshot;
         }
 
-        public async Task ExecuteInNewProjectDbContext(Func<ProjectDbContext, CancellationToken, Task> projectDbContextFunc, CancellationToken cancellationToken)
+        public async Task ChangeProjectData(Func<ProjectDbContext, CancellationToken, Task> changeDataFunc, CancellationToken cancellationToken)
         {
             var factory = Container!.Resolve<ProjectDbContextFactory>();
 
@@ -123,7 +123,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 false,
                 requestScope).ConfigureAwait(false);
 
-            await projectDbContextFunc(dbContext, cancellationToken);
+            await changeDataFunc(dbContext, cancellationToken);
+
+            ProjectSnapshotLastMerged = await GetDatabaseProjectSnapshot();
         }
 
         public async Task MergeIntoDatabase(string commitShaToMerge, ProjectSnapshot snapshotLastMerged, ProjectSnapshot snapshotToMerge, IProgress<ProgressStatus> progress)

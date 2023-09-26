@@ -10,6 +10,7 @@ using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Translation;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -29,26 +30,11 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.VerseRow>");
                 }
 
-                if (modelSnapshot.PropertyValues.TryGetValue("BookChapterVerse", out var bookChapterVerse) &&
-                    modelSnapshot.PropertyValues.TryGetValue("TokenizedCorpusId", out var tokenizedCorpusId))
-                {
-                    var verseRowId = projectDbContext.VerseRows
-                        .Where(e => (Guid)e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
-                        .Where(e => (string)e.BookChapterVerse! == (string)bookChapterVerse!)
-                        .Select(e => e.Id)
-                        .FirstOrDefault();
-
-                    logger.LogDebug($"Converted VerseRow having TokenizedCorpusId ('{tokenizedCorpusId}') / BookChapterVerse ('{bookChapterVerse}') to VerseRowId ('{verseRowId}')");
-                    return verseRowId;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"VerseRow snapshot does not have both TokenizedCorpusId+VerseRowId, which are required for VerseRowId resolution.");
-                }
+                return ResolveVerseRowId((IModelSnapshot<Models.VerseRow>)modelSnapshot, projectDbContext, logger);
             });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.VerseRow), "BookChapterVerse"),
+            (typeof(Models.VerseRow), nameof(Models.VerseRow.BookChapterVerse)),
             new[] { nameof(Models.VerseRow.Id) });
     }
 
@@ -90,16 +76,44 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
         VerseRowLookup.Add((bookChapterVerse, tokenizedCorpusId), (id, userId));
     }
 
+    protected static Guid ResolveVerseRowId(IModelSnapshot<Models.VerseRow> modelSnapshot, ProjectDbContext projectDbContext, ILogger logger)
+    {
+        if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.VerseRow.BookChapterVerse), out var bookChapterVerse) &&
+            modelSnapshot.PropertyValues.TryGetValue(nameof(Models.VerseRow.TokenizedCorpusId), out var tokenizedCorpusId))
+        {
+            var verseRowId = projectDbContext.VerseRows
+                .Where(e => (Guid)e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
+                .Where(e => (string)e.BookChapterVerse! == (string)bookChapterVerse!)
+                .Select(e => e.Id)
+                .FirstOrDefault();
+
+            logger.LogDebug($"Converted VerseRow having TokenizedCorpusId ('{tokenizedCorpusId}') / BookChapterVerse ('{bookChapterVerse}') to VerseRowId ('{verseRowId}')");
+            return verseRowId;
+        }
+        else
+        {
+            throw new PropertyResolutionException($"VerseRow snapshot does not have both TokenizedCorpusId+VerseRowId, which are required for VerseRowId resolution.");
+        }
+    }
+
     protected override async Task HandleDeleteAsync(IModelSnapshot<Models.VerseRow> itemToDelete, CancellationToken cancellationToken)
     {
-        // We need to manually delete any TokenComposites that are associated
-        // with the token(s) that are about to get deleted (might be that not
-        // all of a TokenComposite's tokens get cascade deleted, but the
-        // TokenComposite would no longer be valid):
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
-            $"Deleting any TokenComposites related by Token to VerseRow '{itemToDelete.GetId()}'",
-            TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQueryAsync((Guid)itemToDelete.GetId()),
-            cancellationToken);
+            $"Deleting any TokenComposites related by Token to VerseRow BookChapterVerse: '{itemToDelete.GetId()}'",
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
+
+                var verseRowId = ResolveVerseRowId(itemToDelete, projectDbContext, logger);
+
+                // We need to manually delete any TokenComposites that are associated
+                // with the token(s) that are about to get deleted (might be that not
+                // all of a TokenComposite's tokens get cascade deleted, but the
+                // TokenComposite would no longer be valid):
+                await TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQueryAsync(verseRowId)
+                    (projectDbContext, cache, logger, progress, cancellationToken);
+
+            },
+            cancellationToken
+        );
 
         // VerseRow has a Cascade Delete foreign key relationship in Sqlite with
         // TokenComponent, so related TokenComponents should get deleted
@@ -153,8 +167,8 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
 
     public Expression<Func<Models.VerseRow, bool>> BuildVerseRowLookupWhereExpression(IModelSnapshot<Models.VerseRow> snapshot)
     {
-        var bookChapterVerse = (string)snapshot.PropertyValues["BookChapterVerse"]!;
-        var tokenizedCorpusId = (Guid)snapshot.PropertyValues["TokenizedCorpusId"]!;
+        var bookChapterVerse = (string)snapshot.PropertyValues[nameof(Models.VerseRow.BookChapterVerse)]!;
+        var tokenizedCorpusId = (Guid)snapshot.PropertyValues[nameof(Models.VerseRow.TokenizedCorpusId)]!;
         return vr => vr.BookChapterVerse == bookChapterVerse && vr.TokenizedCorpusId == tokenizedCorpusId;
     }
 }

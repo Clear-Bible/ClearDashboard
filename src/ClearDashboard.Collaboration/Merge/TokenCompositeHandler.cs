@@ -4,17 +4,11 @@ using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Model;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Collaboration.Exceptions;
-using ClearDashboard.DAL.CQRS;
-using MediatR;
-using ClearDashboard.DAL.Alignment.Corpora;
 using SIL.Machine.Utils;
 using ClearDashboard.Collaboration.Builder;
-using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -59,8 +53,16 @@ public class TokenCompositeHandler : DefaultMergeHandler<IModelSnapshot<Models.T
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.TokenComposite>");
                 }
 
-                return ExtractTokenCompositeId((IModelSnapshot<Models.TokenComposite>)modelSnapshot, projectDbContext, logger);
+                return ResolveTokenCompositeId((IModelSnapshot<Models.TokenComposite>)modelSnapshot, projectDbContext, logger);
             });
+
+        mergeContext.MergeBehavior.AddIdPropertyNameMapping(
+            (typeof(Models.TokenComposite), "Ref"),
+            new[] { nameof(Models.TokenComposite.Id) });
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.TokenComposite), "Ref"),
+            new[] { nameof(Models.TokenComposite.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(  
             (typeof(Models.TokenComposite), TokenCompositeBuilder.VERSE_ROW_LOCATION),
@@ -108,7 +110,7 @@ DELETE FROM TokenComponent WHERE Id IN
             };
     }
 
-    protected static Guid ExtractTokenCompositeId(IModelSnapshot<Models.TokenComposite> modelSnapshot, ProjectDbContext projectDbContext, ILogger logger)
+    protected static Guid ResolveTokenCompositeId(IModelSnapshot<Models.TokenComposite> modelSnapshot, ProjectDbContext projectDbContext, ILogger logger)
     {
         if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusId) &&
             modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.EngineTokenId), out var engineTokenId))
@@ -161,7 +163,7 @@ DELETE FROM TokenComponent WHERE Id IN
             $"In HandleCreateAsync associating new TokenComposite with child Tokens",
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                var tokenCompositeId = ExtractTokenCompositeId(itemToCreate, projectDbContext, logger);
+                var tokenCompositeId = ResolveTokenCompositeId(itemToCreate, projectDbContext, logger);
 
                 var tokenizedCorpusId = (Guid)itemToCreate.PropertyValues["TokenizedCorpusId"]!;
                 var parallelCorpusId = (Guid?)itemToCreate.PropertyValues["ParallelCorpusId"];
@@ -230,7 +232,7 @@ DELETE FROM TokenComponent WHERE Id IN
             $"Applying TokenComposite 'TokenLocations' property ListMembershipDifference (OnlyIn1: {string.Join(", ", tokenLocationsOnlyIn1)}, OnlyIn2: {string.Join(", ", tokenLocationsOnlyIn2)})", 
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                var tokenCompositeId = ExtractTokenCompositeId(snapshot, projectDbContext, logger);
+                var tokenCompositeId = ResolveTokenCompositeId(snapshot, projectDbContext, logger);
                 var tokenizedCorpusId = (Guid)snapshot.PropertyValues["TokenizedCorpusId"]!;
                 var parallelCorpusId = (Guid?)snapshot.PropertyValues["ParallelCorpusId"];
 

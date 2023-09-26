@@ -52,7 +52,7 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Token>");
                 }
 
-                return ExtractTokenId((IModelSnapshot<Models.Token>)modelSnapshot, projectDbContext, logger);
+                return ResolveTokenId((IModelSnapshot<Models.Token>)modelSnapshot, projectDbContext, logger);
             });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
@@ -68,7 +68,7 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
             new[] { nameof(Models.Token.VerseRowId) });
     }
 
-    protected static Guid ExtractTokenId(IModelSnapshot<Models.Token> modelSnapshot, ProjectDbContext projectDbContext, ILogger logger)
+    protected static Guid ResolveTokenId(IModelSnapshot<Models.Token> modelSnapshot, ProjectDbContext projectDbContext, ILogger logger)
     {
         if (modelSnapshot.PropertyValues.TryGetValue("Ref", out var refId) &&
             modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Token.TokenizedCorpusId), out var tokenizedCorpusId) &&
@@ -139,7 +139,7 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
     $"Delete any TokenComposites associated with the token being deleted",
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                var tokenId = ExtractTokenId(itemToDelete, projectDbContext, logger);
+                var tokenId = ResolveTokenId(itemToDelete, projectDbContext, logger);
 
                 var dependentTokenCompositeGuids = projectDbContext.TokenCompositeTokenAssociations
                     .Where(e => e.TokenId == tokenId)

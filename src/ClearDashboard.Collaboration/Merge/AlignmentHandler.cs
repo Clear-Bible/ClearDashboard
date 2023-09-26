@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Linq.Expressions;
-using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Utils;
-using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Model;
-using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DataAccessLayer.Data;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Collaboration.Exceptions;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;

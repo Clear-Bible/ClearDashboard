@@ -393,6 +393,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             // Remove a note
             _fixture.Notes.RemoveAll(e => e.Id == testNote3.Id);
+            _fixture.LabelNoteAssociations.RemoveAll(e => e.NoteId == testNote3.Id);
 
             await DoMerge();
 
@@ -412,6 +413,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var testNote2 = _fixture.Notes.Where(e => e.Text!.Contains("two")).FirstOrDefault();
             Assert.NotNull(testNote2);
             _fixture.Notes.RemoveAll(e => e.Id == testNote2.Id);
+            _fixture.LabelNoteAssociations.RemoveAll(e => e.NoteId == testNote2.Id);
 
             var testNote2AssociationToRemove = _fixture.NoteAssociations.Where(e => e.Item1.NoteId == testNote2.Id).First();
             _fixture.NoteAssociations.RemoveAll(e => e.Item1.Id == testNote2AssociationToRemove.Item1.Id);
@@ -486,7 +488,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 .FirstOrDefault();
             Assert.NotNull(testTokenizedCorpus);
 
-            await _fixture.ExecuteInNewProjectDbContext(async (ProjectDbContext dbContext, CancellationToken cancellationToken) => {
+            await _fixture.ChangeProjectData(async (ProjectDbContext dbContext, CancellationToken cancellationToken) => {
 
                 var tokenizedCorpus = dbContext.TokenizedCorpora
                     .Where(e => e.Id == testTokenizedCorpus.Id)
@@ -499,6 +501,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 var splitSource1 = CollaborationProjectFixture.BuildTestToken(tokenizedCorpus, "001001020001001", "splitSource", null, verseRow, DateTimeOffset.Now);
 
                 // Tokens/composite that result from split (target system):
+
                 var splitComposite1 = CollaborationProjectFixture.BuildTestTokenComposite(
                     tokenizedCorpus,
                     null,
