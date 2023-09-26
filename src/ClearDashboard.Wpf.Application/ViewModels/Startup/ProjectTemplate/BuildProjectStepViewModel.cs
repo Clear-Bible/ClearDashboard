@@ -247,6 +247,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private async Task CreateProject(CancellationToken? cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
+            ProjectManager!.IsNewlySetFromTemplate = true;
             // NB:  need to store a reference to the Parent view model so we can clean up in the finally block below;
             _startupDialogViewModel = ParentViewModel;
 
@@ -323,7 +324,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             {
                 BBBCCCVVV = $"{ParentViewModel!.SelectedBookManager.SelectedAndEnabledBooks.First().BookNum:000}{1:000}{1:000}",
                 ParatextSync = false,
-                Title = "⳼ ENHANCED VIEW",
+                Title = "⳼ View",
                 VerseOffset = 0
             };
             
