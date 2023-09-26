@@ -43,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     /// <summary>
     /// Defines a design surface with nodes and connections between the nodes.
     /// </summary>
-    public partial class DesignSurfaceViewModel : Screen
+    public partial class DesignSurfaceViewModel : Screen, IHandle<BackgroundDeletionTaskRunning>
     {
 
         #region Internal Data Members
@@ -223,6 +223,35 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
+
+        #region ctor
+
+        public DesignSurfaceViewModel(
+            ILogger<DesignSurfaceViewModel>? logger,
+            IEventAggregator? eventEventAggregator,
+            ILifetimeScope lifetimeScope,
+            IMediator mediator,
+            ParatextProxy paratextProxy,
+            DashboardProjectManager? projectManager,
+            ILocalizationService localizationService)
+        {
+            Logger = logger;
+            EventAggregator = eventEventAggregator;
+            LifetimeScope = lifetimeScope;
+            Mediator = mediator;
+            _paratextProxy = paratextProxy;
+            _projectManager = projectManager;
+            LocalizationService = localizationService;
+        }
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            // be able to listen to messages
+            EventAggregator.SubscribeOnUIThread(this);
+
+            return base.OnActivateAsync(cancellationToken);
+        }
+
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             Logger!.LogInformation("DesignSurfaceViewModel - OnDeactivateAsync called.");
@@ -272,28 +301,20 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             base.OnViewAttached(view, context);
         }
 
+        //protected override OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        //{
+        //    // be able to listen to messages
+        //    EventAggregator.Unsubscribe(this);
 
-        #region ctor
+        //    return base.OnDeactivateAsync(close, cancellationToken);
+        //}
 
-        public DesignSurfaceViewModel(
-            ILogger<DesignSurfaceViewModel>? logger,
-            IEventAggregator? eventEventAggregator,
-            ILifetimeScope lifetimeScope,
-            IMediator mediator,
-            ParatextProxy paratextProxy,
-            DashboardProjectManager? projectManager,
-            ILocalizationService localizationService)
-        {
-            Logger = logger;
-            EventAggregator = eventEventAggregator;
-            LifetimeScope = lifetimeScope;
-            Mediator = mediator;
-            _paratextProxy = paratextProxy;
-            _projectManager = projectManager;
-            LocalizationService = localizationService;
-        }
+
+
         #endregion
 
+
+        #region Methods
 
         /// <summary>
         /// Retrieve a connection between the two connectors.
@@ -462,6 +483,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             await Task.CompletedTask;
         }
+
+        #region Menus
 
         /// <summary>
         /// creates the data bound menu for the node
@@ -1019,6 +1042,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             });
         }
 
+        #endregion
+
         private async Task<bool> IsRelatedParatextProjectAParatextResource(CorpusNodeViewModel corpusNode)
         {
             bool isResource;
@@ -1349,7 +1374,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             var connectorDraggedOut = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
             var connectorDraggedOver = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOver;
             var newConnection = (ParallelCorpusConnectionViewModel)e.Connection;
-            ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
+
+
+            EventAggregator.PublishOnUIThreadAsync(new IsBackgroundDeletionTaskRunning("Alignment Deletion", connectorDraggedOut, connectorDraggedOver, newConnection));
+
+            //ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
         }
 
         public async void OnCorpusNodeDragCompleted(object? sender, NodeDragCompletedEventArgs? e)
@@ -1432,7 +1461,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// Called when the user has finished dragging out the new connection.
         /// </summary>
-        public async void ConnectionDragCompleted(ParallelCorpusConnectionViewModel newParallelCorpusConnection, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
+        public async void ConnectionDragCompleted(ParallelCorpusConnectionViewModel newParallelCorpusConnection,
+            ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut,
+            ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (parallelCorpusConnectorDraggedOver == null)
@@ -1606,5 +1637,28 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 }
             }
         }
+
+        #endregion
+
+
+        #region IHandlers
+
+        public Task HandleAsync(BackgroundDeletionTaskRunning message, CancellationToken cancellationToken)
+        {
+            if (message.Result)
+            {
+                // is running so cancel this
+                ParallelCorpusConnections.Remove(message.NewConnection);
+            }
+            else
+            {
+                // is not running to complete the connection
+                ConnectionDragCompleted(message.NewConnection, message.ConnectorDraggedOut, message.ConnectorDraggedOver);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        #endregion
     }
 }

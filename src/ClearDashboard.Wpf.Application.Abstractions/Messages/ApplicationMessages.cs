@@ -2,12 +2,13 @@
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using System.Collections.Generic;
-using Caliburn.Micro;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Messages
 {
+    public record IsBackgroundDeletionTaskRunning(string TaskName, ParallelCorpusConnectorViewModel ConnectorDraggedOut, ParallelCorpusConnectorViewModel ConnectorDraggedOver, ParallelCorpusConnectionViewModel NewConnection);
+    public record BackgroundDeletionTaskRunning(bool Result, ParallelCorpusConnectorViewModel ConnectorDraggedOut, ParallelCorpusConnectorViewModel ConnectorDraggedOver, ParallelCorpusConnectionViewModel NewConnection);
 
     public record RedrawParallelCorpusMenus();
     public record SetIsCheckedAlignment(AlignmentSetId AlignmentSetId, bool IsChecked);

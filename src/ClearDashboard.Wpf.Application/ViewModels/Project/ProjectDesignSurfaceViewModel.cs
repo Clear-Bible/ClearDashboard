@@ -5,7 +5,6 @@ using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
-using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -73,7 +72,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public readonly BackgroundTasksViewModel BackgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
-        private readonly SystemPowerModes _systemPowerModes; 
+        private readonly SystemPowerModes _systemPowerModes;
+
+        private const string TaskName = "Alignment Deletion";
+
         #endregion //Member Variables
 
         #region Observable Properties
@@ -1651,7 +1653,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // ****************************************************************************
                 if (connection.ParallelCorpusId is not null)
                 {
+                    var task = _longRunningTaskManager.Create(TaskName, LongRunningTaskStatus.Running);
+                    var cancellationToken = task.CancellationTokenSource!.Token;
+                    // send to the task started event aggregator for everyone else to hear about a background task starting
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                    {
+                        Name = TaskName,
+                        Description = "Deleting Alignment Data...",
+                        StartTime = DateTime.Now,
+                        TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
+                    }), cancellationToken);
+
                     await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+
+                    _longRunningTaskManager.TaskComplete(TaskName);
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                    {
+                        Name = TaskName,
+                        Description = "Deleting Alignment Data...",
+                        StartTime = DateTime.Now,
+                        TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
+                    }), cancellationToken);
                 }
             });
         }
