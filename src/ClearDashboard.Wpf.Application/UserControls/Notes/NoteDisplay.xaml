@@ -9,9 +9,10 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
+    xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
     FontSize="16"
     mc:Ignorable="d">
     <Border

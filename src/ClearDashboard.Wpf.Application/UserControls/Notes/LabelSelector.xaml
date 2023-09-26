@@ -8,9 +8,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:notes="clr-namespace:ClearDashboard.DAL.Alignment.Notes;assembly=ClearDashboard.DAL.Alignment"
+    xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
