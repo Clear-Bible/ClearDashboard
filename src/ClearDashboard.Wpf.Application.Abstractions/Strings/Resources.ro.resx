@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Se stabili o traducere pentru</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Și</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editați | ×</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Găsiți toate</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Forme</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Complet</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Potrivirea completă</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Potrivire</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Semnificații [traduceri]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Sau</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Parţial</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Salvează modificările</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Limba-sursă</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Tip</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Și</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Găsiți toate</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Complet</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Potrivirea completă</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Potrivire</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Sau</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Parţial</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Limbă țintă</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Lexicon Edit</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Traducere</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Tip</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Adăugați ca formă pentru ...</value>
@@ -941,7 +947,7 @@
     <value>Găsiți potriviri complete sau parțiale de lexeme sau formular pentru sursă</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Adăugați ținta ca transalare pentru ...</value>
+    <value>Adăugați ținta ca traducere pentru ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu ținta</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme sau Form se potrivește</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Nu mai există înregistrări de importat.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Vă rugăm să alegeți un corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Selectează tot</value>

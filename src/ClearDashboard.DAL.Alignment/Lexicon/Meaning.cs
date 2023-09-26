@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
@@ -7,9 +9,9 @@ using Microsoft.SqlServer.Server;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public class Meaning
+    public class Meaning : IEquatable<Meaning>
     {
-        public MeaningId? MeaningId
+        public MeaningId MeaningId
         {
             get;
 #if DEBUG
@@ -20,8 +22,30 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             set;
 #endif
         }
-        public string? Text { get; set; }
-        public string? Language { get; set; }
+
+        private string? text_;
+        public string? Text
+        {
+            get => text_;
+            set
+            {
+                text_ = value;
+                IsDirty = true;
+            }
+        }
+        private string? language_;
+        public string? Language
+        {
+            get => language_;
+            set
+            {
+                language_ = value;
+                IsDirty = true;
+            }
+        }
+
+        private readonly List<TranslationId> translationIdsInDatabase_;
+        internal IEnumerable<TranslationId> TranslationIdsToDelete => translationIdsInDatabase_.ExceptBy(translations_.Select(e => e.TranslationId.Id), e => e.Id);
 
 #if DEBUG
         private ObservableCollection<Translation> translations_;
@@ -63,44 +87,80 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 #endif
         }
 
+        public bool IsDirty { get; internal set; } = false;
+        public bool IsInDatabase { get => MeaningId.Created is not null; }
+
         public Meaning()
         {
+            MeaningId = MeaningId.Create(Guid.NewGuid());
+
             translations_ = new ObservableCollection<Translation>();
+            translationIdsInDatabase_ = new();
+
             semanticDomains_ = new ObservableCollection<SemanticDomain>();
         }
         internal Meaning(MeaningId meaningId, string text, string? language, ICollection<Translation> translations, ICollection<SemanticDomain> semanticDomains)
         {
             MeaningId = meaningId;
-            Text = text;
-            Language = language;
+
+            text_ = text;
+            language_ = language;
+
             translations_ = new ObservableCollection<Translation>(translations.DistinctBy(t => t.TranslationId)); ;
+            translationIdsInDatabase_ = new(translations.Select(f => f.TranslationId));
+
             semanticDomains_ = new ObservableCollection<SemanticDomain>(semanticDomains.DistinctBy(sd => sd.SemanticDomainId)); ;
         }
 
         public async Task PutTranslation(IMediator mediator, Translation translation, CancellationToken token = default)
         {
-            if (translation.TranslationId is not null &&
-                translations_.Any(t => t.TranslationId == translation.TranslationId))
-            {
-                return;
-            }
-
-            if (MeaningId is null)
+            if (!IsInDatabase)
             {
                 throw new MediatorErrorEngineException("Create Meaning before associating with given Translation");
+            }
+
+            if (translation.IsInDatabase && !translation.IsDirty)
+            {
+                return;
             }
 
             var result = await mediator.Send(new PutTranslationCommand(MeaningId, translation), token);
             result.ThrowIfCanceledOrFailed();
 
-            translation.TranslationId = result.Data!;
+            translation.PostSave(result.Data!);
 
-            translations_.Add(translation);
+            if (!translations_.Contains(translation))
+            {
+                translations_.Add(translation);
+            }
+
+            if (!translationIdsInDatabase_.Contains(translation.TranslationId, new IIdEqualityComparer()))
+            {
+                translationIdsInDatabase_.Add(translation.TranslationId);
+            }
+        }
+
+        public async Task DeleteTranslation(IMediator mediator, Translation translation, CancellationToken token = default)
+        {
+            if (!translation.IsInDatabase)
+            {
+                return;
+            }
+
+            var command = new DeleteTranslationCommand(translation.TranslationId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
+
+            translation.PostSave(SimpleSynchronizableTimestampedEntityId<TranslationId>.Create(translation.TranslationId.Id));
+
+            translations_.Remove(translation);
+            translationIdsInDatabase_.RemoveAll(e => e.Id == translation.TranslationId.Id);
         }
 
         public async Task<SemanticDomain> CreateAssociateSenanticDomain(IMediator mediator, string text, CancellationToken token = default)
         {
-            if (MeaningId is null)
+            if (!IsInDatabase)
             {
                 throw new MediatorErrorEngineException("'CreateOrUpdate Meaning before associating with SemanticDomain");
             }
@@ -131,7 +191,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 return;
             }
 
-            if (MeaningId is null)
+            if (!IsInDatabase)
             {
                 throw new MediatorErrorEngineException("Create Meaning before associating with given SemanticDomain");
             }
@@ -169,7 +229,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 return;
             }
 
-            if (MeaningId is null)
+            if (!IsInDatabase)
             {
                 throw new MediatorErrorEngineException("Cannot detach semantic domain before Meaning has been created");
             }
@@ -186,17 +246,36 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             semanticDomains_.Remove(semanticDomainMatch);
         }
 
-        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        internal void PostSave(MeaningId? meaningId)
         {
-            if (MeaningId == null)
-            {
-                return;
-            }
-
-            var command = new DeleteMeaningCommand(MeaningId);
-
-            var result = await mediator.Send(command, token);
-            result.ThrowIfCanceledOrFailed();
+            MeaningId = meaningId ?? MeaningId;
+            IsDirty = false;
         }
+
+        internal void PostSaveAll(IDictionary<Guid, IId> createdIIdsByGuid)
+        {
+            createdIIdsByGuid.TryGetValue(MeaningId.Id, out var meaningId);
+            PostSave((MeaningId?)meaningId);
+
+            translationIdsInDatabase_.Clear();
+            translationIdsInDatabase_.AddRange(translations_.Select(e => e.TranslationId));
+
+            foreach (var translation in translations_)
+            {
+                translation.PostSaveAll(createdIIdsByGuid);
+            }
+        }
+
+        public override bool Equals(object? obj) => Equals(obj as Meaning);
+        public bool Equals(Meaning? other)
+        {
+            if (other is null) return false;
+            if (!MeaningId.Id.Equals(other.MeaningId.Id)) return false;
+
+            return true;
+        }
+        public override int GetHashCode() => MeaningId.Id.GetHashCode();
+        public static bool operator ==(Meaning? e1, Meaning? e2) => Equals(e1, e2);
+        public static bool operator !=(Meaning? e1, Meaning? e2) => !(e1 == e2);
     }
 }

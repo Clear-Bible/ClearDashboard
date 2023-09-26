@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Définir une traduction pour</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Et</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Modifier</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Trouver tout</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formes</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Pleinement</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Entièrement assorti</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Correspondant à</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Significations [traductions]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Ou</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Partiellement</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Sauvegarder les modifications</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Langue originelle</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Taper</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Et</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Trouver tout</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Pleinement</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement assorti</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Correspondant à</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Ou</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Partiellement</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Langue cible</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Modifier le lexique</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Traduction</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Taper</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Ajouter comme formulaire pour ...</value>
@@ -941,7 +947,7 @@
     <value>Trouvez des matchs de lexème ou de formulaire complet ou partiel pour la source</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Ajouter la cible comme transalation pour ...</value>
+    <value>Ajouter la cible comme traduction pour ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Trouver des lexèmes qui ont une ou plusieurs traductions qui correspondent à la cible</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexème ou les correspondances de forme</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Il n'y a plus d'enregistrements à importer.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Veuillez choisir un corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Tout sélectionner</value>

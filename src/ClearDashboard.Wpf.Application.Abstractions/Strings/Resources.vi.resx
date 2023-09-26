@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Đặt bản dịch cho</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Và</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Hủy bỏ</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Biên tập</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Tìm tất cả</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Các hình thức</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Đầy đủ</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Phù hợp đầy đủ</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Từ vựng</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Phù hợp</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Ý nghĩa [Dịch]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Hoặc</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Một phần</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Lưu thay đổi</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Ngôn ngữ nguồn</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Kiểu</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Và</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Tìm tất cả</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Đầy đủ</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Phù hợp đầy đủ</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Phù hợp</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Hoặc</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Một phần</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Ngôn ngữ mục tiêu</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Chỉnh sửa từ vựng</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Dịch</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Kiểu</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Thêm dưới dạng hình thức cho ...</value>
@@ -941,7 +947,7 @@
     <value>Tìm các từ bỏ từ vựng đầy đủ hoặc một phần hoặc các hình thức cho nguồn</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Thêm mục tiêu làm phương tiện cho ...</value>
+    <value>Thêm mục tiêu làm dịch cho ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Tìm từ vựng có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Các kết quả phù hợp từ vựng hoặc hình thức</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Không có nhiều hồ sơ để nhập khẩu.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Vui lòng chọn một kho văn bản.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Chọn tất cả</value>

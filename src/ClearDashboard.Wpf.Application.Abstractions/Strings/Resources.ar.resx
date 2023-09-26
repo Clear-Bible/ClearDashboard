@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>تعيين ترجمة ل</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>و</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>يلغي</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>يحرر</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>جد كل</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>نماذج</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>تماما</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>مطابقة تماما</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>لكلية</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>مطابقة</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>المعاني [ترجمات]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>أو</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>جزئيا</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>حفظ التغييرات</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>لغة المصدر</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>يكتب</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>و</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>جد كل</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>تماما</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>مطابقة تماما</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>مطابقة</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>أو</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>جزئيا</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>اللغة المستهدفة</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>تحرير معجم</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ترجمة</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>يكتب</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>أضف كشكل لـ ...</value>
@@ -941,7 +947,7 @@
     <value>ابحث عن lexeme الكامل أو الجزئي أو مباريات النموذج للمصدر</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>أضف الهدف كـ Transalation لـ ...</value>
+    <value>أضف الهدف كترجمة ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ابحث عن lexemes التي تحتوي على ترجمة واحدة أو أكثر تتطابق مع الهدف</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>lexeme أو مباريات النموذج</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>لا يوجد المزيد من السجلات للاستيراد.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>الرجاء اختيار مجموعة.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>اختر الكل</value>

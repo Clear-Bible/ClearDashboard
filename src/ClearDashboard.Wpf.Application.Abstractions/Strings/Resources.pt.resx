@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Defina uma tradução para</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>E</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editar</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formas</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Completamente</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Totalmente correspondente</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Coincidindo</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Significados [traduções]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Ou</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Parcialmente</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Salvar alterações</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Linguagem de origem</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Tipo</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>E</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Encontrar tudo</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Completamente</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Totalmente correspondente</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Coincidindo</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Ou</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Parcialmente</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Linguagem alvo</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>LEXICON EDIT</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Tradução</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Tipo</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Adicione como forma para ...</value>
@@ -941,7 +947,7 @@
     <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Adicione o alvo como transalação para ...</value>
+    <value>Adicione o alvo como tradução para ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Encontre lexemes que tenham uma ou mais tradução que corresponda ao alvo</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme ou formulário correspondem</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Não há mais registros para importar.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Escolha um corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>

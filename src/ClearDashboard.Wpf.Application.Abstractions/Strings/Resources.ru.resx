@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Установить перевод для</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>И</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Редактировать</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Найти все</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Формы</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>В полной мере</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Полностью соответствует</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Лекса</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Соответствующий</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Значения [переводы]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Или</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Частично</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Сохранить изменения</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Исходный язык</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Тип</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>И</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Найти все</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>В полной мере</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Полностью соответствует</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Соответствующий</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Или</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Частично</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Язык перевода</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Лексикон редактировать</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Перевод</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>Тип</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>Добавить в качестве формы для ...</value>
@@ -941,7 +947,7 @@
     <value>Найдите полные или частичные совпадения Lexeme или Form для источника</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Добавьте цель в качестве трансалации для ...</value>
+    <value>Добавьте цель в качестве перевода для ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme или Form Matches</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Больше нет записей для импорта.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Пожалуйста, выберите корпус.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Выбрать все</value>

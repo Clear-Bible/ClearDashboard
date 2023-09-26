@@ -3,6 +3,7 @@ using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Data;
@@ -404,7 +405,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                         .ThenInclude(e => e!.TargetTokenizedCorpus);
         }
 
-        public static TranslationId BuildTranslationId(Models.Translation translation)
+        public static Alignment.Translation.TranslationId BuildTranslationId(Models.Translation translation)
         {
             if (translation.SourceTokenComponent == null)
             {
@@ -430,9 +431,9 @@ namespace ClearDashboard.DAL.Alignment.Features
                 translation.SourceTokenComponent);
         }
 
-        public static TranslationId BuildTranslationId(Models.Translation translation, Models.TokenizedCorpus sourceTokenizedCorpus, Models.TokenizedCorpus targetTokenizedCorpus, Models.TokenComponent sourceTokenComponent)
+        public static Alignment.Translation.TranslationId BuildTranslationId(Models.Translation translation, Models.TokenizedCorpus sourceTokenizedCorpus, Models.TokenizedCorpus targetTokenizedCorpus, Models.TokenComponent sourceTokenComponent)
         {
-            return new TranslationId(
+            return new Alignment.Translation.TranslationId(
                 translation.Id,
                 sourceTokenizedCorpus.DisplayName ?? string.Empty,
                 targetTokenizedCorpus.DisplayName ?? string.Empty,
@@ -477,25 +478,60 @@ namespace ClearDashboard.DAL.Alignment.Features
 
         public static Alignment.Lexicon.LexemeId BuildLexemeId(Models.Lexicon_Lexeme lexeme)
         {
-            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Lexeme, Alignment.Lexicon.LexemeId>(lexeme);
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Lexeme, Alignment.Lexicon.LexemeId>(lexeme, false);
+        }
+
+        public static Alignment.Lexicon.FormId BuildFormId(Models.Lexicon_Form form)
+        {
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Form, Alignment.Lexicon.FormId>(form, false);
         }
 
         public static Alignment.Lexicon.MeaningId BuildMeaningId(Models.Lexicon_Meaning meaning)
         {
-            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Meaning, Alignment.Lexicon.MeaningId>(meaning);
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Meaning, Alignment.Lexicon.MeaningId>(meaning, false);
         }
 
         public static Alignment.Lexicon.TranslationId BuildTranslationId(Models.Lexicon_Translation translation)
         {
-            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Translation, Alignment.Lexicon.TranslationId>(translation);
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Translation, Alignment.Lexicon.TranslationId>(translation, false);
         }
 
         public static Alignment.Lexicon.SemanticDomainId BuildSemanticDomainId(Models.Lexicon_SemanticDomain semanticDomain)
         {
-            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_SemanticDomain, Alignment.Lexicon.SemanticDomainId>(semanticDomain);
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_SemanticDomain, Alignment.Lexicon.SemanticDomainId>(semanticDomain, false);
         }
 
-        private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity) 
+        public static Alignment.Lexicon.Lexeme BuildLexeme(Models.Lexicon_Lexeme lexeme, string? meaningLanguageFilter, bool inMemoryOnly)
+        {
+            return new Lexeme(
+                BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Lexeme, Alignment.Lexicon.LexemeId>(lexeme, inMemoryOnly),
+                lexeme.Lemma!,
+                lexeme.Language,
+                lexeme.Type,
+                lexeme.Meanings
+                    .Where(m => string.IsNullOrEmpty(meaningLanguageFilter) || m.Language == meaningLanguageFilter)
+                    .Select(m => new Meaning(
+                        BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Meaning, Alignment.Lexicon.MeaningId>(m, inMemoryOnly),
+                        m.Text!,
+                        m.Language,
+                        m.Translations.Select(t => new Alignment.Lexicon.Translation(
+                            BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Translation, Alignment.Lexicon.TranslationId>(t, inMemoryOnly),
+                            t.Text ?? string.Empty,
+                            t.OriginatedFrom
+                        )).ToList(),
+                        m.SemanticDomains.Select(sd => new SemanticDomain(
+                            BuildSemanticDomainId(sd),
+                            sd.Text!
+                        )).ToList()
+                    )).ToList(),
+                lexeme.Forms
+                    .Select(f => new Form(
+                        BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Form, Alignment.Lexicon.FormId>(f, inMemoryOnly),
+                        f.Text!
+                    )).ToList());
+        }
+
+        private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity, bool inMemoryOnly) 
             where T : Models.SynchronizableTimestampedEntity 
             where I : SimpleSynchronizableTimestampedEntityId<I>, new()
         {
@@ -504,7 +540,9 @@ namespace ClearDashboard.DAL.Alignment.Features
                 throw new MediatorErrorEngineException($"DB {typeof(T).Name} passed to Build{typeof(I).Name} does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
             }
 
-            return SimpleSynchronizableTimestampedEntityId<I>.Create(entity.Id, entity.Created, BuildUserId(entity.User!));
+            return (!inMemoryOnly)
+                ? SimpleSynchronizableTimestampedEntityId<I>.Create(entity.Id, entity.Created, BuildUserId(entity.User!))
+                : SimpleSynchronizableTimestampedEntityId<I>.Create(entity.Id, BuildUserId(entity.User!));
         }
 
         public static Type? FindEntityIdGenericType(this Type givenType)

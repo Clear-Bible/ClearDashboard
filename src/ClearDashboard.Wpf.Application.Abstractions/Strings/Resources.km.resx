@@ -886,17 +886,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>កំណត់ការបកប្រែសម្រាប់</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>និង</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>លប់ចោល</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>បិនិត្យ</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>រកទាំងអស់</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>ទម្រង់បែបបទ</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>ដេលយ៉ាងពេញលេញ</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>ផ្គូផ្គងយ៉ាងពេញលេញ</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>lexme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>ដេលសីក្នា</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>អត្ថន័យ [ការបកប្រែ]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>រឺ</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>មួយផ្នែក</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>រក្សាទុកការផ្លាស់ប្តូរ</value>
@@ -904,35 +928,17 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>ភាសាប្រភព</value>
   </data>
-  <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>បុម្ពអកសរ</value>
-  </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>និង</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>រកទាំងអស់</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>ដេលយ៉ាងពេញលេញ</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>ផ្គូផ្គងយ៉ាងពេញលេញ</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>ដេលសីក្នា</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>រឺ</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>មួយផ្នែក</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>ភាសាគោលដៅ</value>
   </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>lexicon កែប្រែ</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ការបករេប</value>
+  </data>
+  <data name="LexiconEdit_Type" xml:space="preserve">
+    <value>បុម្ពអកសរ</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
     <value>បន្ថែមជាទម្រង់សម្រាប់ ...</value>
@@ -941,7 +947,7 @@
     <value>រកឃើញ lexme ពេញឬផ្នែកខ្លះនៃការផ្គូផ្គងប្រភព</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>បន្ថែមគោលដៅជាការផ្លាស់ប្តូរសម្រាប់ ...</value>
+    <value>បន្ថែមគោលដៅជាការបកប្រែសម្រាប់ ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ស្វែងរក Lexemes ដែលមានការបកប្រែមួយឬច្រើនដែលត្រូវនឹងគោលដៅ</value>
@@ -951,6 +957,12 @@
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>lexme ឬទម្រង់ការប្រកួត</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>មិនមានកំណត់ត្រាបន្ថែមទៀតដើម្បីនាំចូលទេ។</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>សូមជ្រើសរើសសាកសព។</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>ជ្រើសរើស​ទាំងអស់</value>
