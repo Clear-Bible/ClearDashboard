@@ -84,7 +84,8 @@
                         Text="{Binding ElementName=LabelsDisplayControl, Path=CurrentLabelText}">
                     </TextBlock>
                     <TextBox x:Name="LabelTemplateTextBox"
-                        Margin="10"
+                             AcceptsReturn="True" 
+                             Margin="10"
                         TextWrapping="Wrap"
                         Text="{Binding ElementName=LabelsDisplayControl, Path=CurrentLabelTemplate}">
                     </TextBox>
