@@ -144,8 +144,8 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
             _mergeContext.Logger.LogInformation($"Starting handle verse row child list differences for tokenized corpus");
             await verseRowHandler.MergeListDifferenceGroup(
                 childListDifferences[verseRowChildName],
-                parentItemInCurrentSnapshot?.Children[verseRowChildName],
-                parentItemInTargetCommitSnapshot?.Children[verseRowChildName],
+                parentItemInCurrentSnapshot?.Children.GetValueOrDefault(verseRowChildName),
+                parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(verseRowChildName),
                 cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed handle verse row child list differences for tokenized corpus");
 

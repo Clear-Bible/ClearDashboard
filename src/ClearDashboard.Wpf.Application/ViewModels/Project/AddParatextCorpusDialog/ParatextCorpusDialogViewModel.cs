@@ -179,7 +179,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             { 
                 new NamedParameter("dialogMode", DialogMode),
                 new NamedParameter("initialParatextProjectId", _initialParatextProjectId),
-                new NamedParameter("selectBooksStepNextVisible", false)
+                new NamedParameter("isUpdateCorpusDialog", false)
             };
             var views = _lifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("AddParatextCorpusDialog", parameters, "Order").ToArray();
 

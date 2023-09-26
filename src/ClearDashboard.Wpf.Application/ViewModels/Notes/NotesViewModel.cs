@@ -359,7 +359,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<NotesView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<NotesView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
 

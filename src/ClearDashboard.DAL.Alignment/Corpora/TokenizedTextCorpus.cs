@@ -196,5 +196,65 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var result = await mediator.Send(command);
             result.ThrowIfCanceledOrFailed(true);
         }
+
+        /// <summary>
+        /// Returns a tuple of (1) CompositeTokens that group all of the newly created Tokens and (2) the newly created token. 
+        /// Andy's corpus ui would substitute a CompositeToken(parallel=null) if it exists, or the returned Tokens if it doesn't 
+        /// exist, for T1. Andy's parallel corpus UI would substitute CompositeToken(parallel=parallelId) for T1.
+        /// </summary>
+        /// <param name="tokenIdsWithSameSurfaceText">Split all occurrences of that same word (same surface text) throughout the corpus</param>
+        /// <param name="surfaceTextIndex"></param>
+        /// <param name="surfaceTextLength"></param>
+        /// <param name="trainingText1"></param>
+        /// <param name="trainingText2"></param>
+        /// <param name="trainingText3">Can only be null if surfaceTextIndex > 0</param>
+        /// <param name="createParallelComposite">Create parallel composite when tokenId is not a member of any composite 
+        /// at all (for any parallel or non-parallel composite.</param>
+        /// <returns></returns>
+        public async Task<(IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)> SplitTokens(
+            IMediator mediator,
+            IEnumerable<TokenId> tokenIdsWithSameSurfaceText,
+            int surfaceTextIndex,
+            int surfaceTextLength,
+            string trainingText1,
+            string trainingText2,
+            string? trainingText3, 
+            bool createParallelComposite = true,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var command = new SplitTokensCommand(
+                TokenizedTextCorpusId,
+                tokenIdsWithSameSurfaceText, 
+                surfaceTextIndex,
+                surfaceTextLength,
+                trainingText1,
+                trainingText2,
+                trainingText3,
+                createParallelComposite);
+
+            var result = await mediator.Send(command, cancellationToken);
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
+        }
+
+        public async Task<IEnumerable<Token>> FindTokensBySurfaceText(
+            IMediator mediator, 
+            string searchString,
+            WordPart wordPart = WordPart.Full, // or regex find predicate?
+            bool ignoreCase = true,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var result = await mediator.Send(new FindTokensBySurfaceTextQuery(
+                TokenizedTextCorpusId, 
+                searchString, 
+                wordPart,
+                ignoreCase), cancellationToken);
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
+        }
     }
 }

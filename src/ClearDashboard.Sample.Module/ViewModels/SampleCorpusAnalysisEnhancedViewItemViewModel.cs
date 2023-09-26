@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Features.AttributeFilters;
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Services;
@@ -13,7 +14,7 @@ namespace ClearDashboard.Sample.Module.ViewModels
 {
     public class SampleCorpusAnalysisEnhancedViewItemViewModel : VerseAwareEnhancedViewItemViewModel
     {
-        public SampleCorpusAnalysisEnhancedViewItemViewModel(DashboardProjectManager? projectManager,  IEnhancedViewManager enhancedViewManager, INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService)
+        public SampleCorpusAnalysisEnhancedViewItemViewModel(DashboardProjectManager? projectManager,  IEnhancedViewManager enhancedViewManager, INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, [KeyFilter("Sample")] ILocalizationService localizationService)
             : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService)
         {
         }

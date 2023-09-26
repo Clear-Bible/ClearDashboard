@@ -105,6 +105,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
 
             // Validate the composite:
+
             var compositeCandidatesDb = ProjectDbContext.Tokens
                 .Include(t => t.TokenCompositeTokenAssociations)
                     .ThenInclude(ta => ta.TokenComposite)
