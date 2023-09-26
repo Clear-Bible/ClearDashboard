@@ -1451,6 +1451,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Task.Factory.StartNew(async () =>
                 {
                     await DAL.Alignment.Translation.TranslationSet.Delete(Mediator!, translationSetId);
+
+                    topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+                    foreach (var parallel in DesignSurfaceViewModel.ParallelCorpusConnections)
+                    {
+                        DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(parallel, topLevelProjectIds);
+                    }
                 });
 #pragma warning restore CS4014
             }
