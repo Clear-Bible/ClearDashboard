@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ClearDashboard"
-#define MyAppVersion "1.0.6.10"
+#define MyAppVersion "1.2.0.2"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -11,6 +11,7 @@
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 #define MyAppHelpDocsName "Dashboard_Instructions.pdf"
 #define MyAppId "{{CD4BA885-D292-46D1-9EB8-1049865E327B}"
+#define MyAppPluginFolder "ClearDashboardWebApiPlugin"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -40,6 +41,7 @@ UninstallIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_Ic
 DisableDirPage=yes
 ArchitecturesInstallIn64BitMode=x64
 PrivilegesRequired=admin
+SetupLogging=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -143,6 +145,9 @@ Source: "..\tools\PluginManager\bin\Release\net7.0-windows\publish\win-x64\*"; D
 Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencryption
 
+; Install ResetCurrentUser
+Source: "..\tools\ResetCurrentUser\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 ; Install Hebrew & Greek Fonts
@@ -152,9 +157,14 @@ Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_grk.ttf"; DestDir: 
 Source: "..\src\ClearDashboard.Wpf.Application\Resources\NotoSerif-Italic-VariableFont_wdth,wght.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "Noto Serif"
 Source: "..\src\ClearDashboard.Wpf.Application\Resources\NotoSerif-VariableFont_wdth,wght.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "Noto Serif"
 
-; Install Paratext Plugin
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Install Paratext Regular Plugin
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"; Check: ShouldInstallParatextRegular; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Check: ShouldInstallParatextRegular; Flags: ignoreversion recursesubdirs createallsubdirs
+
+
+; Install Paratext Beta Plugin
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextBetaInstallationPath}\plugins\{#MyAppPluginFolder}"; Check: ShouldInstallParatextBeta; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextBetaInstallationPath}\plugins\{#MyAppPluginFolder}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Check: ShouldInstallParatextBeta; Flags: ignoreversion recursesubdirs createallsubdirs
 
 
 [Registry]
@@ -174,14 +184,17 @@ Name: "{autoprograms}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsNam
 Name: "{autodesktop}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
+Filename: "{app}\ResetCurrentUser.exe";
+Filename: "{app}\..\Paratext 9\Paratext.exe"; Description: "{cm:LaunchProgram,{#StringChange("Paratext", '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 
 [InstallDelete]
-Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"
+Type: filesandordirs; Name: "{code:GetParatextBetaInstallationPath}\plugins\{#MyAppPluginFolder}"
 Type: filesandordirs; Name: "{app}"
 
 [UninstallDelete]
-Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"
+Type: filesandordirs; Name: "{code:GetParatextBetaInstallationPath}\plugins\{#MyAppPluginFolder}"
 Type: filesandordirs; Name: "{app}"
 
 [Code]
@@ -254,6 +267,7 @@ end;
 
 var
     ParatextInstallationPath: string;
+    ParatextBetaInstallationPath: string;
 
 function InitializeSetup: Boolean;
 var
@@ -295,9 +309,51 @@ begin
       MsgBox('Paratext is either missing or not up to date.  You must have Paratext to use this plugin.', mbError, MB_OK);
       Result := False;
     end;
+
+  // get the paratext Beta install directory
+  if RegQueryStringValue(
+       HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Paratext\8',
+       'Program_Files_Directory_Ptw91', Value) then
+    begin
+      ParatextBetaInstallationPath := ExtractFileDir(Value);
+      Log(Format('APPLICATION installed to %s', [ParatextBetaInstallationPath]));
+    end
+  else
+    begin
+      ParatextBetaInstallationPath := '';
+    end;
 end;
 
 function GetParatextInstallationPath(Param: string): string;
 begin
   Result := ParatextInstallationPath;
+end;
+
+function GetParatextBetaInstallationPath(Param: string): string;
+begin
+  Result := ParatextBetaInstallationPath;
+end;
+
+function ShouldInstallParatextRegular: Boolean;
+begin
+  if ParatextInstallationPath='' then
+    begin
+      Result := False;
+    end
+  else
+    begin
+      Result := True;
+    end
+end;
+
+function ShouldInstallParatextBeta: Boolean;
+begin
+  if ParatextBetaInstallationPath='' then
+    begin
+      Result := False;
+    end
+  else
+    begin
+      Result := True;
+    end
 end;

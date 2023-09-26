@@ -4,8 +4,9 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -19,13 +20,31 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.Wpf.Application.Services;
-using Nito.AsyncEx.Synchronous;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
-    public class AddParatextCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, AddParatextCorpusStepViewModel>
+
+    public class UsfmErrorsWrapper
+    {
+        public string ProjectName { get; set; }
+
+        public string ProjectId { get; set; }
+
+        public string ErrorTitle { get; set; }
+        public ObservableCollection<UsfmError> UsfmErrors { get; set; } = new ObservableCollection<UsfmError>();
+
+        public bool HasUsfmErrors => UsfmErrors.Count > 0;
+
+    }
+    public interface IUsfmErrorHost
+    {
+        List<UsfmErrorsWrapper> UsfmErrorsByProject { get; }
+
+        string GetFormattedUsfmErrors();
+
+        string GetUsfmErrorsFileName();
+    }
+    public class AddParatextCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, AddParatextCorpusStepViewModel>, IUsfmErrorHost
     {
         #region Member Variables
 
@@ -110,11 +129,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         public ObservableCollection<UsfmError> UsfmErrors
         {
             get => _usfmErrors;
-            set
-            {
-                _usfmErrors = value;
-                NotifyOfPropertyChange(() => UsfmErrors);
-            }
+            set => Set(ref _usfmErrors, value);
+        }
+
+
+        private List<UsfmErrorsWrapper> _usfmErrorsByProject;
+        public List<UsfmErrorsWrapper> UsfmErrorsByProject
+        {
+            get => _usfmErrorsByProject;
+            set => Set(ref _usfmErrorsByProject, value);
         }
 
         private string _errorTitle;
@@ -216,7 +239,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
                 currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
 
-                Projects = result.Data.Where(c=>!currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
+                if (Projects == null)
+                {
+                    Projects = result.Data.Where(c => !currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
+                }
 
                 if (!string.IsNullOrEmpty(_initialParatextProjectId))
                 {
@@ -235,22 +261,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         }
 
         #endregion //Constructor
-
-
-
+        
 
         #region Methods
 
-        public void CopyToClipboard()
+        public string GetUsfmErrorsFileName()
         {
-            Clipboard.Clear();
-            StringBuilder sb = new StringBuilder();
-            foreach (var error in UsfmErrors)
+            return $"{SelectedProject.LongName}-USFM-Errors.txt";
+        }
+        public string GetFormattedUsfmErrors()
+        {
+            var sb = new StringBuilder();
+
+            foreach (var u in UsfmErrorsByProject)
             {
-                sb.AppendLine($"{error.Reference}\t{error.Error}");
+                if (u.UsfmErrors.Count > 0)
+                {
+                    sb.AppendLine($"Project Name: {u.ProjectName}, number of errors: {u.UsfmErrors.Count} ");
+
+                    foreach (var error in u.UsfmErrors)
+                    {
+                        sb.AppendLine($"\t{error.Reference}\t{error.Error}");
+                    }
+
+                    sb.AppendLine();
+                }
+
             }
 
-            Clipboard.SetText(sb.ToString());
+            return sb.ToString();
         }
 
         public async void ProjectSelected()
@@ -272,7 +311,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
             ShowSpinner = Visibility.Visible;
 
-            var result = await ProjectManager.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
+            var result = await ProjectManager!.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
             if (result.Success)
             {
                 var errors = result.Data;
@@ -280,6 +319,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 if (errors.NumberOfErrors == 0)
                 {
                     UsfmErrors = new();
+                   
                     ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_NoErrors");
                 }
                 else
@@ -287,6 +327,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                     UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
                     ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_ErrorCount");
                 }
+
+                UsfmErrorsByProject = new List<UsfmErrorsWrapper>()
+                {
+                   new() 
+                   {
+                       ProjectName = SelectedProject!.LongName!,
+                       ProjectId = SelectedProject!.Id,
+                       UsfmErrors = UsfmErrors,
+                       ErrorTitle = ErrorTitle
+                   }
+                };
 
                 parentViewModel.UsfmErrors = UsfmErrors;
 

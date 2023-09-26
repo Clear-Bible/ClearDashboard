@@ -1,7 +1,7 @@
-﻿using Autofac.Features.OwnedInstances;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using Microsoft.Extensions.Logging;
 using System;
@@ -60,18 +60,54 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Gets a list of all the GitLab projects
         /// </summary>
         /// <returns></returns>
-        public async Task<List<string>> GetAllProjects()
+        public async Task<List<GitLabProject>> GetAllProjects()
         {
+            var list = new List<GitLabProject>();
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return list;
+            }
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
+            var pageNum = 0;
+            var totalPages = 1;
 
-            var list = new List<string>();
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/projects");
-            var response = await _gitLabClient.Client.SendAsync(request);
+            try
+            {
+                do
+                {
+                    pageNum++;
 
-            response.EnsureSuccessStatusCode();
-            var result = await response.Content.ReadAsStringAsync();
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"{Settings.Default.GitRootUrl}/projects");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
 
             return list;
         }
@@ -84,20 +120,50 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<List<GitLabGroup>> GetAllGroups()
         {
+            var list = new List<GitLabGroup>();
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return list;
+            }
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
-            var list = new List<GitLabGroup>();
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/groups");
             try
             {
-                var response = await _gitLabClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
+                var pageNum = 0;
+                var totalPages = 1;
 
-                list = JsonSerializer.Deserialize<List<GitLabGroup>>(result)!;
+                do
+                {
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"{Settings.Default.GitRootUrl}/groups");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitLabGroup>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+
                 // sort the list
                 list = list.OrderBy(s => s.Name).ToList();
+
             }
             catch (Exception e)
             {
@@ -110,19 +176,53 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<GitUser>> GetAllUsers()
         {
+            var list = new List<GitUser>();
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return list;
+            }
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
-
-            var list = new List<GitUser>();
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/users");
             try
             {
-                var response = await _gitLabClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
+                var pageNum = 0;
+                var totalPages = 1;
 
-                list = JsonSerializer.Deserialize<List<GitUser>>(result)!;
+                do
+                {
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"{Settings.Default.GitRootUrl}/users");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    //foreach (var header in response.Headers)
+                    //{
+                    //    Debug.WriteLine(header.Key, header.Value.First());
+                    //}
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitUser>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+
+                // remove all Admin users as they don't have an organization
                 list = list.Where(c => c.Organization != "").ToList();
 
                 // sort the list
@@ -143,31 +243,67 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<bool> CheckForExistingUser(string userName, string email)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://gitlab.cleardashboard.org/api/v4/users");
+            List<GitLabUser> list = new();
             try
             {
-                var response = await _gitLabClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
+                var pageNum = 0;
+                var totalPages = 1;
 
-                List<GitLabUser> list = JsonSerializer.Deserialize<List<GitLabUser>>(result)!;
-                // sort the list
-                list = list.OrderBy(s => s.Name).ToList();
-                // check both username & email fields
-                var found = list.FirstOrDefault(s => s.UserName == userName || s.Email == email);
-                if (found is null)
+                do
                 {
-                    return false;
-                }
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"{Settings.Default.GitRootUrl}/users");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    //foreach (var header in response.Headers)
+                    //{
+                    //    Debug.WriteLine(header.Key, header.Value.First());
+                    //}
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitLabUser>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+
+                // remove all Admin users as they don't have an organization
+                list = list.Where(c => c.Organization != "").ToList();
+
             }
             catch (Exception e)
             {
                 WireUpLogger();
                 _logger?.LogError(e.Message, e);
+            }
+
+            var found = list.FirstOrDefault(s => s.UserName == userName || s.Email == email);
+            if (found is null)
+            {
+                return false;
             }
 
             return true;
@@ -178,36 +314,63 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             List<GitLabProject> list = new();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"projects");
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return list;
+            }
 
             GitLabClient newClient = _gitLabClient;
             newClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.RemotePersonalAccessToken);
 
+
             try
             {
-                var response = await newClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
+                var pageNum = 0;
+                var totalPages = 1;
 
-
-                list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
-                // sort the list
-                list = list.OrderBy(s => s.Name).ToList();
-
-                // remove non-project repos
-                for (int i = list.Count - 1; i >= 0; i--)
+                do
                 {
-                    if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"projects");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
                     {
-                        list.RemoveAt(i);
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
                     }
-                }
+
+                } while (pageNum < totalPages);
+
             }
             catch (Exception e)
             {
                 WireUpLogger();
                 _logger?.LogError(e.Message, e);
             }
+
+            // remove non-project repos
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
+                {
+                    list.RemoveAt(i);
+                }
+            }
+
 
             return list;
         }
@@ -217,44 +380,73 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             List<GitLabProject> list = new();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"projects");
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return list;
+            }
 
             GitLabClient newClient = _gitLabClient;
             newClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.RemotePersonalAccessToken);
 
             try
             {
-                var response = await newClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
+                var pageNum = 0;
+                var totalPages = 1;
 
-
-                list = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
-                // sort the list
-                list = list.OrderBy(s => s.Name).ToList();
-
-                // remove non-project repos
-                for (int i = list.Count - 1; i >= 0; i--)
+                do
                 {
-                    if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
-                    {
-                        list.RemoveAt(i);
-                    }
-                }
+                    pageNum++;
 
-                // remove projects for which we are not the owner
-                for (int i = list.Count - 1; i >= 0; i--)
-                {
-                    if (list[i].Permissions.ProjectAccess.AccessLevel < 50)
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"projects");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitLabProject>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
                     {
-                        list.RemoveAt(i);
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
                     }
-                }
+
+                } while (pageNum < totalPages);
+
             }
             catch (Exception e)
             {
                 WireUpLogger();
                 _logger?.LogError(e.Message, e);
+            }
+
+
+            // sort the list
+            list = list.OrderBy(s => s.Name).ToList();
+
+            // remove non-project repos
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (!(list[i].Name.StartsWith("P_") && list[i].Name.Length == 38))
+                {
+                    list.RemoveAt(i);
+                }
+            }
+
+            // remove projects for which we are not the owner
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i].Permissions.ProjectAccess.AccessLevel < 50)
+                {
+                    list.RemoveAt(i);
+                }
             }
 
             return list;
@@ -262,38 +454,64 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<GitLabProjectUser>> GetUsersForProject(CollaborationConfiguration collaborationConfiguration, int projectId)
         {
+            List<GitLabProjectUser> list = new();
+
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return list;
+            }
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
-            List<GitLabProjectUser> list = new();
-
-            var request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}/members");
-
             try
             {
-                var response = await _gitLabClient.Client.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
+                var pageNum = 0;
+                var totalPages = 1;
 
-
-                list = JsonSerializer.Deserialize<List<GitLabProjectUser>>(result)!;
-                // sort the list
-                list = list.OrderBy(s => s.Name).ToList();
-
-                foreach (var item in list)
+                do
                 {
-                    if (item.AccessLevel == 50)
-                    {
-                        item.IsOwner = true;
-                    }
-                }
+                    pageNum++;
 
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"projects/{projectId}/members");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitLabProjectUser>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
 
             }
             catch (Exception e)
             {
                 WireUpLogger();
                 _logger?.LogError(e.Message, e);
+            }
+
+            // sort the list
+            list = list.OrderBy(s => s.Name).ToList();
+
+            foreach (var item in list)
+            {
+                if (item.AccessLevel == 50)
+                {
+                    item.IsOwner = true;
+                }
             }
 
             return list;
@@ -317,12 +535,18 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task<GitLabUser> CreateNewUser(string firstName, string lastName, string username, string password,
             string email, string organization)
         {
+            var user = new GitLabUser();
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return user;
+            }
+
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
-            var user = new GitLabUser();
+            
             var request = new HttpRequestMessage(HttpMethod.Post, "users");
-
             var content = new MultipartFormDataContent();
             //content.Add(new StringContent(Uri.EscapeDataString($"{firstName} {lastName}")), "name");
             content.Add(new StringContent($"{firstName} {lastName}"), "name");
@@ -375,6 +599,12 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns></returns>
         public async Task<string> GeneratePersonalAccessToken(GitLabUser user)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return string.Empty;
+            }
+
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
@@ -408,11 +638,17 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<GitLabProject> CreateNewProjectForUser(GitLabUser user, string projectName, string projectDescription)
         {
+            GitLabProject project = new();
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return project;
+            }
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
-            GitLabProject project = new();
+            
             var request = new HttpRequestMessage(HttpMethod.Post, $"projects");
 
             var content = new MultipartFormDataContent();
@@ -444,6 +680,12 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<object> AddUserToProject(GitUser user, GitLabProject selectedProject, PermissionLevel permissionLevel)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return null;
+            }
+
+
             var request = new HttpRequestMessage(HttpMethod.Post, $"projects/{selectedProject.Id}/members");
 
             var content = new MultipartFormDataContent();
@@ -491,6 +733,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task RemoveUserFromProject(GitLabProjectUser selectedCurrentUser, GitLabProject selectedProject)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return;
+            }
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
@@ -516,6 +763,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<bool> DeleteUser(GitLabProjectUser user)
         {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
             var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
@@ -528,6 +780,39 @@ namespace ClearDashboard.Wpf.Application.Services
                 response.EnsureSuccessStatusCode();
 
                 if ((int)response.StatusCode == 204)
+                {
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteProject(GitLabProject project)
+        { 
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"projects/{project.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Accepted)
                 {
                     return true;
                 }

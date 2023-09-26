@@ -1,36 +1,12 @@
-﻿using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.Collaboration.Model;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using ClearDashboard.Collaboration;
-using ClearDashboard.Collaboration.Model;
-using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Features;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.DAL.Alignment.Notes;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Collections;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Newtonsoft.Json.Linq;
-using System.ComponentModel.DataAnnotations.Schema;
-using Autofac.Features.Indexed;
-using ClearDashboard.DAL.Alignment.Corpora;
-using System.Data.Common;
-using ClearDashboard.Collaboration.Builder;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Features;
 
@@ -79,6 +55,12 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
     internal static ProjectSnapshot LoadSnapshot(BuilderContext builderContext, CancellationToken cancellationToken = default)
     {
         var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(builderContext));
+
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Lexicon_Lexeme>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Lexicon_SemanticDomain>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
 
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Corpus>().BuildModelSnapshots(builderContext));
         cancellationToken.ThrowIfCancellationRequested();

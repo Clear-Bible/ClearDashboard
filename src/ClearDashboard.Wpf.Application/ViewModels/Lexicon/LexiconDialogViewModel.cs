@@ -1,13 +1,5 @@
 ﻿//#define DEMO
 
-using System;
-using System.Dynamic;
-using System.Linq;
-using System.Net.Mime;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls.Primitives;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -22,6 +14,13 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Dynamic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls.Primitives;
 // ReSharper disable UnusedMember.Global
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
@@ -128,11 +127,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             private set => Set(ref _applyEnabled, value);
         }
 
+        private bool _cancelEnabled = true;
+        public bool CancelEnabled
+        {
+            get => _cancelEnabled;
+            private set => Set(ref _cancelEnabled, value);
+        }
+
+        private bool _isLoaded = false;
+        public bool IsLoaded
+        {
+            get => _isLoaded;
+            private set => Set(ref _isLoaded, value);
+        }
+
         public async void ApplyTranslation()
         {
             try
             {
-                OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+                OnUIThread(() =>
+                {
+                    ProgressBarVisibility = Visibility.Visible;
+                    ApplyEnabled = false;
+                    CancelEnabled = false;
+                });
 
                 async Task SaveTranslation()
                 {
@@ -143,7 +161,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     }
                 }
 #if !DEMO
-                await System.Windows.Application.Current.Dispatcher.InvokeAsync(SaveTranslation);
+                await Task.Run(async () => await SaveTranslation());
 #endif
             }
             finally
@@ -294,7 +312,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             if (SelectedTranslation == null && TokenDisplay.TargetTranslationText != Translation.DefaultTranslationText)
             {
                 SelectedTranslation = new LexiconTranslationViewModel { Text = TokenDisplay.TargetTranslationText, IsSelected = true};
-                //Concordance.Insert(0, SelectedTranslation);
                 NewTranslation = SelectedTranslation;
                 NotifyOfPropertyChange(nameof(NewTranslation));
             }
@@ -302,12 +319,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             ApplyEnabled = SelectedTranslation != null;
         }
 
-        private async Task<string?> GetFontFamily(string paratextProjectId)
+        private async Task<string> GetFontFamily(string? paratextProjectId)
         {
-            var result = await Mediator.Send(new GetProjectFontFamilyQuery(paratextProjectId));
-            if (result is { HasData: true })
+            if (!string.IsNullOrEmpty(paratextProjectId))
             {
-                return result.Data;
+                var result = await Mediator!.Send(new GetProjectFontFamilyQuery(paratextProjectId));
+                if (result is { HasData: true })
+                {
+                    return result.Data;
+                }
             }
 
             return FontNames.DefaultFontFamily;
@@ -325,31 +345,47 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            await base.OnInitializeAsync(cancellationToken);
-            
-            Lexemes = await LexiconManager.GetLexemesAsync(TokenDisplay.TranslationSurfaceText, GetSourceLanguage(), GetTargetLanguage());
+            await base.OnInitializeAsync(cancellationToken);            
+        }
 
-            if (TokenDisplay?.Translation?.LexiconTranslationId != null)
+        protected override async void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+
+            OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+
+            await Task.Run(async () => {
+
+                SourceFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.ParatextGuid);
+                TargetFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.ParatextGuid);
+
+                Lexemes = await LexiconManager.GetLexemesAsync(TokenDisplay.TranslationSurfaceText, GetSourceLanguage(), GetTargetLanguage());
+
+                if (TokenDisplay?.Translation?.LexiconTranslationId != null)
+                {
+                    CurrentLexeme = Lexemes.GetLexemeWithTranslation(TokenDisplay.Translation.LexiconTranslationId);
+                }
+                CurrentLexeme ??= Lexemes.FirstOrDefault();
+
+                if (Concordance.Count == 0)
+                {
+                    await BuildConcordance();
+                }
+                SelectCurrentTranslation();
+
+                if (SemanticDomainSuggestions.Count == 0)
+                {
+                    SemanticDomainSuggestions = await LexiconManager.GetAllSemanticDomainsAsync();
+                }
+
+            });
+
+            OnUIThread(() =>
             {
-                CurrentLexeme = Lexemes.GetLexemeWithTranslation(TokenDisplay.Translation.LexiconTranslationId);
-            }
-            CurrentLexeme ??= Lexemes.FirstOrDefault();
+                ProgressBarVisibility = Visibility.Collapsed;
+                IsLoaded = true;
+            });
 
-            if (Concordance.Count == 0)
-            {
-                await BuildConcordance();
-            }
-            SelectCurrentTranslation();
-
-            if (SemanticDomainSuggestions.Count == 0)
-            {
-                SemanticDomainSuggestions = await LexiconManager.GetAllSemanticDomainsAsync();
-            }
-
-            SourceFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.ParatextGuid);
-            TargetFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.ParatextGuid);
-
-            OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
         }
 
         public dynamic DialogSettings()
@@ -360,7 +396,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             settings.WindowState = WindowState.Normal;
             settings.ResizeMode = ResizeMode.CanResizeWithGrip;
             settings.PopupAnimation = PopupAnimation.Fade;
-            settings.Placement = PlacementMode.Center;
+            settings.WindowStartupLocation = WindowStartupLocation.Manual;
+            settings.Top = 0;
+            settings.Left = App.Current.MainWindow.ActualWidth/2 - 258;
             settings.Width = 1000;
             settings.Height = 800;
             settings.Title = DialogTitle;

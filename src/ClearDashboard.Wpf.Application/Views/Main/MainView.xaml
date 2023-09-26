@@ -18,7 +18,7 @@
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.Views.Notes"
     xmlns:panes="clr-namespace:ClearDashboard.Wpf.Application.Views.Panes"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
@@ -419,7 +419,7 @@
             Height="100"
             Margin="15,0,5,0"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ShowProgressBar, Converter={StaticResource BooleanToVisibilityConverter}}"
             Value="0" />
         <TextBlock

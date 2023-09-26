@@ -12,7 +12,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Notes"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:notes1="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
@@ -117,7 +117,7 @@
                         </Button.Style>
                         <materialDesign:PackIcon
                             Background="Transparent"
-                            Foreground="{StaticResource SecondaryHueDarkBrush}"
+                            Foreground="{StaticResource AccentHueBrush}"
                             Kind="ArrowExpandAll" />
                     </Button>
 
@@ -462,9 +462,8 @@
             Height="100"
             Margin="15,50,5,0"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
 

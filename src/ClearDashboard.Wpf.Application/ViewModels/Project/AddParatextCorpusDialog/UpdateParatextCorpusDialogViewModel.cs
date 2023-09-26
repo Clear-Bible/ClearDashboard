@@ -138,7 +138,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode),
-                new NamedParameter("selectBooksStepNextVisible", false)
+                new NamedParameter("isUpdateCorpusDialog", true)
             };
 
             var views = _lifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("UpdateParatextCorpusDialog", parameters, "Order").ToArray();
@@ -168,9 +168,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             var result = await _projectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
             if (result.Success && result.HasData)
             {
-                SelectedProject = result.Data!.FirstOrDefault(b =>
-                               b.Id == _paratextProjectId!.Replace("-", "")) ??
-                           throw new InvalidOperationException();
+                try
+                {
+                    SelectedProject = result.Data!.FirstOrDefault(b =>
+                    {
+                        return b.Id == _paratextProjectId!.ToLower().Replace("-", "");
+                    });
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error retrieving Paratext project metadata");
+                }
             }
             else
             {

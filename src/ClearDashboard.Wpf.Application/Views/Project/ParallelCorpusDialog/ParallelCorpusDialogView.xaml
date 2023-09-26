@@ -11,7 +11,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{Binding Title}"
     Width="600"
     Height="600"
@@ -89,9 +89,8 @@
                             Height="15"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource GreenMidBrush}"
                             IsIndeterminate="True"
-                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            Style="{StaticResource ClearDashboardCircularProgressBar}"
                             Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Value="60" />
                     </Grid>

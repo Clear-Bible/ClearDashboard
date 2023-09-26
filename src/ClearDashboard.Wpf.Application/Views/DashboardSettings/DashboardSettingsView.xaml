@@ -10,7 +10,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators"
     xmlns:validatorsAbstract="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="{helpers:Localization Settings_Settings}"
@@ -27,6 +27,7 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -225,7 +226,8 @@
                                     Width="250"
                                     Margin="5,10,5,0"
                                     Content="{helpers:Localization Settings_SaveSettings}"
-                                    IsEnabled="{Binding SaveGitlabUrlButtonEnabled}" />
+                                    IsEnabled="{Binding SaveGitlabUrlButtonEnabled}"
+                                    Style="{StaticResource TransparentStyle}" />
 
 
                             </StackPanel>
@@ -342,6 +344,100 @@
 
 
             </TabItem>
+
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconMaterial
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="MonitorMultiple" />
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Text="{helpers:Localization Settings_MultiMonitorSupport}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <GroupBox Margin="16" Header="{helpers:Localization Settings_MultiMonitorSupport}">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+
+
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="{helpers:Localization Settings_ShowMirrorViewOnDifferentMonitor}"
+                            IsChecked="{Binding DifferentMonitor}" />
+
+                        <CheckBox
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="{helpers:Localization Settings_ShowMirrorViewOnThirdMonitor}"
+                            IsChecked="{Binding ThirdMonitor}" />
+
+                        <Button
+                            x:Name="SaveMultiMonitorSettings"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="{helpers:Localization Settings_SaveSettings}"
+                            Style="{StaticResource TransparentStyle}" />
+
+                    </Grid>
+                </GroupBox>
+
+            </TabItem>
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconOcticons
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="Beaker" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Text="{helpers:Localization Settings_Experimental}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Orientation="Vertical">
+                    <Image
+                        Height="15"
+                        Source="pack://application:,,,/Resources/CautionTape.bmp"
+                        Stretch="Fill"
+                        StretchDirection="UpOnly" />
+                    <GroupBox Margin="16" Header="{helpers:Localization Settings_Experimental}">
+                        <CheckBox
+                            cm:Message.Attach="EnableAlignmentEditing($datacontext)"
+                            Content="{helpers:Localization Settings_EnableAlignmentEditing}"
+                            Foreground="{StaticResource OrangeDarkBrush}"
+                            IsChecked="{Binding IsAlignmentEditingEnabled}" />
+                    </GroupBox>
+                    <TextBlock
+                        Margin="16"
+                        FontWeight="Medium"
+                        Foreground="Red"
+                        Text="Please restart ClearDashboard for AQUA to be be enabled/disabled."
+                        Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </StackPanel>
+            </TabItem>
+
         </TabControl>
 
         <Button
@@ -349,7 +445,8 @@
             Grid.Row="1"
             Margin="10"
             HorizontalAlignment="Right"
-            Content="{helpers:Localization Close}" />
+            Content="{helpers:Localization Close}"
+            Style="{StaticResource TransparentStyle}" />
 
     </Grid>
 </Window>

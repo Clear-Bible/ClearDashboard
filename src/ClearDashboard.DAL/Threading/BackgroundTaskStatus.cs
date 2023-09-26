@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 namespace ClearDashboard.DataAccessLayer.Threading
@@ -50,6 +51,17 @@ namespace ClearDashboard.DataAccessLayer.Threading
             set
             {
                 _backgroundTaskType = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Type _backgroundTaskSource;
+        public Type BackgroundTaskSource
+        {
+            get => _backgroundTaskSource;
+            set
+            {
+                _backgroundTaskSource = value;
                 OnPropertyChanged();
             }
         }

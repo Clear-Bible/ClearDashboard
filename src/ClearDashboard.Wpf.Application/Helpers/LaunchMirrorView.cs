@@ -1,23 +1,19 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography.Xml;
+﻿using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
+using ClearDashboard.Wpf.Application.Views;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using CefSharp.DevTools.Database;
-using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.ViewModels.Marble;
-using ClearDashboard.Wpf.Application.Views;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using MahApps.Metro.IconPacks.Converter;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
     public static class LaunchMirrorView<TView> where TView : UserControl, new()
     {
-        public static void Show(object datacontext, double actualWidth, double actualHeight)
+        public static void Show(object datacontext, double actualWidth, double actualHeight, string title = "")
         {
             bool found = false;
             foreach (var window in App.Current.Windows)
@@ -37,8 +33,65 @@ namespace ClearDashboard.Wpf.Application.Helpers
             // create instance of MirrorView
             var mirror = new MirrorView
             {
-                WindowState = WindowState.Maximized
+                //WindowState = WindowState.Maximized
             };
+
+            mirror.WindowStartupLocation = WindowStartupLocation.Manual;
+
+            // load in the monitor settings
+            var differentMonitor = Settings.Default.DifferentMonitor;
+            var thirdMonitor = Settings.Default.ThirdMonitor;
+            // get the number and sizes of the monitors on the system
+            var monitors = Monitor.AllMonitors.ToList();
+
+
+            // figure out which monitor the app is on
+            var thisApp = App.Current.MainWindow;
+
+            // get the monitor that the app is on
+            var thisMonitor = monitors.FirstOrDefault();  // x => x.Bounds.Left >= thisApp.Left && x.Bounds.Left <= thisApp.Left + thisApp.Width
+
+            foreach (var monitor in monitors)
+            {
+                if (Math.Abs(monitor.Bounds.Left - thisApp.Left) < Math.Abs(thisMonitor.Bounds.Left - thisApp.Left))
+                {
+                    thisMonitor = monitor;
+                }
+            }
+
+            // put on primary monitor
+            if ((differentMonitor == false && thirdMonitor == false) || monitors.Count == 0)
+            {
+                mirror.Left = thisMonitor.Bounds.Left;
+                mirror.Top = thisMonitor.Bounds.Top;
+            }
+            else if (monitors.Count > 2 && thirdMonitor && differentMonitor)
+            {
+                // throw on third monitor
+                mirror.Left = monitors[2].Bounds.Left;
+                mirror.Top = monitors[2].Bounds.Top;
+            }
+            else
+            {
+                if (differentMonitor)
+                {
+                    // remove the monitor that the app is on
+                    monitors.Remove(thisMonitor);
+
+                    var sortedMonitors = monitors.OrderBy(x => x.Bounds.Left).ToList();
+
+                    mirror.Left = monitors[0].Bounds.Left;
+                    mirror.Top = monitors[0].Bounds.Top;
+                }
+                else
+                {
+                    mirror.Left = thisMonitor.Bounds.Left;
+                    mirror.Top = thisMonitor.Bounds.Top;
+                }
+            }
+
+            // turn off the mirror's close button
+            mirror.WindowStyle = WindowStyle.None;
 
             var mirroredView = new TView();
 
@@ -62,8 +115,14 @@ namespace ClearDashboard.Wpf.Application.Helpers
             {
                 pinsViewModel.MainGrid.Tag = "True";
             }
+
+            mirror.Title = $"{title} Expanded View";
+
             // force the MirrorView to show
             mirror.Show();
+            mirror.WindowState = WindowState.Maximized;
+
+
             // now that it is shown, we can get it's actual size
             var newWidth = mainGrid.ActualWidth;
             var newHeight = mainGrid.ActualHeight;

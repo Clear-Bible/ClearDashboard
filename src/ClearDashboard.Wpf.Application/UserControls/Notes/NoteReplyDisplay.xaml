@@ -2,16 +2,16 @@
     x:Class="ClearDashboard.Wpf.Application.UserControls.Notes.NoteReplyDisplay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FontSize="16"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -27,65 +27,63 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"
-                   Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyMargin}"
-                   Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyPadding}"
-                   FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontFamily}"
-                   FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"
-                   FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontStyle}"
-                   FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontWeight}"
-                   Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyText}"
-                   TextWrapping="Wrap"
-        />
+        <TextBlock
+            Grid.Row="0"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyMargin}"
+            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyPadding}"
+            FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontFamily}"
+            FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"
+            FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontStyle}"
+            FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontWeight}"
+            Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyText}"
+            TextWrapping="Wrap" />
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Orientation="Horizontal" >
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Label
+                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                    VerticalContentAlignment="Center"
                     Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyAuthor}"
-                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampColor}"
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}" 
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
-                    VerticalContentAlignment="Center"
-                />
+                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}"
+                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampColor}" />
                 <Label
+                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                    VerticalContentAlignment="Center"
                     Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyTimestamp}"
-                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampColor}"
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}" 
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
-                    VerticalContentAlignment="Center"
-                />
+                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}"
+                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampColor}" />
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Label
+                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenMargin}"
+                    VerticalContentAlignment="Center"
                     Content="{helpers:Localization Notes_NoteReplies_Read}"
-                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenColor}"
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontFamily}"
                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontSize}"
                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontWeight}" 
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenMargin}"
-                    VerticalContentAlignment="Center"
-                    />
-                <CheckBox Grid.Column="1"
-                          x:Name="SeenCheckBox"
-                          Margin="5,0,0,0"
-                          VerticalAlignment="Center"
-                          FontSize="8"
-                          Foreground="Gray"
-                          Click="OnSeenCheckBoxClicked">
+                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontWeight}"
+                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenColor}" />
+                <CheckBox
+                    x:Name="SeenCheckBox"
+                    Grid.Column="1"
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    Click="OnSeenCheckBoxClicked"
+                    FontSize="8"
+                    Foreground="Gray">
                     <CheckBox.IsChecked>
                         <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay">
-                            <Binding Path="SeenByUserIds"/>
-                            <Binding Path="CurrentUser.Id" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                            <Binding Path="SeenByUserIds" />
+                            <Binding Path="CurrentUser.Id" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>

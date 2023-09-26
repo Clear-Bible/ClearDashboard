@@ -80,6 +80,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+
+        private bool _isAlignmentEditingEnabled;
+        public bool IsAlignmentEditingEnabled
+        {
+            get => _isAlignmentEditingEnabled;
+            set
+            {
+                _isAlignmentEditingEnabled = value;
+                NotifyOfPropertyChange(() => IsAlignmentEditingEnabled);
+            }
+        }
+
+
         private bool _runAquaInstall;
         public bool RunAquaInstall
         {
@@ -258,6 +271,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+
         private string _emailCode = "";
         public string EmailCode
         {
@@ -269,6 +283,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+
+        private bool _differentMonitor;
+        public bool DifferentMonitor 
+        { 
+            get => _differentMonitor; 
+            set => Set(ref _differentMonitor, value);
+        }
+
+
+        private bool _thirdMonitor;
+        public bool ThirdMonitor 
+        { 
+            get => _thirdMonitor; 
+            set => Set(ref _thirdMonitor, value); 
+        }
 
         #endregion //Observable Properties
 
@@ -343,6 +372,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             // load in the collab user info
             CollaborationConfig = _collaborationManager.GetConfig();
 
+            // load in the monitor settings
+            DifferentMonitor = Settings.Default.DifferentMonitor;
+            ThirdMonitor = Settings.Default.ThirdMonitor;
+
+            IsAlignmentEditingEnabled = AbstractionsSettingsHelper.GetEnabledAlignmentEditing();
+
+
             base.OnViewReady(view);
         }
 
@@ -390,6 +426,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         #region Methods
 
         // ReSharper disable once UnusedMember.Global
+        
+        public void SaveMultiMonitorSettings()
+        {
+            Settings.Default.DifferentMonitor = DifferentMonitor;
+            Settings.Default.ThirdMonitor = ThirdMonitor;
+            Settings.Default.Save();
+        }
+
+
+
         public void Close()
         {
             TryCloseAsync();
@@ -414,7 +460,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             };
 #pragma warning restore CA1416
 
-            var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, _collaborationConfig.RemotePersonalAccessToken).ConfigureAwait(false);
+            var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, _collaborationConfig.RemotePersonalAccessToken);
 
             if (results)
             {
@@ -458,6 +504,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             Settings.Default.Save();
+        }
+
+
+        public void EnableAlignmentEditing(bool value)
+        {
+            AbstractionsSettingsHelper.SaveEnabledAlignmentEditing(IsAlignmentEditingEnabled);
+            _eventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus());
         }
 
         // ReSharper disable once UnusedParameter.Global

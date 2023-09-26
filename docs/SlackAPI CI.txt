@@ -1,0 +1,10 @@
+Slack CI_Post App
+
+
+App ID: A05S30KDAAZ
+Client ID: 4696406923.5887019452373
+Client Secret: effbab94744703340533508985b722cb
+Signing Secret: 21865f346b9e1a20bd796e75cce5a1ce
+Verification Token: 6YJlP82ULaOUL2qsB6LIpSGk
+
+Bot User OAuth Token: xoxb-4696406923-5887053132181-nNwykpyggVrVcOnHpLnZfc7L

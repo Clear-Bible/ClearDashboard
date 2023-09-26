@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<userControls:VerseDisplayBase
     x:Class="ClearDashboard.Wpf.Application.UserControls.VerseDisplay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,6 +17,24 @@
         <DataTemplate x:Key="SourceTokenDisplay">
             <userControls:TokenDisplay
                 HorizontalAlignment="Left"
+                AlignedTokenAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
+                AlignedTokenClicked="OnAlignedTokenClicked"
+                AlignedTokenColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenColor}"
+                AlignedTokenDoubleClicked="OnAlignedTokenDoubleClicked"
+                AlignedTokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFlowDirection}"
+                AlignedTokenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontFamily}"
+                AlignedTokenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontSize}"
+                AlignedTokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontStyle}"
+                AlignedTokenFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontWeight}"
+                AlignedTokenLeftButtonDown="OnAlignedTokenLeftButtonDown"
+                AlignedTokenLeftButtonUp="OnAlignedTokenLeftButtonUp"
+                AlignedTokenMouseEnter="OnAlignedTokenMouseEnter"
+                AlignedTokenMouseLeave="OnAlignedTokenMouseLeave"
+                AlignedTokenMouseWheel="OnAlignedTokenMouseWheel"
+                AlignedTokenPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenPadding}"
+                AlignedTokenRightButtonDown="OnAlignedTokenRightButtonDown"
+                AlignedTokenRightButtonUp="OnAlignedTokenRightButtonUp"
+                AlignedTokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenVerticalSpacing}"
                 Copy="OnCopy"
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
@@ -73,6 +91,7 @@
                 TranslationMouseWheel="OnTranslationMouseWheel"
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
+                TranslationSet="OnTranslationSet"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
                 <userControls:TokenDisplay.CommandBindings>
                     <CommandBinding Command="Copy" Executed="OnCopy" />
@@ -89,6 +108,24 @@
         <DataTemplate x:Key="TargetTokenDisplay">
             <userControls:TokenDisplay
                 HorizontalAlignment="Left"
+                AlignedTokenAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
+                AlignedTokenClicked="OnAlignedTokenClicked"
+                AlignedTokenColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenColor}"
+                AlignedTokenDoubleClicked="OnAlignedTokenDoubleClicked"
+                AlignedTokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFlowDirection}"
+                AlignedTokenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontFamily}"
+                AlignedTokenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontSize}"
+                AlignedTokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontStyle}"
+                AlignedTokenFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontWeight}"
+                AlignedTokenLeftButtonDown="OnAlignedTokenLeftButtonDown"
+                AlignedTokenLeftButtonUp="OnAlignedTokenLeftButtonUp"
+                AlignedTokenMouseEnter="OnAlignedTokenMouseEnter"
+                AlignedTokenMouseLeave="OnAlignedTokenMouseLeave"
+                AlignedTokenMouseWheel="OnAlignedTokenMouseWheel"
+                AlignedTokenPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenPadding}"
+                AlignedTokenRightButtonDown="OnAlignedTokenRightButtonDown"
+                AlignedTokenRightButtonUp="OnAlignedTokenRightButtonUp"
+                AlignedTokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenVerticalSpacing}"
                 Copy="OnCopy"
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
@@ -144,6 +181,7 @@
                 TranslationMouseWheel="OnTranslationMouseWheel"
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
+                TranslationSet="OnTranslationSet"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
                 <userControls:TokenDisplay.CommandBindings>
                     <CommandBinding Command="Copy" Executed="OnCopy" />
@@ -157,18 +195,22 @@
                 </userControls:TokenDisplay.InputBindings>
             </userControls:TokenDisplay>
         </DataTemplate>
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="SourceWrapPanelTemplate">
             <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="TargetWrapPanelTemplate">
             <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="SourceStackPanelTemplate">
             <StackPanel
                 HorizontalAlignment="Left"
                 FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
                 Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="TargetStackPanelTemplate">
             <StackPanel
                 HorizontalAlignment="Left"
@@ -213,4 +255,4 @@
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}" />
         </Border>
     </StackPanel>
-</UserControl>
+</userControls:VerseDisplayBase>

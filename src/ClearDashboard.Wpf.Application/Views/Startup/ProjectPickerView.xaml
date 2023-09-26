@@ -11,18 +11,23 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:startup="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Name="UserControl"
-    Width="Auto"
-    Height="800"
-    MinWidth="886"
-    MinHeight="594"
+    Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialDesign:DialogHost}}, Path=ActualWidth}"
+    Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialDesign:DialogHost}}, Path=ActualHeight}"
+    MaxWidth="1140"
+    MaxHeight="800"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
+
+    <UserControl.DataContext>
+        <startup:ProjectPickerViewModel />
+    </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -192,22 +197,22 @@
                     TextWrapping="Wrap"
                     Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
-                <!--<TextBlock
-                    Margin="5,0,5,0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Left"
-                    Foreground="{DynamicResource PrimaryHueMidBrush}">
-                    <Run Text="Paratext is not running" />
-                </TextBlock>-->
+            <Grid Width="530" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
                 <Button
                     x:Name="StartParatext"
-                    Width="340"
+                    Grid.Column="0"
                     Height="60"
-                    VerticalAlignment="Center"
+                    MaxWidth="340"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
                     VerticalContentAlignment="Bottom"
                     cal:Message.Attach="StartParatext"
-                    Style="{StaticResource TransparentStyle}">
+                    Style="{StaticResource TransparentStyle}"
+                    Visibility="{Binding IsParatextRegularInstalled}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="30" Height="30">
                             <Image.Style>
@@ -230,14 +235,53 @@
                             Orientation="Vertical">
                             <TextBlock
                                 HorizontalAlignment="Center"
-                                FontSize="14"
+                                FontSize="12"
                                 FontWeight="Bold"
                                 Text="{helpers:Localization ProjectPicker_NotRunning}" />
                             <TextBlock HorizontalAlignment="Center" Text="{helpers:Localization ProjectPicker_StartParatext}" />
                         </StackPanel>
                     </StackPanel>
                 </Button>
-            </StackPanel>
+                <Button
+                    x:Name="StartParatextBeta"
+                    Grid.Column="1"
+                    Width="250"
+                    Height="60"
+                    VerticalContentAlignment="Bottom"
+                    cal:Message.Attach="StartParatextBeta"
+                    Style="{StaticResource TransparentStyle}"
+                    Visibility="{Binding IsParatextBetaInstalled}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="30" Height="30">
+                            <Image.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Connected}" Value="True">
+                                            <Setter Property="Image.Source" Value="/Resources/ParatextBeta_Connected32.png" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Connected}" Value="False">
+                                            <Setter Property="Image.Source" Value="/Resources/ParatextBeta_Disconnected32.png" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <StackPanel
+                            Margin="15,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Text="{helpers:Localization ProjectPicker_BetaNotRunning}"
+                                TextWrapping="Wrap" />
+                            <TextBlock HorizontalAlignment="Center" Text="{helpers:Localization ProjectPicker_StartParatext}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Button>
+            </Grid>
         </StackPanel>
 
         <Line
@@ -252,48 +296,90 @@
 
 
         <!--  Get Started  -->
-        <StackPanel Grid.Row="1">
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
             <Label
                 Margin="40,0,0,0"
                 Content="{helpers:Localization ProjectPicker_GetStarted}"
                 FontSize="19"
                 FontWeight="Medium" />
-            <Button
-                x:Name="MoveForwards"
-                Width="340"
-                Height="60"
-                Margin="10,5,40,10"
-                HorizontalContentAlignment="Left"
-                VerticalContentAlignment="Top"
-                cal:Message.Attach="MoveForwards"
-                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                Background="DarkGray"
-                BorderThickness="0"
-                IsEnabled="{Binding Connected}"
-                Style="{StaticResource TransparentStyle}">
-                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <Image
-                        Height="30"
-                        Margin="5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Source="../../Assets/newproject.png" />
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="19"
-                            FontWeight="Normal"
-                            Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
-                        <TextBlock
-                            Margin="0,2"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            FontWeight="Light"
-                            Text="{helpers:Localization ProjectPicker_CreateLong}"
-                            TextWrapping="Wrap" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    x:Name="MoveForwards"
+                    Width="400"
+                    Height="86"
+                    Margin="10,5,10,2"
+                    HorizontalAlignment="Left"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    cal:Message.Attach="MoveForwards"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                    Background="DarkGray"
+                    BorderThickness="0"
+                    IsEnabled="{Binding Connected}"
+                    Style="{StaticResource TransparentStyle}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <Image
+                            Height="30"
+                            Margin="5"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Source="../../Assets/newproject.png" />
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="19"
+                                FontWeight="Normal"
+                                Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
+                            <TextBlock
+                                Margin="0,2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontWeight="Light"
+                                Text="{helpers:Localization ProjectPicker_CreateLong}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </Button>
+                </Button>
+                <Button
+                    x:Name="CreateProjectWithProjectTemplate"
+                    Width="400"
+                    Height="86"
+                    Margin="10,5,10,2"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    cal:Message.Attach="CreateProjectWithProjectTemplate"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                    Background="DarkGray"
+                    BorderThickness="0"
+                    IsEnabled="{Binding Connected}"
+                    Style="{StaticResource TransparentStyle}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <iconPacks:PackIconJamIcons
+                            Width="20"
+                            Height="20"
+                            Margin="5,10,5,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Foreground="{StaticResource Theme.ShowcaseBrush}"
+                            Kind="Template" />
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="19"
+                                FontWeight="Normal"
+                                Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
+                            <TextBlock
+                                Margin="0,2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontWeight="Light"
+                                Text="{helpers:Localization ProjectPicker_CreateWithProjectTemplate}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <!--<CheckBox Content="Use Project Template" Margin="108,0,0,2" HorizontalAlignment="Left" IsChecked="{Binding UseProjectTemplate, Mode=TwoWay}"/>-->
         </StackPanel>
 
         <!--  Open Recent  -->
@@ -410,6 +496,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
                                     <!--<StackPanel
@@ -450,7 +537,7 @@
                                         Grid.Column="1"
                                         FontSize="14"
                                         FontWeight="DemiBold">
-                                        <Run Text="{helpers:Localization ProjectPicker_Project}" />
+                                        <!--<Run Text="{helpers:Localization ProjectPicker_Project}" />-->
                                         <Run Text="{Binding ProjectName}" />
                                     </TextBlock>
 
@@ -458,19 +545,38 @@
                                         Grid.Row="0"
                                         Grid.Column="2"
                                         Width="145"
-                                        HorizontalAlignment="Center"
+                                        HorizontalAlignment="Left"
                                         FontSize="12"
                                         Text="{Binding Modified}" />
 
                                     <TextBlock
                                         Grid.Row="1"
+                                        Grid.Column="2"
+                                        Grid.ColumnSpan="2"
+                                        VerticalAlignment="Center"
+                                        FontSize="12">
+                                        <Run FontWeight="DemiBold" Text="Owner:" />
+                                        <Run Text="{Binding CollabOwner}" />
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CollabOwner}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <!--<TextBlock
+                                        Grid.Row="1"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2">
                                         <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Database}" />
                                         <Run FontSize="11" Text="{Binding CompactFilePath, Mode=OneTime}" />
-                                    </TextBlock>
+                                    </TextBlock>-->
 
-                                    <TextBlock Grid.Row="2" Grid.Column="1">
+                                    <TextBlock Grid.Row="1" Grid.Column="1">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
@@ -480,8 +586,8 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
-                                        <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Version}" />
-                                        <Run FontSize="11" Text="{Binding Version}" />
+                                        <Run FontSize="12" Text="{helpers:Localization ProjectPicker_Version}" />
+                                        <Run FontSize="12" Text="{Binding Version}" />
                                     </TextBlock>
 
                                     <!--<TextBlock
@@ -499,12 +605,16 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                <Setter Property="Visibility" Value="Visible" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding PermissionLevel}" Value="Owner">
                                                         <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding PermissionLevel}" Value="ReadWrite">
                                                         <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PermissionLevel}" Value="None">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -520,9 +630,9 @@
                                         Grid.Row="3"
                                         Grid.Column="1"
                                         cal:Message.Attach="UpdateDatabase($dataContext)"
-                                        Content="Database Update Needed">
+                                        Content="Required: Update Project">
                                         <Button.Style>
-                                            <Style BasedOn="{StaticResource MaterialDesignRaisedSecondaryButton}" TargetType="Button">
+                                            <Style BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}" TargetType="Button">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding NeedsMigrationUpgrade}" Value="True">
@@ -531,9 +641,31 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Button.Style>
-
-
                                     </Button>
+
+                                    <Button
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        Padding="2"
+                                        HorizontalContentAlignment="Center"
+                                        cal:Message.Attach="ShowCollaborationGetLatest($dataContext)"
+                                        Background="{StaticResource SecondaryHueLightBrush}">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="False">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <Run Text="{helpers:Localization MainView_RemoteUpdateAvailable}" />
+                                    </Button>
+
                                 </Grid>
 
                             </StackPanel>
@@ -547,7 +679,9 @@
         <StackPanel
             Grid.Row="1"
             Grid.Column="1"
-            VerticalAlignment="Top">
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
             <ComboBox
                 x:Name="SelectedLanguage"
                 Width="200"
@@ -559,6 +693,22 @@
                 IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
                 SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+            <Button
+                Padding="-5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                cal:Message.Attach="[Event Click]=[Action OpenSettings()]"
+                Background="Transparent"
+                BorderBrush="Transparent">
+                <materialDesign:PackIcon
+                    Width="30"
+                    Height="30"
+                    Margin="5,5,20,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="{StaticResource PrimaryHueMidBrush}"
+                    Kind="Cog" />
+            </Button>
         </StackPanel>
         <!--<StackPanel
             Grid.Row="2"
@@ -856,7 +1006,7 @@
                 <StackPanel>
                     <userControls:ReleaseNotesUserControl>
                         <!--  This DataTrigger was added to work around an issue where this control froze the UI.  See Jira DI 96  -->
-                        <userControls:ReleaseNotesUserControl.Style>
+                        <!--<userControls:ReleaseNotesUserControl.Style>
                             <Style TargetType="userControls:ReleaseNotesUserControl">
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Style.Triggers>
@@ -865,7 +1015,7 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </userControls:ReleaseNotesUserControl.Style>
+                        </userControls:ReleaseNotesUserControl.Style>-->
                     </userControls:ReleaseNotesUserControl>
                 </StackPanel>
             </StatusBarItem>

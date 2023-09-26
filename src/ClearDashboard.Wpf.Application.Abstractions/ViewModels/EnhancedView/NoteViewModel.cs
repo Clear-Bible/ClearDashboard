@@ -7,6 +7,8 @@ using System.Linq;
 using Caliburn.Micro;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -22,7 +24,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private NoteAssociationViewModelCollection _associations = new();
         private NoteViewModelCollection _replies = new();
 
-        public Note Entity { get; }
+        public Note Entity { get; set; }
         public NoteId? NoteId => Entity.NoteId;
         public EntityId<NoteId>? ThreadId => Entity.ThreadId;
 
@@ -77,7 +79,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     try
                     {
-                        var verseId = association.AssociatedEntityId.ToString().Substring(0,9);
+                        var verseId = string.Empty;
+                        if (association.AssociatedEntityId is TranslationId translationId)
+                        {
+                            verseId = translationId.SourceTokenId.ToString().Substring(0, 9);
+                        }
+                        else
+                        {
+                            verseId = association.AssociatedEntityId.ToString().Substring(0, 9);
+                        }
+
                         if (verseId.Length > 0)
                         {
                             verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verseId) + ", ";

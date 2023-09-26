@@ -10,12 +10,13 @@
     xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Marble"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;assembly=ClearDashboard.DAL.Models"
     xmlns:pieChart="clr-namespace:ClearDashboard.Wpf.Controls.DonutGraph.PieChart;assembly=ClearDashboard.Wpf.Controls"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:wpfKeyBoard="clr-namespace:wpfKeyBoard;assembly=wpfKeyBoard"
     x:Name="MarbleViewControl"
@@ -52,10 +53,25 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
-        <Style x:Key="ExpanderStyle" TargetType="{x:Type Expander}">
+        <Style x:Key="PrimaryExpanderStyle" TargetType="{x:Type Expander}">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}" />
+            <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
+        </Style>
+
+        <Style x:Key="SecondaryExpanderStyle" TargetType="{x:Type Expander}">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="{StaticResource SecondaryHueLightBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource SecondaryHueLightForegroundBrush}" />
+        </Style>
+
+        <Style
+            x:Key="SecondaryGroupBoxStyle"
+            BasedOn="{StaticResource MahApps.Styles.GroupBox}"
+            TargetType="{x:Type GroupBox}">
+            <Setter Property="BorderBrush" Value="{StaticResource SecondaryHueLightBrush}" />
+            <Setter Property="mah:ControlsHelper.ContentCharacterCasing" Value="Normal" />
+            <Setter Property="mah:HeaderedControlHelper.HeaderBackground" Value="{StaticResource SecondaryHueLightBrush}" />
         </Style>
 
         <marble:MarbleViewModel x:Key="ViewModelsSource" />
@@ -80,10 +96,11 @@
 
         <!--  ROW 0  -->
         <StackPanel Grid.Column="0" Orientation="Horizontal">
+
             <Button
-                Width="20"
-                Height="20"
-                Margin="5,5,50,0"
+                Width="25"
+                Height="25"
+                Margin="5,5,5,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
@@ -106,7 +123,7 @@
                 </Button.Style>
                 <materialDesign:PackIcon
                     Background="Transparent"
-                    Foreground="{StaticResource SecondaryHueDarkBrush}"
+                    Foreground="{StaticResource AccentHueBrush}"
                     Kind="ArrowExpandAll" />
             </Button>
 
@@ -119,7 +136,8 @@
                 ShowHeader="False"
                 ShowOffsetControl="False"
                 VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{Binding BcvUserControlVisibility}" />
         </StackPanel>
 
 
@@ -160,7 +178,7 @@
 
                     <Border
                         Grid.Column="1"
-                        Margin="5,3,0,0"
+                        Margin="5,3,2,2"
                         BorderBrush="Black"
                         BorderThickness="1">
                         <StackPanel Orientation="Vertical">
@@ -203,7 +221,7 @@
                     <Border
                         Grid.Row="0"
                         Grid.Column="2"
-                        Margin="5,3,10,0"
+                        Margin="5,3,10,2"
                         BorderBrush="Black"
                         BorderThickness="1">
                         <StackPanel Orientation="Vertical">
@@ -277,81 +295,93 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition x:Name="HeaderColumn" Width="*" />
+                        <ColumnDefinition x:Name="HeaderColumn" Width="73*" />
+                        <ColumnDefinition Width="723*" />
                     </Grid.ColumnDefinitions>
 
-                    <Button
-                        Name="SearchButton"
-                        Grid.Column="0"
-                        Width="25"
-                        Height="25"
-                        Margin="10"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
-                        CommandParameter="{x:Static Dock.Top}"
-                        ToolTip="{helpers:Localization ExpandView}">
-                        <Button.Style>
-                            <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
-                                <Setter Property="Padding" Value="0" />
-                                <Setter Property="Background" Value="Transparent" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                                        <Setter Property="RenderTransform">
-                                            <Setter.Value>
-                                                <ScaleTransform ScaleX="1.75" ScaleY="1.75" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <iconPacks:PackIconMaterial
-                            Width="25"
-                            Height="25"
-                            Background="Transparent"
-                            Foreground="{StaticResource PrimaryHueDarkBrush}"
-                            Kind="DatabaseSearch" />
-                    </Button>
+
 
 
                     <materialDesign:Card
                         Grid.Column="1"
+                        Grid.ColumnSpan="2"
                         Width="{Binding ActualWidth, ElementName=HeaderColumn, Converter={converters:WidthSubtraction}, ConverterParameter='30'}"
                         Margin="0,0,20,0"
                         materialDesign:ElevationAssist.Elevation="Dp0"
                         Background="#EEEBEB">
-                        <ListBox
-                            ItemsSource="{Binding LexicalLinks}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            SelectedValue="{Binding SelectedLexicalLink, Mode=TwoWay}">
-                            <ListBox.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignChoiceChipPrimaryListBox}" TargetType="ListBox">
-                                    <Setter Property="FlowDirection" Value="LeftToRight" />
-                                    <Setter Property="FontSize" Value="16" />
-                                    <Setter Property="FontFamily" Value="SBL Greek" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding LexicalLinks[0].IsRtl}" Value="True">
-                                            <Setter Property="FlowDirection" Value="RightToLeft" />
-                                            <Setter Property="FontSize" Value="20" />
-                                            <Setter Property="FontFamily" Value="SBL Hebrew" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListBox.Style>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,2">
-                                        <TextBlock Text="{Binding Word}">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock" />
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                Name="SearchButton"
+                                Grid.Column="0"
+                                Width="20"
+                                Height="20"
+                                Margin="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                                CommandParameter="{x:Static Dock.Top}"
+                                ToolTip="{helpers:Localization Marble_Search}">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                                <Setter Property="RenderTransform">
+                                                    <Setter.Value>
+                                                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <iconPacks:PackIconForkAwesome
+                                    Width="20"
+                                    Height="20"
+                                    Background="Transparent"
+                                    Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                    Kind="Search" />
+                            </Button>
+
+                            <ListBox
+                                Grid.Column="1"
+                                ItemsSource="{Binding LexicalLinks}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                SelectedValue="{Binding SelectedLexicalLink, Mode=TwoWay}">
+                                <ListBox.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignChoiceChipPrimaryListBox}" TargetType="ListBox">
+                                        <Setter Property="FlowDirection" Value="LeftToRight" />
+                                        <Setter Property="FontSize" Value="16" />
+                                        <Setter Property="FontFamily" Value="SBL Greek" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding LexicalLinks[0].IsRtl}" Value="True">
+                                                <Setter Property="FlowDirection" Value="RightToLeft" />
+                                                <Setter Property="FontSize" Value="20" />
+                                                <Setter Property="FontFamily" Value="SBL Hebrew" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.Style>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,2">
+                                            <TextBlock Text="{Binding Word}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock" />
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
                     </materialDesign:Card>
                 </Grid>
 
@@ -388,7 +418,7 @@
                             Margin="10,10,23,10"
                             Header="{helpers:Localization Marble_FrequencyGraph}"
                             IsExpanded="False"
-                            Style="{StaticResource ExpanderStyle}">
+                            Style="{StaticResource PrimaryExpanderStyle}">
                             <pieChart:PieChartLayout
                                 Margin="2"
                                 HorizontalAlignment="Stretch"
@@ -413,7 +443,8 @@
                             Width="Auto"
                             Margin="10,5,10,10"
                             Header="{helpers:Localization Marble_GeneralInformation}"
-                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
+                            Style="{StaticResource SecondaryGroupBoxStyle}">
                             <GroupBox.HeaderTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -484,7 +515,7 @@
                                         VerticalAlignment="Top"
                                         Header="{helpers:Localization Marble_StrongCodes}">
                                         <Expander.Style>
-                                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                            <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
                                                 <Setter Property="IsExpanded" Value="True" />
                                                 <Style.Triggers>
@@ -577,7 +608,7 @@
                                         VerticalAlignment="Top"
                                         Header="{helpers:Localization Marble_PartsOfSpeech}">
                                         <Expander.Style>
-                                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                            <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
                                                 <Setter Property="IsExpanded" Value="True" />
                                                 <Style.Triggers>
@@ -657,7 +688,7 @@
                                         VerticalAlignment="Top"
                                         Header="{helpers:Localization Marble_RelatedLemmas}">
                                         <Expander.Style>
-                                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                            <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
                                                 <Setter Property="IsExpanded" Value="True" />
                                                 <Style.Triggers>
@@ -780,7 +811,8 @@
                             Width="Auto"
                             Margin="5,5,10,10"
                             Header="{helpers:Localization Marble_Senses}"
-                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
+                            Style="{StaticResource SecondaryGroupBoxStyle}">
 
                             <ListView
                                 x:Name="SensesListView"
@@ -875,7 +907,7 @@
                                 <Expander
                                     Header="{helpers:Localization Marble_Definition}"
                                     IsExpanded="True"
-                                    Style="{StaticResource ExpanderStyle}">
+                                    Style="{StaticResource PrimaryExpanderStyle}">
                                     <StackPanel
                                         Margin="3"
                                         Background="{StaticResource MaterialDesignPaper}"
@@ -953,7 +985,7 @@
 
 
 
-                                <Expander Header="{helpers:Localization Marble_Verses}" Style="{StaticResource ExpanderStyle}">
+                                <Expander Header="{helpers:Localization Marble_Verses}" Style="{StaticResource SecondaryExpanderStyle}">
                                     <StackPanel
                                         Margin="3"
                                         Background="{StaticResource MaterialDesignPaper}"
@@ -1112,7 +1144,7 @@
 
                                 <Expander Header="Synonyms">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.Synonyms.Count}" Value="0">
@@ -1170,7 +1202,7 @@
 
                                 <Expander Header="Antonyms">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource SecondaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.Antonyms.Count}" Value="0">
@@ -1226,7 +1258,7 @@
 
                                 <Expander Header="{helpers:Localization Marble_DomainsTitle}">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.Domains.Count}" Value="0">
@@ -1325,7 +1357,7 @@
 
                                 <Expander Header="CoreDomains">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource SecondaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.CoreDomains.Count}" Value="0">
@@ -1378,7 +1410,7 @@
 
                                 <Expander Header="Valency">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource PrimaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.Valencies.Count}" Value="0">
@@ -1431,7 +1463,7 @@
 
                                 <Expander Header="Collocational Meanings">
                                     <Expander.Style>
-                                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Style BasedOn="{StaticResource SecondaryExpanderStyle}" TargetType="Expander">
                                             <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding SelectedSense.AlphabetTreeNodes.Count}" Value="0">

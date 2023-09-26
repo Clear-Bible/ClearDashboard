@@ -12,7 +12,7 @@ namespace ClearDashboard.Wpf.Application.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -379,6 +379,68 @@ namespace ClearDashboard.Wpf.Application.Properties {
             }
             set {
                 this["EmailPass"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DifferentMonitor {
+            get {
+                return ((bool)(this["DifferentMonitor"]));
+            }
+            set {
+                this["DifferentMonitor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ThirdMonitor {
+            get {
+                return ((bool)(this["ThirdMonitor"]));
+            }
+            set {
+                this["ThirdMonitor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("dirk.kaiser@clear.bible")]
+        public string JiraUser {
+            get {
+                return ((string)(this["JiraUser"]));
+            }
+            set {
+                this["JiraUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ATATT3xFfGF0qGkLXJcyCb8vCNGKc-qsHtK1Va-M0FxkFD0pldZVZtnaaCDRCUV6QyqBy9t2mIwHoFYrt" +
+            "x5ddmcpFHGb6FRS09r9VC6psItw7mKv9a_eca0SeBaiCzj-oGOo1VFjtsodqwlx-NqxI2FFHJZrFgpGB" +
+            "QRJdxciynI6ZCPKKoYxf0E=EB25BFDE")]
+        public string JiraToken {
+            get {
+                return ((string)(this["JiraToken"]));
+            }
+            set {
+                this["JiraToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://clearbible.atlassian.net")]
+        public string JiraBaseUrl {
+            get {
+                return ((string)(this["JiraBaseUrl"]));
+            }
+            set {
+                this["JiraBaseUrl"] = value;
             }
         }
     }

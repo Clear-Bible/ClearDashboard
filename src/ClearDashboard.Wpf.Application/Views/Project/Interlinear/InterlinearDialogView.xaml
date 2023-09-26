@@ -8,7 +8,7 @@
     xmlns:interlinear="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="800"
     Height="450"
     d:DataContext="{d:DesignInstance Type=interlinear:InterlinearDialogViewModel,
@@ -162,7 +162,7 @@
                 HorizontalAlignment="Left"
                 Foreground="{StaticResource PrimaryHueMidBrush}"
                 IsIndeterminate="True"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                Style="{StaticResource ClearDashboardCircularProgressBar}"
                 Visibility="{Binding SpinnerVisibility}"
                 Value="75" />
             <Button
@@ -171,6 +171,7 @@
                 Height="40"
                 MaxWidth="175"
                 Margin="5,0,5,0"
+                IsEnabled="{Binding AlignmentsAvailable}"
                 Style="{StaticResource TransparentStyle}">
                 Create Interlinear
             </Button>

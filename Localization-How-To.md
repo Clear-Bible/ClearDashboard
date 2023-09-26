@@ -53,7 +53,7 @@ Example:
     </TextBlock>
 ```
 
-## To get the localized string from your code, call the following function
+## To get the localized string from your code, inject an instance of ILocalizationService into your class then call the following function:
 ```
     var localizedString = _localizationService["NewCollabUserView_SavedToRemoteServer"];
 ```

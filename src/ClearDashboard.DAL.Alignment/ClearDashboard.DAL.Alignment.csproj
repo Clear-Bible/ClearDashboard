@@ -1,37 +1,33 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearEngine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Clear-Bible/ClearEngine</RepositoryUrl>
     <Platforms>AnyCPU</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.2.0.2</Version>
+    <FileVersion>1.2.0.2</FileVersion>
+    <AssemblyVersion>1.2.0.2</AssemblyVersion>
   </PropertyGroup>
-
   <ItemGroup>
-	<PackageReference Include="ClearBible.Engine" Version="2.0.14" />
-	<PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
+    <PackageReference Include="ClearBible.Engine" Version="2.0.16" />
+    <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
     <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
   </ItemGroup>
-
   <ItemGroup>
-	<ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
     <ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="PresentationFramework">
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_MSIL\PresentationFramework\v4.0_4.0.0.0__31bf3856ad364e35\PresentationFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
-
 </Project>

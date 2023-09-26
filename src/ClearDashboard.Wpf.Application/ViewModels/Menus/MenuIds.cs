@@ -1,11 +1,9 @@
-﻿using System.Runtime.CompilerServices;
-using ClearDashboard.DataAccessLayer.Models;
-
-namespace ClearDashboard.Wpf.Application.ViewModels.Menus;
+﻿namespace ClearDashboard.Wpf.Application.ViewModels.Menus;
 
 public static class MenuIds
 {
     public const string About = "AboutID";
+    public const string AccountInfo = "AccountInfoID";
     public const string BiblicalTerms = "BiblicalTermsID";
     public const string Delete = "DeleteID";
     public const string EnhancedCorpus = "EnhancedCorpusID";

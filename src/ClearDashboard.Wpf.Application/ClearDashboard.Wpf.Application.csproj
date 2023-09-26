@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -8,14 +7,13 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.0.6.10</AssemblyVersion>
-    <FileVersion>1.0.6.10</FileVersion>
-    <Version>1.0.6.10</Version>
+    <AssemblyVersion>1.2.0.2</AssemblyVersion>
+    <FileVersion>1.2.0.2</FileVersion>
+    <Version>1.2.0.2</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-	<UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
-	<Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
+    <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
+    <Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Interfaces\**" />
     <Compile Remove="Models\EnhancedView\**" />
@@ -34,13 +32,11 @@
     <Page Remove="ViewModels\About\**" />
     <Page Remove="Views\DesignSurface\**" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
     <Compile Remove="ViewModels\ParatextViews\WordMeaningsViewModel.cs" />
     <Compile Remove="Views\ParatextViews\WordMeaningsView.xaml.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="Assets\ClearCollabIcon.png" />
     <None Remove="Assets\ClearDashboard_logo.ico" />
@@ -77,6 +73,8 @@
     <None Remove="Resources\NewProject_Icon_128.png" />
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\OpenBook50.png" />
+    <None Remove="Resources\ParatextBeta_Connected32.png" />
+    <None Remove="Resources\ParatextBeta_Disconnected32.png" />
     <None Remove="Resources\Paratext_Connected32.png" />
     <None Remove="Resources\Paratext_Disconnected32.png" />
     <None Remove="Resources\Paratext_Send32.png" />
@@ -90,11 +88,9 @@
     <None Remove="Resources\SILEOTSR.ttf" />
     <None Remove="Resources\tick_16.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Page Remove="Views\ParatextViews\WordMeaningsView.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Assets\ClearCollabIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -124,51 +120,51 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Resources\Crystal Click 2.wav" />
     <EmbeddedResource Include="Resources\DashboardFailure.wav" />
     <EmbeddedResource Include="Resources\plugin_disconnect.wav" />
   </ItemGroup>
-
   <ItemGroup>
-	  <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
-	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="109.1.110" />
-	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.5" />
+    <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
+    <PackageReference Include="ClearApplicationFoundation" Version="2.0.8" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.5" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.12" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.5" />
-    <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.4.0" />
+    <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />
     <PackageReference Include="FuzzyString" Version="1.0.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.51" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.PicolIcons" Version="4.11.0" />
+    <PackageReference Include="Markdig" Version="0.33.0" />
+    <PackageReference Include="MdXaml" Version="1.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" Version="2.21.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
-	<PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="7.0.0" />
-    <PackageReference Include="TimeZoneNames" Version="6.0.0" /><PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
-	  <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
+    <PackageReference Include="System.Management" Version="7.0.2" />
+    <PackageReference Include="TimeZoneNames" Version="6.0.0" />
+    <PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
+    <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Resources\add16.png" />
     <Resource Include="Resources\add24.png" />
@@ -222,6 +218,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\OpenBook50.png" />
+    <Resource Include="Resources\ParatextBeta_Connected32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\ParatextBeta_Disconnected32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Paratext_Connected32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -244,11 +246,9 @@
     <Resource Include="Resources\SILEOTSR.ttf" />
     <Resource Include="Resources\tick_16.png" />
   </ItemGroup>
-
   <ItemGroup>
     <SplashScreen Include="Assets\splash_screen.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -260,10 +260,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Strings\Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
+    <Compile Update="UserControls\AlignmentBulkReview.xaml.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\Lexicon\ConcordanceDisplay.xaml.cs">
       <SubType>Code</SubType>
@@ -286,69 +284,16 @@
     <Compile Update="UserControls\Notes\NoteDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\SelectBooksControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.am.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.ar.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.de.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.en.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.es.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.fr.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.hi.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.id.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.km.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.pt-BR.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.pt.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.resx">
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.ro.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.ru.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.vi.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.zh-cn.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Resources.zh-tw.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Data\usfm\Tes\41MATTes.SFM">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -366,11 +311,20 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
+    <None Update="Resources\Html2Adf\html2adf.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Html2Adf\htmltoadf.x86_64-pc-windows-gnu.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\markdown-cheat-sheet.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -481,10 +435,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <Page Update="Assets\ClearLogo.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\AlignmentBulkReview.xaml">
+      <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\BcvUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
@@ -542,71 +498,64 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
-
   <ItemGroup>
+    <Folder Include="Resources\Html2Adf\" />
     <Folder Include="Resources\TailBlazor\" />
   </ItemGroup>
-
   <PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x86</RuntimeIdentifier>
     <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(PlatformTarget)' == 'x64'">
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
     <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(PlatformTarget)' == 'arm64'">
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-arm64</RuntimeIdentifier>
     <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|x64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|x64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />
   </Target>
-
   <ItemGroup>
-    <PackageReference Update="chromiumembeddedframework.runtime.win-arm64" Version="109.1.11" />
+    <PackageReference Update="chromiumembeddedframework.runtime.win-arm64" Version="115.3.11" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="109.1.11" />
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="115.3.11" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="109.1.11" />
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="115.3.11" />
   </ItemGroup>
 </Project>

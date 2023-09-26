@@ -48,6 +48,12 @@ namespace ClearDashboard.Wpf.Application.Validators
                     //context.AddFailure($"A project with the name '{projectName}' already exists. Please choose a unique name.");
                     context.AddFailure(_localizationService.Get("ProjectValidator_SameName"));
                 }
+
+                var maximumProjectNameLength = 98;
+                if (projectName.Length >= maximumProjectNameLength)
+                {
+                    context.AddFailure(_localizationService.Get("ProjectValidator_TooLong"));
+                }
             });
         }
 

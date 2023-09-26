@@ -1,22 +1,27 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Services;
-using Microsoft.Extensions.Logging;
+using static ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog.ParallelCorpusDialogViewModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
     public record ToggleBackgroundTasksVisibilityMessage();
 
-    public class BackgroundTasksViewModel : Screen, IHandle<BackgroundTaskChangedMessage>, IHandle<ToggleBackgroundTasksVisibilityMessage>
+    public class BackgroundTasksViewModel : Screen, IHandle<BackgroundTaskChangedMessage>, IHandle<ToggleBackgroundTasksVisibilityMessage>, IHandle<IsBackgroundDeletionTaskRunning>
     {
+
+        #region Member Variables   
+
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
         private readonly IEventAggregator? _eventAggregator;
@@ -29,9 +34,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private Timer? _timer;
         private bool _cleanUpOldBackgroundTasks;
 
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
+        private Visibility _showTaskView = Visibility.Collapsed;
+        public Visibility ShowTaskView
+        {
+            get => _showTaskView;
+            set => Set(ref _showTaskView, value);
+        }
+
+        private ObservableCollection<BackgroundTaskStatus> _backgroundTaskStatuses = new();
+        public ObservableCollection<BackgroundTaskStatus> BackgroundTaskStatuses
+        {
+            get => _backgroundTaskStatuses;
+            set => Set(ref _backgroundTaskStatuses, value);
+        }
+
+        private Visibility _showSpinner = Visibility.Collapsed;
+        private bool _showPopup;
+
+        public Visibility ShowSpinner
+        {
+            get => _showSpinner;
+            set => Set(ref _showSpinner, value);
+        }
+
+        public bool ShowPopup
+        {
+            get => _showPopup;
+            set => Set(ref _showPopup, value);
+        }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
         public BackgroundTasksViewModel()
         {
-          
+
             // required for design-time
         }
 
@@ -65,6 +114,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
+        #endregion //Constructor
+
+
+        #region Methods
+
         private void TimerElapsed(object? state)
         {
             try
@@ -83,7 +137,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 _logger.LogError(ex, "An unexpected error occurred while cleaning up background tasks.");
                 //swallow for now
             }
-          
+
         }
 
         public void CancelTask(BackgroundTaskStatus status)
@@ -156,83 +210,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
         }
 
-        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
-        {
-            var backgroundTaskStatus = message.Status;
-
-            // check for duplicate entries
-            var taskExists = false;
-            foreach (var status in BackgroundTaskStatuses)
-            {
-                if (status.Name == backgroundTaskStatus.Name)
-                {
-                    taskExists = true;
-
-                    status.Description = backgroundTaskStatus.Description;
-                    if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
-                    {
-                        if (backgroundTaskStatus.ErrorMessage.Contains("InvalidParameterEngineException"))
-                        {
-                            status.Description = backgroundTaskStatus.Name+ " Failed:\n " + "An unfitting tokenizer was used for the selected corpus.  For example, the ZWSP tokenizer for the NIV84 corpus.";
-                        }
-                        else
-                        {
-                            status.Description = backgroundTaskStatus.Name+ " Failed:\n " + backgroundTaskStatus.ErrorMessage;
-                        }
-                        ShowPopup = true;
-                    }
-
-                    if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
-                    { 
-                        CancelTask(backgroundTaskStatus);
-                        backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Cancelled;
-                    }
-                    status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
-
-                    NotifyOfPropertyChange(() => BackgroundTaskStatuses);
-                    break;
-                }
-            }
-
-            if (taskExists == false)
-            {
-                BackgroundTaskStatuses.Add(backgroundTaskStatus);
-            }
-
-            ToggleSpinner();
-
-            await Task.CompletedTask;
-        }
-
-        private Visibility _showTaskView = Visibility.Collapsed;
-        public Visibility ShowTaskView
-        {
-            get => _showTaskView;
-            set => Set(ref _showTaskView, value);
-        }
-
-        private ObservableCollection<BackgroundTaskStatus> _backgroundTaskStatuses = new();
-        public ObservableCollection<BackgroundTaskStatus> BackgroundTaskStatuses
-        {
-            get => _backgroundTaskStatuses;
-            set => Set(ref _backgroundTaskStatuses, value);
-        }
-
-        private Visibility _showSpinner = Visibility.Collapsed;
-        private bool _showPopup;
-
-        public Visibility ShowSpinner
-        {
-            get => _showSpinner;
-            set => Set(ref _showSpinner, value);
-        }
-
         public void CloseTaskBox()
         {
             ShowTaskView = Visibility.Collapsed;
             ShowPopup = false;
         }
-
 
         private void ToggleSpinner()
         {
@@ -242,33 +224,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             ShowSpinner = runningTasks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
-
-        public bool ShowPopup
-        {
-            get => _showPopup;
-            set => Set(ref _showPopup, value);
-        }
-
-        public async  Task HandleAsync(ToggleBackgroundTasksVisibilityMessage message, CancellationToken cancellationToken)
-        {
-            ShowTaskView = ShowTaskView == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
-            OnUIThread(() =>
-            {
-                ShowPopup = !ShowPopup;
-            });
-           await Task.CompletedTask;
-        }
-
         /// <summary>
         /// Get the number of running tasks that are flagged as high performance mode
         /// </summary>
         /// <returns></returns>
         public int GetNumberOfPerformanceTasksRemaining()
         {
-           return BackgroundTaskStatuses
-               .Where(x => x.BackgroundTaskType == BackgroundTaskStatus.BackgroundTaskMode.PerformanceMode
-               && x.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running)
-               .ToList().Count;
+            return BackgroundTaskStatuses
+                .Where(x => x.BackgroundTaskType == BackgroundTaskStatus.BackgroundTaskMode.PerformanceMode
+                            && x.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running)
+                .ToList().Count;
         }
 
 
@@ -292,7 +257,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
                     return false;
                 }
-                
+
                 if (x.Name == MaculaCorporaNames.GreekCorpusName && nodeName == MaculaCorporaNames.GreekCorpusName)
                 {
                     if (x.Description!.Contains(MaculaCorporaNames.GreekCorpusName))
@@ -315,13 +280,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             return false;
         }
 
+
         public bool CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(string nodeName)
         {
             var tasks = BackgroundTaskStatuses.Where(x =>
             {
                 if (x.Name == MaculaCorporaNames.HebrewCorpusName && nodeName == MaculaCorporaNames.HebrewCorpusName)
                 {
-                    if (x.Description!.Contains(MaculaCorporaNames.HebrewCorpusName) && 
+                    if (x.Description!.Contains(MaculaCorporaNames.HebrewCorpusName) &&
                         (x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed &&
                          x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Failed &&
                          x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Cancelled))
@@ -363,6 +329,96 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         public void CopyText(BackgroundTaskStatus status)
         {
             Clipboard.SetText(status.Name + ": " + status.Description);
+        }
+
+        #endregion // Methods
+
+        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+
+            var backgroundTaskStatus = message.Status;
+
+            // check for duplicate entries
+            var taskExists = false;
+            foreach (var status in BackgroundTaskStatuses)
+            {
+                if (status.Name == backgroundTaskStatus.Name)
+                {
+                    taskExists = true;
+
+                    status.Description = backgroundTaskStatus.Description;
+                    if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
+                    {
+                        if (backgroundTaskStatus.ErrorMessage.Contains("InvalidParameterEngineException"))
+                        {
+                            status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "An unfitting tokenizer was used for the selected corpus.  For example, the ZWSP tokenizer for the NIV84 corpus.  Please remove the corpus, pick a different tokenizer, and try again";
+                        }
+                        else if (backgroundTaskStatus.ErrorMessage.Contains("InvalidDataEngineException"))
+                        {
+                            status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "There were problems with the data being tokenized, such as USFM errors.  Please remove the corpus, resolve the data issue, and try again.";
+                        }
+                        else if (message.Status.BackgroundTaskSource == typeof(ProjectDesignSurfaceViewModel))
+                        {
+                            status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "Please remove it and try again.";
+                        }
+                        else
+                        {
+                            status.Description = backgroundTaskStatus.Name + " Failed:\n\n " + backgroundTaskStatus.ErrorMessage;
+                        }
+                        ShowPopup = true;
+                    }
+
+                    if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
+                    {
+                        CancelTask(backgroundTaskStatus);
+                        backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Cancelled;
+                    }
+                    status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
+
+                    NotifyOfPropertyChange(() => BackgroundTaskStatuses);
+                    break;
+                }
+            }
+
+            if (taskExists == false)
+            {
+                BackgroundTaskStatuses.Add(backgroundTaskStatus);
+            }
+
+            ToggleSpinner();
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ToggleBackgroundTasksVisibilityMessage message, CancellationToken cancellationToken)
+        {
+            ShowTaskView = ShowTaskView == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+            OnUIThread(() =>
+            {
+                ShowPopup = !ShowPopup;
+            });
+            await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Check to see if there is a background task for alignment deletion already in progress
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task HandleAsync(IsBackgroundDeletionTaskRunning message, CancellationToken cancellationToken)
+        {
+            var tasks = BackgroundTaskStatuses.FirstOrDefault(x => x.Name == message.TaskName);
+
+            bool taskRunning = tasks is not null;
+
+            if (taskRunning && tasks.TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed)
+            {
+                // no deletion task running actively
+                taskRunning = false;
+            }
+
+            await _eventAggregator.PublishOnUIThreadAsync(new BackgroundDeletionTaskRunning(taskRunning, message.ConnectorDraggedOut, message.ConnectorDraggedOver, message.NewConnection));
         }
     }
 }

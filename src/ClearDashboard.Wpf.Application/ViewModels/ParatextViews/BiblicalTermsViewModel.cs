@@ -533,7 +533,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         protected override async void OnViewReady(object view)
         {
-            await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
+            await GetBiblicalTerms(BiblicalTermsType.Project);
 
             // populate the combo box for scope
             SetupScopes();
@@ -669,15 +669,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 //{
 
                 //}
-                await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
+                await SetProgressBarVisibilityAsync(Visibility.Visible);
 
                 if (_selectedBiblicalTermsType == SelectedBtEnum.OptionProject)
                 {
-                    await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);//
+                    await GetBiblicalTerms(BiblicalTermsType.Project);
                 }
                 else
                 {
-                    await GetBiblicalTerms(BiblicalTermsType.All).ConfigureAwait(false);//
+                    await GetBiblicalTerms(BiblicalTermsType.All);
 
                 }
 
@@ -693,7 +693,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         /// <returns></returns>
         private async Task SetProgressBarVisibilityAsync(Visibility visibility)
         {
-            await Task.Run(() => { ProgressBarVisibility = visibility; }).ConfigureAwait(false);
+            await Task.Run(() => { ProgressBarVisibility = visibility; });
             // TODO: COMEBACKHERE
             //System.Windows.Forms.Application.DoEvents();
         }
@@ -821,7 +821,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                         //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
                         verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+                        verse.Inlines.Insert(0, new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Black});
 
                         // check if this was the last one
                         if (i == 0)
@@ -1094,7 +1094,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             try
             {
-                await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
+                await SetProgressBarVisibilityAsync(Visibility.Visible);
 
                 OnUIThread(() => { _biblicalTerms.Clear(); });
 
@@ -1102,8 +1102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 var biblicalTermsList = new List<BiblicalTermsData>();
                 try
                 {
-                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), cancellationToken)
-                        .ConfigureAwait(false);
+                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), cancellationToken);
                     if (result.Success)
                     {
                         biblicalTermsList = result.Data;
@@ -1249,7 +1248,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             //}
             finally
             {
-                await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
+                await SetProgressBarVisibilityAsync(Visibility.Hidden);
                 _getBiblicalTermsRunning = false;
                 _longRunningTaskManager.TaskComplete(TaskName);
             }
@@ -1263,7 +1262,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<BiblicalTermsView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<BiblicalTermsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
         #endregion // Methods
     }

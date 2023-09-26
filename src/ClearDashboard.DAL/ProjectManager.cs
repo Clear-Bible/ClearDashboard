@@ -36,6 +36,8 @@ namespace ClearDashboard.DataAccessLayer
         public Project CurrentProject { get; set; }
         public ParatextProject CurrentParatextProject { get; set; }
         public bool HasCurrentProject => CurrentProject != null;
+        public bool CanRunDenormalization => (CurrentProject != null && !PauseDenormalization);
+        public bool PauseDenormalization { get; set; }
         public bool HasCurrentParatextProject => CurrentParatextProject != null;
 
         private string _currentVerse;
@@ -57,12 +59,6 @@ namespace ClearDashboard.DataAccessLayer
         }
 
         #endregion IProjectProvider
-
-
-       
-
-
-      
 
    
         #endregion
@@ -300,6 +296,11 @@ namespace ClearDashboard.DataAccessLayer
         {
             var result = await ExecuteRequest(new UpdateProjectCommand(project), CancellationToken.None);
             return result.Data;
+        }
+
+        public async Task<Project> UpdateCurrentProject()
+        {
+            return await UpdateProject(CurrentProject);
         }
     }
 }

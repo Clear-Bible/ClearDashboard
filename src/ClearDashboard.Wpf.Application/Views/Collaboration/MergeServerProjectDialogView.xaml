@@ -10,7 +10,7 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="1010"
     Height="635"
     d:DataContext="{d:DesignInstance Type=collaboration:MergeServerProjectDialogViewModel,
@@ -65,7 +65,9 @@
                 Text="{helpers:Localization ProjectPicker_AppName}" />
 
         </StackPanel>
+
         <Label Grid.Row="1" Content="{Binding ProgressLabel}" />
+
 
         <ListView
             x:Name="ProgressMessages"
@@ -117,32 +119,128 @@
         </ListView>
 
 
-        <StackPanel
-            Grid.Row="3"
-            Grid.Column="0"
-            Margin="20"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-
-            <Button
-                x:Name="Cancel"
-                Margin="5,5,5,5"
-                cal:Message.Attach="Cancel"
-                Content="{Binding CancelAction}"
-                IsEnabled="{Binding CanCancelAction}"
-                Style="{StaticResource TransparentStyle}" />
-        </StackPanel>
         <ProgressBar
             Grid.Row="2"
             Width="76"
             Height="75"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
+
+        <Grid
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Margin="0,0,10,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Foreground="{Binding StatusMessageColor}"
+                Text="{Binding StatusMessage}" />
+
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button
+                    HorizontalAlignment="Right"
+                    cal:Message.Attach="CopyToClipboard"
+                    Style="{StaticResource TransparentStyle}"
+                    ToolTip="Copy Progress to Clipboard">
+                    <materialDesign:PackIcon Kind="ContentCopy" />
+                </Button>
+
+                <Button
+                    x:Name="Cancel"
+                    Margin="5,5,5,5"
+                    cal:Message.Attach="Cancel"
+                    Content="{Binding CancelAction}"
+                    IsEnabled="{Binding CanCancelAction}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="1" />
+                                    <Setter Property="Foreground" Value="Gray" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                </Trigger>
+
+                            </Style.Triggers>
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Height" Value="50" />
+                            <Setter Property="MinWidth" Value="100" />
+                            <Setter Property="Margin" Value="2" />
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="LightGray" />
+                                                        </Trigger>
+
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding CancelAction}" Value="Done" />
+                                                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Background" Value="{StaticResource SecondaryHueMidBrush}" />
+                                                        </MultiDataTrigger>
+
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding CancelAction}" Value="Cancel" />
+                                                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Background" Value="#EEEBEB" />
+                                                        </MultiDataTrigger>
+
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding CancelAction}" Value="Close" />
+                                                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Background" Value="#EEEBEB" />
+                                                        </MultiDataTrigger>
+
+                                                        <Trigger Property="IsEnabled" Value="False">
+                                                            <Setter Property="Background" Value="Transparent" />
+                                                        </Trigger>
+
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="LightGray" />
+                                                        </Trigger>
+
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <ContentPresenter x:Name="ButtonContent" />
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+            </StackPanel>
+        </Grid>
+
 
     </Grid>
 

@@ -14,6 +14,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using SIL.Extensions;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using TranslationCollection = ClearDashboard.Wpf.Application.Collections.TranslationCollection;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -223,23 +224,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     SourceTokenIds.Add(translation.SourceToken.TokenId);
                 }
-                if (TranslationActionTypes.PutPropagate == translationActionType)
-                {
-                    // If translation propagates to other tokens, then we need a fresh call to retrieve the translations.
-                    await GetTranslationsAsync();
-                }
-                else
-                {
-                    var currentTranslations = Translations?.Where(t => t.SourceToken.TokenId.IdEquals(translation.SourceToken.TokenId));
-                    if (currentTranslations != null)
-                    {
-                        foreach (var currentTranslation in currentTranslations)
-                        {
-                            currentTranslation.TargetTranslationText = translation.TargetTranslationText;
-                            currentTranslation.OriginatedFrom = translation.OriginatedFrom;
-                        }
-                    }
-                }
+
+                await GetTranslationsAsync();
             }
             catch (Exception e)
             {

@@ -4,9 +4,9 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
@@ -16,12 +16,12 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
-using System.Xml.Serialization;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -38,8 +38,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private CollaborationConfiguration _collaborationConfiguration;
         private DashboardUser _dashboardUser;
         private User _licenseUser;
+        private readonly ParatextProxy _paratextProxy;
 
-        private string _emailValidationString = "";
+        private List<string> _emailValidationStringList = new List<string>();
 
         private RegistrationData _registration;
 
@@ -281,6 +282,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private Visibility _closeVisibility = Visibility.Hidden;
+        public Visibility CloseVisibility
+        {
+            get => _closeVisibility;
+            set
+            {
+                _closeVisibility = value;
+                NotifyOfPropertyChange(() => CloseVisibility);
+            }
+        }
+
 
         #endregion //Observable Properties
 
@@ -303,7 +315,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             GitLabHttpClientServices gitLabHttpClientServices,
             CollaborationServerHttpClientServices collaborationHttpClientServices,
             CollaborationManager collaborationManager,
-            CollaborationConfiguration collaborationConfiguration)
+            CollaborationConfiguration collaborationConfiguration,
+            ParatextProxy paratextProxy)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _logger = logger;
@@ -313,6 +326,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _collaborationHttpClientServices = collaborationHttpClientServices;
             _collaborationManager = collaborationManager;
             _collaborationConfiguration = collaborationConfiguration;
+            _paratextProxy=paratextProxy;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -333,8 +347,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             _licenseUser = LicenseManager.GetUserFromLicense();
-            _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_licenseUser.Id); 
-            GetParatextRegistrationData();
+            _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_licenseUser.Id);
+            _registration = _paratextProxy.GetParatextRegistrationData();
             if (!string.IsNullOrWhiteSpace(_dashboardUser.Email))
             {
                 Email = _dashboardUser.Email ?? string.Empty;
@@ -366,7 +380,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             if (!orgFound)
             {
-                var orgName = GetOrganizationNameFromEmail();
+                var orgName = _paratextProxy.GetOrganizationNameFromEmail();
                 foreach (var group in Groups)
                 {
                     if (group.Name ==orgName)
@@ -397,54 +411,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         #region Methods
-        private void GetParatextRegistrationData()
-        {
-            var fileName = Path.Combine(Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData), @"Paratext93\RegistrationInfo.xml");
-
-            if (File.Exists(fileName))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(RegistrationData));
-                var xml = File.ReadAllText(fileName);
-                using (StringReader reader = new StringReader(xml))
-                {
-                    _registration = (RegistrationData)serializer.Deserialize(reader);
-                }
-            }
-        }
-
-        private string GetOrganizationNameFromEmail()
-        {
-            string resultString = string.Empty;
-            try
-            {
-                resultString = Regex.Match(_registration.Email, "(?<=@)[^.]+", RegexOptions.IgnoreCase).Value;
-            }
-            catch (ArgumentException ex)
-            {
-                // Syntax error in the regular expression
-            }
-
-            if (resultString == string.Empty)
-            {
-                return string.Empty;
-            }
-
-            switch (resultString.ToLower())
-            {
-                case "tsco":
-                    return "SeedCo";
-                case "sil":
-                    return "SIL";
-                case "clear":
-                    return "Clear-Bible";
-                case "wycliffe":
-                    return "Wycliffe";
-            }
-
-            return resultString;
-        }
-
         /// <summary>
         /// Function to generate a user name from first & lastnames
         /// </summary>
@@ -493,7 +459,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // not a user
             if (isAlreadyOnGitLab == false)
             {
-                _emailValidationString = GenerateRandomPassword.RandomNumber(1000, 9999).ToString();
+                _emailValidationStringList.Add(GenerateRandomPassword.RandomNumber(1000, 9999).ToString());
 
 
                 var mailMessage = new MimeMessage();
@@ -502,7 +468,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 mailMessage.Subject = _localizationService["NewCollabUserView_DashboardEmailValidationCode"]; //"ClearDashboard Email Validation Code";
                 mailMessage.Body = new TextPart("plain")
                 {
-                    Text = _localizationService["NewCollabUserView_EmailValidationCode"] + " " + _emailValidationString //Email Verification Code: 
+                    Text = _localizationService["NewCollabUserView_EmailValidationCode"] + " " + _emailValidationStringList.LastOrDefault() //Email Verification Code: 
                 };
 
                 try
@@ -530,7 +496,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                ErrorMessage = _localizationService["NewCollabUserView_EmailValidationCode"]; //"User is already on the system!";
+                ErrorMessage = _localizationService["NewCollabUserView_UserAlreadyExists"]; //"User is already on the system!";
             }
 
 
@@ -550,7 +516,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var password = GenerateRandomPassword.RandomPassword(16);
 
             GitLabUser user = await _gitLabHttpClientServices.CreateNewUser(FirstName, LastName, GetUserName(), password,
-                Email, SelectedGroup.Name).ConfigureAwait(false);
+                Email, SelectedGroup.Name);
 
             if (user.Id == 0)
             {
@@ -560,7 +526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             else
             {
-                var accessToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(user).ConfigureAwait(false);
+                var accessToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(user);
 
                 CollaborationConfig = new CollaborationConfiguration
                 {
@@ -579,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 user.Password = password;
 
-                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken).ConfigureAwait(false);
+                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken);
 
                 if (results)
                 {
@@ -599,6 +565,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             ShowGenerateUserButtonEnabled = false;
+
+            CloseVisibility = Visibility.Visible;
         }
 
         public async Task CreateDashboardUser()
@@ -636,7 +604,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// </summary>
         public void ValidateEmailCode()
         {
-            if (EmailCode == _emailValidationString)
+            if (_emailValidationStringList.Contains(EmailCode))
             {
                 BadEmailValidationCode = true;
                 ShowGenerateUserButtonEnabled = true;

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
+﻿using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Enums;
-using ClearDashboard.Wpf.Application.Models;
 using SIL.Machine.Translation;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using SmtAlgorithm = ClearDashboard.Wpf.Application.Models.SmtAlgorithm;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -47,6 +43,7 @@ public interface IParallelCorpusDialogViewModel
     Task SendBackgroundStatus(string name, LongRunningTaskStatus status, CancellationToken cancellationToken,
         string? description = null, Exception? ex = null);
     List<IWorkflowStepViewModel>? Steps { get; }
+    string Message { get; set; }
 
     void Ok();
     void Cancel();

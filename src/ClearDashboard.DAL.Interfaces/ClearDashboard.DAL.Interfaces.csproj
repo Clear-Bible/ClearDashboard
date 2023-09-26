@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU;x64</Platforms>
+    <FileVersion>1.2.0.2</FileVersion>
+    <Version>1.2.0.2</Version>
+    <AssemblyVersion>1.2.0.2</AssemblyVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
   </ItemGroup>
-
 </Project>

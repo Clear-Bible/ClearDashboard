@@ -2,11 +2,15 @@
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.Messages
 {
+    public record IsBackgroundDeletionTaskRunning(string TaskName, ParallelCorpusConnectorViewModel ConnectorDraggedOut, ParallelCorpusConnectorViewModel ConnectorDraggedOver, ParallelCorpusConnectionViewModel NewConnection);
+    public record BackgroundDeletionTaskRunning(bool Result, ParallelCorpusConnectorViewModel ConnectorDraggedOut, ParallelCorpusConnectorViewModel ConnectorDraggedOver, ParallelCorpusConnectionViewModel NewConnection);
 
+    public record RedrawParallelCorpusMenus();
     public record SetIsCheckedAlignment(AlignmentSetId AlignmentSetId, bool IsChecked);
 
     public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
@@ -16,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.Messages
 
     public record UiLanguageChangedMessage(string LanguageCode);
 
-    public record VerseChangedMessage(string Verse);
+    public record VerseChangedMessage(string Verse, bool OverrideParatextSync = false);
     public record BcvArrowMessage(BcvArrow Arrow);
     public record ProjectLoadCompleteMessage(bool Loaded);
 
@@ -28,7 +32,9 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record ParatextConnectedMessage(bool Connected);
 
     public record UserMessage(User User);
-    public record DashboardProjectNameMessage(string projectName);
+    public record DashboardProjectNameMessage(string ProjectName);
+
+    public record DashboardProjectPermissionLevelMessage(PermissionLevel PermissionLevel);
 
     public record FilterPinsMessage(string Message, XmlSource XmlSource = XmlSource.All);
 
@@ -36,9 +42,13 @@ namespace ClearDashboard.Wpf.Application.Messages
 
     public record ReloadProjectMessage();
 
+    public record RefreshCheckGitLab();
+
     public record ProjectsMetadataChangedMessage(List<ParatextProjectMetadata> ProjectsMetadata);
 
     public record RefreshTextCollectionsMessage();
 
     public record RebuildMainMenuMessage();
+
+    public record ParatextSyncMessage(bool Synced, object Parent);
 }

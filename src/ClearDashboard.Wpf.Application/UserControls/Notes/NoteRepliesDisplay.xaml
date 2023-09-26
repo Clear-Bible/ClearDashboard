@@ -7,7 +7,7 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -20,9 +20,9 @@
                 <Separator Foreground="Blue" />
                 <notes:NoteReplyDisplay
                     x:Name="NoteDisplay"
+                    CurrentUser="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentUser}"
                     NoteSeen="OnNoteSeen"
                     ParentNote="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext}"
-                    CurrentUser="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentUser}"
                     ReplyColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyColor}"
                     ReplyFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontFamily}"
                     ReplyFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"

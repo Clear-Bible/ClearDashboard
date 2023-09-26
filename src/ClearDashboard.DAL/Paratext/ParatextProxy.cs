@@ -3,17 +3,16 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ClearDashboard.DataAccessLayer.Models;
 using SIL.Program;
 using Process = System.Diagnostics.Process;
-
-
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
-    #nullable disable
+#nullable disable
     public class ParatextProxy
     {
         private string _paratextProjectPath = string.Empty;
@@ -29,6 +28,14 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             get => _paratextInstallPath;
             set => _paratextInstallPath = value;
         }
+
+        private string _paratextBetaInstallPath = string.Empty;
+        public string ParatextBetaInstallPath
+        {
+            get => _paratextBetaInstallPath;
+            set => _paratextBetaInstallPath = value;
+        }
+
 
         private string _paratextResourcesPath = string.Empty;
         public string ParatextResourcePath
@@ -97,14 +104,14 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             }
         }
 
-        public  async Task<Process> StartParatextAsync(int secondsToWait = 10)
+        public  async Task<Process> StartParatextAsync(int secondsToWait = 10, bool startRegular = true)
         {
             var paratext = Process.GetProcessesByName("Paratext");
             Process process = null;
             if (paratext.Length == 0)
             {
                 _logger.LogInformation("Starting Paratext.");
-                process = await InternalStartParatextAsync();
+                process = await InternalStartParatextAsync(startRegular);
               
                 
                 _logger.LogInformation($"Waiting {secondsToWait} seconds for Paratext to completely start");
@@ -118,11 +125,15 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             }
 
             return process;
-
-
         }
 
-        private  async Task<Process> InternalStartParatextAsync()
+        public async Task<Process> StartParatextBetaAsync(int secondsToWait = 10)
+        {
+            var process = await StartParatextAsync(startRegular: false);
+            return process;
+        }
+
+        private  async Task<Process> InternalStartParatextAsync(bool startRegular = true)
         {
             if (IsParatextInstalled() == false)
             {
@@ -130,12 +141,27 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 return null;
             }
 
-            _logger.LogInformation($"Paratext Install Path: {ParatextInstallPath}\\paratext.exe");
+            if (startRegular)
+            {
+                _logger.LogInformation($"Paratext Install Path: {ParatextInstallPath}\\paratext.exe");
+            }
+            else
+            {
+                _logger.LogInformation($"Paratext Beta Install Path: {ParatextBetaInstallPath}\\paratext.exe");
+            }
+            
 
             Process process = null;
             try
             {
-                process = Process.Start($"{ParatextInstallPath}\\paratext.exe");
+                if (startRegular)
+                {
+                    process = Process.Start($"{ParatextInstallPath}\\paratext.exe");
+                }
+                else
+                {
+                    process = Process.Start($"{ParatextBetaInstallPath}\\paratext.exe");
+                }
             }
             catch (Exception e)
             {
@@ -150,6 +176,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Application is intended for Windows OS only.")]
         private void GetParatextInstallPath()
         {
+            // PARATEXT REGULAR VERSION
             _paratextInstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Paratext9_Full_Release_AppPath", null);
 
             // check if path exists
@@ -158,6 +185,18 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                 // file doesn't exist so null this out
                 _paratextInstallPath = "";
             }
+
+
+            // PARATEXT BETA VERSION
+            _paratextBetaInstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Program_Files_Directory_Ptw91", null);
+            // check if path exists
+            if (!Directory.Exists(_paratextBetaInstallPath))
+            {
+                // file doesn't exist so null this out
+                ParatextBetaInstallPath = "";
+            }
+            
+
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Application is intended for Windows OS only.")]
@@ -288,7 +327,7 @@ namespace ClearDashboard.DataAccessLayer.Paratext
                     }
 
                 }
-            }).ConfigureAwait(false);
+            });
 
             // alphabetize the list by the short name
             projects.Sort((a, b) => a.Name.CompareTo(b.Name));
@@ -661,6 +700,54 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return books;
         }
 
+        public RegistrationData GetParatextRegistrationData()
+        {
+            var fileName = Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.LocalApplicationData), @"Paratext93\RegistrationInfo.xml");
 
+            if (File.Exists(fileName))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(RegistrationData));
+                var xml = File.ReadAllText(fileName);
+                using (StringReader reader = new StringReader(xml))
+                {
+                    return (RegistrationData)serializer.Deserialize(reader);
+                }
+            }
+
+            return new RegistrationData();
+        }
+
+        public string GetOrganizationNameFromEmail()
+        {
+            string resultString = string.Empty;
+            try
+            {
+                resultString = Regex.Match(GetParatextRegistrationData().Email, "(?<=@)[^.]+", RegexOptions.IgnoreCase).Value;
+            }
+            catch (ArgumentException ex)
+            {
+                // Syntax error in the regular expression
+            }
+
+            if (resultString == string.Empty)
+            {
+                return string.Empty;
+            }
+
+            switch (resultString.ToLower())
+            {
+                case "tsco":
+                    return "SeedCo";
+                case "sil":
+                    return "SIL";
+                case "clear":
+                    return "Clear-Bible";
+                case "wycliffe":
+                    return "Wycliffe";
+            }
+
+            return resultString;
+        }
     }
 }

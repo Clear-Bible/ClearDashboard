@@ -31,7 +31,9 @@ public class ProjectSnapshotFactoryCommon
         { typeof(Models.TokenizedCorpus), "TokenizedCorpora" },
         { typeof(Models.ParallelCorpus), "ParallelCorpora" },
         { typeof(Models.TranslationSet), "TranslationSets" },
-        { typeof(Models.User), "Users" }
+        { typeof(Models.User), "Users" },
+        { typeof(Models.Lexicon_Lexeme), "LexiconLexemes" },
+        { typeof(Models.Lexicon_SemanticDomain), "LexiconSemanticDomains" }
     };
 
     public static readonly Dictionary<Type, (string folderName, string childName)> childFolderNameMappings = new() {
@@ -41,7 +43,11 @@ public class ProjectSnapshotFactoryCommon
         { typeof(Models.LabelNoteAssociation), ("LabelNoteAssociations", "LabelNoteAssociations") },
         { typeof(Models.Note), ("Replies", "Replies") },
         { typeof(Models.VerseRow), ("VerseRowsByBook", "VerseRows") },
-        { typeof(NoteModelRef), ("NoteModelRefs", "NoteModelRefs") }
+        { typeof(NoteModelRef), ("NoteModelRefs", "NoteModelRefs") },
+        { typeof(Models.Lexicon_Meaning), ("Meanings", "Meanings") },
+        { typeof(Models.Lexicon_Translation), ("Translations", "Translations") },
+        { typeof(Models.Lexicon_Form), ("Forms", "Forms") },
+        { typeof(Models.Lexicon_SemanticDomainMeaningAssociation), ("SemanticDomainMeaningAssociations", "SemanticDomainMeaningAssociations") }
     };
 
     public static JsonSerializerOptions JsonSerializerOptions => new JsonSerializerOptions
@@ -82,6 +88,8 @@ public class ProjectSnapshotFactoryCommon
         var modelSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(new Models.Project() { Id = projectId }));
 
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.User>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Lexicon_Lexeme>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Lexicon_SemanticDomain>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Corpus>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.TokenizedCorpus>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.ParallelCorpus>>());

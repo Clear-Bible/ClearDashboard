@@ -1,0 +1,283 @@
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate.ProjectSelectionStepView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Startup.ProjectTemplate"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    Width="1010"
+    Height="700"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="AutoCompleteBoxStyle" TargetType="{x:Type controls:AutoCompleteComboBox}">
+            <Setter Property="Width" Value="520" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="100" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Margin="12,0,0,0"
+                Content="{helpers:Localization ProjectPicker_ProjectTemplateWizard}"
+                FontSize="24" />
+            <StackPanel
+                Grid.Row="1"
+                Margin="24,0,0,0"
+                Orientation="Vertical">
+                <Label Content="{helpers:Localization ProjectSetup_Title}" />
+                <StackPanel
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBox
+                        x:Name="ProjectName"
+                        MinWidth="400"
+                        VerticalAlignment="Center"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        FontSize="20"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <TextBox.Text>
+                            <Binding
+                                Mode="TwoWay"
+                                Path="ProjectName"
+                                UpdateSourceTrigger="PropertyChanged"
+                                ValidatesOnDataErrors="True" />
+                        </TextBox.Text>
+                        <Validation.ErrorTemplate>
+                            <ControlTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <AdornedElementPlaceholder />
+                                    <TextBlock
+                                        MaxWidth="536"
+                                        MaxHeight="40"
+                                        Margin="10"
+                                        FontSize="16"
+                                        Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                        Text="{Binding [0].ErrorContent}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </ControlTemplate>
+                        </Validation.ErrorTemplate>
+                    </TextBox>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="2"
+                Margin="24,20"
+                Orientation="Vertical">
+                <Label Margin="0,0,0,-10" Content="{helpers:Localization ProjectPicker_ParatextProject}" />
+                <StackPanel Orientation="Horizontal">
+                    <controls:AutoCompleteComboBox
+                        Width="620"
+                        Height="Auto"
+                        Margin="15"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        cal:Message.Attach="ParatextProjectSelected($eventArgs)"
+                        materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextProject}"
+                        FontSize="16"
+                        IsEnabled="{Binding IsEnabledSelectedParatextProject}"
+                        ItemsSource="{Binding ParatextProjects}"
+                        ScrollViewer.CanContentScroll="False"
+                        SelectedItem="{Binding SelectedParatextProject, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignFilledComboBox}"
+                        TextSearch.TextPath="CombinedName">
+                        <controls:AutoCompleteComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                    <TextBlock FontSize="18" Text="{Binding Name}" />
+                                    <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                    <TextBlock FontSize="10" Text="{Binding Id}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:AutoCompleteComboBox.ItemTemplate>
+                    </controls:AutoCompleteComboBox>
+                    <Button
+                        x:Name="ClearSelectedParatextProject"
+                        Width="Auto"
+                        Height="Auto"
+                        MinWidth="36"
+                        MinHeight="36"
+                        Margin="0"
+                        cal:Message.Attach="ClearSelectedParatextProject"
+                        Style="{StaticResource TransparentStyle}">
+                        <materialDesign:PackIcon
+                            Width="36"
+                            Height="36"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="CloseBox" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="3"
+                Margin="24,10"
+                Orientation="Vertical">
+                <Label Margin="0,0,0,-10" Content="{helpers:Localization ProjectPicker_ParatextBackTranslation}" />
+                <StackPanel Orientation="Horizontal">
+                    <controls:AutoCompleteComboBox
+                        Width="620"
+                        Height="Auto"
+                        Margin="15"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        cal:Message.Attach="ParatextBtProjectSelected($eventArgs)"
+                        materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextBackTranslation}"
+                        FontSize="16"
+                        IsEnabled="{Binding IsEnabledSelectedParatextBtProject}"
+                        ItemsSource="{Binding ParatextBtProjects}"
+                        ScrollViewer.CanContentScroll="False"
+                        SelectedItem="{Binding SelectedParatextBtProject, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignFilledComboBox}"
+                        TextSearch.TextPath="CombinedName">
+                        <controls:AutoCompleteComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                    <TextBlock FontSize="18" Text="{Binding Name}" />
+                                    <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                    <TextBlock FontSize="10" Text="{Binding Id}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:AutoCompleteComboBox.ItemTemplate>
+                    </controls:AutoCompleteComboBox>
+                    <Button
+                        x:Name="ClearSelectedParatextBtProject"
+                        Width="Auto"
+                        Height="Auto"
+                        MinWidth="36"
+                        MinHeight="36"
+                        Margin="0"
+                        cal:Message.Attach="ClearSelectedParatextBtProject"
+                        Style="{StaticResource TransparentStyle}">
+                        <materialDesign:PackIcon
+                            Width="36"
+                            Height="36"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="CloseBox" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="4"
+                Margin="24,10"
+                Orientation="Vertical">
+                <Label Margin="0,0,0,-10" Content="{helpers:Localization ProjectPicker_ParatextInterlinearBible}" />
+                <StackPanel Orientation="Horizontal">
+                    <controls:AutoCompleteComboBox
+                        Width="620"
+                        Height="Auto"
+                        Margin="15"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        cal:Message.Attach="ParatextLwcProjectSelected($eventArgs)"
+                        materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_ParatextInterlinearBible}"
+                        FontSize="16"
+                        IsEnabled="{Binding IsEnabledSelectedParatextLwcProject}"
+                        ItemsSource="{Binding ParatextLwcProjects}"
+                        ScrollViewer.CanContentScroll="False"
+                        SelectedItem="{Binding SelectedParatextLwcProject, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignFilledComboBox}"
+                        TextSearch.TextPath="CombinedName">
+                        <controls:AutoCompleteComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                    <TextBlock FontSize="18" Text="{Binding Name}" />
+                                    <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                    <TextBlock FontSize="10" Text="{Binding Id}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:AutoCompleteComboBox.ItemTemplate>
+                    </controls:AutoCompleteComboBox>
+                    <Button
+                        x:Name="ClearSelectedParatextLwcProject"
+                        Width="Auto"
+                        Height="Auto"
+                        MinWidth="36"
+                        MinHeight="36"
+                        Margin="0"
+                        cal:Message.Attach="ClearSelectedParatextLwcProject"
+                        Style="{StaticResource TransparentStyle}">
+                        <materialDesign:PackIcon
+                            Width="36"
+                            Height="36"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="CloseBox" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="5"
+                Margin="24,10"
+                HorizontalAlignment="Left"
+                Orientation="Vertical">
+                <CheckBox
+                    x:Name="ShowBiblicalTextsCheckBox"
+                    Margin="10,20,0,20"
+                    Content="{helpers:Localization ProjectPicker_IncludeBiblicalTexts}"
+                    FontSize="13"
+                    IsChecked="{Binding ShowBiblicalTexts, Mode=TwoWay}">
+
+                    <CheckBox.ToolTip>
+                        <Label Content="{helpers:Localization ProjectPicker_IncludeBiblicalTextsTooltip}" />
+                    </CheckBox.ToolTip>
+                </CheckBox>
+            </StackPanel>
+
+
+        </Grid>
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="10,0"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+
+            <Button
+                x:Name="MoveBackwards"
+                Margin="0,0,15,15"
+                cal:Message.Attach="MoveBackwards"
+                Content="{helpers:Localization Back}"
+                IsEnabled="{Binding CanMoveBackwards}"
+                Style="{StaticResource TransparentStyle}" />
+            <Button
+                x:Name="MoveForwards"
+                Margin="0,0,15,15"
+                cal:Message.Attach="MoveForwards"
+                Content="{helpers:Localization Next}"
+                IsDefault="True"
+                IsEnabled="{Binding CanMoveForwards}"
+                Style="{StaticResource TransparentStyle}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

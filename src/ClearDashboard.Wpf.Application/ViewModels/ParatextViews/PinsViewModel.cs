@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -33,6 +34,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
@@ -65,6 +67,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private Stopwatch _watch = new Stopwatch();
 
         private Collection<PinsDataTable> _gridData { get; } = new();
+        private PinsVerseViewModel? _pinsVerseViewModel;
 
         #endregion //Member Variables
 
@@ -364,7 +367,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             ShowBackTranslation = Settings.Default.PinsShowBackTranslation;
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        public async Task Initialize(CancellationToken cancellationToken)
         {
             _watch.Start();
 #pragma warning disable CS4014
@@ -387,7 +390,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 var cancellationToken2 = longRunningTask.CancellationTokenSource.Token;
 
 
-                var isDataGenerated = await GenerateInitialData(cancellationToken2);//.ConfigureAwait(false);
+                var isDataGenerated = await GenerateInitialData(cancellationToken2);
                 if (!isDataGenerated)
                 {
                     // send to the task started event aggregator for everyone else to hear about a task error
@@ -406,9 +409,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     ProgressBarVisibility = Visibility.Collapsed;
                 }
 
-                await GenerateData(cancellationToken2);//.ConfigureAwait(false);
+                await GenerateData(cancellationToken2);
 
-                await GenerateLexiconData(cancellationToken2);//.ConfigureAwait(false);
+                await GenerateLexiconData(cancellationToken2);
 
                 await ConnectDataToUi(cancellationToken2).ConfigureAwait(true);
             }
@@ -441,12 +444,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
 #pragma warning restore CS4014
 
-            _ = base.OnActivateAsync(cancellationToken);
+            //_ = base.OnActivateAsync(cancellationToken);
         }
 
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
             if (_generateDataRunning)
@@ -466,6 +468,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
+        #endregion //Constructor
+
+        #region Methods
 
         /// <summary>
         /// Main logic for building the data
@@ -474,13 +479,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GenerateInitialData(CancellationToken cancellationToken)
         {
             //ReSharper disable once MethodSupportsCancellation
-            _ = await Task.Run(async () =>
+            _ = await Task.Run<bool>(async () =>
             {
                 var logger = LifetimeScope.Resolve<ILogger<ParatextProxy>>();
                 ParatextProxy paratextUtils = new ParatextProxy(logger);
                 if (paratextUtils.IsParatextInstalled())
                 {
-                    _paratextInstallPath = paratextUtils.ParatextInstallPath;
+
+                    if (paratextUtils.ParatextInstallPath != string.Empty)
+                    {
+                        _paratextInstallPath = paratextUtils.ParatextInstallPath;
+                    }
+                    else if (paratextUtils.ParatextBetaInstallPath != string.Empty)
+                    {
+                        _paratextInstallPath = paratextUtils.ParatextBetaInstallPath;
+                    }
+
 
                     //run getting and deserializing all of these resources in parallel
                     await Task.WhenAll(
@@ -518,7 +532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     else
                     {
                         _termRenderingsList.TermRendering[i].Id =
-                                    CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
+                            CorrectUnicode(_termRenderingsList.TermRendering[i].Id);
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
@@ -531,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         if (_biblicalTermsList.Term[i].Id != "")
                         {
                             _biblicalTermsList.Term[i].Id =
-                                        CorrectUnicode(_biblicalTermsList.Term[i].Id);
+                                CorrectUnicode(_biblicalTermsList.Term[i].Id);
                         }
 
                         cancellationToken.ThrowIfCancellationRequested();
@@ -545,7 +559,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         if (_allBiblicalTermsList.Term[i].Id != "")
                         {
                             _allBiblicalTermsList.Term[i].Id =
-                                        CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
+                                CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
                         }
 
                         cancellationToken.ThrowIfCancellationRequested();
@@ -568,12 +582,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         // Sense number uses "." in gateway language; this Sense number will not match anything in abt or bbt
                         // place Sense in braces  
                         biblicalTermsSense = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)] + " {" +
-                                                     sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
-                                                     "}";
+                                             sourceWord[(sourceWord.IndexOf(".", StringComparison.Ordinal) + 1)..] +
+                                             "}";
 
                         // remove the Sense number from word/phrase for correct matching with AllBiblicalTerms
                         biblicalTermsSpelling =
-                                    sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
+                            sourceWord = sourceWord[..sourceWord.IndexOf(".", StringComparison.Ordinal)];
                     }
                     else if (sourceWord.Contains("-")) // Sense number uses "-" in Gk & Heb, this will match bbt
                     {
@@ -593,7 +607,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     try
                     {
                         spellingRecords = _spellingStatus.Status?.FindAll(s => string.Equals(s.Word,
-                                    biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
+                            biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
                     }
                     catch (Exception e)
                     {
@@ -641,7 +655,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     var verseList = new List<string>();
 
                     // check against the BiblicalTermsList
-                    var bt = _biblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
+                    var bt = _biblicalTermsList.Term?.FindAll(t => t.Id == sourceWord);
+
+                    if (bt is null)
+                    {
+                        bt = new List<Term>();
+                    }
+
                     var gloss = "";
                     if (bt.Count > 0)
                     {
@@ -661,7 +681,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
                             XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
+                            XmlSourceDisplayName = "Key Terms",//Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
                             Code = "KeyTerm",
                             OriginID = terms.Id,
                             Gloss = gloss,
@@ -683,7 +703,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     else
                     {
                         // if not found in the Biblical Terms list, now check AllBiblicalTerms second
-                        var abt = _allBiblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
+                        var abt = _allBiblicalTermsList.Term?.FindAll(t => t.Id == sourceWord);
+                        if (abt is null)
+                        {
+                            abt = new List<Term>();
+                        }
+
+
                         if (abt.Count > 0)
                         {
                             gloss = abt[0].Gloss;
@@ -702,7 +728,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
                                 XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
+                                XmlSourceDisplayName = "All Biblical Terms",//Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -733,8 +759,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Id = Guid.NewGuid(),
                                 XmlSource = xmlSource,
                                 XmlSourceAbbreviation = xmlSource.GetDescription(),
-                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,
-                                    "TermRenderings.xml"),
+                                XmlSourceDisplayName = "Term Renderings", //Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath,"TermRenderings.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -767,9 +792,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> GenerateLexiconData(CancellationToken cancellationToken)
         {
-            _ = await Task.Run(async () =>
+            _ = await Task.Run<bool>(async () =>
             {
-                await GenerateLexiconDataCalculations(cancellationToken).ConfigureAwait(false);
+                await GenerateLexiconDataCalculations(cancellationToken);
                 return true;
             }).ConfigureAwait(true);
 
@@ -859,9 +884,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
                             {
                                 var verseReferences = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
-                                
+
                                 var orderedList = SortRefs(verseReferences); // sort the List  
-                                
+
                                 verseReferences.Clear();
                                 foreach (var orderedReference in orderedList)
                                 {
@@ -886,7 +911,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Id = Guid.NewGuid(),
                             XmlSource = xmlSource,
                             XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlPath = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
+                            XmlSourceDisplayName = "Lexicon",//Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
                             Code = senseEntry.Id,
                             Gloss = senseEntry.Gloss.Text,
                             Lang = senseEntry.Gloss.Language,
@@ -991,7 +1016,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GetLexicon()
         {
             // load in the lexicon.xml for the project
-            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None).ConfigureAwait(false);
+            var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None);
             if (queryLexiconResult.Success == false)
             {
                 _logger!.LogError(queryLexiconResult.Message);
@@ -1011,7 +1036,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             // load in the 'spellingstatus.xml'
             var querySsResult =
-                await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
+                await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None);
             if (querySsResult.Success == false)
             {
                 _logger!.LogError(querySsResult.Message);
@@ -1033,7 +1058,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             var queryAbtResult =
                 await ExecuteRequest(
                     new GetBiblicalTermsQuery(paratextInstallPath, BTtype.allBT),
-                    CancellationToken.None).ConfigureAwait(false);
+                    CancellationToken.None);
             if (queryAbtResult.Success == false)
             {
                 _logger!.LogError(queryAbtResult.Message);
@@ -1055,7 +1080,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             var queryBtResult =
                 await ExecuteRequest(
                     new GetBiblicalTermsQuery(paratextInstallPath, BTtype.BT),
-                    CancellationToken.None).ConfigureAwait(false);
+                    CancellationToken.None);
             if (queryBtResult.Success == false)
             {
                 _logger!.LogError(queryBtResult.Message);
@@ -1074,7 +1099,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GetTermRenderings()
         {
             // load in the TermRenderings.xml file
-            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(), CancellationToken.None).ConfigureAwait(false);
+            var queryResult = await ExecuteRequest(new GetTermRenderingsQuery(), CancellationToken.None);
 
             if (queryResult.Success == false)
             {
@@ -1091,15 +1116,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             return false;
         }
 
-        #endregion //Constructor
-
-        #region Methods
-
         private void CheckAndRefreshGrid()
         {
             if (_gridData != null && GridCollectionView is not null)
             {
-                GridCollectionView.Refresh();
+                try
+                {
+                    GridCollectionView.Refresh();
+                }
+                catch
+                {
+                    _logger.LogError("PINS Clear Filter failed.");
+                }
             }
         }
 
@@ -1140,15 +1168,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (itemDt.Gloss is null)
             {
-                return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                        || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
-                    && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
+                return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                        || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                        || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
+                    && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource] || _isAll);
             }
 
-            return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                    || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase) 
-                    || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
-                && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource]||_isAll);
+            return (itemDt.Source.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                    || itemDt.Gloss.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                    || itemDt.Notes.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase)
+                    || itemDt.OriginID.Contains(_filterString, StringComparison.InvariantCultureIgnoreCase))
+                && (_selectedXmlSourceRadioDictionary[itemDt.XmlSource] || _isAll);
         }
 
         /// <summary>
@@ -1169,6 +1199,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> LoadVerseText(PinsDataTable dataRow)
         {
+            if (_pinsVerseViewModel != null)
+            {
+                await _pinsVerseViewModel.TryCloseAsync();
+            }
+
             LastSelectedPinsDataTableSource = dataRow.Source;
             VerseFilterText = string.Empty;
             //_showBackTranslation = false;
@@ -1215,7 +1250,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 else
                 {
                     verseText = "There was an issue getting the text for this verse.";
-                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    //_logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 var backTranslationResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum, true), CancellationToken.None);
@@ -1225,7 +1260,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 {
                     backTranslation = backTranslationResult.Data.Name;
 
-                    if (ShowBackTranslation)
+                    if (Settings.Default.PinsShowBackTranslation)
                         showBackTranslation = true;
                     //showBackTranslation = true;
                     //if(!ShowBackTranslation)
@@ -1234,7 +1269,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 }
                 else
                 {
-                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    //_logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 SelectedItemVerses.Add(new PinsVerseListViewModel
@@ -1249,7 +1284,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             CreateInlines(dataRow);
             NotifyOfPropertyChange(() => SelectedItemVerses);
-            VerseRefDialogOpen = true;
+            //VerseRefDialogOpen = true;
+
+
+            dynamic settings = new ExpandoObject();
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.Title = "PINS Verse List";
+
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("lastSelectedPinsDataTableSource", LastSelectedPinsDataTableSource),
+                new NamedParameter("verseCollection", _verseCollection),
+                new NamedParameter("showBackTranslation", Settings.Default.PinsShowBackTranslation),
+                new NamedParameter("backTranslationFound", BackTranslationFound),
+                new NamedParameter("selectedItemVerses", SelectedItemVerses),
+            };
+
+            _pinsVerseViewModel = LifetimeScope?.Resolve<PinsVerseViewModel>(parameters);
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowWindowAsync(_pinsVerseViewModel, null, settings);
             return false;
         }
 
@@ -1334,7 +1388,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         //var a = new Run(startPart) { FontWeight = FontWeights.Normal };
                         verse.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
                         verse.Inlines.Insert(0,
-                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = Brushes.Orange });
+                            new Run(words[i]) { FontWeight = FontWeights.Bold, Foreground = (SolidColorBrush?)System.Windows.Application.Current.FindResource("AccentHueBrush")
+                            });
 
                         // check if this was the last one
                         if (i == 0)
@@ -1378,7 +1433,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
+            LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
         void VerseCollection_Filter(object sender, FilterEventArgs e)
