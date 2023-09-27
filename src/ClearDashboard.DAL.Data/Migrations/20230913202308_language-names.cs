@@ -33,7 +33,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             {
                 var dataChanged = false;
 
-                Sldr.Initialize();
+                if (!Sldr.IsInitialized)
+                {
+                    Sldr.Initialize();
+                }
                 var lookup = new LanguageLookup();
 
                 // "InitialMigration" is where the Corpus table was created:
