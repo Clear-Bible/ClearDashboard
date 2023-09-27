@@ -109,7 +109,6 @@
         <DataTemplate x:Key="TargetTokenDisplay">
             <userControls:TokenDisplay
                 HorizontalAlignment="Left"
-                Copy="OnCopy"
                 AlignedTokenAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
                 AlignedTokenClicked="OnAlignedTokenClicked"
                 AlignedTokenColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenColor}"
@@ -128,6 +127,7 @@
                 AlignedTokenRightButtonDown="OnAlignedTokenRightButtonDown"
                 AlignedTokenRightButtonUp="OnAlignedTokenRightButtonUp"
                 AlignedTokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenVerticalSpacing}"
+                Copy="OnCopy"
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
                 FilterPinsByBiblicalTerms="OnFilterPinsByBiblicalTerms"
@@ -196,22 +196,22 @@
                 </userControls:TokenDisplay.InputBindings>
             </userControls:TokenDisplay>
         </DataTemplate>
-        <!-- ReSharper disable once Xaml.RedundantResource -->
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="SourceWrapPanelTemplate">
             <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
-        <!-- ReSharper disable once Xaml.RedundantResource -->
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="TargetWrapPanelTemplate">
             <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
-        <!-- ReSharper disable once Xaml.RedundantResource -->
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="SourceStackPanelTemplate">
             <StackPanel
                 HorizontalAlignment="Left"
                 FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
                 Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
-        <!-- ReSharper disable once Xaml.RedundantResource -->
+        <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="TargetStackPanelTemplate">
             <StackPanel
                 HorizontalAlignment="Left"

@@ -19,6 +19,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Popups
         Delete,
         DeleteCorpusNodeConfirmation,
         DeleteProjectConfirmation,
+        DeleteCollabProjectSimple,
+        DeleteCollabProjectExtended,
         CloseEnhancedViewConfirmation,
         SwitchParatextProjectMessage
     }

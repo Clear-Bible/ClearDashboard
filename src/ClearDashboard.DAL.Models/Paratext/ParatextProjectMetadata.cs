@@ -13,6 +13,10 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? LongName { get; set; }
         public string? CombinedName => string.Format("{0}, {1}", Name, LongName);
         public string? LanguageName { get; set; }
+        /// <summary>
+        /// IETF BCP47 language tag
+        /// </summary>
+        public string? LanguageId { get; set; }
         public string? ProjectPath { get; set; }
         public bool IsRtl { get; set; }
         public string FontFamily { get; set; } = "Segoe UI";

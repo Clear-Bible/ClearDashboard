@@ -7,6 +7,7 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Tests.Mocks;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
@@ -87,6 +88,11 @@ namespace ClearDashboard.DAL.Alignment.Tests
             builder.Populate(services);
             builder.RegisterModule(configModule);
             builder.RegisterType<CollaborationManager>().AsSelf().SingleInstance();
+
+            // Register Paratext as our "External" lexicon provider / drafting tool:
+            builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetLexiconQuery>()
+                .As<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>()
+                .Keyed<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>("External");
 
             var container = builder.Build();
             return container;

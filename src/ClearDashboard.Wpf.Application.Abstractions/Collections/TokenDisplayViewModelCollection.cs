@@ -8,6 +8,7 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Collections

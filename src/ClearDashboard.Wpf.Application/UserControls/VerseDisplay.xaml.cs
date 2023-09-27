@@ -13,6 +13,7 @@ using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
 using System.Threading;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.Events.Notes;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {

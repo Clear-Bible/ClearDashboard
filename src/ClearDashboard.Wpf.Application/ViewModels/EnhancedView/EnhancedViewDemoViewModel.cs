@@ -29,6 +29,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TranslationId = ClearDashboard.DAL.Alignment.Lexicon.TranslationId;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
+using ClearDashboard.Wpf.Application.Events.Notes;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo

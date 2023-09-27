@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <Version>1.1.0.8</Version>
-    <FileVersion>1.1.0.8</FileVersion>
-    <AssemblyVersion>1.1.0.8</AssemblyVersion>
+    <Version>1.2.0.2</Version>
+    <FileVersion>1.2.0.2</FileVersion>
+    <AssemblyVersion>1.2.0.2</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>9</LangVersion>
@@ -47,6 +47,7 @@
     <PackageReference Include="Serilog" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
     <PackageReference Include="System.Text.Json" Version="7.0.3" />
   </ItemGroup>

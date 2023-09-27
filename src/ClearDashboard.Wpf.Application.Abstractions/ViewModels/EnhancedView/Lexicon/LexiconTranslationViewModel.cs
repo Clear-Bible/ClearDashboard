@@ -14,7 +14,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
             return Meaning != null && Meaning.MeaningId != null && Meaning.MeaningId.IdEquals(meaning.MeaningId);
         }
 
-        public TranslationId? TranslationId
+        public TranslationId TranslationId
         {
             get => Entity.TranslationId;
 //#if DEBUG

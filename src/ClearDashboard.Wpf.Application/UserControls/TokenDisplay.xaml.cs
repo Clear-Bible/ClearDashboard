@@ -11,6 +11,7 @@ using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using System.Linq;

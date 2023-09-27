@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
-using ClearDashboard.DataAccessLayer.Models;
+using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +12,14 @@ using System.Xml.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Features.PINS
 {
-    public record GetLexiconQuery() : IRequest<RequestResult<Lexicon>>;
+    public record GetLexiconQuery() : IRequest<RequestResult<Models.Lexicon>>;
 
     public class GetLexiconQueryHandler : XmlReaderRequestHandler<GetLexiconQuery,
-        RequestResult<Lexicon>, Lexicon>
+        RequestResult<Models.Lexicon>, Models.Lexicon>
     {
         #nullable disable
 
-        private Lexicon _biblicalTermsList = new();
+        private Models.Lexicon _biblicalTermsList = new();
         private readonly ProjectManager _projectManager;
 
         public GetLexiconQueryHandler(ILogger<GetLexiconQueryHandler> logger, ProjectManager ProjectManager) : base(logger)
@@ -30,12 +30,12 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
 
         protected override string ResourceName { get; set; } = "";
 
-        public override Task<RequestResult<Lexicon>> Handle(GetLexiconQuery request,
+        public override Task<RequestResult<Models.Lexicon>> Handle(GetLexiconQuery request,
             CancellationToken cancellationToken)
         {
             if (_projectManager.HasCurrentParatextProject == false)
             {
-                var ret = new RequestResult<Lexicon>();
+                var ret = new RequestResult<Models.Lexicon>();
                 ret.Success = false;
                 ret.Message = "No CurrentParatextProject - Plugin is probably not running";
                 return Task.FromResult(ret);
@@ -43,7 +43,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
 
             ResourceName = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml");
 
-            var queryResult = ValidateResourcePath(new Lexicon());
+            var queryResult = ValidateResourcePath(new Models.Lexicon());
             if (queryResult.Success == false)
             {
                 LogAndSetUnsuccessfulResult(ref queryResult,
@@ -65,7 +65,7 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
             return Task.FromResult(queryResult);
         }
 
-        protected override Lexicon ProcessData()
+        protected override Models.Lexicon ProcessData()
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(ResourceName);
@@ -73,10 +73,10 @@ namespace ClearDashboard.DataAccessLayer.Features.PINS
 
             using (reader)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Lexicon));
+                XmlSerializer serializer = new XmlSerializer(typeof(Models.Lexicon));
                 try
                 {
-                    _biblicalTermsList = (Lexicon)serializer.Deserialize(reader);
+                    _biblicalTermsList = (Models.Lexicon)serializer.Deserialize(reader);
                 }
                 catch (Exception e)
                 {

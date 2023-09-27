@@ -118,6 +118,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             set => Set(ref _canOk, value);
         }
 
+        private string _message = string.Empty;
+        public string Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
+        }
+
+
         #endregion //Observable Properties
 
 

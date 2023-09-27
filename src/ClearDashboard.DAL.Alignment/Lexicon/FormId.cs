@@ -1,12 +1,8 @@
-﻿
-using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Features;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public record FormId : BaseId
+    public class FormId : SimpleSynchronizableTimestampedEntityId<FormId>
     {
-        public FormId(Guid id) : base(id)
-        {
-        }
     }
 }

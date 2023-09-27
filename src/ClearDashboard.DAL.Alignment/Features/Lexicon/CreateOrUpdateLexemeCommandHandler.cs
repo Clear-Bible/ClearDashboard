@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             try
             {
                 Models.Lexicon_Lexeme? lexeme = null;
-                if (request.LexemeId != null)
+                if (request.LexemeId.Created is not null)
                 {
                     lexeme = ProjectDbContext!.Lexicon_Lexemes.FirstOrDefault(li => li.Id == request.LexemeId.Id);
                     if (lexeme == null)
@@ -49,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 {
                     lexeme = new Models.Lexicon_Lexeme
                     {
-                        Id = Guid.NewGuid(),
+                        Id = request.LexemeId.Id,
                         Lemma = request.Lemma,
                         Language = request.Language,
                         Type = request.Type

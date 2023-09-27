@@ -1,18 +1,18 @@
 ﻿<usercontrols:TokenDisplayBase
-    xmlns:usercontrols="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Class="ClearDashboard.Wpf.Application.UserControls.TokenDisplay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bulkAlignment="clr-namespace:ClearDashboard.Wpf.Application.UserControls.BulkAlignment"
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-   xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
-   xmlns:cm="http://caliburnmicro.com"
-   xmlns:bulkAlignment="clr-namespace:ClearDashboard.Wpf.Application.UserControls.BulkAlignment"
-   d:DataContext="{d:DesignInstance Type=enhancedView:TokenDisplayViewModel}"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:usercontrols="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    d:DataContext="{d:DesignInstance Type=enhancedView:TokenDisplayViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -37,6 +37,7 @@
             Padding="0"
             HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
             HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            cm:Message.Attach="[ToolTipOpening]=[OnToolTipOpening($eventArgs)]"
             materialDesign:ShadowAssist.ShadowDepth="Depth0"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"
             BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBorder}"
@@ -57,9 +58,8 @@
             MouseRightButtonDown="OnTokenRightButtonDown"
             MouseRightButtonUp="OnTokenRightButtonUp"
             MouseWheel="OnTokenMouseWheel"
-            PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"
-            cm:Message.Attach="[ToolTipOpening]=[OnToolTipOpening($eventArgs)]">
-            <!-- ToolTipOpening="OnToolTipOpening"-->
+            PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
+            <!--  ToolTipOpening="OnToolTipOpening"  -->
             <Button.ContextMenu>
                 <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
                     <MenuItem
@@ -127,7 +127,10 @@
                     VerticalOffset="20">
                     <StackPanel Orientation="Vertical">
                         <bulkAlignment:AlignmentTooltip Visibility="{Binding IsHighlighted, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendedPropertiesXml="{Binding ExtendedProperties}" Visibility="{Binding HasExtendedProperties, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <controls:ExtendedPropertiesTreeView
+                            x:Name="ExtendedPropertiesTreeViewName"
+                            ExtendedPropertiesXml="{Binding ExtendedProperties}"
+                            Visibility="{Binding HasExtendedProperties, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </StackPanel>
                 </ToolTip>
             </Button.ToolTip>
@@ -192,24 +195,22 @@
             <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />
         </Button>
         <Button
+            Height="Auto"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenMargin}"
+            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenPadding}"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
+            HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
+            materialDesign:ShadowAssist.ShadowDepth="Depth0"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenBackground}"
             BorderThickness="0"
+            Click="OnAlignedTokenClicked"
             FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFlowDirection}"
             FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontFamily}"
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontSize}"
             FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontStyle}"
             FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontWeight}"
             Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenColor}"
-            Height="Auto"
-            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
-            HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
             IsDefault="False"
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenMargin}"
-            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenPadding}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenVisibility}"
-            
-            Click="OnAlignedTokenClicked"
             MouseDoubleClick="OnAlignedTokenDoubleClicked"
             MouseEnter="OnAlignedTokenMouseEnter"
             MouseLeave="OnAlignedTokenMouseLeave"
@@ -218,7 +219,7 @@
             MouseRightButtonUp="OnAlignedTokenRightButtonUp"
             MouseWheel="OnAlignedTokenMouseWheel"
             PreviewMouseLeftButtonDown="OnAlignedTokenLeftButtonDown"
-        >
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenVisibility}">
             <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenText}" />
         </Button>
         <Rectangle

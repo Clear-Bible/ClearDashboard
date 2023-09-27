@@ -20,6 +20,7 @@
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.Views.Lexicon"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -174,6 +175,11 @@
                                 <paratextViews:BiblicalTermsView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
+                        <panes:PanesTemplateSelector.LexiconViewTemplate>
+                            <DataTemplate>
+                                <lexicon:LexiconView />
+                            </DataTemplate>
+                        </panes:PanesTemplateSelector.LexiconViewTemplate>
 
                         <!--<panes:PanesTemplateSelector.WordMeaningsViewTemplate>
                             <DataTemplate>
@@ -419,7 +425,7 @@
             Height="100"
             Margin="15,0,5,0"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ShowProgressBar, Converter={StaticResource BooleanToVisibilityConverter}}"
             Value="0" />
         <TextBlock

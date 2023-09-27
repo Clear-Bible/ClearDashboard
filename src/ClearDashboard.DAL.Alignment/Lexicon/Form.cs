@@ -1,15 +1,19 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
+using Microsoft.SqlServer.Server;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public class Form
+    public class Form : IEquatable<Form>
     {
-        public FormId? FormId
+        public FormId FormId
         {
             get;
 #if DEBUG
@@ -20,28 +24,53 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             set;
 #endif
         }
-        public string? Text { get; set; }
+
+        private string? text_;
+        public string? Text
+        {
+            get => text_;
+            set
+            {
+                text_ = value;
+                IsDirty = true;
+            }
+        }
+
+        public bool IsDirty { get; internal set; } = false;
+        public bool IsInDatabase { get => FormId.Created is not null; }
 
         public Form()
         {
+            FormId = FormId.Create(Guid.NewGuid());
         }
         internal Form(FormId formId, string text)
         {
             FormId = formId;
-            Text = text;
+            text_ = text;
         }
 
-        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        internal void PostSave(FormId? formId)
         {
-            if (FormId == null)
-            {
-                return;
-            }
-
-            var command = new DeleteFormCommand(FormId);
-
-            var result = await mediator.Send(command, token);
-            result.ThrowIfCanceledOrFailed();
+            FormId = formId ?? FormId;
+            IsDirty = false;
         }
+
+        internal void PostSaveAll(IDictionary<Guid, IId> createdIIdsByGuid)
+        {
+            createdIIdsByGuid.TryGetValue(FormId.Id, out var formId);
+            PostSave((FormId?)formId);
+        }
+
+        public override bool Equals(object? obj) => Equals(obj as Form);
+        public bool Equals(Form? other)
+        {
+            if (other is null) return false;
+            if (!FormId.Id.Equals(other.FormId.Id)) return false;
+
+            return true;
+        }
+        public override int GetHashCode() => FormId.Id.GetHashCode();
+        public static bool operator ==(Form? e1, Form? e2) => Equals(e1, e2);
+        public static bool operator !=(Form? e1, Form? e2) => !(e1 == e2);
     }
 }
