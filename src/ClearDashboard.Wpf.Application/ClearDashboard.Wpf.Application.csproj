@@ -269,16 +269,19 @@
     <Compile Update="UserControls\Lexicon\MeaningEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\NoteCollectionDisplay.xaml.cs">
+    <Compile Update="UserControls\Notes\LabelsEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\Lexicon\LexemeEditor.xaml.cs">
+    <Compile Update="UserControls\Notes\NoteCollectionDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\NoteReplyDisplay.xaml.cs">
+    <Compile Update="UserControls\Lexicon\LabelEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\NoteDisplay.xaml.cs">
+    <Compile Update="UserControls\Notes\NoteReplyDisplay.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\Notes\NoteDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\SelectBooksControl.xaml.cs">
@@ -451,23 +454,26 @@
     <Page Update="UserControls\Lexicon\MeaningEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteAssociationsDisplay.xaml">
+    <Page Update="UserControls\Notes\LabelsEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteCollectionDisplay.xaml">
+    <Page Update="UserControls\Notes\NoteAssociationsDisplay.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\Notes\NoteCollectionDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserControls\Lexicon\LexemeEditor.xaml">
+    <Page Update="UserControls\Lexicon\LabelEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteReplyDisplay.xaml">
+    <Page Update="UserControls\Notes\NoteReplyDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\TimerUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteDisplay.xaml">
+    <Page Update="UserControls\Notes\NoteDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

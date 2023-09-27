@@ -28,6 +28,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.UserControls;
+using ClearDashboard.Wpf.Application.UserControls.Notes;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
