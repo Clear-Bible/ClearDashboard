@@ -15,6 +15,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -645,7 +646,7 @@
             <controls:SidebarExpander
                 x:Name="NotesExpander"
                 Grid.Row="0"
-                Grid.Column="2"
+                Grid.Column="1"
                 mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
@@ -669,18 +670,23 @@
                     </TextBlock>
                 </controls:SidebarExpander.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <userControls:NoteCollectionDisplay
+                    <notes:NoteCollectionDisplay
                         x:Name="NotesControl"
-                        Margin="0,0"
+                        CurrentUserId="{Binding NoteManager.CurrentUserId}"
+                        DefaultLabelGroup="{Binding NoteManager.DefaultLabelGroup}"
                         EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
                         LabelBackground="BlanchedAlmond"
                         LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        LabelFontSize="14"
+                        LabelGroups="{Binding NoteManager.LabelGroups}"
+                        LabelPadding="10,6,10,5"
                         LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
-                        NoteMargin="0,0,0,10"
+                        Margin="0,-20"
+                        NoteMargin="0,0,0,0"
                         NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         Notes="{Binding NoteManager.CurrentNotes}"
-                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        UserFontStyle="Italic"
+                        TimestampMargin="0,0,00,0"
                         Visibility="{Binding NoteControlVisibility}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="NoteIndicatorMouseEnter">
@@ -710,14 +716,35 @@
                             <i:EventTrigger EventName="LabelAdded">
                                 <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelDeleted">
+                                <i:CallMethodAction MethodName="LabelDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelDisassociated">
+                                <i:CallMethodAction MethodName="LabelDisassociated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupAdded">
+                                <i:CallMethodAction MethodName="LabelGroupAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupLabelAdded">
+                                <i:CallMethodAction MethodName="LabelGroupLabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupRemoved">
+                                <i:CallMethodAction MethodName="LabelGroupRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupSelected">
+                                <i:CallMethodAction MethodName="LabelGroupSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
                             <i:EventTrigger EventName="LabelRemoved">
                                 <i:CallMethodAction MethodName="LabelRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelUpdated">
+                                <i:CallMethodAction MethodName="LabelUpdated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
                             <i:EventTrigger EventName="CloseRequested">
                                 <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                    </userControls:NoteCollectionDisplay>
+                    </notes:NoteCollectionDisplay>
                 </ScrollViewer>
             </controls:SidebarExpander>
         </Grid>

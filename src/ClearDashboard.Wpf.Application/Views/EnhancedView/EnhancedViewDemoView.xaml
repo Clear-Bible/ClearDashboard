@@ -11,6 +11,7 @@
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     Title="AlignmentSample"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewDemoViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -736,7 +737,7 @@
             Grid.RowSpan="4"
             Grid.Column="1"
             Orientation="Vertical">
-            <userControls:NoteCollectionDisplay
+            <notes:NoteCollectionDisplay
                 cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)]; 
                                     [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            
                                     [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            
@@ -765,39 +766,39 @@
                 NoteAssociationMargin="5,5,0,0"
                 TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding NotePaneVisibility}">
-                <userControls:NoteCollectionDisplay.NoteTextMargin>
+                <notes:NoteCollectionDisplay.NoteTextMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="NoteLeftMarginSlider" Path="Value" />
                         <Binding ElementName="NoteTopMarginSlider" Path="Value" />
                         <Binding ElementName="NoteRightMarginSlider" Path="Value" />
                         <Binding ElementName="NoteBottomMarginSlider" Path="Value" />
                     </MultiBinding>
-                </userControls:NoteCollectionDisplay.NoteTextMargin>
-                <userControls:NoteCollectionDisplay.TimestampMargin>
+                </notes:NoteCollectionDisplay.NoteTextMargin>
+                <notes:NoteCollectionDisplay.TimestampMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="TimestampLeftMarginSlider" Path="Value" />
                         <Binding ElementName="TimestampTopMarginSlider" Path="Value" />
                         <Binding ElementName="TimestampRightMarginSlider" Path="Value" />
                         <Binding ElementName="TimestampBottomMarginSlider" Path="Value" />
                     </MultiBinding>
-                </userControls:NoteCollectionDisplay.TimestampMargin>
-                <userControls:NoteCollectionDisplay.LabelMargin>
+                </notes:NoteCollectionDisplay.TimestampMargin>
+                <notes:NoteCollectionDisplay.LabelMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="LabelLeftMarginSlider" Path="Value" />
                         <Binding ElementName="LabelTopMarginSlider" Path="Value" />
                         <Binding ElementName="LabelRightMarginSlider" Path="Value" />
                         <Binding ElementName="LabelBottomMarginSlider" Path="Value" />
                     </MultiBinding>
-                </userControls:NoteCollectionDisplay.LabelMargin>
-                <userControls:NoteCollectionDisplay.LabelPadding>
+                </notes:NoteCollectionDisplay.LabelMargin>
+                <notes:NoteCollectionDisplay.LabelPadding>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="LabelLeftPaddingSlider" Path="Value" />
                         <Binding ElementName="LabelTopPaddingSlider" Path="Value" />
                         <Binding ElementName="LabelRightPaddingSlider" Path="Value" />
                         <Binding ElementName="LabelBottomPaddingSlider" Path="Value" />
                     </MultiBinding>
-                </userControls:NoteCollectionDisplay.LabelPadding>
-            </userControls:NoteCollectionDisplay>
+                </notes:NoteCollectionDisplay.LabelPadding>
+            </notes:NoteCollectionDisplay>
         </StackPanel>
     </Grid>
 </Page>
