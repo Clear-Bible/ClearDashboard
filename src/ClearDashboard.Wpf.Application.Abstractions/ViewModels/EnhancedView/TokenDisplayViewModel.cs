@@ -9,6 +9,7 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.Collections.Notes;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
