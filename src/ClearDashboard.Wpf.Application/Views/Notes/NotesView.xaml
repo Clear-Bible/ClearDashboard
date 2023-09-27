@@ -15,6 +15,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:notes1="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     x:Name="NotesViewWindow"
     d:DataContext="{d:DesignInstance Type=notes:NotesViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -613,7 +614,7 @@
                                 </StackPanel>
                             </Button>
                         </StackPanel>
-                        <userControls:NoteRepliesDisplay
+                        <notes1:NoteRepliesDisplay
                             Margin="20,0"
                             CurrentUser="{Binding CurrentUser}"
                             IsEnabled="{Binding IsNoteSelected}"

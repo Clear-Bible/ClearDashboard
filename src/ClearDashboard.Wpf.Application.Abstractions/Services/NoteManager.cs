@@ -10,12 +10,15 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.Wpf.Application.Collections.Notes;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -34,6 +37,66 @@ namespace ClearDashboard.Wpf.Application.Services
         public void ClearNotesCache()
         {
             NotesCache.Clear();
+        }
+        private UserId? _currentUserId;
+        private LabelCollection _labelSuggestions = new();
+        private LabelGroupViewModelCollection _labelGroups = new();
+        private LabelGroupViewModel? _defaultLabelGroup;
+
+        /// <summary>
+        /// Gets the <see cref="UserId"/> of the current user.
+        /// </summary>
+        public UserId? CurrentUserId
+        {
+            get
+            {
+                if (_currentUserId == null &&  UserProvider.CurrentUser != null)
+                {
+                    _currentUserId = new UserId(UserProvider.CurrentUser!.Id, UserProvider.CurrentUser!.FullName!);
+                }
+                return _currentUserId;
+            }
+        }
+
+        /// <summary>
+        /// Gets the LabelGroup which contains all label suggestions.
+        /// </summary>
+        public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel { Name = "<None>" };
+
+        /// <summary>
+        /// Gets the default <see cref="LabelGroupViewModel"/> for the current user, if any.
+        /// </summary>
+        public LabelGroupViewModel? DefaultLabelGroup
+        {
+            get => _defaultLabelGroup;
+            set => Set(ref _defaultLabelGroup, value);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion.
+        /// </summary>
+        public LabelCollection LabelSuggestions
+        {
+            get => _labelSuggestions;
+            private set => Set(ref _labelSuggestions, value);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="LabelGroupViewModel"/>s that can be used for auto-completion.
+        /// </summary>
+        public LabelGroupViewModelCollection LabelGroups
+        {
+            get => _labelGroups;
+            private set => Set(ref _labelGroups, value);
+        }
+
+        /// <summary>
+        /// Gets the collection of notes associated with the current selection.
+        /// </summary>
+        public NoteViewModelCollection CurrentNotes
+        {
+            get => _currentNotes;
+            private set => Set(ref _currentNotes, value);
         }
 
         private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
@@ -79,18 +142,59 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        /// <summary>
-        /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion.
-        /// </summary>
-        public LabelCollection LabelSuggestions { get; private set; } = new();
+        private async Task<LabelGroupViewModelCollection> GetLabelGroupsAsync()
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = new LabelGroupViewModelCollection { NoneLabelGroup };
+
+                var labelGroups = await LabelGroup.GetAll(Mediator);
+                foreach (var labelGroup in labelGroups.OrderBy(lg => lg.Name))
+                {
+                    var labelIds = await labelGroup.GetLabelIds(Mediator);
+                    var labels = new LabelCollection(LabelSuggestions.Where(ls => labelIds.Contains(ls.LabelId)));
+                    result.Add(new LabelGroupViewModel(labelGroup) { Labels = labels });
+                }
+
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved label groups in {stopwatch.ElapsedMilliseconds}ms");
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
 
         /// <summary>
-        /// Gets the collection of notes associated with the current selection.
+        /// Gets the default label group for the current user.
         /// </summary>
-        public NoteViewModelCollection CurrentNotes
+        /// <returns>A <see cref="LabelGroupViewModel"/> to use by default.</returns>
+        private async Task<LabelGroupViewModel?> GetUserDefaultLabelGroupAsync()
         {
-            get => _currentNotes;
-            private set => Set(ref _currentNotes, value);
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var labelGroupId = await LabelGroup.GetUserDefault(Mediator, CurrentUserId!);
+
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved label groups in {stopwatch.ElapsedMilliseconds}ms");
+
+                var matchingLabelGroup = LabelGroups.FirstOrDefault(lg => lg.LabelGroupId == labelGroupId);
+                return matchingLabelGroup ?? NoneLabelGroup;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
         }
 
         /// <summary>
@@ -101,7 +205,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// of the referenced note, call <see cref="GetNoteDetailsAsync(NoteId,bool)"/>.
         /// </remarks>
         /// <param name="entityIds">A collection of entity IDs for which to retrieve note IDs.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the async operation.</param>
+        /// <param name="cancellationToken">A cancellation token for the asynchronous operation.</param>
         /// <returns>A <see cref="EntityNoteIdDictionary"/> containing the note IDs.</returns>
         public async Task<EntityNoteIdDictionary> GetNoteIdsAsync(IEnumerable<IId>? entityIds = null, CancellationToken cancellationToken = default)
         {
@@ -399,7 +503,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="note">The <see cref="NoteViewModel"/> to which to associate the label.</param>
         /// <param name="labelText">The text of the new <see cref="Label"/>.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task CreateAssociateNoteLabelAsync(NoteViewModel note, string labelText)
+        public async Task<Label?> CreateAssociateNoteLabelAsync(NoteViewModel note, string labelText)
         {
             try
             {
@@ -407,10 +511,11 @@ namespace ClearDashboard.Wpf.Application.Services
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
+                Label? newLabel = null;
                 // For thread safety, because Note.CreateAssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
                 async void CreateAssociateLabel()
                 {
-                    var newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText, null);
+                    newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText, null);
                     LabelSuggestions.Add(newLabel);
                     LabelSuggestions = new LabelCollection(LabelSuggestions.OrderBy(l => l.Text));
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
@@ -421,6 +526,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
 #endif
+                return newLabel;
             }
             catch (Exception e)
             {
@@ -497,9 +603,301 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        /// <summary>
+        /// Deletes an existing <see cref="Label"/>.
+        /// </summary>
+        /// <param name="label">The <see cref="Label"/> to delete.</param>
+        public void DeleteLabel(Label label)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                LabelSuggestions.RemoveIfExists(label);
+                label.Delete(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Deleted label {label.Text} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing <see cref="Label"/>.
+        /// </summary>
+        /// <param name="label">The <see cref="Label"/> to update.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        public async Task UpdateLabelAsync(Label label, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                async void UpdateLabel()
+                {
+                    await label.CreateOrUpdate(Mediator, cancellationToken);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(UpdateLabel);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Updated label {label.Text} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="LabelGroup"/> and optionally initialize it with a collection of <see cref="Label"/>s from another label group.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> containing the new label group.</param>
+        /// <param name="sourceLabelGroup">The source label group from which to populate labels in the new group.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task CreateLabelGroupAsync(LabelGroupViewModel labelGroup, LabelGroupViewModel? sourceLabelGroup, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                // For thread safety, because LabelGroup.CreateOrUpdate() modifies an observable collection, we need to invoke the operation on the dispatcher.
+                async void CreateLabelGroupWithLabelsAsync()
+                {
+                    var newLabelGroup = new LabelGroupViewModel(await labelGroup.Entity.CreateOrUpdate(Mediator, cancellationToken));
+
+                    if (sourceLabelGroup != null)
+                    {
+                        foreach (var sourceLabel in sourceLabelGroup.Labels)
+                        {
+                            await newLabelGroup.Entity.AssociateLabel(Mediator, sourceLabel, cancellationToken);
+                            newLabelGroup.Labels.Add(sourceLabel);
+                        }
+                    }
+
+                    LabelGroups.Add(newLabelGroup);
+                    LabelGroups = new LabelGroupViewModelCollection(LabelGroups.OrderBy(l => l.Name));
+
+                    await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup), cancellationToken);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateLabelGroupWithLabelsAsync);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation(sourceLabelGroup != null
+                    ? $"Created label group {labelGroup.Name} and initialized it with {sourceLabelGroup.Labels.Count} in {stopwatch.ElapsedMilliseconds} ms"
+                    : $"Created label group {labelGroup.Name} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Associates a <see cref="Label"/> to a <see cref="LabelGroup"/>.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> to which to add the label.</param>
+        /// <param name="label">The label to add.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task AssociateLabelToLabelGroupAsync(LabelGroupViewModel labelGroup, Label label, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                // For thread safety, we need to invoke the operation on the dispatcher.
+                async void AssociateLabel()
+                {
+                    await labelGroup.Entity.AssociateLabel(Mediator, label, cancellationToken);
+
+                    labelGroup.Labels.Add(label);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation(
+                    $"Associated label '{label.Text}' ({label.LabelId}) to label group '{labelGroup.Name}' ({labelGroup.LabelGroupId}) in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Detaches a <see cref="Label"/> from a <see cref="LabelGroup"/>.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> from which to disassociate the label.</param>
+        /// <param name="label">The label to disassociate.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task DetachLabelFromLabelGroupAsync(LabelGroupViewModel labelGroup, Label label, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                // For thread safety, we need to invoke the operation on the dispatcher.
+                async void DetachLabelAsync()
+                {
+                    labelGroup.Labels.RemoveIfExists(label);
+                    await labelGroup.Entity.DetachLabel(Mediator, label, cancellationToken);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(DetachLabelAsync);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Detached label '{label.Text}' ({label.LabelId}) from label group '{labelGroup.Name}' ({labelGroup.LabelGroupId}) in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Removes an existing <see cref="LabelGroup"/>.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> containing the new label group.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task RemoveLabelGroupAsync(LabelGroupViewModel labelGroup, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                // For thread safety, because LabelGroup.CreateOrUpdate() modifies an observable collection, we need to invoke the operation on the dispatcher.
+                async void RemoveLabelGroupViewModelAsync()
+                {
+                    labelGroup.Entity.Delete(Mediator, cancellationToken);
+
+                    LabelGroups.Remove(labelGroup);
+
+                    //await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup), cancellationToken);
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(RemoveLabelGroupViewModelAsync);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Removed label group {labelGroup.Name} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Saves a specified <see cref="LabelGroup"/> as the default for a user.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> to set as default.</param>
+        /// <param name="userId">The <see cref="UserId"/> for the user.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        private void SaveLabelGroupDefault(LabelGroupViewModel labelGroup, UserId userId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                labelGroup.Entity.PutAsUserDefault(Mediator, userId, cancellationToken);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Saved label group {labelGroup.Name} for user {userId.DisplayName}");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Saves a specified <see cref="LabelGroup"/> as the default for the current user.
+        /// </summary>
+        /// <param name="labelGroup">The <see cref="LabelGroupViewModel"/> to set as default.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public void SaveLabelGroupDefault(LabelGroupViewModel labelGroup, CancellationToken cancellationToken = default)
+        {
+            SaveLabelGroupDefault(labelGroup, CurrentUserId!, cancellationToken);
+            DefaultLabelGroup = labelGroup;
+        }        
+        
+        /// <summary>
+        /// Clears the <see cref="LabelGroup"/> default for a user.
+        /// </summary>
+        /// <param name="userId">The <see cref="UserId"/> for the user.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        private async Task ClearLabelGroupDefault(UserId userId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                await LabelGroup.PutUserDefault(Mediator, null, userId, cancellationToken);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Cleared label group default for user {userId.DisplayName}");
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Clears the <see cref="LabelGroup"/> for the current user.
+        /// </summary>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task ClearLabelGroupDefault(CancellationToken cancellationToken = default)
+        {
+            await ClearLabelGroupDefault(CurrentUserId!, cancellationToken);
+            DefaultLabelGroup = NoneLabelGroup;
+        }
+
         public async Task InitializeAsync()
         {
             LabelSuggestions = await GetLabelSuggestionsAsync();
+            NoneLabelGroup.Labels = LabelSuggestions;
+            LabelGroups = await GetLabelGroupsAsync();
+            DefaultLabelGroup = await GetUserDefaultLabelGroupAsync();
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
@@ -517,6 +915,5 @@ namespace ClearDashboard.Wpf.Application.Services
 
             EventAggregator.SubscribeOnUIThread(this);
         }
-
     }
 }
