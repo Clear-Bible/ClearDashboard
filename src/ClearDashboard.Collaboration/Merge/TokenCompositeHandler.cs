@@ -90,11 +90,11 @@ DELETE FROM TokenComponent WHERE Id IN
         return
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                await projectDbContext.TokenComposites
+                projectDbContext.RemoveRange(projectDbContext.TokenComposites
                     .Where(tc => tc.TokenCompositeTokenAssociations
-                        .Where(tca => tca.Token!.VerseRowId == verseRowId).Any())
-                    .ExecuteDeleteAsync(cancellationToken);
+                        .Where(tca => tca.Token!.VerseRowId == verseRowId).Any()));
 
+                await Task.CompletedTask;
             };
     }
 
@@ -103,9 +103,10 @@ DELETE FROM TokenComponent WHERE Id IN
         return
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                await projectDbContext.TokenComponents
-                    .Where(tc => tc.VerseRowId == verseRowId)
-                    .ExecuteDeleteAsync(cancellationToken);
+                projectDbContext.RemoveRange(projectDbContext.TokenComponents
+                    .Where(tc => tc.VerseRowId == verseRowId));
+
+                await Task.CompletedTask;
 
             };
     }

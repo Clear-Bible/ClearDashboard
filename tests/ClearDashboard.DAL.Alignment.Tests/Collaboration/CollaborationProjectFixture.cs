@@ -498,14 +498,16 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return translation;
         }
 
-        public static Models.Lexicon_Form BuildTestLexiconForm(string text, Models.Lexicon_Lexeme lexeme)
+        public static Models.Lexicon_Form BuildTestLexiconForm(string text, Models.Lexicon_Lexeme lexeme, Guid testUserId)
         {
             var form = new Models.Lexicon_Form
             {
                 Id = Guid.NewGuid(),
                 Text = text,
                 Lexeme = lexeme,
-                LexemeId = lexeme.Id
+                LexemeId = lexeme.Id,
+                Created = DateTimeOffset.UtcNow,
+                UserId = testUserId
             };
             lexeme.Forms.Add(form);
             return form;

@@ -202,7 +202,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var lexiconLexeme2 = CollaborationProjectFixture.BuildTestLexiconLexeme("en", "lemma2", null, testUser.Id);
             var lexiconLexeme2Meaning1 = CollaborationProjectFixture.BuildTestLexiconMeaning("fr", "lemma2Meaning1", lexiconLexeme2, testUser.Id);
             _ = CollaborationProjectFixture.BuildTestLexiconTranslation("lemma2Meaning1Tr1", lexiconLexeme2Meaning1, testUser.Id);
-            _ = CollaborationProjectFixture.BuildTestLexiconForm("lemma2Form1", lexiconLexeme2);
+            _ = CollaborationProjectFixture.BuildTestLexiconForm("lemma2Form1", lexiconLexeme2, testUser.Id);
             _fixture.LexiconLexemes.Add(lexiconLexeme2);
 
             _ = CollaborationProjectFixture.BuildTestLexiconSemanticDomainMeaningAssociation(semanticDomain1, lexiconLexeme2Meaning1, testUser.Id);
