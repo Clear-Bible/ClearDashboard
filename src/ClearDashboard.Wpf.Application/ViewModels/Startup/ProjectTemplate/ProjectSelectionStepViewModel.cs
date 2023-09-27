@@ -344,8 +344,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             {
                 return;
             }
-
-            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectName));
+            
 
             OpenProjectManager.AddProjectToOpenProjectList(ProjectManager!);
 
