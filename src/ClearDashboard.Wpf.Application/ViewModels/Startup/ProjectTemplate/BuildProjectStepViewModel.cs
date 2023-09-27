@@ -281,7 +281,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 await _startupDialogViewModel!.TryCloseAsync(true);
 
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
                 ProjectManager!.CurrentDashboardProject.ProjectName = (_oldProject == null) ? null : _oldProject.ProjectName;
@@ -291,7 +291,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 await _startupDialogViewModel!.GoToStep(1);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
                 ProjectManager!.CurrentDashboardProject.ProjectName = (_oldProject == null) ? null : _oldProject.ProjectName;
