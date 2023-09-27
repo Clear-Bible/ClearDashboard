@@ -50,7 +50,7 @@
                 </Style.Triggers>
             </Style>-->
             <converters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <!--<converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />-->
@@ -572,55 +572,57 @@
                             <Border Grid.Column="1" BorderThickness="0">
                                 <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
                                     <Grid>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                        <Button
-                                            Width="20"
-                                            Height="20"
-                                            Margin="3,0,0,0"
-                                            VerticalAlignment="Center"
-                                            Command="{Binding ElementName=ItemsListView, Path=DataContext.DeleteCorpusRowCommand}"
-                                            CommandParameter="{Binding}"
-                                            IsEnabled="{Binding DisableDeleteButton}">
-                                            <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
-                                                    <Setter Property="Padding" Value="0" />
-
-                                                </Style>
-                                            </Button.Style>
-                                            <materialDesign:PackIcon
+                                        <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                                            <Button
                                                 Width="20"
                                                 Height="20"
-                                                Foreground="{StaticResource RedVeryDarkBrush}"
-                                                Kind="Close"
-                                                ToolTip="{helpers:Localization EnhancedView_RemoveCorpus}" />
-                                        </Button>
-                                        <TextBlock
-                                            Margin="8,0,5,0"
-                                            VerticalAlignment="Center"
-                                            FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                            FontWeight="Bold"
-                                            Text="{Binding Title}" />
-                                    </StackPanel>
-                                        <Button x:Name="EditMode" Content="{Binding EditModeButtonLabel}" 
-                                                HorizontalAlignment="Right"
-                                                Padding="4"
-                                                Margin="0 2 5 0"
-                                                IsEnabled="{Binding DisableDeleteButton}"
-                                                Visibility="{Binding ShowEditButton, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                Margin="3,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding ElementName=ItemsListView, Path=DataContext.DeleteCorpusRowCommand}"
+                                                CommandParameter="{Binding}"
+                                                IsEnabled="{Binding DisableDeleteButton}">
+                                                <Button.Style>
+                                                    <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
+                                                        <Setter Property="Padding" Value="0" />
+
+                                                    </Style>
+                                                </Button.Style>
+                                                <materialDesign:PackIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Foreground="{StaticResource RedVeryDarkBrush}"
+                                                    Kind="Close"
+                                                    ToolTip="{helpers:Localization EnhancedView_RemoveCorpus}" />
+                                            </Button>
+                                            <TextBlock
+                                                Margin="8,0,5,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                FontWeight="Bold"
+                                                Text="{Binding Title}" />
+                                        </StackPanel>
+                                        <Button
+                                            x:Name="EditMode"
+                                            Margin="0,2,5,0"
+                                            Padding="4"
+                                            HorizontalAlignment="Right"
+                                            Content="{Binding EditModeButtonLabel}"
+                                            IsEnabled="{Binding DisableDeleteButton}"
+                                            Visibility="{Binding ShowEditButton, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Click">
                                                     <cm:ActionMessage MethodName="ToggleEditMode" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource  MaterialDesignFlatButton}" TargetType="{x:Type Button}">
+                                                <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
                                                     <Setter Property="Padding" Value="2" />
 
                                                 </Style>
                                             </Button.Style>
                                         </Button>
 
-                                   
+
                                     </Grid>
                                     <ContentControl
                                         Name="VerseContentControl"
