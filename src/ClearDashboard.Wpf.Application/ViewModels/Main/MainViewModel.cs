@@ -490,7 +490,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 await SaveAvalonDockLayout();
             }
 
-            await SaveProjectData();
+            if (!ProjectManager.IsNewlySetFromTemplate)
+            {
+                await SaveProjectData();
+            }
+            
             UnsubscribeFromEventAggregator();
 
             await PinsViewModel.DeactivateAsync(close);

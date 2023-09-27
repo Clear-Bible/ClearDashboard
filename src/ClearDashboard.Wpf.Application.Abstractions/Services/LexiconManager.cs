@@ -581,13 +581,10 @@ namespace ClearDashboard.Wpf.Application.Services
            
         }
 
-        public async Task ProcessImportedLexicon()
+        public async Task ProcessLexiconToImport()
         {
             if (ManagedLexemes != null)
             {
-
-                //var selectedLexemesToImport = LexiconImportViewModels.Where(vm => vm.IsSelected)
-                //    .Select(vm => ManagedLexemes.First(lexeme => lexeme.LexemeId.Id == vm.LexemeId)).;
 
                 var selectedLexemesToImportIds = LexiconImportViewModels.Where(vm => vm.IsSelected).Select(vm=>vm.LexemeId).Distinct(); 
                 var selectedLexemesToImport = ManagedLexemes.IntersectBy(selectedLexemesToImportIds, l => l.LexemeId.Id);
@@ -601,25 +598,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         }
 
-        //public async Task ProcessLexiconImportsToDelete()
-        //{
-        //    if (ManagedLexemes != null)
-        //    {
-        //        var selectedLexemesToDelete = ImportedLexiconViewModels.Where(vm => vm.IsSelected)
-        //            .Select(vm => ManagedLexemes.First(lexeme => lexeme.LexemeId.Id == vm.LexemeId).LexemeId);
-
-        //        //var lexicon = new Lexicon
-        //        //{
-        //        //   LexemeIdsToDelete = selectedLexemesToDelete
-        //        //};
-
-        //        //await lexicon.SaveAsync(Mediator);
-        //    }
-
-        //}
-
-
-
+       
         /// <summary>
         /// Creates an <see cref="LexiconManager"/> instance using the specified DI container.
         /// </summary>

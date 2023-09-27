@@ -33,6 +33,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             {
                 var dataChanged = false;
 
+                if (Sldr.IsInitialized)
+                {
+                    Sldr.Cleanup();
+                }
                 Sldr.Initialize();
                 var lookup = new LanguageLookup();
 

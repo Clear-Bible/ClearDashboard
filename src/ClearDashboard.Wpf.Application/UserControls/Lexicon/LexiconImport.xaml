@@ -82,8 +82,8 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <Button x:Name="ProcessImportedLexicon"
-                                cm:Message.Attach="ProcessImportedLexicon"
+                    <Button x:Name="ProcessLexiconToImport"
+                                cm:Message.Attach="ProcessLexiconToImport"
                                 Width="100"
                                 Height="30"
                                 Margin="10, 0"
@@ -91,7 +91,7 @@
                                 HorizontalAlignment="Left"
                                 Content="{helpers:Localization LexiconImport_ImportChecked}" 
                                 Style="{StaticResource SmallTransparentStyle}"
-                                IsEnabled="{Binding HasLexiconImports}"/>
+                                IsEnabled="{Binding HasLexiconToImport}"/>
                         <StackPanel Orientation="Horizontal" Margin="10,5,5,5">
                             <Label Margin="10, 0, 0, 0" Content="Corpus:"></Label>
                             <ComboBox
@@ -124,7 +124,7 @@
                     </materialDesign:Card>
                 <DataGrid Grid.Row="1" Grid.Column="0" 
                           x:Name="LexiconSelectionDataGrid" 
-                          ItemsSource="{Binding LexiconImports}"
+                          ItemsSource="{Binding LexiconToImport}"
                           AutoGenerateColumns="False" 
                           HorizontalAlignment="Stretch"
                           Margin="5"
@@ -136,7 +136,7 @@
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
                           IsReadOnly="True"
-                          Visibility="{Binding HasLexiconImports, Converter={StaticResource BooleanToVisibilityConverter}}">
+                          Visibility="{Binding HasLexiconToImport, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <DataGrid.Columns>
                             <DataGridTemplateColumn>
