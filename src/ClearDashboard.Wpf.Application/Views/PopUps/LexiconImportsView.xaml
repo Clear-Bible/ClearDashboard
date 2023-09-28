@@ -24,7 +24,7 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
     <Grid>
-        <lexicon:LexiconImport DataContext="{Binding .}" />
+        <lexicon:LexiconImportDialog DataContext="{Binding .}" />
         <ProgressBar
             x:Name="ProgressBarVisibility"
             Grid.Column="0"
