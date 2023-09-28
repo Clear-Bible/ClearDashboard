@@ -518,7 +518,7 @@
     <value>Usuários atuais do projeto:</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>Excluir projeto</value>
+    <value>Excluir colaboração do projeto</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
     <value>Você tem outros usuários conectados a este projeto. Este projeto também será removido para eles. Tem certeza de que você deseja excluir este projeto?</value>
@@ -629,7 +629,7 @@
     <value>Junte -se a tokens</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Junte -se a tokens para par de idiomas</value>
+    <value>Junte -se a tokens para o par de idiomas</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Marcar o alinhamento como 'inválido'</value>
@@ -641,7 +641,7 @@
     <value>Marcar o alinhamento como 'válido'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Novo token</value>
+    <value>Novo token: texto de treinamento</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Notas</value>
@@ -658,8 +658,14 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>Aplique dividido em todas as instâncias de token:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Selecione Localização para dividir o token:</value>
+    <value>Selecione onde dividir o token:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>Divisão de três vias</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>Token de compósito un -joain</value>
@@ -944,7 +950,7 @@
     <value>Adicione como forma para ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
+    <value>Encontre correspondências ou formulários completos ou parciais para a fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Adicione o alvo como tradução para ...</value>
@@ -981,6 +987,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Palavra -alvo</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>Importação de léxico</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Tradução corresponde</value>
@@ -1142,7 +1151,7 @@
     <value>Pesquisar por brilho inglês</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Pesquisar por hebraico/grego</value>
+    <value>Pesquise por hebraico/grego</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Senso</value>
@@ -1163,7 +1172,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Verso senso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1190,7 +1199,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header2" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1475,7 +1484,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento de versos entre corpora paralela</value>
+    <value>Defina o mapeamento do verso entre corpora paralela</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
@@ -1493,7 +1502,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corpora</value>
+    <value>Adicione corporal</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1580,7 +1589,7 @@
     <value>Propriedades</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Recurso</value>
@@ -1709,7 +1718,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelando ...</value>
+    <value>Cancelamento ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1811,7 +1820,7 @@
     <value>Pesquise recente</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Clique aqui para começar o Paratext</value>
+    <value>Clique aqui para começar a Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
     <value>Versão:</value>
@@ -2132,13 +2141,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaure o usuário da colaboração</value>
+    <value>Restaurar o usuário de colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salvar o usuário do GitLab no servidor</value>
+    <value>Salve o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>

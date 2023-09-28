@@ -518,7 +518,7 @@
     <value>អ្នកប្រើប្រាស់គម្រោងបច្ចុប្បន្ន:</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>លុបគម្រោង</value>
+    <value>លុបកិច្ចសហប្រតិបត្តិការគម្រោង</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
     <value>អ្នកមានអ្នកប្រើប្រាស់ផ្សេងទៀតភ្ជាប់នឹងគម្រោងនេះ។ គម្រោងនេះនឹងត្រូវបានដកចេញសម្រាប់ពួកគេផងដែរ។ តើអ្នកប្រាកដថាអ្នកចង់លុបគំរោងនេះទេ?</value>
@@ -641,7 +641,7 @@
     <value>សម្គាល់ការតម្រឹមដែលមានសុពលភាព</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>និមិត្តសញ្ញាថ្មី</value>
+    <value>និមិត្តសញ្ញាថ្មី: អត្ថបទបណ្តុះបណ្តាល</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>កំណត់ចំណាំ</value>
@@ -658,8 +658,14 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>បំបែកថូខឹន</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>ដាក់ពាក្យសុំបំបែកទៅវត្ថុទាំងអស់នៃថូខឹន:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>ជ្រើសរើសទីតាំងដើម្បីបំបែកថូខឹន:</value>
+    <value>ជ្រើសរើសកន្លែងដែលត្រូវបំបែកថូខឹន:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>ពុះបីផ្លូវ</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>និមិត្តសញ្ញា unjoin សមាសធាតុផ្សំ</value>
@@ -981,6 +987,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>ពាក្យគោលដៅ</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>ការនាំចូល lexicon</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>ការផ្គូផ្គងការបកប្រែ</value>

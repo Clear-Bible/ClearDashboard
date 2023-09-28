@@ -518,7 +518,7 @@
     <value>वर्तमान परियोजना उपयोगकर्ता:</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>प्रोजेक्ट हटाएं</value>
+    <value>प्रोजेक्ट सहयोग हटाएं</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
     <value>आपके पास इस परियोजना से जुड़े अन्य उपयोगकर्ता हैं। इस परियोजना को उनके लिए भी हटा दिया जाएगा। क्या आप इस परियोजना को हटाना चाहते हैं?</value>
@@ -629,7 +629,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -641,7 +641,7 @@
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>नया टोकन</value>
+    <value>नया टोकन: प्रशिक्षण पाठ</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>टिप्पणियाँ</value>
@@ -658,8 +658,14 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>विभाजित टोकन</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>टोकन के सभी उदाहरणों पर विभाजन लागू करें:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए स्थान का चयन करें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>तीन-तरफ़ा विभाजन</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>अनजान समग्र टोकन</value>
@@ -982,6 +988,9 @@
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>लक्ष्य शब्द</value>
   </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>लेक्सिकॉन आयात</value>
+  </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>अनुवाद मैच</value>
   </data>
@@ -1064,7 +1073,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -1178,7 +1187,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>रद्द किया गया ऑपरेशन</value>
+    <value>अभियान रद्द किया गया</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1682,7 +1691,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाओ</value>
+    <value>दिखावा दिखाना</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1739,13 +1748,13 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर प्रोजेक्ट</value>
+    <value>आयात सर्वर परियोजना</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
     <value>बाइबिल के ग्रंथों को शामिल करें?</value>
@@ -1841,7 +1850,7 @@
     <value>1 जॉन</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 राजा</value>
+    <value>1 किंग्स</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 पीटर</value>
@@ -2294,7 +2303,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -2315,7 +2324,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>उपडोमेन:</value>
+    <value>सबडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

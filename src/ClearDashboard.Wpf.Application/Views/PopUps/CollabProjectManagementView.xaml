@@ -484,7 +484,7 @@
                         Height="32"
                         HorizontalAlignment="Center"
                         Kind="DeleteCircleOutline" />
-                    <TextBlock Grid.Row="1" Text="{helpers:Localization CollabProjectManagementView_Delete}" />
+                    <TextBlock Grid.Row="1" Text="Delete Project Collaboration" />
                 </Grid>
             </Button>
         </StackPanel>
