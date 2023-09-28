@@ -63,8 +63,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>
     {
-        public IEnhancedViewManager EnhancedViewManager { get; }
-
         #region Member Variables
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
@@ -81,6 +79,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion //Member Variables
 
         #region Observable Properties
+
+        public IEnhancedViewManager EnhancedViewManager { get; }
 
         public bool LoadingDesignSurface { get; set; }
 
@@ -1591,12 +1591,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowLexiconDialog:
-                    await ShowLexiconDialog();
+                    await ShowLexiconDialog(corpusNodeViewModel.CorpusId);
                     break;
             }
         }
 
-        private async Task ShowLexiconDialog()
+        private async Task ShowLexiconDialog(Guid corpusId)
         {
             var localizedString = _localizationService!.Get("LexiconImport_Title");
 
@@ -1607,7 +1607,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
-            var viewModel = IoC.Get<ClearDashboard.Wpf.Application.ViewModels.PopUps.LexiconImportsViewModel>();
+            var viewModel = IoC.Get<LexiconImportsViewModel>();
+            viewModel.SelectedProjectId = corpusId;
 
             IWindowManager manager = new WindowManager();
             await manager.ShowDialogAsync(viewModel, null, settings);

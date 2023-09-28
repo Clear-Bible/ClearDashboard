@@ -990,9 +990,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     }
 
                     // do not allow MACULA or Resource types to have lexicon
-                    if ((corpusNodeViewModel.CorpusType == CorpusType.ManuscriptGreek ||
-                         corpusNodeViewModel.CorpusType == CorpusType.ManuscriptHebrew ||
-                         corpusNodeViewModel.CorpusType == CorpusType.Resource) == false)
+                    if (corpusNodeViewModel.CorpusType == CorpusType.Standard ||
+                         corpusNodeViewModel.CorpusType == CorpusType.BackTranslation)
                     {
                         corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
                         {

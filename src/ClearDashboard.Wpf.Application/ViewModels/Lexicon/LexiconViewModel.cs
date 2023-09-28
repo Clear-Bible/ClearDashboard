@@ -21,19 +21,68 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
     public class LexiconViewModel : ToolViewModel
     {
+        #region Member Variables
+
         private IWindowManager WindowManager { get; }
         private LexiconManager LexiconManager { get; }
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        public BindableCollection<LexiconImportViewModel> LexiconToImport { get; private set; } = new BindableCollection<LexiconImportViewModel>();
+
+        public bool HasLexiconToImport => LexiconToImport.Any();
+       
+        public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
+
+        public List<CorpusId> ProjectCorpora { get; } = new List<CorpusId>();
+
+        public CorpusId? SelectedProjectCorpus
+        {
+            get => _selectedProjectCorpus;
+            set
+            {
+                if (Set(ref _selectedProjectCorpus, value))
+                {
+                    NotifyOfPropertyChange<bool>(()=>HasSelectedProjectCorpus);
+                    NotifyOfPropertyChange<bool>(()=>ShowNoRecordsToManageMessage);
+                }
+            }
+        }
+
+        public bool HasSelectedProjectCorpus => SelectedProjectCorpus != null;
+
+        public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !LexiconToImport.Any();
+
+        public bool ShowDialog
+        {
+            get => _showDialog;
+            set => Set(ref _showDialog, value);
+        }
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
 
         private Visibility _progressBarVisibility = Visibility.Hidden;
         private bool _showDialog;
 
-       private CorpusId? _selectedProjectCorpus;
+        private CorpusId? _selectedProjectCorpus;
 
         public Visibility ProgressBarVisibility
         {
             get => _progressBarVisibility;
             set => Set(ref _progressBarVisibility, value);
         }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
         public LexiconViewModel()
         {
             //required for design-time support
@@ -59,31 +108,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         {
             return base.OnInitializeAsync(cancellationToken);
         }
-
-        public BindableCollection<LexiconImportViewModel> LexiconToImport { get; private set; } = new BindableCollection<LexiconImportViewModel>();
-
-        public bool HasLexiconToImport => LexiconToImport.Any();
-       
-        public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
-
-        public List<CorpusId> ProjectCorpora { get; } = new List<CorpusId>();
-
-        public CorpusId? SelectedProjectCorpus
-        {
-            get => _selectedProjectCorpus;
-            set
-            {
-                if (Set(ref _selectedProjectCorpus, value))
-                {
-                    NotifyOfPropertyChange(()=>HasSelectedProjectCorpus);
-                    NotifyOfPropertyChange(()=>ShowNoRecordsToManageMessage);
-                }
-            }
-        }
-
-        public bool HasSelectedProjectCorpus => SelectedProjectCorpus != null;
-
-        public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !LexiconToImport.Any();
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
@@ -112,12 +136,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             await base.OnActivateAsync(cancellationToken);
         }
 
+        protected override void OnViewAttached(object view, object context)
+        {
+            base.OnViewAttached(view, context);
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            base.OnViewReady(view);
+        }
+
+        #endregion //Constructor
+
+
+        #region Methods
+
         private async Task GetParatextProjects()
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
             foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c=> c.CorpusType == CorpusType.Standard.ToString() || c.CorpusType == CorpusType.BackTranslation.ToString() || c.CorpusType == CorpusType.Resource.ToString()).OrderBy(c => c.Created))
             {
-               ProjectCorpora.Add(corpusId);
+                ProjectCorpora.Add(corpusId);
             }
 
             await Task.CompletedTask;
@@ -154,11 +198,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
            
         }
 
-        //public async Task ProjectCorpusSelected(SelectionChangedEventArgs args)
-        //{
-        //    await GetToImportLexiconImportViewModels(CancellationToken.None);
-        //}
-
         public async Task ProjectCorpusSelected()
         {
             await GetToImportLexiconImportViewModels(CancellationToken.None);
@@ -187,12 +226,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
 
-        public bool ShowDialog
-        {
-            get => _showDialog;
-            set => Set(ref _showDialog, value);
-        }
-
         public async Task OnTargetAsTranslationButtonClicked(LexiconImportViewModel lexiconImport)
         {
 
@@ -218,21 +251,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             return base.OnDeactivateAsync(close, cancellationToken);
-        }
-
-        protected override void OnViewAttached(object view, object context)
-        {
-            base.OnViewAttached(view, context);
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewReady(object view)
-        {
-            base.OnViewReady(view);
         }
 
 
@@ -271,5 +289,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             });
 
         }
+
+        #endregion // Methods
     }
 }

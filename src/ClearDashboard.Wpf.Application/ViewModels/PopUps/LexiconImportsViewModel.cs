@@ -22,6 +22,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class LexiconImportsViewModel: DashboardApplicationScreen
     {
+        #region Member Variables   
+
         private IWindowManager WindowManager { get; }
         private LexiconManager LexiconManager { get; }
 
@@ -30,11 +32,60 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private CorpusId? _selectedProjectCorpus;
 
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        public BindableCollection<LexiconImportViewModel> LexiconToImport { get; private set; } = new BindableCollection<LexiconImportViewModel>();
+
+        public bool HasLexiconToImport => Enumerable.Any<LexiconImportViewModel>(LexiconToImport);
+
+        public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
+
+        public List<CorpusId> ProjectCorpora { get; } = new List<CorpusId>();
+
+        public bool HasSelectedProjectCorpus => SelectedProjectCorpus != null;
+
+        public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !Enumerable.Any<LexiconImportViewModel>(LexiconToImport);
+
+        public bool ShowDialog
+        {
+            get => _showDialog;
+            set => Set(ref _showDialog, value);
+        }
+
+        public Guid SelectedProjectId { get; set; } = Guid.Empty;
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
+        public CorpusId? SelectedProjectCorpus
+        {
+            get => _selectedProjectCorpus;
+            set
+            {
+                if (Set(ref _selectedProjectCorpus, value))
+                {
+                    NotifyOfPropertyChange(() => HasSelectedProjectCorpus);
+                    NotifyOfPropertyChange(() => ShowNoRecordsToManageMessage);
+                }
+            }
+        }
+
         public Visibility ProgressBarVisibility
         {
             get => _progressBarVisibility;
             set => Set(ref _progressBarVisibility, value);
         }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
         public LexiconImportsViewModel()
         {
             //required for design-time support
@@ -61,34 +112,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             return base.OnInitializeAsync(cancellationToken);
         }
 
-        public BindableCollection<LexiconImportViewModel> LexiconToImport { get; private set; } = new BindableCollection<LexiconImportViewModel>();
-
-        public bool HasLexiconToImport => LexiconToImport.Any();
-
-        public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
-
-        public List<CorpusId> ProjectCorpora { get; } = new List<CorpusId>();
-
-        public CorpusId? SelectedProjectCorpus
-        {
-            get => _selectedProjectCorpus;
-            set
-            {
-                if (Set(ref _selectedProjectCorpus, value))
-                {
-                    NotifyOfPropertyChange(() => HasSelectedProjectCorpus);
-                    NotifyOfPropertyChange(() => ShowNoRecordsToManageMessage);
-                }
-            }
-        }
-
-        public bool HasSelectedProjectCorpus => SelectedProjectCorpus != null;
-
-        public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !LexiconToImport.Any();
-
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            await Task.Run(async () =>
+            // leave the following as not awaited so that the UI can load while the data is being loaded.
+            Task.Run(async () =>
             {
                 // TODO:  change to true when feature is ready.
                 ShowDialog = false;
@@ -113,16 +140,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             await base.OnActivateAsync(cancellationToken);
         }
 
+        #endregion //Constructor
+
+
+        #region Methods
+
         private async Task GetParatextProjects()
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-            foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c => c.CorpusType == CorpusType.Standard.ToString() || c.CorpusType == CorpusType.BackTranslation.ToString() || c.CorpusType == CorpusType.Resource.ToString()).OrderBy(c => c.Created))
+
+            // this really only is used for the dropdown so we don't really need this
+            ProjectCorpora.Clear();
+            foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c =>
+                         c.CorpusType == CorpusType.Standard.ToString() ||
+                         c.CorpusType == CorpusType.BackTranslation.ToString()).OrderBy(c => c.Created))
             {
                 ProjectCorpora.Add(corpusId);
             }
 
+            if (SelectedProjectId != Guid.Empty)
+            {
+                var selectedProjectCorpus = ProjectCorpora.FirstOrDefault(c => c.Id == SelectedProjectId);
+
+                if (selectedProjectCorpus is not null)
+                {
+                    //ProjectCorpora.Clear();
+                    //ProjectCorpora.Add(selectedProjectCorpus);
+                    SelectedProjectCorpus = selectedProjectCorpus;
+                    await ProjectCorpusSelected();
+                }
+            }
+
             await Task.CompletedTask;
         }
+
         private async Task GetImportedLexiconViewModels(CancellationToken cancellationToken)
         {
             ImportedLexicon.Clear();
@@ -188,12 +239,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
 
-        public bool ShowDialog
-        {
-            get => _showDialog;
-            set => Set(ref _showDialog, value);
-        }
-
         public async Task OnTargetAsTranslationButtonClicked(LexiconImportViewModel lexiconImport)
         {
 
@@ -216,26 +261,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            return base.OnDeactivateAsync(close, cancellationToken);
-        }
-
-        protected override void OnViewAttached(object view, object context)
-        {
-            base.OnViewAttached(view, context);
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewReady(object view)
-        {
-            base.OnViewReady(view);
-        }
-
 
         public void OnToggleAllChecked(CheckBox? checkBox)
         {
@@ -246,6 +271,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     lexicon.IsSelected = checkBox.IsChecked ?? false;
                 }
             }
+        }
+
+
+        public async void Close()
+        {
+            await TryCloseAsync();
         }
 
         public async Task ProcessLexiconToImport()
@@ -273,5 +304,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         }
 
+        #endregion // Methods
     }
 }

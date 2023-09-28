@@ -83,21 +83,39 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button
-                x:Name="ProcessLexiconToImport"
-                Width="100"
-                Height="30"
-                Margin="10,0"
-                HorizontalAlignment="Left"
-                cm:Message.Attach="ProcessLexiconToImport"
-                Content="{helpers:Localization LexiconImport_ImportChecked}"
-                Foreground="{DynamicResource MaterialDesignBody}"
-                IsEnabled="{Binding HasLexiconToImport}"
-                Style="{StaticResource SmallTransparentStyle}" />
-            <StackPanel Margin="10,5,5,5" Orientation="Horizontal">
-                <Label Margin="10,0,0,0" Content="Corpus:" />
-                <ComboBox
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Button
+            x:Name="ProcessLexiconToImport"
+            Width="100"
+            Height="30"
+            Margin="10,0"
+            HorizontalAlignment="Left"
+            cm:Message.Attach="ProcessLexiconToImport"
+            Content="{helpers:Localization LexiconImport_ImportChecked}"
+            Foreground="{DynamicResource MaterialDesignBody}"
+            IsEnabled="{Binding HasLexiconToImport}"
+            Style="{StaticResource SmallTransparentStyle}" />
+
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="10,5,5,5"
+            Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                Content="Corpus:"
+                FontSize="14" />
+            <Label
+                Margin="0,0,0,0"
+                Content="{Binding SelectedProjectCorpus.Name}"
+                FontSize="14" />
+            <!--<ComboBox
                     x:Name="ParatextProjectsComboBox"
                     MinWidth="150"
                     Margin="10,0,5,0"
@@ -112,12 +130,27 @@
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-                </ComboBox>
-            </StackPanel>
+                </ComboBox>-->
         </StackPanel>
+
+        <Button
+            x:Name="Close"
+            Grid.Row="0"
+            Grid.Column="2"
+            Width="100"
+            Height="30"
+            Margin="10,0"
+            HorizontalAlignment="Right"
+            cm:Message.Attach="Close"
+            Content="{helpers:Localization Close}"
+            Foreground="{DynamicResource MaterialDesignBody}"
+            Style="{StaticResource SmallTransparentStyle}" />
+
+
         <materialDesign:Card
             Grid.Row="1"
             Grid.Column="0"
+            Grid.ColumnSpan="3"
             Visibility="{Binding HasSelectedProjectCorpus, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
             <StackPanel>
                 <TextBlock
@@ -129,6 +162,7 @@
         <materialDesign:Card
             Grid.Row="1"
             Grid.Column="0"
+            Grid.ColumnSpan="3"
             Visibility="{Binding ShowNoRecordsToManageMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel>
                 <TextBlock
@@ -141,6 +175,7 @@
             x:Name="LexiconSelectionDataGrid"
             Grid.Row="1"
             Grid.Column="0"
+            Grid.ColumnSpan="3"
             Margin="5"
             HorizontalAlignment="Stretch"
             AutoGenerateColumns="False"
