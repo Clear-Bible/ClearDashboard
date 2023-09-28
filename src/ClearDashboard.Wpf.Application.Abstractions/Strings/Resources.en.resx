@@ -518,7 +518,7 @@
     <value>Current Project Users:</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>Delete Project</value>
+    <value>Delete Project Collaboration</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
     <value>You have other users connected to this project.  This project will be removed for them as well. Are sure you want to delete this project?</value>
@@ -641,7 +641,7 @@
     <value>Mark Alignment as 'Valid'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>New Token</value>
+    <value>New Token: Training Text</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Notes</value>
@@ -658,8 +658,14 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Split Token</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>Apply split to all instances of token:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Select Location to Split Token:</value>
+    <value>Select where to split token:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>Three-way split</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>Unjoin Composite Token</value>
@@ -981,6 +987,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Target Word</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>Lexicon Import</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Translation matches</value>
