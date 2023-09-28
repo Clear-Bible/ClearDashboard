@@ -42,9 +42,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set
             {
                 _tokenDisplay = value;
+                CharacterThreshold2 = TokenLength;
                 NotifyOfPropertyChange(nameof(TokenCharacters));
             } 
         }
+
+        private int TokenLength => _tokenDisplay != null ? _tokenDisplay.SurfaceText.Length : 0;
 
         private TokenCharacterViewModelCollection? _tokenCharacters;
         public TokenCharacterViewModelCollection TokenCharacters
@@ -55,23 +58,92 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private int _characterThreshold = 0;
-
-        public int CharacterThreshold
+        private int _characterThreshold1 = 0;
+        public int CharacterThreshold1
         {
-            get => _characterThreshold;
+            get => _characterThreshold1;
             set
             {
-                _characterThreshold = value;
+                _characterThreshold1 = Math.Min(value, CharacterThreshold2);
                 NotifyOfPropertyChange();
-                NotifyOfPropertyChange(nameof(Subtoken1));
-                NotifyOfPropertyChange(nameof(Subtoken2));
-                NotifyOfPropertyChange(nameof(ApplyEnabled));
+                CalculateSubtokens();
             }
         }
 
-        public string Subtoken1 => TokenDisplay.SurfaceText[..CharacterThreshold];
-        public string Subtoken2 => TokenDisplay.SurfaceText[CharacterThreshold..];
+        private int _characterThreshold2 = int.MaxValue;
+        public int CharacterThreshold2
+        {
+            get => _characterThreshold2;
+            set
+            {
+                _characterThreshold2 = Math.Max(value, CharacterThreshold1);
+                NotifyOfPropertyChange();
+                CalculateSubtokens();
+            }
+        }
+
+        private void CalculateSubtokens()
+        {
+            Subtoken1 = TokenDisplay.SurfaceText[..CharacterThreshold1];
+
+            if (CharacterThreshold2 < TokenLength)
+            {
+                Subtoken2 = TokenDisplay.SurfaceText[CharacterThreshold1..CharacterThreshold2];
+                Subtoken3 = TokenDisplay.SurfaceText[CharacterThreshold2..];
+            }
+            else
+            {
+                Subtoken2 = TokenDisplay.SurfaceText[CharacterThreshold1..];
+                Subtoken3 = string.Empty;
+            }
+
+            NotifyOfPropertyChange(nameof(Subtoken1));
+            NotifyOfPropertyChange(nameof(Subtoken2));
+            NotifyOfPropertyChange(nameof(Subtoken3));
+
+            NotifyOfPropertyChange(nameof(Subtoken1Enabled));
+            NotifyOfPropertyChange(nameof(Subtoken2Enabled));
+            NotifyOfPropertyChange(nameof(Subtoken3Enabled));
+
+            NotifyOfPropertyChange(nameof(ApplyEnabled));
+        }
+
+        private string _subtoken1 = string.Empty;
+        public string Subtoken1
+        {
+            get => _subtoken1;
+            set
+            {
+                _subtoken1 = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        private string _subtoken2 = string.Empty;
+        public string Subtoken2
+        {
+            get => _subtoken2;
+            set
+            {
+                _subtoken2 = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        private string _subtoken3 = string.Empty;
+        public string Subtoken3
+        {
+            get => _subtoken3;
+            set
+            {
+                _subtoken3 = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool Subtoken1Enabled => CharacterThreshold1 > 0 && CharacterThreshold1 < TokenLength;
+        public bool Subtoken2Enabled => CharacterThreshold1 != CharacterThreshold2 && (CharacterThreshold1 > 0 || CharacterThreshold2 < TokenLength);
+        public bool Subtoken3Enabled => CharacterThreshold2 > 0 && CharacterThreshold2 < TokenLength;
 
         public string DialogTitle => $"{LocalizationService!["EnhancedView_SplitToken"]}: {TokenDisplay.SurfaceText}";
 
@@ -82,7 +154,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             private set => Set(ref _progressBarVisibility, value);
         }
 
-        public bool ApplyEnabled => CharacterThreshold > 0 && CharacterThreshold < TokenDisplay.SurfaceText.Length;
+        public bool ApplyEnabled
+
+        {
+            get
+            {
+                var enabled = true;
+                var enabledCount = 0;
+                if (Subtoken1Enabled)
+                {
+                    enabledCount++;
+                    enabled &= !string.IsNullOrWhiteSpace(Subtoken1);
+                }
+                if (Subtoken2Enabled)
+                {
+                    enabledCount++;
+                    enabled &= !string.IsNullOrWhiteSpace(Subtoken2);
+                }
+                if (Subtoken3Enabled)
+                {
+                    enabledCount++;
+                    enabled &= !string.IsNullOrWhiteSpace(Subtoken3);
+                }
+
+                return enabledCount >= 2 && enabled;
+            }
+        }
 
         private bool _cancelEnabled = true;
         public bool CancelEnabled
@@ -101,7 +198,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public void CharacterClicked(object source, RoutedEventArgs args)
         {
             var tokenCharacterArgs = args as TokenCharacterEventArgs;
-            CharacterThreshold = tokenCharacterArgs!.TokenCharacter.Index + 1;
+            CharacterThreshold1 = tokenCharacterArgs!.TokenCharacter.Index + 1;
+        }
+
+        public void ThreeWaySplitUnchecked(object source, RoutedEventArgs args)
+        {
+            CharacterThreshold2 = TokenDisplay.SurfaceText.Length;
+        }
+
+        public void TrainingTextChanged(object source, RoutedEventArgs args)
+        {
+            NotifyOfPropertyChange(nameof(ApplyEnabled));
         }
 
         public async void ApplySplit()

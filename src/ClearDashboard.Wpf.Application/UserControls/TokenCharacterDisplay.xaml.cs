@@ -33,11 +33,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Brushes.Transparent));
         
         /// <summary>
-        /// Identifies the Threshold dependency property.
+        /// Identifies the BackgroundColor2 dependency property.
         /// </summary>
-        public static readonly DependencyProperty ThresholdProperty = DependencyProperty.Register(
-            nameof(Threshold), typeof(int), typeof(TokenCharacterDisplay),
+        public static readonly DependencyProperty BackgroundColor3Property = DependencyProperty.Register(
+            nameof(BackgroundColor3), typeof(Brush), typeof(TokenCharacterDisplay),
+            new PropertyMetadata(Brushes.SkyBlue));
+        
+        /// <summary>
+        /// Identifies the Threshold1 dependency property.
+        /// </summary>
+        public static readonly DependencyProperty Threshold1Property = DependencyProperty.Register(
+            nameof(Threshold1), typeof(int), typeof(TokenCharacterDisplay),
             new PropertyMetadata(0, OnThresholdChanged));
+
+        /// <summary>
+        /// Identifies the Threshold2 dependency property.
+        /// </summary>
+        public static readonly DependencyProperty Threshold2Property = DependencyProperty.Register(
+            nameof(Threshold2), typeof(int), typeof(TokenCharacterDisplay),
+            new PropertyMetadata(int.MaxValue, OnThresholdChanged));
 
         private static void OnThresholdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -59,6 +73,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenCharacter = tokenCharacter!,
+                ModifierKeys = Keyboard.Modifiers
             });
         }
 
@@ -73,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the background when it is less than the threshold.
+        /// Gets or sets the <see cref="Brush"/> used to draw the background when it is less than threshold 1.
         /// </summary>
         public Brush BackgroundColor1
         {
@@ -82,12 +97,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the background when it is greater than or equal to the threshold.
+        /// Gets or sets the <see cref="Brush"/> used to draw the background when it is between thresholds 1 and 2.
         /// </summary>
         public Brush BackgroundColor2
         {
             get => (Brush)GetValue(BackgroundColor2Property);
             set => SetValue(BackgroundColor2Property, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the background when it is greater than threshold 2
+        /// </summary>
+        public Brush BackgroundColor3
+        {
+            get => (Brush)GetValue(BackgroundColor3Property);
+            set => SetValue(BackgroundColor3Property, value);
         }
 
         /// <summary>
@@ -98,15 +122,26 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the <see cref="Brush"/> used to draw the background.
         /// </summary>
-        public Brush ComputedBackgroundColor => TokenCharacter != null && TokenCharacter.Index < Threshold ? BackgroundColor1 : BackgroundColor2;
+        public Brush ComputedBackgroundColor => TokenCharacter != null && TokenCharacter.Index < Threshold1 ? BackgroundColor1 
+                                              : TokenCharacter != null && TokenCharacter.Index < Threshold2 ? BackgroundColor2
+                                              : BackgroundColor3;
 
         /// <summary>
-        /// Gets or sets the threshold used to determine the background color.
+        /// Gets or sets the first threshold used to determine the background color.
         /// </summary>
-        public int Threshold
+        public int Threshold1
         {
-            get => (int)GetValue(ThresholdProperty);
-            set => SetValue(ThresholdProperty, value);
+            get => (int)GetValue(Threshold1Property);
+            set => SetValue(Threshold1Property, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the second threshold used to determine the background color.
+        /// </summary>
+        public int Threshold2
+        {
+            get => (int)GetValue(Threshold2Property);
+            set => SetValue(Threshold2Property, value);
         }
 
         /// <summary>
@@ -129,6 +164,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             this.DataContextChanged += OnDataContextChanged;
         }
-
     }
 }

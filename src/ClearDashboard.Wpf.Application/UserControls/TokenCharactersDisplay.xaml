@@ -18,7 +18,8 @@
                 FontSize="{Binding ElementName=TokenCharactersDisplayControl, Path=FontSize}" 
                 HorizontalAlignment="Center"
                 HorizontalContentAlignment="Center"
-                Threshold="{Binding ElementName=TokenCharactersDisplayControl, Path=Threshold}" 
+                Threshold1="{Binding ElementName=TokenCharactersDisplayControl, Path=Threshold1}" 
+                Threshold2="{Binding ElementName=TokenCharactersDisplayControl, Path=Threshold2}" 
                 Width="{Binding ElementName=TokenCharactersDisplayControl, Path=CharacterWidth}" 
                 />
         </DataTemplate>
