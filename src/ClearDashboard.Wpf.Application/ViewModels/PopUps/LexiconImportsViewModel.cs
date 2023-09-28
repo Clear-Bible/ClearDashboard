@@ -3,9 +3,10 @@ using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,14 +18,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
+namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
-    public class LexiconViewModel : ToolViewModel
+    public class LexiconImportsViewModel: DashboardApplicationScreen
     {
-        #region Member Variables
+        #region Member Variables   
 
         private IWindowManager WindowManager { get; }
         private LexiconManager LexiconManager { get; }
+
+        private Visibility _progressBarVisibility = Visibility.Hidden;
+        private bool _showDialog;
+
+        private CorpusId? _selectedProjectCorpus;
 
         #endregion //Member Variables
 
@@ -33,11 +39,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public BindableCollection<LexiconImportViewModel> LexiconToImport { get; private set; } = new BindableCollection<LexiconImportViewModel>();
 
-        public bool HasLexiconToImport => LexiconToImport.Any();
-       
+        public bool HasLexiconToImport => Enumerable.Any<LexiconImportViewModel>(LexiconToImport);
+
         public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
 
         public List<CorpusId> ProjectCorpora { get; } = new List<CorpusId>();
+
+        public bool HasSelectedProjectCorpus => SelectedProjectCorpus != null;
+
+        public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !Enumerable.Any<LexiconImportViewModel>(LexiconToImport);
+
+        public bool ShowDialog
+        {
+            get => _showDialog;
+            set => Set(ref _showDialog, value);
+        }
+
+        public Guid SelectedProjectId { get; set; } = Guid.Empty;
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
 
         public CorpusId? SelectedProjectCorpus
         {
@@ -46,31 +69,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 if (Set(ref _selectedProjectCorpus, value))
                 {
-                    NotifyOfPropertyChange<bool>(()=>HasSelectedProjectCorpus);
-                    NotifyOfPropertyChange<bool>(()=>ShowNoRecordsToManageMessage);
+                    NotifyOfPropertyChange(() => HasSelectedProjectCorpus);
+                    NotifyOfPropertyChange(() => ShowNoRecordsToManageMessage);
                 }
             }
         }
-
-        public bool HasSelectedProjectCorpus => SelectedProjectCorpus != null;
-
-        public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !LexiconToImport.Any();
-
-        public bool ShowDialog
-        {
-            get => _showDialog;
-            set => Set(ref _showDialog, value);
-        }
-
-        #endregion //Public Properties
-
-
-        #region Observable Properties
-
-        private Visibility _progressBarVisibility = Visibility.Hidden;
-        private bool _showDialog;
-
-        private CorpusId? _selectedProjectCorpus;
 
         public Visibility ProgressBarVisibility
         {
@@ -83,21 +86,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         #region Constructor
 
-        public LexiconViewModel()
+        public LexiconImportsViewModel()
         {
             //required for design-time support
         }
 
-        public LexiconViewModel(INavigationService navigationService,
+        public LexiconImportsViewModel(INavigationService navigationService,
             ILogger<LexiconViewModel> logger,
             DashboardProjectManager dashboardProjectManager,
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope lifetimeScope,
             ILocalizationService localizationService,
-            IWindowManager windowManager, 
+            IWindowManager windowManager,
             LexiconManager lexiconManager) :
-            base(navigationService, logger, dashboardProjectManager, eventAggregator, mediator, lifetimeScope, localizationService)
+            base(dashboardProjectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             LexiconManager = lexiconManager;
             WindowManager = windowManager;
@@ -111,7 +114,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            await Task.Run(async () =>
+            // leave the following as not awaited so that the UI can load while the data is being loaded.
+            Task.Run(async () =>
             {
                 // TODO:  change to true when feature is ready.
                 ShowDialog = false;
@@ -119,7 +123,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 var stopWatch = Stopwatch.StartNew();
                 try
                 {
-                    await GetParatextProjects(); 
+                    await GetParatextProjects();
                     await GetImportedLexiconViewModels(cancellationToken);
                 }
                 finally
@@ -136,21 +140,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             await base.OnActivateAsync(cancellationToken);
         }
 
-        protected override void OnViewAttached(object view, object context)
-        {
-            base.OnViewAttached(view, context);
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewReady(object view)
-        {
-            base.OnViewReady(view);
-        }
-
         #endregion //Constructor
 
 
@@ -159,13 +148,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         private async Task GetParatextProjects()
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-            foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c=> c.CorpusType == CorpusType.Standard.ToString() || c.CorpusType == CorpusType.BackTranslation.ToString() || c.CorpusType == CorpusType.Resource.ToString()).OrderBy(c => c.Created))
+
+            // this really only is used for the dropdown so we don't really need this
+            ProjectCorpora.Clear();
+            foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c =>
+                         c.CorpusType == CorpusType.Standard.ToString() ||
+                         c.CorpusType == CorpusType.BackTranslation.ToString()).OrderBy(c => c.Created))
             {
                 ProjectCorpora.Add(corpusId);
             }
 
+            if (SelectedProjectId != Guid.Empty)
+            {
+                var selectedProjectCorpus = ProjectCorpora.FirstOrDefault(c => c.Id == SelectedProjectId);
+
+                if (selectedProjectCorpus is not null)
+                {
+                    //ProjectCorpora.Clear();
+                    //ProjectCorpora.Add(selectedProjectCorpus);
+                    SelectedProjectCorpus = selectedProjectCorpus;
+                    await ProjectCorpusSelected();
+                }
+            }
+
             await Task.CompletedTask;
         }
+
         private async Task GetImportedLexiconViewModels(CancellationToken cancellationToken)
         {
             ImportedLexicon.Clear();
@@ -179,8 +187,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 ProgressBarVisibility = Visibility.Visible;
                 LexiconToImport.Clear();
-                NotifyOfPropertyChange(()=>HasLexiconToImport);
-                NotifyOfPropertyChange(()=>ShowNoRecordsToManageMessage);
+                NotifyOfPropertyChange(() => HasLexiconToImport);
+                NotifyOfPropertyChange(() => ShowNoRecordsToManageMessage);
 
                 var projectId = SelectedProjectCorpus?.ParatextGuid;
                 var lexiconImports = await LexiconManager.GetLexiconImportViewModels(projectId, cancellationToken);
@@ -195,8 +203,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     ProgressBarVisibility = Visibility.Hidden;
                 });
             }
-           
+
         }
+
+        //public async Task ProjectCorpusSelected(SelectionChangedEventArgs args)
+        //{
+        //    await GetToImportLexiconImportViewModels(CancellationToken.None);
+        //}
 
         public async Task ProjectCorpusSelected()
         {
@@ -248,11 +261,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             }
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            return base.OnDeactivateAsync(close, cancellationToken);
-        }
-
 
         public void OnToggleAllChecked(CheckBox? checkBox)
         {
@@ -263,6 +271,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     lexicon.IsSelected = checkBox.IsChecked ?? false;
                 }
             }
+        }
+
+
+        public async void Close()
+        {
+            await TryCloseAsync();
         }
 
         public async Task ProcessLexiconToImport()

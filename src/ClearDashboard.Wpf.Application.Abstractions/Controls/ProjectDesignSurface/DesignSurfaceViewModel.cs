@@ -972,7 +972,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
 
                     // do not allow MACULA to be updated
-                    if ((corpusNodeViewModel.CorpusType == CorpusType.ManuscriptGreek || corpusNodeViewModel.CorpusType == CorpusType.ManuscriptHebrew) == false)
+                    if ((corpusNodeViewModel.CorpusType == CorpusType.ManuscriptGreek ||
+                         corpusNodeViewModel.CorpusType == CorpusType.ManuscriptHebrew) == false)
                     {
                         AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
 
@@ -983,6 +984,22 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             Id = DesignSurfaceMenuIds.UpdateParatextCorpus,
                             ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                             IconKind = PackIconPicolIconsKind.Edit.ToString(),
+                            CorpusNodeViewModel = corpusNodeViewModel,
+                            Tokenizer = tokenizer.ToString(),
+                        });
+                    }
+
+                    // do not allow MACULA or Resource types to have lexicon
+                    if (corpusNodeViewModel.CorpusType == CorpusType.Standard ||
+                         corpusNodeViewModel.CorpusType == CorpusType.BackTranslation)
+                    {
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        {
+                            // Show the Lexicon Dialog
+                            Header = "Import Lexicon",
+                            Id = DesignSurfaceMenuIds.ShowLexiconDialog,
+                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                            IconKind = PackIconPicolIconsKind.Upload.ToString(),
                             CorpusNodeViewModel = corpusNodeViewModel,
                             Tokenizer = tokenizer.ToString(),
                         });
