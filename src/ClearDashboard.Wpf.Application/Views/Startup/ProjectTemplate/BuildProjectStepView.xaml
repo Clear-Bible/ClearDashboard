@@ -131,7 +131,7 @@
                 Content="{Binding BackOrCancelAction}"
                 FontSize="12"
                 IsEnabled="{Binding CanMoveBackwards}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
             <Button
                 x:Name="CreateOrClose"
                 Width="90"

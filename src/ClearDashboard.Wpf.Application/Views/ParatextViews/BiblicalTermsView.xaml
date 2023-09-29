@@ -5,13 +5,12 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-   
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:paratextviews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     x:Name="BiblicalTermsViewWindow"
     d:DataContext="{d:DesignInstance Type=paratextviews:BiblicalTermsViewModel}"
@@ -114,16 +113,16 @@
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
                         <RadioButton
+                            Background="{StaticResource PrimaryHueDarkBrush}"
                             Content="{helpers:Localization BiblicalTermsForm_Project}"
-                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radBTType"
                             IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionProject}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                         <RadioButton
                             Margin="20,0,0,0"
+                            Background="{StaticResource PrimaryHueDarkBrush}"
                             Content="{helpers:Localization BiblicalTermsForm_All}"
-                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="radBTType"
                             IsChecked="{Binding Path=SelectedBiblicalTermsType, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=OptionAll}"
                             Style="{StaticResource MaterialDesignLightRadioButton}" />
@@ -164,16 +163,16 @@
                             Orientation="Vertical">
                             <RadioButton
                                 Margin="0,0,5,0"
+                                Background="{StaticResource PrimaryHueDarkBrush}"
                                 Content="{helpers:Localization BiblicalTermsForm_Gloss}"
-                                Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                 GroupName="radFilterType"
                                 IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Gloss}"
                                 Style="{StaticResource MaterialDesignLightRadioButton}" />
 
                             <RadioButton
                                 Margin="0,0,5,0"
+                                Background="{StaticResource PrimaryHueDarkBrush}"
                                 Content="{helpers:Localization BiblicalTermsForm_Renderings}"
-                                Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                 GroupName="radFilterType"
                                 IsChecked="{Binding Path=SelectedWordFilterEnum, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Rendering}"
                                 Style="{StaticResource MaterialDesignLightRadioButton}" />
@@ -302,9 +301,9 @@
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 
@@ -394,7 +393,7 @@
                                 <iconPacks:PackIconRadixIcons.Style>
                                     <Style TargetType="iconPacks:PackIconRadixIcons">
                                         <Setter Property="Kind" Value="Box" />
-                                        <Setter Property="Foreground" Value="Orange" />
+                                        <Setter Property="Foreground" Value="{StaticResource AccentHueBrush}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Found}" Value="True">
                                                 <Setter Property="Kind" Value="CheckBox" />
@@ -632,7 +631,7 @@
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Found}" Value="False">
                                                     <Setter Property="Kind" Value="CloseBox" />
-                                                    <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentHueBrush}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>

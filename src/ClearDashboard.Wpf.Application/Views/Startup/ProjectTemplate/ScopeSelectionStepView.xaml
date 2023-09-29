@@ -63,7 +63,7 @@
                 cm:Message.Attach="MoveBackwards()"
                 Content="{helpers:Localization Back}"
                 FontSize="12"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
             <Button
                 x:Name="MoveForwards"
                 Width="90"

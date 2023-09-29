@@ -221,6 +221,7 @@
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate>
@@ -289,8 +290,8 @@
                                     <Style BasedOn="{StaticResource ClearDashboardRaisedAccentButton}" TargetType="Button">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SimpRefs}" Value="0">
-                                                <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
-                                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                                                <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

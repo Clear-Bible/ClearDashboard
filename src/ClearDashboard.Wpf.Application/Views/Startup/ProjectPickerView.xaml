@@ -632,7 +632,7 @@
                                         cal:Message.Attach="UpdateDatabase($dataContext)"
                                         Content="Required: Update Project">
                                         <Button.Style>
-                                            <Style BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}" TargetType="Button">
+                                            <Style BasedOn="{StaticResource TransparentStyle}" TargetType="Button">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding NeedsMigrationUpgrade}" Value="True">
@@ -706,7 +706,7 @@
                     Margin="5,5,20,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="{StaticResource PrimaryHueMidBrush}"
+                    Foreground="{StaticResource PrimaryHueDarkBrush}"
                     Kind="Cog" />
             </Button>
         </StackPanel>

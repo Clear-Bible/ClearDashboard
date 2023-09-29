@@ -388,7 +388,7 @@
                         <materialDesign:PackIcon
                             Width="36"
                             Height="36"
-                            Foreground="{StaticResource BlueMidBrush}"
+                            Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Kind="TooltipOutline" />
                         <ProgressBar
                             Width="14"

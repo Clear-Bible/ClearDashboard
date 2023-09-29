@@ -136,7 +136,6 @@
                                                 <TextBlock
                                                     Margin="5,5,0,0"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                                     Text="{Binding Header}" />
                                             </StackPanel>
                                         </HierarchicalDataTemplate>
@@ -664,6 +663,7 @@
                         Maximum="200"
                         Minimum="1"
                         SmallChange="10"
+                        Style="{StaticResource DashboardSliderStyle}"
                         TickFrequency="10"
                         TickPlacement="TopLeft"
                         ToolTip="{helpers:Localization Pds_ChangeZoom}"
