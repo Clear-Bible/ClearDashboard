@@ -360,14 +360,14 @@
                             Margin="5,10,5,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Top"
-                            Foreground="{StaticResource Theme.ShowcaseBrush}"
+                            Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
                             Kind="Template" />
                         <StackPanel Orientation="Vertical">
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="19"
                                 FontWeight="Normal"
-                                Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
+                                Text="{helpers:Localization ProjectPicker_CreateNewProjectQuick}" />
                             <TextBlock
                                 Margin="0,2"
                                 HorizontalAlignment="Left"
@@ -652,7 +652,7 @@
                                         cal:Message.Attach="ShowCollaborationGetLatest($dataContext)"
                                         Background="{StaticResource SecondaryHueLightBrush}">
                                         <Button.Style>
-                                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}">
+                                            <Style BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}" TargetType="Button">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible" />

@@ -432,6 +432,11 @@
                     <TextBlock
                         Margin="16"
                         FontWeight="Medium"
+                        Text="Please restart ClearDashboard for Alignment Editing to be enabled/disabled"
+                        Visibility="{Binding IsAlignmentEditingSettingChanged, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <TextBlock
+                        Margin="16"
+                        FontWeight="Medium"
                         Foreground="Red"
                         Text="Please restart ClearDashboard for AQUA to be be enabled/disabled."
                         Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />

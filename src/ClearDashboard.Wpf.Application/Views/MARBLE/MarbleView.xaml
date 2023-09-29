@@ -55,8 +55,8 @@
 
         <Style x:Key="PrimaryExpanderStyle" TargetType="{x:Type Expander}">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Background" Value="{StaticResource PrimaryHueLightBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForegroundBrush}" />
+            <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}" />
         </Style>
 
         <Style x:Key="SecondaryExpanderStyle" TargetType="{x:Type Expander}">

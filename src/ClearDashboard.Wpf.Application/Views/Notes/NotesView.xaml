@@ -374,7 +374,6 @@
                                 Height="Auto"
                                 Margin="-8"
                                 VerticalAlignment="Center"
-                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
                                 Text="{Binding Text}"
                                 TextWrapping="Wrap" />
                         </DataTemplate>

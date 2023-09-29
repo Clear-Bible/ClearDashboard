@@ -269,7 +269,7 @@
                 cal:Message.Attach="MoveBackwards"
                 Content="{helpers:Localization Back}"
                 IsEnabled="{Binding CanMoveBackwards}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
             <Button
                 x:Name="MoveForwards"
                 Margin="0,0,15,15"

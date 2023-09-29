@@ -220,7 +220,7 @@
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate>
@@ -254,7 +254,7 @@
                                 Margin="-13,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                BorderBrush="{StaticResource PrimaryHueLightBrush}"
+                                BorderBrush="{StaticResource PrimaryHueMidBrush}"
                                 BorderThickness="2"
                                 CornerRadius="10">
                                 <TextBlock
@@ -517,7 +517,7 @@
             DialogOpened="DialogHost_OnDialogOpened"
             DialogTheme="Inherit"
             IsOpen="{Binding VerseRefDialogOpen}"
-            OverlayBackground="{DynamicResource PrimaryHueLightBrush}">
+            OverlayBackground="{DynamicResource PrimaryHueMidBrush}">
             <materialDesign:DialogHost.DialogContent>
                 <Border
                     x:Name="LowerBorder"
@@ -700,7 +700,7 @@
             </materialDesign:DialogHost.DialogContent>
             <Border
                 MinWidth="256"
-                BorderBrush="{StaticResource PrimaryHueLightBrush}"
+                BorderBrush="{StaticResource PrimaryHueMidBrush}"
                 BorderThickness="0"
                 ClipToBounds="True" />
         </materialDesign:DialogHost>
