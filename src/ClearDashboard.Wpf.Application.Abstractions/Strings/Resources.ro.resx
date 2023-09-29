@@ -131,7 +131,7 @@
     <value>Copiați erorile USFM pe clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul erorilor:</value>
+    <value>Numărul de erori:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
     <value>Interlinear</value>
@@ -335,7 +335,7 @@
     <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>înțelepciune, înțelegere</value>
+    <value>Înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -518,7 +518,7 @@
     <value>Utilizatorii actuali ai proiectului:</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Ștergeți colaborarea proiectului</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
     <value>Aveți alți utilizatori conectați la acest proiect. Acest proiect va fi eliminat și pentru ei. Sunteți sigur că doriți să ștergeți acest proiect?</value>
@@ -641,13 +641,13 @@
     <value>Marcați alinierea drept „valabilă”</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>NOU JEDIC</value>
+    <value>NOU JEGAT: Text de instruire</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest game de versuri.</value>
+    <value>Nu există date de versuri în acest interval de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>Îndepărtați corpusul</value>
@@ -658,8 +658,14 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Jeton împărțit</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>Aplicați despărțire la toate cazurile de jeton:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Selectați locația pentru a împărți token:</value>
+    <value>Selectați unde să împărțiți token:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>Split cu trei căi</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>Unjoin compus jeton</value>
@@ -857,7 +863,7 @@
     <value>Introduceți o nouă traducere</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>LEMMA</value>
+    <value>Lemma</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -982,6 +988,9 @@
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Cuvânt țintă</value>
   </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>Import de lexic</value>
+  </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Meciuri de traducere</value>
   </data>
@@ -1031,7 +1040,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Machete de proiect</value>
+    <value>Aspecte de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1130,7 +1139,7 @@
     <value>Fragmente din discurs</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lemnițe înrudite</value>
+    <value>Lematele înrudite</value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Domeniu de aplicare:</value>
@@ -1163,7 +1172,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Simțul versetului</value>
+    <value>Sense verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1472,7 +1481,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
+    <value>ALIGNER WORD MASINE DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1487,7 +1496,7 @@
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vizualizare</value>
+    <value>Adăugați la vedere</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la New View</value>
@@ -1508,7 +1517,7 @@
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la New View</value>
+    <value>Adăugați text la vizualizare nouă</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați vizualizarea versului pentru vizualizare</value>
@@ -1607,7 +1616,7 @@
     <value>StudiuBibleAdDitions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Accesați paratext și schimbați proiectele. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
+    <value>Accesați paratext și schimbați proiecte. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ţintă</value>
@@ -1964,7 +1973,7 @@
     <value>Judecători</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentări</value>
+    <value>Lamentații</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Levitic</value>
@@ -2054,7 +2063,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți prenumele dvs.</value>
+    <value>Vă rugăm să introduceți numele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2096,7 +2105,7 @@
     <value>Adresa de e-mail</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>E -mail de trimitere</value>
+    <value>Eroare de trimitere prin e -mail</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Cod de verificare a e -mailului</value>
