@@ -6,8 +6,8 @@ using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Events.Notes;
 
 namespace ClearDashboard.Wpf.Application.Views.Notes
 {

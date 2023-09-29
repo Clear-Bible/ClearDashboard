@@ -5,15 +5,14 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
@@ -21,7 +20,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
     public class UsfmCheckStepViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>, IUsfmErrorHost
     {
 
+        #region Member Variables   
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
         public SelectedBookManager SelectedBookManager { get; private set; }
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
+        private List<UsfmErrorsWrapper> _usfmErrorsByProject;
+        public List<UsfmErrorsWrapper> UsfmErrorsByProject
+        {
+            get => _usfmErrorsByProject;
+            set => Set(ref _usfmErrorsByProject, value);
+        }
+
+        private bool _continueEnabled;
+        public bool ContinueEnabled
+        {
+            get => _continueEnabled;
+            set => Set(ref _continueEnabled, value);
+        }
+
+        private Visibility _progressIndicatorVisibility = Visibility.Hidden;
+        public Visibility ProgressIndicatorVisibility
+        {
+            get => _progressIndicatorVisibility;
+            set => Set(ref _progressIndicatorVisibility, value);
+        }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
 
         public UsfmCheckStepViewModel(DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ProjectSetupViewModel> logger, IEventAggregator eventAggregator,
@@ -33,9 +70,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             EnableControls = true;
         }
 
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
+            await base.OnActivateAsync(cancellationToken);
+        }
+
+        #endregion //Constructor
+
+
+        #region Methods
+
+        public override async Task Initialize(CancellationToken cancellationToken)
+        {
+            ContinueEnabled = false;
+            UsfmErrorsByProject = new List<UsfmErrorsWrapper>();
+
+            ProgressIndicatorVisibility = Visibility.Visible;
+
+            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ParentViewModel!.ProjectName);
+
+            SelectedBookManager = ParentViewModel!.SelectedBookManager;
+
+            UsfmErrorsByProject = await PerformUsfmErrorCheck(cancellationToken);
+
+            //var usfmErrors = UsfmErrorsByProject.ToDictionary(e => e.ProjectId, e => e.UsfmErrors.AsEnumerable());
+
+            //await SelectedBookManager!.InitializeBooks(usfmErrors, false, true, cancellationToken);
+
+            ContinueEnabled = true;
+
+            ProgressIndicatorVisibility = Visibility.Hidden;
+
+            await base.Initialize(cancellationToken);
+
+        }
 
         private async Task<List<UsfmErrorsWrapper>> PerformUsfmErrorCheck(CancellationToken cancellationToken)
         {
+            CanMoveBackwards = false;
             var usfmErrors = new List<UsfmErrorsWrapper>();
             if (ParentViewModel!.SelectedParatextProject != null)
             {
@@ -112,65 +185,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 }
             }
 
+            CanMoveBackwards = true;
             return usfmErrors;
         }
 
         //public ObservableCollection<UsfmError> UsfmErrors { get; }
-
-        private List<UsfmErrorsWrapper> _usfmErrorsByProject;
-        public List<UsfmErrorsWrapper> UsfmErrorsByProject
-        {
-            get => _usfmErrorsByProject;
-            set => Set(ref _usfmErrorsByProject, value);
-        }
-
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            await Initialize(cancellationToken);
-            await base.OnActivateAsync(cancellationToken);
-        }
-
-        private bool _continueEnabled;
-        public bool ContinueEnabled
-        {
-            get => _continueEnabled;
-            set => Set(ref _continueEnabled, value);
-        }
-
-        private Visibility _progressIndicatorVisibility = Visibility.Hidden;
-    
-        public Visibility ProgressIndicatorVisibility
-        {
-            get => _progressIndicatorVisibility;
-            set => Set(ref _progressIndicatorVisibility, value);
-        }
-
-
-        public override async Task Initialize(CancellationToken cancellationToken)
-        {
-            ContinueEnabled = false;
-            UsfmErrorsByProject = new List<UsfmErrorsWrapper>();
-
-            ProgressIndicatorVisibility = Visibility.Visible;
-
-            DisplayName = string.Format(LocalizationService!["ProjectPicker_ProjectTemplateWizardTemplate"], ParentViewModel!.ProjectName);
-
-            SelectedBookManager = ParentViewModel!.SelectedBookManager;
-
-            UsfmErrorsByProject = await PerformUsfmErrorCheck(cancellationToken);
-
-            //var usfmErrors = UsfmErrorsByProject.ToDictionary(e => e.ProjectId, e => e.UsfmErrors.AsEnumerable());
-
-            //await SelectedBookManager!.InitializeBooks(usfmErrors, false, true, cancellationToken);
-
-            ContinueEnabled = true;
-
-            ProgressIndicatorVisibility = Visibility.Hidden;
-
-            await base.Initialize(cancellationToken);
-
-        }
-
 
 
         public string GetUsfmErrorsFileName()
@@ -199,6 +218,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             return sb.ToString();
         }
+
+        #endregion // Methods
     }
 
 

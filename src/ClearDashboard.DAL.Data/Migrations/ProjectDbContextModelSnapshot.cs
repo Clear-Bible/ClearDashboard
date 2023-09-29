@@ -15,7 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
@@ -363,15 +363,23 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
                     b.Property<Guid>("LexemeId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LexemeId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Lexicon_Form");
                 });
@@ -401,7 +409,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("Lemma", "Language")
+                    b.HasIndex("Lemma", "Type", "Language")
                         .IsUnique();
 
                     b.ToTable("Lexicon_Lexeme");
@@ -491,6 +499,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<Guid>("MeaningId")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("OriginatedFrom")
+                        .HasColumnType("jsonb");
 
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
@@ -1485,7 +1496,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Lexeme");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme", b =>

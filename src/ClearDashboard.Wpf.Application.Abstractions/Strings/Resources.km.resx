@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>អ្នកប្រើប្រាស់គម្រោងបច្ចុប្បន្ន:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>លុបកិច្ចសហប្រតិបត្តិការគម្រោង</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>អ្នកមានអ្នកប្រើប្រាស់ផ្សេងទៀតភ្ជាប់នឹងគម្រោងនេះ។ គម្រោងនេះនឹងត្រូវបានដកចេញសម្រាប់ពួកគេផងដែរ។ តើអ្នកប្រាកដថាអ្នកចង់លុបគំរោងនេះទេ?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុបគម្រោងនេះឬ?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>ការបិបន៍នា</value>
   </data>
@@ -632,7 +641,7 @@
     <value>សម្គាល់ការតម្រឹមដែលមានសុពលភាព</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>និមិត្តសញ្ញាថ្មី</value>
+    <value>និមិត្តសញ្ញាថ្មី: អត្ថបទបណ្តុះបណ្តាល</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>កំណត់ចំណាំ</value>
@@ -649,8 +658,14 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>បំបែកថូខឹន</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>ដាក់ពាក្យសុំបំបែកទៅវត្ថុទាំងអស់នៃថូខឹន:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>ជ្រើសរើសទីតាំងដើម្បីបំបែកថូខឹន:</value>
+    <value>ជ្រើសរើសកន្លែងដែលត្រូវបំបែកថូខឹន:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>ពុះបីផ្លូវ</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>និមិត្តសញ្ញា unjoin សមាសធាតុផ្សំ</value>
@@ -752,7 +767,7 @@
     <value>លេខសម្ងាត់:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>URL:</value>
+    <value>url:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
     <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
@@ -877,17 +892,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>កំណត់ការបកប្រែសម្រាប់</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>និង</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>លប់ចោល</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>បិនិត្យ</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>រកទាំងអស់</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>ទម្រង់បែបបទ</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>ដេលយ៉ាងពេញលេញ</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>ផ្គូផ្គងយ៉ាងពេញលេញ</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>lexme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>ដេលសីក្នា</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>អត្ថន័យ [ការបកប្រែ]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>រឺ</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>មួយផ្នែក</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>រក្សាទុកការផ្លាស់ប្តូរ</value>
@@ -895,50 +934,50 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>ភាសាប្រភព</value>
   </data>
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
+    <value>ភាសាគោលដៅ</value>
+  </data>
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>lexicon កែប្រែ</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
+    <value>ការបករេប</value>
+  </data>
   <data name="LexiconEdit_Type" xml:space="preserve">
     <value>បុម្ពអកសរ</value>
   </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>និង</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>រកទាំងអស់</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>ដេលយ៉ាងពេញលេញ</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>ផ្គូផ្គងយ៉ាងពេញលេញ</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>ដេលសីក្នា</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>រឺ</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>មួយផ្នែក</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
-    <value>ភាសាគោលដៅ</value>
-  </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
-    <value>ការបករេប</value>
-  </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>ដូចទម្រង់សម្រាប់ ...</value>
+    <value>បន្ថែមជាទម្រង់សម្រាប់ ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>រកឃើញ lexme ពេញឬផ្នែកខ្លះនៃការផ្គូផ្គងប្រភព</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>ជាគោលដៅជាការផ្លាស់ប្តូរសម្រាប់ ...</value>
+    <value>បន្ថែមគោលដៅជាការបកប្រែសម្រាប់ ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>ស្វែងរក Lexemes ដែលមានការបកប្រែមួយឬច្រើនដែលត្រូវនឹងគោលដៅ</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>ការត្រួតពិនិត្យការនាំចូល</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>lexme ឬទម្រង់ការប្រកួត</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>មិនមានកំណត់ត្រាបន្ថែមទៀតដើម្បីនាំចូលទេ។</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>សូមជ្រើសរើសសាកសព។</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>ជ្រើសរើស​ទាំងអស់</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>ភាសាប្រភព</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>បុម្ពអកសរ</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>ពាក្យប្រភព</value>
@@ -948,6 +987,12 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>ពាក្យគោលដៅ</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>ការនាំចូល lexicon</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>ការផ្គូផ្គងការបកប្រែ</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>មិនជ្រើសរើសទាំងអស់</value>
@@ -1285,6 +1330,21 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>បន្ថែមស្លាកមួយ</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>តើអ្នកចង់បង្កើតស្លាក:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>ហើយភ្ជាប់វាជាមួយស្លាកក្រុម:</value>
+  </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>តើអ្នកចង់លុបស្លាកទេ:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>តើអ្នកចង់ផ្តាច់ស្លាកទេ:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>ពីក្រុមហ៊ុនស្លាកក្រុម:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>បន្ថែមតារាងស្លាក</value>
   </data>
@@ -1311,6 +1371,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>យកស្លាកនេះចេញ</value>
+  </data>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>អត្ថបទភ្ជាប់ទៅនឹងស្លាក</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
@@ -1426,6 +1489,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>paratext propus propus</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>ជ្រើសរើសក្បួនដោះស្រាយ SMT ទៅរថភ្លើង</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមការអនុម័តច្រើនក្នុងការមើល</value>
   </data>
@@ -1510,8 +1576,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>ម៉ាក់ (អូអេដ) ម៉ារ៉េល</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>ធនធានថ្មម៉ាប</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>ចំនួននៃនិមិត្តសញ្ញាផ្សេងៗគ្នា</value>
@@ -1651,6 +1717,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratextet Beta មិនដំណើរការទេ</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>បោះបង់ ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>គម្រោងសហការ</value>
   </data>
@@ -1767,6 +1836,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>គម្រោងដែលមានឈ្មោះដូចគ្នាមានរួចហើយ។ សូមជ្រើសរើសឈ្មោះតែមួយ។</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>ឈ្មោះគម្រោងដែលបានផ្តល់ឱ្យវែងពេក។</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>របាក្សត្រ 1</value>
@@ -2038,6 +2110,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>លេខកូដផ្ទៀងផ្ទាត់អ៊ីមែល</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>ដេលល្បាប់</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>រកុម</value>
   </data>
@@ -2081,10 +2159,10 @@
     <value>ការកំណត់ clectashbashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>បង្ហាញទិដ្ឋភាពកញ្ចក់នៅលើម៉ូនីទ័រផ្សេងជាងផ្ទាំងគ្រប់គ្រង</value>
+    <value>បង្ហាញការលាតសន្ធឹងពង្រីកនៅលើម៉ូនីទ័រផ្សេងជាងផ្ទាំងគ្រប់គ្រង</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>សម្រាប់ប្រព័ន្ធដែលមានម៉ូនីទ័របីឬច្រើនទៀតបង្ហាញទិដ្ឋភាពកញ្ចក់នៅលើម៉ូនីទ័រទីបី</value>
+    <value>សម្រាប់ប្រព័ន្ធដែលមានម៉ូនីទ័របីឬច្រើនបានបង្ហាញទិដ្ឋភាពពង្រីកនៅលើម៉ូនីទ័រទីបី</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>ការប្រមូលអត្ថបទ</value>

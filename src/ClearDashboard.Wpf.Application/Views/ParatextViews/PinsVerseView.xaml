@@ -68,7 +68,7 @@
                     FontFamily="{Binding ElementName=PinsVerseViewWindow, Path=DataContext.FontFamily}"
                     FontSize="{Binding ElementName=PinsVerseViewWindow, Path=DataContext.FontSize}"
                     FontWeight="Bold"
-                    Foreground="Orange"
+                    Foreground="{StaticResource AccentHueBrush}"
                     Text="{Binding LastSelectedPinsDataTableSource}" />
                 <Run Text="{helpers:Localization Pins_Occurences}" />
             </TextBlock>
@@ -87,8 +87,8 @@
             <CheckBox
                 Name="ShowBackTranslationCheckBox"
                 Margin="50,0,0,0"
+                Background="{StaticResource PrimaryHueDarkBrush}"
                 Content="{helpers:Localization Pins_ShowBackTranslation}"
-                Foreground="Green"
                 IsChecked="{Binding ShowBackTranslation}"
                 IsEnabled="{Binding BackTranslationFound}" />
         </StackPanel>
@@ -116,11 +116,11 @@
                                     <materialDesign:PackIcon.Style>
                                         <Style TargetType="materialDesign:PackIcon">
                                             <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
-                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                            <Setter Property="Foreground" Value="{StaticResource SecondaryHueMidBrush}" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Found}" Value="False">
                                                     <Setter Property="Kind" Value="CloseBox" />
-                                                    <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentHueBrush}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -137,7 +137,7 @@
                                     VerticalAlignment="Center"
                                     Cursor="Hand"
                                     FontStyle="Italic"
-                                    Foreground="{StaticResource BlueMidBrush}">
+                                    Foreground="{StaticResource PrimaryHueDarkBrush}">
                                     <TextBlock.InputBindings>
                                         <MouseBinding
                                             Command="{Binding Path=DataContext.VerseClickCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
@@ -192,7 +192,7 @@
                                         Name="BackTranslation"
                                         Margin="10,10,0,0"
                                         FontStyle="Italic"
-                                        Foreground="Green"
+                                        Foreground="{StaticResource SecondaryHueMidBrush}"
                                         Text="{Binding BackTranslation}"
                                         TextWrapping="Wrap"
                                         Visibility="{Binding ShowBackTranslation, Converter={BoolToVisibilityConverter}}" />

@@ -156,7 +156,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 {
                     if (SelectedTranslation != null && !string.IsNullOrWhiteSpace(SelectedTranslation.Text))
                     {
-                        await InterlinearDisplay.PutTranslationAsync(new Translation(TokenDisplay.TokenForTranslation, SelectedTranslation.Text, Translation.OriginatedFromValues.Assigned, SelectedTranslation.TranslationId),
+                        var lexiconTranslationId = (SelectedTranslation.TranslationId.IsInDatabase) ? SelectedTranslation.TranslationId : null;
+                        await InterlinearDisplay.PutTranslationAsync(new Translation(TokenDisplay.TokenForTranslation, SelectedTranslation.Text, Translation.OriginatedFromValues.Assigned, lexiconTranslationId),
                                                                      ApplyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate);
                     }
                 }
@@ -178,7 +179,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void OnLexemeAdded(object sender, LexemeEventArgs e)
         {
-            if (e.Lexeme.LexemeId == null)
+            if (!e.Lexeme.LexemeId.IsInDatabase)
             {
                 if (!string.IsNullOrWhiteSpace(e.Lexeme.Lemma))
                 {
@@ -192,7 +193,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
         public async void OnLexemeDeleted(object sender, LexemeEventArgs e)
         {
-            if (e.Lexeme.LexemeId != null)
+            if (e.Lexeme.LexemeId.IsInDatabase)
             {
                 await LexiconManager.DeleteLexemeAsync(e.Lexeme);
             }
@@ -209,7 +210,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void OnLexemeFormRemoved(object sender, LexemeFormEventArgs e)
         {
-            await LexiconManager.DeleteLexemeFormAsync(e.Form);
+            await LexiconManager.DeleteLexemeFormAsync(e.Lexeme, e.Form);
         }
 
         public async void OnMeaningAdded(object sender, MeaningEventArgs e)
@@ -219,7 +220,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void OnMeaningDeleted(object sender, MeaningEventArgs e)
         {
-            await LexiconManager.DeleteMeaningAsync(e.Meaning);
+            await LexiconManager.DeleteMeaningAsync(e.Lexeme, e.Meaning);
         }
 
         public async void OnMeaningUpdated(object sender, MeaningEventArgs e)
@@ -251,12 +252,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void OnTranslationDeleted(object sender, LexiconTranslationEventArgs e)
         {
-            await LexiconManager.DeleteTranslationAsync(e.Translation);
+            await LexiconManager.DeleteTranslationAsync(e.Meaning, e.Translation);
         }
 
         public async void OnTranslationDropped(object sender, LexiconTranslationEventArgs e)
         {
-            await LexiconManager.MoveTranslationAsync(e.Translation, e.Meaning);
+            await LexiconManager.MoveTranslationAsync(e.Meaning, e.Translation);
         }
 
         private LexiconTranslationViewModel? SelectedTranslation { get; set; }

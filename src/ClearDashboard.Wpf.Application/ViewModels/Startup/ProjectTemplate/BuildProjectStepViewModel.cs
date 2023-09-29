@@ -1,50 +1,83 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Features;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
+using Dahomey.Json;
+using Dahomey.Json.Serialization.Conventions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DataAccessLayer;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using Point = System.Windows.Point;
-using ClearDashboard.DAL.Alignment;
-using ClearDashboard.Wpf.Application.Models.EnhancedView;
-using System.Collections.Generic;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using Dahomey.Json.Serialization.Conventions;
-using System.Text.Json;
-using ClearBible.Engine.Exceptions;
-using Dahomey.Json;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
     public class BuildProjectStepViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>, IHandle<BackgroundTaskChangedMessage>
     {
+        #region Member Variables   
+
         private readonly ProjectTemplateProcessRunner _processRunner;
         private Task _runningTask = Task.CompletedTask;
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private CancellationToken? _cancellationToken;
         private readonly ProjectDbContextFactory _projectNameDbContextFactory;
 
         private readonly string _createAction;
         private readonly string _backAction;
         private readonly string _cancelAction;
+
+        private DataAccessLayer.Models.Project _oldProject;
+
+        /// <summary>
+        /// This is the design surface that is displayed in the window.
+        /// It is the main part of the view-model.
+        /// </summary>
+        private ReadonlyProjectDesignSurfaceViewModel? _designSurfaceViewModel;
+
+        private StartupDialogViewModel? _startupDialogViewModel;
+
+        private readonly BindableCollection<string> _messages = new BindableCollection<string>();
+        private readonly ProjectBuilderStatusViewModel _backgroundTasksViewModel;
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        public BindableCollection<string> Messages => _messages;
+        public ProjectBuilderStatusViewModel BackgroundTasksViewModel => _backgroundTasksViewModel;
+
+        public ReadonlyProjectDesignSurfaceViewModel? ProjectDesignSurfaceViewModel
+        {
+            get => _designSurfaceViewModel;
+            private set => Set(ref _designSurfaceViewModel, value);
+        }
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
 
         private bool _showProjectOverviewMessage;
         public bool ShowProjectOverviewMessage
@@ -74,36 +107,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _progressIndicatorVisibility, value);
         }
 
-        public BindableCollection<string> Messages => _messages;
 
-        public ProjectBuilderStatusViewModel BackgroundTasksViewModel => _backgroundTasksViewModel;
-
-        /// <summary>
-        /// This is the design surface that is displayed in the window.
-        /// It is the main part of the view-model.
-        /// </summary>
-        private ReadonlyProjectDesignSurfaceViewModel? _designSurfaceViewModel;
-        public ReadonlyProjectDesignSurfaceViewModel? ProjectDesignSurfaceViewModel
+        private Visibility _cancelTextVisibility = Visibility.Collapsed;
+        public Visibility CancelTextVisibility
         {
-            get => _designSurfaceViewModel;
-            private set => Set(ref _designSurfaceViewModel, value);
+            get => _cancelTextVisibility;
+            set => Set(ref _cancelTextVisibility, value);
         }
 
-        private StartupDialogViewModel? _startupDialogViewModel;
 
-        private readonly BindableCollection<string> _messages = new BindableCollection<string>();
-        private readonly ProjectBuilderStatusViewModel _backgroundTasksViewModel;
+        #endregion //Observable Properties
+
+
+        #region Constructor
 
         public BuildProjectStepViewModel(DashboardProjectManager projectManager,
-                                         ProjectTemplateProcessRunner processRunner,
-                                         ProjectBuilderStatusViewModel backgroundTasksViewModel,
-                                         INavigationService navigationService,
-                                         ILogger<ProjectSetupViewModel> logger,
-                                         IEventAggregator eventAggregator,
-                                         IMediator mediator,
-                                         ILifetimeScope? lifetimeScope,
-                                         ILocalizationService localizationService,
-                                         ProjectDbContextFactory projectNameDbContextFactory)
+            ProjectTemplateProcessRunner processRunner,
+            ProjectBuilderStatusViewModel backgroundTasksViewModel,
+            INavigationService navigationService,
+            ILogger<ProjectSetupViewModel> logger,
+            IEventAggregator eventAggregator,
+            IMediator mediator,
+            ILifetimeScope? lifetimeScope,
+            ILocalizationService localizationService,
+            ProjectDbContextFactory projectNameDbContextFactory)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _backgroundTasksViewModel = backgroundTasksViewModel;
@@ -117,10 +144,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             _backOrCancelAction = _backAction;
             _createOrCloseAction = _createAction;
 
+            _oldProject = ProjectManager!.CurrentProject;
 
         }
+
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            CancelTextVisibility = Visibility.Collapsed;
+
             _runningTask = Task.CompletedTask;
             _cancellationToken = null;
 
@@ -145,7 +176,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             await BackgroundTasksViewModel.ActivateAsync();
 
-
             await base.OnActivateAsync(cancellationToken);
         }
 
@@ -154,6 +184,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await BackgroundTasksViewModel.DeactivateAsync(true);
             await base.OnDeactivateAsync(close, cancellationToken);
         }
+
+        #endregion //Constructor
+
+
+        #region Methods
 
         private async Task ActivateProjectDesignSurface(CancellationToken cancellationToken)
         {
@@ -196,6 +231,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 await ParentViewModel!.GoToStep(1);
                 return;
             }
+            _cancellationTokenSource = new CancellationTokenSource();
+
             _cancellationToken = _cancellationTokenSource.Token;
 
             BackOrCancelAction = _cancelAction;
@@ -214,6 +251,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private async Task CreateProject(CancellationToken? cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
+            ProjectManager!.IsNewlySetFromTemplate = true;
             // NB:  need to store a reference to the Parent view model so we can clean up in the finally block below;
             _startupDialogViewModel = ParentViewModel;
 
@@ -223,7 +261,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             {
                 cancellationToken?.ThrowIfCancellationRequested();
 
-                _runningTask = Task.Run(async () => { await CreateNewProject(cancellationToken ?? CancellationToken.None); });
+                _runningTask = Task.Run((Func<Task?>)(async () => { await CreateNewProject(cancellationToken ?? CancellationToken.None); }));
 
                 await _runningTask;
 
@@ -246,8 +284,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             catch (OperationCanceledException)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
-                ProjectManager!.CurrentDashboardProject.ProjectName = null;
-                ProjectManager!.CurrentProject = null;
+                ProjectManager!.CurrentDashboardProject.ProjectName = (_oldProject == null) ? null : _oldProject.ProjectName;
+                ProjectManager!.CurrentProject = _oldProject;
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
 
@@ -256,8 +294,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             catch (Exception)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
-                ProjectManager!.CurrentDashboardProject.ProjectName = null;
-                ProjectManager!.CurrentProject = null;
+                ProjectManager!.CurrentDashboardProject.ProjectName = (_oldProject == null) ? null : _oldProject.ProjectName;
+                ProjectManager!.CurrentProject = _oldProject;
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
 
@@ -278,6 +316,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 ProjectManager!.PauseDenormalization = false;
 
+                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
+
                 stopwatch.Stop();
             }
         }
@@ -290,14 +330,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             {
                 BBBCCCVVV = $"{ParentViewModel!.SelectedBookManager.SelectedAndEnabledBooks.First().BookNum:000}{1:000}{1:000}",
                 ParatextSync = false,
-                Title = "⳼ ENHANCED VIEW",
+                Title = "⳼ View",
                 VerseOffset = 0
             };
             
             var parallelCorpusIds = topLevelProjectIds.ParallelCorpusIds.Where(x =>
                 x.SourceTokenizedCorpusId!.CorpusId!.ParatextGuid == ParentViewModel!.SelectedParatextProject!.Id);
 
-              foreach (var parallelCorpusId in parallelCorpusIds)
+            foreach (var parallelCorpusId in parallelCorpusIds)
             {
                 var translationSets = topLevelProjectIds.TranslationSetIds.Where(translationSet =>
                     translationSet.ParallelCorpusId!.IdEquals(parallelCorpusId));
@@ -469,35 +509,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             switch (index)
             {
                 case 0:
-                    {
-                        index = index + 1;
-                        point = new Point(25, 50);
-                        break;
-                    }
+                {
+                    index = index + 1;
+                    point = new Point(25, 50);
+                    break;
+                }
                 case 1:
-                    {
-                        index = index + 1;
-                        point = new Point(275, 50);
-                        break;
-                    }
+                {
+                    index = index + 1;
+                    point = new Point(275, 50);
+                    break;
+                }
                 case 2:
-                    {
-                        index = index + 1;
-                        point = new Point(275, 125);
-                        break;
-                    }
+                {
+                    index = index + 1;
+                    point = new Point(275, 125);
+                    break;
+                }
                 case 3:
-                    {
-                        index = index + 1;
-                        point = new Point(275, 200);
-                        break;
-                    }
+                {
+                    index = index + 1;
+                    point = new Point(275, 200);
+                    break;
+                }
                 case 4:
-                    {
-                        index = index + 1;
-                        point = new Point(275, 275);
-                        break;
-                    }
+                {
+                    index = index + 1;
+                    point = new Point(275, 275);
+                    break;
+                }
             }
 
             return point;
@@ -672,12 +712,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         {
             if (_cancellationToken is not null && !(_cancellationToken?.IsCancellationRequested ?? false))
             {
+                CancelTextVisibility = Visibility.Visible;
+                
                 CanMoveBackwards = false;
 
                 _cancellationTokenSource.Cancel();
                 _processRunner.Cancel();
 
                 await Task.WhenAny(tasks: new[] { _runningTask, Task.Delay(30000) });
+
+                ParentViewModel!.ProjectName = string.Empty;
             }
             else
             {
@@ -694,5 +738,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
             await Task.CompletedTask;
         }
+
+        #endregion // Methods
     }
 }

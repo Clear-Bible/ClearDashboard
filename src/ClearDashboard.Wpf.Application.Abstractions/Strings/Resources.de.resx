@@ -434,7 +434,7 @@
     <value>Maschine</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Markieren Sie als "ungültig" ausgewählt.</value>
+    <value>Markieren Sie als "ungültig" ausgewählt</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
     <value>Markieren Sie als "Bedarfsüberprüfung" ausgewählt.</value>
@@ -516,6 +516,15 @@
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Aktuelle Projektbenutzer:</value>
+  </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Projektzusammenarbeit löschen</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Sie haben andere Benutzer, die mit diesem Projekt verbunden sind. Dieses Projekt wird auch für sie entfernt. Sind Sie sicher, dass Sie dieses Projekt löschen möchten?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie dieses Projekt löschen möchten?</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Beschreibung</value>
@@ -632,7 +641,7 @@
     <value>Markieren Sie die Ausrichtung als "gültig"</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Neues Token</value>
+    <value>Neues Token: Trainingstext</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Anmerkungen</value>
@@ -649,8 +658,14 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Geteiltes Token</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>Wenden Sie sich auf alle Fälle von Token an:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Wählen Sie den Speicherort zu Split -Token:</value>
+    <value>Wählen Sie aus, wo Token geteilt werden soll:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>Drei-Wege-Split</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>Unjoin Composite Token</value>
@@ -877,17 +892,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Setzen Sie eine Übersetzung für</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Und</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Stornieren</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Bearbeiten</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Finde alle</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formen</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Völlig</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Voll passend</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Matching</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Bedeutungen [Übersetzungen]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Oder</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Teilweise</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Änderungen speichern</value>
@@ -895,50 +934,50 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Ausgangssprache</value>
   </data>
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
+    <value>Zielsprache</value>
+  </data>
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Lexikonbearbeitung</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
+    <value>Übersetzung</value>
+  </data>
   <data name="LexiconEdit_Type" xml:space="preserve">
     <value>Typ</value>
   </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Und</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Finde alle</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Völlig</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Voll passend</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Matching</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Oder</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Teilweise</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
-    <value>Zielsprache</value>
-  </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
-    <value>Übersetzung</value>
-  </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Als Form für ...</value>
+    <value>Fügen Sie als Form für ... hinzu</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Als Ziel als Transalation für ...</value>
+    <value>Ziel als Übersetzung für ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Importiert</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme oder Form sind überein</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Es gibt keine Aufzeichnungen mehr zu importieren.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Bitte wählen Sie einen Korpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Wählen Sie Alle</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>Ausgangssprache</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>Typ</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>Quellwort</value>
@@ -948,6 +987,12 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Zielwort</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>Lexikonimport</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Übersetzungsübereinstimmungen</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Alles wiederufen</value>
@@ -1139,7 +1184,7 @@
     <value>Datenbank erstellen ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Führen Sie vollständig zusammen ... neu lädt die Schnittstelle neu</value>
+    <value>Vervollständigen Sie vollständig ... Nachladen der Schnittstelle neu</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
     <value>Operation storniert</value>
@@ -1259,7 +1304,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Assoziationen</value>
+    <value>Durch Verbände</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1285,6 +1330,21 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Fügen Sie ein Etikett hinzu</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Möchten Sie das Etikett erstellen:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>und verbinden Sie es mit der Labelgruppe:</value>
+  </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Möchten Sie das Etikett löschen:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>Möchten Sie das Etikett disassoziieren:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>aus der Labelgruppe:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Etikettengruppe hinzufügen</value>
   </data>
@@ -1292,7 +1352,7 @@
     <value>Fügen Sie eine Etikettengruppe hinzu</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Eine Labelgruppe existiert bereits mit Namen</value>
+    <value>Eine Etikettengruppe existiert bereits mit Namen</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>Labelgruppe initialisieren</value>
@@ -1311,6 +1371,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Entfernen Sie dieses Etikett</value>
+  </data>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Text an Etikett angehängt</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Erstellt</value>
@@ -1426,6 +1489,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
   </data>
@@ -1510,8 +1576,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Hebräisch (OT) Macula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Marmorressource</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Anzahl verschiedener Tokenisierungen</value>
@@ -1651,6 +1717,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext Beta läuft nicht</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Stornierung ...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Zusammenarbeitsprojekte</value>
   </data>
@@ -1676,7 +1745,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Aktivieren Sie die Buchauswahl</value>
+    <value>Buchauswahl aktivieren</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1691,7 +1760,7 @@
     <value>Biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Kooperationsprojekte verwalten</value>
@@ -1745,7 +1814,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
+    <value>Aktualisierungsprojekte Liste aktualisieren</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>
@@ -1767,6 +1836,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Ein Projekt mit demselben Namen gibt es bereits. Bitte wählen Sie einen eindeutigen Namen.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Der angegebene Projektname ist zu lang.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Chroniken</value>
@@ -1790,7 +1862,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotheus</value>
+    <value>1 Timothy</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -1877,7 +1949,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremiah</value>
+    <value>Jeremia</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>
@@ -2038,6 +2110,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>E -Mail -Überprüfungscode</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Aktivieren Sie die Bearbeitung der Ausrichtung</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Experimental</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Gruppe</value>
   </data>
@@ -2081,10 +2159,10 @@
     <value>Cleardashboard -Einstellungen</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Zeigen Sie Spiegelansichten auf einem anderen Monitor als Dashboard</value>
+    <value>Zeigen Sie erweiterte Ansichten auf einem anderen Monitor als Dashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Für Systeme mit drei oder mehr Monitoren zeigen Sie Spiegelansicht auf dem dritten Monitor</value>
+    <value>Für Systeme mit drei oder mehr Monitoren zeigen Sie die erweiterte Ansicht auf den dritten Monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Textsammlung</value>
@@ -2099,7 +2177,7 @@
     <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktivieren Sie die Anzeige von Verse-by-Vers-Textsammlungen</value>
+    <value>Aktivieren Sie die Anzeige von Versen durch Versuchssammlungen</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Aufgabe abbrechen</value>

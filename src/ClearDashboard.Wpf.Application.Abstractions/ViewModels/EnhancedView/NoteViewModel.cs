@@ -2,13 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using Caliburn.Micro;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using TimeZoneNames;
+using static SIL.Scripture.MultilingScrBooks;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
@@ -46,13 +51,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public ObservableCollection<Label> Labels
+        private LabelCollection? _labels;
+        public LabelCollection Labels
         {
-            get => Entity.Labels;
+            get => _labels ??= new LabelCollection(Entity.Labels);
             set
             {
-                if (Equals(value, Entity.Labels)) return;
                 Entity.Labels = value;
+                _labels = new LabelCollection(Entity.Labels);
                 NotifyOfPropertyChange();
             }
         }
@@ -73,7 +79,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     try
                     {
-                        var verseId = association.AssociatedEntityId.ToString().Substring(0,9);
+                        var verseId = string.Empty;
+                        if (association.AssociatedEntityId is TranslationId translationId)
+                        {
+                            verseId = translationId.SourceTokenId.ToString().Substring(0, 9);
+                        }
+                        else
+                        {
+                            verseId = association.AssociatedEntityId.ToString().Substring(0, 9);
+                        }
+
                         if (verseId.Length > 0)
                         {
                             verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verseId) + ", ";
@@ -153,9 +168,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public string Created => Entity.NoteId?.Created != null ? Entity.NoteId.Created.Value.ToString("u") : string.Empty;
 
         /// <summary>
+        /// Gets a formatted string corresponding to the date the note was created, converted to local time.
+        /// </summary>
+        public string CreatedLocalTime
+        {
+            get
+            {
+                var localTimeZone = TimeZoneInfo.Local;
+                var localTimeZoneAbbreviations = TZNames.GetAbbreviationsForTimeZone(localTimeZone.Id, CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
+                var localTimeZoneAbbreviation = localTimeZone.IsDaylightSavingTime(DateTime.Now) ? localTimeZoneAbbreviations.Daylight : localTimeZoneAbbreviations.Standard;
+                var localTime = Entity?.NoteId?.Created?.ToLocalTime() ?? null;
+
+                return localTime != null ? $"{localTime.Value:d} {localTime.Value:hhmm} {localTimeZoneAbbreviation}" : string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Gets a formatted string corresponding to the date the note was modified.
         /// </summary>
         public string Modified => Entity.NoteId != null && Entity.NoteId.Modified != null ? Entity.NoteId.Modified.Value.ToString("u") : string.Empty;
+
+        /// <summary>
+        /// Gets a formatted string corresponding to the date the note was modified, converted to local time.
+        /// </summary>
+        public string ModifiedLocalTime
+        {
+            get
+            {
+                var localTimeZone = TimeZoneInfo.Local;
+                var localTimeZoneAbbreviations = TZNames.GetAbbreviationsForTimeZone(localTimeZone.Id, CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
+                var localTimeZoneAbbreviation = localTimeZone.IsDaylightSavingTime(DateTime.Now) ? localTimeZoneAbbreviations.Daylight : localTimeZoneAbbreviations.Standard;
+                var localTime = Entity?.NoteId?.Modified?.ToLocalTime() ?? null;
+
+                return localTime != null ? $"{localTime.Value:d} {localTime.Value:hhmm} {localTimeZoneAbbreviation}" : string.Empty;
+            }
+        }
 
         /// <summary>
         /// Gets the display name of the user that last modified the note.
@@ -191,6 +238,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteViewModel(Note note)
         {
             Entity = note;
+            _labels = new LabelCollection(note.Labels);
             Associations = new NoteAssociationViewModelCollection();
             Replies = new NoteViewModelCollection();
         }

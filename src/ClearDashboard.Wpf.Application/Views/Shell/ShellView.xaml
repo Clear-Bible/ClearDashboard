@@ -230,7 +230,7 @@
                         Margin="30,0,0,0"
                         Padding="20,2,20,2"
                         VerticalAlignment="Center"
-                        Background="{StaticResource GreenLightBrush}"
+                        Background="{StaticResource SecondaryHueLightBrush}"
                         TextAlignment="Center">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
@@ -396,9 +396,8 @@
                             Margin="0,0,0,8"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Bottom"
-                            Foreground="{StaticResource GreenMidBrush}"
                             IsIndeterminate="True"
-                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            Style="{StaticResource ClearDashboardCircularProgressBar}"
                             Visibility="{Binding BackgroundTasksViewModel.ShowSpinner}"
                             Value="60" />
                     </Grid>

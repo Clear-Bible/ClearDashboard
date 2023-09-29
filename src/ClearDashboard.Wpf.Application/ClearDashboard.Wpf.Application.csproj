@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -7,9 +7,9 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.1.0.8</AssemblyVersion>
-    <FileVersion>1.1.0.8</FileVersion>
-    <Version>1.1.0.8</Version>
+    <AssemblyVersion>1.2.0.2</AssemblyVersion>
+    <FileVersion>1.2.0.2</FileVersion>
+    <Version>1.2.0.2</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
     <Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
@@ -126,9 +126,9 @@
     <EmbeddedResource Include="Resources\plugin_disconnect.wav" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
-	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
-	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.8" />
+    <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
+    <PackageReference Include="ClearApplicationFoundation" Version="2.0.8" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.12" />
@@ -269,16 +269,19 @@
     <Compile Update="UserControls\Lexicon\MeaningEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\NoteCollectionDisplay.xaml.cs">
+    <Compile Update="UserControls\Notes\LabelsEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\Lexicon\LexemeEditor.xaml.cs">
+    <Compile Update="UserControls\Notes\NoteCollectionDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\NoteReplyDisplay.xaml.cs">
+    <Compile Update="UserControls\Lexicon\LabelEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\NoteDisplay.xaml.cs">
+    <Compile Update="UserControls\Notes\NoteReplyDisplay.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\Notes\NoteDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\SelectBooksControl.xaml.cs">
@@ -451,23 +454,26 @@
     <Page Update="UserControls\Lexicon\MeaningEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteAssociationsDisplay.xaml">
+    <Page Update="UserControls\Notes\LabelsEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteCollectionDisplay.xaml">
+    <Page Update="UserControls\Notes\NoteAssociationsDisplay.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\Notes\NoteCollectionDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserControls\Lexicon\LexemeEditor.xaml">
+    <Page Update="UserControls\Lexicon\LabelEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteReplyDisplay.xaml">
+    <Page Update="UserControls\Notes\NoteReplyDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\TimerUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="UserControls\NoteDisplay.xaml">
+    <Page Update="UserControls\Notes\NoteDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

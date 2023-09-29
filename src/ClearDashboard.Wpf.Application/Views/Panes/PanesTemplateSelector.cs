@@ -5,6 +5,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.Views.Panes
 {
@@ -30,6 +31,12 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
         //        TOOLS
         // ====================
         public DataTemplate BiblicalTermsViewTemplate
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate LexiconViewTemplate
         {
             get;
             set;
@@ -79,6 +86,11 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             if (item is BiblicalTermsViewModel)
             {
                 return BiblicalTermsViewTemplate;
+            }
+
+            if (item is LexiconViewModel)
+            {
+                return LexiconViewTemplate;
             }
 
             //if (item is WordMeaningsViewModel)

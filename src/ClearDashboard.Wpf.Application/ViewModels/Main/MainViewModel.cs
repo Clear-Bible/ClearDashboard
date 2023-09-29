@@ -50,6 +50,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -489,7 +490,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 await SaveAvalonDockLayout();
             }
 
-            await SaveProjectData();
+            if (!ProjectManager.IsNewlySetFromTemplate)
+            {
+                await SaveProjectData();
+            }
+            
             UnsubscribeFromEventAggregator();
 
             await PinsViewModel.DeactivateAsync(close);
@@ -822,6 +827,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>(cancellationToken);
+
+            //await ActivateItemAsync<LexiconViewModel>(cancellationToken);
 
             _ = await Task.Factory.StartNew(async () =>
             {
@@ -1601,6 +1608,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         //    e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
                         //    break;
                         WorkspaceLayoutNames.Marble => GetToolViewModelFromItems("MarbleViewModel"),
+                        //WorkspaceLayoutNames.Lexicon => GetToolViewModelFromItems("LexiconViewModel"),
                         WorkspaceLayoutNames.Pins => GetToolViewModelFromItems("PinsViewModel"),
                         WorkspaceLayoutNames.TextCollection => GetToolViewModelFromItems("TextCollectionsViewModel"),
                         WorkspaceLayoutNames.Notes => GetToolViewModelFromItems("NotesViewModel"),
@@ -1644,6 +1652,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             case NotesViewModel:
                             case BiblicalTermsViewModel:
                             case ParatextViews.PinsViewModel:
+                            //case LexiconViewModel:
                             case TextCollectionsViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
@@ -1723,6 +1732,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case BiblicalTermsViewModel:
                         case ParatextViews.PinsViewModel:
                         case TextCollectionsViewModel:
+                        //case LexiconViewModel:
                         case MarbleViewModel:
                         case NotesViewModel:
                             return (ToolViewModel)t;
@@ -1759,6 +1769,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 case WorkspaceLayoutNames.Marble:
                     var marbleViewModel = GetToolViewModelFromItems("MarbleViewModel");
                     return (marbleViewModel, marbleViewModel.Title, marbleViewModel.DockSide);
+                //case WorkspaceLayoutNames.Lexicon:
+                //    var lexiconViewModel = GetToolViewModelFromItems("LexiconViewModel");
+                //    return (lexiconViewModel, lexiconViewModel.Title, lexiconViewModel.DockSide);
                 case WorkspaceLayoutNames.Notes:
                     var notesViewModel = GetToolViewModelFromItems("NotesViewModel");
                     return (notesViewModel, notesViewModel.Title, notesViewModel.DockSide);
@@ -1792,11 +1805,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     windowPane.ToggleAutoHide();
                 }
-                else if (windowPane.IsHidden)
+                if (windowPane.IsHidden)
                 {
                     windowPane.Show();
                 }
-                else if (windowPane.IsVisible)
+                if (windowPane.IsVisible)
                 {
                     windowPane.IsActive = true;
                 }

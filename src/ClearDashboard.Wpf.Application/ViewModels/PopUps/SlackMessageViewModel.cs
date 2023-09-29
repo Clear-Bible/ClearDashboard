@@ -16,6 +16,7 @@ using System.Dynamic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using static ClearDashboard.Wpf.Application.Helpers.SlackMessage;
 using Markdown = Markdig.Markdown;
@@ -27,6 +28,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
         private readonly ILogger<SlackMessageViewModel> _logger;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
+
+        private Timer _timer = new System.Timers.Timer();
 
 
         private User _currentDashboardUser;
@@ -402,8 +405,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             }
 
+
+            // Create a timer to get rid of the message and email icon
+            _timer = new Timer(3000);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.AutoReset = false;
+            _timer.Enabled = true;
         }
 
+        private void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        {
+            WorkingMessage = "";
+            ShowEmailIcon = false;
+        }
 
         private void CheckJiraButtonEnabled()
         {
@@ -524,19 +538,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 ShowEmailIcon = false;  
             }
 
+            // Create a timer to get rid of the message and email icon
+            _timer = new Timer(3500);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.AutoReset = false;
+            _timer.Enabled = true;
 
-            //dynamic settings = new ExpandoObject();
-            //settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            //settings.ResizeMode = ResizeMode.NoResize;
-            //settings.MinWidth = 500;
-            //settings.MinHeight = 170;
-
-            //var viewModel = IoC.Get<JiraResultsViewModel>();
-            //viewModel.JiraTicketResponse = result!;
-            //viewModel.JiraUser = _jiraUser;
-
-            //IWindowManager manager = new WindowManager();
-            //await manager.ShowDialogAsync(viewModel, null, settings);
         }
 
 

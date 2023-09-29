@@ -419,7 +419,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобрять</value>
+    <value>Не одобряют</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Текущие пользователи проекта:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Удалить сотрудничество проекта</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>У вас есть другие пользователи, подключенные к этому проекту. Этот проект будет удален и для них. Уверены, что вы хотите удалить этот проект?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить этот проект?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Описание</value>
   </data>
@@ -608,10 +617,10 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск фильтра</value>
+    <value>Поиск по фильтру</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск членов фильтра</value>
+    <value>Поиск члена фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Межлинейный</value>
@@ -632,7 +641,7 @@
     <value>Марк выравнивание как «действительный»</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Новый знак</value>
+    <value>Новый токен: тренировочный текст</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Примечания</value>
@@ -647,10 +656,16 @@
     <value>Показать элементы управления представлением</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Расколотый токен</value>
+    <value>Разделенный токен</value>
+  </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>Применить разделение ко всем случаям токена:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Выберите место для разделения токена:</value>
+    <value>Выберите, где разделить токен:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>Трехсторонний раскол</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>Unjoin Composite Token</value>
@@ -877,17 +892,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Установить перевод для</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>И</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Редактировать</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Найти все</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Формы</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>В полной мере</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Полностью соответствует</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Лекса</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Соответствующий</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Значения [переводы]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>Или</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Частично</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Сохранить изменения</value>
@@ -895,50 +934,50 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Исходный язык</value>
   </data>
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
+    <value>Язык перевода</value>
+  </data>
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Лексикон редактировать</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
+    <value>Перевод</value>
+  </data>
   <data name="LexiconEdit_Type" xml:space="preserve">
     <value>Тип</value>
   </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>И</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Найти все</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>В полной мере</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Полностью соответствует</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Соответствующий</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>Или</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Частично</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
-    <value>Язык перевода</value>
-  </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
-    <value>Перевод</value>
-  </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Как форма для ...</value>
+    <value>Добавить в качестве формы для ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Найдите полные или частичные совпадения Lexeme или Form для источника</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Такая же цель, как трансалация для ...</value>
+    <value>Добавьте цель в качестве перевода для ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Найдите Lexemes, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme или Form Matches</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>Больше нет записей для импорта.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Пожалуйста, выберите корпус.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Выбрать все</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>Исходный язык</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>Тип</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>Исходное слово</value>
@@ -948,6 +987,12 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Целевое слово</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>Импорт лексиконов</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Перевод совпадает</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Снять все</value>
@@ -1154,7 +1199,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header2" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1285,6 +1330,21 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Добавить этикетку</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>Вы хотите создать этикетку:</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>и связывать это с группой лейблов:</value>
+  </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>Вы хотите удалить этикетку:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>Вы хотите отменить этикетку:</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>Из группы лейбла:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Добавить группу метки</value>
   </data>
@@ -1311,6 +1371,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Удалите эту метку</value>
+  </data>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Текст, прикрепленный к этикетке</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1406,10 +1469,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1425,6 +1488,9 @@
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
+  </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Выберите алгоритм SMT, чтобы тренироваться</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте массовое разрешение на просмотр</value>
@@ -1454,7 +1520,7 @@
     <value>Добавить текст в новый вид</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Добавить Verse View, чтобы просмотреть</value>
+    <value>Добавить вид стиха, чтобы просмотреть</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Вспомогательный</value>
@@ -1510,8 +1576,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Иврит (OT) макула</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marbleresource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Мраморный ресурс</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Количество различных токенизаций</value>
@@ -1523,7 +1589,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1559,7 +1625,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIteChoder</value>
+    <value>Транслитерация WithIntEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1568,7 +1634,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1625,7 +1691,7 @@
     <value>Префикс</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Показать переходное время</value>
+    <value>Покажите Backtranslation</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Корень</value>
@@ -1650,6 +1716,9 @@
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext Beta не работает</value>
+  </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Отмена ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Совместные проекты</value>
@@ -1767,6 +1836,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Проект с тем же названием уже существует. Пожалуйста, выберите уникальное имя.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>Данное название проекта слишком длинное.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Паралипоменон</value>
@@ -2033,10 +2105,16 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка</value>
+    <value>По электронной почте ошибка отправки</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
+  </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Включить редактирование выравнивания</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Экспериментальный</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Группа</value>
@@ -2081,10 +2159,10 @@
     <value>Настройки ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Показать зеркальные виды на другом мониторе, чем панель панели</value>
+    <value>Показать расширенные представления на другом мониторе, чем панель инструментов</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать зеркальное представление о третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>

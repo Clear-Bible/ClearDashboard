@@ -15,6 +15,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -49,7 +50,7 @@
                 </Style.Triggers>
             </Style>-->
             <converters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <!--<converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />-->
@@ -571,55 +572,57 @@
                             <Border Grid.Column="1" BorderThickness="0">
                                 <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
                                     <Grid>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                        <Button
-                                            Width="20"
-                                            Height="20"
-                                            Margin="3,0,0,0"
-                                            VerticalAlignment="Center"
-                                            Command="{Binding ElementName=ItemsListView, Path=DataContext.DeleteCorpusRowCommand}"
-                                            CommandParameter="{Binding}"
-                                            IsEnabled="{Binding DisableDeleteButton}">
-                                            <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
-                                                    <Setter Property="Padding" Value="0" />
-
-                                                </Style>
-                                            </Button.Style>
-                                            <materialDesign:PackIcon
+                                        <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                                            <Button
                                                 Width="20"
                                                 Height="20"
-                                                Foreground="{StaticResource RedVeryDarkBrush}"
-                                                Kind="Close"
-                                                ToolTip="{helpers:Localization EnhancedView_RemoveCorpus}" />
-                                        </Button>
-                                        <TextBlock
-                                            Margin="8,0,5,0"
-                                            VerticalAlignment="Center"
-                                            FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                            FontWeight="Bold"
-                                            Text="{Binding Title}" />
-                                    </StackPanel>
-                                        <Button x:Name="EditMode" Content="{Binding EditModeButtonLabel}" 
-                                                HorizontalAlignment="Right"
-                                                Padding="4"
-                                                Margin="0 2 5 0"
-                                                IsEnabled="{Binding DisableDeleteButton}"
-                                                Visibility="{Binding ShowEditButton, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                Margin="3,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding ElementName=ItemsListView, Path=DataContext.DeleteCorpusRowCommand}"
+                                                CommandParameter="{Binding}"
+                                                IsEnabled="{Binding DisableDeleteButton}">
+                                                <Button.Style>
+                                                    <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
+                                                        <Setter Property="Padding" Value="0" />
+
+                                                    </Style>
+                                                </Button.Style>
+                                                <materialDesign:PackIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Foreground="{StaticResource RedVeryDarkBrush}"
+                                                    Kind="Close"
+                                                    ToolTip="{helpers:Localization EnhancedView_RemoveCorpus}" />
+                                            </Button>
+                                            <TextBlock
+                                                Margin="8,0,5,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                FontWeight="Bold"
+                                                Text="{Binding Title}" />
+                                        </StackPanel>
+                                        <Button
+                                            x:Name="EditMode"
+                                            Margin="0,2,5,0"
+                                            Padding="4"
+                                            HorizontalAlignment="Right"
+                                            Content="{Binding EditModeButtonLabel}"
+                                            IsEnabled="{Binding DisableDeleteButton}"
+                                            Visibility="{Binding ShowEditButton, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Click">
                                                     <cm:ActionMessage MethodName="ToggleEditMode" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource  MaterialDesignFlatButton}" TargetType="{x:Type Button}">
+                                                <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
                                                     <Setter Property="Padding" Value="2" />
 
                                                 </Style>
                                             </Button.Style>
                                         </Button>
 
-                                   
+
                                     </Grid>
                                     <ContentControl
                                         Name="VerseContentControl"
@@ -645,7 +648,7 @@
             <controls:SidebarExpander
                 x:Name="NotesExpander"
                 Grid.Row="0"
-                Grid.Column="2"
+                Grid.Column="1"
                 mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
@@ -669,18 +672,23 @@
                     </TextBlock>
                 </controls:SidebarExpander.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <userControls:NoteCollectionDisplay
+                    <notes:NoteCollectionDisplay
                         x:Name="NotesControl"
-                        Margin="0,0"
+                        CurrentUserId="{Binding NoteManager.CurrentUserId}"
+                        DefaultLabelGroup="{Binding NoteManager.DefaultLabelGroup}"
                         EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
                         LabelBackground="BlanchedAlmond"
                         LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        LabelFontSize="14"
+                        LabelGroups="{Binding NoteManager.LabelGroups}"
+                        LabelPadding="10,6,10,5"
                         LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
-                        NoteMargin="0,0,0,10"
+                        Margin="0,-20"
+                        NoteMargin="0,0,0,0"
                         NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         Notes="{Binding NoteManager.CurrentNotes}"
-                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        UserFontStyle="Italic"
+                        TimestampMargin="0,0,00,0"
                         Visibility="{Binding NoteControlVisibility}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="NoteIndicatorMouseEnter">
@@ -710,14 +718,35 @@
                             <i:EventTrigger EventName="LabelAdded">
                                 <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelDeleted">
+                                <i:CallMethodAction MethodName="LabelDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelDisassociated">
+                                <i:CallMethodAction MethodName="LabelDisassociated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupAdded">
+                                <i:CallMethodAction MethodName="LabelGroupAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupLabelAdded">
+                                <i:CallMethodAction MethodName="LabelGroupLabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupRemoved">
+                                <i:CallMethodAction MethodName="LabelGroupRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelGroupSelected">
+                                <i:CallMethodAction MethodName="LabelGroupSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
                             <i:EventTrigger EventName="LabelRemoved">
                                 <i:CallMethodAction MethodName="LabelRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelUpdated">
+                                <i:CallMethodAction MethodName="LabelUpdated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
                             <i:EventTrigger EventName="CloseRequested">
                                 <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                    </userControls:NoteCollectionDisplay>
+                    </notes:NoteCollectionDisplay>
                 </ScrollViewer>
             </controls:SidebarExpander>
         </Grid>

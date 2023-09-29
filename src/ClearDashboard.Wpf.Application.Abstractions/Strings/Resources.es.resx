@@ -458,7 +458,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Reflexión de origen</value>
+    <value>Fuente Ref.</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -517,6 +517,15 @@
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Usuarios actuales del proyecto:</value>
   </data>
+  <data name="CollabProjectManagementView_Delete" xml:space="preserve">
+    <value>Eliminar la colaboración del proyecto</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
+    <value>Tiene otros usuarios conectados a este proyecto. Este proyecto también se eliminará para ellos. ¿Está seguro de que desea eliminar este proyecto?</value>
+  </data>
+  <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
+    <value>¿Estás seguro de que quieres eliminar este proyecto?</value>
+  </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Descripción</value>
   </data>
@@ -530,7 +539,7 @@
     <value>Proyectos</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Seleccionar proyecto</value>
+    <value>Proyecto seleccionado</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -596,13 +605,13 @@
     <value>Eliminar la alineación?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>¿Eliminar todas las alineaciones?</value>
+    <value>Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -632,7 +641,7 @@
     <value>Marque la alineación como 'válido'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Nuevo token</value>
+    <value>Nuevo token: texto de entrenamiento</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Notas</value>
@@ -649,11 +658,17 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>Aplicar división a todas las instancias de token:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Seleccione la ubicación para dividir el token:</value>
+    <value>Seleccione dónde dividir el token:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unir un token compuesto</value>
+    <value>Un si unión a la token compuesta</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -809,7 +824,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregar un significado para este lema</value>
+    <value>Agregue un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -821,7 +836,7 @@
     <value>Cancelar traducción</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias inseguros</value>
+    <value>Cambiar todos los ocurrencias no establecidos</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -877,17 +892,41 @@
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Establecer una traducción para</value>
   </data>
+  <data name="LexiconEdit_And" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="LexiconEdit_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editar</value>
+  </data>
+  <data name="LexiconEdit_FindAll" xml:space="preserve">
+    <value>Encuentra todos</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formularios</value>
   </data>
+  <data name="LexiconEdit_Fully" xml:space="preserve">
+    <value>Completamente</value>
+  </data>
+  <data name="LexiconEdit_FullyMatching" xml:space="preserve">
+    <value>Completamente coincidente</value>
+  </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_Matching" xml:space="preserve">
+    <value>Pareo</value>
+  </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
     <value>Significados [traducciones]</value>
+  </data>
+  <data name="LexiconEdit_Or" xml:space="preserve">
+    <value>O</value>
+  </data>
+  <data name="LexiconEdit_Partially" xml:space="preserve">
+    <value>Parcialmente</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Guardar cambios</value>
@@ -895,50 +934,50 @@
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
     <value>Lenguaje fuente</value>
   </data>
+  <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
+    <value>Lengua de llegada</value>
+  </data>
+  <data name="LexiconEdit_Title" xml:space="preserve">
+    <value>Léxico editar</value>
+  </data>
+  <data name="LexiconEdit_Translation" xml:space="preserve">
+    <value>Traducción</value>
+  </data>
   <data name="LexiconEdit_Type" xml:space="preserve">
     <value>Tipo</value>
   </data>
-  <data name="LexiconIEdit_And" xml:space="preserve">
-    <value>Y</value>
-  </data>
-  <data name="LexiconIEdit_FindAll" xml:space="preserve">
-    <value>Encuentra todos</value>
-  </data>
-  <data name="LexiconIEdit_Fully" xml:space="preserve">
-    <value>Completamente</value>
-  </data>
-  <data name="LexiconIEdit_FullyMatching" xml:space="preserve">
-    <value>Completamente coincidente</value>
-  </data>
-  <data name="LexiconIEdit_Matching" xml:space="preserve">
-    <value>Pareo</value>
-  </data>
-  <data name="LexiconIEdit_Or" xml:space="preserve">
-    <value>O</value>
-  </data>
-  <data name="LexiconIEdit_Partially" xml:space="preserve">
-    <value>Parcialmente</value>
-  </data>
-  <data name="LexiconIEdit_TargetLanguage" xml:space="preserve">
-    <value>Lengua de llegada</value>
-  </data>
-  <data name="LexiconIEdit_Translation" xml:space="preserve">
-    <value>Traducción</value>
-  </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Como como forma para ...</value>
+    <value>Agregar como forma para ...</value>
+  </data>
+  <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
+    <value>Encuentre coincidencias de lexeme o formulario completa o parcial para la fuente</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Como objetivo como transalación para ...</value>
+    <value>Agregue el objetivo como traducción para ...</value>
+  </data>
+  <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
+    <value>Encuentre lexemas que tengan una o más traducción que coincida con el objetivo</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Importación comprobada</value>
+  </data>
+  <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
+    <value>Lexeme o coincidencias de formulario</value>
+  </data>
+  <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
+    <value>No hay más registros para importar.</value>
+  </data>
+  <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
+    <value>Elija un corpus.</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Seleccionar todo</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>Lenguaje fuente</value>
+  </data>
+  <data name="LexiconImport_SourceType" xml:space="preserve">
+    <value>Tipo</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
     <value>Palabra fuente</value>
@@ -948,6 +987,12 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Palabra objetivo</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>Importación de léxico</value>
+  </data>
+  <data name="LexiconImport_TranslationMatches" xml:space="preserve">
+    <value>Partidos de traducción</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Deselecciona todo</value>
@@ -1285,6 +1330,21 @@
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Agregar una etiqueta</value>
   </data>
+  <data name="Notes_LabelAddConfirm" xml:space="preserve">
+    <value>¿Quieres crear etiqueta?</value>
+  </data>
+  <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
+    <value>y asociarlo con el grupo de etiquetas:</value>
+  </data>
+  <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
+    <value>¿Quieres eliminar la etiqueta:</value>
+  </data>
+  <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
+    <value>¿Quieres disociar la etiqueta?</value>
+  </data>
+  <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
+    <value>del grupo de etiquetas:</value>
+  </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Agregar grupo de etiquetas</value>
   </data>
@@ -1311,6 +1371,9 @@
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>Elimina esta etiqueta</value>
+  </data>
+  <data name="Notes_LabelTextAttached" xml:space="preserve">
+    <value>Texto adjunto a la etiqueta</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
@@ -1426,6 +1489,9 @@
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus paratext</value>
   </data>
+  <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
+    <value>Seleccione un algoritmo SMT para entrenar</value>
+  </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
     <value>Agregue la aprobación masiva para ver</value>
   </data>
@@ -1481,7 +1547,7 @@
     <value>Hija</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Eliminar interlineal</value>
@@ -1510,8 +1576,8 @@
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Hebreo (ot) mácula</value>
   </data>
-  <data name="Pds_MarbleResource" xml:space="preserve">
-    <value>Marqueource</value>
+  <data name="Pds_MARBLE Resource" xml:space="preserve">
+    <value>Recurso de mármol</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Número de tokenizaciones diferentes</value>
@@ -1651,6 +1717,9 @@
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
     <value>Paratext beta no se está ejecutando</value>
   </data>
+  <data name="ProjectPicker_Cancelling" xml:space="preserve">
+    <value>Cancelado...</value>
+  </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Proyectos de colaboración</value>
   </data>
@@ -1767,6 +1836,9 @@
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Ya existe un proyecto con el mismo nombre. Elija un nombre único.</value>
+  </data>
+  <data name="ProjectValidator_TooLong" xml:space="preserve">
+    <value>El nombre del proyecto dado es demasiado largo.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Crónicas</value>
@@ -2038,6 +2110,12 @@
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Código de verificación de correo electrónico</value>
   </data>
+  <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
+    <value>Habilitar la edición de alineación</value>
+  </data>
+  <data name="Settings_Experimental" xml:space="preserve">
+    <value>Experimental</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Grupo</value>
   </data>
@@ -2069,7 +2147,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab en el servidor</value>
+    <value>Guardar el usuario de GitLab al servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>
@@ -2081,10 +2159,10 @@
     <value>Configuración de ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Mostrar vistas de espejo en un monitor diferente al tablero</value>
+    <value>Mostrar vistas ampliadas en un monitor diferente al tablero</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Para sistemas con tres o más monitores, muestre la vista del espejo en el tercer monitor</value>
+    <value>Para sistemas con tres o más monitores, muestre una vista ampliada en el tercer monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colección de texto</value>
@@ -2099,7 +2177,7 @@
     <value>Validar el código de correo electrónico</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Habilitar visualización de colecciones de texto verso a versiones</value>
+    <value>Habilitar visualización de colecciones de texto verso por verso</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Cancelar tarea</value>
@@ -2123,7 +2201,7 @@
     <value>Mostrar preleboseos</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Actualización de la nueva versión de ClearDashboard</value>
+    <value>Actualizar a la nueva versión de ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
     <value>Usuario</value>
