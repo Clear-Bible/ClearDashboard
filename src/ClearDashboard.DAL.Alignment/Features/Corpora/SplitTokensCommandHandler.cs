@@ -53,7 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var requestTokenIdGuids = request.TokenIdsWithSameSurfaceText.Select(e => e.Id);
 
-            var tokensDb = await ProjectDbContext.Tokens
+            var tokensDbQueryable = ProjectDbContext.Tokens
                 .Include(t => t.TokenCompositeTokenAssociations)
                 .Include(t => t.TokenizedCorpus)
                     .ThenInclude(tc => tc!.SourceParallelCorpora)
@@ -63,7 +63,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(t => t.SourceAlignments.Where(a => a.Deleted == null))
                 .Include(t => t.TargetAlignments.Where(a => a.Deleted == null))
                 .Include(t => t.TokenVerseAssociations.Where(a => a.Deleted == null))
-                .Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
+                .Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id);
+
+            var tokensDb = await tokensDbQueryable
                 .Where(t => requestTokenIdGuids.Contains(t.Id))
                 .ToListAsync(cancellationToken);
 
@@ -80,7 +82,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
                 (
                     success: false,
-                    message: $"Request TokenId(s) '{string.Join(",", missingTokenIdGuids)}' not found in database"
+                    message: $"Request TokenId(s) '{string.Join(",", missingTokenIdGuids)}' not found in database as part of TokenizedCorpusId '{request.TokenizedTextCorpusId.Id}'"
                 );
             }
 
@@ -101,6 +103,38 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     success: false,
                     message: $"Tokens in database matching request TokenIds do not all having SurfaceText matching: '{surfaceText}'"
                 );
+            }
+
+            if (tokensDb.Count == 1 && request.PropagateTo != SplitTokenPropagationScope.None)
+            {
+                var tokenToPropagate = tokensDb.First();
+
+                var tokensDbPropagateQueryable = tokensDbQueryable
+                    .Where(t => t.SurfaceText == tokenToPropagate.SurfaceText)
+                    .Where(t => t.Id != tokenToPropagate.Id);
+
+                if (request.PropagateTo == SplitTokenPropagationScope.Book)
+                {
+                    tokensDbPropagateQueryable = tokensDbPropagateQueryable
+                        .Where(t => t.BookNumber == tokenToPropagate.BookNumber);
+                }
+
+                if (request.PropagateTo == SplitTokenPropagationScope.BookChapter)
+                {
+                    tokensDbPropagateQueryable = tokensDbPropagateQueryable
+                        .Where(t => t.BookNumber == tokenToPropagate.BookNumber)
+                        .Where(t => t.ChapterNumber == tokenToPropagate.ChapterNumber);
+                }
+
+                if (request.PropagateTo == SplitTokenPropagationScope.BookChapterVerse)
+                {
+                    tokensDbPropagateQueryable = tokensDbPropagateQueryable
+                        .Where(t => t.BookNumber == tokenToPropagate.BookNumber)
+                        .Where(t => t.ChapterNumber == tokenToPropagate.ChapterNumber)
+                        .Where(t => t.VerseNumber == tokenToPropagate.VerseNumber);
+                }
+
+                tokensDb.AddRange(await tokensDbPropagateQueryable.ToListAsync(cancellationToken));
             }
 
             if (request.SurfaceTextIndex < 0 ||
@@ -312,7 +346,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (!request.CreateParallelComposite)
+                var tcParallelCorpora = tokenDb.TokenizedCorpus!.SourceParallelCorpora.Union(tokenDb.TokenizedCorpus!.TargetParallelCorpora);
+
+                // If there aren't any parallel corpora associated with the token's tokenized corpus,
+                // ignore the "CreateParallelComposite == true" from the request:
+
+                if (!request.CreateParallelComposite || !tcParallelCorpora.Any())
                 {
                     // If (createParallelComposite == false and T1 is not a member of any composite at all),
                     // create a non parallel composite C(parallel=null) with the newly created tokens and
@@ -361,7 +400,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     // TokenVerseAssoc(source or target) that reference T1 to reference C(parallel) instead.
 
                     bool isFirst = true;
-                    foreach (var pc in tokenDb.TokenizedCorpus!.SourceParallelCorpora.Union(tokenDb.TokenizedCorpus!.TargetParallelCorpora))
+                    foreach (var pc in tcParallelCorpora)
                     {
                         var compositeToken = new CompositeToken(replacementTokensById[tokenDb.Id]);
                         compositeToken.TokenId.Id = Guid.NewGuid();

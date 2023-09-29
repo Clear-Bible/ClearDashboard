@@ -13,8 +13,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         string TrainingText1,
         string TrainingText2,
         string? TrainingText3,
-        bool CreateParallelComposite = true) : 
+        bool CreateParallelComposite = true,
+        SplitTokenPropagationScope PropagateTo = SplitTokenPropagationScope.None) : 
         ProjectRequestCommand<
             (IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, 
              IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)>;
+
+    public enum SplitTokenPropagationScope
+    {
+        None,
+        BookChapterVerse,
+        BookChapter,
+        Book,
+        All
+    }
 }

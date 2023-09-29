@@ -55,7 +55,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
                     "bob",
                     "joe",
                     "bo",
-                    false
+                    false,
+                    SplitTokenPropagationScope.None
                     );
 
                 Assert.Equal(tokenIdsWithCommonSurfaceText.Count, split1.SplitChildTokensByIncomingTokenId.Count());
@@ -147,7 +148,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
                     "bobby",
                     "joey",
                     null,
-                    false
+                    false,
+                    SplitTokenPropagationScope.None
                     );
 
                 Assert.Equal(tokenIdsWithCommonSurfaceText.Count, split1.SplitChildTokensByIncomingTokenId.Count());
@@ -227,6 +229,71 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
                 Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.Last, true)).Count());
                 Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "segment", WordPart.Last, false)).Count());
                 Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.Last, false));
+            }
+            finally
+            {
+                await DeleteDatabaseContext();
+            }
+        }
+
+        [Fact]
+        [Trait("Category", "Handlers")]
+        public async void SplitTokens3()
+        {
+            try
+            {
+                var textCorpus = TestDataHelpers.GetSampleTextCorpus();
+
+                // Create the corpus in the database:
+                var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+
+                // Create the TokenizedCorpus + Tokens in the database:
+                var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+                var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction, ScrVers.RussianProtestant);
+
+                Assert.NotNull(tokenizedTextCorpus);
+                Assert.All(tokenizedTextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
+
+                ProjectDbContext!.ChangeTracker.Clear();
+
+                var tokenIdsWithCommonSurfaceText = ProjectDbContext!.Tokens
+                    .Include(e => e.TokenCompositeTokenAssociations)
+                    .Where(e => e.SurfaceText == "Chapter")
+                    .ToDictionary(e => ModelHelper.BuildTokenId(e), e => e.TokenCompositeTokenAssociations.Select(ta => ta.TokenCompositeId).ToList());
+
+                var singleTokenId = tokenIdsWithCommonSurfaceText.Keys.Take(1);
+                var split1 = await tokenizedTextCorpus.SplitTokens(
+                    Mediator!,
+                    singleTokenId,
+                    0,
+                    2,
+                    "bob",
+                    "joe",
+                    null,
+                    false,
+                    SplitTokenPropagationScope.BookChapter
+                    );
+
+                var scopeMatchCount = ProjectDbContext!.Tokens
+                    .Where(e => e.SurfaceText == "Chapter")
+                    .Where(e => e.BookNumber == singleTokenId.First().BookNumber)
+                    .Where(e => e.ChapterNumber == singleTokenId.First().ChapterNumber)
+                    .Count();
+
+                Assert.Equal(scopeMatchCount, split1.SplitChildTokensByIncomingTokenId.Count());
+                Assert.Equal(scopeMatchCount, split1.SplitCompositeTokensByIncomingTokenId.Count());
+
+                foreach (var t in split1.SplitChildTokensByIncomingTokenId)
+                {
+                    var children = t.Value.ToArray();
+                    Assert.Equal(2, children.Length);
+
+                    Assert.True(children[0].SurfaceText == "Ch");
+                    Assert.True(children[0].TrainingText == "bob");
+
+                    Assert.True(children[1].SurfaceText == "apter");
+                    Assert.True(children[1].TrainingText == "joe");
+                }
             }
             finally
             {

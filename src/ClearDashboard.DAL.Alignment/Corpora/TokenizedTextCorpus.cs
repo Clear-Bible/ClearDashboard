@@ -210,6 +210,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <param name="trainingText3">Can only be null if surfaceTextIndex > 0</param>
         /// <param name="createParallelComposite">Create parallel composite when tokenId is not a member of any composite 
         /// at all (for any parallel or non-parallel composite.</param>
+        /// <param name="propagateTo">A non-"None" value will only take effect if there is a single token id in TokenIdsWithSameSurfaceText.
+        /// Propagates, limited to tokens within the given scope that matches the specified token,
+        /// to tokens in the same tokenized corpus having the same surface text</param>
         /// <returns></returns>
         public async Task<(IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)> SplitTokens(
             IMediator mediator,
@@ -220,6 +223,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             string trainingText2,
             string? trainingText3, 
             bool createParallelComposite = true,
+            SplitTokenPropagationScope propagateTo = SplitTokenPropagationScope.None,
             CancellationToken cancellationToken = default
         )
         {
@@ -231,7 +235,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 trainingText1,
                 trainingText2,
                 trainingText3,
-                createParallelComposite);
+                createParallelComposite,
+                propagateTo);
 
             var result = await mediator.Send(command, cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
