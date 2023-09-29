@@ -812,7 +812,7 @@
     <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Thêm một hình thức từ vựng vào bổ đề này</value>
+    <value>Thêm một dạng từ vựng vào bổ đề này</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>Thêm từ vựng</value>
@@ -956,7 +956,7 @@
     <value>Thêm mục tiêu làm dịch cho ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Tìm các từ bỏ có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
+    <value>Tìm từ vựng có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Nhập khẩu đã kiểm tra</value>
@@ -1136,7 +1136,7 @@
     <value>Glosses:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Các phần của bài phát biểu</value>
+    <value>Các phần của lời nói</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
     <value>Bổ số liên quan</value>
@@ -1475,7 +1475,7 @@
     <value>Thuật toán căn chỉnh từ máy</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Mô hình đối xứng xe lửa?</value>
+    <value>Mô hình Symmetrized Train?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Xe lửa</value>
@@ -1532,7 +1532,7 @@
     <value>Tính toán mô hình dịch mới</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức thu phóng của nội dung</value>
+    <value>Thay đổi mức độ zoom của nội dung</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Chuyên gia tư vấn</value>
@@ -1604,7 +1604,7 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language Sourcel</value>
+    <value>Language chua</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>
@@ -1625,7 +1625,7 @@
     <value>Phiên âm</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Phiên dịchWithEncoder</value>
+    <value>Transitationwithencoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
@@ -1729,6 +1729,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Tạo một dự án mới</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Bắt đầu nhanh chóng dự án mới</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Tạo dự án:</value>
   </data>
@@ -1754,7 +1757,7 @@
     <value>Bắt đầu</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Dự án máy chủ nhập khẩu</value>
+    <value>Nhập dự án máy chủ</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
     <value>Bao gồm các văn bản Kinh Thánh?</value>
@@ -1886,7 +1889,7 @@
     <value>2 Tê -sa -lô -ni -ca</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Ti -mô -thê</value>
+    <value>2 Timothy</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 John</value>
@@ -1898,7 +1901,7 @@
     <value>Amos</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>COLOSSIANS</value>
+    <value>Cô -lô -se</value>
   </data>
   <data name="ProperCase_Daniel" xml:space="preserve">
     <value>Daniel</value>

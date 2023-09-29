@@ -251,7 +251,7 @@
     <value>pietre prețioase</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>ierburi</value>
+    <value>Iarbă</value>
   </data>
   <data name="BiblicalTermsDomains_Group" xml:space="preserve">
     <value>grup</value>
@@ -647,7 +647,7 @@
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest interval de versuri.</value>
+    <value>Nu există date de versuri în acest game de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>Îndepărtați corpusul</value>
@@ -911,7 +911,7 @@
     <value>Complet</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Potrivirea completă</value>
+    <value>Potrivire completă</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1040,7 +1040,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Aspecte de proiect</value>
+    <value>Machete de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1172,7 +1172,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sense verset</value>
+    <value>Simțul versetului</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1343,7 +1343,7 @@
     <value>Doriți să dezasociați eticheta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>din Grupul de etichete:</value>
+    <value>din grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
@@ -1481,7 +1481,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNER WORD MASINE DE TRAIN</value>
+    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1496,7 +1496,7 @@
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vedere</value>
+    <value>Adăugați la vizualizare</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la New View</value>
@@ -1517,7 +1517,7 @@
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la vizualizare nouă</value>
+    <value>Adăugați text la New View</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați vizualizarea versului pentru vizualizare</value>
@@ -1729,6 +1729,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Creați un nou proiect</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Proiect nou de pornire rapidă</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Creați proiect:</value>
   </data>
@@ -1739,7 +1742,7 @@
     <value>Bază de date:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acel proiect, o altă aplicație îl folosește în continuare.</value>
+    <value>Nu puteți șterge acest proiect, o altă aplicație îl folosește în continuare.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Ștergeți proiectul</value>
@@ -2105,7 +2108,7 @@
     <value>Adresa de e-mail</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>Eroare de trimitere prin e -mail</value>
+    <value>E -mail de trimitere</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Cod de verificare a e -mailului</value>
@@ -2237,7 +2240,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Suportă formatul Markdown</value>
+    <value>Acceptă formatul de marcare</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>

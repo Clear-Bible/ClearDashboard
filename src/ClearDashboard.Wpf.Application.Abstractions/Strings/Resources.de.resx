@@ -953,7 +953,7 @@
     <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Ziel als Übersetzung für ...</value>
+    <value>Fügen Sie Ziel als Übersetzung für ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
@@ -1223,7 +1223,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
+    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1493,7 +1493,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1729,6 +1729,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Erstellen Sie ein neues Projekt</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Schnellstart neues Projekt</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Projekt erstellen:</value>
   </data>
@@ -1745,7 +1748,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Buchauswahl aktivieren</value>
+    <value>Aktivieren Sie die Buchauswahl</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1760,7 +1763,7 @@
     <value>Biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Kooperationsprojekte verwalten</value>
@@ -1862,7 +1865,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timothy</value>
+    <value>1 Timotheus</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>

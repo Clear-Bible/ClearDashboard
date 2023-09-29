@@ -629,13 +629,13 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
+    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -662,7 +662,7 @@
     <value>टोकन के सभी उदाहरणों पर विभाजन लागू करें:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -869,7 +869,7 @@
     <value>Lemma/रूप:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>न्यू लेक्सेम के लिए लेम्मा:</value>
+    <value>नए लेक्सेम के लिए लेम्मा:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
@@ -1691,7 +1691,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाना</value>
+    <value>दिखावा दिखाओ</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1724,10 +1724,13 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
+    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नई परियोजना बनाएं</value>
+    <value>एक नया प्रोजेक्ट बनाएं</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>त्वरित शुरुआत नई परियोजना</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>प्रोजेक्ट बनाएं:</value>
@@ -2006,7 +2009,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दामाद</value>
+    <value>दाई</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>

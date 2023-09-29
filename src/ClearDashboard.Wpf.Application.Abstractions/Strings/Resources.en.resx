@@ -1571,10 +1571,10 @@
     <value>Show information about this project</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Greek (NT) Macula</value>
+    <value>Greek (NT) MACULA</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>Hebrew (OT) Macula</value>
+    <value>Hebrew (OT) MACULA</value>
   </data>
   <data name="Pds_MARBLE Resource" xml:space="preserve">
     <value>MARBLE Resource</value>
@@ -1728,6 +1728,9 @@
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Create a new project</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Quick Start New Project</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Create Project: </value>

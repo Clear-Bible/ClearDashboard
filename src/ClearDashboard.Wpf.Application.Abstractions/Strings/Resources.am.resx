@@ -1729,6 +1729,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>አዲስ ፕሮጀክት ይፍጠሩ</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>ፈጣን ፕሮጀክት ይጀምሩ</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>ፕሮጀክት ይፍጠሩ</value>
   </data>

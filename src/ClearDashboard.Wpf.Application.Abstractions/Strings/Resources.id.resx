@@ -248,7 +248,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>batu permata</value>
+    <value>Batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -491,7 +491,7 @@
     <value>Waktu lokal</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Beri nama itemnya</value>
+    <value>Beri nama item</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup baru</value>
@@ -605,7 +605,7 @@
     <value>Hapus Penyelarasan?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Hapus penyelarasan</value>
+    <value>Hapus Penyelarasan</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Hapus Alignment untuk '{0}'?</value>
@@ -668,7 +668,7 @@
     <value>Split tiga arah</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token Komposit Unjoin</value>
+    <value>Unjoin Token Komposit</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -950,7 +950,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
+    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1334,7 +1334,7 @@
     <value>Apakah Anda ingin membuat label:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>dan kaitkan dengan grup label:</value>
+    <value>dan asosiasikan dengan grup label:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Apakah Anda ingin menghapus label:</value>
@@ -1493,7 +1493,7 @@
     <value>Pilih algoritma SMT untuk berlatih</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Tambahkan persetujuan massal untuk dilihat</value>
+    <value>Tambahkan persetujuan curah untuk dilihat</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Tambahkan ke tampilan</value>
@@ -1547,7 +1547,7 @@
     <value>Anak perempuan</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Hapus penyelarasan</value>
+    <value>Hapus Penyelarasan</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Hapus Interlinear</value>
@@ -1610,7 +1610,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studibible</value>
+    <value>Studybible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1709,7 +1709,7 @@
     <value>PRO</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Tambahkan pengguna kolaborasi baru</value>
+    <value>Tambahkan Pengguna Kolaborasi Baru</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
@@ -1728,6 +1728,9 @@
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Buat proyek baru</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Mulai Cepat Proyek Baru</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Buat Proyek:</value>
@@ -1982,7 +1985,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Maleakhi</value>
+    <value>Malachi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>

@@ -458,7 +458,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Fuente Ref.</value>
+    <value>Reflexión de origen</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -539,7 +539,7 @@
     <value>Proyectos</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Proyecto seleccionado</value>
+    <value>Seleccionar proyecto</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -605,13 +605,13 @@
     <value>Eliminar la alineación?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Eliminar alineación</value>
+    <value>Eliminar la alineación</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Eliminar todas las alineaciones?</value>
+    <value>¿Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -653,7 +653,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de vista</value>
+    <value>Mostrar los controles de la vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -824,7 +824,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregue un significado para este lema</value>
+    <value>Agregar un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -1340,7 +1340,7 @@
     <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>¿Quieres disociar la etiqueta?</value>
+    <value>¿Quieres disociar la etiqueta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>del grupo de etiquetas:</value>
@@ -1529,7 +1529,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcular el nuevo modelo de traducción</value>
+    <value>Calcule el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -1547,7 +1547,7 @@
     <value>Hija</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Eliminar alineación</value>
+    <value>Eliminar la alineación</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Eliminar interlineal</value>
@@ -1728,6 +1728,9 @@
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Crea un nuevo proyecto</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Inicio rápido nuevo proyecto</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Crear proyecto:</value>
@@ -2147,7 +2150,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab al servidor</value>
+    <value>Guardar el usuario de GitLab en el servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>
@@ -2201,7 +2204,7 @@
     <value>Mostrar preleboseos</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Actualizar a la nueva versión de ClearDashboard</value>
+    <value>Actualización de la nueva versión de ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
     <value>Usuario</value>
