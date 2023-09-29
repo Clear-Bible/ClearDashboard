@@ -518,7 +518,7 @@
     <value>የአሁኑ ፕሮጀክት ተጠቃሚዎች</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>ፕሮጀክት ሰርዝ</value>
+    <value>የፕሮጀክት ትብብር ሰርዝ</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
     <value>ከዚህ ፕሮጀክት ጋር የተገናኙ ሌሎች ተጠቃሚዎች አለዎት. ይህ ፕሮጀክት ለእነሱም ይወገዳል. ይህንን ፕሮጀክት መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?</value>
@@ -641,7 +641,7 @@
     <value>"ተቀባይነት ያለው" የሚል ምልክት ምልክት</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>አዲስ ማስመሰያ</value>
+    <value>አዲስ ማስመሰያ-ስልጠና ጽሑፍ</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>ማስታወሻዎች</value>
@@ -658,8 +658,14 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>የተከፋፈለው ማስመሰያ</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>ለተስማሚዎች ሁኔታዎች ሁሉ ተከፍሏል</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>ለማስለቀቅ ቦታን ይምረጡ-</value>
+    <value>ማስመሰያ የት እንደሚከፋፍሉ ይምረጡ</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>ባለሦስት መንገድ ተከፍሏል</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>የ Unijoie Commonite ማስመሰያ</value>
@@ -981,6 +987,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Target ላማው ቃል</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>LEXICON ማስመጣት</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>የትርጉም ግጥሚያዎች</value>

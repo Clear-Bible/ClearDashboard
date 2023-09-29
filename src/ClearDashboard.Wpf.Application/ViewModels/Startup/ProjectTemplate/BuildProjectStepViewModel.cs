@@ -10,6 +10,7 @@ using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
@@ -45,6 +46,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private readonly string _createAction;
         private readonly string _backAction;
         private readonly string _cancelAction;
+
+        private DataAccessLayer.Models.Project _oldProject;
 
         /// <summary>
         /// This is the design surface that is displayed in the window.
@@ -141,6 +144,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             _backOrCancelAction = _backAction;
             _createOrCloseAction = _createAction;
 
+            _oldProject = ProjectManager!.CurrentProject;
 
         }
 
@@ -247,6 +251,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private async Task CreateProject(CancellationToken? cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
+            ProjectManager!.IsNewlySetFromTemplate = true;
             // NB:  need to store a reference to the Parent view model so we can clean up in the finally block below;
             _startupDialogViewModel = ParentViewModel;
 
@@ -279,8 +284,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             catch (OperationCanceledException)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
-                ProjectManager!.CurrentDashboardProject.ProjectName = null;
-                ProjectManager!.CurrentProject = null;
+                ProjectManager!.CurrentDashboardProject.ProjectName = (_oldProject == null) ? null : _oldProject.ProjectName;
+                ProjectManager!.CurrentProject = _oldProject;
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
 
@@ -289,8 +294,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             catch (Exception)
             {
                 errorCleanupAction = await GetErrorCleanupAction(ParentViewModel!.ProjectName);
-                ProjectManager!.CurrentDashboardProject.ProjectName = null;
-                ProjectManager!.CurrentProject = null;
+                ProjectManager!.CurrentDashboardProject.ProjectName = (_oldProject == null) ? null : _oldProject.ProjectName;
+                ProjectManager!.CurrentProject = _oldProject;
 
                 PlaySound.PlaySoundFromResource(SoundType.Error);
 
@@ -311,6 +316,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 ProjectManager!.PauseDenormalization = false;
 
+                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
+
                 stopwatch.Stop();
             }
         }
@@ -323,7 +330,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             {
                 BBBCCCVVV = $"{ParentViewModel!.SelectedBookManager.SelectedAndEnabledBooks.First().BookNum:000}{1:000}{1:000}",
                 ParatextSync = false,
-                Title = "⳼ ENHANCED VIEW",
+                Title = "⳼ View",
                 VerseOffset = 0
             };
             

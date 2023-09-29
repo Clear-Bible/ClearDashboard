@@ -455,7 +455,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian sumber</value>
+    <value>Bagian Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -518,7 +518,7 @@
     <value>Pengguna proyek saat ini:</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>Hapus proyek</value>
+    <value>Hapus kolaborasi proyek</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
     <value>Anda memiliki pengguna lain yang terhubung ke proyek ini. Proyek ini akan dihapus untuk mereka juga. Apakah Anda ingin menghapus proyek ini?</value>
@@ -641,7 +641,7 @@
     <value>Mark Alignment sebagai 'valid'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Token Baru</value>
+    <value>Token Baru: Teks Pelatihan</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Catatan</value>
@@ -658,11 +658,17 @@
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Split token</value>
   </data>
+  <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
+    <value>Terapkan perpecahan untuk semua contoh token:</value>
+  </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Pilih lokasi untuk membagi token:</value>
+    <value>Pilih Tempat Membagi Token:</value>
+  </data>
+  <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
+    <value>Split tiga arah</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Unjoin Token Komposit</value>
+    <value>Token Komposit Unjoin</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -944,7 +950,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
+    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -981,6 +987,9 @@
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
     <value>Kata target</value>
+  </data>
+  <data name="LexiconImport_Title" xml:space="preserve">
+    <value>Impor leksikon</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Kecocokan terjemahan</value>
@@ -1340,7 +1349,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan Grup Label</value>
+    <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1484,7 +1493,7 @@
     <value>Pilih algoritma SMT untuk berlatih</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Tambahkan persetujuan curah untuk dilihat</value>
+    <value>Tambahkan persetujuan massal untuk dilihat</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Tambahkan ke tampilan</value>
@@ -1796,7 +1805,7 @@
     <value>Klik di sini untuk melihat video 'Dashboard Memulai'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>Setelah Anda mengklik tombol 'Buat' di bawah ini, kami akan menjadi tokenisasi, menyelaraskan, dan menyiapkan proyek Anda. Semua langkah akan muncul di sini saat diproses. Saat Anda menunggu, jangan ragu untuk mengklik tautan di bawah ini dan menonton beberapa video bermanfaat untuk memulai menggunakan ClearDashboard!</value>
+    <value>Setelah Anda mengklik tombol 'Buat' di bawah ini, kami akan menjadi tokenisasi, menyelaraskan, dan menyiapkan proyek Anda. Semua langkah akan muncul di sini saat diproses. Sementara Anda menunggu untuk mengklik tautan di bawah ini dan menonton beberapa video bermanfaat untuk memulai menggunakan ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
     <value>Wizard Template Proyek</value>

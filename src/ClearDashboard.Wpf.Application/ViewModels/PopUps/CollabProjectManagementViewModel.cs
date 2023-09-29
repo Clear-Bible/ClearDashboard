@@ -235,7 +235,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set
             {
                 _filterText = value;
-                CollabeUserCollectionView.Refresh();
+                CollabUserCollectionView.Refresh();
                 NotifyOfPropertyChange(() => FilterText);
             }
         }
@@ -247,19 +247,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set
             {
                 _selectedOrganization = value;
-                CollabeUserCollectionView.Refresh();
+                CollabUserCollectionView.Refresh();
                 NotifyOfPropertyChange(() => SelectedOrganization);
             }
         }
 
-        private ICollectionView _collabeUserCollectionView;
-        public ICollectionView CollabeUserCollectionView
+        private ICollectionView _collabUserCollectionView;
+        public ICollectionView CollabUserCollectionView
         {
-            get => _collabeUserCollectionView;
+            get => _collabUserCollectionView;
             set
             {
-                _collabeUserCollectionView = value;
-                NotifyOfPropertyChange(() => CollabeUserCollectionView);
+                _collabUserCollectionView = value;
+                NotifyOfPropertyChange(() => CollabUserCollectionView);
             }
         }
 
@@ -306,8 +306,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _gitLabUsers = await _gitLabHttpClientServices.GetAllUsers();
             CollabUsers = new ObservableCollection<GitUser>(_gitLabUsers);
 
-            CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
-            CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
+            CollabUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabUserCollectionView.Filter = CollabUsersCollectionFilter;
 
             // get the various orgs
             var org = _gitLabUsers.Select(x => x.Organization).Distinct().ToList();
@@ -382,9 +382,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _collabUsers.RemoveAll(x => ids.Contains(x.Id));
             NotifyOfPropertyChange(() => CollabUsers);
 
-            CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
-            CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
-            CollabeUserCollectionView.Refresh();
+            CollabUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabUserCollectionView.Filter = CollabUsersCollectionFilter;
+            CollabUserCollectionView.Refresh();
 
             ShowProgressBar = Visibility.Hidden;
         }
@@ -403,9 +403,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     await Task.Delay(500);
                     await GetUsersForProject();
 
-                    CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
-                    CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
-                    CollabeUserCollectionView.Refresh();
+                    CollabUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+                    CollabUserCollectionView.Filter = CollabUsersCollectionFilter;
+                    CollabUserCollectionView.Refresh();
+                    user.IsSelected = false;
                 }
             }
             ShowProgressBar = Visibility.Hidden;
@@ -445,9 +446,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
             }
 
-            CollabeUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
-            CollabeUserCollectionView.Filter = CollabUsersCollectionFilter;
-            CollabeUserCollectionView.Refresh();
+            CollabUserCollectionView = CollectionViewSource.GetDefaultView(CollabUsers);
+            CollabUserCollectionView.Filter = CollabUsersCollectionFilter;
+            CollabUserCollectionView.Refresh();
 
             ShowProgressBar = Visibility.Hidden;
         }
@@ -486,7 +487,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 user.IsSelected = !user.IsSelected;
             }
-            CollabeUserCollectionView.Refresh();
+            CollabUserCollectionView.Refresh();
         }
 
 
