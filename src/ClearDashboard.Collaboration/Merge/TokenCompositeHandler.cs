@@ -170,23 +170,32 @@ DELETE FROM TokenComponent WHERE Id IN
                 var parallelCorpusId = (Guid?)itemToCreate.PropertyValues["ParallelCorpusId"];
                 var tokenLocations = (IEnumerable<string>)itemToCreate.PropertyValues["TokenLocations"]!;
 
-                var tokenLocationMap = projectDbContext.Tokens
+                var tokensMatchingLocations = projectDbContext.Tokens
+                    .Include(e => e.TokenCompositeTokenAssociations)
                     .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
                     .Where(e => tokenLocations.Contains(e.EngineTokenId))
+                    .Where(e => e.Deleted == null);
+
+                var tokenLocationMap = tokensMatchingLocations
                     .ToDictionary(e => e.EngineTokenId!, e => e);
 
-                var leftover = tokenLocationMap.Keys.Except(tokenLocations);
+                var leftover = tokenLocations.Except(tokenLocationMap.Keys);
                 if (leftover.Any())
                 {
-                    throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain tokens: {string.Join(", ", leftover)}");
+                    throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain token locations: {string.Join(", ", leftover)}");
                 }
 
-                if (tokenLocationMap.Values
+                var existingAssociatedTokenCompositeIds = tokenLocationMap.Values
                     .SelectMany(t => t.TokenCompositeTokenAssociations
                         .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId }))
-                    .Any(tap => tap.TokenCompositeId != tokenCompositeId && tap.ParallelCorpusId == parallelCorpusId))
+                    .Where(tap => tap.ParallelCorpusId == parallelCorpusId)
+                    .Select(tap => tap.TokenCompositeId)
+                    .ToList();
+
+                if (existingAssociatedTokenCompositeIds.Any())
                 {
-                    throw new PropertyResolutionException($"Merge conflict:  CompositeToken '{tokenCompositeId}' snapshot contains tokens already part of a composite having a ParallelCorpusId (null or non-null) that matches '{parallelCorpusId}'.");
+                    logger.LogInformation($"CompositeToken '{tokenCompositeId}' snapshot contains tokens already part of a composite having a ParallelCorpusId (null or non-null) that matches '{parallelCorpusId}'.  Deleting existing/conflicting composite");
+                    projectDbContext.RemoveRange(projectDbContext.TokenComposites.Where(e => existingAssociatedTokenCompositeIds.Contains(e.Id)));
                 }
 
                 // Add the tokens to the composite:
@@ -237,15 +246,18 @@ DELETE FROM TokenComponent WHERE Id IN
                 var tokenizedCorpusId = (Guid)snapshot.PropertyValues["TokenizedCorpusId"]!;
                 var parallelCorpusId = (Guid?)snapshot.PropertyValues["ParallelCorpusId"];
 
+                var tokenLocationsBoth = tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2);
+
                 var tokenLocationMap = projectDbContext.Tokens
                     .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
-                    .Where(e => tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2).Contains(e.EngineTokenId))
+                    .Where(e => tokenLocationsBoth.Contains(e.EngineTokenId))
+                    .Where(e => e.Deleted == null)
                     .ToDictionary(e => e.EngineTokenId!, e => e);
 
-                var leftover = tokenLocationMap.Keys.Except(tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2));
+                var leftover = tokenLocationsBoth.Except(tokenLocationMap.Keys);
                 if (leftover.Any())
                 {
-                    throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain tokens: {string.Join(", ", leftover)}");
+                    throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain token locations: {string.Join(", ", leftover)}");
                 }
 
                 // Remove the OnlyIn1 tokens from the composite:

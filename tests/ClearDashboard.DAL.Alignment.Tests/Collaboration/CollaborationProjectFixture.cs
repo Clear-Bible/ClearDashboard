@@ -124,8 +124,6 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 requestScope).ConfigureAwait(false);
 
             await changeDataFunc(dbContext, cancellationToken);
-
-            ProjectSnapshotLastMerged = await GetDatabaseProjectSnapshot();
         }
 
         public async Task MergeIntoDatabase(string commitShaToMerge, ProjectSnapshot snapshotLastMerged, ProjectSnapshot snapshotToMerge, IProgress<ProgressStatus> progress)
@@ -183,7 +181,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Language = language,
                 ParatextGuid = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",  // zz_SUR
                 CorpusType = corpusType,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = userId
             };
 
@@ -201,7 +199,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Language = "he",
                 ParatextGuid = ManuscriptIds.HebrewManuscriptId,
                 CorpusType = Models.CorpusType.ManuscriptHebrew,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = userId
             };
 
@@ -213,8 +211,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 DisplayName = "Hebrew (OT) Macula",
                 TokenizationFunction = "WhitespaceTokenizer",
                 Metadata = new(),
-                LastTokenized = DateTimeOffset.UtcNow,
-                Created = DateTimeOffset.UtcNow,
+                LastTokenized = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = userId
             };
 
@@ -234,7 +232,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Language = "el",
                 ParatextGuid = ManuscriptIds.GreekManuscriptId,
                 CorpusType = Models.CorpusType.ManuscriptGreek,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = userId
             };
 
@@ -246,8 +244,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 DisplayName = "Greek (NT) Macula",
                 TokenizationFunction = "WhitespaceTokenizer",
                 Metadata = new(),
-                LastTokenized = DateTimeOffset.UtcNow,
-                Created = DateTimeOffset.UtcNow,
+                LastTokenized = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = userId
             };
 
@@ -266,8 +264,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 DisplayName = displayName,
                 TokenizationFunction = tokenizationFunction,
                 Metadata = new(),
-                LastTokenized = DateTimeOffset.UtcNow,
-                Created = DateTimeOffset.UtcNow,
+                LastTokenized = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = userId
             };
 
@@ -318,7 +316,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 IsRangeStart = false,
                 IsEmpty = false,
                 TokenizedCorpusId = tokenizedCorpusId,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 Modified = null,
                 UserId = userId
             };
@@ -433,7 +431,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 TargetTokenizedCorpus = testTokenizedCorpus2,
                 SourceTokenizedCorpusId = testTokenizedCorpus1.Id,
                 TargetTokenizedCorpusId = testTokenizedCorpus2.Id,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = testUserId
             };
         }
@@ -449,7 +447,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 SmtModel = "FastAlign",
                 IsSyntaxTreeAlignerRefined = false,
                 IsSymmetrized = true,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = testUserId
             };
         }
@@ -462,7 +460,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Language = language,
                 Lemma = lemma,
                 Type = type,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = testUserId
             };
         }
@@ -476,7 +474,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Text = text,
                 Lexeme = lexeme,
                 LexemeId = lexeme.Id,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = testUserId
             };
             lexeme.Meanings.Add(meaning);
@@ -491,7 +489,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Text = text,
                 Meaning = meaning,
                 MeaningId = meaning.Id,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = testUserId
             };
             meaning.Translations.Add(translation);
@@ -506,7 +504,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 Text = text,
                 Lexeme = lexeme,
                 LexemeId = lexeme.Id,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = testUserId
             };
             lexeme.Forms.Add(form);
@@ -519,7 +517,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             {
                 Id = Guid.NewGuid(),
                 Text = text,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = testUserId
             };
         }
@@ -551,7 +549,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 DisplayName = "translation set for " + testAlignmentSet.ParallelCorpus!.DisplayName,
                 AlignmentSet = testAlignmentSet,
                 AlignmentSetId = testAlignmentSet.Id,
-                Created = DateTimeOffset.UtcNow,
+                Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                 UserId = testUserId
             };
         }
@@ -580,7 +578,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                     AlignmentVerification = verification,
                     AlignmentOriginatedFrom = originatedFrom,
                     Score = score,
-                    Created = DateTimeOffset.UtcNow,
+                    Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                     UserId = userId
                 };
 
@@ -611,7 +609,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                     TranslationState = originatedFrom,
                     LexiconTranslation = lexiconTranslation,
                     LexiconTranslationId = lexiconTranslation?.Id,
-                    Created = DateTimeOffset.UtcNow,
+                    Created = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond(),
                     UserId = userId
                 };
 

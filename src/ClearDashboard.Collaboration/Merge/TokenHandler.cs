@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Builder;
 using SIL.Machine.Utils;
-using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -76,44 +75,54 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
         {
             modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Token.OriginTokenLocation), out var originTokenLocation);
             var hasIndex = int.TryParse(((string)refId!).Split("_").LastOrDefault(), out int index);
+            var isDeleted = modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Token.Deleted), out var tokenDeleted);
+
+            var tokenQueryable = projectDbContext.Tokens
+                    .Where(e => e.TokenizedCorpusId == (Guid)tokenizedCorpusId!);
+
+            if (isDeleted && tokenDeleted is not null)
+                tokenQueryable = tokenQueryable.AsNoTrackingWithIdentityResolution().Where(e => e.Deleted != null);
+            else
+                tokenQueryable = tokenQueryable.AsNoTrackingWithIdentityResolution().Where(e => e.Deleted == null);
 
             Guid tokenId;
             if (originTokenLocation is not null && hasIndex)
             {
-                tokenId = projectDbContext.Tokens
-                    .Where(e => e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
+                var token = tokenQueryable
                     .Where(e => e.OriginTokenLocation == (string)originTokenLocation!)
                     .OrderBy(e => e.OriginTokenLocation)
+                    .OrderBy(e => e.EngineTokenId)
                     .Skip(index)
                     .Take(1)
-                    .Select(e => e.Id)
                     .FirstOrDefault();
 
-                if (tokenId == default)
+                if (token is null)
                 {
                     tokenId = Guid.NewGuid();
                     logger.LogDebug($"No Token Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / OriginTokenLocation ('{originTokenLocation}') / Index ({index}).  Using: '{tokenId}'");
                 }
                 else
                 {
+                    tokenId = token.Id;
+                    //projectDbContext.Entry(token).State = EntityState.Detached;
                     logger.LogDebug($"Resolved TokenizedCorpusId ('{tokenizedCorpusId}') / OriginTokenLocation ('{originTokenLocation}') / Index ({index}) to Token Id ('{tokenId}')");
                 }
             }
             else
             {
-                tokenId = projectDbContext.Tokens
-                    .Where(e => e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
+                var token = tokenQueryable
                     .Where(e => e.EngineTokenId == (string)engineTokenId!)
-                    .Select(e => e.Id)
                     .FirstOrDefault();
 
-                if (tokenId == default)
+                if (token is null)
                 {
                     tokenId = Guid.NewGuid();
                     logger.LogDebug($"No Token Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / EngineTokenId ('{engineTokenId}').  Using: '{tokenId}'");
                 }
                 else
                 {
+                    tokenId = token.Id;
+                    //projectDbContext.Entry(token).State = EntityState.Detached;
                     logger.LogDebug($"Resolved TokenizedCorpusId ('{tokenizedCorpusId}') / EngineTokenId ('{engineTokenId}') to Token Id ('{tokenId}')");
                 }
             }

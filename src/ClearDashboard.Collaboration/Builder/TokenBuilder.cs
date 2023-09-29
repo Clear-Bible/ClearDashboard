@@ -25,7 +25,10 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
             .Where(e => e.OriginTokenLocation != null)
             .ToList()
             .GroupBy(e => e.OriginTokenLocation)
-            .SelectMany(g => g.Select((e, index) => (Token: e, Index: index as int?)))
+            .SelectMany(g => g
+                .OrderBy(e => e.OriginTokenLocation)
+                .OrderBy(e => e.EngineTokenId)
+                .Select((e, index) => (Token: e, Index: index as int?)))
             .ToList();
 
         var manuallyChangedOriginTokenLocations = tokenIndexes
@@ -49,6 +52,7 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
         (projectDbContext, tokenizedCorpusId) =>
             {
                 return OrganizeTokensByOriginTokenLocation(projectDbContext.Tokens
+                    .AsNoTrackingWithIdentityResolution()
                     .Include(e => e.VerseRow)
                     .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
                 );

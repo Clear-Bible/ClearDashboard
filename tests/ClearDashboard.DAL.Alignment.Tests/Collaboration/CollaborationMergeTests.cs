@@ -17,6 +17,7 @@ using System.Threading;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
+    [Collection("Sequential")]
     [TestCaseOrderer("ClearDashboard.DAL.Alignment.Tests.Collaboration.AlphabeticalOrderer", "ClearDashboard.DAL.Alignment.Tests")]
     public class CollaborationMergeTests : IClassFixture<CollaborationProjectFixture>
     {
@@ -490,6 +491,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             await _fixture.ChangeProjectData(async (ProjectDbContext dbContext, CancellationToken cancellationToken) => {
 
+                // These represent changes to the 'target' database that were done outside of collaboration
+
                 var tokenizedCorpus = dbContext.TokenizedCorpora
                     .Where(e => e.Id == testTokenizedCorpus.Id)
                     .FirstOrDefault();
@@ -582,8 +585,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(5, _fixture.ProjectDbContext.TokenComposites.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
-            Assert.Equal(9, _fixture.ProjectDbContext.Tokens.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
+            Assert.Equal(4, _fixture.ProjectDbContext.TokenComposites.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
+            Assert.Equal(35, _fixture.ProjectDbContext.Tokens.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
 
             var splitCompositeDb = _fixture.ProjectDbContext.TokenComposites
                 .Include(e => e.Tokens.OrderBy(t => t.EngineTokenId))
@@ -594,7 +597,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var extraCompositeDb = _fixture.ProjectDbContext.TokenComposites
                 .Include(e => e.Tokens.OrderBy(t => t.EngineTokenId))
                 .Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id)
-                .Where(e => e.EngineTokenId != "001001020001001-001001020001002")
+                .Where(e => e.EngineTokenId == "001001020001004-001001020001005-001001020004001")
                 .FirstOrDefault();
 
             Assert.NotNull(splitCompositeDb);
@@ -606,7 +609,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var tokensWord1Db = _fixture.ProjectDbContext.Tokens
                 .Where(e => e.BookNumber == 1)
                 .Where(e => e.ChapterNumber == 1)
-                .Where(e => e.VerseNumber == 2)
+                .Where(e => e.VerseNumber == 20)
                 .Where(e => e.WordNumber == 1)
                 .OrderBy(e => e.SubwordNumber)
                 .ToArray();
