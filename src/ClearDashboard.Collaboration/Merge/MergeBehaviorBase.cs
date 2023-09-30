@@ -94,6 +94,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     public abstract void CompleteInsertModelCommand(Type entityType);
 
     public abstract Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken);
+    public abstract Task<IEnumerable<Dictionary<string, object>>> GetEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object> resolvedWhereClause, CancellationToken cancellationToken);
 
     public abstract Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default);
     public abstract object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver entityValueResolver);

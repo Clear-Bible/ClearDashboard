@@ -50,6 +50,46 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
         }
 
+        public static void ApplyColumnsToSelectCommand(DbCommand command, Type type, string[] selectColumns, string[] whereColumns, (string name, int count)[] whereInColumns)
+        {
+            var whereStrings = new List<string>();
+            if (whereColumns.Any())
+            {
+                whereStrings.Add($"{string.Join(" AND ", whereColumns.Select(c => c + " = @" + c))}");
+            }
+            if (whereInColumns.Any())
+            {
+                // E.g.:  " AND EngineTokenId IN (@EngineTokenId0, @EngineTokenId1) AND OriginTokenLocation IN (@OriginTokenLocation0, @OriginTokenLocation1, @OriginTokenLocation2)"
+                whereStrings.Add(string.Join(" AND ", whereInColumns
+                    .Select(column => column.name + " IN (" + string.Join(", ", Enumerable.Range(0, column.count)
+                        .Select(e => $"@{column.name}{e}")) + ")")));
+            }
+
+            command.CommandText =
+            $@"
+                SELECT {string.Join(", ", selectColumns)}
+                FROM {type.Name}
+                WHERE {string.Join(" AND ", whereStrings)}
+            ";
+            
+            foreach (var column in whereColumns)
+            {
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = $"@{column}";
+                command.Parameters.Add(parameter);
+            }
+
+            foreach (var (columnName, columnCount) in whereInColumns)
+            {
+                foreach (var nameIndex in Enumerable.Range(0, columnCount))
+                {
+                    var parameter = command.CreateParameter();
+                    parameter.ParameterName = $"@{columnName}{nameIndex}";
+                    command.Parameters.Add(parameter);
+                }
+            }
+        }
+
         public static DbCommand CreateSoftDeleteByIdUpdateCommand(DbConnection connection, Type type)
         {
             var command = connection.CreateCommand();

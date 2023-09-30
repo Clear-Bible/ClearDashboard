@@ -170,6 +170,14 @@ DELETE FROM TokenComponent WHERE Id IN
                 var parallelCorpusId = (Guid?)itemToCreate.PropertyValues["ParallelCorpusId"];
                 var tokenLocations = (IEnumerable<string>)itemToCreate.PropertyValues["TokenLocations"]!;
 
+                var tokenLocationMap2 = (await _mergeContext.MergeBehavior.GetEntityValuesAsync(
+                    typeof(Models.Token),
+                    new List<string> { "Id", "EngineTokenId" },
+                    new Dictionary<string, object> { { "EngineTokenId", tokenLocations } },
+                    cancellationToken))
+                    .Select(e => (e["EngineTokenId"], Guid.Parse((string)e["Id"])))
+                    .ToList();
+
                 var tokensMatchingLocations = projectDbContext.Tokens
                     .Include(e => e.TokenCompositeTokenAssociations)
                     .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)

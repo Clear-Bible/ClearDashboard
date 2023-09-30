@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using ClearDashboard.Collaboration.DifferenceModel;
+using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Interfaces;
@@ -9,6 +12,8 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
@@ -156,12 +161,88 @@ public class MergeBehaviorApply : MergeBehaviorBase
         return resolvedWhereClause;
     }
 
+    public override async Task<IEnumerable<Dictionary<string, object>>> GetEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object> resolvedWhereClause, CancellationToken cancellationToken)
+    {
+        if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
+
+        var results = new List<Dictionary<string, object>>();
+        await using (var command = _connection.CreateCommand())
+        {
+            command.CommandType = CommandType.Text;
+
+            var tableType = entityType;
+            if (_discriminatorMappings.TryGetValue(entityType, out var mapping))
+            {
+                tableType = mapping.TableEntityType;
+                resolvedWhereClause.Add(mapping.DiscriminatorColumnName, mapping.DiscriminatorColumnValue);
+            }
+
+            DataUtil.ApplyColumnsToSelectCommand(
+                command,
+                tableType,
+                selectColumns.ToArray(), 
+                resolvedWhereClause
+                    .Where(e => !e.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
+                    .Select(e => e.Key)
+                    .ToArray(),
+                resolvedWhereClause
+                    .Where(e => e.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
+                    .Select(e => (name: e.Key, count: (e.Value as IEnumerable)!.Cast<object>().Count()))
+                    .ToArray());
+
+            try
+            {
+                command.Prepare();
+            }
+            catch (Exception ex)
+            {
+                throw new PropertyResolutionException($"Entity type '{entityType}' had following error when trying to prepare DbCommand: {ex.Message}");
+            }
+
+            foreach (var kvp in resolvedWhereClause)
+            {
+                if (kvp.Value is not null && kvp.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
+                {
+                    var valueEnumerable = (kvp.Value as IEnumerable)!.Cast<object>();
+                    foreach (var column in valueEnumerable.Select((value, nameIndex) => new { value, nameIndex }))
+                    {
+                        command.Parameters[$"@{kvp.Key}{column.nameIndex}"].Value = column.value;
+                    }
+                }
+                else
+                {
+                    command.Parameters[$"@{kvp.Key}"].Value = kvp.Value;
+                }
+            }
+
+            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+            if (reader.HasRows)
+            {
+                var columnSchema = reader.GetColumnSchema()
+                    .Where(e => e.ColumnOrdinal != null)
+                    .Select(e => (e.ColumnName, e.ColumnOrdinal))
+                    .ToList();
+
+                while (reader.Read())
+                {
+                    var resultRow = new Dictionary<string, object>();
+                    foreach (var schemaItem in columnSchema)
+                    {
+                        resultRow.Add(schemaItem.ColumnName, reader.GetValue(schemaItem.ColumnOrdinal!.Value));
+                    }
+                    results.Add(resultRow);
+                }
+            }
+        }
+
+        return results;
+    }
+
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
         _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");
         await query.Invoke(_projectDbContext, MergeCache, _logger, Progress, cancellationToken);
     }
-
     public override object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver propertyValueConverter)
     {
         return propertyValueConverter.Invoke(modelSnapshot, _projectDbContext, MergeCache, _logger);
