@@ -466,6 +466,7 @@
                 IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="False"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                 Visibility="{Binding NoProjectVisibility}">
 
@@ -652,7 +653,7 @@
                                         cal:Message.Attach="ShowCollaborationGetLatest($dataContext)"
                                         Background="{StaticResource SecondaryHueLightBrush}">
                                         <Button.Style>
-                                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}">
+                                            <Style BasedOn="{StaticResource MaterialDesignRaisedPrimaryLightButton}" TargetType="Button">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding GitLabUpdateNeeded}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible" />
@@ -838,6 +839,7 @@
                 Grid.Row="4"
                 ItemsSource="{Binding DashboardCollabProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <!--  Visibility="{Binding CollabProjectVisibility}"  -->
                 <ListView.IsEnabled>
