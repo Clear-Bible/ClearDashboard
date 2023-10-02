@@ -198,7 +198,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public void CharacterClicked(object source, RoutedEventArgs args)
         {
             var tokenCharacterArgs = args as TokenCharacterEventArgs;
-            CharacterThreshold1 = tokenCharacterArgs!.TokenCharacter.Index + 1;
+            if (tokenCharacterArgs!.IsShiftPressed)
+            {
+                CharacterThreshold2 = tokenCharacterArgs!.TokenCharacter.Index;
+            }
+            else
+            {
+                CharacterThreshold1 = tokenCharacterArgs!.TokenCharacter.Index + 1;
+            }
         }
 
         public void ThreeWaySplitUnchecked(object source, RoutedEventArgs args)

@@ -85,7 +85,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Creates an <see cref="AlignmentDisplayViewModel"/> instance using the specified DI container.
         /// </summary>
         /// <param name="componentContext">A <see cref="IComponentContext"/> (i.e. LifetimeScope) with which to resolve dependencies.</param>
-        /// <param name="parallelTextRow">The <see cref="EngineParallelTextRow"/> containing the tokens to align.</param>
+        /// <param name="parallelTextRows">The <see cref="EngineParallelTextRow"/> containing the tokens to align.</param>
         /// <param name="parallelCorpusId">The <see cref="ParallelCorpusId"/> of the parallel corpus.</param>
         /// <param name="sourceDetokenizer">The detokenizer to use for the source tokens.</param>
         /// <param name="isSourceRtl">True if the source tokens should be displayed right-to-left (RTL); false otherwise.</param>
@@ -139,7 +139,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     sourceTokens.AddRange(row.SourceTokens);
                 }
             }
-            SourceTokenMap = new TokenMap(sourceTokens, sourceDetokenizer, isSourceRtl);
+            //SourceTokenMap = new TokenMap(sourceTokens, sourceDetokenizer, isSourceRtl);
 
             var targetTokens = new List<Token>();
             foreach (var row in parallelTextRows)
@@ -149,7 +149,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     targetTokens.AddRange(row.TargetTokens);
                 }
             }
-            TargetTokenMap = new TokenMap(targetTokens, targetDetokenizer, isTargetRtl);
+            //TargetTokenMap = new TokenMap(targetTokens, targetDetokenizer, isTargetRtl);
 
             AlignmentSetId = alignmentSetId;
         }

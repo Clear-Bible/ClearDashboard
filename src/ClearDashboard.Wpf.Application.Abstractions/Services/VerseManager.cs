@@ -9,6 +9,8 @@ using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -68,13 +70,35 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Start();
 
                 var tokens = new TokenCollection(compositeToken.Tokens);
-                compositeToken.Tokens = new List<Token>();
+                compositeToken.Tokens = new List<ClearBible.Engine.Corpora.Token>();
                 await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Unjoined composite token {compositeToken.TokenId.Id} into {tokens.Count} in {stopwatch.ElapsedMilliseconds} ms");
 
                 await EventAggregator.PublishOnUIThreadAsync(new TokenUnjoinedMessage(compositeToken, tokens));
+                SelectionManager.SelectionUpdated();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "An unexpected error occurred while un-joining tokens.");
+                throw;
+            }
+        }
+
+        public async Task SplitToken(TokenizedTextCorpus corpus, TokenId tokenId, int tokenIndex1, int tokenIndex2, string trainingText1, string trainingText2, string? trainingText3, bool createParallelComposite = true)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await corpus.SplitTokens(Mediator, new List<TokenId> { tokenId }, tokenIndex1, tokenIndex2, trainingText1, trainingText2, trainingText3, createParallelComposite);
+
+                stopwatch.Stop();
+                Logger.LogInformation($"Split token {tokenId.Id} into in {stopwatch.ElapsedMilliseconds} ms");
+
+                //await EventAggregator.PublishOnUIThreadAsync(new TokenUnjoinedMessage(compositeToken, tokens));
                 SelectionManager.SelectionUpdated();
             }
             catch (Exception e)

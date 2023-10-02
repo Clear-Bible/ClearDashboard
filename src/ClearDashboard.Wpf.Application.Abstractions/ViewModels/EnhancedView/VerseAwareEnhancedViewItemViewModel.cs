@@ -343,14 +343,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             tokens.AddRange(row.Tokens);
                         }
-                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus));
                     }
                     else
                     {
                         // Otherwise, create a separate verse display for each row.
                         foreach (var textRow in tokensTextRowsRange)
                         {
-                            verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                            verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus));
                         }
                     }
                     OnUIThread(() =>
@@ -358,7 +358,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         Verses = verses;
                     });
                 }
-               
 
                 CreateTitle(metadatum, tokensTextRowsRange, currentBcv, bookFound);
             }
@@ -475,14 +474,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     {
                         if (row.SourceTokens != null) tokens.AddRange(row.SourceTokens);
                     }
-                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.ParallelCorpus!, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId!))));
                 }
                 else
                 {
                     // Otherwise, create a separate verse display for each row.
                     foreach (var row in rows)
                     {
-                        Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row.SourceTokens, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                        Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row.SourceTokens!, metadatum.ParallelCorpus!, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId!))));
                     }
                 }
 

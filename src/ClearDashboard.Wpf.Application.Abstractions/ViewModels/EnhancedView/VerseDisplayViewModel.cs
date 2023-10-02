@@ -67,6 +67,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
+        public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
+
         /// <summary>
         /// Gets the <see cref="ParallelCorpusId"/> for the verse.
         /// </summary>
@@ -335,22 +338,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-        protected virtual async Task InitializeAsync()
-        {
-            await BuildTokenDisplayViewModelsAsync();
-        }
-
-        protected VerseDisplayViewModel(NoteManager noteManager, IMediator mediator, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger logger)
-        {
-            NoteManager = noteManager;
-            Mediator = mediator;
-            EventAggregator = eventAggregator;
-            LifetimeScope = lifetimeScope;
-            Logger = logger;
-
-            EventAggregator.SubscribeOnUIThread(this);
-        }
-
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
@@ -368,6 +355,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
         {
             await Task.CompletedTask;
+        }
+        protected virtual async Task InitializeAsync()
+        {
+            await BuildTokenDisplayViewModelsAsync();
+        }
+
+        protected VerseDisplayViewModel(NoteManager noteManager, IMediator mediator, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger logger)
+        {
+            NoteManager = noteManager;
+            Mediator = mediator;
+            EventAggregator = eventAggregator;
+            LifetimeScope = lifetimeScope;
+            Logger = logger;
+
+            EventAggregator.SubscribeOnUIThread(this);
         }
     }
 }

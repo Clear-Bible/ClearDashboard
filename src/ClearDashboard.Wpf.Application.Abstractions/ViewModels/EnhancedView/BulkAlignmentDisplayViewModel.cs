@@ -32,8 +32,8 @@ public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
         ILogger<BulkAlignmentDisplayViewModel> logger) : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
     {
         _bulkAlignment = bulkAlignment;
-        SourceTokenMap = new TokenMap(bulkAlignment.SourceVerseTokens, sourceDetokenizer, isSourceRtl);
-        TargetTokenMap = new TokenMap(bulkAlignment.TargetVerseTokens, targetDetokenizer, isTargetRtl);
+        //SourceTokenMap = new TokenMap(bulkAlignment.SourceVerseTokens, sourceDetokenizer, isSourceRtl);
+        //TargetTokenMap = new TokenMap(bulkAlignment.TargetVerseTokens, targetDetokenizer, isTargetRtl);
     }
 
     public string DisplayTokens => string.Join(" ", _bulkAlignment.SourceVerseTokens.Select(token => token.TrainingText));
