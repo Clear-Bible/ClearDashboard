@@ -39,6 +39,7 @@ namespace ClearDashboard.DataAccessLayer
         public bool CanRunDenormalization => (CurrentProject != null && !PauseDenormalization);
         public bool PauseDenormalization { get; set; }
         public bool HasCurrentParatextProject => CurrentParatextProject != null;
+        public bool IsNewlySetFromTemplate { get; set; }
 
         private string _currentVerse;
         public string CurrentVerse

@@ -5,6 +5,7 @@ using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -49,6 +50,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -61,8 +63,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>
     {
-        public IEnhancedViewManager EnhancedViewManager { get; }
-
         #region Member Variables
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
@@ -79,6 +79,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion //Member Variables
 
         #region Observable Properties
+
+        public IEnhancedViewManager EnhancedViewManager { get; }
 
         public bool LoadingDesignSurface { get; set; }
 
@@ -1588,7 +1590,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
                     await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
                     break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowLexiconDialog:
+                    await ShowLexiconDialog(corpusNodeViewModel.CorpusId);
+                    break;
             }
+        }
+
+        private async Task ShowLexiconDialog(Guid corpusId)
+        {
+            var localizedString = _localizationService!.Get("LexiconImport_Title");
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<LexiconImportsViewModel>();
+            viewModel.SelectedProjectId = corpusId;
+
+            IWindowManager manager = new WindowManager();
+            await manager.ShowDialogAsync(viewModel, null, settings);
         }
 
 

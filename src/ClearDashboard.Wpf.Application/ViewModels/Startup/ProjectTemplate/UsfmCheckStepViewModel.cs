@@ -49,7 +49,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         }
 
         private Visibility _progressIndicatorVisibility = Visibility.Hidden;
-    
         public Visibility ProgressIndicatorVisibility
         {
             get => _progressIndicatorVisibility;
@@ -109,6 +108,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         private async Task<List<UsfmErrorsWrapper>> PerformUsfmErrorCheck(CancellationToken cancellationToken)
         {
+            CanMoveBackwards = false;
             var usfmErrors = new List<UsfmErrorsWrapper>();
             if (ParentViewModel!.SelectedParatextProject != null)
             {
@@ -185,6 +185,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 }
             }
 
+            CanMoveBackwards = true;
             return usfmErrors;
         }
 
