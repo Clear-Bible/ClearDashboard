@@ -2227,6 +2227,9 @@
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Không có mạng</value>
   </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Đặt lại biểu mẫu</value>
+  </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Gửi</value>
   </data>

@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using System.Windows.Controls;
 using static ClearDashboard.Wpf.Application.Helpers.SlackMessage;
 using Markdown = Markdig.Markdown;
 
@@ -29,7 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly ILogger<SlackMessageViewModel> _logger;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
 
-        private Timer _timer = new System.Timers.Timer();
+        //private Timer _timer = new System.Timers.Timer();
 
 
         private User _currentDashboardUser;
@@ -354,6 +355,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Methods
 
+        public void ResetSlackMessage()
+        {
+            TabControl_SelectionChanged();
+            UserMessage = string.Empty;
+            ShowSlackSendButton = false;
+        }
+
+        public void ResetJiraMessage()
+        {
+            TabControl_SelectionChanged();
+
+            JiraTitle = string.Empty;
+            JiraDescription = string.Empty;
+            JiraSeverity = string.Empty;
+        }
+
+
+        public void TabControl_SelectionChanged()
+        {
+            WorkingMessage = "";
+            ShowEmailIcon = false;
+        }
+
         public async void Close()
         {
             await this.TryCloseAsync();
@@ -406,18 +430,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
 
-            // Create a timer to get rid of the message and email icon
-            _timer = new Timer(3000);
-            _timer.Elapsed += OnTimedEvent;
-            _timer.AutoReset = false;
-            _timer.Enabled = true;
+            //// Create a timer to get rid of the message and email icon
+            //_timer = new Timer(3000);
+            //_timer.Elapsed += OnTimedEvent;
+            //_timer.AutoReset = false;
+            //_timer.Enabled = true;
         }
 
-        private void OnTimedEvent(object? sender, ElapsedEventArgs e)
-        {
-            WorkingMessage = "";
-            ShowEmailIcon = false;
-        }
+        //private void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        //{
+        //    WorkingMessage = "";
+        //    ShowEmailIcon = false;
+        //}
 
         private void CheckJiraButtonEnabled()
         {
@@ -538,11 +562,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 ShowEmailIcon = false;  
             }
 
-            // Create a timer to get rid of the message and email icon
-            _timer = new Timer(3500);
-            _timer.Elapsed += OnTimedEvent;
-            _timer.AutoReset = false;
-            _timer.Enabled = true;
+            //// Create a timer to get rid of the message and email icon
+            //_timer = new Timer(3500);
+            //_timer.Elapsed += OnTimedEvent;
+            //_timer.AutoReset = false;
+            //_timer.Enabled = true;
 
         }
 
