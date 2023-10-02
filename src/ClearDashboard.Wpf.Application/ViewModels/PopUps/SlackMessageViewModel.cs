@@ -87,6 +87,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set
             {
                 _userMessage = value;
+
+                if (_userMessage != string.Empty)
+                {
+                    ShowSlackSendButton = true;
+                }
+
                 NotifyOfPropertyChange(() => UserMessage);
             }
         }

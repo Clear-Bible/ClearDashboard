@@ -70,7 +70,7 @@
                         BorderThickness="2"
                         FontSize="16"
                         SpellCheck.IsEnabled="True"
-                        Text="{Binding UserMessage}"
+                        Text="{Binding UserMessage, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap" />
 
                     <Grid Grid.Row="1">
