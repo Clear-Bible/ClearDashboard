@@ -466,6 +466,7 @@
                 IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="False"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                 Visibility="{Binding NoProjectVisibility}">
 
@@ -838,6 +839,7 @@
                 Grid.Row="4"
                 ItemsSource="{Binding DashboardCollabProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <!--  Visibility="{Binding CollabProjectVisibility}"  -->
                 <ListView.IsEnabled>
