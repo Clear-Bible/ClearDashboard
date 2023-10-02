@@ -177,7 +177,7 @@
                             </Style.Triggers>
                             <Setter Property="BorderThickness" Value="1" />
                             <Setter Property="BorderBrush" Value="Gray" />
-                            <Setter Property="CornerRadius" Value="5" />
+
                             <Setter Property="HorizontalContentAlignment" Value="Center" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                             <Setter Property="Height" Value="50" />
@@ -190,6 +190,7 @@
                                         <Border>
                                             <Border.Style>
                                                 <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="CornerRadius" Value="5" />
                                                     <Style.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
                                                             <Setter Property="Background" Value="LightGray" />

@@ -58,21 +58,21 @@ public class SelectedBookManager : PropertyChangedBase
             foreach (var book in books.Where(book => book.HasUsfmError || !book.IsEnabled || !book.IsSelected))
             {
                 commonBooks[book.Abbreviation].HasUsfmError = commonBooks[book.Abbreviation].HasUsfmError || book.HasUsfmError;
-                commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled; 
-                commonBooks[book.Abbreviation].IsSelected = commonBooks[book.Abbreviation].IsSelected && book.IsSelected;
+                commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled;
+                commonBooks[book.Abbreviation].IsSelected = false; // set this to false by default
             }
         }
 
         SelectedBooks = new(commonBooks.Values);
 
-        if (selectAllEnabledBooks)
-        {
-            var enabledBooks = SelectedBooks.Where(b => b.IsEnabled);
-            foreach (var book in enabledBooks)
-            {
-                book.IsSelected = true;
-            }
-        }
+        //if (selectAllEnabledBooks)
+        //{
+        //    var enabledBooks = SelectedBooks.Where(b => b.IsEnabled);
+        //    foreach (var book in enabledBooks)
+        //    {
+        //        book.IsSelected = true;
+        //    }
+        //}
         NotifyOfPropertyChange(() => SelectedBooks);
     }
 
