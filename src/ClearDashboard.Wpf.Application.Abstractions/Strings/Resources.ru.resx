@@ -2236,6 +2236,9 @@
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Без интернета</value>
   </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Сброс форма</value>
+  </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Отправлять</value>
   </data>
