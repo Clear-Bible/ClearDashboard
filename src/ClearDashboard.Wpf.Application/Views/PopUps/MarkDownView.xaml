@@ -89,7 +89,7 @@
             x:Name="Close"
             Grid.Row="1"
             Width="Auto"
-            Margin="10,0,10,10"
+            Margin="10,5,10,10"
             HorizontalAlignment="Right"
             cm:Message.Attach="Close"
             Content="{helpers:Localization Close}"
