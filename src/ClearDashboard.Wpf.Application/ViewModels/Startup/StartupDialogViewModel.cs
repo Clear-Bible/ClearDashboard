@@ -73,11 +73,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _selectedParatextLwcProject, value);
         }
 
-        private bool _includeBiblicalTexts = true;
-        public bool IncludeBiblicalTexts
+        private bool _includeOtBiblicalTexts = true;
+        public bool IncludeOtBiblicalTexts
         {
-            get => _includeBiblicalTexts;
-            set => Set(ref _includeBiblicalTexts, value);
+            get => _includeOtBiblicalTexts;
+            set => Set(ref _includeOtBiblicalTexts, value);
+        }
+
+        private bool _includeNtBiblicalTexts = true;
+        public bool IncludeNtBiblicalTexts
+        {
+            get => _includeNtBiblicalTexts;
+            set => Set(ref _includeNtBiblicalTexts, value);
         }
 
         private IEnumerable<string>? _selectedBookIds = null;
@@ -199,7 +206,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             SelectedParatextProject = null;
             SelectedParatextBtProject = null;
             SelectedParatextLwcProject = null;
-            IncludeBiblicalTexts = true;
+            IncludeOtBiblicalTexts = true;
             SelectedBookIds = null;
             SelectedBookManager.UnselectAllBooks();
         }

@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _continueEnabled, value);
         }
 
-        private bool _controlsEnabled;
+        private bool _controlsEnabled = true;
         public bool ControlsEnabled
         {
             get => _controlsEnabled;
@@ -69,13 +69,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
-            ControlsEnabled = false;
+            ControlsEnabled = true;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await Initialize(cancellationToken);
             await base.OnActivateAsync(cancellationToken);
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            SelectedBookManager.PropertyChanged -= OnSelectedBookManagerPropertyChanged;
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         #endregion //Constructor
@@ -86,12 +92,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private void OnSelectedBookManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             ContinueEnabled = SelectedBookManager.SelectedBooks.Any(book=>book.IsSelected);
-        }
-
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            SelectedBookManager.PropertyChanged -= OnSelectedBookManagerPropertyChanged;
-            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         public override async Task Initialize(CancellationToken cancellationToken)

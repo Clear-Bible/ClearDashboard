@@ -84,11 +84,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _selectedParatextLwcProject, value);
         }
 
-        private bool _showBiblicalTexts = true;
-        public bool ShowBiblicalTexts
+        private bool _showOtBiblicalTexts = true;
+        public bool ShowOtBiblicalTexts
         {
-            get => _showBiblicalTexts;
-            set => Set(ref _showBiblicalTexts, value);
+            get => _showOtBiblicalTexts;
+            set => Set(ref _showOtBiblicalTexts, value);
+        }
+
+        private bool _showNtBiblicalTexts = true;
+        public bool ShowNtBiblicalTexts
+        {
+            get => _showNtBiblicalTexts;
+            set => Set(ref _showNtBiblicalTexts, value);
         }
 
         private bool _isEnabledSelectedParatextProject = true;
@@ -329,7 +336,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             SelectedParatextProject = ParentViewModel!.SelectedParatextProject;
             SelectedParatextBtProject = ParentViewModel!.SelectedParatextBtProject;
             SelectedParatextLwcProject = ParentViewModel!.SelectedParatextLwcProject;
-            ShowBiblicalTexts = ParentViewModel!.IncludeBiblicalTexts;
+            ShowOtBiblicalTexts = ParentViewModel!.IncludeOtBiblicalTexts;
+            ShowNtBiblicalTexts = ParentViewModel!.IncludeNtBiblicalTexts;
 
             ValidationResult = await Validator!.ValidateAsync(this, cancellationToken);
             CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName) && ValidationResult.IsValid);
@@ -366,7 +374,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ParentViewModel!.SelectedParatextProject = SelectedParatextProject;
             ParentViewModel!.SelectedParatextBtProject = SelectedParatextBtProject;
             ParentViewModel!.SelectedParatextLwcProject = SelectedParatextLwcProject;
-            ParentViewModel!.IncludeBiblicalTexts = ShowBiblicalTexts;
+            ParentViewModel!.IncludeOtBiblicalTexts = ShowOtBiblicalTexts;
+            ParentViewModel!.IncludeNtBiblicalTexts = ShowNtBiblicalTexts;
             ParentViewModel!.ProjectName = ProjectName;
 
             ParentViewModel!.SelectedBookIds = null;

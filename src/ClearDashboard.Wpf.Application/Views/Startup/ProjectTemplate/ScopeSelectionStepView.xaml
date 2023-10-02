@@ -45,7 +45,8 @@
             Margin="20,0,0,20"
             Content="{helpers:Localization ProjectPicker_EnableBookSelection}"
             FontSize="13"
-            IsChecked="{Binding ControlsEnabled, Mode=TwoWay}">
+            IsChecked="{Binding ControlsEnabled, Mode=TwoWay}"
+            Visibility="Collapsed">
             <CheckBox.ToolTip>
                 <Label Content="{helpers:Localization ProjectPicker_EnableBookSelectionTooltip}" />
             </CheckBox.ToolTip>
