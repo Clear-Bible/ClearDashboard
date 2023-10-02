@@ -629,7 +629,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -659,7 +659,7 @@
     <value>विभाजित टोकन</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>टोकन के सभी उदाहरणों पर विभाजन लागू करें:</value>
+    <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
@@ -1051,8 +1051,11 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>पसंद</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>त्वरित नया</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध है</value>
+    <value>Collab परिवर्तन उपलब्ध हैं</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>डिफ़ॉल्ट वर्सिफिकेशन के लिए पद्य मैपिंग रीसेट करें</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1520,7 +1523,7 @@
     <value>नए दृश्य में पाठ जोड़ें</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>देखने के लिए कविता दृश्य जोड़ें</value>
+    <value>देखने के लिए जोड़ें</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>सहायक</value>
@@ -1691,7 +1694,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाना</value>
+    <value>दिखावा दिखाओ</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1724,10 +1727,13 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
+    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नई परियोजना बनाएं</value>
+    <value>एक नया प्रोजेक्ट बनाएं</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>त्वरित शुरुआत नई परियोजना</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>प्रोजेक्ट बनाएं:</value>
@@ -1748,7 +1754,7 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
@@ -1756,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>आयात सर्वर परियोजना</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>बाइबिल के ग्रंथों को शामिल करें?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>एनटी ग्रील बाइबिल ग्रंथों को शामिल करें?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>ओटी हिब्रू बाइबिल ग्रंथों को शामिल करें?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>सहयोग परियोजनाओं का प्रबंधन करें</value>
@@ -1850,7 +1859,7 @@
     <value>1 जॉन</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 किंग्स</value>
+    <value>1 राजा</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 पीटर</value>

@@ -9,6 +9,7 @@
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     x:Name="LexiconViewWindow"
+    MaxHeight="900"
     d:DataContext="{d:DesignInstance Type=popUps:LexiconImportsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -22,7 +23,6 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    MaxHeight="900"
     mc:Ignorable="d">
     <Grid>
         <lexicon:LexiconImportDialog DataContext="{Binding .}" />

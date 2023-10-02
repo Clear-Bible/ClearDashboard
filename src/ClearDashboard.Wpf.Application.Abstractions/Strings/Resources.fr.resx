@@ -383,7 +383,7 @@
     <value>Tous</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendements manquants</value>
+    <value>Rendages manquants</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Mots alignés</value>
@@ -497,7 +497,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>nouveau individu</value>
+    <value>Nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -596,7 +596,7 @@
     <value>Supprimer cette vue?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer un alignement</value>
+    <value>Créer l'alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
     <value>Afficher / créer des notes</value>
@@ -626,7 +626,7 @@
     <value>Interlinéaire</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Rejoignez les jetons</value>
+    <value>Rejoignez des jetons</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>Rejoignez des jetons pour la paire de langues</value>
@@ -659,7 +659,7 @@
     <value>Jeton divisé</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Appliquez la fente à toutes les instances de jeton:</value>
+    <value>Appliquez la fente à d'autres instances de jeton:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Sélectionnez où diviser le jeton:</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Préférences</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Rapide</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Modifications de collaboration disponibles</value>
   </data>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Réinitialiser les mappages des vers à la versification par défaut</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1520,7 +1523,7 @@
     <value>Ajouter du texte à une nouvelle vue</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Ajouter la vue du verset à la vue</value>
+    <value>Ajouter à la vue</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliaire</value>
@@ -1729,6 +1732,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Créer un nouveau projet</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Nouveau projet de démarrage rapide</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Créer un projet:</value>
   </data>
@@ -1745,7 +1751,7 @@
     <value>Supprimer le projet</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Activer la sélection des livres</value>
+    <value>Activer la sélection du livre</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>En cas de vérification, vous pourrez sélectionner les livres à traiter.</value>
@@ -1756,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Projet d'importation du serveur</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Inclure des textes bibliques?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Cochez cette case pour inclure les textes bibliques grecs et hébreux lors de la création de votre projet.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Inclure des textes bibliques NT Greel?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Inclure des textes bibliques hébraïques?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gérer les projets de collaboration</value>
@@ -1907,7 +1916,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -1961,7 +1970,7 @@
     <value>John</value>
   </data>
   <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jona</value>
+    <value>Jonie</value>
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
@@ -1973,7 +1982,7 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentation</value>
+    <value>Lamentations</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>
@@ -2033,7 +2042,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharie</value>
+    <value>Zécharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>

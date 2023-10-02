@@ -244,9 +244,21 @@
                 <CheckBox
                     x:Name="ShowBiblicalTextsCheckBox"
                     Margin="10,20,0,20"
-                    Content="{helpers:Localization ProjectPicker_IncludeBiblicalTexts}"
+                    Content="{helpers:Localization ProjectPicker_IncludeOtBiblicalTexts}"
                     FontSize="13"
-                    IsChecked="{Binding ShowBiblicalTexts, Mode=TwoWay}">
+                    IsChecked="{Binding ShowOtBiblicalTexts, Mode=TwoWay}">
+
+                    <CheckBox.ToolTip>
+                        <Label Content="{helpers:Localization ProjectPicker_IncludeBiblicalTextsTooltip}" />
+                    </CheckBox.ToolTip>
+                </CheckBox>
+
+                <CheckBox
+                    x:Name="ShowBiblicalNTTextsCheckBox"
+                    Margin="10,5,0,20"
+                    Content="{helpers:Localization ProjectPicker_IncludeNtBiblicalTexts}"
+                    FontSize="13"
+                    IsChecked="{Binding ShowNtBiblicalTexts, Mode=TwoWay}">
 
                     <CheckBox.ToolTip>
                         <Label Content="{helpers:Localization ProjectPicker_IncludeBiblicalTextsTooltip}" />
