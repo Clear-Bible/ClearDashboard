@@ -659,7 +659,7 @@
     <value>Jeton divisé</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Appliquez la fente à toutes les instances de jeton:</value>
+    <value>Appliquez la fente à d'autres instances de jeton:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Sélectionnez où diviser le jeton:</value>
@@ -992,7 +992,7 @@
     <value>Importation du lexique</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Matchs de traduction</value>
+    <value>Correspondance de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1050,6 +1050,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Préférences</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Rapide</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Modifications de collaboration disponibles</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Réinitialiser les mappages des vers à la versification par défaut</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1910,7 +1913,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -1964,7 +1967,7 @@
     <value>John</value>
   </data>
   <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jona</value>
+    <value>Jonie</value>
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
@@ -1976,7 +1979,7 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentation</value>
+    <value>Lamentations</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>

@@ -86,7 +86,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                     <TextBlock
                         VerticalAlignment="Center"
-                        Foreground="Black"
+                        Foreground="{StaticResource MenuTextHueBrush}"
                         Text="{Binding Header}" />
                 </HierarchicalDataTemplate>
             </Menu.ItemTemplate>
@@ -304,7 +304,7 @@
                         Padding="0"
                         HorizontalAlignment="Right"
                         cm:Message.Attach="CancelSave"
-                        Style="{StaticResource RedMidButton}">
+                        Style="{StaticResource MaterialDesignRaisedErrorButton}">
                         <materialDesign:PackIcon
                             Width="32"
                             Height="32"
@@ -373,7 +373,7 @@
                                         Width="20"
                                         Height="20"
                                         Cursor="Hand"
-                                        Foreground="Red"
+                                        Foreground="{StaticResource ErrorHueBrush}"
                                         IsHitTestVisible="False"
                                         Kind="DeleteForever" />
                                 </Button>
@@ -405,7 +405,7 @@
                         x:Name="CancelDelete"
                         Padding="0"
                         HorizontalAlignment="Center"
-                        Style="{StaticResource RedMidButton}">
+                        Style="{StaticResource MaterialDesignRaisedErrorButton}">
                         <materialDesign:PackIcon
                             Width="32"
                             Height="32"

@@ -251,7 +251,7 @@
     <value>pietre prețioase</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>Iarbă</value>
+    <value>ierburi</value>
   </data>
   <data name="BiblicalTermsDomains_Group" xml:space="preserve">
     <value>grup</value>
@@ -659,7 +659,7 @@
     <value>Jeton împărțit</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplicați despărțire la toate cazurile de jeton:</value>
+    <value>Aplicați despărțiți în alte cazuri de jeton:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Selectați unde să împărțiți token:</value>
@@ -863,7 +863,7 @@
     <value>Introduceți o nouă traducere</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>Lemma</value>
+    <value>LEMMA</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -911,7 +911,7 @@
     <value>Complet</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Potrivire completă</value>
+    <value>Potrivirea completă</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1040,7 +1040,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Machete de proiect</value>
+    <value>Aspecte de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1050,6 +1050,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferințe</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>NOU RAPID</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Modificări de colab disponibile</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Resetați mapări de versuri la versificarea implicită</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1343,7 +1346,7 @@
     <value>Doriți să dezasociați eticheta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>din grupul de etichete:</value>
+    <value>din Grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
@@ -1496,7 +1499,7 @@
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vizualizare</value>
+    <value>Adăugați la vedere</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la New View</value>
@@ -1571,7 +1574,7 @@
     <value>Afișați informații despre acest proiect</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Greacă (NT) macula</value>
+    <value>Macula greacă (NT)</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Ebraică (OT) macula</value>
@@ -1811,7 +1814,7 @@
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Vrăjitor de șablon de proiect</value>
+    <value>Expert de șablon de proiect</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
     <value>Proiect de șablon vrăjitor: {0}</value>
@@ -1976,7 +1979,7 @@
     <value>Judecători</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentații</value>
+    <value>Lamentări</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Levitic</value>
@@ -2066,7 +2069,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele dvs.</value>
+    <value>Vă rugăm să introduceți prenumele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2165,7 +2168,7 @@
     <value>Afișați vizualizări extinse pe un monitor diferit de tabloul de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați o vizualizare extinsă pe a treia monitor</value>
+    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați vizualizare extinsă pe a treia monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colecția de text</value>
@@ -2240,7 +2243,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Acceptă formatul de marcare</value>
+    <value>Suportă formatul Markdown</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>

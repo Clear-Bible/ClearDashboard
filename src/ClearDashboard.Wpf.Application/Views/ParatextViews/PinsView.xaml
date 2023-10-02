@@ -125,45 +125,45 @@
                 Content="All" />
             <RadioButton
                 Name="AllXmlSourceRadio"
-                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
-                IsChecked="{Binding IsAll}" />
+                IsChecked="{Binding IsAll}"
+                Style="{StaticResource DashboardRadioButtonStyle}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="Key Terms" />
             <RadioButton
                 Name="BtXmlSourceRadio"
-                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
-                IsChecked="{Binding IsBt}" />
+                IsChecked="{Binding IsBt}"
+                Style="{StaticResource DashboardRadioButtonStyle}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="All Biblical Terms" />
             <RadioButton
                 Name="AbtXmlSourceRadio"
-                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
-                IsChecked="{Binding IsAbt}" />
+                IsChecked="{Binding IsAbt}"
+                Style="{StaticResource DashboardRadioButtonStyle}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="Term Renderings" />
             <RadioButton
                 Name="TrXmlSourceRadio"
-                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
-                IsChecked="{Binding IsTr}" />
+                IsChecked="{Binding IsTr}"
+                Style="{StaticResource DashboardRadioButtonStyle}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="Lexicon" />
             <RadioButton
                 Name="LxXmlSourceRadio"
-                Background="{StaticResource PrimaryHueDarkBrush}"
                 GroupName="XmlSourceRadio"
-                IsChecked="{Binding IsLx}" />
+                IsChecked="{Binding IsLx}"
+                Style="{StaticResource DashboardRadioButtonStyle}" />
 
             <Button
                 Height="25"

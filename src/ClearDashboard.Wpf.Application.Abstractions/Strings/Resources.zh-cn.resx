@@ -407,7 +407,7 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对齐审查</value>
+    <value>批量对准评论</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
@@ -659,7 +659,7 @@
     <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>将分配适用于所有令牌：</value>
+    <value>将拆分应用于其他令牌：</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>选择在哪里拆分令牌：</value>
@@ -959,7 +959,7 @@
     <value>查找具有与目标匹配的一个或多个翻译的词汇</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>导入检查</value>
+    <value>进口检查</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme或形式匹配</value>
@@ -1004,7 +1004,7 @@
     <value>需要姓</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要许可密钥</value>
+    <value>需要许可证密钥</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1050,6 +1050,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>优先</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>快速新</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>可用的合作更改</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>将诗歌映射重置为默认差异</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1253,7 +1256,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的合作用户</value>
+    <value>新的协作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密码：</value>
@@ -1889,7 +1892,7 @@
     <value>帖撒罗尼迦后书</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2蒂莫西</value>
+    <value>2提摩太</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3约翰</value>
@@ -2180,7 +2183,7 @@
     <value>验证电子邮件代码</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>启用逐一文字集合显示</value>
+    <value>启用逐节的文本集合显示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任务</value>
@@ -2213,7 +2216,7 @@
     <value>错误报告</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>我在项目中丢失了数据</value>
+    <value>我在一个项目中丢失了数据</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
     <value>我无法完成任务</value>

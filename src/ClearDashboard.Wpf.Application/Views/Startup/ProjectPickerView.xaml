@@ -581,7 +581,7 @@
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsCompatibleVersion}" Value="False">
-                                                        <Setter Property="Foreground" Value="Red" />
+                                                        <Setter Property="Foreground" Value="{StaticResource ErrorHueBrush}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -706,7 +706,7 @@
                     Margin="5,5,20,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="{StaticResource PrimaryHueDarkBrush}"
+                    Foreground="{StaticResource PrimaryHueLightBrush}"
                     Kind="Cog" />
             </Button>
         </StackPanel>
@@ -958,12 +958,12 @@
             <TextBlock
                 Width="500"
                 MaxWidth="340"
-                Margin="11,10,0,0"
+                Margin="11,10,0,5"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="16"
-                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
+                Foreground="{StaticResource ErrorHueBrush}"
                 TextWrapping="Wrap"
                 Visibility="{Binding DeleteErrorVisibility}">
                 <Run Text="*" />
@@ -978,7 +978,7 @@
                 VerticalAlignment="Center"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 FontSize="16"
-                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
+                Foreground="{StaticResource ErrorHueBrush}"
                 TextWrapping="Wrap"
                 Visibility="{Binding AlreadyOpenMessageVisibility}">
                 <Run Text="*" />

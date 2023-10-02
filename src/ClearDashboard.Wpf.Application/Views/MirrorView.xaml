@@ -21,6 +21,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Slider
+            Style="{StaticResource DashboardSliderStyle}"
             Name="ZoomSlider"
             Grid.Column="0"
             AutoToolTipPlacement="BottomRight"

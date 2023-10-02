@@ -80,7 +80,10 @@
             Grid.Row="2"
             Grid.Column="0"
             Margin="40,20">
-            <Hyperlink extension:HyperlinkExtensions.IsExternal="true" NavigateUri="https://cleardashboard.org">
+            <Hyperlink
+                extension:HyperlinkExtensions.IsExternal="true"
+                Foreground="{StaticResource HyperlinkHueBrush}"
+                NavigateUri="https://cleardashboard.org">
                 <Hyperlink.Inlines>
                     <Run Text="{helpers:Localization ProjectPicker_ProjectBuilderHelpfulVideos}" />
                 </Hyperlink.Inlines>
@@ -100,7 +103,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 FontSize="16"
-                Foreground="{StaticResource OrangeMidBrush}"
+                Foreground="{StaticResource AccentHueBrush}"
                 Text="{helpers:Localization ProjectPicker_Cancelling}"
                 Visibility="{Binding CancelTextVisibility}">
                 <!--<TextBlock.Triggers>
@@ -150,9 +153,8 @@
             Height="75"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressIndicatorVisibility}"
             Value="0" />
     </Grid>

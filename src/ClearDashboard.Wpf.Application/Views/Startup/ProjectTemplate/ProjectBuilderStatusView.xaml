@@ -118,7 +118,7 @@
                                         HorizontalAlignment="Left"
                                         FontSize="12"
                                         FontWeight="Bold"
-                                        Foreground="{StaticResource BlueMidBrush}"
+                                        Foreground="{StaticResource PrimaryHueMidBrush}"
                                         Text="{Binding Name}" />
                                     <!--  TASK DESCRIPTION  -->
                                     <TextBlock

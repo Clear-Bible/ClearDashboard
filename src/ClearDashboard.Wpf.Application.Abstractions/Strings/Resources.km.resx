@@ -659,7 +659,7 @@
     <value>បំបែកថូខឹន</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>ដាក់ពាក្យសុំបំបែកទៅវត្ថុទាំងអស់នៃថូខឹន:</value>
+    <value>ដាក់ពាក្យសុំបំបែកទៅវត្ថុផ្សេងទៀតនៃថូខឹន:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>ជ្រើសរើសកន្លែងដែលត្រូវបំបែកថូខឹន:</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>ចំណូលចិត្ត</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>ថ្មីរហ័ស</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>ការផ្លាស់ប្តូរ Collab មាន</value>
   </data>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>កំណត់ការធ្វើផែនទីខថ្មីឡើងវិញចំពោះការផ្លាស់ប្តូរលំនាំដើម</value>
   </data>
   <data name="MRK" xml:space="preserve">

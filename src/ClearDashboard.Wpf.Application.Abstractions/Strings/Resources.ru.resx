@@ -419,7 +419,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобрять</value>
+    <value>Не одобряют</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -659,7 +659,7 @@
     <value>Расколотый токен</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Применить разделение ко всем случаям токена:</value>
+    <value>Применить разделение на другие случаи токена:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Выберите, где разделить токен:</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Предпочтения</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Быстрый новый</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Коллабные изменения доступны</value>
   </data>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>Мих.</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1469,10 +1472,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1691,7 +1694,7 @@
     <value>Префикс</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Показать переходное время</value>
+    <value>Покажите Backtranslation</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Корень</value>

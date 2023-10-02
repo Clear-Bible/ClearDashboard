@@ -38,7 +38,7 @@
                 <TextBlock
                     Name="UpdateLink"
                     Cursor="Hand"
-                    Foreground="{StaticResource PrimaryHueDarkBrush}"
+                    Foreground="{StaticResource HyperlinkHueBrush}"
                     Text="{helpers:Localization ShellView_UpdateFound}"
                     TextDecorations="Underline" />
             </Button>
@@ -53,7 +53,7 @@
                 <iconPacks:PackIconPixelartIcons
                     Width="20"
                     Height="20"
-                    Foreground="{StaticResource PrimaryHueDarkBrush}"
+                    Foreground="{StaticResource PrimaryHueLightBrush}"
                     Kind="Notes" />
             </Button>
         </StackPanel>

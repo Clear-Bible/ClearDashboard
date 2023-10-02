@@ -455,7 +455,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellenteil</value>
+    <value>Quellteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -659,7 +659,7 @@
     <value>Geteiltes Token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Wenden Sie sich auf alle Fälle von Token an:</value>
+    <value>Bewerben Sie sich auf andere Token -Fälle:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Wählen Sie aus, wo Token geteilt werden soll:</value>
@@ -950,7 +950,7 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
+    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Fügen Sie Ziel als Übersetzung für ...</value>
@@ -1050,6 +1050,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Vorlieben</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Schnell neu</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Zusammenarbeit mit Zusammenarbeit verfügbar</value>
@@ -1184,7 +1187,7 @@
     <value>Datenbank erstellen ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Vervollständigen Sie vollständig ... Nachladen der Schnittstelle neu</value>
+    <value>Führen Sie vollständig zusammen ... neu lädt die Schnittstelle neu</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
     <value>Operation storniert</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Versetzen Sie Verse -Mappings auf Standardversifikation zurück</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1304,7 +1307,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Verbände</value>
+    <value>Durch Assoziationen</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1493,7 +1496,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1511,16 +1514,16 @@
     <value>Erstellen Sie eine neue Corpus -Tokenisierung</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Neue Interlineare hinzufügen</value>
+    <value>Fügen Sie neue Interlineare hinzu</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
+    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Vers anzeigen, um anzeigen</value>
+    <value>Fügen Sie Verse View zur Anzeige hinzu</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Hilfs</value>
@@ -1598,7 +1601,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>
@@ -1748,7 +1751,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Aktivieren Sie die Buchauswahl</value>
+    <value>Buchauswahl aktivieren</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1817,7 +1820,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierungsprojekte Liste aktualisieren</value>
+    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>

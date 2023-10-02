@@ -36,7 +36,7 @@
 
                 <ResourceDictionary>
                     <!--  primary  -->
-                    <Color x:Key="PrimaryHueLight">#A3D1FF</Color>
+                    <Color x:Key="PrimaryHueLight">#3292DE</Color>
                     <Color x:Key="PrimaryHueLightForeground">#000000</Color>
                     <Color x:Key="PrimaryHueMid">#7DA1C4</Color>
                     <Color x:Key="PrimaryHueMidForeground">#000000</Color>
@@ -88,6 +88,18 @@
 
                     <SolidColorBrush x:Key="MaroonHueBrush" Color="{DynamicResource MaroonHue}" />
                     <SolidColorBrush x:Key="MaroonHueForegroundBrush" Color="{DynamicResource MaroonHueForeground}" />
+
+                    <SolidColorBrush x:Key="HyperlinkHueBrush" Color="{DynamicResource PrimaryHueDark}" />
+
+                    <SolidColorBrush x:Key="MenuTextHueBrush" Color="Black" />
+
+                    <Style
+                        x:Key="DashboardRadioButtonStyle"
+                        BasedOn="{StaticResource MaterialDesignLightRadioButton}"
+                        TargetType="{x:Type RadioButton}">
+                        <Setter Property="Background" Value="{StaticResource PrimaryHueDarkBrush}" />
+                        <!--<Setter Property="Foreground" Value="{StaticResource PrimaryHueLightForeground}" />-->
+                    </Style>
 
                     <Style
                         x:Key="DashboardCheckBoxStyle"

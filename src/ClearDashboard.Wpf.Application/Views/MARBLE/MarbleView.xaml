@@ -860,7 +860,7 @@
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding Path=IsCurrentVerseSense}" Value="True">
                                                                         <Setter Property="Kind" Value="Star" />
-                                                                        <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}" />
+                                                                        <Setter Property="Foreground" Value="{StaticResource AccentHueBrush}" />
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
@@ -1001,6 +1001,7 @@
                                                     TextDecorations="Underline" />
                                                 <RadioButton
                                                     Name="rbAll"
+                                                    Style="{StaticResource DashboardRadioButtonStyle}"
                                                     Margin="10"
                                                     Command="{Binding Path=SetContextCommand}"
                                                     CommandParameter="{Binding ElementName=rbAll, Path=Tag}"
@@ -1010,6 +1011,7 @@
                                                     Tag="All" />
                                                 <RadioButton
                                                     Name="RbBook"
+                                                    Style="{StaticResource DashboardRadioButtonStyle}"
                                                     Margin="10"
                                                     Command="{Binding Path=SetContextCommand}"
                                                     CommandParameter="{Binding ElementName=RbBook, Path=Tag}"
@@ -1019,6 +1021,7 @@
                                                     Tag="Book" />
                                                 <RadioButton
                                                     Name="rbChapter"
+                                                    Style="{StaticResource DashboardRadioButtonStyle}"
                                                     Margin="10"
                                                     Command="{Binding Path=SetContextCommand}"
                                                     CommandParameter="{Binding ElementName=rbChapter, Path=Tag}"

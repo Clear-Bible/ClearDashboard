@@ -119,7 +119,7 @@
     <value>Thêm vào</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Chọn cách để mã hóa xác chết</value>
+    <value>Chọn cách để mã hóa Quả văn</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Liên kết</value>
@@ -659,7 +659,7 @@
     <value>Tách mã thông báo</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Áp dụng chia tách cho tất cả các trường hợp của mã thông báo:</value>
+    <value>Áp dụng chia tách cho các phiên bản mã thông báo khác:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Chọn nơi để chia mã thông báo:</value>
@@ -812,7 +812,7 @@
     <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Thêm một dạng từ vựng vào bổ đề này</value>
+    <value>Thêm một hình thức từ vựng vào bổ đề này</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>Thêm từ vựng</value>
@@ -866,7 +866,7 @@
     <value>Bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/hình thức:</value>
+    <value>Bổ đề/các hình thức:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho Lexeme mới:</value>
@@ -875,7 +875,7 @@
     <value>Từ vựng</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Một từ vựng đã tồn tại cho bổ đề</value>
+    <value>Một từ vựng đã tồn tại cho Bổ đề</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Ý nghĩa:</value>
@@ -884,7 +884,7 @@
     <value>Bản dịch mới</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Loại bỏ miền ngữ nghĩa này khỏi ý nghĩa này</value>
+    <value>Xóa miền ngữ nghĩa này khỏi ý nghĩa này</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>Loại bỏ hình thức từ vựng này khỏi bổ đề này</value>
@@ -920,7 +920,7 @@
     <value>Phù hợp</value>
   </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>Ý nghĩa [dịch]</value>
+    <value>Ý nghĩa [Dịch]</value>
   </data>
   <data name="LexiconEdit_Or" xml:space="preserve">
     <value>Hoặc</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Sở thích</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Nhanh chóng mới</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Thay đổi cộng tác có sẵn</value>
   </data>
@@ -1136,7 +1139,7 @@
     <value>Glosses:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Các phần của lời nói</value>
+    <value>Các phần của bài phát biểu</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
     <value>Bổ số liên quan</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Đặt lại ánh xạ câu thơ về sự đa dạng hóa mặc định</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1466,7 +1469,7 @@
     <value>Siêu dữ liệu JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Song song với những câu thơ</value>
+    <value>Song song hóa câu thơ</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>Thuật toán căn chỉnh từ máy</value>
@@ -1532,7 +1535,7 @@
     <value>Tính toán mô hình dịch mới</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức độ zoom của nội dung</value>
+    <value>Thay đổi mức thu phóng của nội dung</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Chuyên gia tư vấn</value>
@@ -1604,7 +1607,7 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language chua</value>
+    <value>Language Sourcel</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>
@@ -1625,7 +1628,7 @@
     <value>Phiên âm</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Transitationwithencoder</value>
+    <value>Phiên dịchWithEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
@@ -1853,7 +1856,7 @@
     <value>1 John</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 vị vua</value>
+    <value>1 Kings</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 Peter</value>
@@ -1901,7 +1904,7 @@
     <value>Amos</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>Cô -lô -se</value>
+    <value>COLOSSIANS</value>
   </data>
   <data name="ProperCase_Daniel" xml:space="preserve">
     <value>Daniel</value>
@@ -2024,7 +2027,7 @@
     <value>Sự mặc khải</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Người La Mã</value>
+    <value>Rô -ma</value>
   </data>
   <data name="ProperCase_Ruth" xml:space="preserve">
     <value>Ruth</value>

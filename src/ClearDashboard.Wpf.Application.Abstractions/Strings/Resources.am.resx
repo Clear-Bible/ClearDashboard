@@ -659,7 +659,7 @@
     <value>የተከፋፈለው ማስመሰያ</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>ለተስማሚዎች ሁኔታዎች ሁሉ ተከፍሏል</value>
+    <value>ወደ ሌሎች የተለዩ ምልክቶች ተከፍለው ይተግብሩ-</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>ማስመሰያ የት እንደሚከፋፍሉ ይምረጡ</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>ምርጫዎች</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>ፈጣን አዲስ</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>የሚገኙ ለውጦች</value>
   </data>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>የቁጥር ካርታዎችን ወደ ነባሪ አቀራረብን ዳግም ያስጀምሩ</value>
   </data>
   <data name="MRK" xml:space="preserve">

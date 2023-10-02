@@ -659,7 +659,7 @@
     <value>Split Token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Apply split to all instances of token:</value>
+    <value>Apply split to other instances of token:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Select where to split token:</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferences</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Quick New</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Collab Changes Available</value>
   </data>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Reset verse mappings to default versification</value>
   </data>
   <data name="MRK" xml:space="preserve">

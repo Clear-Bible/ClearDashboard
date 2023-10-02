@@ -89,14 +89,14 @@
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="40" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!--  ROW 6  -->
                     <Button
                         Grid.Row="6"
+                        Grid.RowSpan="2"
                         Grid.Column="0"
-                        Width="66"
-                        Height="20"
                         Margin="10"
                         Padding="0"
                         HorizontalAlignment="Left"
@@ -105,7 +105,7 @@
                         CommandParameter="{x:Static Dock.Top}"
                         Content="{helpers:Localization Close}"
                         FontSize="10"
-                        Style="{StaticResource SmallTransparentStyle}" />
+                        Style="{StaticResource AlternativeStyle}" />
 
                     <!--  ROW 0  -->
                     <Label
@@ -374,7 +374,7 @@
                         Grid.Column="1"
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
-                        IsChecked="{Binding ParagraphMode}"/>
+                        IsChecked="{Binding ParagraphMode}" />
 
                     <StackPanel
                         Grid.Row="5"

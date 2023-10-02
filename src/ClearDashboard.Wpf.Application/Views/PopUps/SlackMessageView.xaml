@@ -264,7 +264,7 @@
                         Style="{StaticResource TransparentStyle}">
                         <TextBlock
                             Cursor="Hand"
-                            Foreground="DodgerBlue"
+                            Foreground="{StaticResource HyperlinkHueBrush}"
                             Text="{helpers:Localization SlackMessageView_SuggestionMarkdown}"
                             TextDecorations="Underline" />
                     </Button>
@@ -274,7 +274,7 @@
                         Grid.Row="3"
                         Grid.Column="1"
                         Width="Auto"
-                        Margin="10,0,10,10"
+                        Margin="10,5,10,10"
                         HorizontalAlignment="Right"
                         Content="{helpers:Localization SlackMessageView_Send}"
                         IsEnabled="{Binding JiraButtonEnabled}">

@@ -307,6 +307,7 @@
                                     <TextBlock
                                         Margin="5,5,0,0"
                                         VerticalAlignment="Center"
+                                        Foreground="{StaticResource MenuTextHueBrush}"
                                         IsEnabled="{Binding IsEnabled}"
                                         Text="{Binding Header}">
                                         <TextBlock.Style>

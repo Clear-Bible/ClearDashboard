@@ -108,7 +108,7 @@
                     StaysOpen="False"
                     VerticalOffset="30">
                     <Border BorderThickness="2">
-                        <StackPanel Background="{StaticResource SecondaryHueMidBrush}" Orientation="Vertical">
+                        <StackPanel Background="WhiteSmoke" Orientation="Vertical">
                             <TextBlock
                                 Padding="10"
                                 HorizontalAlignment="Center"
@@ -124,7 +124,7 @@
                                     Margin="5"
                                     Click="DeleteNoteCancelled"
                                     Content="{helpers:Localization No}"
-                                    Style="{StaticResource TransparentStyle}" />
+                                    Style="{StaticResource AlternativeStyle}" />
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -297,11 +297,13 @@
                                 <Button
                                     Margin="5"
                                     Click="ParatextSendConfirmed"
-                                    Content="{helpers:Localization Yes}" />
+                                    Content="{helpers:Localization Yes}"
+                                    Style="{StaticResource TransparentStyle}" />
                                 <Button
                                     Margin="5"
                                     Click="ParatextSendCancelled"
-                                    Content="{helpers:Localization No}" />
+                                    Content="{helpers:Localization No}"
+                                    Style="{StaticResource AlternativeStyle}" />
                             </StackPanel>
                         </StackPanel>
                     </Border>

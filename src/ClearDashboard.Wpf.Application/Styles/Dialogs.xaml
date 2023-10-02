@@ -50,9 +50,8 @@
                                         </Setter>
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="#EEEBEB" />
                                         <Setter Property="Cursor" Value="Hand" />
-                                        <Setter Property="Background" Value="#A3D1FF" />
+                                        <Setter Property="Background" Value="#3292DE" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
                                         <Setter Property="Opacity" Value="1" />
@@ -161,7 +160,7 @@
                                         <Setter Property="Background" Value="LightGray" />
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="#A3D1FF" />
+                                        <Setter Property="Background" Value="#3292DE" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -209,7 +208,7 @@
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
                                         <Setter Property="Cursor" Value="Hand" />
-                                        <Setter Property="Background" Value="#A3D1FF" />
+                                        <Setter Property="Background" Value="#3292DE" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
                                         <Setter Property="Opacity" Value="1" />

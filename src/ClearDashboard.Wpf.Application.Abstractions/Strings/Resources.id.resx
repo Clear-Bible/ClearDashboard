@@ -491,7 +491,7 @@
     <value>Waktu lokal</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Beri nama item</value>
+    <value>Beri nama itemnya</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup baru</value>
@@ -659,7 +659,7 @@
     <value>Split token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Terapkan perpecahan untuk semua contoh token:</value>
+    <value>Terapkan perpecahan untuk contoh token lain:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Pilih Tempat Membagi Token:</value>
@@ -668,7 +668,7 @@
     <value>Split tiga arah</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Unjoin Token Komposit</value>
+    <value>Token Komposit Unjoin</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferensi</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Cepat baru</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>COBOL COBULSI TERSEDIA</value>
   </data>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Setel ulang pemetaan ayat ke versifikasi default</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1334,7 +1337,7 @@
     <value>Apakah Anda ingin membuat label:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>dan asosiasikan dengan grup label:</value>
+    <value>dan kaitkan dengan grup label:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Apakah Anda ingin menghapus label:</value>
@@ -1610,7 +1613,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studybible</value>
+    <value>Studibible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1709,7 +1712,7 @@
     <value>PRO</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Tambahkan Pengguna Kolaborasi Baru</value>
+    <value>Tambahkan pengguna kolaborasi baru</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
@@ -1985,7 +1988,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
+    <value>Maleakhi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>
@@ -2057,7 +2060,7 @@
     <value>Kunci yang disediakan salah. Ketika didekripsi, elemen -elemen JSON tertentu tidak dapat ditemukan.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Isi kunci lisensi yang didekripsi tidak sesuai dengan informasi yang Anda berikan.</value>
+    <value>Isi kunci lisensi yang didekripsi tidak cocok dengan informasi yang Anda berikan.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>Kunci lisensi Anda hilang atau rusak.</value>

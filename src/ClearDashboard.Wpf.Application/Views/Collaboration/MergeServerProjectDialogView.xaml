@@ -205,7 +205,7 @@
                                                                 <Condition Binding="{Binding CancelAction}" Value="Cancel" />
                                                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
                                                             </MultiDataTrigger.Conditions>
-                                                            <Setter Property="Background" Value="#EEEBEB" />
+                                                            <Setter Property="Background" Value="{StaticResource AlternativeButtonHue}" />
                                                         </MultiDataTrigger>
 
                                                         <MultiDataTrigger>
@@ -213,11 +213,11 @@
                                                                 <Condition Binding="{Binding CancelAction}" Value="Close" />
                                                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False" />
                                                             </MultiDataTrigger.Conditions>
-                                                            <Setter Property="Background" Value="#EEEBEB" />
+                                                            <Setter Property="Background" Value="{StaticResource AlternativeButtonHue}" />
                                                         </MultiDataTrigger>
 
                                                         <Trigger Property="IsEnabled" Value="False">
-                                                            <Setter Property="Background" Value="Transparent" />
+                                                            <Setter Property="Background" Value="LightGray" />
                                                         </Trigger>
 
                                                         <Trigger Property="IsMouseOver" Value="True">

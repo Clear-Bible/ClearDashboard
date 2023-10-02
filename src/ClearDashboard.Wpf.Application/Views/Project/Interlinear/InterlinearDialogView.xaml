@@ -139,7 +139,7 @@
                             MaxWidth="400"
                             Margin="10"
                             FontSize="16"
-                            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                            Foreground="{DynamicResource ErrorHueBrush}"
                             Text="{Binding [0].ErrorContent}"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -160,7 +160,6 @@
                 Height="40"
                 Margin="10,0"
                 HorizontalAlignment="Left"
-                Foreground="{StaticResource PrimaryHueMidBrush}"
                 IsIndeterminate="True"
                 Style="{StaticResource ClearDashboardCircularProgressBar}"
                 Visibility="{Binding SpinnerVisibility}"

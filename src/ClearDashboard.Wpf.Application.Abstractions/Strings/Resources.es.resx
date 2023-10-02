@@ -653,13 +653,13 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de la vista</value>
+    <value>Mostrar los controles de vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplicar división a todas las instancias de token:</value>
+    <value>Aplicar la división a otros casos de token:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Seleccione dónde dividir el token:</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferencias</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Rápido</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Cambios de colaboración disponibles</value>
   </data>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Restablecer las asignaciones de versos a la versificación predeterminada</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1340,7 +1343,7 @@
     <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>¿Quieres disociar la etiqueta:</value>
+    <value>¿Quieres disociar la etiqueta?</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>del grupo de etiquetas:</value>
@@ -1349,7 +1352,7 @@
     <value>Agregar grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Agregar un grupo de etiqueta</value>
+    <value>Agregar un grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Un grupo de etiquetas ya existe con el nombre</value>
@@ -2150,7 +2153,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab en el servidor</value>
+    <value>Guardar el usuario de GitLab al servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>

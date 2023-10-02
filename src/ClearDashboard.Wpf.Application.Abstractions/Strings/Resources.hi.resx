@@ -635,7 +635,7 @@
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
+    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -659,10 +659,10 @@
     <value>विभाजित टोकन</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>टोकन के सभी उदाहरणों पर विभाजन लागू करें:</value>
+    <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -869,7 +869,7 @@
     <value>Lemma/रूप:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>नए लेक्सेम के लिए लेम्मा:</value>
+    <value>न्यू लेक्सेम के लिए लेम्मा:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
@@ -1051,8 +1051,11 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>पसंद</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>त्वरित नया</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध है</value>
+    <value>Collab परिवर्तन उपलब्ध हैं</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>डिफ़ॉल्ट वर्सिफिकेशन के लिए पद्य मैपिंग रीसेट करें</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1751,7 +1754,7 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
@@ -1853,7 +1856,7 @@
     <value>1 जॉन</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 किंग्स</value>
+    <value>1 राजा</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 पीटर</value>
@@ -2009,7 +2012,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दाई</value>
+    <value>दामाद</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>

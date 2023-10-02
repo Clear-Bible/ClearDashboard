@@ -1,14 +1,14 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.Application.UserControls.Notes.NoteCollectionDisplay"
-    x:Name="NoteCollectionDisplayControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
+    x:Name="NoteCollectionDisplayControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -18,14 +18,16 @@
         <DataTemplate x:Key="NoteTemplate" DataType="notes:NoteDisplay">
             <notes:NoteDisplay
                 x:Name="NoteDisplay"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NotePadding}"
                 CurrentUserId="{Binding ElementName=NoteCollectionDisplayControl, Path=CurrentUserId}"
                 DefaultLabelGroup="{Binding ElementName=NoteCollectionDisplayControl, Path=DefaultLabelGroup}"
                 EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
                 LabelAdded="OnLabelAdded"
-                LabelDeleted="OnLabelDeleted"
-                LabelDisassociated="OnLabelDisassociated"
                 LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
                 LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
+                LabelDeleted="OnLabelDeleted"
+                LabelDisassociated="OnLabelDisassociated"
                 LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
                 LabelGroupAdded="OnLabelGroupAdded"
                 LabelGroupLabelAdded="OnLabelGroupLabelAdded"
@@ -38,7 +40,6 @@
                 LabelSelected="OnLabelSelected"
                 LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
                 LabelUpdated="OnLabelUpdated"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
                 Note="{Binding}"
                 NoteAdded="OnNoteAdded"
                 NoteAssociationClicked="OnNoteAssociationClicked"
@@ -71,7 +72,6 @@
                 NoteTextMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextMargin}"
                 NoteTextPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextPadding}"
                 NoteUpdated="OnNoteUpdated"
-                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NotePadding}"
                 TimestampFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
                 TimestampFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
                 TimestampFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontStyle}"
@@ -179,7 +179,7 @@
                 <Button
                     Click="OnCloseRequested"
                     Content="{helpers:Localization Close}"
-                    Style="{StaticResource TransparentStyle}" />
+                    Style="{StaticResource AlternativeStyle}" />
             </StackPanel>
         </Grid>
     </Border>

@@ -521,7 +521,7 @@
     <value>Excluir colaboração do projeto</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Você tem outros usuários conectados a este projeto. Este projeto também será removido para eles. Tem certeza de que deseja excluir este projeto?</value>
+    <value>Você tem outros usuários conectados a este projeto. Este projeto também será removido para eles. Tem certeza de que você deseja excluir este projeto?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>Tem certeza de que deseja excluir este projeto?</value>
@@ -659,7 +659,7 @@
     <value>Token dividido</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplique dividido em todas as instâncias de token:</value>
+    <value>Aplique dividido em outras instâncias de token:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Selecione onde dividir o token:</value>
@@ -1051,6 +1051,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferências</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Rápido novo</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Alterações de colaboração disponíveis</value>
   </data>
@@ -1151,7 +1154,7 @@
     <value>Pesquisar por brilho inglês</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Pesquisar por hebraico/grego</value>
+    <value>Pesquise por hebraico/grego</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Senso</value>
@@ -1172,7 +1175,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sentido do verso</value>
+    <value>Verso senso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1198,8 +1201,8 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para versificação padrão</value>
+  <data name="Migrate_Header" xml:space="preserve">
+    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1589,7 +1592,7 @@
     <value>Propriedades</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Recurso</value>
@@ -1667,7 +1670,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme tipo</value>
+    <value>Lexeme Type</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -2144,13 +2147,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaure o usuário da colaboração</value>
+    <value>Restaurar o usuário de colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salvar o usuário do GitLab no servidor</value>
+    <value>Salve o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>
