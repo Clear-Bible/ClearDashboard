@@ -1523,7 +1523,7 @@
     <value>Ajouter du texte à une nouvelle vue</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Ajouter la vue du verset à la vue</value>
+    <value>Ajouter à la vue</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliaire</value>
@@ -1762,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Projet d'importation du serveur</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Inclure des textes bibliques?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Cochez cette case pour inclure les textes bibliques grecs et hébreux lors de la création de votre projet.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Inclure des textes bibliques NT Greel?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Inclure des textes bibliques hébraïques?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gérer les projets de collaboration</value>

@@ -1523,7 +1523,7 @@
     <value>Thêm văn bản vào chế độ xem mới</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm chế độ xem câu để xem</value>
+    <value>Thêm để xem</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Phụ trợ</value>
@@ -1762,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Nhập dự án máy chủ</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Bao gồm các văn bản Kinh Thánh?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Kiểm tra hộp này để bao gồm các văn bản Kinh thánh Hy Lạp và tiếng Do Thái khi tạo dự án của bạn.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Bao gồm các văn bản Kinh thánh NT Greel?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Bao gồm các văn bản Kinh thánh tiếng Do Thái OT?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Quản lý các dự án hợp tác</value>

@@ -1523,7 +1523,7 @@
     <value>បន្ថែមអត្ថបទទៅទិដ្ឋភាពថ្មី</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>បន្ថែមទិដ្ឋភាពខដើម្បីមើល</value>
+    <value>បន្ថែមទៅមើល</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>auxiliary</value>
@@ -1762,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>គម្រោងនាំចូលម៉ាស៊ីនមេ</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>រួមបញ្ចូលអត្ថបទក្នុងគម្ពីរ?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>ធីកប្រអប់នេះដើម្បីបញ្ចូលអត្ថបទព្រះគម្ពីរក្រិកនិងហេប្រ៊ូនៅពេលបង្កើតគម្រោងរបស់អ្នក។</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>រួមមានអត្ថបទព្រះគម្ពីរ NT GREEL?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>រួមបញ្ចូលអត្ថបទគម្ពីរហេប្រ៊ូ?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>គ្រប់គ្រងគម្រោងសហការ</value>

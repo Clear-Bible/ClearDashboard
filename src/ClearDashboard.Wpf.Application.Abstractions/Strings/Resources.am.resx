@@ -1523,7 +1523,7 @@
     <value>ወደ አዲስ እይታ ጽሑፍ ያክሉ</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>ቁጥር እይታን ለማመልከት</value>
+    <value>ለማየት ያክሉ</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>ረዳትነት</value>
@@ -1762,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>አስመጪ አገልጋይ ፕሮጀክት</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>መጽሐፍ ቅዱሳዊ ጽሑፎችን ያካተቱ?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>ፕሮጀክትዎን በሚፈጠሩበት ጊዜ የግሪክ እና የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎችን ለማካተት ይህንን ሳጥን ይመልከቱ.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>NT gtel መጽሐፍ ቅዱሳዊ ጽሑፎችን ይጨምሩ?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>የብኪውን የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎች ያካትቱ?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>የትብብር ፕሮጄክቶችን ያቀናብሩ</value>

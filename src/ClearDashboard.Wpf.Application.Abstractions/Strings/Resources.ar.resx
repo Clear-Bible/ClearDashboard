@@ -1523,7 +1523,7 @@
     <value>أضف نصًا إلى عرض جديد</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>أضف عرض الآية للعرض</value>
+    <value>أضف للعرض</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>مساعد</value>
@@ -1762,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>استيراد مشروع خادم</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>تشمل النصوص التوراتية؟</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>حدد هذا المربع لتشمل النصوص التوراتية اليونانية والعبرية عند إنشاء مشروعك.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>تشمل النصوص التوراتية NT Greel؟</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>تشمل نصوص الكتاب المقدس العبرية؟</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>إدارة مشاريع التعاون</value>

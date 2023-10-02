@@ -1523,7 +1523,7 @@
     <value>Добавить текст в новый вид</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Добавить Verse View, чтобы просмотреть</value>
+    <value>Добавить в просмотр</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Вспомогательный</value>
@@ -1762,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Импортный сервер проект</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Включите библейские тексты?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Включите библейские тексты NT Grel?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Включите ивритские библейские тексты?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Управление совместными проектами</value>

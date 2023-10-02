@@ -1523,7 +1523,7 @@
     <value>नए दृश्य में पाठ जोड़ें</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>देखने के लिए कविता दृश्य जोड़ें</value>
+    <value>देखने के लिए जोड़ें</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>सहायक</value>
@@ -1762,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>आयात सर्वर परियोजना</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>बाइबिल के ग्रंथों को शामिल करें?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>एनटी ग्रील बाइबिल ग्रंथों को शामिल करें?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>ओटी हिब्रू बाइबिल ग्रंथों को शामिल करें?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>सहयोग परियोजनाओं का प्रबंधन करें</value>
