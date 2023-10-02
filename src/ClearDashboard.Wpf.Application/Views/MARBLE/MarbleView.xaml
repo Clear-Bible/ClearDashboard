@@ -1525,7 +1525,7 @@
                                                                                                 Background="#00FFFFFF">
                                                                                                 <Path
                                                                                                     Name="ExpandPath"
-                                                                                                    Fill="#FFFFFFFF"
+                                                                                                    Fill="#FFFFFF"
                                                                                                     Stroke="#FF818181">
                                                                                                     <Path.Data>
                                                                                                         <PathGeometry Figures="M0,0L0,6L6,0z" />
