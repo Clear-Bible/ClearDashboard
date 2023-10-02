@@ -74,7 +74,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 if (result.Success)
                 {
                     var data = result.Data;
-                    Assert.Null(data);
+                    Assert.NotNull(data);
                 }
                 else
                 {
@@ -97,7 +97,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 if (result.Success)
                 {
                     var data = result.Data;
-                    Assert.Null(data);
+                    Assert.NotNull(data);
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 if (result.Success)
                 {
                     var data = result.Data;
-                    Assert.Null(data);
+                    Assert.NotNull(data);
                 }
                 else
                 {

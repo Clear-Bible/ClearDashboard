@@ -224,7 +224,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// 2) All of the tokens must originate from the same Paratext corpus;
         /// 3) All of the tokens must be contiguous in the corpus.
         /// </remarks>
-        public ParatextSendNoteInformation? ParatextSendNoteInformation { get; set; }
+        public ExternalSendNoteInformation? ParatextSendNoteInformation { get; set; }
 
         public void NoteSeenChanged()
         {
