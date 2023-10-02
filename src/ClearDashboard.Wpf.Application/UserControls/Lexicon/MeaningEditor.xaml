@@ -118,7 +118,6 @@
             <Popup
                 Name="ConfirmDeletePopup"
                 Grid.Column="2"
-                Width="200"
                 Placement="Left"
                 PlacementTarget="{Binding ElementName=DeleteMeaningButton}"
                 StaysOpen="False"
@@ -126,7 +125,7 @@
                 <Border BorderThickness="2">
                     <StackPanel
                         VerticalAlignment="Center"
-                        Background="LightGoldenrodYellow"
+                        Background="WhiteSmoke"
                         Orientation="Vertical">
                         <TextBlock
                             Padding="10"
@@ -136,8 +135,18 @@
                             Delete this meaning?
                         </TextBlock>
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <Button Margin="5" Click="DeleteMeaningConfirmed">Yes</Button>
-                            <Button Margin="5" Click="DeleteMeaningCancelled">No</Button>
+                            <Button
+                                Margin="5"
+                                Click="DeleteMeaningConfirmed"
+                                Style="{StaticResource TransparentStyle}">
+                                Yes
+                            </Button>
+                            <Button
+                                Margin="5"
+                                Click="DeleteMeaningCancelled"
+                                Style="{StaticResource AlternativeStyle}">
+                                No
+                            </Button>
                         </StackPanel>
                     </StackPanel>
                 </Border>

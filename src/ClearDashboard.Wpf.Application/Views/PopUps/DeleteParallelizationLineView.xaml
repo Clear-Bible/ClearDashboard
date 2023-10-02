@@ -146,27 +146,29 @@
                 Visibility="{Binding ProgressBarVisibility}" />
 
             <Button
-                x:Name="DeleteAll"
+                x:Name="Close"
                 Grid.Column="1"
+                Margin="5"
+                Content="{helpers:Localization Close}"
+                Style="{StaticResource AlternativeStyle}" />
+
+            <Button
+                x:Name="DeleteAll"
+                Grid.Column="2"
                 Margin="5"
                 Content="Delete All"
                 Style="{StaticResource TransparentStyle}" />
 
             <Button
                 x:Name="DeleteSelected"
-                Grid.Column="2"
+                Grid.Column="3"
                 Margin="5"
                 Content="Delete Selected"
                 IsEnabled="True"
                 Style="{StaticResource TransparentStyle}" />
 
 
-            <Button
-                x:Name="Close"
-                Grid.Column="3"
-                Margin="5"
-                Content="{helpers:Localization Close}"
-                Style="{StaticResource TransparentStyle}" />
+
         </Grid>
     </Grid>
 </Window>

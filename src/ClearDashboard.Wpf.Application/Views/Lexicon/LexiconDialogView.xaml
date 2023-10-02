@@ -22,7 +22,7 @@
             <RowDefinition Height="25" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="60" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="70" />
         </Grid.RowDefinitions>
 
         <Label
@@ -180,7 +180,7 @@
                 FontFamily="{DynamicResource MaterialDesignFont}"
                 FontSize="14"
                 IsEnabled="{Binding CancelEnabled}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
         </StackPanel>
         <ProgressBar
             Grid.Row="2"

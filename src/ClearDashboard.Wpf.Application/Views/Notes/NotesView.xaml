@@ -12,10 +12,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Notes"
+    xmlns:notes1="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:notes1="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     x:Name="NotesViewWindow"
     d:DataContext="{d:DesignInstance Type=notes:NotesViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -155,11 +155,12 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
+                                    Background="{StaticResource PrimaryHueDarkBrush}"
                                     Content="{helpers:Localization Notes_FilterStatus_Any}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Any}"
-                                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                                    Style="{StaticResource DashboardRadioButtonStyle}"/>
 
 
                                 <materialDesign:PackIcon
@@ -172,27 +173,29 @@
                                     Grid.Row="1"
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
+                                    Background="{StaticResource PrimaryHueDarkBrush}"
                                     Content="{helpers:Localization Notes_FilterStatus_Open}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Open}"
-                                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                                    Style="{StaticResource DashboardRadioButtonStyle}"/>
 
                                 <materialDesign:PackIcon
                                     Grid.Row="2"
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
-                                    Foreground="{StaticResource BlueDarkBrush}"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
                                     Kind="EmailOutline" />
                                 <RadioButton
                                     Grid.Row="2"
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
+                                    Background="{StaticResource PrimaryHueDarkBrush}"
                                     Content="{helpers:Localization Notes_FilterStatus_Closed}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Resolved}"
-                                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                                    Style="{StaticResource DashboardRadioButtonStyle}" />
                             </Grid>
                         </GroupBox>
 
@@ -328,7 +331,7 @@
                                 <materialDesign:PackIcon.Style>
                                     <Style TargetType="materialDesign:PackIcon">
                                         <Setter Property="Kind" Value="EmailOutline" />
-                                        <Setter Property="Foreground" Value="{StaticResource BlueDarkBrush}" />
+                                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
                                                 <Setter Property="Kind" Value="EmailOpenOutline" />
@@ -374,7 +377,6 @@
                                 Height="Auto"
                                 Margin="-8"
                                 VerticalAlignment="Center"
-                                FontFamily="pack://application:,,,/resources/#Ezra SIL SR"
                                 Text="{Binding Text}"
                                 TextWrapping="Wrap" />
                         </DataTemplate>
@@ -487,12 +489,12 @@
                         Orientation="Horizontal">
 
                         <RadioButton
+                            Style="{StaticResource DashboardRadioButtonStyle}"
                             Checked="RadioButton_Open_Checked"
                             Content="{helpers:Localization Notes_Note_NoteStatus_Open}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="{Binding NoteId}"
-                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
-                            Style="{StaticResource MaterialDesignLightRadioButton}" />
+                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"/>
                         <RadioButton
                             Margin="10,0,0,0"
                             Checked="RadioButton_Resolved_Checked"
@@ -500,7 +502,7 @@
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="{Binding NoteId}"
                             IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
-                            Style="{StaticResource MaterialDesignLightRadioButton}" />
+                            Style="{StaticResource DashboardRadioButtonStyle}"/>
                     </StackPanel>
                 </Border>
                 <GroupBox

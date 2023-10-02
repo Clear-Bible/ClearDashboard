@@ -25,9 +25,8 @@
             Height="100"
             Margin="15,50,5,0"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
     </Grid>

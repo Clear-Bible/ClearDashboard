@@ -33,13 +33,14 @@
                 x:Name="ClickUpdateLink"
                 Margin="10,0,10,0"
                 Padding="0"
+                Background="Transparent"
                 BorderThickness="0"
-                Click="ClickUpdateLink_OnClick"
-                Style="{StaticResource TransparentButton}">
+                Click="ClickUpdateLink_OnClick">
                 <TextBlock
                     Name="UpdateLink"
+                    Background="Transparent"
                     Cursor="Hand"
-                    Foreground="DodgerBlue"
+                    Foreground="{StaticResource HyperlinkHueBrush}"
                     Text="{helpers:Localization ShellView_UpdateFound}"
                     TextDecorations="Underline" />
             </Button>
@@ -54,7 +55,7 @@
                 <iconPacks:PackIconPixelartIcons
                     Width="20"
                     Height="20"
-                    Foreground="{StaticResource BlueMidBrush}"
+                    Foreground="{StaticResource PrimaryHueLightBrush}"
                     Kind="Notes" />
             </Button>
         </StackPanel>

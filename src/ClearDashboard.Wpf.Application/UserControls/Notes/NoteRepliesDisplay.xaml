@@ -7,9 +7,9 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
     <UserControl.Resources>

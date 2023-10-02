@@ -140,7 +140,7 @@
                                                 Width="18"
                                                 Height="18"
                                                 VerticalAlignment="Center"
-                                                Foreground="{StaticResource RedLightBrush}"
+                                                Foreground="{StaticResource ErrorHueBrush}"
                                                 Kind="Cancel" />
                                         </Button>
 
@@ -151,7 +151,7 @@
                                                 HorizontalAlignment="Left"
                                                 FontSize="12"
                                                 FontWeight="Bold"
-                                                Foreground="{StaticResource BlueMidBrush}"
+                                                Foreground="{StaticResource PrimaryHueMidBrush}"
                                                 Text="{Binding Name}" />
                                             <!--<Run Text="TASK: " />-->
                                             <!--  TASK DESCRIPTION  -->
@@ -166,7 +166,7 @@
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Failed}">
-                                                                <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
+                                                                <Setter Property="Foreground" Value="{StaticResource ErrorHueBrush}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>

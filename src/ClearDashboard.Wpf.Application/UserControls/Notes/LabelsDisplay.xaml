@@ -1,14 +1,14 @@
 <UserControl
     x:Class="ClearDashboard.Wpf.Application.UserControls.Notes.LabelsDisplay"
-    x:Name="LabelsDisplayControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:notes="clr-namespace:ClearDashboard.DAL.Alignment.Notes;assembly=ClearDashboard.DAL.Alignment"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    x:Name="LabelsDisplayControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
@@ -16,22 +16,21 @@
     <UserControl.Resources>
         <DataTemplate x:Key="LabelBoxTemplate" DataType="notes:Label">
             <Border
+                Margin="{Binding ElementName=LabelsDisplayControl, Path=LabelMargin}"
+                Padding="{Binding ElementName=LabelsDisplayControl, Path=LabelPadding}"
                 Background="{Binding ElementName=LabelsDisplayControl, Path=LabelBackground}"
                 BorderBrush="{Binding ElementName=LabelsDisplayControl, Path=BorderBrush}"
                 BorderThickness="{Binding ElementName=LabelsDisplayControl, Path=BorderThickness}"
-                CornerRadius="{Binding ElementName=LabelsDisplayControl, Path=LabelCornerRadius}"
-                Margin="{Binding ElementName=LabelsDisplayControl, Path=LabelMargin}"
-                Padding="{Binding ElementName=LabelsDisplayControl, Path=LabelPadding}">
+                CornerRadius="{Binding ElementName=LabelsDisplayControl, Path=LabelCornerRadius}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
+                        Width="{Binding ElementName=LabelsDisplayControl, Path=LabelWidth}"
                         FontFamily="{Binding ElementName=LabelsDisplayControl, Path=LabelFontFamily}"
                         FontSize="{Binding ElementName=LabelsDisplayControl, Path=LabelFontSize}"
                         FontStyle="{Binding ElementName=LabelsDisplayControl, Path=LabelFontStyle}"
                         FontWeight="{Binding ElementName=LabelsDisplayControl, Path=LabelFontWeight}"
                         Text="{Binding Path=Text}"
-                        TextWrapping="Wrap" 
-                        Width="{Binding ElementName=LabelsDisplayControl, Path=LabelWidth}"
-                        >
+                        TextWrapping="Wrap">
                         <TextBlock.ContextMenu>
                             <ContextMenu x:Name="LabelContextMenu">
                                 <MenuItem Click="OnEditLabelClicked" Header="{helpers:Localization Notes_LabelTextAttached}" />
@@ -40,14 +39,14 @@
                     </TextBlock>
                     <Button
                         Name="RemoveLabelButton"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        HorizontalContentAlignment="Right"
                         Height="22"
                         Margin="10,-4,0,0"
                         Padding="0,0,0,0"
-                        ToolTip="{helpers:Localization Notes_LabelRemove}"
-                        Click="OnRemoveLabel">
+                        HorizontalContentAlignment="Right"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="OnRemoveLabel"
+                        ToolTip="{helpers:Localization Notes_LabelRemove}">
                         <Image Height="18" Source="/Resources/close24.png" />
                     </Button>
                 </StackPanel>
@@ -63,36 +62,44 @@
             ItemTemplate="{StaticResource LabelBoxTemplate}"
             ItemsPanel="{StaticResource LabelsPanelTemplate}"
             ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Labels}" />
-        <Popup Grid.Row="0"
-               Name="EditLabelTextPopup"
-               Width="400"
-               Placement="Left"
-               StaysOpen="False"
-               VerticalOffset="30">
+        <Popup
+            Name="EditLabelTextPopup"
+            Grid.Row="0"
+            Width="400"
+            Placement="Left"
+            StaysOpen="False"
+            VerticalOffset="30">
             <Border BorderThickness="2">
-                <StackPanel Background="WhiteSmoke" Orientation="Vertical" VerticalAlignment="Center">
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Background="WhiteSmoke"
+                    Orientation="Vertical">
                     <TextBlock
                         Padding="5"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Text="{helpers:Localization Notes_LabelTextAttached}">
-                    </TextBlock>
+                        Text="{helpers:Localization Notes_LabelTextAttached}" />
                     <TextBlock
                         Padding="5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
                         FontWeight="Bold"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Text="{Binding ElementName=LabelsDisplayControl, Path=CurrentLabelText}">
-                    </TextBlock>
-                    <TextBox x:Name="LabelTemplateTextBox"
-                             AcceptsReturn="True" 
-                             Margin="10"
-                        TextWrapping="Wrap"
-                        Text="{Binding ElementName=LabelsDisplayControl, Path=CurrentLabelTemplate}">
-                    </TextBox>
+                        Text="{Binding ElementName=LabelsDisplayControl, Path=CurrentLabelText}" />
+                    <TextBox
+                        x:Name="LabelTemplateTextBox"
+                        Margin="10"
+                        AcceptsReturn="True"
+                        Text="{Binding ElementName=LabelsDisplayControl, Path=CurrentLabelTemplate}"
+                        TextWrapping="Wrap" />
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Button Margin="5,10,5,5" Click="OnEditLabelConfirmed" Content="{helpers:Localization Update}"/>
-                        <Button Margin="5,10,5,5" Click="OnEditLabelCancelled" Content="{helpers:Localization Cancel}"/>
+                        <Button
+                            Margin="5,10,5,5"
+                            Click="OnEditLabelConfirmed"
+                            Content="{helpers:Localization Update}" />
+                        <Button
+                            Margin="5,10,5,5"
+                            Click="OnEditLabelCancelled"
+                            Content="{helpers:Localization Cancel}" />
                     </StackPanel>
                 </StackPanel>
             </Border>

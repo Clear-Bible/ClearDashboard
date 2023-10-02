@@ -607,21 +607,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 BuildParatextProjectToBackTranslationConnector(paratextNode, paratextBackTranslationNode);
             }
 
-            // If selected, build Macula Greek and Macula Hebrew nodes and associated connectors
-            if (ParentViewModel!.IncludeOtBiblicalTexts)
+            if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks && ParentViewModel!.IncludeOtBiblicalTexts)
             {
+                var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode(GetNextPoint(ref index));
+                BuildParatextProjectToMaculaHebrewConnector(paratextNode, manuscriptHebrewNode);
+            }
 
-                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks)
-                {
-                    var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode(GetNextPoint(ref index));
-                    BuildParatextProjectToMaculaHebrewConnector(paratextNode, manuscriptHebrewNode);
-                }
-
-                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks)
-                {
-                    var manuscriptGreekNode = BuildMaculaGreekCorpusNode(GetNextPoint(ref index));
-                    BuildParatextProjectToMaculaGreekConnector(paratextNode, manuscriptGreekNode);
-                }
+            if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks && ParentViewModel!.IncludeNtBiblicalTexts)
+            {
+                var manuscriptGreekNode = BuildMaculaGreekCorpusNode(GetNextPoint(ref index));
+                BuildParatextProjectToMaculaGreekConnector(paratextNode, manuscriptGreekNode);
             }
             await Task.CompletedTask;
         }

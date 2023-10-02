@@ -89,9 +89,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             {
                 _isAlignmentEditingEnabled = value;
                 NotifyOfPropertyChange(() => IsAlignmentEditingEnabled);
+
+                IsAlignmentEditingSettingChanged =_isAlignmentEditingEnabledInitial != _isAlignmentEditingEnabled;
             }
         }
 
+        private bool _isAlignmentEditingEnabledInitial;
+
+        private bool _isAlignmentEditingSettingChanged;
+        public bool IsAlignmentEditingSettingChanged
+        {
+            get => _isAlignmentEditingSettingChanged;
+            set
+            {
+                _isAlignmentEditingSettingChanged = value;
+                NotifyOfPropertyChange(() => IsAlignmentEditingSettingChanged);
+            }
+        }
 
         private bool _runAquaInstall;
         public bool RunAquaInstall
@@ -377,6 +391,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             ThirdMonitor = Settings.Default.ThirdMonitor;
 
             IsAlignmentEditingEnabled = AbstractionsSettingsHelper.GetEnabledAlignmentEditing();
+            _isAlignmentEditingEnabledInitial = IsAlignmentEditingEnabled;
+            IsAlignmentEditingSettingChanged =  _isAlignmentEditingEnabledInitial != IsAlignmentEditingEnabled;
 
 
             base.OnViewReady(view);

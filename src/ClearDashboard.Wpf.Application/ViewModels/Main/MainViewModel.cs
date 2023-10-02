@@ -1387,8 +1387,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // New
+                        new() { Header = _localizationService!.Get("MainView_QuickNew"), Id = MenuIds.FileQuickNew, ViewModel = this, IsEnabled = true },
                         new() { Header =_localizationService!.Get("MainView_FileNew"), Id = MenuIds.FileNew, ViewModel = this, IsEnabled = true },
                         new() { Header = _localizationService!.Get("MainView_FileOpen"), Id = MenuIds.FileOpen, ViewModel = this, IsEnabled = true }
+                        
                     }
                 },
                 new()
@@ -2189,6 +2191,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             break;
                         }
 
+                    case MenuIds.FileQuickNew:
+                    {
+                        await ShowStartupDialog(menuItem);
+                        break;
+                    }
                     case MenuIds.FileNew:
                         {
                             await ShowStartupDialog(menuItem);
@@ -2225,6 +2232,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (menuItem.Id == MenuIds.FileNew)
             {
                 StartupDialogViewModel.GoToSetup = true;
+            }
+
+            if (menuItem.Id == MenuIds.FileQuickNew)
+            {
+                StartupDialogViewModel.GoToTemplate = true;
             }
 
             var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();

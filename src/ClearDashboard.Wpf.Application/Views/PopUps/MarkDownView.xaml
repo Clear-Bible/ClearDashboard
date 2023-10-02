@@ -93,6 +93,6 @@
             HorizontalAlignment="Right"
             cm:Message.Attach="Close"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource AlternativeStyle}" />
     </Grid>
 </Window>

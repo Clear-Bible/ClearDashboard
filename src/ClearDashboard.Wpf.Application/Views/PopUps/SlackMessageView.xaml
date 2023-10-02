@@ -288,11 +288,11 @@
                             Grid.Column="1"
                             Margin="5,5,5,5"
                             HorizontalAlignment="Left"
-                            BorderThickness="0"
-                            Style="{StaticResource TransparentStyle}">
+                            Background="Transparent"
+                            BorderThickness="0">
                             <TextBlock
                                 Cursor="Hand"
-                                Foreground="DodgerBlue"
+                                Foreground="{StaticResource HyperlinkHueBrush}"
                                 Text="{helpers:Localization SlackMessageView_SuggestionMarkdown}"
                                 TextDecorations="Underline" />
                         </Button>

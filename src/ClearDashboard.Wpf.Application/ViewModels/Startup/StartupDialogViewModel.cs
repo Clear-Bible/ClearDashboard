@@ -27,6 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public bool MimicParatextConnection { get; set; }
         public static bool InitialStartup = true;
         public static bool GoToSetup = false;
+        public static bool GoToTemplate = false;
         public string Version { get; set; }
 
         #endregion //Member Variables
@@ -164,6 +165,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 CurrentStep = Steps![2];
                 GoToSetup = false;
+            }
+            if (GoToTemplate)
+            {
+                CurrentStep = Steps![3];
+                GoToTemplate = false;
             }
             else
             {

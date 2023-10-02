@@ -20,6 +20,7 @@
                                      IsDesignTimeCreatable=True}"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
+    Style="{DynamicResource CustomWindowStyle}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -72,6 +73,30 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="CustomWindowStyle" TargetType="{x:Type Window}">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome
+                        CaptionHeight="30"
+                        CornerRadius="2"
+                        GlassFrameThickness="5,30,5,5"
+                        NonClientFrameEdges="None"
+                        ResizeBorderThickness="5"
+                        UseAeroCaptionButtons="True" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <AdornerDecorator>
+                            <ContentPresenter />
+                        </AdornerDecorator>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="Background" Value="Gray" />
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -96,7 +121,7 @@
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     FontSize="30"
-                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                    Foreground="{StaticResource PrimaryHueMidBrush}"
                     Style="{DynamicResource MaterialDesignHeadline6TextBlock}">
                     Generate License Key for Dashboard / Collab
                 </TextBlock>
@@ -385,7 +410,7 @@
                                 <TextBlock
                                     Name="DecryptedFirstNameBlock"
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Decrypted First Name" />
                                 <Button Name="CopyDecryptedFirstName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -404,7 +429,7 @@
                                 <TextBlock
                                     Name="DecryptedLastNameBlock"
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Decrypted Last Name" />
                                 <Button Name="CopyDecryptedLastName" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -423,7 +448,7 @@
                                 <TextBlock
                                     Name="DecryptedGuidBlock"
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Decrypted User Id" />
                                 <Button Name="CopyDecryptedGuid" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -443,7 +468,7 @@
                                 Margin="10,20,0,0"
                                 Content="User is Internal"
                                 FontSize="20"
-                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Foreground="{StaticResource PrimaryHueMidBrush}"
                                 IsChecked="{Binding DashboardUser.IsInternal}"
                                 IsEnabled="False" />
 
@@ -451,7 +476,7 @@
                                 <TextBlock
                                     Name="DecryptedLicenseVersionBlock"
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Decrypted License Version" />
                                 <Button Name="CopyDecryptedLicenseVersion" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -477,7 +502,7 @@
                                 <TextBlock
                                     Name="DecryptedCollabConfigBlock"
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Decrypted Collab Config" />
                                 <Button Name="CopyDecryptedCollabConfig" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -559,7 +584,7 @@
                                 Margin="10"
                                 cm:Message.Attach="[Event Checked] = [Action ByEmailRadio_OnCheck]"
                                 Content="By Email"
-                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Foreground="{StaticResource PrimaryHueMidBrush}"
                                 GroupName="FetchByRadios"
                                 IsChecked="{Binding EmailChecked}" />
                             <RadioButton
@@ -567,7 +592,7 @@
                                 Margin="10"
                                 cm:Message.Attach="[Event Checked] = [Action ByIdRadio_OnCheck]"
                                 Content="By Id"
-                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Foreground="{StaticResource PrimaryHueMidBrush}"
                                 GroupName="FetchByRadios"
                                 IsChecked="{Binding IdChecked}" />
 
@@ -633,7 +658,7 @@
                                 <TextBlock
                                     Name="FetchedEmailBlock"
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Fetched Email" />
                                 <Button Name="CopyFetchedEmail" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -652,7 +677,7 @@
                             <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
                                 <TextBlock
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Combined License" />
                                 <Button x:Name="CombinedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -673,7 +698,7 @@
                                 <TextBlock
                                     Name="FetchedLicenseBlock"
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Fetched Dashboard License" />
                                 <Button Name="CopyFetchedLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -692,7 +717,7 @@
                             <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
                                 <TextBlock
                                     Margin="10"
-                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                     Text="Fetched GitLab License" />
                                 <Button Name="CopyFetchedGitLabLicense" cm:Message.Attach="[Event Click] = [Action Copy_OnClick($source)]">
                                     <materialDesign:PackIcon Kind="ContentCopy" />
@@ -747,7 +772,7 @@
 
                             <TextBlock
                                 Margin="10,30,10,10"
-                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Foreground="{StaticResource PrimaryHueMidBrush}"
                                 Text="Email" />
                             <TextBox
                                 MinWidth="300"
@@ -837,7 +862,7 @@
                                 Width="16"
                                 Height="16"
                                 HorizontalAlignment="Center"
-                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Foreground="{StaticResource PrimaryHueMidBrush}"
                                 Kind="AccountGroup" />
 
                         </Grid>
@@ -1094,7 +1119,7 @@
                                 Width="16"
                                 Height="16"
                                 HorizontalAlignment="Center"
-                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Foreground="{StaticResource PrimaryHueMidBrush}"
                                 Kind="Gitlab" />
                         </Grid>
 
@@ -1277,7 +1302,7 @@
                                 Width="16"
                                 Height="16"
                                 HorizontalAlignment="Center"
-                                Foreground="{StaticResource PrimaryHueLightBrush}"
+                                Foreground="{StaticResource PrimaryHueMidBrush}"
                                 Kind="Gitlab" />
                         </Grid>
 

@@ -80,7 +80,7 @@
                                         MaxHeight="40"
                                         Margin="10"
                                         FontSize="16"
-                                        Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                        Foreground="{DynamicResource ErrorHueBrush}"
                                         Text="{Binding [0].ErrorContent}"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
@@ -133,7 +133,7 @@
                         <materialDesign:PackIcon
                             Width="36"
                             Height="36"
-                            Foreground="{StaticResource BlueMidBrush}"
+                            Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Kind="CloseBox" />
                     </Button>
                 </StackPanel>
@@ -182,7 +182,7 @@
                         <materialDesign:PackIcon
                             Width="36"
                             Height="36"
-                            Foreground="{StaticResource BlueMidBrush}"
+                            Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Kind="CloseBox" />
                     </Button>
                 </StackPanel>
@@ -231,7 +231,7 @@
                         <materialDesign:PackIcon
                             Width="36"
                             Height="36"
-                            Foreground="{StaticResource BlueMidBrush}"
+                            Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Kind="CloseBox" />
                     </Button>
                 </StackPanel>
@@ -281,7 +281,7 @@
                 cal:Message.Attach="MoveBackwards"
                 Content="{helpers:Localization Back}"
                 IsEnabled="{Binding CanMoveBackwards}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
             <Button
                 x:Name="MoveForwards"
                 Margin="0,0,15,15"
