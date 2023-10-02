@@ -270,7 +270,6 @@
                     <Grid
                         Grid.Row="3"
                         Grid.Column="0"
-
                         Grid.ColumnSpan="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -289,8 +288,8 @@
                             Grid.Column="1"
                             Margin="5,5,5,5"
                             HorizontalAlignment="Left"
-                            BorderThickness="0"
-                            Style="{StaticResource TransparentStyle}">
+                            Background="Transparent"
+                            BorderThickness="0">
                             <TextBlock
                                 Cursor="Hand"
                                 Foreground="{StaticResource HyperlinkHueBrush}"

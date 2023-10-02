@@ -33,10 +33,12 @@
                 x:Name="ClickUpdateLink"
                 Margin="10,0,10,0"
                 Padding="0"
+                Background="Transparent"
                 BorderThickness="0"
                 Click="ClickUpdateLink_OnClick">
                 <TextBlock
                     Name="UpdateLink"
+                    Background="Transparent"
                     Cursor="Hand"
                     Foreground="{StaticResource HyperlinkHueBrush}"
                     Text="{helpers:Localization ShellView_UpdateFound}"
