@@ -793,10 +793,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
 
-                if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
-                {
-                    UpdateVerseSelection(args.TokenDisplay, true);
-                }
+                //if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
+                //{
+                //    UpdateVerseSelection(args.TokenDisplay, true);
+                //}
             }
 
             RaiseTokenEvent(TokenMouseEnterEvent, e);
