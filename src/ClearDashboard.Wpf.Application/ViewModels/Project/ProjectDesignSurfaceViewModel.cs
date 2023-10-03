@@ -350,7 +350,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if (designSurfaceData != null)
                 {
                     bool currentParatextProjectPresent = false;
-                    bool standardCorporaPresent = false;
+                    bool projectCorporaPresent = false;
 
                     foreach (var corpusId in topLevelProjectIds.CorpusIds.OrderBy(c => c.Created))
                     {
@@ -370,6 +370,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ? new Point(corpusNodeLocation.X, corpusNodeLocation.Y)
                             : new Point();
 
+                        if (corpus.CorpusId.CorpusType == CorpusType.BackTranslation.ToString() ||
+                            corpus.CorpusId.CorpusType == CorpusType.Auxiliary.ToString())
+                        {
+                            projectCorporaPresent = true;
+                        }
+
                         // check to see if this is a resource and not a Standard
                         if (corpus.CorpusId.CorpusType == CorpusType.Standard.ToString())
                         {
@@ -380,14 +386,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
                             else
                             {
-                                standardCorporaPresent = true;
-                                if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
-                                {
-                                    currentParatextProjectPresent = true;
-                                }
+                                projectCorporaPresent = true;
                             }
                         }
-                        
+
+                        if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
+                        {
+                            currentParatextProjectPresent = true;
+                        }
+
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
                         var tokenizedCorpora =
                             topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
@@ -395,7 +402,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
 
-                    if (standardCorporaPresent  && !currentParatextProjectPresent)
+                    if (projectCorporaPresent  && !currentParatextProjectPresent)
                     {
                         var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
 
