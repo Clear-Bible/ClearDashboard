@@ -371,6 +371,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             : new Point();
 
                         if (corpus.CorpusId.CorpusType == CorpusType.BackTranslation.ToString() ||
+                            corpus.CorpusId.CorpusType == CorpusType.Daughter.ToString() ||
+                            corpus.CorpusId.CorpusType == CorpusType.TransliterationManual.ToString() ||
+                            corpus.CorpusId.CorpusType == CorpusType.TransliterationWithEncoder.ToString() ||
                             corpus.CorpusId.CorpusType == CorpusType.Auxiliary.ToString())
                         {
                             projectCorporaPresent = true;
