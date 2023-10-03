@@ -25,7 +25,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             { "aramaic", "Official Aramaic" }
         };
 
-        private readonly LanguageLookup _lookup = new();
+        private readonly LanguageLookup _lookup;
         private readonly Dictionary<string, LanguageInfo> _suggestLanguagesCache = new();
 
         private readonly Func<string, ParatextProjectMetadata> _getParatextProjectMetadata;
@@ -42,6 +42,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             _logger = logger;
             _getParatextProjectMetadata = getParatextProjectMetadata;
             _paratextAppPath = paratextAppPath;
+
+            if (Sldr.IsInitialized)
+            {
+                Sldr.Cleanup();
+            }
+            Sldr.Initialize();
+            _lookup = new();
         }
 
         private LanguageInfo? SuggestLanguage(string searchString)
@@ -68,7 +75,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             var paratextProjectMetadata = _getParatextProjectMetadata(projectId);
 
             // 1.  [currentParatextProjectPath]\Lexicon.xml (if there is a Paratext project loaded)
-            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null)
+            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null && File.Exists(Path.Combine(paratextProjectMetadata.ProjectPath, "Lexicon.xml")))
             {
                 LoadIntoLexiconModel(
                     lexiconModel,
@@ -86,7 +93,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             var biblicalTermsDirectory = Path.Combine(_paratextAppPath, "Terms", "Lists");
             var biblicalTermsById = new Dictionary<string, BiblicalTermFileModel>();
 
-            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null)
+            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null && File.Exists(Path.Combine(paratextProjectMetadata.ProjectPath, "ProjectBiblicalTerms.xml")))
             {
                 LoadIntoLexiconModel(
                     lexiconModel,
@@ -108,9 +115,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
             //
             // Each TermRendering is related to a BiblicalTerm by TermRendering.Id == BiblicalTerm.Id
             // Determine language of each by finding related BiblicalTerm
-            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null)
+            if (paratextProjectMetadata != null && paratextProjectMetadata.ProjectPath != null && File.Exists(Path.Combine(paratextProjectMetadata.ProjectPath, "TermRenderings.xml")))
             {
-                var lookup = new LanguageLookup();
                 var projectLanguageInfo = SuggestLanguage(paratextProjectMetadata.LanguageName);
 
                 if (projectLanguageInfo is not null)
@@ -120,7 +126,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                         biblicalTermsById,
                         projectLanguageInfo.LanguageTag,
                         LoadIntoFileModel<TermRenderingsListFileModel>(Path.Combine(paratextProjectMetadata.ProjectPath, "TermRenderings.xml")));
-
                 }
                 else
                 {
@@ -133,9 +138,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 
         protected void LoadIntoLexiconModel(Lexicon_Lexicon lexiconModel, LexiconFileModel lexiconFileModel)
         {
-            var lookup = new LanguageLookup();
-
-            var lexiconLanguageInfo = lookup.GetLanguageFromCode(lexiconFileModel.Language);
+            var lexiconLanguageInfo = _lookup.GetLanguageFromCode(lexiconFileModel.Language);
             if (lexiconLanguageInfo is null)
             {
                 _logger.LogWarning($"Unable to load Lexicon file data into Lexicon model due to GetLanguageNameFromCode returning null for language: '{lexiconFileModel.Language}'");
@@ -154,7 +157,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 
                 foreach (var sense in item.Entry.Sense)
                 {
-                    var senseLanguageInfo = lookup.GetLanguageFromCode(sense.Gloss.Language);
+                    var senseLanguageInfo = _lookup.GetLanguageFromCode(sense.Gloss.Language);
                     if (senseLanguageInfo is null)
                     {
                         _logger.LogInformation($"Unable to load Lexicon file sense/meaning entry into Lexicon model due to GetLanguageNameFromCode returning null for language: '{sense.Gloss.Language}'");
