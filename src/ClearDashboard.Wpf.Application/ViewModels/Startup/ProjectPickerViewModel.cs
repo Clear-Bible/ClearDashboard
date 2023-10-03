@@ -822,7 +822,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await SetGitLabUpdateNeeded(projectsToAdd);
 
             DashboardProjects.AddRange(projectsToAdd);
-            DashboardProjects.Sort();
+            DashboardProjects.Sort((x, y)  => string.Compare(x.ProjectName, y.ProjectName));
 
             _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
 
