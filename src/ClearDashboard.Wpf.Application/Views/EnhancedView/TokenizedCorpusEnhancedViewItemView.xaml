@@ -1,16 +1,18 @@
-﻿<UserControl x:Class="ClearDashboard.Wpf.Application.Views.EnhancedView.TokenizedCorpusEnhancedViewItemView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-             xmlns:cm="http://caliburnmicro.com"
-             xmlns:input="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
-             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.Views.EnhancedView.TokenizedCorpusEnhancedViewItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:input="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
 
@@ -146,9 +148,8 @@
             Height="75"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
     </Grid>

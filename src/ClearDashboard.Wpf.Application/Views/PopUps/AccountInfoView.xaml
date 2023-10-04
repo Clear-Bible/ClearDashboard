@@ -58,6 +58,6 @@
             Height="40"
             Margin="3,0,3,5"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource AlternativeStyle}" />
     </Grid>
 </Window>

@@ -60,7 +60,7 @@
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>

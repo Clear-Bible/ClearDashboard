@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.Views.Lexicon"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
@@ -20,7 +21,6 @@
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.Views.Lexicon"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -86,7 +86,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type models:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                     <TextBlock
                         VerticalAlignment="Center"
-                        Foreground="{StaticResource PrimaryHueMidBrush}"
+                        Foreground="{StaticResource MenuTextHueBrush}"
                         Text="{Binding Header}" />
                 </HierarchicalDataTemplate>
             </Menu.ItemTemplate>
@@ -304,7 +304,7 @@
                         Padding="0"
                         HorizontalAlignment="Right"
                         cm:Message.Attach="CancelSave"
-                        Style="{StaticResource RedMidButton}">
+                        Style="{StaticResource MaterialDesignRaisedErrorButton}">
                         <materialDesign:PackIcon
                             Width="32"
                             Height="32"
@@ -373,7 +373,7 @@
                                         Width="20"
                                         Height="20"
                                         Cursor="Hand"
-                                        Foreground="Red"
+                                        Foreground="{StaticResource ErrorHueBrush}"
                                         IsHitTestVisible="False"
                                         Kind="DeleteForever" />
                                 </Button>
@@ -405,7 +405,7 @@
                         x:Name="CancelDelete"
                         Padding="0"
                         HorizontalAlignment="Center"
-                        Style="{StaticResource RedMidButton}">
+                        Style="{StaticResource MaterialDesignRaisedErrorButton}">
                         <materialDesign:PackIcon
                             Width="32"
                             Height="32"

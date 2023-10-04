@@ -105,7 +105,7 @@
                                 Margin="0"
                                 HorizontalAlignment="Left"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -138,7 +138,7 @@
                                 Margin="0"
                                 HorizontalAlignment="Left"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -172,7 +172,7 @@
                                 Margin="0"
                                 HorizontalAlignment="Left"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -196,7 +196,7 @@
             materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LicenseKey}"
             materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
             FontSize="16"
-            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+            Foreground="{DynamicResource ErrorHueBrush}"
             TextWrapping="Wrap" />
 
         <Button

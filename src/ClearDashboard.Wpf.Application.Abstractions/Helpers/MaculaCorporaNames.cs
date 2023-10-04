@@ -2,7 +2,7 @@
 {
     public static class MaculaCorporaNames
     {
-        public static string GreekCorpusName = "Greek (NT) Macula";
-        public static string HebrewCorpusName = "Hebrew (OT) Macula";
+        public static string GreekCorpusName = "Greek (NT) MACULA";
+        public static string HebrewCorpusName = "Hebrew (OT) MACULA";
     }
 }

@@ -650,6 +650,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the FilterPinsTargetEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent FilterPinsTargetEvent = EventManager.RegisterRoutedEvent
+            ("FilterPinsTarget", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the FilterPinsByBiblicalTermsEvent routed event.
         /// </summary>
         public static readonly RoutedEvent FilterPinsByBiblicalTermsEvent = EventManager.RegisterRoutedEvent
@@ -1057,6 +1063,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             add => AddHandler(FilterPinsEvent, value);
             remove => RemoveHandler(FilterPinsEvent, value);
         }
+
+        /// <summary>
+        /// Occurs when the user requests to filter pins.
+        /// </summary>
+        public event RoutedEventHandler FilterPinsTarget
+        {
+            add => AddHandler(FilterPinsTargetEvent, value);
+            remove => RemoveHandler(FilterPinsTargetEvent, value);
+        }
+
         /// <summary>
         /// Occurs when the user requests to filter pins by biblical terms.
         /// </summary>
@@ -1423,6 +1439,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
+            //2
             var control = e.Source as FrameworkElement;
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new NoteEventArgs
@@ -1499,7 +1516,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnFilterPins(object sender, RoutedEventArgs e)
         {
+            //1
             RaiseNoteEvent(FilterPinsEvent, e);
+        }
+
+        private void OnFilterPinsTarget(object sender, RoutedEventArgs e)
+        {
+            //1
+            RaiseNoteEvent(FilterPinsTargetEvent, e);
         }
 
         private void OnFilterPinsByBiblicalTerms(object sender, RoutedEventArgs e)

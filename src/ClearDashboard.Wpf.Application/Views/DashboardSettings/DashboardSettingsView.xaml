@@ -109,13 +109,13 @@
                         <CheckBox
                             cm:Message.Attach="AquaEnabledCheckBox($datacontext)"
                             Content="{helpers:Localization Settings_AquaEnabled}"
-                            Foreground="{StaticResource OrangeDarkBrush}"
+                            Foreground="{StaticResource AccentHueBrush}"
                             IsChecked="{Binding IsAquaEnabled}" />
                     </GroupBox>
                     <TextBlock
                         Margin="16"
                         FontWeight="Medium"
-                        Foreground="Red"
+                        Foreground="{StaticResource ErrorHueBrush}"
                         Text="Please restart ClearDashboard for AQUA to be be enabled/disabled."
                         Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </StackPanel>
@@ -426,13 +426,18 @@
                         <CheckBox
                             cm:Message.Attach="EnableAlignmentEditing($datacontext)"
                             Content="{helpers:Localization Settings_EnableAlignmentEditing}"
-                            Foreground="{StaticResource OrangeDarkBrush}"
+                            Foreground="{StaticResource AccentHueBrush}"
                             IsChecked="{Binding IsAlignmentEditingEnabled}" />
                     </GroupBox>
                     <TextBlock
                         Margin="16"
                         FontWeight="Medium"
-                        Foreground="Red"
+                        Text="Please restart ClearDashboard for Alignment Editing to be enabled/disabled"
+                        Visibility="{Binding IsAlignmentEditingSettingChanged, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <TextBlock
+                        Margin="16"
+                        FontWeight="Medium"
+                        Foreground="{StaticResource ErrorHueBrush}"
                         Text="Please restart ClearDashboard for AQUA to be be enabled/disabled."
                         Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </StackPanel>
@@ -446,7 +451,7 @@
             Margin="10"
             HorizontalAlignment="Right"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource AlternativeStyle}" />
 
     </Grid>
 </Window>

@@ -51,7 +51,7 @@
                 Margin="5,10"
                 Content="{Binding CancelLabel}"
                 IsDefault="false"
-                Style="{StaticResource TransparentStyle}"
+                Style="{StaticResource AlternativeStyle}"
                 Visibility="{Binding CancelVisibility}" />
         </StackPanel>
     </Grid>

@@ -75,7 +75,7 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    
+
     <TabControl Margin="5" HorizontalContentAlignment="Left">
         <TabItem Header="Import">
             <Grid>

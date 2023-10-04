@@ -298,7 +298,7 @@
                                                 <Setter Property="Foreground" Value="Black" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IconKind}" Value="Cancel">
-                                                        <Setter Property="Foreground" Value="Red" />
+                                                        <Setter Property="Foreground" Value="{StaticResource ErrorHueBrush}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -307,14 +307,15 @@
                                     <TextBlock
                                         Margin="5,5,0,0"
                                         VerticalAlignment="Center"
+                                        Foreground="{StaticResource MenuTextHueBrush}"
                                         IsEnabled="{Binding IsEnabled}"
                                         Text="{Binding Header}">
                                         <TextBlock.Style>
                                             <Style BasedOn="{StaticResource MahApps.Styles.TextBlock}" TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                                <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />-->
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsEnabled}" Value="False">
-                                                        <Setter Property="Foreground" Value="{DynamicResource RedDarkBrush}" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource ErrorHueBrush}" />
                                                         <Setter Property="TextDecorations" Value="Strikethrough" />
                                                     </DataTrigger>
                                                 </Style.Triggers>

@@ -53,7 +53,7 @@
                 Content="{helpers:Localization Back}"
                 FontSize="12"
                 IsEnabled="{Binding CanMoveBackwards}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
             <Button
                 x:Name="MoveForwards"
                 Width="90"
@@ -73,9 +73,8 @@
             Height="75"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressIndicatorVisibility}"
             Value="0" />
     </Grid>

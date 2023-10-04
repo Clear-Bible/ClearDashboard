@@ -422,7 +422,7 @@
                                     Grid.Row="1"
                                     Grid.Column="1"
                                     Cursor="Hand"
-                                    Foreground="Blue"
+                                    Foreground="{StaticResource HyperlinkHueBrush}"
                                     Text="{Binding Email}"
                                     TextDecorations="Underline" />
 
@@ -484,7 +484,7 @@
                         Height="32"
                         HorizontalAlignment="Center"
                         Kind="DeleteCircleOutline" />
-                    <TextBlock Grid.Row="1" Text="Delete Project Collaboration" />
+                    <TextBlock Grid.Row="1" Text="{helpers:Localization CollabProjectManagementView_Delete}" />
                 </Grid>
             </Button>
         </StackPanel>
@@ -496,10 +496,9 @@
             x:Name="Close"
             Grid.Row="3"
             Grid.Column="2"
-            Width="200"
             Margin="5"
             HorizontalAlignment="Right"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource AlternativeStyle}" />
     </Grid>
 </Window>

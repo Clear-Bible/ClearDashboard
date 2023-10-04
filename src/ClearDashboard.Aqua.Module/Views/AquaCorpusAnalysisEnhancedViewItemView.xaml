@@ -90,7 +90,7 @@
                     IsChecked="{Binding Path=Visualization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AquaVisualizationToBooleanConverter}, ConverterParameter=CartesianChart}"
                     Visibility="{Binding Path=TypeAnalysis, Mode=OneWay, Converter={StaticResource AquaTypeHasVisualizationVisibilityConverter}, ConverterParameter=CartesianChart}"
                     IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                    Style="{StaticResource DashboardRadioButtonStyle}" />
                 <RadioButton
                     Content="{helpers:Localization Aqua_EnhancedView_VisualizationSelection_BarChart}"
                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
@@ -98,7 +98,7 @@
                     IsChecked="{Binding Path=Visualization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AquaVisualizationToBooleanConverter}, ConverterParameter=BarChart}"
                     Visibility="{Binding Path=TypeAnalysis, Mode=OneWay, Converter={StaticResource AquaTypeHasVisualizationVisibilityConverter}, ConverterParameter=BarChart}"
                     IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                    Style="{StaticResource DashboardRadioButtonStyle}"/>
                 <RadioButton
                     Content="{helpers:Localization Aqua_EnhancedView_VisualizationSelection_MissingWords}"
                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
@@ -106,7 +106,7 @@
                     IsChecked="{Binding Path=Visualization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AquaVisualizationToBooleanConverter}, ConverterParameter=MissingWords}"
                     Visibility="{Binding Path=TypeAnalysis, Mode=OneWay, Converter={StaticResource AquaTypeHasVisualizationVisibilityConverter}, ConverterParameter=MissingWords}"
                     IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                    Style="{StaticResource DashboardRadioButtonStyle}" />
                 <RadioButton
                     Content="{helpers:Localization Aqua_EnhancedView_VisualizationSelection_HeatMap}"
                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
@@ -114,7 +114,7 @@
                     IsChecked="{Binding Path=Visualization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AquaVisualizationToBooleanConverter}, ConverterParameter=HeatMap}"
                     Visibility="{Binding Path=TypeAnalysis, Mode=OneWay, Converter={StaticResource AquaTypeHasVisualizationVisibilityConverter}, ConverterParameter=HeatMap}"
                     IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                    Style="{StaticResource DashboardRadioButtonStyle}" />
             </StackPanel>
 
             <lvc:CartesianChart

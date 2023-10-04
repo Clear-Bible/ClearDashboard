@@ -190,6 +190,10 @@
                         Click="OnCreateNote"
                         Header="{helpers:Localization EnhancedView_CreateNote}"
                         Visibility="Collapsed" />
+                    <MenuItem
+                        Click="OnFilterPinsTarget"
+                        Header="{helpers:Localization EnhancedView_FilterPins}"
+                        Visibility="Visible" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />

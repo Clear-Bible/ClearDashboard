@@ -288,11 +288,11 @@
 
         <!--  SYNC BUTTON  -->
         <ToggleButton
-            x:Name="Toogle"
+            x:Name="Toggle"
             Grid.Row="1"
             Grid.Column="0"
             IsChecked="{Binding ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+            Style="{StaticResource DashboardToggleStyle}" />
 
         <!--  BOOK LEFT ARROW  -->
         <Button

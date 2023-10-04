@@ -61,6 +61,7 @@
             <RadioButton
                 x:Name="NewTranslationCheckBox"
                 Grid.Column="0"
+                Style="{StaticResource DashboardRadioButtonStyle}"
                 VerticalAlignment="Center"
                 Checked="OnNewTranslationChecked"
                 GroupName="SelectedTransaction"
