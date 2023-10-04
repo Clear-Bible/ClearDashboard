@@ -17,7 +17,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>

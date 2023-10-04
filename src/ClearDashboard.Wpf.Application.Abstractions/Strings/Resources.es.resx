@@ -659,7 +659,7 @@
     <value>Token dividido</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplicar la división a otros casos de token:</value>
+    <value>Aplicar la división a otros casos de token</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Seleccione dónde dividir el token:</value>
@@ -668,7 +668,7 @@
     <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unión a la token compuesta</value>
+    <value>Un si unir un token compuesto</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -824,7 +824,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregar un significado para este lema</value>
+    <value>Agregue un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -1532,7 +1532,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcule el nuevo modelo de traducción</value>
+    <value>Calcular el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -1766,7 +1766,7 @@
     <value>Marque esta casilla para incluir los textos bíblicos griegos y hebreos al crear su proyecto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>¿Incluir textos bíblicos de NT Greel?</value>
+    <value>¿Incluir textos bíblicos griegos de NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>¿Incluir textos bíblicos hebreos?</value>
@@ -1934,7 +1934,7 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Gálate</value>
+    <value>Gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>

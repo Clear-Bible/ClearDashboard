@@ -335,7 +335,7 @@
     <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Înțelepciune, înțelegere</value>
+    <value>înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -650,7 +650,7 @@
     <value>Nu există date de versuri în acest game de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Îndepărtați corpusul</value>
+    <value>Eliminați corpusul</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Afișați controalele de vizualizare</value>
@@ -659,7 +659,7 @@
     <value>Jeton împărțit</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplicați despărțiți în alte cazuri de jeton:</value>
+    <value>Aplicați despărțiți în alte cazuri de jeton</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Selectați unde să împărțiți token:</value>
@@ -986,7 +986,7 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvânt țintă</value>
+    <value>Cuvântul țintă</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
     <value>Import de lexic</value>
@@ -1175,7 +1175,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Simțul versetului</value>
+    <value>Sense verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1484,7 +1484,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
+    <value>ALIGNER WORD MASINE DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1574,7 +1574,7 @@
     <value>Afișați informații despre acest proiect</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Macula greacă (NT)</value>
+    <value>Greacă (NT) macula</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Ebraică (OT) macula</value>
@@ -1694,7 +1694,7 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Arată backtranslație</value>
+    <value>Afișați backtranslația</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Tulpină</value>
@@ -1760,16 +1760,16 @@
     <value>Incepe</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Proiect de import server</value>
+    <value>Import proiect de server</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Verificați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Includeți texte biblice NT Greel?</value>
+    <value>Includeți textele biblice grecești NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Includeți texte biblice ebraice?</value>
+    <value>Includeți textele biblice ebraice?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gestionați proiectele de colaborare</value>
@@ -1817,7 +1817,7 @@
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Expert de șablon de proiect</value>
+    <value>Vrăjitor de șablon de proiect</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
     <value>Proiect de șablon vrăjitor: {0}</value>
@@ -2249,7 +2249,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Suportă formatul Markdown</value>
+    <value>Acceptă formatul de marcare</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>

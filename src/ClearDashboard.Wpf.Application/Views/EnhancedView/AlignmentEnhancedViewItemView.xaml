@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
              xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
              xmlns:cm="http://caliburnmicro.com"
+             FontFamily="{StaticResource ClearDashboardFont}"
              xmlns:input="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"

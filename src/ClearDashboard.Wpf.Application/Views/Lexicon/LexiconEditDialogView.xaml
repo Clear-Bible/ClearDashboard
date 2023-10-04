@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Application.Views.Lexicon.LexiconEditDialogView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
@@ -80,7 +81,7 @@
                 x:Name="Save"
                 Margin="10"
                 Content="{helpers:Localization LexiconEdit_SaveChanges}"
-                FontFamily="{DynamicResource MaterialDesignFont}"
+                FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 IsEnabled="{Binding CanSave}"
                 Style="{StaticResource TransparentStyle}" />
@@ -88,7 +89,7 @@
                 x:Name="Cancel"
                 Margin="10"
                 Content="{helpers:Localization LexiconEdit_Cancel}"
-                FontFamily="{DynamicResource MaterialDesignFont}"
+                FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 IsEnabled="{Binding CanCancel}"
                 Style="{StaticResource TransparentStyle}" />

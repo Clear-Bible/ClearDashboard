@@ -629,7 +629,7 @@
     <value>Junte -se a tokens</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Junte -se a tokens para o par de idiomas</value>
+    <value>Junte -se a tokens para par de idiomas</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Marcar o alinhamento como 'inválido'</value>
@@ -659,7 +659,7 @@
     <value>Token dividido</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplique dividido em outras instâncias de token:</value>
+    <value>Aplique dividido em outras instâncias de token</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Selecione onde dividir o token:</value>
@@ -905,7 +905,7 @@
     <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>Completamente</value>
@@ -1175,7 +1175,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Verso senso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1220,7 +1220,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1334,7 +1334,7 @@
     <value>Adicione um rótulo</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Você quer criar rótulo:</value>
+    <value>Você quer criar o rótulo:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
@@ -1505,7 +1505,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corpora</value>
+    <value>Adicione corporal</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1628,7 +1628,7 @@
     <value>Transliteração manual</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>TransliteraçãoWithEncoder</value>
+    <value>Transliteração comncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Desconhecido</value>
@@ -1658,7 +1658,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>
@@ -1766,7 +1766,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos nt greel?</value>
+    <value>Incluir textos bíblicos gregos no NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -1811,7 +1811,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
+    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -2099,7 +2099,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>
@@ -2150,13 +2150,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurar o usuário de colaboração</value>
+    <value>Restaure o usuário da colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salve o usuário do GitLab no servidor</value>
+    <value>Salvar o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>

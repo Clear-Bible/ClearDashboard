@@ -659,7 +659,7 @@
     <value>Geteiltes Token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Bewerben Sie sich auf andere Token -Fälle:</value>
+    <value>Wenden Sie sich auf andere Token -Fälle an</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Wählen Sie aus, wo Token geteilt werden soll:</value>
@@ -1307,7 +1307,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Assoziationen</value>
+    <value>Durch Verbände</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1496,7 +1496,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1766,7 +1766,7 @@
     <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT Greel Biblical Texte einschließen?</value>
+    <value>NT -griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -1871,7 +1871,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotheus</value>
+    <value>1 Timothy</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2294,7 +2294,7 @@
     <value>Neue hinzufügen</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Aktualisieren Sie und fügen Sie neue Bücher hinzu</value>
+    <value>Neue Bücher aktualisieren und hinzufügen</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
     <value>Bücher auswählen</value>

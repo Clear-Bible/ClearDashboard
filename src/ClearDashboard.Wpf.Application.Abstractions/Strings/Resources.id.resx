@@ -248,7 +248,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Batu permata</value>
+    <value>batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -512,7 +512,7 @@
     <value>Pengguna kolaborasi yang tersedia:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Pengguna proyek saat ini:</value>
@@ -659,7 +659,7 @@
     <value>Split token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Terapkan perpecahan untuk contoh token lain:</value>
+    <value>Terapkan perpecahan untuk contoh token lainnya</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Pilih Tempat Membagi Token:</value>
@@ -950,7 +950,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
+    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1352,7 +1352,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan grup label</value>
+    <value>Tambahkan Grup Label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1613,7 +1613,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studibible</value>
+    <value>Studybible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1766,13 +1766,13 @@
     <value>Centang kotak ini untuk memasukkan teks -teks Alkitab Yunani dan Ibrani saat membuat proyek Anda.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Sertakan teks Alkitab Greel NT?</value>
+    <value>Sertakan teks Alkitab Yunani?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Sertakan teks -teks Alkitab Ibrani?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Tidak ada yang cocok.</value>
@@ -1847,7 +1847,7 @@
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Nama proyek yang diberikan terlalu lama.</value>
+    <value>Nama proyek yang diberikan terlalu panjang.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>
@@ -2063,7 +2063,7 @@
     <value>Kunci yang disediakan salah. Ketika didekripsi, elemen -elemen JSON tertentu tidak dapat ditemukan.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Isi kunci lisensi yang didekripsi tidak cocok dengan informasi yang Anda berikan.</value>
+    <value>Isi kunci lisensi yang didekripsi tidak sesuai dengan informasi yang Anda berikan.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>Kunci lisensi Anda hilang atau rusak.</value>

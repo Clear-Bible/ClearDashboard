@@ -12,6 +12,7 @@
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:threading="clr-namespace:ClearDashboard.DataAccessLayer.Threading;assembly=ClearDashboard.DAL"
     Width="300"
+    FontFamily="{StaticResource ClearDashboardFont}"
     Height="200"
     Margin="5"
     d:DataContext="{d:DesignInstance Type=shell:BackgroundTasksViewModel,
