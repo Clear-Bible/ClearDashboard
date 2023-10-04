@@ -919,7 +919,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     
         public void FilterPins(object? sender, NoteEventArgs e)
         {
+            //5
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
+        }
+
+        public void FilterPinsTarget(object? sender, NoteEventArgs e)
+        {
+            EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.TargetTranslationText));
         }
 
         public void FilterPinsByBiblicalTerms(object? sender, NoteEventArgs e)
