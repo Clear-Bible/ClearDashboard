@@ -110,256 +110,256 @@
     <value>3Ин.</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>Версия</value>
+    <value>Loading...</value>
   </data>
   <data name="ACT" xml:space="preserve">
     <value>Деян.</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Добавлять</value>
+    <value>Loading...</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Выберите, как токенизировать корпус</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Выравнивание</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>Проверка USFM</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>Скопируйте ошибки USFM в буфер обмена</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Количество ошибок:</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Межлинейно</value>
+    <value>Межлинейный</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Нет ошибок</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Сохранить ошибки USFM для файла</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Выбрать все</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Выберите книги для обработки</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
-    <value>Избранные книги</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Выберите Paratext Project</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>Снять все</value>
+    <value>Loading...</value>
   </data>
   <data name="AMO" xml:space="preserve">
     <value>Ам.</value>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Назад</value>
+    <value>Loading...</value>
   </data>
   <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>Задача была отменена</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_Book" xml:space="preserve">
-    <value>КНИГА</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_Chapter" xml:space="preserve">
-    <value>ГЛАВА</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Следующая книга</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
-    <value>Следующая глава</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_NextVerse" xml:space="preserve">
     <value>Следующий стих</value>
   </data>
   <data name="Bcv_Offset" xml:space="preserve">
-    <value>КОМПЕНСИРОВАТЬ</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>Предыдущая книга</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>Предыдущая глава</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_PreviousVerse" xml:space="preserve">
-    <value>Предыдущий стих</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_Sync" xml:space="preserve">
-    <value>Синхронизированный</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_Verse" xml:space="preserve">
-    <value>Стих</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsBcv_All" xml:space="preserve">
-    <value>Все</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsBcv_Book" xml:space="preserve">
-    <value>Книга</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
-    <value>Глава</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
-    <value>Стих</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>привязанность</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
-    <value>сельское хозяйство</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_All" xml:space="preserve">
     <value>1 Фессалоникийцам</value>
   </data>
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>животные</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Area" xml:space="preserve">
-    <value>область</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_AreaNature" xml:space="preserve">
-    <value>область; природа</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Association" xml:space="preserve">
-    <value>ассоциация</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>строительство; религиозная деятельность</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>конструкции; животноводство</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>контейнеры; животноводство</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
-    <value>ремесла; ткани</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
-    <value>фрукты</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>драгоценные камни</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>травы</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Group" xml:space="preserve">
-    <value>группа</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_GroupArea" xml:space="preserve">
-    <value>группа; область</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>честь, уважение, статус</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
-    <value>локаль</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>млекопитающие; домашние животные</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
-    <value>млекопитающие; дикие животные</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>памятник</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
-    <value>Мораль и этика</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
-    <value>траур</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Nature" xml:space="preserve">
-    <value>природа</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>язычество</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_People" xml:space="preserve">
-    <value>люди</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_PeopleAuthority" xml:space="preserve">
-    <value>люди; власть</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>люди; честь, уважение, статус</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
-    <value>человек</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Purpose" xml:space="preserve">
-    <value>цель</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>религиозная деятельность</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>Жертвы и предложения</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
     <value>урегулирование</value>
   </data>
   <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>Знаки и чудеса</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>сверхъестественные существа и силы</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>сверхъестественные существа и силы; названия</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
-    <value>инструменты</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>инструменты; роды</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
-    <value>инструменты; масса; коммерция</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
-    <value>деревья; фрукты</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
-    <value>деревья; духи и специи</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Мудрость, понимание</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
-    <value>Все</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Category" xml:space="preserve">
-    <value>Категория</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>Счета</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Found" xml:space="preserve">
-    <value>Найденный</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
-    <value>Глянец</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
-    <value>Глянец:</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Note" xml:space="preserve">
-    <value>Примечание</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Project" xml:space="preserve">
-    <value>Проект</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Renderings" xml:space="preserve">
     <value>Визуализации</value>
@@ -368,55 +368,55 @@
     <value>Визуализации</value>
   </data>
   <data name="BiblicalTermsForm_Scope" xml:space="preserve">
-    <value>Объем:</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_SemanticDomain" xml:space="preserve">
-    <value>Семантический домен:</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Term" xml:space="preserve">
-    <value>Срок</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsForm_Word" xml:space="preserve">
-    <value>Слово:</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsRendering_AllTerms" xml:space="preserve">
-    <value>Все</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Пропавшие визуализации</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
-    <value>Выровненные слова</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>Выравнивания</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Тип выравнивания:</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
-    <value>Утвердить</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Approved" xml:space="preserve">
-    <value>Одобренный</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>Утвердить выбранный</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>Редактор объемного выравнивания</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Обзор объема выравнивания</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
-    <value>Считать</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>Считать по поверхностному тексту</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
-    <value>Считать учебным текстом</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
     <value>Не одобряют</value>
@@ -425,130 +425,130 @@
     <value>Не одобрен</value>
   </data>
   <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Не одобряют выбранный</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
-    <value>Неверный</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Machine" xml:space="preserve">
-    <value>Машина</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Марк выбран как «недействительный»</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Марк выбран как «обзор потребностей»</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Марк выбрана как «действительный»</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
-    <value>Нуждается в обзоре</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Part" xml:space="preserve">
-    <value>Часть</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>Слова</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
-    <value>Источник</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Исходная часть</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Источник ref</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
-    <value>Цель</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>Целевая часть</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
-    <value>Тип</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_Valid" xml:space="preserve">
-    <value>Действительный</value>
+    <value>Loading...</value>
   </data>
   <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
     <value>Текст стиха</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Отмена</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_Add" xml:space="preserve">
-    <value>Добавлять</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_Delete" xml:space="preserve">
-    <value>Удалить</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>Включите в вращение дисплея часов</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_LocalTime" xml:space="preserve">
     <value>Местное время</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Назовите элемент</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>новая группа</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>новый человек</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>Выберите часовой пояс</value>
+    <value>Loading...</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Закрывать</value>
+    <value>Loading...</value>
   </data>
   <data name="COL" xml:space="preserve">
     <value>Кол.</value>
   </data>
   <data name="CollabProjectManagementView_AvailableCollaborationUsers" xml:space="preserve">
-    <value>Доступные пользователи сотрудничества:</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Управление совместными проектами</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
-    <value>Текущие пользователи проекта:</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>Удалить сотрудничество проекта</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>У вас есть другие пользователи, подключенные к этому проекту. Этот проект будет удален и для них. Уверены, что вы хотите удалить этот проект?</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить этот проект?</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Описание</value>
   </data>
   <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
-    <value>Член проекта</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
-    <value>Владелец проекта</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_Projects" xml:space="preserve">
-    <value>Проекты</value>
+    <value>Loading...</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Выберите проект</value>
+    <value>Loading...</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Копия</value>
+    <value>Loading...</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Создавать</value>
+    <value>Loading...</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Созданный</value>
+    <value>Loading...</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Сделано</value>
@@ -560,121 +560,121 @@
     <value>Четкие примечания</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Удалить</value>
+    <value>Loading...</value>
   </data>
   <data name="Delete_Project" xml:space="preserve">
-    <value>Удалить проект</value>
+    <value>Loading...</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить этот проект?</value>
+    <value>Loading...</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>Втор.</value>
   </data>
   <data name="DisplayName" xml:space="preserve">
-    <value>Отображаемое имя</value>
+    <value>Loading...</value>
   </data>
   <data name="Done" xml:space="preserve">
-    <value>Сделанный</value>
+    <value>Loading...</value>
   </data>
   <data name="ECC" xml:space="preserve">
     <value>Еккл.</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Редактировать</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_AddAlignment" xml:space="preserve">
-    <value>Добавить выравнивание?</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Выровнять '{0}' с '{1}'?</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Выравнивание</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
-    <value>Удалить эту точку зрения?</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Создать выравнивание</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Просмотреть/создать заметки</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
-    <value>Удалить выравнивание?</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Удалить выравнивание</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>Удалить выравнивание для '{0}'?</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Удалить все выравнивания?</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск фильтра</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск членов фильтра</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Межлинейно</value>
+    <value>Межлинейный</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
     <value>Присоединяйтесь к токенам</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Присоединяйтесь к токенам для языковой пары</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
-    <value>Марк выравнивание как «недействительный»</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>Марк выравнивание как «обзор потребностей»</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>Марк выравнивание как «действительный»</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>Новый токен: тренировочный текст</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
-    <value>Примечания</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Нет данных стихов в этом диапазоне стихов.</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Удалить корпус</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Показать элементы управления представлением</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Расколотый токен</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Применить разделение на другие случаи токена:</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Выберите, где разделить токен:</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
-    <value>Трехсторонний раскол</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Unjoin Composite Token</value>
+    <value>Loading...</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>Еф.</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Ошибка</value>
+    <value>Loading...</value>
   </data>
   <data name="EST" xml:space="preserve">
     <value>Есф.</value>
@@ -695,40 +695,40 @@
     <value>Размер шрифта:</value>
   </data>
   <data name="FontSettings_Height" xml:space="preserve">
-    <value>Высота:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_Horizontal" xml:space="preserve">
-    <value>Горизонтальное расстояние:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>Примечание Индикаторы:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
-    <value>Режим абзаца</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
-    <value>Исходный текст:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_SourceFontSize" xml:space="preserve">
-    <value>Размер шрифта источника:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_Target" xml:space="preserve">
-    <value>Целевой текст:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Целевой размер шрифта:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
-    <value>Заголовок:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>Размер шрифта заголовка:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_Translations" xml:space="preserve">
-    <value>Переводы:</value>
+    <value>Loading...</value>
   </data>
   <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>Вертикальное расстояние:</value>
+    <value>Loading...</value>
   </data>
   <data name="GAL" xml:space="preserve">
     <value>Гал.</value>
@@ -764,13 +764,13 @@
     <value>Ин.</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Пароль:</value>
+    <value>Loading...</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>URL:</value>
+    <value>Loading...</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Имя пользователя:</value>
+    <value>Loading...</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>Иов.</value>
@@ -794,13 +794,13 @@
     <value>Новый проект</value>
   </data>
   <data name="Landing_Project" xml:space="preserve">
-    <value>Проект</value>
+    <value>Loading...</value>
   </data>
   <data name="Landing_Projects" xml:space="preserve">
-    <value>Проекты</value>
+    <value>Loading...</value>
   </data>
   <data name="Landing_Settings" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Loading...</value>
   </data>
   <data name="Language [UID_Key]" xml:space="preserve">
     <value>Russian [ru]</value>
@@ -809,283 +809,283 @@
     <value>Лев.</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Добавить семантический домен в это значение</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Добавьте лексическую форму в эту лемму</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>Добавить лексем</value>
   </data>
   <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
-    <value>Добавьте лексем</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_AddMeaning" xml:space="preserve">
     <value>Добавить смысл</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Добавить смысл для этой леммы</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
-    <value>Добавить семантический домен</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Применить перевод</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Отменить перевод</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Изменить все незаметные события</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>При проверке это изменит все незаметные события этого слова</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Согласие</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>Удалить эту лексу</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>Удалить эту лексу?</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Удалить это значение</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
-    <value>Удалить этот перевод</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>Введите новый перевод для</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Введите новый перевод</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>Лемма</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Лемма/формы:</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Лемма для новой лексеме:</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>Лекса</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Лекса для уже существует для леммы</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Значения:</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Новый перевод</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Удалить этот семантический домен из этого значения</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>Удалить эту лексическую форму из этой леммы</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Установить перевод для</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
-    <value>И</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
-    <value>Отмена</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
-    <value>Редактировать</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
-    <value>Найти все</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Формы</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
-    <value>В полной мере</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Полностью соответствует</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>Лекса</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
-    <value>Соответствующий</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>Значения [переводы]</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Or" xml:space="preserve">
-    <value>Или</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Partially" xml:space="preserve">
-    <value>Частично</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
-    <value>Сохранить изменения</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
-    <value>Исходный язык</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
-    <value>Язык перевода</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>Лексикон редактировать</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
-    <value>Перевод</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_Type" xml:space="preserve">
-    <value>Тип</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Добавить в качестве формы для ...</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Найдите полные или частичные совпадения Lexeme или Form для источника</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Добавьте цель в качестве перевода для ...</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите Lexemes, которые имеют один или несколько переводов, которые соответствуют цели</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>Импорт проверен</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme или Form Matches</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
-    <value>Больше нет записей для импорта.</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
-    <value>Пожалуйста, выберите корпус.</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
     <value>Выбрать все</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
-    <value>Исходный язык</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_SourceType" xml:space="preserve">
-    <value>Тип</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_SourceWord" xml:space="preserve">
-    <value>Исходное слово</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_TargetLanguage" xml:space="preserve">
-    <value>Язык перевода</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Целевое слово</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
-    <value>Импорт лексиконов</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Перевод совпадает</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
-    <value>Снять все</value>
+    <value>Loading...</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>Имя требуется</value>
+    <value>Loading...</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>Фамилия требуется</value>
+    <value>Loading...</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>Лицензионный ключ требуется</value>
+    <value>Loading...</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>Лк.</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>О</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_AccountInfo" xml:space="preserve">
-    <value>Информация Об Учетной Записи</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>Файл</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_FileNew" xml:space="preserve">
-    <value>Новый</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_FileOpen" xml:space="preserve">
-    <value>Открыть</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_GatherLogs" xml:space="preserve">
-    <value>Отправить сообщение, чтобы очистить</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_GettingStartedGuide" xml:space="preserve">
-    <value>Начало работы</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_Help" xml:space="preserve">
-    <value>Помощь</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_Layouts" xml:space="preserve">
-    <value>Макеты</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_LayoutsDelete" xml:space="preserve">
-    <value>Удалить сохраненный макет</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Макеты проекта</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
-    <value>Сохранить текущий макет</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>Стандартные макеты</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>Предпочтения</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Быстрый новый</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Коллабные изменения доступны</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_ShowLog" xml:space="preserve">
-    <value>Показать журнал</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_Windows" xml:space="preserve">
-    <value>Окна</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
-    <value>Инструмент выравнивания</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>Библейские термины</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>Корпус токены</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Панель приборов</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
-    <value>Вид</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsMarble" xml:space="preserve">
-    <value>МРАМОР</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Новый вид</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>Заметки Список</value>
@@ -1094,115 +1094,115 @@
     <value>PINS</value>
   </data>
   <data name="MainView_WindowsTextCollections" xml:space="preserve">
-    <value>Текстовые коллекции</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>Значения слова</value>
+    <value>Loading...</value>
   </data>
   <data name="MAL" xml:space="preserve">
     <value>Мал.</value>
   </data>
   <data name="Marble_All" xml:space="preserve">
-    <value>Все</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Book" xml:space="preserve">
-    <value>Книга</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Chapter" xml:space="preserve">
-    <value>Глава</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>Определение</value>
   </data>
   <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>Определение длинного:</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>Определение короткого: короткое:</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Определение недоступно</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Domains" xml:space="preserve">
-    <value>Домены:</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_DomainsTitle" xml:space="preserve">
-    <value>Домены</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>Частотный график</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
-    <value>Общая информация</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>Глоссы:</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Части речи</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Связанные леммы</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
-    <value>Объем:</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Search" xml:space="preserve">
-    <value>Поиск</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>Поиск по английскому блеску</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Поиск на иврите/греческом</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
-    <value>Смысл</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Senses" xml:space="preserve">
-    <value>Чувства</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Сильные коды</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Подпагнические домены:</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
-    <value>Стих</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_Verses" xml:space="preserve">
-    <value>Стихи</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Стих смысл</value>
+    <value>Loading...</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Всего стиха</value>
+    <value>Loading...</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>Мф.</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Создание базы данных ...</value>
+    <value>Loading...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Слияние полного ... перезагружать интерфейс</value>
+    <value>Loading...</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>Операция отменена</value>
+    <value>Loading...</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
-    <value>Операция завершена!</value>
+    <value>Loading...</value>
   </data>
   <data name="MergeDialog_OperationErrored" xml:space="preserve">
-    <value>Ошибка встречается</value>
+    <value>Loading...</value>
   </data>
   <data name="MIC" xml:space="preserve">
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Loading...</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1211,238 +1211,238 @@
     <value>Наум.</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Имя</value>
+    <value>Loading...</value>
   </data>
   <data name="NEH" xml:space="preserve">
     <value>Неем.</value>
   </data>
   <data name="NewCollabUserView_AccessToken" xml:space="preserve">
-    <value>Токен доступа:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
-    <value>Проверьте доступность пользователя</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Создать пользователя сотрудничества</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>Создать пользователя сотрудничества</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
-    <value>ClearDashboard Email Code Code</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_Email" xml:space="preserve">
-    <value>Электронная почта:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>Адрес электронной почты</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
-    <value>Код проверки электронной почты:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
-    <value>Ошибка создания пользователя на сервере</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_FirstName" xml:space="preserve">
     <value>Имя</value>
   </data>
   <data name="NewCollabUserView_Group" xml:space="preserve">
-    <value>Группа:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Фамилия</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>Новый пользователь сотрудничества</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Пароль:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
-    <value>Сохраняется на удаленном сервере</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
-    <value>Выберите организацию</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
-    <value>Пользователь уже существует на сервере</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Имя пользователя:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Пользователь уже в системе!</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>Проверить код электронной почты</value>
+    <value>Loading...</value>
   </data>
   <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>Проект с именем '{0}' уже существует. Пожалуйста, выберите уникальное имя ».</value>
+    <value>Loading...</value>
   </data>
   <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>Создать новый проект</value>
+    <value>Loading...</value>
   </data>
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
-    <value>Пожалуйста, введите имя для вашего проекта.</value>
+    <value>Loading...</value>
   </data>
   <data name="NewTestament" xml:space="preserve">
-    <value>Новый Завет</value>
+    <value>Loading...</value>
   </data>
   <data name="Next" xml:space="preserve">
-    <value>Следующий</value>
+    <value>Loading...</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Нет</value>
+    <value>Loading...</value>
   </data>
   <data name="None" xml:space="preserve">
-    <value>Никто</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Добавить новую ноту</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Удалить эту записку?</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Ассоциациями</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
-    <value>Фильтры</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>По ярлыкам</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>По записку текст</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
-    <value>Любой</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Закрыто</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
-    <value>Открыть</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Пользователями</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Добавить этикетку</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Вы хотите создать этикетку:</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>и связывать это с группой лейблов:</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
-    <value>Вы хотите удалить этикетку:</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Вы хотите отменить этикетку:</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>Из группы лейбла:</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
-    <value>Добавить группу метки</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу этикетки</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Группа лейблов уже существует с именем</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
-    <value>Инициализировать группу метки</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
-    <value>с ярлыками от:</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Название группы на этикетке</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>Удалить эту группу этикетки?</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
-    <value>Удалить эту группу этикетки</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
-    <value>Удалите эту метку</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
-    <value>Текст, прикрепленный к этикетке</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
-    <value>Созданный</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Модифицированный</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Пользователь</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
-    <value>Положение дел</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Note_NoteStatus_Open" xml:space="preserve">
-    <value>Открыть</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Закрыто</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
-    <value>Ассоциации</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_NoteLabelGroup" xml:space="preserve">
-    <value>Группа</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_NoteLabelGroups" xml:space="preserve">
-    <value>ДЕВОЧКИ ГРУППЫ</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Ярлыки</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
-    <value>Ответы</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
-    <value>Видимый</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_NoteText" xml:space="preserve">
-    <value>Текст</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Открыто закрыто</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
-    <value>Часть</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Отправить эту записку в Paratext?</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Отправить эту записку в Paratext</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>Токенизированный корпус</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
-    <value>Набор перевода</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_UnreadReplies" xml:space="preserve">
-    <value>Непрочитанные ответы</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
-    <value>Неистричные ответы присутствуют</value>
+    <value>Loading...</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
-    <value>Слово</value>
+    <value>Loading...</value>
   </data>
   <data name="NUM" xml:space="preserve">
     <value>Числ.</value>
@@ -1451,196 +1451,196 @@
     <value>Авд.</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Хорошо</value>
+    <value>Loading...</value>
   </data>
   <data name="OldTestament" xml:space="preserve">
-    <value>Ветхий Завет</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>Создать выравнивание слов</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Создать параллелизацию стихов корпораций</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Создать интернете</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>JSON Metadata</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Параллелизировать стихи корпораций</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Симметризированная модель поезда?</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>Тренироваться</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Слово поезда</value>
+    <value>Loading...</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Установите картирование стиха между параллелизированными корпусами</value>
+    <value>Loading...</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
-    <value>Paratext Corpus</value>
+    <value>Loading...</value>
   </data>
   <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
-    <value>Выберите алгоритм SMT, чтобы тренироваться</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Добавьте массовое разрешение на просмотр</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Добавить в просмотр</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Добавить в новый вид</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
     <value>Добавить корпора</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
-    <value>Создать новое выравнивание слов</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>Создать новую токенизацию корпуса</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интернетальный</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>Добавьте текст в просмотр</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Добавить текст в новый вид</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Добавить в просмотр</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Вспомогательный</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Обратная трансляция</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Рассчитайте новую модель перевода</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Измените уровень увеличения содержания</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>Консультанты</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
-    <value>Создать новое выравнивание слов</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>Создайте новый интерлинеар</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_Daughter" xml:space="preserve">
-    <value>Дочь</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Удалить выравнивание</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>Удалить Interlineear</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить этот корпус? Все примечания, выравнивания и межлинеры, связанные с этим корпусом, будут удалены и не могут быть восстановлены.</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Словарь</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>Установите всю область контента в просмотр</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Установите все узлы в Viewport</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
-    <value>Получите последние из Paratext</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
-    <value>Показать информацию об этом проекте</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Греческая (NT) макула</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>Иврит (OT) макула</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_MARBLE Resource" xml:space="preserve">
-    <value>Мраморный ресурс</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>Количество различных токенизаций</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>Проект проекта поверхность</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_PropertiesMenu" xml:space="preserve">
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>Ресурс</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>Масштабировать содержание до 100%</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Добавить текст в новое окно</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
-    <value>Источник</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Исходный язык</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
-    <value>Стандартный</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Учебное пособие</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>Исследование</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Перейдите в Paratext и переключите проекты. Проект Paratext, в настоящее время подключенный к плагину ClearDashboard, не совпадает с корпусом в этом проекте ClearDashboard.</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
-    <value>Цель</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>Транслитерация</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIntEncoder</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
-    <value>Неизвестный</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
-    <value>XML</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить содержание</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Loading...</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>Флм.</value>
@@ -1649,205 +1649,205 @@
     <value>Фил.</value>
   </data>
   <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Очистить фильтр</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Code" xml:space="preserve">
-    <value>Код</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Filter" xml:space="preserve">
-    <value>Фильтр:</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Формы</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
-    <value>Глянец</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Language" xml:space="preserve">
-    <value>Язык</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>Лекса</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
     <value>Тип лекса</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Загружать ссылки</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Match" xml:space="preserve">
-    <value>Соответствовать</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Notes" xml:space="preserve">
-    <value>Примечания</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
     <value>Случаи</value>
   </data>
   <data name="Pins_Origin" xml:space="preserve">
-    <value>Источник</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Phrase" xml:space="preserve">
-    <value>Фраза</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Prefix" xml:space="preserve">
-    <value>Префикс</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Покажите Backtranslation</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
-    <value>Корень</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Suffix" xml:space="preserve">
-    <value>Суффикс</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>Ссылки на стихи</value>
+    <value>Loading...</value>
   </data>
   <data name="Pins_Word" xml:space="preserve">
-    <value>Слово</value>
+    <value>Loading...</value>
   </data>
   <data name="PRO" xml:space="preserve">
     <value>Прит.</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Добавить нового пользователя сотрудничества</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>ClearDashboard</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>Paratext Beta не работает</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Отмена ...</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
-    <value>Совместные проекты</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>Создайте свой проект, чтобы начать.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>Создать новый проект</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
-    <value>Quick Start New Project</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Создать проект:</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>Создайте свой проект, используя мастер шаблона проекта.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>База данных:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Вы не можете удалить этот проект, другое приложение все еще использует его.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Удалить проект</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Включить выбор книги</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>При проверке вы сможете выбрать, какие книги для обработки.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>Начать</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Импортный сервер проект</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Включите библейские тексты NT Grel?</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Включите ивритские библейские тексты?</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Управление совместными проектами</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Нет совпадений.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Здесь одиноко. Пожалуйста, создайте новый проект.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext не установлен. Пожалуйста, установите Paratext и повторите приложение ClearDashboard.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext не работает</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>Открыть недавние</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
-    <value>Paratext Back Перевод</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Межлинейная Библия (LWC)</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext работает, но не подключен.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Paratext Project</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Проект:</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
-    <value>Мы почти там!</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Нажмите здесь, чтобы просмотреть видео на панель инструментов.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>После того, как вы нажмете кнопку «Создать» ниже, мы будем токенизировать, выравнивать и подгонять ваш проект. Все шаги будут отображаться здесь, когда они обрабатываются. Пока вы ждете, не стесняйтесь нажимать на ссылку ниже и смотреть несколько полезных видео, чтобы начать использовать ClearDashboard!</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Мастер шаблонов проекта</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
-    <value>Мастер шаблонов проекта: {0}</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Список проектов обновления</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Поиск недавно</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Нажмите здесь, чтобы запустить Paratext</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Версия:</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>Пожалуйста, введите имя для вашего проекта</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectSetup_Title" xml:space="preserve">
-    <value>Создайте свой новый проект</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Данное имя проекта содержит незаконные символы. Допустимые символы включают «a-z» (нижний и верхний регистр), номера «0-9» и символы '-' и '_'.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
-    <value>Проект с тем же названием уже существует. Пожалуйста, выберите уникальное имя.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Данное название проекта слишком длинное.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Паралипоменон</value>
@@ -2051,37 +2051,37 @@
     <value>Пс.</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Обновлять</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>Закрыть приложение</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogView_Register" xml:space="preserve">
-    <value>регистр</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Предоставленный ключ неисправен. При расшифровке определенные элементы JSON не могли быть найдены.</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Содержание расшифрованного лицензионного ключа не соответствует предоставленной вами информации.</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>Ваш лицензионный ключ либо отсутствует, либо сломан.</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Добро пожаловать в Cleardashboard! Пожалуйста, введите информацию о регистрации.</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Пожалуйста, введите ваше имя</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>Пожалуйста, введите свою фамилию</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Пожалуйста, введите свой лицензионный ключ</value>
+    <value>Loading...</value>
   </data>
   <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>Известные вопросы</value>
+    <value>Loading...</value>
   </data>
   <data name="REV" xml:space="preserve">
     <value>Откр.</value>
@@ -2093,145 +2093,145 @@
     <value>Руф.</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Сохранять</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Включить экспериментальный плагин Aqua</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
-    <value>Настройки сотрудничества</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
-    <value>ClearDashboard Email Code Code</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_Email" xml:space="preserve">
-    <value>Электронная почта</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>Адрес электронной почты</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка отправки</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
-    <value>Код проверки электронной почты</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
-    <value>Включить редактирование выравнивания</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
-    <value>Экспериментальный</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
-    <value>Группа</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
-    <value>Поддержка Multi Monitor</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_NotFoundOnSystem" xml:space="preserve">
-    <value>Не найдено в системе!</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_Plugins" xml:space="preserve">
-    <value>Плагины</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_PowerModes" xml:space="preserve">
-    <value>Режимы мощности</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Позвольте ClearDashboard изменять режимы питания во время высоких вычислительных событий</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
-    <value>Сдержанный</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_ReservedCaption" xml:space="preserve">
-    <value>Зарезервировано для будущего расширения</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Восстановить пользователь сотрудничества</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
-    <value>Сохраняется на удаленном сервере</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Сохранить пользователя Gitlab на сервер</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
-    <value>Сохранить настройки</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Отправить валидацию по электронной почте</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
-    <value>Настройки ClearDashboard</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Показать расширенные представления на другом мониторе, чем панель инструментов</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
-    <value>Текстовая коллекция</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_UserAlreadyExists" xml:space="preserve">
-    <value>Пользователь уже существует на сервере</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_UserName" xml:space="preserve">
-    <value>Имя пользователя</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_ValidateEmailCode" xml:space="preserve">
-    <value>Проверить код электронной почты</value>
+    <value>Loading...</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Включить стихотворенные текстовые коллекции.</value>
+    <value>Loading...</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Отменить задание</value>
+    <value>Отмена задания</value>
   </data>
   <data name="ShellView_Loading" xml:space="preserve">
     <value>Загрузка ...</value>
   </data>
   <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>Нет фоновых задач.</value>
+    <value>Loading...</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>Режим питания включен</value>
+    <value>Loading...</value>
   </data>
   <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>Показать фоновые задачи</value>
+    <value>Loading...</value>
   </data>
   <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>Выпуск заметок</value>
+    <value>Loading...</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Показать предварительные перерасти</value>
+    <value>Loading...</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Обновление новой версии ClearDashboard</value>
+    <value>Loading...</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
-    <value>Пользователь</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_BugReport" xml:space="preserve">
     <value>Отчет об ошибке</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>Я потерял данные в проекте</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
-    <value>Я не могу выполнить задачу</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>Я выполнил задачу, но это было сложно</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
-    <value>Я хотел бы сделать ...</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_Message" xml:space="preserve">
-    <value>Сообщение:</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Без интернета</value>
@@ -2240,106 +2240,106 @@
     <value>Сброс форма</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
-    <value>Отправлять</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Предположение</value>
   </data>
   <data name="SlackMessageView_SuggestionEditor" xml:space="preserve">
-    <value>редактор</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Поддерживает формат разметки</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
-    <value>Предварительный просмотр</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Строгость:</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
-    <value>Заголовок:</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>Отправить Slack Message</value>
+    <value>Loading...</value>
   </data>
   <data name="SNG" xml:space="preserve">
     <value>Песн.</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Начинать</value>
+    <value>Loading...</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Положение дел</value>
+    <value>Loading...</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Отформатировано</value>
+    <value>Loading...</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>Неформатирован</value>
+    <value>Loading...</value>
   </data>
   <data name="TargetContextView_ZoomIn" xml:space="preserve">
-    <value>Приблизить</value>
+    <value>Loading...</value>
   </data>
   <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>Уменьшить</value>
+    <value>Loading...</value>
   </data>
   <data name="TIT" xml:space="preserve">
     <value>Тит.</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Обновлять</value>
+    <value>Loading...</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Add" xml:space="preserve">
-    <value>Добавить новое</value>
+    <value>Loading...</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Обновить и добавить новые книги</value>
+    <value>Loading...</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Выберите книги</value>
+    <value>Loading...</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
-    <value>Обновить и добавить новый</value>
+    <value>Loading...</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создайте использование дефолтов</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
-    <value>Инструмент выравнивания</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>Библейские термины</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>Корпус токены</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Панель приборов</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
-    <value>Вид</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_PINS" xml:space="preserve">
-    <value>Термин Поиск</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_TextCollection" xml:space="preserve">
-    <value>Текстовая коллекция</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>Значения слова</value>
+    <value>Loading...</value>
   </data>
   <data name="WordMeaningsView_Domain" xml:space="preserve">
-    <value>Домен:</value>
+    <value>Loading...</value>
   </data>
   <data name="WordMeaningsView_Sense" xml:space="preserve">
-    <value>Смысл:</value>
+    <value>Loading...</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
     <value>Субдомен:</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Да</value>
+    <value>Loading...</value>
   </data>
   <data name="ZEC" xml:space="preserve">
     <value>Зах.</value>
