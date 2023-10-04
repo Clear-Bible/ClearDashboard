@@ -659,7 +659,7 @@
     <value>Split token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Terapkan perpecahan untuk contoh token lain:</value>
+    <value>Terapkan perpecahan untuk contoh token lainnya</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Pilih Tempat Membagi Token:</value>
@@ -1352,7 +1352,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan grup label</value>
+    <value>Tambahkan Grup Label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1377,6 +1377,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Teks terlampir pada label</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Hapus label</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Label Disassociate</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Dibuat</value>
@@ -1766,7 +1772,7 @@
     <value>Centang kotak ini untuk memasukkan teks -teks Alkitab Yunani dan Ibrani saat membuat proyek Anda.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Sertakan teks Alkitab Greel NT?</value>
+    <value>Sertakan teks Alkitab Yunani?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Sertakan teks -teks Alkitab Ibrani?</value>

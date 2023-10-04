@@ -407,13 +407,13 @@
     <value>散裝對齊編輯</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量對齊審查</value>
+    <value>批量對準評論</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>數數</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按地面文本計數</value>
+    <value>按表面文本計數</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通過培訓文本計數</value>
@@ -608,10 +608,10 @@
     <value>刪除對齊</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>刪除“ {0}”的對齊方式？</value>
+    <value>刪除“ {0}”的對齊？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>刪除所有路線？</value>
+    <value>刪除所有對齊方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多個對齊定義。單擊'{1}'將刪除所有對齊。</value>
@@ -659,7 +659,7 @@
     <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>將拆分應用於其他令牌：</value>
+    <value>將拆分應用於其他令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>選擇在哪里拆分令牌：</value>
@@ -1004,7 +1004,7 @@
     <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要許可證密鑰</value>
+    <value>需要許可密鑰</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1377,6 +1377,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>標籤附加的文字</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>刪除標籤</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>分離標籤</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
@@ -1766,7 +1772,7 @@
     <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>包括nt格雷爾聖經文本？</value>
+    <value>包括NT希臘聖經文本？</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>包括希伯來語聖經文本？</value>
@@ -2066,7 +2072,7 @@
     <value>解密許可證密鑰的內容與您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的許可證密鑰要么缺少或損壞。</value>
+    <value>您的許可密鑰丟失或損壞。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>歡迎來到Cleardashboard！請輸入您的註冊信息。</value>
@@ -2168,7 +2174,7 @@
     <value>ClearDashboard設置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>顯示出與儀表板不同的顯示器上擴展的視圖</value>
+    <value>顯示與儀表板不同的顯示器上展示的視圖</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>對於具有三個或三個或以上監視器的系統，在第三監視器上顯示擴展的視圖</value>
@@ -2219,7 +2225,7 @@
     <value>錯誤報告</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>我在項目中丟失了數據</value>
+    <value>我在一個項目中丟失了數據</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
     <value>我無法完成任務</value>
@@ -2297,7 +2303,7 @@
     <value>更新並添加新書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>選擇書</value>
+    <value>選擇書籍</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新並添加新</value>

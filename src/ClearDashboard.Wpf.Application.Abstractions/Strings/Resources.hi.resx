@@ -659,10 +659,10 @@
     <value>विभाजित टोकन</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें:</value>
+    <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -1055,7 +1055,7 @@
     <value>त्वरित नया</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध हैं</value>
+    <value>Collab परिवर्तन उपलब्ध है</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1190,7 +1190,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>अभियान रद्द किया गया</value>
+    <value>रद्द किया गया ऑपरेशन</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1377,6 +1377,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>लेबल से जुड़ा पाठ</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>हटाएं लेबल</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>विच्छेद लेबल</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>बनाया था</value>
@@ -1727,10 +1733,10 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
+    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नया प्रोजेक्ट बनाएं</value>
+    <value>एक नई परियोजना बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -1760,13 +1766,13 @@
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर परियोजना</value>
+    <value>आयात सर्वर प्रोजेक्ट</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>एनटी ग्रील बाइबिल ग्रंथों को शामिल करें?</value>
+    <value>NT ग्रीक बाइबिल ग्रंथों को शामिल करें?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>ओटी हिब्रू बाइबिल ग्रंथों को शामिल करें?</value>
@@ -2336,7 +2342,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
+    <value>उपडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

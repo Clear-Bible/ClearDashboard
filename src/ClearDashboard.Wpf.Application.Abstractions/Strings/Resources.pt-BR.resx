@@ -140,7 +140,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salvar erros USFM no arquivo</value>
+    <value>Salve erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -659,7 +659,7 @@
     <value>Token dividido</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplique dividido em outras instâncias de token:</value>
+    <value>Aplique dividido em outras instâncias de token</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Selecione onde dividir o token:</value>
@@ -905,7 +905,7 @@
     <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>Completamente</value>
@@ -950,7 +950,7 @@
     <value>Adicione como forma para ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Encontre correspondências ou formulários completos ou parciais para a fonte</value>
+    <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Adicione o alvo como tradução para ...</value>
@@ -1154,7 +1154,7 @@
     <value>Pesquisar por brilho inglês</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Pesquise por hebraico/grego</value>
+    <value>Pesquisar por hebraico/grego</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Senso</value>
@@ -1175,7 +1175,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Verso senso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1202,7 +1202,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para versificação padrão</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1220,7 +1220,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1378,6 +1378,12 @@
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Texto anexado ao rótulo</value>
   </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Excluir rótulo</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Rótulo desassociado</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Criada</value>
   </data>
@@ -1505,7 +1511,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corpora</value>
+    <value>Adicione corporal</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1592,7 +1598,7 @@
     <value>Propriedades</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para versificação padrão</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Recurso</value>
@@ -1628,7 +1634,7 @@
     <value>Transliteração manual</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>TransliteraçãoWithEncoder</value>
+    <value>Transliteração comncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Desconhecido</value>
@@ -1658,7 +1664,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>
@@ -1670,7 +1676,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme Type</value>
+    <value>Lexeme tipo</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1766,7 +1772,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos nt greel?</value>
+    <value>Incluir textos bíblicos gregos do NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -1811,7 +1817,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
+    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -2099,7 +2105,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>
@@ -2150,13 +2156,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurar o usuário de colaboração</value>
+    <value>Restaure o usuário da colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salve o usuário do GitLab no servidor</value>
+    <value>Salvar o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>
@@ -2171,7 +2177,7 @@
     <value>Mostrar visualizações expandidas em um monitor diferente do painel</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Para sistemas com três ou mais monitores, mostre uma visualização expandida no terceiro monitor</value>
+    <value>Para sistemas com três ou mais monitores, mostre visualização expandida no terceiro monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Coleção de texto</value>

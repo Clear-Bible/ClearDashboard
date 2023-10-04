@@ -223,6 +223,7 @@
                 Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" />
             <notesControls:LabelSelector
                 x:Name="LabelSelector"
+                LabelGroup="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"

@@ -94,7 +94,8 @@
                                     BorderThickness="0"
                                     Click="DeleteLabelClicked"
                                     FontWeight="SemiBold"
-                                    ToolTip="{helpers:Localization Notes_LabelRemove}">
+                                    ToolTip="{helpers:Localization Notes_LabelRemove}"
+                                    ToolTipOpening="OnToolTipOpening">
                                     <Image
                                         Width="24"
                                         Height="14"

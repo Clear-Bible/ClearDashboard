@@ -390,9 +390,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             LabelsEditor.EventAggregator = eventAggregator;
-            PaneId = Guid.NewGuid();
 
-            
+            LabelSelector.LocalizationService = localizationService;
+
+            PaneId = Guid.NewGuid();
         }
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout, EnhancedViewItemMetadatum? metadatum, CancellationToken cancellationToken)
