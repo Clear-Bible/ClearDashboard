@@ -144,7 +144,7 @@
             cm:Message.Attach="Close"
             Content="{helpers:Localization Close}"
             Foreground="{DynamicResource MaterialDesignBody}"
-            Style="{StaticResource SmallTransparentStyle}" />
+            Style="{StaticResource SmallAlternativeStyle}" />
 
 
         <materialDesign:Card
