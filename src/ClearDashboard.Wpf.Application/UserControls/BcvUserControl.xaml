@@ -11,7 +11,6 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     d:DesignHeight="55"
-    FontFamily="{StaticResource ClearDashboardFont}"
     d:DesignWidth="515"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="Transparent"
