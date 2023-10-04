@@ -37,7 +37,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseEnterMessage>,
         IHandle<NoteMouseLeaveMessage>,
         IHandle<TokensJoinedMessage>,
-        IHandle<TokenUnjoinedMessage>
+        IHandle<TokenUnjoinedMessage>,
+        IHandle<TokenSplitMessage>
     {
         protected NoteManager NoteManager { get; }
         protected IMediator Mediator { get; }
@@ -341,14 +342,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
-            SourceTokenMap!.AddCompositeToken(message.CompositeToken);
+            SourceTokenMap?.AddCompositeToken(message.CompositeToken);
+            TargetTokenMap?.AddCompositeToken(message.CompositeToken);
             await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
+        }        
+        
+        public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var kvp in message.SplitCompositeTokensByIncomingTokenId)
+            {
+                var compositeToken = kvp.Value.FirstOrDefault();    // For now, the user can only split one token at a time.
+                if (compositeToken != null)
+                {
+                    SourceTokenMap?.ReplaceToken(kvp.Key, compositeToken);
+                    TargetTokenMap?.ReplaceToken(kvp.Key, compositeToken);
+                }
+            }
+            await BuildTokenDisplayViewModelsAsync();
+            await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage(), cancellationToken);
+
+            await Task.CompletedTask;
         }
 
         public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = null);
-            SourceTokenMap!.RemoveCompositeToken(message.CompositeToken, message.Tokens);
+            SourceTokenMap?.RemoveCompositeToken(message.CompositeToken, message.Tokens);
+            TargetTokenMap?.RemoveCompositeToken(message.CompositeToken, message.Tokens);
             await RefreshTranslationsAsync(message.Tokens);
         }
 

@@ -37,6 +37,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool IsTargetRtl => VerseDisplay.IsTargetRtl;
 
+        public bool IsCorpusView => VerseDisplay is CorpusDisplayViewModel;
+
         /// <summary>
         /// Gets or sets whether this is a source token.
         /// </summary>

@@ -125,6 +125,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenCharacter = e.TokenCharacter,
+                ModifierKeys = e.ModifierKeys
             });
         }
 

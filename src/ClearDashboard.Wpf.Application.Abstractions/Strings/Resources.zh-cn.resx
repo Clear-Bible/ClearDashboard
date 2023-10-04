@@ -236,7 +236,7 @@
     <value>建造;宗教活动</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>构造；畜牧业</value>
+    <value>建筑；畜牧业</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧业</value>
@@ -413,7 +413,7 @@
     <value>数数</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按表面文本计数</value>
+    <value>按地面文本计数</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通过培训文本计数</value>
@@ -449,7 +449,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢纽的单词</value>
+    <value>枢密性的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -611,7 +611,7 @@
     <value>删除“ {0}”的对齐？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>删除所有对齐方式？</value>
+    <value>删除所有路线？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多个对齐定义。单击'{1}'将删除所有对齐。</value>
@@ -656,10 +656,10 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>分开令牌</value>
+    <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>将分配适用于所有代币的实例：</value>
+    <value>将拆分应用于其他令牌：</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>选择在哪里拆分令牌：</value>
@@ -1001,7 +1001,7 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓氏</value>
+    <value>需要姓</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>需要许可证密钥</value>
@@ -1050,6 +1050,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>优先</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>快速新</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>可用的合作更改</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>将诗歌映射重置为默认差异</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1253,7 +1256,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的合作用户</value>
+    <value>新的协作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密码：</value>
@@ -1508,7 +1511,7 @@
     <value>创建新单词对齐</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>创建新的语料库令牌化</value>
+    <value>创建新的语料库</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
@@ -1520,7 +1523,7 @@
     <value>将文本添加到新视图</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>添加经文视图以查看</value>
+    <value>添加到查看</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>辅助的</value>
@@ -1535,7 +1538,7 @@
     <value>更改内容的缩放级别</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顾问说明</value>
+    <value>顾问Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>创建新单词对齐</value>
@@ -1691,7 +1694,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示退缩</value>
+    <value>展示反向翻译</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>干</value>
@@ -1715,7 +1718,7 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>PARATEXT BETA未运行</value>
+    <value>paratext beta不运行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
     <value>取消...</value>
@@ -1728,6 +1731,9 @@
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>快速启动新项目</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>创建项目：</value>
@@ -1756,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>导入服务器项目</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>包括圣经文本？</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>在创建项目时，请选中此框，以包括希腊语和希伯来语圣经的文本。</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>包括nt格雷尔圣经文本？</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>包括希伯来语圣经文本？</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>管理协作项目</value>
@@ -1886,7 +1895,7 @@
     <value>帖撒罗尼迦后书</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2蒂莫西</value>
+    <value>2提摩太</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3约翰</value>
@@ -2057,7 +2066,7 @@
     <value>解密许可证密钥的内容与您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的许可证密钥要么缺少或损坏。</value>
+    <value>您的许可密钥丢失或损坏。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>欢迎来到Cleardashboard！请输入您的注册信息。</value>
@@ -2177,7 +2186,7 @@
     <value>验证电子邮件代码</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>启用逐一文字集合显示</value>
+    <value>启用逐节的文本集合显示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任务</value>
@@ -2198,7 +2207,7 @@
     <value>发行说明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>显示预释放</value>
+    <value>显示预发行</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>
@@ -2226,6 +2235,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>没有互联网</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>重置表格</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>发送</value>
@@ -2285,7 +2297,7 @@
     <value>更新并添加新书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>选择书</value>
+    <value>选择书籍</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新并添加新</value>

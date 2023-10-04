@@ -17,6 +17,7 @@
     >
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter" />
 
         <Style x:Key="SliderRepeatLeft" TargetType="RepeatButton">
             <Setter Property="SnapsToDevicePixels" Value="true" />
@@ -218,7 +219,7 @@
                 VerticalAlignment="Center"
                 Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
                 Margin="0,0,0,0"
-                Visibility="{Binding ElementName=ThreeWaySplitCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"
+                Visibility="{Binding ElementName=ThreeWaySplitCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"
         />
 
         <Slider Grid.Row="2" 
@@ -265,14 +266,15 @@
             TickFrequency="1"
             Value="{Binding CharacterThreshold2}" 
             VerticalAlignment="Center"
-            Visibility="{Binding ElementName=ThreeWaySplitCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"
+            Visibility="{Binding ElementName=ThreeWaySplitCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"
             Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
             />
 
         <CheckBox Grid.Row="6" x:Name="ThreeWaySplitCheckBox" 
                   Content="{helpers:Localization EnhancedView_SplitTokenThreeWay}" 
                   HorizontalAlignment="Right" 
-                  Margin="0,0,80,0" 
+                  IsChecked="{Binding ThreeWaySplit}"
+                  Margin="0,0,80,10" 
                   cm:Message.Attach="[Event Unchecked] = [Action ThreeWaySplitUnchecked($this, $eventArgs)]"
                   />
 
@@ -346,22 +348,31 @@
                      />
         </Grid>
 
-        <CheckBox Grid.Row="8" x:Name="ApplyToAllCheckBox" HorizontalAlignment="Center" IsEnabled="False">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,5">
-                <TextBlock FontFamily="{DynamicResource MaterialDesignFont}"
-                           FontSize="16"
-                           FontWeight="Normal"
-                           Margin="0,2,0,0"
-                           VerticalAlignment="Center"
-                           Text="{helpers:Localization EnhancedView_SplitTokenApplyToAll}"/>
-                <TextBlock FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
-                           FontSize="18"
-                           FontWeight="SemiBold"
-                           Margin="5,0,0,0"
-                           VerticalAlignment="Center"
-                           Text="{Binding TokenDisplay.SurfaceText}"/>
-            </StackPanel>
-        </CheckBox>
+        <StackPanel Grid.Row="8" 
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal" 
+                    VerticalAlignment="Center" 
+                    Margin="0,0,0,5">
+            <TextBlock FontFamily="{DynamicResource MaterialDesignFont}"
+                       FontSize="14"
+                       FontWeight="Normal"
+                       Margin="0,2,0,0"
+                       VerticalAlignment="Center"
+                       Text="{helpers:Localization EnhancedView_SplitTokenApplyToAll}"/>
+            <TextBlock FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Margin="5,0,10,0"
+                       VerticalAlignment="Center"
+                       Text="{Binding TokenDisplay.SurfaceText}"/>
+            <ComboBox x:Name="PropagateComboBox"
+                      FontSize="14"
+                      ItemsSource="{Binding PropagationOptions}"
+                      SelectedValue="{Binding SelectedPropagationOption}"
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value"
+            />
+        </StackPanel>
 
         <StackPanel Grid.Row="9"
                     HorizontalAlignment="Center"

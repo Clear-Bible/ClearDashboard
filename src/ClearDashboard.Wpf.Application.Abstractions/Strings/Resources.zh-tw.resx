@@ -236,7 +236,7 @@
     <value>建造;宗教活動</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>構造；畜牧業</value>
+    <value>建築；畜牧業</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧業</value>
@@ -407,13 +407,13 @@
     <value>散裝對齊編輯</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量對準評論</value>
+    <value>批量對齊審查</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>數數</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按表面文本計數</value>
+    <value>按地面文本計數</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通過培訓文本計數</value>
@@ -449,7 +449,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞紐的單詞</value>
+    <value>樞密性的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -464,7 +464,7 @@
     <value>目標</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>目標部分</value>
+    <value>目標零件</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
     <value>類型</value>
@@ -587,7 +587,7 @@
     <value>添加對齊方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>與'{1}'對齊'{0}'？</value>
+    <value>用'{1}'對齊'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>結盟</value>
@@ -656,10 +656,10 @@
     <value>顯示視圖控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>分開令牌</value>
+    <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>將分配適用於所有令牌：</value>
+    <value>將拆分應用於其他令牌：</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>選擇在哪里拆分令牌：</value>
@@ -1001,10 +1001,10 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓</value>
+    <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要許可密鑰</value>
+    <value>需要許可證密鑰</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1050,6 +1050,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>優先</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>快速新</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>可用的合作更改</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>將詩歌映射重置為默認差異</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1352,7 +1355,7 @@
     <value>添加標籤組</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>一個標籤組已經存在</value>
+    <value>標籤組已經存在，名稱為</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化標籤組</value>
@@ -1427,7 +1430,7 @@
     <value>將此註釋發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>令牌化語料庫</value>
+    <value>象徵化的語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1469,10 +1472,10 @@
     <value>並行化語料庫經文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>機器字對準算法</value>
+    <value>機詞對齊算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>機器字對準算法</value>
+    <value>機詞對齊算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火車對稱模型？</value>
@@ -1508,19 +1511,19 @@
     <value>創建新單詞對齊</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>創建新的語料庫令牌化</value>
+    <value>創建新的語料庫</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文字以查看</value>
+    <value>添加文本查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>將文本添加到新視圖</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>添加經文視圖以查看</value>
+    <value>添加到查看</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>輔助的</value>
@@ -1535,7 +1538,7 @@
     <value>更改內容的縮放級別</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顧問說明</value>
+    <value>顧問Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
@@ -1691,7 +1694,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示退縮</value>
+    <value>展示反向翻譯</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -1724,10 +1727,13 @@
     <value>協作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>創建您的項目以入門。</value>
+    <value>創建您的項目以開始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>創建一個新項目</value>
+  </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>快速啟動新項目</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>創建項目：</value>
@@ -1756,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>導入服務器項目</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>包括聖經文本？</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>選中此框，以在創建項目時包括希臘語和希伯來語聖經文本。</value>
+    <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>包括nt格雷爾聖經文本？</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>包括希伯來語聖經文本？</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>管理協作項目</value>
@@ -1790,7 +1799,7 @@
     <value>線性聖經（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext正在運行但未連接。</value>
+    <value>paratext正在運行但未連接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT項目</value>
@@ -2087,7 +2096,7 @@
     <value>節省</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>啟用實驗水上插件</value>
+    <value>啟用實驗性水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>檢查您的電子郵件並輸入驗證代碼：</value>
@@ -2198,7 +2207,7 @@
     <value>發行說明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>顯示預釋放</value>
+    <value>顯示預發行</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>
@@ -2226,6 +2235,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>沒有互聯網</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>重置表格</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>發送</value>

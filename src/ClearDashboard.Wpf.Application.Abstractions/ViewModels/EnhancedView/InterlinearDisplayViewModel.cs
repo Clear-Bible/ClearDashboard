@@ -140,7 +140,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </remarks>
         public InterlinearDisplayViewModel(IEnumerable<Token> tokens,
                                            ParallelCorpus parallelCorpus,
-                                           ParallelCorpusId parallelCorpusId,
                                            TranslationSetId translationSetId,
                                            NoteManager noteManager,
                                            IMediator mediator,
@@ -150,7 +149,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                            IWindowManager windowManager)
             : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
-            ParallelCorpusId = parallelCorpusId;
+            ParallelCorpusId = parallelCorpus.ParallelCorpusId;
             SourceTokenMap = new TokenMap(tokens, (parallelCorpus.SourceCorpus as TokenizedTextCorpus)!);
             TranslationSetId = translationSetId;
             WindowManager = windowManager;

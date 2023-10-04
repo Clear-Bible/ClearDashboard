@@ -132,6 +132,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         /// <summary>
+        /// Replaces a token with another, as in the case of splitting an existing token into a composite token.
+        /// </summary>
+        /// <param name="tokenId">The <see cref="TokenId"/> of the token to be replaced.</param>
+        /// <param name="replacementToken">The <see cref="Token"/> to replace it with.  This can be a <see cref="CompositeToken"/>.</param>
+        public void ReplaceToken(TokenId tokenId, Token replacementToken)
+        {
+            var existing = Tokens.FirstOrDefault(t => t.TokenId.IdEquals(tokenId));
+            if (existing != null)
+            {
+                Tokens.Insert(Tokens.IndexOf(existing), replacementToken);
+                Tokens.Remove(existing);
+
+                RebuildPaddedTokens();
+            }
+        }
+
+        /// <summary>
         /// Removes a <see cref="CompositeToken"/> from the token map, reinserting its child tokens.
         /// </summary>
         /// <param name="compositeToken">The <see cref="CompositeToken"/> to remove.</param>

@@ -10,6 +10,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -86,24 +87,47 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task SplitToken(TokenizedTextCorpus corpus, TokenId tokenId, int tokenIndex1, int tokenIndex2, string trainingText1, string trainingText2, string? trainingText3, bool createParallelComposite = true)
+        /// <summary>
+        /// Splits a token into multiple components.
+        /// </summary>
+        /// <param name="corpus">The <see cref="TokenizedTextCorpus"/> that the token is part of.</param>
+        /// <param name="tokenId">The <see cref="TokenId"/> of the token to be split.</param>
+        /// <param name="tokenIndex1">The first index in the token's surface text to split the token.</param>
+        /// <param name="tokenIndex2">The second index in the token's surface text to split the token.</param>
+        /// <param name="trainingText1">The training text for the first component of the split.</param>
+        /// <param name="trainingText2">The training text for the second component of the split.</param>
+        /// <param name="trainingText3">The training text for the third component of the split, if any.</param>
+        /// <param name="createParallelComposite">If true, create a parallel composite token.</param>
+        /// <param name="propagateTo">The <see cref="SplitTokenPropagationScope"/> value indicating how the token split should be propagated.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
+        /// <returns></returns>
+        public async Task SplitToken(TokenizedTextCorpus corpus, 
+            TokenId tokenId, 
+            int tokenIndex1, 
+            int tokenIndex2, 
+            string trainingText1, 
+            string trainingText2, 
+            string? trainingText3, 
+            bool createParallelComposite = true,
+            SplitTokenPropagationScope propagateTo = SplitTokenPropagationScope.None,
+            CancellationToken cancellationToken = default)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var result = await corpus.SplitTokens(Mediator, new List<TokenId> { tokenId }, tokenIndex1, tokenIndex2, trainingText1, trainingText2, trainingText3, createParallelComposite);
+                var result = await corpus.SplitTokens(Mediator, new List<TokenId> { tokenId }, tokenIndex1, tokenIndex2, trainingText1, trainingText2, trainingText3, createParallelComposite, propagateTo, cancellationToken);
 
                 stopwatch.Stop();
-                Logger.LogInformation($"Split token {tokenId.Id} into in {stopwatch.ElapsedMilliseconds} ms");
+                Logger.LogInformation($"Split token {tokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                //await EventAggregator.PublishOnUIThreadAsync(new TokenUnjoinedMessage(compositeToken, tokens));
+                await EventAggregator.PublishOnUIThreadAsync(new TokenSplitMessage(result.SplitCompositeTokensByIncomingTokenId, result.SplitChildTokensByIncomingTokenId), cancellationToken);
                 SelectionManager.SelectionUpdated();
             }
             catch (Exception e)
             {
-                Logger.LogError(e, "An unexpected error occurred while un-joining tokens.");
+                Logger.LogError(e, "An unexpected error occurred while splitting tokens.");
                 throw;
             }
         }

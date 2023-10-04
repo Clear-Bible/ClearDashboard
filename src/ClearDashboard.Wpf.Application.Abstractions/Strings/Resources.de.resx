@@ -455,7 +455,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellenteil</value>
+    <value>Quellteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -659,7 +659,7 @@
     <value>Geteiltes Token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Wenden Sie sich auf alle Fälle von Token an:</value>
+    <value>Bewerben Sie sich auf andere Token -Fälle:</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Wählen Sie aus, wo Token geteilt werden soll:</value>
@@ -950,10 +950,10 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
+    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Ziel als Übersetzung für ...</value>
+    <value>Fügen Sie Ziel als Übersetzung für ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
@@ -1050,6 +1050,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Vorlieben</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Schnell neu</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Zusammenarbeit mit Zusammenarbeit verfügbar</value>
@@ -1184,7 +1187,7 @@
     <value>Datenbank erstellen ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Vervollständigen Sie vollständig ... Nachladen der Schnittstelle neu</value>
+    <value>Führen Sie vollständig zusammen ... neu lädt die Schnittstelle neu</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
     <value>Operation storniert</value>
@@ -1198,7 +1201,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Versetzen Sie Verse -Mappings auf Standardversifikation zurück</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1223,7 +1226,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
+    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1304,7 +1307,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Verbände</value>
+    <value>Durch Assoziationen</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1511,16 +1514,16 @@
     <value>Erstellen Sie eine neue Corpus -Tokenisierung</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Neue Interlineare hinzufügen</value>
+    <value>Fügen Sie neue Interlineare hinzu</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
+    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Vers anzeigen, um anzeigen</value>
+    <value>Zur Anzeige hinzufügen</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Hilfs</value>
@@ -1598,7 +1601,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>
@@ -1729,6 +1732,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Erstellen Sie ein neues Projekt</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Schnellstart neues Projekt</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Projekt erstellen:</value>
   </data>
@@ -1756,11 +1762,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Serverprojekt importieren</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Biblische Texte einschließen?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>NT Greel Biblical Texte einschließen?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>OT hebräische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Kooperationsprojekte verwalten</value>
@@ -1814,7 +1823,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierungsprojekte Liste aktualisieren</value>
+    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>
@@ -1862,7 +1871,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timothy</value>
+    <value>1 Timotheus</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2226,6 +2235,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Kein Internet</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Formular leeren</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Schicken</value>

@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -20,6 +23,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class SplitTokenDialogViewModel : DashboardApplicationScreen
     {
+        public VerseManager VerseManager { get; }
+        public List<KeyValuePair<SplitTokenPropagationScope, string>> PropagationOptions { get; } = new();
+        public SplitTokenPropagationScope SelectedPropagationOption { get; set; } = SplitTokenPropagationScope.None;
+
         private FontFamily _tokenFontFamily;
         public FontFamily TokenFontFamily
         {
@@ -79,6 +86,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 _characterThreshold2 = Math.Max(value, CharacterThreshold1);
                 NotifyOfPropertyChange();
                 CalculateSubtokens();
+            }
+        }
+
+        private bool _threeWaySplit;
+        public bool ThreeWaySplit
+        {
+            get => _threeWaySplit;
+            set
+            {
+                _threeWaySplit = value;
+                NotifyOfPropertyChange();
             }
         }
 
@@ -155,7 +173,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         public bool ApplyEnabled
-
         {
             get
             {
@@ -201,6 +218,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (tokenCharacterArgs!.IsShiftPressed)
             {
                 CharacterThreshold2 = tokenCharacterArgs!.TokenCharacter.Index;
+                ThreeWaySplit = true;
+
             }
             else
             {
@@ -230,6 +249,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 async Task SaveSplitToken()
                 {
+                    await VerseManager.SplitToken(TokenDisplay.Corpus!,
+                        TokenDisplay.Token.TokenId,
+                        Subtoken3Enabled ? CharacterThreshold1 : 0,
+                        Subtoken3Enabled ? CharacterThreshold2 : CharacterThreshold1,
+                        Subtoken1,
+                        Subtoken2,
+                        Subtoken3,
+                        !TokenDisplay.IsCorpusView,
+                        SelectedPropagationOption);
                 }
                 await Task.Run(async () => await SaveSplitToken());
             }
@@ -269,7 +297,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         public SplitTokenDialogViewModel(
-            DashboardProjectManager? projectManager, 
+            DashboardProjectManager? projectManager,
+            VerseManager verseManager,
             INavigationService navigationService,
             ILogger<LexiconDialogViewModel> logger,
             IEventAggregator eventAggregator,
@@ -278,6 +307,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
+            VerseManager = verseManager;
+            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.None, localizationService["None"]));
+            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapterVerse, $"{localizationService["BiblicalTermsBcv_Book"]}+{localizationService["BiblicalTermsBcv_Chapter"]}+{localizationService["BiblicalTermsBcv_Verse"]}"));
+            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["BiblicalTermsBcv_Book"]}+{localizationService["BiblicalTermsBcv_Chapter"]}"));
+            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["BiblicalTermsBcv_Book"]}"));
+            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["BiblicalTermsBcv_All"]}"));
         }
     }
 }
