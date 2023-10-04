@@ -19,7 +19,7 @@
     d:DesignWidth="1500"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource ClearDashboardFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"

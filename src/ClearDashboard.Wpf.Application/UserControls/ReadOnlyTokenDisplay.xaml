@@ -1,6 +1,7 @@
 ﻿<userControls:TokenDisplayBase
     x:Class="ClearDashboard.Wpf.Application.UserControls.ReadOnlyTokenDisplay"
     x:Name="TokenDisplayControl"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

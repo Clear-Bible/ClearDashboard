@@ -31,7 +31,7 @@
             Margin="0,10,0,0"
             HorizontalContentAlignment="Center"
             Content="{helpers:Localization Lexicon_SetTranslation}"
-            FontFamily="{DynamicResource ClearDashboardFont}"
+            FontFamily="{StaticResource ClearDashboardFont}"
             FontSize="16" />
 
         <Label
@@ -47,7 +47,7 @@
             Grid.Row="2"
             Margin="20,0,20,20"
             CurrentLexeme="{Binding CurrentLexeme}"
-            FontFamily="{DynamicResource ClearDashboardFont}"
+            FontFamily="{StaticResource ClearDashboardFont}"
             LemmaFontFamily="{Binding SourceFontFamily}"
             LemmaFontSize="16"
             LemmaFontWeight="Bold"
@@ -61,7 +61,7 @@
             MeaningTextFontSize="14"
             SemanticDomainBackground="AliceBlue"
             SemanticDomainCornerRadius="4"
-            SemanticDomainFontFamily="{DynamicResource ClearDashboardFont}"
+            SemanticDomainFontFamily="{StaticResource ClearDashboardFont}"
             SemanticDomainFontSize="12"
             SemanticDomainFontStyle="Normal"
             SemanticDomainMargin="4"
@@ -121,7 +121,7 @@
             Grid.Row="3"
             Margin="20,10,0,0"
             VerticalAlignment="Center"
-            FontFamily="{DynamicResource ClearDashboardFont}"
+            FontFamily="{StaticResource ClearDashboardFont}"
             FontSize="16"
             FontWeight="SemiBold"
             Text="{helpers:Localization Lexicon_Concordance}" />
@@ -170,7 +170,7 @@
                 x:Name="ApplyTranslation"
                 Margin="10"
                 Content="{helpers:Localization Lexicon_ApplyTranslation}"
-                FontFamily="{DynamicResource ClearDashboardFont}"
+                FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 IsEnabled="{Binding ApplyEnabled}"
                 Style="{StaticResource TransparentStyle}" />
@@ -178,7 +178,7 @@
                 x:Name="CancelTranslation"
                 Margin="10"
                 Content="{helpers:Localization Lexicon_CancelTranslation}"
-                FontFamily="{DynamicResource ClearDashboardFont}"
+                FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 IsEnabled="{Binding CancelEnabled}"
                 Style="{StaticResource AlternativeStyle}" />

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:a="clr-namespace:ClearDashboard.Wpf.Application.Models.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:cm="http://caliburnmicro.com"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"

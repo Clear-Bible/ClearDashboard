@@ -81,7 +81,7 @@
                 x:Name="Save"
                 Margin="10"
                 Content="{helpers:Localization LexiconEdit_SaveChanges}"
-                FontFamily="{DynamicResource ClearDashboardFont}"
+                FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 IsEnabled="{Binding CanSave}"
                 Style="{StaticResource TransparentStyle}" />
@@ -89,7 +89,7 @@
                 x:Name="Cancel"
                 Margin="10"
                 Content="{helpers:Localization LexiconEdit_Cancel}"
-                FontFamily="{DynamicResource ClearDashboardFont}"
+                FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 IsEnabled="{Binding CanCancel}"
                 Style="{StaticResource TransparentStyle}" />

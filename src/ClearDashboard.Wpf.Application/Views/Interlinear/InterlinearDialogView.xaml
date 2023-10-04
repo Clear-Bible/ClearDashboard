@@ -13,7 +13,7 @@
         helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
         AllowsTransparency="True"
         FlowDirection="{Binding WindowFlowDirection}"
-        FontFamily="{DynamicResource ClearDashboardFont}"
+        FontFamily="{StaticResource ClearDashboardFont}"
         Background="{DynamicResource MaterialDesignPaper}"
         Foreground="{DynamicResource MaterialDesignBody}"
         ShowInTaskbar="False"

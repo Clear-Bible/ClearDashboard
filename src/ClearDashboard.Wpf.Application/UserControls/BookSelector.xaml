@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Application.UserControls.BookSelector"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -12,7 +13,7 @@
     d:DesignWidth="100"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="Transparent"
-    FontFamily="{DynamicResource ClearDashboardFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"

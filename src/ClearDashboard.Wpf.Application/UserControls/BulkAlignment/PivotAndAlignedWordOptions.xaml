@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Application.UserControls.BulkAlignment.PivotAndAlignedWordOptions"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:a="clr-namespace:ClearDashboard.Wpf.Application.Models.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters;assembly=ClearDashboard.Wpf.Application.Abstractions"

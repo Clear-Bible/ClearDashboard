@@ -23,7 +23,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource ClearDashboardFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     Icon="..\..\Assets/ClearDashboard_Icon.ico"
     Initialized="OnWindowInitialized"
     Loaded="OnWindowLoaded"

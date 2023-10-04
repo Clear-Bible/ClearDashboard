@@ -22,7 +22,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource Transparent}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource ClearDashboardFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     Foreground="{DynamicResource MaterialDesignPaper}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
