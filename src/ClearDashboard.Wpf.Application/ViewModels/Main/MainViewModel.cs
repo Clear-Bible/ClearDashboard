@@ -963,7 +963,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public void LaunchGettingStartedGuide()
         {
             var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
-            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
+            var path = Path.Combine(programFiles, "ClearDashboard", "Dashboard_Instructions.pdf");
             if (File.Exists(path))
             {
                 var p = new Process();
