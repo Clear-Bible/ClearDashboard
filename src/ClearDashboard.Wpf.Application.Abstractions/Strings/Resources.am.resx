@@ -659,7 +659,7 @@
     <value>የተከፋፈለው ማስመሰያ</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>ወደ ሌሎች የተለዩ ምልክቶች ተከፍለው ይተግብሩ-</value>
+    <value>ወደ ሌሎች የተለዩ መግለጫዎች ተከፍሏል</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>ማስመሰያ የት እንደሚከፋፍሉ ይምረጡ</value>
@@ -1766,7 +1766,7 @@
     <value>ፕሮጀክትዎን በሚፈጠሩበት ጊዜ የግሪክ እና የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎችን ለማካተት ይህንን ሳጥን ይመልከቱ.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT gtel መጽሐፍ ቅዱሳዊ ጽሑፎችን ይጨምሩ?</value>
+    <value>የአኪ ግሪክ መጽሐፍ ቅዱሳዊ ጽሑፎችን ያካቱ?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>የብኪውን የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎች ያካትቱ?</value>

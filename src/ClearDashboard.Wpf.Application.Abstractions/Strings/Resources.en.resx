@@ -659,7 +659,7 @@
     <value>Split Token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Apply split to other instances of token:</value>
+    <value>Apply split to other instances of token</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Select where to split token:</value>
@@ -1766,7 +1766,7 @@
     <value>Check this box to include the Greek and Hebrew biblical texts when creating your project.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Include NT Greel Biblical Texts?</value>
+    <value>Include NT Greek Biblical Texts?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Include OT Hebrew Biblical Texts?</value>
