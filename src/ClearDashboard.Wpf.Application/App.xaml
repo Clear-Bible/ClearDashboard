@@ -93,6 +93,8 @@
 
                     <SolidColorBrush x:Key="MenuTextHueBrush" Color="Black" />
 
+                    <FontFamily x:Key="ClearDashboardFont">Segoe UI</FontFamily>
+
                     <Style
                         x:Key="DashboardRadioButtonStyle"
                         BasedOn="{StaticResource MaterialDesignLightRadioButton}"

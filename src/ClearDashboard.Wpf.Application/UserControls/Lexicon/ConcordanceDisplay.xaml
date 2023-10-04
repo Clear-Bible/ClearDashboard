@@ -48,7 +48,7 @@
             Grid.Row="1"
             Margin="-20,20,0,0"
             VerticalAlignment="Center"
-            FontFamily="{DynamicResource MaterialDesignFont}"
+            FontFamily="{DynamicResource ClearDashboardFont}"
             FontSize="16"
             FontWeight="SemiBold"
             Text="{helpers:Localization Lexicon_NewTranslation}" />
@@ -86,7 +86,7 @@
                 Margin="4,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                FontFamily="{DynamicResource MaterialDesignFont}"
+                FontFamily="{DynamicResource ClearDashboardFont}"
                 FontSize="13"
                 FontStyle="Italic"
                 Foreground="DarkGray"

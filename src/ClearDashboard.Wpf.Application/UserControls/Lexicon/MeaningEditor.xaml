@@ -181,7 +181,7 @@
                 Margin="4,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                FontFamily="{DynamicResource MaterialDesignFont}"
+                FontFamily="{DynamicResource ClearDashboardFont}"
                 FontSize="13"
                 FontStyle="Italic"
                 Foreground="DarkGray"

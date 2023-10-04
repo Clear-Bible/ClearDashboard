@@ -31,7 +31,7 @@
             <TextBlock
                 Grid.Column="0"
                 VerticalAlignment="Center"
-                FontFamily="{DynamicResource MaterialDesignFont}"
+                FontFamily="{DynamicResource ClearDashboardFont}"
                 FontSize="12"
                 FontStyle="Normal"
                 FontWeight="Normal"

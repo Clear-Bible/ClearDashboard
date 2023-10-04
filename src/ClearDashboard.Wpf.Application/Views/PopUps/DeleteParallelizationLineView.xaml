@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Application.Views.PopUps.DeleteParallelizationLineView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"

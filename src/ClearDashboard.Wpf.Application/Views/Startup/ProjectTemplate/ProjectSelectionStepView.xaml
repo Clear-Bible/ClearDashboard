@@ -17,7 +17,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{DynamicResource ClearDashboardFont}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="AutoCompleteBoxStyle" TargetType="{x:Type controls:AutoCompleteComboBox}">

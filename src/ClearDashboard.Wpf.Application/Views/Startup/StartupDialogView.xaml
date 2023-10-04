@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="StartupDialogView"
     d:DesignHeight="450"
+    FontFamily="{StaticResource ClearDashboardFont}"
     d:DesignWidth="800"
     mc:Ignorable="d">
 

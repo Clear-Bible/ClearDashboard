@@ -23,6 +23,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
 
     <UserControl.DataContext>

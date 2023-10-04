@@ -11,6 +11,7 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Notes"
     xmlns:notes1="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"

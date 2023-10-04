@@ -21,7 +21,7 @@
     AllowsTransparency="True"
     Background="{DynamicResource Transparent}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{DynamicResource ClearDashboardFont}"
     Foreground="{DynamicResource MaterialDesignPaper}"
     ShowCloseButton="True"
     ShowInTaskbar="False"

@@ -11,7 +11,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="White"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{DynamicResource ClearDashboardFont}"
     Foreground="Black"
     ShowInTaskbar="False"
     TextElement.FontSize="13"
