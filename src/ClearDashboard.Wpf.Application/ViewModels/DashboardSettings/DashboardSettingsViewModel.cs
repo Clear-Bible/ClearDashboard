@@ -91,13 +91,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
-        // ReSharper disable once UnusedMember.Global
-        // ReSharper disable once UnusedParameter.Global
-        public void TokenSplittingCheckBox(bool value)
-        {
-            Settings.Default.Save();
-        }
-
         private bool _isAlignmentEditingEnabled;
         public bool IsAlignmentEditingEnabled
         {
@@ -411,7 +404,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             _isAlignmentEditingEnabledInitial = IsAlignmentEditingEnabled;
             IsAlignmentEditingSettingChanged =  _isAlignmentEditingEnabledInitial != IsAlignmentEditingEnabled;
 
-            IsTokenSplittingEnabled = AbstractionsSettingsHelper.GetEnabledTokenSplitting();
+            IsTokenSplittingEnabled = Settings.Default.IsTokenSplittingEnabled;
 
             base.OnViewReady(view);
         }
@@ -549,7 +542,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         public void EnableTokenSplitting(bool value)
         {
-            AbstractionsSettingsHelper.SaveEnabledTokenSplitting(IsTokenSplittingEnabled);
+            Settings.Default.IsTokenSplittingEnabled = IsTokenSplittingEnabled;
         }
 
         // ReSharper disable once UnusedParameter.Global

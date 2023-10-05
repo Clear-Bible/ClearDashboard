@@ -30,16 +30,5 @@ namespace ClearDashboard.Wpf.Application.Helpers
             Settings.Default.IsAlignmentEditingEnabled = value;
             Settings.Default.Save();
         }        
-        
-        public static bool GetEnabledTokenSplitting()
-        {
-            return Settings.Default.IsTokenSplittingEnabled;
-        }
-
-        public static void SaveEnabledTokenSplitting(bool value)
-        {
-            Settings.Default.IsTokenSplittingEnabled = value;
-            Settings.Default.Save();
-        }
     }
 }

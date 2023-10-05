@@ -70,17 +70,5 @@ namespace ClearDashboard.Wpf.Application {
                 this["IsAlignmentEditingEnabled"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsTokenSplittingEnabled {
-            get {
-                return ((bool)(this["IsTokenSplittingEnabled"]));
-            }
-            set {
-                this["IsTokenSplittingEnabled"] = value;
-            }
-        }
     }
 }

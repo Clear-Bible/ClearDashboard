@@ -1177,7 +1177,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
                     JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
                     UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
-                    SplitTokenMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
+                    SplitTokenMenuItem.Visibility = Properties.Settings.Default.IsTokenSplittingEnabled && AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                     FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                     CreateAlignmentMenuItem.Visibility = tokenDisplay.VerseDisplay is AlignmentDisplayViewModel && AllSelectedTokens.CanCreateAlignment ? Visibility.Visible : Visibility.Collapsed;
                     DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned && AllSelectedTokens.SelectedTokenCount == 1 ? Visibility.Visible : Visibility.Collapsed;
