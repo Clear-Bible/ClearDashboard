@@ -10,7 +10,7 @@ using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.UserControls;
+using ClearDashboard.Wpf.Application.UserControls.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -28,10 +28,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.UserControls.Notes;
-using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -46,6 +42,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         IHandle<TokenizedCorpusUpdatedMessage>,
         IHandle<ReloadProjectMessage>
     {
+        #region Member Variables   
+
         private const string TaskName = "Notes";
         private const int ToleranceContainsFuzzyAssociationsDescriptions = 1;
         private const int ToleranceContainsFuzzyNoteText = 1;
@@ -55,12 +53,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private NotesView view_;
         private LongRunningTask? currentLongRunningTask_;
 
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
         public enum FilterNoteStatusEnum
         {
             Any,
             Open,
             Resolved
         }
+
+        public Guid UserId => _currentUser?.Id
+                              ?? throw new InvalidStateEngineException(name: "currentUser_", value: "null");
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
 
         private Visibility _progressBarVisibility = Visibility.Visible;
         public Visibility ProgressBarVisibility
@@ -74,7 +85,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         }
 
         private DataAccessLayer.Models.User? _currentUser;
-
         public DataAccessLayer.Models.User? CurrentUser
         {
             get => _currentUser;
@@ -85,8 +95,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        public Guid UserId => _currentUser?.Id 
-                              ?? throw new InvalidStateEngineException(name: "currentUser_", value: "null");
 
         private FilterNoteStatusEnum filterStatus_;
         public FilterNoteStatusEnum FilterStatus
@@ -272,6 +280,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
         public NotesViewModel()
         {
             // used by Caliburn Micro for design time    
@@ -337,6 +350,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
+        #endregion //Constructor
+
+
+        #region Methods
+
         private bool FilterNotesCollectionView(object obj)
         {
             if (obj is NoteViewModel noteViewModel)
@@ -378,14 +396,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Getting all note ids", null);
 
             _ = (await noteManager.GetNoteIdsAsync(cancellationToken: cancellationToken))
-                    .SelectMany(d => d.Value)
-                    //.Distinct(new IIdEqualityComparer()) //using hashset instead.
-                    .Select(nid =>
-                    {
-                        noteIds.Add(nid);
-                        return nid;
-                    })
-                    .ToList();
+                .SelectMany(d => d.Value)
+                //.Distinct(new IIdEqualityComparer()) //using hashset instead.
+                .Select(nid =>
+                {
+                    noteIds.Add(nid);
+                    return nid;
+                })
+                .ToList();
 
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Collecting note details for notes", null);
 
@@ -523,7 +541,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             IsBusy = true;
             currentLongRunningTask_ = longRunningTaskManager_!.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = currentLongRunningTask_!.CancellationTokenSource?.Token
-                ?? throw new Exception("Cancellation source is not set.");
+                                    ?? throw new Exception("Cancellation source is not set.");
             try
             {
                 currentLongRunningTask_.Status = LongRunningTaskStatus.Running;
@@ -674,7 +692,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await GetAllNotesAndSetNoteViewModelsAsync(true);
         }
 
-
+        #endregion // Methods
     }
 
     public static class Extensions
@@ -683,18 +701,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             if (str == null)
                 throw new InvalidParameterEngineException(name: "str", value: "null");
-            else if (input.Length == 0)
+
+            if (input.Length == 0)
                 return true;
-            else
+            if (str.ToUpperInvariant().Contains(input.ToUpperInvariant()))
+                return true;
+
+            if (input.Length > 3)
             {
-                if (str.Contains(input))
-                    return true;
-                else
-                    //see https://github.com/kdjones/fuzzystring
-                    return str.LongestCommonSubsequence(input).Length
-                        >=
-                        input.Length - tolerance;
+                //see https://github.com/kdjones/fuzzystring
+                return str.LongestCommonSubsequence(input).Length
+                       >=
+                       input.Length - tolerance;
+
             }
+
+            return false;
         }
     }
 }
