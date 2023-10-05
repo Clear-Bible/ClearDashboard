@@ -18,6 +18,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="200"
     d:DesignWidth="300"
+    FontFamily="{StaticResource ClearDashboardFont}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="Transparent"
     mc:Ignorable="d">

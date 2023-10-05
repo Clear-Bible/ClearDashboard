@@ -392,9 +392,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             LabelsEditor.EventAggregator = eventAggregator;
-            PaneId = Guid.NewGuid();
 
-            
+            LabelSelector.LocalizationService = localizationService;
+
+            PaneId = Guid.NewGuid();
         }
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout, EnhancedViewItemMetadatum? metadatum, CancellationToken cancellationToken)
@@ -1125,8 +1126,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (e.Note.NoteId != null)
             {
                 await NoteManager.AssociateNoteLabelAsync(e.Note, e.Label);
+                Message = $"Label '{e.Label.Text}' selected for note";
             }
-            Message = $"Label '{e.Label.Text}' selected for note";
+
+            if (e.LabelGroup != null && !e.LabelGroup.Labels.ContainsMatchingLabel(e.Label.Text))
+            {
+                await NoteManager.AssociateLabelToLabelGroupAsync(e.LabelGroup, e.Label);
+                Message += $" and associated to label group {e.LabelGroup.Name}";
+            }
         }
 
         public void LabelRemoved(object sender, LabelEventArgs e)

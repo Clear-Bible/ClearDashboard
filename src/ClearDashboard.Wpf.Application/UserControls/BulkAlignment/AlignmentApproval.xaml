@@ -1,65 +1,85 @@
-﻿<UserControl x:Class="ClearDashboard.Wpf.Application.UserControls.BulkAlignment.AlignmentApproval"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:cm="http://caliburnmicro.com"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
-             xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-             xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
-             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.UserControls.BulkAlignment.AlignmentApproval"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    FontFamily="{StaticResource ClearDashboardFont}"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    mc:Ignorable="d">
     <UserControl.Resources>
-       <Style TargetType="{x:Type Label}">
+        <Style TargetType="{x:Type Label}">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.SystemControlForegroundAccent}" />
         </Style>
     </UserControl.Resources>
-    <materialDesign:Card  Height="300"  Margin="5" >
+    <materialDesign:Card Height="300" Margin="5">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" ></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="{Binding BulkAlignmentsCountMessage}"  HorizontalAlignment="Left" Margin="4, 2, 4 ,0" Padding="0" Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}"></Label>
-                <userControls:BookSelector Grid.Row="0" Grid.Column="1" 
-                                               Books="{Binding RelevantBooks}" 
-                                               CurrentBook="{Binding CurrentBook}" 
-                                               Visibility="{Binding ShowBookSelector, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                               cm:Message.Attach="[Event SelectionChanged] = [Action OnBookChanged($eventArgs)];" 
-                                               HorizontalAlignment="Left" ></userControls:BookSelector>
-                <Label Grid.Row="0" Grid.Column="2" Content="{helpers:Localization BulkAlignmentReview_Alignments}"  HorizontalAlignment="Right" Margin="0, 2, 4 ,0" Padding="0"></Label>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="4,2,4,0"
+                    Padding="0"
+                    HorizontalAlignment="Left"
+                    Content="{Binding BulkAlignmentsCountMessage}"
+                    Visibility="{Binding HasBulkAlignments, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <userControls:BookSelector
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    cm:Message.Attach="[Event SelectionChanged] = [Action OnBookChanged($eventArgs)];"
+                    Books="{Binding RelevantBooks}"
+                    CurrentBook="{Binding CurrentBook}"
+                    Visibility="{Binding ShowBookSelector, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="0,2,4,0"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    Content="{helpers:Localization BulkAlignmentReview_Alignments}" />
             </Grid>
-            <DataGrid Grid.Row="1" Grid.Column="0" 
-                          x:Name="ApprovalDataGrid" 
-                          ItemsSource="{Binding PagedBulkAlignments}" 
-                          AutoGenerateColumns="False" 
-                          HorizontalAlignment="Stretch"
-                          Margin="4"
-                          VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                          VirtualizingPanel.VirtualizationMode="Recycling"
-                          VirtualizingPanel.IsVirtualizing="True"
-                          SelectionMode="Single"
-                          SelectionUnit="FullRow"
-                          ScrollViewer.CanContentScroll="True"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible"
-                          IsReadOnly="True"
-                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}">
+            <DataGrid
+                x:Name="ApprovalDataGrid"
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="4"
+                HorizontalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
+                IsReadOnly="True"
+                ItemsSource="{Binding PagedBulkAlignments}"
+                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                VirtualizingPanel.VirtualizationMode="Recycling">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.HeaderTemplate>
@@ -69,36 +89,46 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox Focusable="False" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                      HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <CheckBox
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Focusable="False"
+                                    IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_Type}"  Binding="{Binding Type}" Width="100"/>
-                    <DataGridTextColumn Header="{helpers:Localization BulkAlignmentReview_SourceRef}" Binding="{Binding SourceRef}" Width="125"/>
-                    <DataGridTemplateColumn Header="{helpers:Localization BulkAlignmentReview_VerseText}" Width=".6*">
+                    <DataGridTextColumn
+                        Width="100"
+                        Binding="{Binding Type}"
+                        Header="{helpers:Localization BulkAlignmentReview_Type}" />
+                    <DataGridTextColumn
+                        Width="125"
+                        Binding="{Binding SourceRef}"
+                        Header="{helpers:Localization BulkAlignmentReview_SourceRef}" />
+                    <DataGridTemplateColumn Width=".6*" Header="{helpers:Localization BulkAlignmentReview_VerseText}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <userControls:ReadOnlyVerseDisplay 
-                                        DataContext="{Binding BulkAlignmentDisplayViewModel}"
-                                        HorizontalAlignment="Stretch"
-                                        VerseBackground="Transparent"
-                                        VerseBorderBrush="Transparent"
-                                        VerseMargin="0"
-                                        VersePadding="0"
-                                        SourceFontFamily="{Binding ElementName=ApprovalDataGrid, Path=DataContext.SourceFontFamily}"
-                                        SourceFontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}"
-                                        TargetFontFamily="{Binding ElementName=ApprovalDataGrid, Path=DataContext.TargetFontFamily}"
-                                        TargetFontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}" />
+                                <userControls:ReadOnlyVerseDisplay
+                                    HorizontalAlignment="Stretch"
+                                    DataContext="{Binding BulkAlignmentDisplayViewModel}"
+                                    SourceFontFamily="{Binding ElementName=ApprovalDataGrid, Path=DataContext.SourceFontFamily}"
+                                    SourceFontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}"
+                                    TargetFontFamily="{Binding ElementName=ApprovalDataGrid, Path=DataContext.TargetFontFamily}"
+                                    TargetFontSize="{Binding DataContext.TargetFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=enhancedView:EnhancedView}}"
+                                    VerseBackground="Transparent"
+                                    VerseBorderBrush="Transparent"
+                                    VerseMargin="0"
+                                    VersePadding="0" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{helpers:Localization Bcv_Sync}" Width="75">
+                    <DataGridTemplateColumn Width="75" Header="{helpers:Localization Bcv_Sync}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button  cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]" 
-                                             Style="{StaticResource SmallTransparentStyle}" 
-                                             Content="{iconPacks:PicolIcons Kind=Synchronize}"></Button>
+                                <Button
+                                    cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]"
+                                    Content="{iconPacks:PicolIcons Kind=Synchronize}"
+                                    Style="{StaticResource SmallTransparentStyle}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
