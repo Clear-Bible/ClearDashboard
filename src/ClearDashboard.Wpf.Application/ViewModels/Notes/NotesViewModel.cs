@@ -704,9 +704,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
             if (input.Length == 0)
                 return true;
-            if (str.ToUpperInvariant().Contains(input.ToUpperInvariant()))
-                return true;
-
             if (input.Length > 3)
             {
                 //see https://github.com/kdjones/fuzzystring
@@ -715,6 +712,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                        input.Length - tolerance;
 
             }
+            if (str.ToUpperInvariant().Contains(input.ToUpperInvariant()))
+                return true;
 
             return false;
         }
