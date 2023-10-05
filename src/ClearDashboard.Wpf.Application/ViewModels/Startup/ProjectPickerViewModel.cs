@@ -297,16 +297,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 _searchText = value;
                 NotifyOfPropertyChange(() => SearchText);
 
+
+                DashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
                 if (SearchText == string.Empty || SearchText is null)
                 {
-                    DashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
                     SearchBlankVisibility = Visibility.Collapsed;
                     NoProjectVisibility = Visibility.Visible;
-                }
-                else
-                {
-                    DashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
-                    DashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ', '_')));
                 }
 
                 if (DashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count > 0)
@@ -478,11 +474,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
+            await GetProjectsVersion();
+
             EventAggregator.Subscribe(this);
 
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
-
-            await GetProjectsVersion();
 
             if (Pinger.PingHost())
             {
@@ -783,15 +779,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 }
             }
 
-            await SetDatabaseCompatibility(DashboardProjects);
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
 
-            await SetGitLabUpdateNeeded(DashboardProjects);
+            _=Task.Run(async () =>
+            {
+                await SetDatabaseCompatibility(DashboardProjects);
 
+                _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+            });
 
-            DashboardProjectsDisplay.Clear();
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+            _=Task.Run(async () =>
+            {
+                await SetGitLabUpdateNeeded(DashboardProjects);
 
-            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+                _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+            });
         }
 
         private async Task AddNewToDashboardProjectsList()
@@ -817,16 +819,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 }
             }
 
-            await SetDatabaseCompatibility(projectsToAdd);
-
-            await SetGitLabUpdateNeeded(projectsToAdd);
-
             DashboardProjects.AddRange(projectsToAdd);
-            DashboardProjects.Sort((x, y)  => string.Compare(x.ProjectName, y.ProjectName));
+            DashboardProjects.Sort((x, y) => string.Compare(x.ProjectName, y.ProjectName));
 
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
 
-            NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+            _=Task.Run(async () =>
+            {
+                await SetDatabaseCompatibility(projectsToAdd);
+
+                _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+            });
+            
+
+            _=Task.Run(async () =>
+            {
+                await SetGitLabUpdateNeeded(projectsToAdd);
+
+                _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+            });
         }
 
         private async Task<DashboardProject> FileToDashboardProject(string file, DirectoryInfo directoryInfo)
@@ -1019,7 +1030,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CollabButtonsEnabled = true;
             }
 
-            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects);
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
 
             NotifyOfPropertyChange(nameof(DashboardProjectsDisplay));
         }
@@ -1064,7 +1075,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        public BindableCollection<DashboardProject> CopyDashboardProjectsToAnother(List<DashboardProject> original)
+        public BindableCollection<DashboardProject> CopyDashboardProjectsToAnother(List<DashboardProject> original, string searchTerm = "")
         {
             BindableCollection<DashboardProject> copy = new();
 
@@ -1072,6 +1083,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 copy.Add(project);
             }
+
+            copy.RemoveAll(project=>!project.ProjectName.ToLower().Contains((searchTerm??string.Empty).ToLower().Replace(' ', '_')));
 
             return copy;
         }
