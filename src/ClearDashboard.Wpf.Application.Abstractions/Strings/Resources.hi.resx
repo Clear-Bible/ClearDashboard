@@ -2131,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>संरेखण संपादन सक्षम करें</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>टोकन विभाजन को सक्षम करें</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>प्रयोगात्मक</value>
   </data>
