@@ -393,7 +393,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
                         }
 
-                        if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
+                        if (ProjectManager.CurrentParatextProject != null && 
+                            corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject!.Guid)
                         {
                             currentParatextProjectPresent = true;
                         }

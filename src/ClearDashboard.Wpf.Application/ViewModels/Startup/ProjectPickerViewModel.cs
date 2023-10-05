@@ -1385,6 +1385,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             Connected = message.Connected;
 
+            Connected = true;
+
             await Task.CompletedTask;
         }
 

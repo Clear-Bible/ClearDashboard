@@ -1229,7 +1229,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // get the project layouts
-            if (ProjectManager.CurrentParatextProject.DirectoryPath != null)
+            if (ProjectManager.CurrentParatextProject != null && ProjectManager.CurrentParatextProject.DirectoryPath != null)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 path = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath, "shared");

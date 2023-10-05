@@ -828,6 +828,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> GenerateLexiconDataCalculations(CancellationToken cancellationToken)
         {
+            if (ProjectManager.CurrentParatextProject is null)
+            {
+                return false;
+            }
+
 
             var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
             ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();

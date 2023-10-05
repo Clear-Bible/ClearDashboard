@@ -34,7 +34,10 @@ using Uri = System.Uri;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
+    using ClearDashboard.DAL.Alignment;
+    using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
     using ClearDashboard.Wpf.Application.Events.Notes;
+    using Paratext.PluginInterfaces;
 
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
@@ -404,9 +407,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DisplayName = enhancedViewLayout.Title;
             Title = enhancedViewLayout.Title;
             VerseOffsetRange = enhancedViewLayout.VerseOffset;
-            BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
+
+            if (ProjectManager!.CurrentParatextProject is not null)
+            {
+                BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
+            }
+            else
+            {
+                // TODO:  This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
+                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
+
+                // get the first project id
+                var firstProjectId = topLevelProjectIds.CorpusIds.FirstOrDefault(t => t.CorpusType == "Standard");
+
+                var results =
+                    await ExecuteRequest(new GetProjectBBBCCCVVVQuery(ProjectManager.CurrentDashboardProject.FullFilePath, firstProjectId.Id), CancellationToken.None);
+
+                var bcvDictionary = new Dictionary<string, string>();
+                if (results.Success)
+                {
+                    var data = results.Data;
+                    foreach (var verse in data)
+                    {
+                        bcvDictionary.Add(verse, verse);
+                    }
+                }
+
+                BcvDictionary = bcvDictionary;
+            }
+            
             ParatextSync = enhancedViewLayout.ParatextSync;
-            if (ParatextSync)
+            if (ParatextSync && ProjectManager.CurrentVerse is not null)
             {
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
                 VerseChange = ProjectManager.CurrentVerse;
