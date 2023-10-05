@@ -166,7 +166,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CurrentStep = Steps![2];
                 GoToSetup = false;
             }
-            if (GoToTemplate)
+            else if (GoToTemplate)
             {
                 CurrentStep = Steps![3];
                 GoToTemplate = false;
