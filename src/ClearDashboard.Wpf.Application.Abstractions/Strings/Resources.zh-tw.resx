@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>結盟</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>選擇與您合作的書籍，您稍後可以隨時添加更多書籍。</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>檢查USFM</value>
   </data>
@@ -407,13 +410,13 @@
     <value>散裝對齊編輯</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量對齊審查</value>
+    <value>批量對準評論</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>數數</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按地面文本計數</value>
+    <value>按表面文本計數</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通過培訓文本計數</value>
@@ -611,7 +614,7 @@
     <value>刪除“ {0}”的對齊？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>刪除所有路線？</value>
+    <value>刪除所有對齊方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多個對齊定義。單擊'{1}'將刪除所有對齊。</value>
@@ -1377,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>標籤附加的文字</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>刪除標籤</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>分離標籤</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
@@ -2168,7 +2177,7 @@
     <value>ClearDashboard設置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>顯示出與儀表板不同的顯示器上擴展的視圖</value>
+    <value>顯示與儀表板不同的顯示器上展示的視圖</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>對於具有三個或三個或以上監視器的系統，在第三監視器上顯示擴展的視圖</value>

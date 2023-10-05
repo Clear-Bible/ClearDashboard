@@ -12,7 +12,6 @@
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:threading="clr-namespace:ClearDashboard.DataAccessLayer.Threading;assembly=ClearDashboard.DAL"
     Width="300"
-    FontFamily="{StaticResource ClearDashboardFont}"
     Height="200"
     Margin="5"
     d:DataContext="{d:DesignInstance Type=shell:BackgroundTasksViewModel,
@@ -21,6 +20,7 @@
     d:DesignWidth="300"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="Transparent"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -75,12 +75,13 @@
                                             </materialDesign:PackIcon.RenderTransform>
                                             <materialDesign:PackIcon.Style>
                                                 <Style TargetType="materialDesign:PackIcon">
-                                                    <Setter Property="Kind" Value="AirplaneSettings" />
+                                                    <Setter Property="Kind" Value="Close" />
+                                                    <Setter Property="Foreground" Value="{StaticResource ErrorHueBrush}" />
                                                     <Setter Property="Padding" Value="0" />
 
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Running}">
-                                                            <Setter Property="Foreground" Value="Orange" />
+                                                            <Setter Property="Foreground" Value="{StaticResource AccentHueBrush}" />
                                                             <Setter Property="Kind" Value="Autorenew" />
                                                             <DataTrigger.EnterActions>
                                                                 <BeginStoryboard>

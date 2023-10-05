@@ -41,6 +41,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -62,7 +63,16 @@
             FontSize="20"
             Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}" />
 
-        <Grid Grid.Row="1">
+        <Label
+            Grid.Row="1"
+            Margin="15,0,0,0"
+            HorizontalAlignment="Left"
+            Content="{helpers:Localization AddParatextCorpusDialog_CanAddLater}"
+            FontSize="11"
+            Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -96,8 +106,8 @@
             CornerRadius="4" />-->
 
         <materialDesign:Card
-            Grid.Row="2"
-            Margin="15"
+            Grid.Row="3"
+            Margin="15,0,15,15"
             materialDesign:ShadowAssist.ShadowDepth="Depth0">
             <Grid>
                 <Grid.RowDefinitions>
@@ -1763,14 +1773,14 @@
         </materialDesign:Card>
         <!--  Bottom row of buttons  -->
         <StackPanel
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="0"
-            Margin="5"
+            Margin="0"
             Orientation="Horizontal"
             Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <Button
-                Margin="10,0,0,15"
+                Margin="10,0,0,0"
                 cm:Message.Attach="SelectOldTestamentBooks()"
                 Content="{helpers:Localization OldTestament}"
                 FontSize="12"
@@ -1778,7 +1788,7 @@
 
             <Button
                 MinWidth="120"
-                Margin="10,0,0,15"
+                Margin="10,0,0,0"
                 cm:Message.Attach="SelectAllBooks()"
                 Content="{helpers:Localization AddParatextCorpusDialog_SelectAll}"
                 FontSize="12"
@@ -1786,7 +1796,7 @@
 
             <Button
                 MinWidth="120"
-                Margin="10,0,0,15"
+                Margin="10,0,0,0"
                 cm:Message.Attach="UnselectAllBooks()"
                 Content="{helpers:Localization AddParatextCorpusDialog_UnSelectAll}"
                 FontSize="12"
@@ -1794,7 +1804,7 @@
 
             <Button
                 x:Name="SelectNewTestamentBooks"
-                Margin="10,0,0,15"
+                Margin="10,0,0,0"
                 cm:Message.Attach="SelectNewTestamentBooks()"
                 Content="{helpers:Localization NewTestament}"
                 FontSize="12"

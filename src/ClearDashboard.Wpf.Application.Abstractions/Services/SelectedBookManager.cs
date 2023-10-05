@@ -48,9 +48,9 @@ public class SelectedBookManager : PropertyChangedBase
 
     public async Task InitializeBooks(IDictionary<string, IEnumerable<UsfmError>> usfmErrorsByParatextProjectId, bool enableTokenizedBooks, bool selectAllEnabledBooks, CancellationToken cancellationToken)
     {
-        var commonBooks = CreateBooks(true, true).ToDictionary(e => e.Abbreviation, e => e);
+        var commonBooks = CreateBooks(false, true).ToDictionary(e => e.Abbreviation, e => e);
 
-        
+
         foreach (var kvp in usfmErrorsByParatextProjectId.Where(e => e.Key != null))
         {
             var books = await InitializeBooksInternal(kvp.Value, kvp.Key, enableTokenizedBooks, cancellationToken);
@@ -58,7 +58,10 @@ public class SelectedBookManager : PropertyChangedBase
             foreach (var book in books.Where(book => book.HasUsfmError || !book.IsEnabled || !book.IsSelected))
             {
                 commonBooks[book.Abbreviation].HasUsfmError = commonBooks[book.Abbreviation].HasUsfmError || book.HasUsfmError;
-                commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled && book.IsEnabled;
+                if (kvp.Key == usfmErrorsByParatextProjectId.Keys.First())
+                {
+                    commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled || book.IsEnabled;
+                }
                 commonBooks[book.Abbreviation].IsSelected = false; // set this to false by default
             }
         }
