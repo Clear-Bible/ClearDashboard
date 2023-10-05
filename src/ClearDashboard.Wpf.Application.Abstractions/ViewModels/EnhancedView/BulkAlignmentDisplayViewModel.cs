@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
@@ -21,10 +17,7 @@ public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
     private readonly BulkAlignment _bulkAlignment;
     
     public BulkAlignmentDisplayViewModel(BulkAlignment bulkAlignment,
-        EngineStringDetokenizer sourceDetokenizer,
-        bool isSourceRtl,
-        EngineStringDetokenizer targetDetokenizer,
-        bool isTargetRtl,
+        ParallelCorpus parallelCorpus,
         NoteManager noteManager, 
         IMediator mediator, 
         IEventAggregator eventAggregator, 
@@ -32,20 +25,20 @@ public class BulkAlignmentDisplayViewModel : VerseDisplayViewModel
         ILogger<BulkAlignmentDisplayViewModel> logger) : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
     {
         _bulkAlignment = bulkAlignment;
-        //SourceTokenMap = new TokenMap(bulkAlignment.SourceVerseTokens, sourceDetokenizer, isSourceRtl);
-        //TargetTokenMap = new TokenMap(bulkAlignment.TargetVerseTokens, targetDetokenizer, isTargetRtl);
+        SourceTokenMap = new TokenMap(bulkAlignment.SourceVerseTokens, (parallelCorpus.SourceCorpus as TokenizedTextCorpus)!);
+        TargetTokenMap = new TokenMap(bulkAlignment.TargetVerseTokens, (parallelCorpus.TargetCorpus as TokenizedTextCorpus)!);
     }
 
     public string DisplayTokens => string.Join(" ", _bulkAlignment.SourceVerseTokens.Select(token => token.TrainingText));
 
-    public static async Task<BulkAlignmentDisplayViewModel> CreateAsync(IComponentContext componentContext, BulkAlignment bulkAlignment, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl)
+    public static async Task<BulkAlignmentDisplayViewModel> CreateAsync(IComponentContext componentContext, 
+        BulkAlignment bulkAlignment, 
+        ParallelCorpus parallelCorpus
+        )
     {
         var viewModel = componentContext.Resolve<BulkAlignmentDisplayViewModel>(
             new NamedParameter("bulkAlignment", bulkAlignment),
-                            new NamedParameter("sourceDetokenizer", sourceDetokenizer),
-                            new NamedParameter("isSourceRtl", isSourceRtl),
-                            new NamedParameter("targetDetokenizer", targetDetokenizer),
-                            new NamedParameter("isTargetRtl", isTargetRtl));
+            new NamedParameter("parallelCorpus", parallelCorpus));
         await viewModel.InitializeAsync();
         return viewModel;
     }
