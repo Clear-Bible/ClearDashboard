@@ -80,6 +80,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _isTokenSplittingEnabled;
+        public bool IsTokenSplittingEnabled
+        {
+            get => _isTokenSplittingEnabled;
+            set
+            {
+                _isTokenSplittingEnabled = value;
+                NotifyOfPropertyChange(() => IsAlignmentEditingEnabled);
+            }
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        // ReSharper disable once UnusedParameter.Global
+        public void TokenSplittingCheckBox(bool value)
+        {
+            Settings.Default.Save();
+        }
 
         private bool _isAlignmentEditingEnabled;
         public bool IsAlignmentEditingEnabled
@@ -394,6 +411,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             _isAlignmentEditingEnabledInitial = IsAlignmentEditingEnabled;
             IsAlignmentEditingSettingChanged =  _isAlignmentEditingEnabledInitial != IsAlignmentEditingEnabled;
 
+            IsTokenSplittingEnabled = AbstractionsSettingsHelper.GetEnabledTokenSplitting();
 
             base.OnViewReady(view);
         }
@@ -527,6 +545,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         {
             AbstractionsSettingsHelper.SaveEnabledAlignmentEditing(IsAlignmentEditingEnabled);
             _eventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus());
+        }
+
+        public void EnableTokenSplitting(bool value)
+        {
+            AbstractionsSettingsHelper.SaveEnabledTokenSplitting(IsTokenSplittingEnabled);
         }
 
         // ReSharper disable once UnusedParameter.Global
