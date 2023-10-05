@@ -87,7 +87,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             set
             {
                 _isTokenSplittingEnabled = value;
-                NotifyOfPropertyChange(() => IsAlignmentEditingEnabled);
+                NotifyOfPropertyChange(() => IsTokenSplittingEnabled);
             }
         }
 
