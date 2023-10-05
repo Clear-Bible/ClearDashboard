@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alineación</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Seleccione Libros con los que esté trabajando, siempre puede agregar más libros más tarde.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Verificar USFM</value>
   </data>
@@ -458,7 +461,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Reflexión de origen</value>
+    <value>Fuente Ref.</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -605,13 +608,13 @@
     <value>Eliminar la alineación?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>¿Eliminar todas las alineaciones?</value>
+    <value>Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -653,7 +656,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de vista</value>
+    <value>Mostrar los controles de la vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -836,7 +839,7 @@
     <value>Cancelar traducción</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias no establecidos</value>
+    <value>Cambiar todos los ocurrencias inseguros</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -1352,7 +1355,7 @@
     <value>Agregar grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Agregar un grupo de etiquetas</value>
+    <value>Agregar un grupo de etiqueta</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Un grupo de etiquetas ya existe con el nombre</value>
@@ -1377,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Texto adjunto a la etiqueta</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Etiqueta de eliminación</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Etiqueta disociada</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
@@ -1427,7 +1436,7 @@
     <value>¿Enviar esta nota a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envía esta nota a Paratext</value>
+    <value>Envíe esta nota a Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1550,7 +1559,7 @@
     <value>Hija</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Eliminar interlineal</value>
@@ -1613,7 +1622,7 @@
     <value>Estándar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Estudio de estudio</value>
+    <value>Estudiobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBIBLeadDitions</value>
@@ -2156,7 +2165,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab al servidor</value>
+    <value>Guardar el usuario de GitLab en el servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>
