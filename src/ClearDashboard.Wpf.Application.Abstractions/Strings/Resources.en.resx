@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alignment</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Select book(s) you are working with, you can always add more books later.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Checking USFM</value>
   </data>
@@ -1377,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Text attached to label</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Delete label</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Disassociate label</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>

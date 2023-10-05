@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alinhamento</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Selecione Livros (s) com os quais você está trabalhando, sempre pode adicionar mais livros posteriormente.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Verificando USFM</value>
   </data>
@@ -140,7 +143,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salvar erros USFM no arquivo</value>
+    <value>Salve erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -629,7 +632,7 @@
     <value>Junte -se a tokens</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Junte -se a tokens para par de idiomas</value>
+    <value>Junte -se a tokens para o par de idiomas</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Marcar o alinhamento como 'inválido'</value>
@@ -950,7 +953,7 @@
     <value>Adicione como forma para ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Encontre correspondências ou formulários completos ou parciais para a fonte</value>
+    <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Adicione o alvo como tradução para ...</value>
@@ -1154,7 +1157,7 @@
     <value>Pesquisar por brilho inglês</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Pesquise por hebraico/grego</value>
+    <value>Pesquisar por hebraico/grego</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Senso</value>
@@ -1202,7 +1205,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para versificação padrão</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1334,7 +1337,7 @@
     <value>Adicione um rótulo</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Você quer criar o rótulo:</value>
+    <value>Você quer criar rótulo:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
@@ -1377,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Texto anexado ao rótulo</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Excluir rótulo</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Rótulo desassociado</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Criada</value>
@@ -1592,7 +1601,7 @@
     <value>Propriedades</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para versificação padrão</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Recurso</value>
@@ -1670,7 +1679,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme Type</value>
+    <value>Lexeme tipo</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1766,7 +1775,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos gregos no NT?</value>
+    <value>Incluir textos bíblicos gregos do NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -2171,7 +2180,7 @@
     <value>Mostrar visualizações expandidas em um monitor diferente do painel</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Para sistemas com três ou mais monitores, mostre uma visualização expandida no terceiro monitor</value>
+    <value>Para sistemas com três ou mais monitores, mostre visualização expandida no terceiro monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Coleção de texto</value>

@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Aliniere</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Selectați cartea cu care lucrați, puteți adăuga întotdeauna mai multe cărți mai târziu.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Verificarea USFM</value>
   </data>
@@ -335,7 +338,7 @@
     <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>înțelepciune, înțelegere</value>
+    <value>Înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -647,10 +650,10 @@
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest game de versuri.</value>
+    <value>Nu există date de versuri în acest interval de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Eliminați corpusul</value>
+    <value>Îndepărtați corpusul</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Afișați controalele de vizualizare</value>
@@ -986,7 +989,7 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvântul țintă</value>
+    <value>Cuvânt țintă</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
     <value>Import de lexic</value>
@@ -1175,7 +1178,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sense verset</value>
+    <value>Simțul versetului</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1378,6 +1381,12 @@
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Text atașat la etichetă</value>
   </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Ștergeți eticheta</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Dezasociați eticheta</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creată</value>
   </data>
@@ -1484,7 +1493,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNER WORD MASINE DE TRAIN</value>
+    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1499,7 +1508,7 @@
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vedere</value>
+    <value>Adăugați la vizualizare</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la New View</value>
@@ -1523,7 +1532,7 @@
     <value>Adăugați text la New View</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vedere</value>
+    <value>Adăugați la vizualizare</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliar</value>
@@ -1694,7 +1703,7 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Afișați backtranslația</value>
+    <value>Arată backtranslație</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Tulpină</value>
@@ -1760,7 +1769,7 @@
     <value>Incepe</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Import proiect de server</value>
+    <value>Proiect de import server</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Verificați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
@@ -1769,7 +1778,7 @@
     <value>Includeți textele biblice grecești NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Includeți textele biblice ebraice?</value>
+    <value>Includeți texte biblice ebraice?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gestionați proiectele de colaborare</value>
@@ -1811,7 +1820,7 @@
     <value>Suntem aproape acolo!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Faceți clic aici pentru a vizualiza videoclipurile „bordul de bord”</value>
+    <value>Faceți clic aici pentru a vizualiza videoclipurile „tabloul de bord”</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
@@ -2072,7 +2081,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți prenumele dvs.</value>
+    <value>Vă rugăm să introduceți numele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2171,7 +2180,7 @@
     <value>Afișați vizualizări extinse pe un monitor diferit de tabloul de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați vizualizare extinsă pe a treia monitor</value>
+    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați o vizualizare extinsă pe a treia monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colecția de text</value>
@@ -2249,7 +2258,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Acceptă formatul de marcare</value>
+    <value>Suportă formatul Markdown</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>

@@ -119,10 +119,13 @@
     <value>Ajouter</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Sélectionnez comment tokensize le corpus</value>
+    <value>Sélectionnez comment tokenize le corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alignement</value>
+  </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Sélectionnez des livres avec lesquels vous travaillez, vous pouvez toujours ajouter plus de livres plus tard.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Vérification USFM</value>
@@ -440,7 +443,7 @@
     <value>Mark sélectionné comme «Revue des besoins»</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Mark sélectionné comme «valide»</value>
+    <value>Marque sélectionnée comme «valide»</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Besoin d'examen</value>
@@ -497,7 +500,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>Nouveau individu</value>
+    <value>nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -626,7 +629,7 @@
     <value>Interlinéaire</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Rejoignez des jetons</value>
+    <value>Rejoignez les jetons</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>Rejoignez des jetons pour la paire de langues</value>
@@ -992,7 +995,7 @@
     <value>Importation du lexique</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Correspondance de traduction</value>
+    <value>Matchs de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1378,6 +1381,12 @@
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Texte attaché à l'étiquette</value>
   </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Supprimer l'étiquette</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Étiquette dissociée</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Créé</value>
   </data>
@@ -1484,7 +1493,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de la machine à train</value>
+    <value>Aligneur de mot de machine de train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1535,7 +1544,7 @@
     <value>Calculer le nouveau modèle de traduction</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Modifier le niveau de zoom du contenu</value>
+    <value>Changer le niveau de zoom du contenu</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Consultant Notes</value>
@@ -1751,7 +1760,7 @@
     <value>Supprimer le projet</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Activer la sélection du livre</value>
+    <value>Activer la sélection des livres</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>En cas de vérification, vous pourrez sélectionner les livres à traiter.</value>
@@ -1802,7 +1811,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet PARATEXT</value>
+    <value>Projet de parattex</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -1823,7 +1832,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Rafraîchir la liste des projets de collaboration</value>
+    <value>Refreindre la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -1916,7 +1925,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -2042,7 +2051,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharie</value>
+    <value>Zécharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2150,7 +2159,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de la collaboration</value>
+    <value>Restaurer l'utilisateur de collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>
@@ -2303,7 +2312,7 @@
     <value>Mettre à jour et ajouter nouveau</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Créer à l'aide de valeurs par défaut</value>
+    <value>Créer en utilisant les valeurs par défaut</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Outil d'alignement</value>
