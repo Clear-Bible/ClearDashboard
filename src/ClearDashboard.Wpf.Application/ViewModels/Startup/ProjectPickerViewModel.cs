@@ -458,24 +458,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 IsParatextBetaInstalled = Visibility.Collapsed;
             }
+
+            //
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             _longRunningTaskManager.CancellationTokenSource= new CancellationTokenSource();
             await base.OnActivateAsync(cancellationToken);
-        }
 
-
-        protected override async void OnViewLoaded(object view)
-        {
             if (_initializationComplete)
             {
                 return;
             }
 
             await GetProjectsVersion();
+        }
 
+        protected override async void OnViewLoaded(object view)
+        {
             EventAggregator.Subscribe(this);
 
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
@@ -786,6 +787,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 await SetDatabaseCompatibility(DashboardProjects);
 
                 _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+                NotifyOfPropertyChange(() => DashboardProjectsDisplay);
             });
 
             _=Task.Run(async () =>
@@ -793,6 +795,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 await SetGitLabUpdateNeeded(DashboardProjects);
 
                 _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+                NotifyOfPropertyChange(() => DashboardProjectsDisplay);
             });
         }
 
@@ -829,6 +832,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 await SetDatabaseCompatibility(projectsToAdd);
 
                 _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+                NotifyOfPropertyChange(() => DashboardProjectsDisplay);
             });
             
 
@@ -837,6 +841,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 await SetGitLabUpdateNeeded(projectsToAdd);
 
                 _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+                NotifyOfPropertyChange(() => DashboardProjectsDisplay);
             });
         }
 
