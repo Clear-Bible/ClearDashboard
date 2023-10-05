@@ -97,6 +97,17 @@ namespace ClearDashboard.Wpf.Application.Collections
             }
         }
 
+        public void Replace(TokenId tokenId, Token replacementToken)
+        {
+            var existing = Items.FirstOrDefault(i => i.Token.TokenId.IdEquals(tokenId));
+            if (existing != null)
+            {
+                var index = IndexOf(existing);
+                Items.Insert(IndexOf(existing), new TokenDisplayViewModel(replacementToken));
+                Items.Remove(existing);
+            }
+        }
+
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             CombinedNotes = new NoteViewModelCollection();

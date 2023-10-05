@@ -2131,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktifkan pengeditan penyelarasan</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Aktifkan pemisahan token</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Eksperimental</value>
   </data>

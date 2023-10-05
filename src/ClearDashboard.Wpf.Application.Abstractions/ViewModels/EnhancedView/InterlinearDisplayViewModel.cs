@@ -105,7 +105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         protected override async Task InitializeAsync()
         {
-            TranslationManager = await TranslationManager.CreateAsync(LifetimeScope, SourceTokenMap.Tokens.TokenIds.ToList(), TranslationSetId);
+            TranslationManager = await TranslationManager.CreateAsync(LifetimeScope, SourceTokenMap!.TokenIds.ToList(), TranslationSetId);
 
             await base.InitializeAsync();
         }
@@ -114,20 +114,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Creates an <see cref="InterlinearDisplayViewModel"/> instance using the specified DI container.
         /// </summary>
         /// <param name="componentContext">A <see cref="IComponentContext"/> (i.e. LifetimeScope) with which to resolve dependencies.</param>
-        /// <param name="sourceTokens">The tokens to display.</param>
-        /// <param name="parallelCorpusId">The <see cref="ParallelCorpusId"/> of the parallel corpus.</param>
-        /// <param name="detokenizer">The detokenizer to use for the source tokens.</param>
-        /// <param name="isRtl">True if the source tokens should be displayed right-to-left (RTL); false otherwise.</param>
+        /// <param name="tokens">The tokens to display.</param>
+        /// <param name="parallelCorpus">The <see cref="ParallelCorpus"/> that the tokens are part of.</param>
         /// <param name="translationSetId">The ID of the translation set to use.</param>
         /// <returns>A constructed <see cref="InterlinearDisplayViewModel"/>.</returns>
         public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, 
-            IEnumerable<Token> sourceTokens, ParallelCorpusId parallelCorpusId, EngineStringDetokenizer detokenizer, bool isRtl, TranslationSetId translationSetId)
+            IEnumerable<Token> tokens, 
+            ParallelCorpus parallelCorpus,
+            TranslationSetId translationSetId)
         {
             var verseDisplayViewModel = componentContext.Resolve<InterlinearDisplayViewModel>(
-                new NamedParameter("sourceTokens", sourceTokens),
-                new NamedParameter("parallelCorpusId", parallelCorpusId),
-                new NamedParameter("sourceDetokenizer", detokenizer),
-                new NamedParameter("isSourceRtl", isRtl),
+                new NamedParameter("tokens", tokens),
+                new NamedParameter("parallelCorpus", parallelCorpus),
                 new NamedParameter("translationSetId", translationSetId)
             );
             await verseDisplayViewModel.InitializeAsync();
@@ -140,21 +138,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <remarks>
         /// This is for use by the DI container; use <see cref="CreateAsync"/> instead to create and initialize an instance of this view model.
         /// </remarks>
-        public InterlinearDisplayViewModel(IEnumerable<Token> sourceTokens,
-            ParallelCorpusId parallelCorpusId,
-            EngineStringDetokenizer sourceDetokenizer,
-            bool isSourceRtl,
-            TranslationSetId translationSetId,
-            NoteManager noteManager,
-            IMediator mediator,
-            IEventAggregator eventAggregator,
-            ILifetimeScope lifetimeScope,
-            ILogger<InterlinearDisplayViewModel> logger,
-            IWindowManager windowManager)
+        public InterlinearDisplayViewModel(IEnumerable<Token> tokens,
+                                           ParallelCorpus parallelCorpus,
+                                           TranslationSetId translationSetId,
+                                           NoteManager noteManager,
+                                           IMediator mediator,
+                                           IEventAggregator eventAggregator,
+                                           ILifetimeScope lifetimeScope,
+                                           ILogger<InterlinearDisplayViewModel> logger,
+                                           IWindowManager windowManager)
             : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
-            ParallelCorpusId = parallelCorpusId;
-            SourceTokenMap = new TokenMap(sourceTokens, sourceDetokenizer, isSourceRtl);
+            ParallelCorpusId = parallelCorpus.ParallelCorpusId;
+            SourceTokenMap = new TokenMap(tokens, (parallelCorpus.SourceCorpus as TokenizedTextCorpus)!);
             TranslationSetId = translationSetId;
             WindowManager = windowManager;
         }

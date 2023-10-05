@@ -102,6 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected IEnhancedViewManager EnhancedViewManager { get; }
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
+        public IWindowManager WindowManager { get; }
 
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>();
 
@@ -368,7 +369,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager selectionManager, 
             IEventAggregator? eventAggregator,
             IMediator mediator,
-            ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
+            ILifetimeScope? lifetimeScope, ILocalizationService localizationService, IWindowManager windowManager) :
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
@@ -376,6 +377,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
+            WindowManager = windowManager;
             EnhancedViewManager = enhancedViewManager;
             
             Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
@@ -874,6 +876,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task TokenJoinLanguagePairAsync(TokenEventArgs e)
         {
             await VerseManager.JoinTokensAsync(e.SelectedTokens.TokenCollection, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
+        }
+
+        public void TokenSplit(object sender, TokenEventArgs e)
+        {
+            Task.Run(() => TokenSplitAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenSplitAsync(TokenEventArgs args)
+        {
+            async Task ShowSplitTokenDialog()
+            {
+                var item = ActiveItem as VerseAwareEnhancedViewItemViewModel;
+                var dialogViewModel = LifetimeScope!.Resolve<SplitTokenDialogViewModel>();
+                dialogViewModel.TokenDisplay = args.TokenDisplay;
+                dialogViewModel.TokenFontFamily = item.SourceFontFamily;
+                _ = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+            }
+            await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowSplitTokenDialog);
         }
 
         public void TokenUnjoin(object sender, TokenEventArgs e)
