@@ -13,6 +13,8 @@ using System;
 using System.Linq;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using SIL.Scripture;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -41,6 +43,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected override Translation? GetTranslationForToken(Token token, CompositeToken? compositeToken)
         {
             return TranslationManager?.GetTranslationForToken(token, compositeToken);
+        }
+
+        public override void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
+            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
+        {
+            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, sourceTokenizedCorpusNotes);
+            if (targetTokenizedCorpusNotes != null)
+                SetExternalNotesOnTokenDisplayViewModels(TargetTokenDisplayViewModels, targetTokenizedCorpusNotes);
         }
 
         /// <summary>

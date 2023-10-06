@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
@@ -16,7 +15,6 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
@@ -25,6 +23,7 @@ namespace ClearDashboard.Wpf.Application.Services
 {
     public class ExternalNoteManager
     {
+
         /// <summary>
         /// Gets relevant External drafting tool project information for the entities associated with a note.
         /// </summary>
@@ -140,15 +139,15 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public static async Task<IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromExternalAsync(
+        public static async Task<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromExternalAsync(
             IMediator mediator, 
             TokenizedTextCorpusId tokenizedTextCorpusId, 
             int bookNumber, 
             int chapterNumber, 
-            EngineStringDetokenizer engineStringDetokenizer,
             ILogger? logger,
             CancellationToken cancellationToken)
         {
+            var engineStringDetokenizer = tokenizedTextCorpusId.Detokenizer;
             try
             {
                 var stopwatch = new Stopwatch();
@@ -163,7 +162,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 var tokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator, tokenizedTextCorpusId, false, cancellationToken);
                 var tokenTextRows = tokenizedTextCorpus.GetRows(new List<string>() { bookAbbreviation })
                     .Where(r => ((VerseRef)r.Ref).ChapterNum == chapterNumber)
-                    .Cast<TokensTextRow>();
+                    .Cast<TokensTextRow>()
+                    .ToList();
 
                 var getNotesCommandParam = new GetNotesQueryParam()
                 {
@@ -186,9 +186,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
                     return externalNotesGroupedByVerse
                         ?.Select(g => g
-                            .Select(r => r)
-                            .AddVerseAndTokensContext(tokenTextRows.First(ttr => ((VerseRef)ttr.Ref).VerseNum.ToString() == g.Key), engineStringDetokenizer))
+                            .Select(en => en)
+                            .Where(en => tokenTextRows
+                                .Select(ttr => (VerseRef) ttr.Ref)
+                                .Contains(new VerseRef(en.VerseRefString)))
+                            .AddVerseAndTokensContext(tokenTextRows.First(ttr => ((VerseRef)ttr.Ref).ToString() == g.Key), engineStringDetokenizer))
                         .SelectMany(r => r)
+                        .ToList()
                             ?? throw new InvalidDataEngineException(name: "result.Data", value: "null", message: "result of GetNotesQuery is successful yet result.Data is null");
                 }
                 else
@@ -204,38 +208,105 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        private record Chapter(int BookNumber, int BhapterNumber);
+        private record Chapter(int BookNumber, int ChapterNumber);
 
-        private Dictionary<Chapter, IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> ChapterExternalNotesMap { get; set; } = new();
+        private Dictionary<string, Dictionary<Chapter, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>>>  ExternalProjectIdToChapterToExternalNotesMap { get; set; } = new();
 
-        public async Task<IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetExternalNotes(
-            IMediator mediator,
-            TokenizedTextCorpusId tokenizedTextCorpusId,
-            int bookNumber,
-            int chapterNumber,
-            int verseNumber,
-            EngineStringDetokenizer engineStringDetokenizer,
-            ILogger? logger = null,
-            CancellationToken cancellationToken = default)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="tokenizedTextCorpusIds"></param>
+        /// <param name="verseRefs"></param>
+        /// <param name="logger"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>A list of list of external notes, where the first list groups lists of external notes by the tokenizedTextCorpusIds parameter, in order.</returns>
+        /// <exception cref="EngineException"></exception>
+        /// <exception cref="InvalidStateEngineException"></exception>
+        public List<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>>
+            GetExternalNotes(
+                IMediator mediator,
+                IEnumerable<TokenizedTextCorpusId> tokenizedTextCorpusIds,
+                IEnumerable<VerseRef> verseRefs,
+                ILogger? logger = null,
+                CancellationToken cancellationToken = default)
         {
-            var chapter = new Chapter(bookNumber, chapterNumber);
-            IEnumerable<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? externalNotesForChapter;
-            if (ChapterExternalNotesMap.TryGetValue(chapter, out externalNotesForChapter)) 
+            bool obtainedLock = false;
+            try
             {
+                Monitor.TryEnter(ExternalProjectIdToChapterToExternalNotesMap, TimeSpan.FromSeconds(60), ref obtainedLock);
+                if (!obtainedLock)
+                {
+                    logger?.LogWarning($"couldn't obtain lock on ExternalProjectIdToChapterToExternalNotesMap for verseref {verseRefs.First()}");
+                    throw new EngineException("Couldn't obtain lock on cache within 10 seconds");
+                }
+                                
+                return tokenizedTextCorpusIds
+                    .Select(ttcid =>
+                    {
+                        Dictionary<Chapter, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>>? chapterToExternalNotesMap = null;
+                        if (ExternalProjectIdToChapterToExternalNotesMap.TryGetValue(ttcid?.CorpusId?.ParatextGuid
+                            ?? throw new InvalidStateEngineException(name: "tokenizedTextCorpus.CorpusId or ParatextGuid", value: "null")
+                            , out chapterToExternalNotesMap))
+                        {
+                        }
+                        else
+                        {
+                            chapterToExternalNotesMap = new Dictionary<Chapter, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>>();
+                            ExternalProjectIdToChapterToExternalNotesMap.Add(ttcid!.CorpusId!.ParatextGuid, chapterToExternalNotesMap);
+                        }
+
+                        var externalNotes = verseRefs
+                            .SelectMany(vr =>
+                            {
+                                var chapter = new Chapter(vr.BookNum, vr.ChapterNum);
+                                List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? externalNotes = null;
+                                if (chapterToExternalNotesMap.TryGetValue(chapter, out externalNotes))
+                                {
+                                    return externalNotes
+                                        .Where(en => en.verseRef.BookNum == vr.BookNum &&
+                                            en.verseRef.ChapterNum == vr.ChapterNum &&
+                                            en.verseRef.VerseNum == vr.VerseNum);
+                                }
+                                else
+                                {
+                                    var task = GetNotesForChapterFromExternalAsync(mediator, ttcid, vr.BookNum, vr.ChapterNum, logger, cancellationToken);
+                                    task.Wait();
+                                    externalNotes = task.Result;
+                                    chapterToExternalNotesMap.Add(chapter, externalNotes);
+                                    return externalNotes
+                                        .Where(en => en.verseRef.BookNum == vr.BookNum &&
+                                            en.verseRef.ChapterNum == vr.ChapterNum &&
+                                            en.verseRef.VerseNum == vr.VerseNum);
+
+                                }
+                            })
+                            .ToList();
+                        return externalNotes;
+                    })
+                    .ToList();
+            }
+            finally
+            {
+                if (obtainedLock)
+                {
+                    Monitor.Exit(ExternalProjectIdToChapterToExternalNotesMap);
+                }
+            }
+        }
+
+        public bool InvalidateExternalNotesCache(TokenizedTextCorpusId? tokenizedTextCorpusId)
+        {
+            if (tokenizedTextCorpusId == null)
+            {
+                ExternalProjectIdToChapterToExternalNotesMap.Clear();
+                return true;
             }
             else
             {
-                externalNotesForChapter = await GetNotesForChapterFromExternalAsync(mediator, tokenizedTextCorpusId, bookNumber, chapterNumber, engineStringDetokenizer, logger, cancellationToken);
-                ChapterExternalNotesMap.Add(chapter, externalNotesForChapter);
+                return ExternalProjectIdToChapterToExternalNotesMap.Remove(tokenizedTextCorpusId?.CorpusId?.ParatextGuid
+                    ?? throw new InvalidStateEngineException(name: "tokenizedTextCorpus.CorpusId or ParatextGuid", value: "null"));
             }
-
-            return externalNotesForChapter
-                .Where(t => t.verseRef.VerseNum == verseNumber);
-        }
-
-        public void InvalidateExternalNotesCache()
-        {
-            ChapterExternalNotesMap.Clear();
         }
     }
 }

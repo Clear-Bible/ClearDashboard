@@ -44,8 +44,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                                   ILifetimeScope? lifetimeScope,
                                                   IWindowManager windowManager,
                                                   ILocalizationService localizationService,
+                                                  NoteManager noteManager,
                                                   EditMode editMode = EditMode.MainViewOnly)
-            : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService, editMode)
+            : base(
+                  projectManager, 
+                  enhancedViewManager, 
+                  navigationService, 
+                  logger, 
+                  eventAggregator, 
+                  mediator, 
+                  lifetimeScope, 
+                  windowManager, 
+                  localizationService, 
+                  noteManager, 
+                  editMode)
         {
             ShowEditButton = EditMode == EditMode.ManualToggle;
             EnableEditMode = false;
