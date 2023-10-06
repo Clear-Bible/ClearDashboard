@@ -202,6 +202,14 @@ namespace ClearDashboard.Wpf.Application.Collections
                 action(token);
             }
         }
+        public int SelectedAssignedTranslationCount => SelectedTranslations
+            .GroupBy(t => t.CompositeToken?.TokenId?.Id?? t.Token.TokenId.Id)
+            .Count(g => g.Any(e => e.Translation?.TranslationId!=null));
+        
+        public int SelectedUnassignedTranslationCount => SelectedTranslations
+            .GroupBy(t => t.CompositeToken?.TokenId?.Id?? t.Token.TokenId.Id)
+            .Count(g => g.All(e => e.Translation?.TranslationId==null));
+
 
         public bool CanJoinTokens => SelectedTokens.Count() > 1 
                                      && SelectedTokens.All(t => t.IsSource) 
@@ -216,5 +224,12 @@ namespace ClearDashboard.Wpf.Application.Collections
         public int SelectedTokenCount => SelectedTokens.Select(t => t.AlignmentToken).Distinct().Count();
         public int SourceTokenCount => SelectedTokens.Where(t => t.IsSource).Select(t => t.AlignmentToken).Distinct().Count();
         public int TargetTokenCount => SelectedTokens.Where(t => t.IsTarget).Select(t => t.AlignmentToken).Distinct().Count();
+
+        public bool CanTranslateToken => SelectedTranslations.Count() == 1
+                                         || (SelectedTranslations.Where(t=>t.CompositeToken!=null)
+                                             .Select(t=>t.CompositeToken!.TokenId.Id).Distinct().Count() == 1 
+                                             && SelectedTranslations.All(t=> t.CompositeToken != null));
+
+      
     }
 }

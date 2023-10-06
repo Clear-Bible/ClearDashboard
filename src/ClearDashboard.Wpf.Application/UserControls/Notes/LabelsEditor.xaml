@@ -91,7 +91,7 @@
                 Placement="Left"
                 PlacementTarget="{Binding ElementName=AddLabelGroupPopupButton}"
                 PreviewKeyDown="OnLabelGroupAddEscapePressed"
-                StaysOpen="False"
+                StaysOpen="True"
                 VerticalOffset="30">
                 <Border
                     Padding="5"
