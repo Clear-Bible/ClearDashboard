@@ -172,10 +172,29 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
         var tokenChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.Token)].childName;
         if (childListDifferences.ContainsKey(tokenChildName))
         {
+            if (parentItemInCurrentSnapshot is not null)
+            {
+                var tokenizedCorpusId = (Guid)parentItemInCurrentSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.Id)]!;
+
+                await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+                    $"Loading manual token 'ref' cache for TokenizedCorpusId '{tokenizedCorpusId}'",
+                    async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+                    {
+                        LoadManualTokenRefsIntoCache(projectDbContext, tokenizedCorpusId, cache);
+                        await Task.CompletedTask;
+                    },
+                    cancellationToken);
+            }
+
             var tokenHandler = (TokenHandler)_mergeContext.FindMergeHandler<IModelSnapshot<Models.Token>>();
 
             _mergeContext.Logger.LogInformation($"Starting handle token child list differences for tokenized corpus");
             await tokenHandler.MergeListDifferenceGroup(
+                childListDifferences[tokenChildName],
+                parentItemInCurrentSnapshot?.Children.GetValueOrDefault(tokenChildName),
+                parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(tokenChildName),
+                cancellationToken);
+            await tokenHandler.DeleteOriginTokenLocationLeftovers(
                 childListDifferences[tokenChildName],
                 parentItemInCurrentSnapshot?.Children.GetValueOrDefault(tokenChildName),
                 parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(tokenChildName),

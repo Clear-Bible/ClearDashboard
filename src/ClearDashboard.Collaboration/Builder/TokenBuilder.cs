@@ -3,6 +3,7 @@ using ClearDashboard.Collaboration.Model;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Data;
 using SIL.Extensions;
+using System.Linq;
 
 namespace ClearDashboard.Collaboration.Builder;
 
@@ -21,15 +22,23 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
     public static IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)> OrganizeTokensByOriginTokenLocation(IEnumerable<Models.Token> tokens)
     {
         // Tokens manually changed (e.g. Token Splitting/subword renumbering):
-        var tokenIndexes = tokens
+        var originTokenLocationGroups = tokens
             .Where(e => e.OriginTokenLocation != null)
             .ToList()
-            .GroupBy(e => e.OriginTokenLocation)
+            .GroupBy(e => e.OriginTokenLocation);
+
+        var tokenIndexes = originTokenLocationGroups
+            .Where(g => g.Count() > 1)
             .SelectMany(g => g
                 .OrderBy(e => e.OriginTokenLocation)
                 .OrderBy(e => e.EngineTokenId)
                 .Select((e, index) => (Token: e, Index: index as int?)))
             .ToList();
+
+        tokenIndexes.AddRange(originTokenLocationGroups
+            .Where(g => g.Count() == 1)
+            .Select(g => (Token: g.First(), Index: null as int?))
+            .ToList());
 
         var manuallyChangedOriginTokenLocations = tokenIndexes
             .Select(e => e.Token.OriginTokenLocation!)
@@ -45,7 +54,18 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
             .Select(e => (Token: e, Index: null as int?))
         );
 
-        return tokenIndexes;
+        // Tokens not yet included in tokenIndexes that were soft deleted:
+        tokenIndexes.AddRange(tokens
+            .Where(e => e.Deleted != null)
+            .Where(e => !tokenIndexes.Select(e => e.Token.Id).Contains(e.Id))
+            .ToList()
+            .Select(e => (Token: e, Index: null as int?))
+        );
+
+        return tokenIndexes
+            .OrderBy(e => e.Token.OriginTokenLocation)
+            .OrderBy(e => e.Index)
+            .OrderBy(e => e.Token.EngineTokenId);
     }
 
     public Func<ProjectDbContext, Guid, IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)>> GetTokenizedCorpusTokens = 
@@ -80,14 +100,13 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
         return tokenModelSnapshot;
     }
 
-    private static string CalculateRef(Guid tokenizedCorpusId, string engineTokenId, string? originTokenLocation, int? index)
+    public static string CalculateRef(Guid tokenizedCorpusId, string engineTokenId, string? originTokenLocation, int? index)
     {
         // If a split token, use {OriginTokenLocation}_{Index} (index, when ordered by Subword,
-        // within the set of tokens having this OriginTokenLocation).  Else use EngineTokenId
-        var identityPropertyValue = (
-            tokenizedCorpusId.ToString() +
-            originTokenLocation ?? engineTokenId
-        ).ToMD5String();
+        // within the set of tokens having this OriginTokenLocation).
+        // Else use OriginTokenLocation (if there is one - which would mean the EngineTokenId
+        // was changed by subword renumbering), otherwise EngineTokenId
+        var identityPropertyValue = $"{tokenizedCorpusId}{ originTokenLocation ?? engineTokenId}".ToMD5String();
 
         if (index != null)
         {

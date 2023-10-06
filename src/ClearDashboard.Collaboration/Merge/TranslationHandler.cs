@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Builder;
+using System.Data.Common;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -13,7 +14,7 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
 {
     public static Guid LookupSourceTokenizedCorpusId(ProjectDbContext projectDbContext, Guid translationSetId, MergeCache cache)
     {
-        if (!cache.TryLookupCacheEntry((typeof(Models.TranslationSet), translationSetId.ToString()!),
+        if (!cache.TryLookupCacheEntry(TranslationSetHandler.TranslationSetCacheKey(translationSetId),
             nameof(Models.ParallelCorpus.SourceTokenizedCorpusId), out var sourceTokenizedCorpusId))
         {
             sourceTokenizedCorpusId = projectDbContext.TranslationSets
@@ -25,8 +26,8 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
             if (sourceTokenizedCorpusId is null) throw new InvalidModelStateException($"Invalid TranslationSetId '{translationSetId}' - SourceTokenizedCorpusId not found");
 
             cache.AddCacheEntry(
-                (typeof(Models.TranslationSet), translationSetId!.ToString()!),
-                nameof(Models.Translation.SourceTokenComponentId), sourceTokenizedCorpusId);
+                TranslationSetHandler.TranslationSetCacheKey(translationSetId),
+                nameof(Models.ParallelCorpus.SourceTokenizedCorpusId), sourceTokenizedCorpusId);
         }
 
         return (Guid)sourceTokenizedCorpusId!;
@@ -36,8 +37,9 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
     {
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.Translation), nameof(Models.Translation.SourceTokenComponentId)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
+                await Task.CompletedTask;
                 if (modelSnapshot is not IModelSnapshot<Models.Translation>)
                 {
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Translation>");
@@ -60,7 +62,7 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.Translation), nameof(Models.Translation.Id)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot is not IModelSnapshot<Models.Translation>)
                 {
@@ -73,11 +75,11 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
                     var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)translationSetId!, cache);
                     var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
 
-                    var translationId = projectDbContext.Translations
+                    var translationId = await projectDbContext.Translations
                         .Where(e => e.TranslationSetId == (Guid)translationSetId!)
                         .Where(e => e.SourceTokenComponentId == sourceTokenComponentId)
                         .Select(e => e.Id)
-                        .FirstOrDefault();
+                        .FirstOrDefaultAsync();
 
                     if (translationId == default)
                         throw new PropertyResolutionException($"TranslationSetId '{translationSetId}' and SourceTokenComponentId '{sourceTokenComponentId}' cannot be resolved to a Translation");

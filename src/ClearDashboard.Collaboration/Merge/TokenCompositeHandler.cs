@@ -9,11 +9,23 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.Collaboration.Exceptions;
 using SIL.Machine.Utils;
 using ClearDashboard.Collaboration.Builder;
+using System.Data.Common;
+using ClearDashboard.DAL.Alignment.Features.Common;
+using ClearDashboard.DataAccessLayer.Data.Migrations;
+using System.Reflection.Metadata.Ecma335;
+using SIL.Extensions;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Collections;
+using System.Threading;
 
 namespace ClearDashboard.Collaboration.Merge;
 
 public class TokenCompositeHandler : DefaultMergeHandler<IModelSnapshot<Models.TokenComposite>>
 {
+    public static readonly Type TABLE_ENTITY_TYPE = typeof(Models.TokenComponent);
+    public static readonly string DISCRIMINATOR_COLUMN_VALUE = "TokenComposite";
+    public static readonly string DISCRIMINATOR_COLUMN_NAME = "Discriminator";
+
     public TokenCompositeHandler(MergeContext mergeContext) : base(mergeContext)
     {
         mergeContext.MergeBehavior.AddEntityTypeDiscriminatorMapping(
@@ -23,16 +35,16 @@ public class TokenCompositeHandler : DefaultMergeHandler<IModelSnapshot<Models.T
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.TokenComposite), nameof(Models.TokenComposite.VerseRowId)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot.PropertyValues.TryGetValue(TokenCompositeBuilder.VERSE_ROW_LOCATION, out var verseRowLocation) &&
                     modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusId))
                 {
-                    var verseRowId = projectDbContext.VerseRows
+                    var verseRowId = await projectDbContext.VerseRows
                         .Where(e => (Guid)e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
                         .Where(e => (string)e.BookChapterVerse! == (string)verseRowLocation!)
                         .Select(e => e.Id)
-                        .FirstOrDefault();
+                        .FirstOrDefaultAsync();
 
                     logger.LogDebug($"Converted TokenComposite TokenizedCorpusId ('{tokenizedCorpusId}') / VerseRowLocation ('{verseRowLocation}') to VerseRowId ('{verseRowId}')");
                     return (verseRowId != Guid.Empty) ? verseRowId : null;
@@ -46,14 +58,14 @@ public class TokenCompositeHandler : DefaultMergeHandler<IModelSnapshot<Models.T
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.TokenComposite), nameof(Models.TokenComposite.Id)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot is not IModelSnapshot<Models.TokenComposite>)
                 {
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.TokenComposite>");
                 }
 
-                return ResolveTokenCompositeId((IModelSnapshot<Models.TokenComposite>)modelSnapshot, projectDbContext, logger);
+                return await ResolveTokenCompositeId((IModelSnapshot<Models.TokenComposite>)modelSnapshot, dbConnection, logger);
             });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
@@ -111,19 +123,31 @@ DELETE FROM TokenComponent WHERE Id IN
             };
     }
 
-    protected static Guid ResolveTokenCompositeId(IModelSnapshot<Models.TokenComposite> modelSnapshot, ProjectDbContext projectDbContext, ILogger logger)
+    protected async static Task<Guid> ResolveTokenCompositeId(IModelSnapshot<Models.TokenComposite> modelSnapshot, DbConnection dbConnection, ILogger logger)
     {
         if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusId) &&
             modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.EngineTokenId), out var engineTokenId))
         {
             modelSnapshot.PropertyValues.TryGetValue(nameof(Models.TokenComposite.ParallelCorpusId), out var parallelCorpusId);
+            var hasDeleted = modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Token.Deleted), out var tokenDeleted);
 
-            var tokenCompositeId = projectDbContext.TokenComposites
-                .Where(e => e.TokenizedCorpusId == (Guid)tokenizedCorpusId!)
-                .Where(e => e.ParallelCorpusId == (Guid?)parallelCorpusId)
-                .Where(e => e.EngineTokenId == (string)engineTokenId!)
-                .Select(e => e.Id)
-                .FirstOrDefault();
+            var deleted = (hasDeleted && tokenDeleted is not null) ? DataUtil.NOT_NULL : null;
+
+            var tokenCompositeId = (await DataUtil.SelectEntityValuesAsync(
+                dbConnection,
+                TABLE_ENTITY_TYPE,
+                new List<string> { "Id" },
+                new Dictionary<string, object?>             {
+                    { "EngineTokenId", (string)engineTokenId! },
+                    { "TokenizedCorpusId", tokenizedCorpusId },
+                    { "Deleted", deleted },
+                    { "ParallelCorpusId", parallelCorpusId },
+                    { DISCRIMINATOR_COLUMN_NAME, DISCRIMINATOR_COLUMN_VALUE }
+                },
+                true,
+                CancellationToken.None))
+                    .Select(e => Guid.Parse((string)e["Id"]!))
+                    .FirstOrDefault();
 
             if (tokenCompositeId == default)
             {
@@ -147,9 +171,40 @@ DELETE FROM TokenComponent WHERE Id IN
     // is approach this at a low level - no business logic - and assume that the
     // snapshot carries across changes to affected Translations and Alignments.
 
-    protected override async Task HandleDeleteAsync(IModelSnapshot<Models.TokenComposite> itemToDelete, CancellationToken cancellationToken)
+    protected override async Task<Dictionary<string, object>> HandleDeleteAsync(IModelSnapshot<Models.TokenComposite> itemToDelete, CancellationToken cancellationToken)
     {
-        await base.HandleDeleteAsync(itemToDelete, cancellationToken);
+        return await base.HandleDeleteAsync(itemToDelete, cancellationToken);
+    }
+
+    private async Task<IEnumerable<(Guid TokenId, string EngineTokenId)>> FindTokenIds(IEnumerable<string> tokenLocations, Guid tokenizedCorpusId, CancellationToken cancellationToken)
+    {
+        var tokenIds = new List<(Guid TokenId, string EngineTokenId)>();
+
+        await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
+            $"Resolve token id",
+            async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+            {
+                tokenIds.AddRange((await DataUtil.SelectEntityValuesAsync(
+                    dbConnection,
+                    TokenHandler.TABLE_ENTITY_TYPE,
+                    new List<string> { "Id", "EngineTokenId" },
+                    new Dictionary<string, object?> {
+                        { "EngineTokenId", tokenLocations },
+                        { "TokenizedCorpusId", tokenizedCorpusId },
+                        { "Deleted", null },
+                        { TokenHandler.DISCRIMINATOR_COLUMN_NAME, TokenHandler.DISCRIMINATOR_COLUMN_VALUE }
+                    },
+                    true,
+                    CancellationToken.None))
+                        .Select(e => (
+                            TokenId: Guid.Parse((string)e["Id"]!),
+                            EngineTokenId: (string)e["EngineTokenId"]!))
+                        .ToList());
+            },
+            cancellationToken
+        );
+
+        return tokenIds; ;
     }
 
     protected override async Task<Guid> HandleCreateAsync(IModelSnapshot<Models.TokenComposite> itemToCreate, CancellationToken cancellationToken)
@@ -160,58 +215,41 @@ DELETE FROM TokenComponent WHERE Id IN
         // but we also need to find all TokenLocation tokens and set their
         // TokenCompositeId.
 
+        var tokenizedCorpusId = (Guid)itemToCreate.PropertyValues["TokenizedCorpusId"]!;
+        var parallelCorpusId = (Guid?)itemToCreate.PropertyValues["ParallelCorpusId"];
+        var tokenLocations = (IEnumerable<string>)itemToCreate.PropertyValues["TokenLocations"]!;
+
+        var tokenIds = await FindTokenIds(tokenLocations, tokenizedCorpusId, cancellationToken);
+
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"In HandleCreateAsync associating new TokenComposite with child Tokens",
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                var tokenCompositeId = ResolveTokenCompositeId(itemToCreate, projectDbContext, logger);
-
-                var tokenizedCorpusId = (Guid)itemToCreate.PropertyValues["TokenizedCorpusId"]!;
-                var parallelCorpusId = (Guid?)itemToCreate.PropertyValues["ParallelCorpusId"];
-                var tokenLocations = (IEnumerable<string>)itemToCreate.PropertyValues["TokenLocations"]!;
-
-                var tokenLocationMap2 = (await _mergeContext.MergeBehavior.GetEntityValuesAsync(
-                    typeof(Models.Token),
-                    new List<string> { "Id", "EngineTokenId" },
-                    new Dictionary<string, object> { { "EngineTokenId", tokenLocations } },
-                    cancellationToken))
-                    .Select(e => (e["EngineTokenId"], Guid.Parse((string)e["Id"])))
-                    .ToList();
-
-                var tokensMatchingLocations = projectDbContext.Tokens
-                    .Include(e => e.TokenCompositeTokenAssociations)
-                    .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
-                    .Where(e => tokenLocations.Contains(e.EngineTokenId))
-                    .Where(e => e.Deleted == null);
-
-                var tokenLocationMap = tokensMatchingLocations
-                    .ToDictionary(e => e.EngineTokenId!, e => e);
-
-                var leftover = tokenLocations.Except(tokenLocationMap.Keys);
+                var leftover = tokenLocations.Except(tokenIds.Select(e => e.EngineTokenId));
                 if (leftover.Any())
                 {
                     throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain token locations: {string.Join(", ", leftover)}");
                 }
 
-                var existingAssociatedTokenCompositeIds = tokenLocationMap.Values
-                    .SelectMany(t => t.TokenCompositeTokenAssociations
-                        .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId }))
+                var existingAssociatedTokenCompositeIds = projectDbContext.TokenCompositeTokenAssociations
+                    .Include(e => e.TokenComposite)
+                    .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId })
                     .Where(tap => tap.ParallelCorpusId == parallelCorpusId)
                     .Select(tap => tap.TokenCompositeId)
                     .ToList();
 
                 if (existingAssociatedTokenCompositeIds.Any())
                 {
-                    logger.LogInformation($"CompositeToken '{tokenCompositeId}' snapshot contains tokens already part of a composite having a ParallelCorpusId (null or non-null) that matches '{parallelCorpusId}'.  Deleting existing/conflicting composite");
+                    logger.LogInformation($"CompositeToken '{id}' snapshot contains tokens already part of a composite having a ParallelCorpusId (null or non-null) that matches '{parallelCorpusId}'.  Deleting existing/conflicting composite");
                     projectDbContext.RemoveRange(projectDbContext.TokenComposites.Where(e => existingAssociatedTokenCompositeIds.Contains(e.Id)));
                 }
 
                 // Add the tokens to the composite:
-                var tokenAssocationsToAdd = tokenLocationMap
+                var tokenAssocationsToAdd = tokenIds
                     .Select(l => new Models.TokenCompositeTokenAssociation
                     {
-                        TokenId = l.Value.Id,
-                        TokenCompositeId = tokenCompositeId
+                        TokenId = l.TokenId,
+                        TokenCompositeId = id
                     })
                     .ToList();
 
@@ -227,11 +265,6 @@ DELETE FROM TokenComponent WHERE Id IN
     {
         var modified = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
 
-        // If the modifications included changes to which tokens were part of
-        // the composite, we need to do two things:
-        //  - remove the previous child tokens
-        //  - add the new child tokens
-
         var tokenLocationDifference = modelDifference.PropertyDifferences
             .Where(pd => pd.PropertyName == "TokenLocations")
             .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ListDifference<string>)))
@@ -241,57 +274,70 @@ DELETE FROM TokenComponent WHERE Id IN
             return modified;
         }
 
-        var snapshot = (IModelSnapshot<Models.TokenComposite>)itemToModify;
+        // If the modifications included changes to which tokens were part of
+        // the composite, we need to do two things:
+        //  - remove the previous child tokens
+        //  - add the new child tokens
+        var tokenCompositeId = default(Guid);
+
+        await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
+            $"Resolve token id",
+            async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+            {
+                tokenCompositeId = await ResolveTokenCompositeId(itemToModify, dbConnection, logger);
+            },
+            cancellationToken
+        );
+
         var valueListDifference = (ListDifference<string>)tokenLocationDifference.PropertyValueDifference;
         var tokenLocationsOnlyIn1 = valueListDifference.ListMembershipDifference.OnlyIn1;
         var tokenLocationsOnlyIn2 = valueListDifference.ListMembershipDifference.OnlyIn2;
+        var tokenLocationsBoth = tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2);
+        var tokenizedCorpusId = (Guid)itemToModify.PropertyValues["TokenizedCorpusId"]!;
+        var parallelCorpusId = (Guid?)itemToModify.PropertyValues["ParallelCorpusId"];
+
+        var tokenIds = await FindTokenIds(tokenLocationsBoth, tokenizedCorpusId, cancellationToken);
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"Applying TokenComposite 'TokenLocations' property ListMembershipDifference (OnlyIn1: {string.Join(", ", tokenLocationsOnlyIn1)}, OnlyIn2: {string.Join(", ", tokenLocationsOnlyIn2)})", 
             async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
-                var tokenCompositeId = ResolveTokenCompositeId(snapshot, projectDbContext, logger);
-                var tokenizedCorpusId = (Guid)snapshot.PropertyValues["TokenizedCorpusId"]!;
-                var parallelCorpusId = (Guid?)snapshot.PropertyValues["ParallelCorpusId"];
-
-                var tokenLocationsBoth = tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2);
-
-                var tokenLocationMap = projectDbContext.Tokens
-                    .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
-                    .Where(e => tokenLocationsBoth.Contains(e.EngineTokenId))
-                    .Where(e => e.Deleted == null)
-                    .ToDictionary(e => e.EngineTokenId!, e => e);
-
-                var leftover = tokenLocationsBoth.Except(tokenLocationMap.Keys);
+                var leftover = tokenLocationsBoth.Except(tokenIds.Select(e => e.EngineTokenId));
                 if (leftover.Any())
                 {
                     throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain token locations: {string.Join(", ", leftover)}");
                 }
 
                 // Remove the OnlyIn1 tokens from the composite:
-                var tokenIdsOnlyIn1 = tokenLocationMap
-                            .Where(l => tokenLocationsOnlyIn1.Contains(l.Key))
-                            .Select(l => l.Value.Id)
+                var tokenIdsOnlyIn1 = tokenIds
+                            .Where(l => tokenLocationsOnlyIn1.Contains(l.EngineTokenId))
+                            .Select(l => l.TokenId)
                             .ToList();
+
                 var tokenAssocationsToRemove = projectDbContext.TokenCompositeTokenAssociations
                         .Where(a => tokenIdsOnlyIn1.Contains(a.TokenId));
 
                 projectDbContext.RemoveRange(tokenAssocationsToRemove);
 
-                if (tokenLocationMap.Values
-                    .SelectMany(t => t.TokenCompositeTokenAssociations
-                        .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId }))
-                    .Any(tap => tap.TokenCompositeId != tokenCompositeId && tap.ParallelCorpusId == parallelCorpusId))
+                var existingAssociatedTokenCompositeIds = projectDbContext.TokenCompositeTokenAssociations
+                    .Include(e => e.TokenComposite)
+                    .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId })
+                    .Where(tap => tap.ParallelCorpusId == parallelCorpusId)
+                    .Where(tap => tap.TokenCompositeId != tokenCompositeId)
+                    .Select(tap => tap.TokenCompositeId)
+                    .ToList();
+
+                if (existingAssociatedTokenCompositeIds.Any())
                 {
                     throw new PropertyResolutionException($"Merge conflict:  CompositeToken '{tokenCompositeId}' snapshot contains tokens already part of a composite having a ParallelCorpusId (null or non-null) that matches '{parallelCorpusId}'.");
                 }
 
                 // Add the OnlyIn2 tokens to the composite:
-                var tokenAssocationsToAdd = tokenLocationMap
-                    .Where(l => tokenLocationsOnlyIn2.Contains(l.Key)).ToList()
+                var tokenAssocationsToAdd = tokenIds
+                    .Where(l => tokenLocationsOnlyIn2.Contains(l.EngineTokenId)).ToList()
                     .Select(l => new Models.TokenCompositeTokenAssociation
                     {
-                        TokenId = l.Value.Id,
+                        TokenId = l.TokenId,
                         TokenCompositeId = tokenCompositeId
                     })
                     .ToList();

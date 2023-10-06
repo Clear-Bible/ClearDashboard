@@ -11,6 +11,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Translation;
 using SIL.Machine.Utils;
+using System.Data.Common;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -23,13 +24,14 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
     {
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.VerseRow), nameof(Models.VerseRow.Id)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot is not IModelSnapshot<Models.VerseRow>)
                 {
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.VerseRow>");
                 }
 
+                await Task.CompletedTask;
                 return ResolveVerseRowId((IModelSnapshot<Models.VerseRow>)modelSnapshot, projectDbContext, logger);
             });
 
@@ -96,7 +98,7 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
         }
     }
 
-    protected override async Task HandleDeleteAsync(IModelSnapshot<Models.VerseRow> itemToDelete, CancellationToken cancellationToken)
+    protected override async Task<Dictionary<string, object>> HandleDeleteAsync(IModelSnapshot<Models.VerseRow> itemToDelete, CancellationToken cancellationToken)
     {
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"Deleting any TokenComposites related by Token to VerseRow BookChapterVerse: '{itemToDelete.GetId()}'",
@@ -119,7 +121,7 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
         // TokenComponent, so related TokenComponents should get deleted
         // automatically, and they in turn have a Cascade Delete relationship
         // with Translations and Alignments, which should also get deleted.
-        await base.HandleDeleteAsync(itemToDelete, cancellationToken);
+        return await base.HandleDeleteAsync(itemToDelete, cancellationToken);
     }
 
     protected override async Task<Guid> HandleCreateAsync(IModelSnapshot<Models.VerseRow> itemToCreate, CancellationToken cancellationToken)

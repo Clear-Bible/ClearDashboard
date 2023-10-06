@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.Collaboration.Builder;
 using SIL.Machine.Utils;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -18,6 +19,12 @@ public class AlignmentSetHandler : DefaultMergeHandler<IModelSnapshot<Models.Ali
 	public AlignmentSetHandler(MergeContext mergeContext) : base(mergeContext)
     {
     }
+
+    public static (Type EntityType, string EntityId, string ItemName) AlignmentSetCacheKey(Guid alignmentSetId) => 
+        (typeof(Models.AlignmentSet), alignmentSetId.ToString()!, nameof(Models.AlignmentSet));
+
+    public static (Type EntityType, string EntityId, string ItemName) DenormalizationTrainingTextCacheKey(Guid sourceTokenizedCorpusId) =>
+        (typeof(Models.AlignmentSetDenormalizationTask), sourceTokenizedCorpusId!.ToString()!, nameof(Models.TokenComponent.EngineTokenId));
 
     protected override async Task HandleCreateChildrenAsync(IModelSnapshot<Models.AlignmentSet> parentSnapshot, CancellationToken cancellationToken)
     {
@@ -65,10 +72,14 @@ public class AlignmentSetHandler : DefaultMergeHandler<IModelSnapshot<Models.Ali
                     var id = await _mergeContext.MergeBehavior.RunInsertModelCommand((IModelSnapshot)child, cancellationToken);
 
                     var sourceTokenLocation = (string)child.PropertyValues[AlignmentBuilder.SOURCE_TOKEN_LOCATION]!;
-                    _mergeContext.MergeBehavior.MergeCache.TryLookupCacheEntry((typeof(Models.AlignmentSet), alignmentSetId.ToString()!),
-                        nameof(Models.ParallelCorpus.SourceTokenizedCorpusId), out var sourceTokenizedCorpusId);
                     _mergeContext.MergeBehavior.MergeCache.TryLookupCacheEntry(
-                        (typeof(Models.AlignmentSetDenormalizationTask), sourceTokenizedCorpusId!.ToString()!), sourceTokenLocation, out var trainingText);
+                        AlignmentSetCacheKey(alignmentSetId),
+                        nameof(Models.ParallelCorpus.SourceTokenizedCorpusId), 
+                        out var sourceTokenizedCorpusId);
+                    _mergeContext.MergeBehavior.MergeCache.TryLookupCacheEntry(
+                        DenormalizationTrainingTextCacheKey((Guid)sourceTokenizedCorpusId!),
+                        sourceTokenLocation, 
+                        out var trainingText);
 
                     denormalizationTexts.Add((string)trainingText!);
                     count++;

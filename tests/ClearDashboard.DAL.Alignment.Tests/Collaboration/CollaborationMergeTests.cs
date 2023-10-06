@@ -510,7 +510,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                     null,
                     "001001020001001-001001020001002-001001020001003-001001020001004",
                     "spl_itSou_rce_other0",
-                    "001001020001001-001001020001001-001001020001001-",
+                    "001001020001001-001001020001001-001001020001001-001001020001002",
                     verseRow);
 
                 // Additional tokens in same word and/or verse (target system):

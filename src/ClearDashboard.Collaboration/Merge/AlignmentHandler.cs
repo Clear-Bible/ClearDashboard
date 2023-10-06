@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Builder;
+using System.Data.Common;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -13,7 +14,7 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
 {
     public static Guid LookupSourceTokenizedCorpusId(ProjectDbContext projectDbContext, Guid alignmentSetId, MergeCache cache)
     {
-        if (!cache.TryLookupCacheEntry((typeof(Models.AlignmentSet), alignmentSetId.ToString()!),
+        if (!cache.TryLookupCacheEntry(AlignmentSetHandler.AlignmentSetCacheKey(alignmentSetId),
             nameof(Models.ParallelCorpus.SourceTokenizedCorpusId), out var sourceTokenizedCorpusId))
         {
             sourceTokenizedCorpusId = projectDbContext.AlignmentSets
@@ -25,7 +26,7 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
             if (sourceTokenizedCorpusId is null) throw new InvalidModelStateException($"Invalid AlignmentSetId '{alignmentSetId}' - SourceTokenizedCorpusId not found");
 
             cache.AddCacheEntry(
-                (typeof(Models.AlignmentSet), alignmentSetId!.ToString()!),
+                AlignmentSetHandler.AlignmentSetCacheKey(alignmentSetId),
                 nameof(Models.ParallelCorpus.SourceTokenizedCorpusId), sourceTokenizedCorpusId);
         }
 
@@ -34,7 +35,7 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
 
     public static Guid LookupTargetTokenizedCorpusId(ProjectDbContext projectDbContext, Guid alignmentSetId, MergeCache cache)
     {
-        if (!cache.TryLookupCacheEntry((typeof(Models.AlignmentSet), alignmentSetId.ToString()!),
+        if (!cache.TryLookupCacheEntry(AlignmentSetHandler.AlignmentSetCacheKey(alignmentSetId),
             nameof(Models.ParallelCorpus.TargetTokenizedCorpusId), out var targetTokenizedCorpusId))
         {
             targetTokenizedCorpusId = projectDbContext.AlignmentSets
@@ -46,7 +47,7 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
             if (targetTokenizedCorpusId is null) throw new InvalidModelStateException($"Invalid AlignmentSetId '{alignmentSetId}' - TargetTokenizedCorpusId not found");
 
             cache.AddCacheEntry(
-                (typeof(Models.AlignmentSet), alignmentSetId!.ToString()!),
+                AlignmentSetHandler.AlignmentSetCacheKey(alignmentSetId),
                 nameof(Models.ParallelCorpus.TargetTokenizedCorpusId), targetTokenizedCorpusId);
         }
 
@@ -57,7 +58,7 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
     {
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.Alignment), nameof(Models.Alignment.SourceTokenComponentId)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot is not IModelSnapshot<Models.Alignment>)
                 {
@@ -71,6 +72,8 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
                     var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
 
                     logger.LogDebug($"Converted Alignment having SourceTokenLocation ('{SourceTokenLocation}') / AlignmentSetId ('{alignmentSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
+
+                    await Task.CompletedTask;
                     return sourceTokenComponentId;
                 }
                 else
@@ -81,7 +84,7 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.Alignment), nameof(Models.Alignment.TargetTokenComponentId)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot is not IModelSnapshot<Models.Alignment>)
                 {
@@ -95,6 +98,8 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
                     var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)TargetTokenLocation!, cache);
 
                     logger.LogDebug($"Converted Alignment having TargetTokenLocation ('{TargetTokenLocation}') / AlignmentSetId ('{alignmentSetId}') to TargetTokenComponentId ('{targetTokenComponentId}')");
+
+                    await Task.CompletedTask;
                     return targetTokenComponentId;
                 }
                 else
@@ -105,7 +110,7 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.Alignment), nameof(Models.Alignment.Id)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot is not IModelSnapshot<Models.Alignment>)
                 {
@@ -121,12 +126,12 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
                     var targetTokenizedCorpusId = LookupTargetTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
                     var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)TargetTokenLocation!, cache);
 
-                    var alignmentId = projectDbContext.Alignments
+                    var alignmentId = await projectDbContext.Alignments
                         .Where(e => e.AlignmentSetId == (Guid)alignmentSetId!)
                         .Where(e => e.SourceTokenComponentId == sourceTokenComponentId)
                         .Where(e => e.TargetTokenComponentId == targetTokenComponentId)
                         .Select(e => e.Id)
-                        .FirstOrDefault();
+                        .FirstOrDefaultAsync();
 
                     if (alignmentId == default)
                         throw new PropertyResolutionException($"AlignmentSetId '{alignmentSetId}' and SourceTokenComponentId '{sourceTokenComponentId}' cannot be resolved to a Alignment");

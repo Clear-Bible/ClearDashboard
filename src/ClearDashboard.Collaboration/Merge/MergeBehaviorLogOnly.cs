@@ -12,9 +12,9 @@ namespace ClearDashboard.Collaboration.Merge;
 
 public class MergeBehaviorLogOnly : MergeBehaviorBase
 {
-	public MergeBehaviorLogOnly(/* pass in configuration */ILogger logger, MergeCache mergeCache, IProgress<ProgressStatus> progress) : base(logger, mergeCache, progress)
-	{
-	}
+    public MergeBehaviorLogOnly(/* pass in configuration */ILogger logger, MergeCache mergeCache, IProgress<ProgressStatus> progress) : base(logger, mergeCache, progress)
+    {
+    }
 
     public override async Task MergeStartAsync(CancellationToken cancellationToken)
     {
@@ -71,24 +71,33 @@ public class MergeBehaviorLogOnly : MergeBehaviorBase
         return where;
     }
 
-    public override async Task<IEnumerable<Dictionary<string, object>>> GetEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object> resolvedWhereClause, CancellationToken cancellationToken)
+    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> resolvedWhereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
     {
         await Task.CompletedTask;
 
         var whereItems = string.Join(", ", resolvedWhereClause);
         _logger.LogInformation($"Getting Ids for :  '{entityType.ShortDisplayName()}' where: '{whereItems}'");
 
-        return Enumerable.Empty<Dictionary<string, object>>();
+        return Enumerable.Empty<Dictionary<string, object?>>();
     }
 
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"RUNNING:  '{description}'");
         await Task.CompletedTask;
+
+        _logger.LogInformation($"RUNNING:  '{description}'");
+    }
+    public override async Task RunDbConnectionQueryAsync(string description, DbConnectionMergeQueryAsync query, CancellationToken cancellationToken = default)
+    {
+        await Task.CompletedTask;
+
+        _logger.LogInformation($"RUNNING:  '{description}'");
     }
 
-    public override object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver propertyValueConverter)
+    public override async Task<object?> RunEntityValueResolverAsync(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolverAsync propertyValueConverter)
     {
+        await Task.CompletedTask;
+
         _logger.LogInformation($"RUNNING converter for model type {modelSnapshot.EntityType.ShortDisplayName()} propertyName:  '{propertyName}'");
         return modelSnapshot;
     }

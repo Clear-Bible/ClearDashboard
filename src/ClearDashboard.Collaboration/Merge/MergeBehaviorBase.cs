@@ -1,32 +1,25 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Common;
-using System.Data.Entity.Core.Metadata.Edm;
 using System.Reflection;
 using System.Text.Json;
 using ClearBible.Engine.Utils;
-using ClearDashboard.Collaboration.Builder;
 using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
-using SIL.EventsAndDelegates;
 using SIL.Machine.Utils;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 
 public delegate Task ProjectDbContextMergeQueryAsync(ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken = default);
-public delegate object? EntityValueResolver(IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger);
+public delegate Task DbConnectionMergeQueryAsync(DbConnection dbConnnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken = default);
+public delegate Task<object?> EntityValueResolverAsync(IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger);
 
 public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 {
@@ -42,7 +35,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         (Type TableEntityType, string DiscriminatorColumnName, string DiscriminatorColumnValue)
     > _discriminatorMappings = new();
 
-    protected readonly Dictionary<(Type EntityType, string EntityPropertyName), EntityValueResolver> _entityValueResolvers = new();
+    protected readonly Dictionary<(Type EntityType, string EntityPropertyName), EntityValueResolverAsync> _entityValueResolvers = new();
     protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _propertyNameMap = new();
     protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _idPropertyNameMap = new();
     protected readonly Dictionary<(Type EntityType, string EntityPropertyName), string> _idReversePropertyNameMap = new();
@@ -63,7 +56,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         _discriminatorMappings.Add(entityType, discriminatorMapping);
     }
 
-    public void AddEntityValueResolver((Type EntityType, string EntityPropertyName) key, EntityValueResolver entityValueResolver)
+    public void AddEntityValueResolver((Type EntityType, string EntityPropertyName) key, EntityValueResolverAsync entityValueResolver)
     {
         _entityValueResolvers.Add(key, entityValueResolver);
     }
@@ -94,10 +87,12 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     public abstract void CompleteInsertModelCommand(Type entityType);
 
     public abstract Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken);
-    public abstract Task<IEnumerable<Dictionary<string, object>>> GetEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object> resolvedWhereClause, CancellationToken cancellationToken);
+    public abstract Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> resolvedWhereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken);
 
     public abstract Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default);
-    public abstract object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver entityValueResolver);
+    public abstract Task RunDbConnectionQueryAsync(string description, DbConnectionMergeQueryAsync query, CancellationToken cancellationToken = default);
+
+    public abstract Task<object?> RunEntityValueResolverAsync(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolverAsync entityValueResolver);
 
     protected DbCommand CreateModelSnapshotInsertCommandNoParameters(DbConnection connection, IModelSnapshot modelSnapshot)
     {
@@ -131,7 +126,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         return command;
     }
 
-    protected Guid AddModelSnapshotParametersToInsertCommand(DbCommand command, IModelSnapshot modelSnapshot)
+    protected async Task<Guid> AddModelSnapshotParametersToInsertCommand(DbCommand command, IModelSnapshot modelSnapshot)
     {
         var entityType = modelSnapshot.EntityType;
         var identityPropertyName = entityType.GetIdentityProperty()?.Name;
@@ -171,9 +166,9 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
                 continue;
             }
-            else if (_entityValueResolvers.TryGetValue((entityType, propertyName), out EntityValueResolver? resolver))
+            else if (_entityValueResolvers.TryGetValue((entityType, propertyName), out EntityValueResolverAsync? resolver))
             {
-                var entityPropertyValue = RunEntityValueResolver(modelSnapshot, propertyName, resolver);
+                var entityPropertyValue = await RunEntityValueResolverAsync(modelSnapshot, propertyName, resolver);
                 command.Parameters[p.ParameterName].Value = entityPropertyValue ?? DBNull.Value;
 
                 continue;
@@ -200,7 +195,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         return identityPropertyValue;
     }
 
-    protected Dictionary<string, object> ResolveWhereClause(Dictionary<string, object> where, IModelSnapshot modelSnapshot)
+    protected async Task<Dictionary<string, object>> ResolveWhereClauseAsync(Dictionary<string, object> where, IModelSnapshot modelSnapshot)
     {
         var entityType = modelSnapshot.EntityType;
         var resolvedValues = new Dictionary<string, object>();
@@ -215,27 +210,38 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
         foreach (var key in whereColumns)
         {
-            if (_entityValueResolvers.TryGetValue((entityType, key), out var resolver))
+            if (where.ContainsKey(key))
             {
-                var resolvedValue = RunEntityValueResolver(modelSnapshot, key, resolver);
+                resolvedValues[key] = where[key].ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
+            }
+            else if (_entityValueResolvers.TryGetValue((entityType, key), out var resolver))
+            {
+                var resolvedValue = await RunEntityValueResolverAsync(modelSnapshot, key, resolver);
                 resolvedValues[key] = resolvedValue ?? DBNull.Value;
             }
             else
             {
-                if (!where.ContainsKey(key))
-                {
-                    // Anything mapped has to have a resolver to get its value
-                    throw new PropertyResolutionException($"Found mapped where clause key '{key}' but no resolver configured");
-                }
-
-                resolvedValues[key] = where[key].ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
+                // Anything mapped has to have a resolver to get its value
+                throw new PropertyResolutionException($"Found mapped where clause key '{key}' but no resolver configured");
             }
         }
 
         return resolvedValues;
     }
 
-    protected DbCommand CreateModelSnapshotUpdateCommand(DbConnection connection, IModelDifference modelDifference, IModelSnapshot modelSnapshot, Dictionary<string, object> resolvedWhereClause)
+    public Type ResolveTableName(Type entityType, Dictionary<string, object?> whereClause)
+    {
+        var tableType = entityType;
+        if (_discriminatorMappings.TryGetValue(entityType, out var mapping))
+        {
+            tableType = mapping.TableEntityType;
+            whereClause.Add(mapping.DiscriminatorColumnName, mapping.DiscriminatorColumnValue);
+        }
+
+        return tableType;
+    }
+
+    protected async Task<DbCommand> CreateModelSnapshotUpdateCommand(DbConnection connection, IModelDifference modelDifference, IModelSnapshot modelSnapshot, Dictionary<string, object> resolvedWhereClause)
     {
         var entityType = modelSnapshot.EntityType;
 
@@ -269,13 +275,13 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
         resolvedWhereClause.ToList().ForEach(kvp => command.Parameters[$"@{kvp.Key}"].Value = kvp.Value);
 
-        ApplyPropertyModelDifferencesToCommand(command, modelDifference, modelSnapshot);
-        ApplyPropertyValueDifferencesToCommand(command, modelDifference, modelSnapshot);
+        await ApplyPropertyModelDifferencesToCommand(command, modelDifference, modelSnapshot);
+        await ApplyPropertyValueDifferencesToCommand(command, modelDifference, modelSnapshot);
 
         return command;
     }
 
-    private void ApplyPropertyValueDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
+    private async Task ApplyPropertyValueDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
     {
         var entityType = modelSnapshot.EntityType;
 
@@ -303,7 +309,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             {
                 if (_entityValueResolvers.TryGetValue((entityType, ep), out var resolver))
                 {
-                    propertyValue = RunEntityValueResolver(modelSnapshot, ep, resolver);
+                    propertyValue = await RunEntityValueResolverAsync(modelSnapshot, ep, resolver);
                     command.Parameters[$"@{ep}"].Value = propertyValue ?? DBNull.Value;
 
                     continue;
@@ -317,8 +323,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         }
     }
 
-
-    private void ApplyPropertyModelDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
+    private async Task ApplyPropertyModelDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
     {
         var entityType = modelSnapshot.EntityType;
 
@@ -351,7 +356,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             {
                 if (_entityValueResolvers.TryGetValue((entityType, ep), out var resolver))
                 {
-                    var propertyValue = RunEntityValueResolver(modelSnapshot, ep, resolver);
+                    var propertyValue = await RunEntityValueResolverAsync(modelSnapshot, ep, resolver);
                     command.Parameters[$"@{ep}"].Value = propertyValue ?? DBNull.Value;
                 }
                 else if (modelValueDifference.ModelType.IsAssignableTo(typeof(IDictionary<string, object>)))
@@ -396,7 +401,9 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         // ====================================================================
 
         command.Prepare();
-        resolvedWhereClause.ToList().ForEach(kvp => command.Parameters[$"@{kvp.Key}"].Value = kvp.Value);
+        resolvedWhereClause
+            .ToList()
+            .ForEach(kvp => command.Parameters[$"@{kvp.Key}"].Value = kvp.Value);
 
         return command;
     }

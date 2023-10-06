@@ -81,7 +81,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
         if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
         var id = string.Join(", ", where);
 
-        var resolvedWhereClause = ResolveWhereClause(where, itemToDelete);
+        var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToDelete);
         var command = CreateModelSnapshotDeleteCommand(_connection, itemToDelete, resolvedWhereClause);
 
         _logger.LogInformation($"Executing delete query for model type '{itemToDelete.EntityType.ShortDisplayName()}' having id '{id}'");
@@ -116,7 +116,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
         _logger.LogDebug($"Running insert command for model type:  '{itemToCreate.EntityType.ShortDisplayName()}' having id '{itemToCreate.GetId()}'");
 
         var command = _insertCommandsByType[itemToCreate.EntityType];
-        var id = AddModelSnapshotParametersToInsertCommand(command, itemToCreate);
+        var id = await AddModelSnapshotParametersToInsertCommand(command, itemToCreate);
 
         await Task.CompletedTask;
         _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
@@ -142,8 +142,8 @@ public class MergeBehaviorApply : MergeBehaviorBase
         if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
         var id = string.Join(", ", where);
 
-        var resolvedWhereClause = ResolveWhereClause(where, itemToModify);
-        var command = CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
+        var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToModify);
+        var command = await CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
 
         _logger.LogDebug($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having id '{id}'");
 
@@ -161,81 +161,17 @@ public class MergeBehaviorApply : MergeBehaviorBase
         return resolvedWhereClause;
     }
 
-    public override async Task<IEnumerable<Dictionary<string, object>>> GetEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object> resolvedWhereClause, CancellationToken cancellationToken)
+    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
     {
-        if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
+        var tableType = ResolveTableName(entityType, whereClause);
 
-        var results = new List<Dictionary<string, object>>();
-        await using (var command = _connection.CreateCommand())
-        {
-            command.CommandType = CommandType.Text;
-
-            var tableType = entityType;
-            if (_discriminatorMappings.TryGetValue(entityType, out var mapping))
-            {
-                tableType = mapping.TableEntityType;
-                resolvedWhereClause.Add(mapping.DiscriminatorColumnName, mapping.DiscriminatorColumnValue);
-            }
-
-            DataUtil.ApplyColumnsToSelectCommand(
-                command,
-                tableType,
-                selectColumns.ToArray(), 
-                resolvedWhereClause
-                    .Where(e => !e.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
-                    .Select(e => e.Key)
-                    .ToArray(),
-                resolvedWhereClause
-                    .Where(e => e.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
-                    .Select(e => (name: e.Key, count: (e.Value as IEnumerable)!.Cast<object>().Count()))
-                    .ToArray());
-
-            try
-            {
-                command.Prepare();
-            }
-            catch (Exception ex)
-            {
-                throw new PropertyResolutionException($"Entity type '{entityType}' had following error when trying to prepare DbCommand: {ex.Message}");
-            }
-
-            foreach (var kvp in resolvedWhereClause)
-            {
-                if (kvp.Value is not null && kvp.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
-                {
-                    var valueEnumerable = (kvp.Value as IEnumerable)!.Cast<object>();
-                    foreach (var column in valueEnumerable.Select((value, nameIndex) => new { value, nameIndex }))
-                    {
-                        command.Parameters[$"@{kvp.Key}{column.nameIndex}"].Value = column.value;
-                    }
-                }
-                else
-                {
-                    command.Parameters[$"@{kvp.Key}"].Value = kvp.Value;
-                }
-            }
-
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            if (reader.HasRows)
-            {
-                var columnSchema = reader.GetColumnSchema()
-                    .Where(e => e.ColumnOrdinal != null)
-                    .Select(e => (e.ColumnName, e.ColumnOrdinal))
-                    .ToList();
-
-                while (reader.Read())
-                {
-                    var resultRow = new Dictionary<string, object>();
-                    foreach (var schemaItem in columnSchema)
-                    {
-                        resultRow.Add(schemaItem.ColumnName, reader.GetValue(schemaItem.ColumnOrdinal!.Value));
-                    }
-                    results.Add(resultRow);
-                }
-            }
-        }
-
-        return results;
+        return await DataUtil.SelectEntityValuesAsync(
+            _connection, 
+            tableType, 
+            selectColumns, 
+            whereClause, 
+            useNotIndexedInFromClause, 
+            cancellationToken);
     }
 
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
@@ -243,9 +179,25 @@ public class MergeBehaviorApply : MergeBehaviorBase
         _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");
         await query.Invoke(_projectDbContext, MergeCache, _logger, Progress, cancellationToken);
     }
-    public override object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver propertyValueConverter)
+
+    public override async Task RunDbConnectionQueryAsync(string description, DbConnectionMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
-        return propertyValueConverter.Invoke(modelSnapshot, _projectDbContext, MergeCache, _logger);
+        if (_connection is null || !_connectionOpen)
+        {
+            throw new PropertyResolutionException($"Unable to run '{description}' because DbConnection is closed");
+        }
+
+        _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");
+        await query.Invoke(_connection, MergeCache, _logger, Progress, cancellationToken);
+    }
+
+    public override async Task<object?> RunEntityValueResolverAsync(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolverAsync propertyValueConverter)
+    {
+        if (_connection is null || !_connectionOpen)
+        {
+            throw new PropertyResolutionException($"Unable to resolve '{propertyName}' because DbConnection is closed");
+        }
+        return await propertyValueConverter.Invoke(modelSnapshot, _projectDbContext, _connection, MergeCache, _logger);
     }
 
     protected override void Dispose(bool disposing)
