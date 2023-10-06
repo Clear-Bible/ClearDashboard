@@ -28,6 +28,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public static bool InitialStartup = true;
         public static bool GoToSetup = false;
         public static bool GoToTemplate = false;
+        public static bool ProjectAlreadyOpened = false;
+
         public string Version { get; set; }
 
         #endregion //Member Variables
@@ -166,7 +168,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CurrentStep = Steps![2];
                 GoToSetup = false;
             }
-            if (GoToTemplate)
+            else if (GoToTemplate)
             {
                 CurrentStep = Steps![3];
                 GoToTemplate = false;
