@@ -18,6 +18,8 @@
     x:Name="UserControl"
     Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialDesign:DialogHost}}, Path=ActualWidth}"
     Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialDesign:DialogHost}}, Path=ActualHeight}"
+    MinWidth="800"
+    MinHeight="450"
     MaxWidth="1140"
     MaxHeight="800"
     d:DesignHeight="450"
