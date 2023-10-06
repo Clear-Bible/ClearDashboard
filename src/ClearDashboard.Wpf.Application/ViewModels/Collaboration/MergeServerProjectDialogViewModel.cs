@@ -517,7 +517,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
             catch (Exception ex)
             {
-                if (CollaborationDialogAction == CollaborationDialogAction.Initialize)
+                if (ex.ToString().Contains("status code: 404"))
+                {
+                    progress.Report(new ProgressStatus(0, $"The project you are pushing changes to either no longer exists or is not shared with you."));
+                }
+                else if (CollaborationDialogAction == CollaborationDialogAction.Initialize)
                 {
                     progress.Report(new ProgressStatus(0, $"Exception thrown attempting to initialize, fetch, stage and commit project changes: {ex.Message}"));
                 }
