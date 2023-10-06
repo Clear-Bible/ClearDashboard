@@ -117,7 +117,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var result = await corpus.SplitTokens(Mediator, new List<TokenId> { tokenId }, tokenIndex1, tokenIndex2, trainingText1, trainingText2, trainingText3, createParallelComposite, propagateTo, cancellationToken);
+                var result = await corpus.SplitTokens(Mediator, new List<TokenId> { tokenId }, tokenIndex1, tokenIndex2-tokenIndex1, trainingText1, trainingText2, trainingText3, createParallelComposite, propagateTo, cancellationToken);
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Split token {tokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
