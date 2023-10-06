@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>ការតម្រឹម</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>ជ្រើសរើសសៀវភៅដែលអ្នកកំពុងធ្វើការជាមួយអ្នកតែងតែអាចបន្ថែមសៀវភៅបន្ថែមទៀតនៅពេលក្រោយ។</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>ពិនិត្យ USFM</value>
   </data>
@@ -659,7 +662,7 @@
     <value>បំបែកថូខឹន</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>ដាក់ពាក្យសុំបំបែកទៅវត្ថុផ្សេងទៀតនៃថូខឹន:</value>
+    <value>ដាក់ពាក្យសុំបំបែកទៅវត្ថុផ្សេងទៀតនៃថូខឹន</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>ជ្រើសរើសកន្លែងដែលត្រូវបំបែកថូខឹន:</value>
@@ -1378,6 +1381,12 @@
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>អត្ថបទភ្ជាប់ទៅនឹងស្លាក</value>
   </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>លុបស្លាក</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>ផ្តាច់ស្លាកស្លាក</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
   </data>
@@ -1766,7 +1775,7 @@
     <value>ធីកប្រអប់នេះដើម្បីបញ្ចូលអត្ថបទព្រះគម្ពីរក្រិកនិងហេប្រ៊ូនៅពេលបង្កើតគម្រោងរបស់អ្នក។</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>រួមមានអត្ថបទព្រះគម្ពីរ NT GREEL?</value>
+    <value>រួមបញ្ចូលទាំងអត្ថបទព្រះគម្ពីរទេ?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>រួមបញ្ចូលអត្ថបទគម្ពីរហេប្រ៊ូ?</value>
@@ -2121,6 +2130,9 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>បើកការបំបែកថូខឹន</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>ដេលល្បាប់</value>

@@ -29,6 +29,6 @@ namespace ClearDashboard.Wpf.Application.Helpers
         {
             Settings.Default.IsAlignmentEditingEnabled = value;
             Settings.Default.Save();
-        }
+        }        
     }
 }

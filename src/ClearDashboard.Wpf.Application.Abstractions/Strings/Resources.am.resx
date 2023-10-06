@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>አሰላለፍ</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>አብረው የሚሠሩበት መጽሐፍ (ቶች) ይምረጡ, ሁል ጊዜም ተጨማሪ መጽሐፍትን በኋላ ማከል ይችላሉ.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>USFM ን በመፈተሽ ላይ</value>
   </data>
@@ -659,7 +662,7 @@
     <value>የተከፋፈለው ማስመሰያ</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>ወደ ሌሎች የተለዩ ምልክቶች ተከፍለው ይተግብሩ-</value>
+    <value>ወደ ሌሎች የተለዩ መግለጫዎች ተከፍሏል</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>ማስመሰያ የት እንደሚከፋፍሉ ይምረጡ</value>
@@ -1378,6 +1381,12 @@
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>ጽሑፍ ከመሰየም ጋር ተያይ attached ል</value>
   </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>መለያ ሰርዝ</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>የአስፈፃሚነት መለያ</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>ተፈጠረ</value>
   </data>
@@ -1766,7 +1775,7 @@
     <value>ፕሮጀክትዎን በሚፈጠሩበት ጊዜ የግሪክ እና የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎችን ለማካተት ይህንን ሳጥን ይመልከቱ.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT gtel መጽሐፍ ቅዱሳዊ ጽሑፎችን ይጨምሩ?</value>
+    <value>የአኪ ግሪክ መጽሐፍ ቅዱሳዊ ጽሑፎችን ያካቱ?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>የብኪውን የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎች ያካትቱ?</value>
@@ -2121,6 +2130,9 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>የምደባ አርት editing ትን አንቃ</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>የመረበሽ መከፋፈል ያንቁ</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>ሙከራ</value>

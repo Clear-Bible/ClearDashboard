@@ -20,6 +20,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.ViewModels;
 using Alignment = ClearDashboard.DAL.Alignment.Translation.Alignment;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
@@ -389,10 +390,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         TargetVerseTokens = verseContext.targetVerseTokens,
                         TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
                     },
-                    AlignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                    AlignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl,
-                    AlignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
-                    AlignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.IsRtl
+                    ParallelCorpus
                 )
             };
         }
@@ -606,6 +604,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
+        private ParallelCorpus ParallelCorpus { get; set; }
         private async Task EnsureAlignmentSet()
         {
             if (AlignmentSet == null && EnhancedViewItemMetadatum is AlignmentEnhancedViewItemMetadatum)
@@ -613,6 +612,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 AlignmentSetId = Guid.Parse(((AlignmentEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)
                     .AlignmentSetId!);
                 AlignmentSet = await AlignmentSet.Get(new AlignmentSetId(AlignmentSetId), Mediator!);
+                ParallelCorpus = await ParallelCorpus.Get(Mediator!, AlignmentSet.ParallelCorpusId);
             }
         }
 

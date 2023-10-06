@@ -6,6 +6,7 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
@@ -38,6 +39,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool IsTargetRtl => VerseDisplay.IsTargetRtl;
 
+        public bool IsCorpusView => VerseDisplay is CorpusDisplayViewModel;
+
         /// <summary>
         /// Gets or sets whether this is a source token.
         /// </summary>
@@ -53,6 +56,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(IsTarget));
             }
         }
+
+        public TokenizedTextCorpus? Corpus => IsSource ? VerseDisplay.SourceCorpus : VerseDisplay.TargetCorpus;
 
         /// <summary>
         /// Placeholder for when we will need to support RTL for the selected application language.

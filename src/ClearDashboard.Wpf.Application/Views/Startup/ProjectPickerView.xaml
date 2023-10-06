@@ -23,6 +23,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
 
     <UserControl.DataContext>
@@ -739,7 +740,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock
-                Margin="40,0,0,0"
+                Margin="7,0,0,0"
                 FontSize="19"
                 FontWeight="Medium"
                 Text="{helpers:Localization ProjectPicker_CollabProjects}" />

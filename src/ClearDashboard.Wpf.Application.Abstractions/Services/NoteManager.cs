@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <summary>
         /// Gets the LabelGroup which contains all label suggestions.
         /// </summary>
-        public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel { Name = "<None>" };
+        public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel() ;
 
         /// <summary>
         /// Gets the default <see cref="LabelGroupViewModel"/> for the current user, if any.
@@ -915,6 +915,8 @@ namespace ClearDashboard.Wpf.Application.Services
             Mediator = mediator;
             UserProvider = userProvider;
             ExternalNoteManager = new ExternalNoteManager();
+
+            NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
 
             EventAggregator.SubscribeOnUIThread(this);
         }

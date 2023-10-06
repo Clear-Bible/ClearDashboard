@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Penyelarasan</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Pilih buku yang Anda kerjakan, Anda selalu dapat menambahkan lebih banyak buku nanti.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Memeriksa USFM</value>
   </data>
@@ -659,7 +662,7 @@
     <value>Split token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Terapkan perpecahan untuk contoh token lain:</value>
+    <value>Terapkan perpecahan untuk contoh token lainnya</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Pilih Tempat Membagi Token:</value>
@@ -1352,7 +1355,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan grup label</value>
+    <value>Tambahkan Grup Label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1377,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Teks terlampir pada label</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Hapus label</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Label Disassociate</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Dibuat</value>
@@ -1766,7 +1775,7 @@
     <value>Centang kotak ini untuk memasukkan teks -teks Alkitab Yunani dan Ibrani saat membuat proyek Anda.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Sertakan teks Alkitab Greel NT?</value>
+    <value>Sertakan teks Alkitab Yunani?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Sertakan teks -teks Alkitab Ibrani?</value>
@@ -2121,6 +2130,9 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktifkan pengeditan penyelarasan</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Aktifkan pemisahan token</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Eksperimental</value>

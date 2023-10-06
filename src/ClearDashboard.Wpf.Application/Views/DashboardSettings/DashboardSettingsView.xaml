@@ -21,7 +21,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -423,11 +423,18 @@
                         Stretch="Fill"
                         StretchDirection="UpOnly" />
                     <GroupBox Margin="16" Header="{helpers:Localization Settings_Experimental}">
-                        <CheckBox
-                            cm:Message.Attach="EnableAlignmentEditing($datacontext)"
-                            Content="{helpers:Localization Settings_EnableAlignmentEditing}"
-                            Foreground="{StaticResource AccentHueBrush}"
-                            IsChecked="{Binding IsAlignmentEditingEnabled}" />
+                        <StackPanel Orientation="Vertical">
+                            <CheckBox
+                                cm:Message.Attach="EnableAlignmentEditing($datacontext)"
+                                Content="{helpers:Localization Settings_EnableAlignmentEditing}"
+                                Foreground="{StaticResource AccentHueBrush}"
+                                IsChecked="{Binding IsAlignmentEditingEnabled}" />
+                            <CheckBox
+                                cm:Message.Attach="EnableTokenSplitting($datacontext)"
+                                Content="{helpers:Localization Settings_EnableTokenSplitting}"
+                                Foreground="{StaticResource AccentHueBrush}"
+                                IsChecked="{Binding IsTokenSplittingEnabled}" />
+                        </StackPanel>
                     </GroupBox>
                     <TextBlock
                         Margin="16"

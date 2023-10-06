@@ -713,7 +713,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         }
     }
 
-    private static ITextCorpus CreateFakeTextCorpusWithComposite(bool includeBadCompositeToken)
+    public static ITextCorpus CreateFakeTextCorpusWithComposite(bool includeBadCompositeToken)
     {
         var textCorpus = new DictionaryTextCorpus(
             new MemoryText("GEN", new[]
