@@ -28,6 +28,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
 using Point = System.Windows.Point;
+using ClearDashboard.Wpf.Application.Messages;
 
 // ReSharper disable InconsistentNaming
 
@@ -36,7 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
     /// <summary>
     /// 
     /// </summary>
-    public class BiblicalTermsViewModel : ToolViewModel
+    public class BiblicalTermsViewModel : ToolViewModel, IHandle<ParatextConnectedMessage>
     {
         private readonly LongRunningTaskManager _longRunningTaskManager;
 
@@ -533,55 +534,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         protected override async void OnViewReady(object view)
         {
-            await GetBiblicalTerms(BiblicalTermsType.Project);
-
-            // populate the combo box for scope
-            SetupScopes();
-            // select the first one
-            var drv = Scopes.DefaultView[Scopes.Rows.IndexOf(Scopes.Rows[0])];
-            SelectedScope = drv;
-
-            // populate the combo box for rendering filters
-            SetupRenderingFilters();
-            // select the first one
-            drv = RenderingsFilters.DefaultView[RenderingsFilters.Rows.IndexOf(RenderingsFilters.Rows[0])];
-            RenderingFilter = drv;
-
-            // populate the combo box for semantic domains
-            SetupSemanticDomains();
-            // select the first one
-            drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
-            SelectedDomain = drv;
-
-            try
+            if (!CheckIfConnectedToParatext())
             {
-                // setup the collectionview that binds to the data grid
-                OnUIThread(() =>
-                {
-                    BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
-                    
-                    // setup the method that we go to for filtering
-                    BiblicalTermsCollectionView.Filter = FilterGridItems;
-                });
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWarning("Setting BiblicalTerms progress bar visibility task was cancelled.", ex);
+                ProgressBarVisibility = Visibility.Collapsed;
+                return;
             }
 
-
-            NotifyOfPropertyChange(() => BiblicalTermsCollectionView);
-
-
-
-            if (ProjectManager.CurrentParatextProject != null)
-            {
-                var paratextProject = ProjectManager.CurrentParatextProject;
-                // pull out the project font family
-                _fontFamily = paratextProject.Language.FontFamily;
-                _fontSize = paratextProject.Language.Size;
-                IsRtl = paratextProject.Language.IsRtol;
-            }
+            await RequestBiblicalTermsData();
 
 
             Logger.LogInformation("OnViewReady");
@@ -611,6 +570,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         #endregion //Constructor
 
         #region Methods
+
+        private async Task RequestBiblicalTermsData()
+        {
+            await GetBiblicalTerms(BiblicalTermsType.Project);
+
+            // populate the combo box for scope
+            SetupScopes();
+            // select the first one
+            var drv = Scopes.DefaultView[Scopes.Rows.IndexOf(Scopes.Rows[0])];
+            SelectedScope = drv;
+
+            // populate the combo box for rendering filters
+            SetupRenderingFilters();
+            // select the first one
+            drv = RenderingsFilters.DefaultView[RenderingsFilters.Rows.IndexOf(RenderingsFilters.Rows[0])];
+            RenderingFilter = drv;
+
+            // populate the combo box for semantic domains
+            SetupSemanticDomains();
+            // select the first one
+            drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
+            SelectedDomain = drv;
+
+            try
+            {
+                // setup the collectionview that binds to the data grid
+                OnUIThread(() =>
+                {
+                    BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
+
+                    // setup the method that we go to for filtering
+                    BiblicalTermsCollectionView.Filter = FilterGridItems;
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("Setting BiblicalTerms progress bar visibility task was cancelled.", ex);
+            }
+
+
+            NotifyOfPropertyChange(() => BiblicalTermsCollectionView);
+
+
+            if (ProjectManager.CurrentParatextProject != null)
+            {
+                var paratextProject = ProjectManager.CurrentParatextProject;
+                // pull out the project font family
+                _fontFamily = paratextProject.Language.FontFamily;
+                _fontSize = paratextProject.Language.Size;
+                IsRtl = paratextProject.Language.IsRtol;
+            }
+        }
+
+        private bool CheckIfConnectedToParatext()
+        {
+            if (ProjectManager?.HasCurrentParatextProject == false)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
 
         /// <summary>
         /// TODO
@@ -1265,5 +1287,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             LaunchMirrorView<BiblicalTermsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
         #endregion // Methods
+
+        public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
+        {
+
+            if (message.Connected)
+            {
+                await RequestBiblicalTermsData();
+            }
+        }
     }
 }
