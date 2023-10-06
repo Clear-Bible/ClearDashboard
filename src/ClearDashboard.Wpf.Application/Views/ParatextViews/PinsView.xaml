@@ -7,7 +7,6 @@
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -20,6 +19,7 @@
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -119,52 +119,51 @@
                 Style="{StaticResource TransparentStyle}" />-->
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
-
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="All" />
             <RadioButton
                 Name="AllXmlSourceRadio"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsAll}"
                 Style="{StaticResource DashboardRadioButtonStyle}" />
             <Label
-                Margin="10,0,0,0"
+                Margin="-4,0,10,0"
                 VerticalAlignment="Center"
-                Content="Key Terms" />
+                Content="All" />
             <RadioButton
                 Name="BtXmlSourceRadio"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsBt}"
                 Style="{StaticResource DashboardRadioButtonStyle}" />
             <Label
-                Margin="10,0,0,0"
+                Margin="-4,0,10,0"
                 VerticalAlignment="Center"
-                Content="All Biblical Terms" />
+                Content="Key Terms" />
             <RadioButton
                 Name="AbtXmlSourceRadio"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsAbt}"
                 Style="{StaticResource DashboardRadioButtonStyle}" />
             <Label
-                Margin="10,0,0,0"
+                Margin="-4,0,10,0"
                 VerticalAlignment="Center"
-                Content="Term Renderings" />
+                Content="All Biblical Terms" />
             <RadioButton
                 Name="TrXmlSourceRadio"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsTr}"
                 Style="{StaticResource DashboardRadioButtonStyle}" />
             <Label
-                Margin="10,0,0,0"
+                Margin="-4,0,10,0"
                 VerticalAlignment="Center"
-                Content="Lexicon" />
+                Content="Term Renderings" />
             <RadioButton
                 Name="LxXmlSourceRadio"
                 GroupName="XmlSourceRadio"
                 IsChecked="{Binding IsLx}"
                 Style="{StaticResource DashboardRadioButtonStyle}" />
+            <Label
+                Margin="-4,0,10,0"
+                VerticalAlignment="Center"
+                Content="Lexicon" />
 
             <Button
                 Height="25"
