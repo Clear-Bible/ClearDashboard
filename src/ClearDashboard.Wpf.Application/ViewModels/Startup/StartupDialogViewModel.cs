@@ -28,6 +28,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public static bool InitialStartup = true;
         public static bool GoToSetup = false;
         public static bool GoToTemplate = false;
+        public static bool ProjectAlreadyOpened = false;
+
         public string Version { get; set; }
 
         #endregion //Member Variables

@@ -901,17 +901,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async Task SetGitLabUpdateNeeded(List<DashboardProject> projects)
         {
-            // get the collab most recent Sha
-            foreach (var project in projects)
+            if (!StartupDialogViewModel.ProjectAlreadyOpened)
             {
-                if (project.IsCollabProject)
+                // get the collab most recent Sha
+                foreach (var project in projects)
                 {
-                    var results = await ExecuteRequest(new GetGitLabUpdatedNeededQuery(project), CancellationToken.None);
-                    if (results.Success && results.HasData)
+                    if (project.IsCollabProject)
                     {
-                        if (results.Data == true)
+                        var results = await ExecuteRequest(new GetGitLabUpdatedNeededQuery(project), CancellationToken.None);
+                        if (results.Success && results.HasData)
                         {
-                            project.GitLabUpdateNeeded = true;
+                            if (results.Data == true)
+                            {
+                                project.GitLabUpdateNeeded = true;
+                            }
                         }
                     }
                 }
