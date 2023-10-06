@@ -13,6 +13,8 @@ using System.Threading;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using System.Data.Entity.Core.Objects;
 using ClearDashboard.DataAccessLayer.Data.Migrations;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -362,16 +364,42 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
                 }
             }
         }
+
+        foreach (var otlInsertSnapshot in otlInserts
+            .SelectMany(e => e.Value
+                .Select(t => t.Snapshot)))
+        {
+            var tokenId = await FindTokenId(otlInsertSnapshot, cancellationToken);
+            if (tokenId != default)
+            {
+
+            }
+        }
     }
 
-    private static IDictionary<string, IEnumerable<string>> FindOriginTokenLocationSets(IEnumerable<IModelSnapshot<Models.Token>>? tokens)
+    private async Task<Guid> FindTokenId(IModelSnapshot<Models.Token> snapshot, CancellationToken cancellationToken)
     {
-        if (tokens is null)
+        var tokenId = default(Guid);
+
+        await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
+            $"Resolve token id",
+            async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+            {
+                tokenId = await ResolveTokenId(snapshot, dbConnection, cache, logger);
+            },
+            cancellationToken);
+
+        return tokenId;
+    }
+
+    private static IDictionary<string, IEnumerable<(string RefValue, IModelSnapshot<Models.Token> Snapshot)>> FindOriginTokenLocationSets(IEnumerable<IModelSnapshot<Models.Token>>? tokenSnapshots)
+    {
+        if (tokenSnapshots is null)
         {
-            return new Dictionary<string, IEnumerable<string>>();
+            return new Dictionary<string, IEnumerable<(string, IModelSnapshot<Models.Token>)>>();
         }
 
-        return tokens
+        return tokenSnapshots
             .Select(e =>
             {
                 if (e.PropertyValues.TryGetValue("Ref", out var refValue) &&
@@ -379,17 +407,17 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
                     !string.IsNullOrEmpty((string?)originTokenLocation) &&
                     int.TryParse(((string)refValue!).Split("_").LastOrDefault(), out int index))
                 {
-                    return (OriginTokenLocation: (string)originTokenLocation, RefValue: (string)refValue, Index: index);
+                    return (OriginTokenLocation: (string)originTokenLocation, RefValue: (string)refValue, Index: index, Snapshot: e);
                 }
                 else
                 {
-                    return (OriginTokenLocation: string.Empty, RefValue: string.Empty, Index: 0);
+                    return (OriginTokenLocation: string.Empty, RefValue: string.Empty, Index: 0, Snapshot: e);
                 }
             })
             .Where(e => !string.IsNullOrEmpty(e.OriginTokenLocation))
             .GroupBy(e => e.OriginTokenLocation)
             .ToDictionary(
                 g => g.Key,
-                g => g.OrderBy(e => e.Index).Select(e => e.RefValue));
+                g => g.OrderBy(e => e.Index).Select(e => (e.RefValue, e.Snapshot)));
     }
 }

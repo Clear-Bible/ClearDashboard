@@ -233,9 +233,9 @@ DELETE FROM TokenComponent WHERE Id IN
 
                 var existingAssociatedTokenCompositeIds = projectDbContext.TokenCompositeTokenAssociations
                     .Include(e => e.TokenComposite)
-                    .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId })
-                    .Where(tap => tap.ParallelCorpusId == parallelCorpusId)
-                    .Select(tap => tap.TokenCompositeId)
+                    .Select(e => new { e.TokenCompositeId, e.TokenComposite!.ParallelCorpusId })
+                    .Where(e => e.ParallelCorpusId == parallelCorpusId)
+                    .Select(e => e.TokenCompositeId)
                     .ToList();
 
                 if (existingAssociatedTokenCompositeIds.Any())
@@ -310,17 +310,24 @@ DELETE FROM TokenComponent WHERE Id IN
 
                 // Remove the OnlyIn1 tokens from the composite:
                 var tokenIdsOnlyIn1 = tokenIds
-                            .Where(l => tokenLocationsOnlyIn1.Contains(l.EngineTokenId))
-                            .Select(l => l.TokenId)
-                            .ToList();
+                    .Where(e => tokenLocationsOnlyIn1.Contains(e.EngineTokenId))
+                    .Select(e => e.TokenId)
+                    .ToList();
 
                 var tokenAssocationsToRemove = projectDbContext.TokenCompositeTokenAssociations
-                        .Where(a => tokenIdsOnlyIn1.Contains(a.TokenId));
+                    .Where(a => tokenIdsOnlyIn1.Contains(a.TokenId))
+                    .Where(a => a.TokenCompositeId == tokenCompositeId);
 
                 projectDbContext.RemoveRange(tokenAssocationsToRemove);
 
+                var tokenIdsOnlyIn2 = tokenIds
+                    .Where(e => tokenLocationsOnlyIn2.Contains(e.EngineTokenId))
+                    .Select(e => e.TokenId)
+                    .ToList();
+
                 var existingAssociatedTokenCompositeIds = projectDbContext.TokenCompositeTokenAssociations
                     .Include(e => e.TokenComposite)
+                    .Where(e => tokenIdsOnlyIn2.Contains(e.TokenId))
                     .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId })
                     .Where(tap => tap.ParallelCorpusId == parallelCorpusId)
                     .Where(tap => tap.TokenCompositeId != tokenCompositeId)
@@ -333,11 +340,10 @@ DELETE FROM TokenComponent WHERE Id IN
                 }
 
                 // Add the OnlyIn2 tokens to the composite:
-                var tokenAssocationsToAdd = tokenIds
-                    .Where(l => tokenLocationsOnlyIn2.Contains(l.EngineTokenId)).ToList()
-                    .Select(l => new Models.TokenCompositeTokenAssociation
+                var tokenAssocationsToAdd = tokenIdsOnlyIn2
+                    .Select(e => new Models.TokenCompositeTokenAssociation
                     {
-                        TokenId = l.TokenId,
+                        TokenId = e,
                         TokenCompositeId = tokenCompositeId
                     })
                     .ToList();
