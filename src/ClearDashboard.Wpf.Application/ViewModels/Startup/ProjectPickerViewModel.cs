@@ -1112,9 +1112,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             AlertVisibility = Visibility.Collapsed;
         }
 
-        public async void NavigateToMainViewModel(DashboardProject project, MouseButtonEventArgs args)
+        public async void NavigateToMainViewModel(DashboardProject? project, MouseButtonEventArgs args)
         {
-
+            if (project == null)
+            {
+                return;
+            }
             // Only respond to a Left button click otherwise,
             // the context menu will not be shown on a right click.
             if (args.LeftButton != MouseButtonState.Pressed)

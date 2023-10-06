@@ -1142,12 +1142,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (AllSelectedTokens != null)
             {
                 var selectedTokenCount = AllSelectedTokens.Count(t => t.IsTokenSelected);
-                var selectedAssignedTranslationCount = AllSelectedTokens
-                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId != null);
-                var selectedUnassignedTranslationCount = AllSelectedTokens
-                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId == null);
 
-                if (selectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || selectedAssignedTranslationCount > 0))
+                if (AllSelectedTokens.SelectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || AllSelectedTokens.SelectedAssignedTranslationCount > 0))
                 {
                     CreateNoteMenuItem.Visibility = Visibility.Visible;
                 }
@@ -1156,7 +1152,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     CreateNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
-                if (selectedTokenCount > 0 && selectedAssignedTranslationCount == 0 && selectedUnassignedTranslationCount == 0)
+                if (selectedTokenCount > 0 && AllSelectedTokens.SelectedAssignedTranslationCount == 0 && AllSelectedTokens.SelectedUnassignedTranslationCount == 0)
                 {
                     CopyMenuItem.Visibility = Visibility.Visible;
                     JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
@@ -1185,12 +1181,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (AllSelectedTokens != null)
             {
                 var selectedTokenCount = AllSelectedTokens.Count(t => t.IsTokenSelected);
-                var selectedAssignedTranslationCount = AllSelectedTokens
-                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId != null);
-                var selectedUnassignedTranslationCount = AllSelectedTokens
-                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId == null);
-
-                if (selectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || selectedAssignedTranslationCount > 0))
+               
+                if (AllSelectedTokens.SelectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || AllSelectedTokens.SelectedAssignedTranslationCount > 0))
                 {
                     CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
                 }
@@ -1199,7 +1191,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
-                if (selectedTokenCount == 0 && selectedAssignedTranslationCount + selectedUnassignedTranslationCount == 1)
+                if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
                 {
                     SetTranslationMenuItem.Visibility = Visibility.Visible;
                 }
