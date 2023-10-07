@@ -189,6 +189,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             _refreshTimer.AutoReset = true;
             _refreshTimer.Enabled = true;
             InstantClockRefresh();
+
+            Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
+        }
+
+        private void Dispatcher_ShutdownStarted(object? sender, EventArgs e)
+        {
+            _refreshTimer.Elapsed -= ClockRefresh;
         }
 
         #endregion //Constructor
@@ -226,7 +233,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             Properties.Settings.Default.Save();
         }
 
-        private void ClockRefresh(object sender, ElapsedEventArgs e)
+        private void ClockRefresh(object? sender, ElapsedEventArgs e)
         {
             UpdateClockMenuItems();
 
