@@ -190,89 +190,12 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
             async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
             {
                 tokenId = await ResolveTokenId(itemToDelete, dbConnection, cache, logger);
-
-                tokenCompositeIds.AddRange((await DataUtil.SelectEntityValuesAsync(
-                    dbConnection,
-                    typeof(Models.TokenCompositeTokenAssociation),
-                    new List<string> { "Id", "TokenCompositeId" },
-                    new Dictionary<string, object?> {
-                                { "TokenId", tokenId },
-                                { "Deleted", null }
-                    },
-                    true,
-                    CancellationToken.None))
-                        .Select(e => Guid.Parse((string)e["TokenCompositeId"]!))
-                        .Distinct()
-                        .ToList());
+                tokenCompositeIds.AddRange(await FindTokenCompositeIds(dbConnection, new Guid[] { tokenId }, cancellationToken));
             },
             cancellationToken
         );
 
-        await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
-    $"Delete any TokenComposites associated with the token being deleted",
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
-
-                var tokenCompositesToDelete = projectDbContext.TokenComposites
-                    .Include(tc => tc.Translations.Where(t => t.Deleted == null))
-                    .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
-                    .Include(tc => tc.TargetAlignments.Where(a => a.Deleted == null))
-                    .Where(e => tokenCompositeIds.Contains(e.Id))
-                    .ToList();
-
-                foreach (var tokenComposite in tokenCompositesToDelete)
-                {
-                    projectDbContext.TokenComposites.Remove(tokenComposite);
-                    foreach (var e in tokenComposite.Translations) { e.Deleted = currentDateTime; }
-                    foreach (var e in tokenComposite.SourceAlignments) 
-                    { 
-                        e.Deleted = currentDateTime;
-
-                        var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
-                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), e.AlignmentSetId);
-                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), tokenComposite.TrainingText!);
-                        alignmentSetDenormalizationTasks.Add(t);
-                    }
-                    foreach (var e in tokenComposite.TargetAlignments) 
-                    { 
-                        e.Deleted = currentDateTime;
-
-                        var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
-                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), e.AlignmentSetId);
-                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), tokenComposite.TrainingText!);
-                        alignmentSetDenormalizationTasks.Add(t);
-                    }
-                }
-
-                // Since we are deleting the Token entity using DbCommand (which will cascade delete any
-                // related TokenComponentTokenAssociation entities), DbContext won't know anything about
-                // it and when projectDbContext.Remove(tokenComposite) is called related 
-                // TokenCompositeTokenAssociations will be marked for deletion.  When the transaction is
-                // finally committed DbContext will complain that "The database operation was expected
-                // to affect 1 row(s), but actually affected 0 row(s)".  To prevent this error, we find
-                // all TokenCompositeTokenAssociations for the deleted TokenId and set them to 'Detached':
-                foreach (var associationEntry in projectDbContext.ChangeTracker
-                    .Entries<Models.TokenCompositeTokenAssociation>()
-                    .Where(e => e.Property(e => e.TokenId).OriginalValue == tokenId))
-                {
-                    associationEntry.State = EntityState.Detached;
-                }
-
-                await Task.CompletedTask;
-            },
-            cancellationToken
-        );
-
-        if (alignmentSetDenormalizationTasks.Any())
-        {
-            _mergeContext.MergeBehavior.StartInsertModelCommand(alignmentSetDenormalizationTasks.First());
-            foreach (var child in alignmentSetDenormalizationTasks)
-            {
-                _ = await _mergeContext.MergeBehavior.RunInsertModelCommand(child, cancellationToken);
-            }
-            _mergeContext.MergeBehavior.CompleteInsertModelCommand(typeof(Models.AlignmentSetDenormalizationTask));
-
-            _mergeContext.FireAlignmentDenormalizationEvent = true;
-        }
+        await DeleteCompositesForTokens(tokenCompositeIds, new Guid[] { tokenId }, cancellationToken);
 
         // Deletes the actual Token entity.  
         return await base.HandleDeleteAsync(itemToDelete, cancellationToken);
@@ -365,31 +288,131 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
             }
         }
 
-        foreach (var otlInsertSnapshot in otlInserts
-            .SelectMany(e => e.Value
-                .Select(t => t.Snapshot)))
+        // Delete any existing token composites from the current database that reference tokens
+        // from the OriginTokenLocation sets being inserted:
+        foreach (var otlInsert in otlInserts)
         {
-            var tokenId = await FindTokenId(otlInsertSnapshot, cancellationToken);
-            if (tokenId != default)
+            if (otlSetsInCurrentDatabase.TryGetValue(otlInsert.Key, out var otlSetCurrentDatabase))
             {
+                var tokenCompositeIds = await FindTokenCompositeIds(otlSetCurrentDatabase
+                    .Select(e => e.Snapshot), cancellationToken);
 
             }
         }
     }
 
-    private async Task<Guid> FindTokenId(IModelSnapshot<Models.Token> snapshot, CancellationToken cancellationToken)
+    private async Task DeleteCompositesForTokens(IEnumerable<Guid> tokenCompositeIds, IEnumerable<Guid> tokenIdsInComposites, CancellationToken cancellationToken)
     {
-        var tokenId = default(Guid);
+        var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
+        List<GeneralModel<Models.AlignmentSetDenormalizationTask>> alignmentSetDenormalizationTasks = new();
+
+        await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+$"Delete any TokenComposites associated with the token being deleted",
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
+
+                var tokenCompositesToDelete = projectDbContext.TokenComposites
+                    .Include(tc => tc.Translations.Where(t => t.Deleted == null))
+                    .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
+                    .Include(tc => tc.TargetAlignments.Where(a => a.Deleted == null))
+                    .Where(e => tokenCompositeIds.Contains(e.Id))
+                    .ToList();
+
+                foreach (var tokenComposite in tokenCompositesToDelete)
+                {
+                    projectDbContext.TokenComposites.Remove(tokenComposite);
+                    foreach (var e in tokenComposite.Translations) { e.Deleted = currentDateTime; }
+                    foreach (var e in tokenComposite.SourceAlignments)
+                    {
+                        e.Deleted = currentDateTime;
+
+                        var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
+                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), e.AlignmentSetId);
+                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), tokenComposite.TrainingText!);
+                        alignmentSetDenormalizationTasks.Add(t);
+                    }
+                    foreach (var e in tokenComposite.TargetAlignments)
+                    {
+                        e.Deleted = currentDateTime;
+
+                        var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
+                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), e.AlignmentSetId);
+                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), tokenComposite.TrainingText!);
+                        alignmentSetDenormalizationTasks.Add(t);
+                    }
+                }
+
+                // Since we are deleting the Token entity using DbCommand (which will cascade delete any
+                // related TokenComponentTokenAssociation entities), DbContext won't know anything about
+                // it and when projectDbContext.Remove(tokenComposite) is called related 
+                // TokenCompositeTokenAssociations will be marked for deletion.  When the transaction is
+                // finally committed DbContext will complain that "The database operation was expected
+                // to affect 1 row(s), but actually affected 0 row(s)".  To prevent this error, we find
+                // all TokenCompositeTokenAssociations for the deleted TokenId and set them to 'Detached':
+                foreach (var associationEntry in projectDbContext.ChangeTracker
+                    .Entries<Models.TokenCompositeTokenAssociation>()
+                    .Where(e => tokenIdsInComposites.Contains(e.Property(e => e.TokenId).OriginalValue)))
+                {
+                    associationEntry.State = EntityState.Detached;
+                }
+
+                await Task.CompletedTask;
+            },
+            cancellationToken
+        );
+
+        if (alignmentSetDenormalizationTasks.Any())
+        {
+            _mergeContext.MergeBehavior.StartInsertModelCommand(alignmentSetDenormalizationTasks.First());
+            foreach (var child in alignmentSetDenormalizationTasks)
+            {
+                _ = await _mergeContext.MergeBehavior.RunInsertModelCommand(child, cancellationToken);
+            }
+            _mergeContext.MergeBehavior.CompleteInsertModelCommand(typeof(Models.AlignmentSetDenormalizationTask));
+
+            _mergeContext.FireAlignmentDenormalizationEvent = true;
+        }
+    }
+
+    private static async Task<IEnumerable<Guid>> FindTokenCompositeIds(DbConnection dbConnection, IEnumerable<Guid> tokenIds, CancellationToken cancellationToken)
+    {
+        return (await DataUtil.SelectEntityValuesAsync(
+            dbConnection,
+            typeof(Models.TokenCompositeTokenAssociation),
+            new List<string> { "Id", "TokenCompositeId" },
+            new Dictionary<string, object?> {
+                { "TokenId", tokenIds },
+                { "Deleted", null }
+            },
+            true,
+            cancellationToken))
+                .Select(e => Guid.Parse((string)e["TokenCompositeId"]!))
+                .Distinct()
+                .ToList();
+    }
+
+    private async Task<IEnumerable<Guid>> FindTokenCompositeIds(IEnumerable<IModelSnapshot<Models.Token>> tokenSnapshots, CancellationToken cancellationToken)
+    {
+        var tokenCompositeIds = new List<Guid>();
 
         await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
-            $"Resolve token id",
+            $"Find all database composite ids related to incoming token snapshots",
             async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
             {
-                tokenId = await ResolveTokenId(snapshot, dbConnection, cache, logger);
+                var tokenIds = new List<Guid>();
+                foreach (var tokenSnapshot in tokenSnapshots)
+                {
+                    var tokenId = await ResolveTokenId(tokenSnapshot, dbConnection, cache, logger);
+                    if (tokenId != default)
+                    {
+                        tokenIds.Add(tokenId);
+                    }
+                }
+
+                tokenCompositeIds.AddRange(await FindTokenCompositeIds(dbConnection, tokenIds, cancellationToken));
             },
             cancellationToken);
 
-        return tokenId;
+        return tokenCompositeIds.Distinct();
     }
 
     private static IDictionary<string, IEnumerable<(string RefValue, IModelSnapshot<Models.Token> Snapshot)>> FindOriginTokenLocationSets(IEnumerable<IModelSnapshot<Models.Token>>? tokenSnapshots)
