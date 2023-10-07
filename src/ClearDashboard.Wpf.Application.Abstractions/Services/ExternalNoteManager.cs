@@ -238,7 +238,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 if (!obtainedLock)
                 {
                     logger?.LogWarning($"couldn't obtain lock on ExternalProjectIdToChapterToExternalNotesMap for verseref {verseRefs.First()}");
-                    throw new EngineException("Couldn't obtain lock on cache within 10 seconds");
+                    throw new EngineException("Couldn't obtain lock on cache within 60 seconds");
                 }
                                 
                 return tokenizedTextCorpusIds
@@ -297,15 +297,32 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public bool InvalidateExternalNotesCache(TokenizedTextCorpusId? tokenizedTextCorpusId)
         {
-            if (tokenizedTextCorpusId == null)
+            bool obtainedLock = false;
+            try
             {
-                ExternalProjectIdToChapterToExternalNotesMap.Clear();
-                return true;
+                Monitor.TryEnter(ExternalProjectIdToChapterToExternalNotesMap, TimeSpan.FromSeconds(60), ref obtainedLock);
+                if (!obtainedLock)
+                {
+                    throw new EngineException("Couldn't obtain lock on cache within 60 seconds");
+                }
+
+                if (tokenizedTextCorpusId == null)
+                {
+                    ExternalProjectIdToChapterToExternalNotesMap.Clear();
+                    return true;
+                }
+                else
+                {
+                    return ExternalProjectIdToChapterToExternalNotesMap.Remove(tokenizedTextCorpusId?.CorpusId?.ParatextGuid
+                        ?? throw new InvalidStateEngineException(name: "tokenizedTextCorpus.CorpusId or ParatextGuid", value: "null"));
+                }
             }
-            else
+            finally
             {
-                return ExternalProjectIdToChapterToExternalNotesMap.Remove(tokenizedTextCorpusId?.CorpusId?.ParatextGuid
-                    ?? throw new InvalidStateEngineException(name: "tokenizedTextCorpus.CorpusId or ParatextGuid", value: "null"));
+                if (obtainedLock)
+                {
+                    Monitor.Exit(ExternalProjectIdToChapterToExternalNotesMap);
+                }
             }
         }
     }

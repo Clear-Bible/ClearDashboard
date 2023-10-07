@@ -129,6 +129,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     tokenDisplayViewModel.ExternalNotes = externalNotes;
                 }
+                else
+                {
+                    tokenDisplayViewModel.ExternalNotes = null;
+                }
             }
         }
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)
