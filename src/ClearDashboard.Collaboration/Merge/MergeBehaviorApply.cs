@@ -174,6 +174,17 @@ public class MergeBehaviorApply : MergeBehaviorBase
             cancellationToken);
     }
 
+    public override async Task<int> DeleteEntityValuesAsync(Type entityType, Dictionary<string, object?> whereClause, CancellationToken cancellationToken)
+    {
+        var tableType = ResolveTableName(entityType, whereClause);
+
+        return await DataUtil.DeleteEntityValuesAsync(
+            _connection,
+            tableType,
+            whereClause,
+            cancellationToken);
+    }
+
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
         _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");

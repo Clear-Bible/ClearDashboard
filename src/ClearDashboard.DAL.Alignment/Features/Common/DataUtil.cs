@@ -53,6 +53,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
         }
 
+        public static void ApplyColumnsToDeleteCommand(DbCommand command, Type type, string[] whereColumns)
+        {
+            command.CommandText =
+                $@"
+                DELETE FROM {type.Name}
+                WHERE {string.Join(", ", whereColumns.Select(c => c + " = @" + c))}
+            ";
+
+            foreach (var column in whereColumns)
+            {
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = $"@{column}";
+                command.Parameters.Add(parameter);
+            }
+        }
+
         public enum WhereEquality
         {
             Equals,
@@ -211,6 +227,32 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             var results = ReadSelectDbDataReader(reader);
 
             return results;
+        }
+
+        public static async Task<int> DeleteEntityValuesAsync(DbConnection? connection, Type tableType, Dictionary<string, object?> whereClause, CancellationToken cancellationToken)
+        {
+            if (connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
+
+            await using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+
+            ApplyColumnsToDeleteCommand(
+                command,
+                tableType,
+                whereClause.Keys.ToArray());
+
+            try
+            {
+                command.Prepare();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Preparing command to get data from table type '{tableType}' failed with the following error: {ex.Message}", ex);
+            }
+
+            AddWhereClauseParameters(command, whereClause);
+
+            return await command.ExecuteNonQueryAsync(cancellationToken);
         }
 
         public static DbCommand CreateSoftDeleteByIdUpdateCommand(DbConnection connection, Type type)

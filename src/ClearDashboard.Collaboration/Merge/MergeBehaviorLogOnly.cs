@@ -71,14 +71,24 @@ public class MergeBehaviorLogOnly : MergeBehaviorBase
         return where;
     }
 
-    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> resolvedWhereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
+    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
     {
         await Task.CompletedTask;
 
-        var whereItems = string.Join(", ", resolvedWhereClause);
+        var whereItems = string.Join(", ", whereClause);
         _logger.LogInformation($"Getting Ids for :  '{entityType.ShortDisplayName()}' where: '{whereItems}'");
 
         return Enumerable.Empty<Dictionary<string, object?>>();
+    }
+
+    public override async Task<int> DeleteEntityValuesAsync(Type entityType, Dictionary<string, object?> whereClause, CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+
+        var whereItems = string.Join(", ", whereClause);
+        _logger.LogInformation($"Deleting Ids for :  '{entityType.ShortDisplayName()}' where: '{whereItems}'");
+
+        return 0;
     }
 
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
