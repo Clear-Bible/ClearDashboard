@@ -290,20 +290,29 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
         Unloaded += OnUnloaded;
 
         EventAggregator?.SubscribeOnUIThread(this);
+        Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
     }
 
-    ~TokenDisplayBase()
+    private void Dispatcher_ShutdownStarted(object? sender, EventArgs e)
     {
+        Loaded -= OnLoaded;
+        Unloaded -= OnUnloaded;
 
-        // Prevent errors related to the destructor getting called on a non-UI thread.
-        Execute.OnUIThread(() =>
-        {
-            Loaded -= OnLoaded;
-            Unloaded -= OnUnloaded;
-
-            EventAggregator?.Unsubscribe(this);
-        });
-       
+        EventAggregator?.Unsubscribe(this);
     }
+
+    //~TokenDisplayBase()
+    //{
+
+    //    // Prevent errors related to the destructor getting called on a non-UI thread.
+    //    Execute.OnUIThread(() =>
+    //    {
+    //        Loaded -= OnLoaded;
+    //        Unloaded -= OnUnloaded;
+
+    //        EventAggregator?.Unsubscribe(this);
+    //    });
+       
+    //}
 
 }
