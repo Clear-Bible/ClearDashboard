@@ -4,9 +4,9 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <Version>1.2.0.8</Version>
-    <FileVersion>1.2.0.8</FileVersion>
-    <AssemblyVersion>1.2.0.8</AssemblyVersion>
+    <Version>1.2.0.9</Version>
+    <FileVersion>1.2.0.9</FileVersion>
+    <AssemblyVersion>1.2.0.9</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>9</LangVersion>
