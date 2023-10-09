@@ -29,7 +29,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
         }
         public Task<RequestResult<bool>> Handle(CanAddNoteForProjectAndUserQuery request, CancellationToken cancellationToken)
         {
-            if (request.ParatextProjectId.Equals(string.Empty))
+            if (request.ExternalProjectId.Equals(string.Empty))
             {
                 throw new Exception($"paratextprojectid is not set");
             }
@@ -37,16 +37,16 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             try
             {
                 project = _host.GetAllProjects(true)
-                    .Where(p => p.ID.Equals(request.ParatextProjectId))
+                    .Where(p => p.ID.Equals(request.ExternalProjectId))
                     .First();
             }
             catch (Exception)
             {
-                throw new Exception($"paratextprojectid {request.ParatextProjectId} not found");
+                throw new Exception($"paratextprojectid {request.ExternalProjectId} not found");
             }
 
             //can if project is not a resource and the user is in the list of nonobservers,otherwise can't.
-            return Task.FromResult(new RequestResult<bool>(!project.IsResource && project.NonObserverUsers.Select(ui => ui.Name).Contains(request.ParatextUserName)));
+            return Task.FromResult(new RequestResult<bool>(!project.IsResource && project.NonObserverUsers.Select(ui => ui.Name).Contains(request.ExternalUserName)));
         }
     }
 }

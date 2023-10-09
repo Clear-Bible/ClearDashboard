@@ -147,7 +147,7 @@
                             Padding="5"
                             HorizontalAlignment="Center"
                             ItemsSource="{Binding ElementName=LabelsEditorControl, Path=LabelGroups}"
-                            SelectedItem="{Binding ElementName=LabelsEditorControl, Path=LabelGroups[0]}"
+                            SelectedItem="{Binding ElementName=LabelsEditorControl, Path=CurrentSourceLabelGroup}"
                             Visibility="{Binding ElementName=LabelsEditorControl, Path=NewLabelGroupInitializationVisibility}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -161,15 +161,15 @@
                             Orientation="Horizontal">
                             <Button
                                 Margin="5"
-                                Click="OnLabelGroupAddCancelled"
-                                Content="{helpers:Localization Cancel}"
-                                Style="{StaticResource AlternativeStyle}" />
-                            <Button
-                                Margin="5"
                                 Click="OnLabelGroupAddConfirmed"
                                 Content="{helpers:Localization Notes_LabelGroupAdd}"
                                 IsDefault="True"
                                 Style="{StaticResource TransparentStyle}" />
+                            <Button
+                                Margin="5"
+                                Click="OnLabelGroupAddCancelled"
+                                Content="{helpers:Localization Cancel}"
+                                Style="{StaticResource AlternativeStyle}" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -224,6 +224,7 @@
                 Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" />
             <notesControls:LabelSelector
                 x:Name="LabelSelector"
+                LabelGroup="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"

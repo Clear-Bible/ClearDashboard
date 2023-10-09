@@ -5,11 +5,10 @@ using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using Microsoft.Extensions.Logging;
-using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.DataAccessLayer.Features.Notes
 {
-    public class AddNoteCommandHandler : ParatextRequestHandler<AddNoteCommand, RequestResult<IProjectNote>, IProjectNote>
+    public class AddNoteCommandHandler : ParatextRequestHandler<AddNoteCommand, RequestResult<ExternalNote>, ExternalNote>
     {
 
         public AddNoteCommandHandler([NotNull] ILogger<AddNoteCommandHandler> logger) : base(logger)
@@ -17,7 +16,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Notes
             //no-op
         }
 
-        public override async Task<RequestResult<IProjectNote>> Handle(AddNoteCommand request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<ExternalNote>> Handle(AddNoteCommand request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("addnotecommand", request, cancellationToken);
         }

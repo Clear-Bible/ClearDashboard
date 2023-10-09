@@ -2131,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>启用对齐编辑</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>启用令牌分裂</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>实验</value>
   </data>

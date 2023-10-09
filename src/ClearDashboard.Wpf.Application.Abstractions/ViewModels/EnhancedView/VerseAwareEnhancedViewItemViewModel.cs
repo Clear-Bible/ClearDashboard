@@ -38,6 +38,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class VerseAwareEnhancedViewItemViewModel : EnhancedViewItemViewModel,
             IHandle<TokensJoinedMessage>, 
+            IHandle<TokenSplitMessage>,
             IHandle<TokenUnjoinedMessage>,
             IHandle<AlignmentAddedMessage>,
             IHandle<AlignmentDeletedMessage>
@@ -343,14 +344,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             tokens.AddRange(row.Tokens);
                         }
-                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus));
                     }
                     else
                     {
                         // Otherwise, create a separate verse display for each row.
                         foreach (var textRow in tokensTextRowsRange)
                         {
-                            verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                            verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus));
                         }
                     }
                     OnUIThread(() =>
@@ -358,7 +359,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         Verses = verses;
                     });
                 }
-               
 
                 CreateTitle(metadatum, tokensTextRowsRange, currentBcv, bookFound);
             }
@@ -475,14 +475,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     {
                         if (row.SourceTokens != null) tokens.AddRange(row.SourceTokens);
                     }
-                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.ParallelCorpus!, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId!))));
                 }
                 else
                 {
                     // Otherwise, create a separate verse display for each row.
                     foreach (var row in rows)
                     {
-                        Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row.SourceTokens, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                        Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row.SourceTokens!, metadatum.ParallelCorpus!, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId!))));
                     }
                 }
 
@@ -512,11 +512,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     // For "paragraph mode" include all of the rows in a single verse display.
                     Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!,
                         rows,
-                        metadatum.ParallelCorpus.ParallelCorpusId,
-                        metadatum.ParallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                        metadatum.IsRtl ?? false,
-                        metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
-                        metadatum.IsTargetRtl ?? false,
+                        metadatum.ParallelCorpus,
                         new AlignmentSetId(Guid.Parse(metadatum.AlignmentSetId))
                     ));
                 }
@@ -527,11 +523,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     {
                         Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 
                             new List<EngineParallelTextRow> {row}, 
-                            metadatum.ParallelCorpus.ParallelCorpusId, 
-                            metadatum.ParallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                            metadatum.IsRtl ?? false,
-                            metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
-                            metadatum.IsTargetRtl ?? false,
+                            metadatum.ParallelCorpus, 
                             new AlignmentSetId(Guid.Parse(metadatum.AlignmentSetId))
                             ));
                     }
@@ -738,6 +730,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
+        {
+            if (EnhancedViewItemMetadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusMetadatum)
+            {
+                tokenizedCorpusMetadatum.TokenizedTextCorpus = null;
+            }
+            if (EnhancedViewItemMetadatum is ParallelCorpusEnhancedViewItemMetadatum parallelCorpusMetadatum)
+            {
+                parallelCorpusMetadatum.ParallelCorpus = null;
+            }
+
+            await Task.CompletedTask;
+        }        
+        
+        public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
         {
             if (EnhancedViewItemMetadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusMetadatum)
             {

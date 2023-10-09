@@ -8,7 +8,7 @@ namespace ClearDashboard.Wpf.Application.Converters
     /// <summary>
   /// Source: http://stackoverflow.com/questions/534575/how-do-i-invert-booleantovisibilityconverter
   /// 
-  /// Implements a Boolean to Visibility converter
+  /// Implements a Boolean to Visibility converter, using <see cref="Visibility.Hidden"/> for false.
   /// Use ConverterParameter=true to negate the visibility - boolean interpretation.
   /// </summary>
   [ValueConversion(typeof(Boolean), typeof(Visibility))]

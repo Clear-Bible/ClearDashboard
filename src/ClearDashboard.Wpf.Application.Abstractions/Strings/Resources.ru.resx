@@ -2131,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Включить редактирование выравнивания</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Включить расщепление токенов</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Экспериментальный</value>
   </data>
