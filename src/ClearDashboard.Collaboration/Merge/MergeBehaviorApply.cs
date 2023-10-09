@@ -161,7 +161,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
         return resolvedWhereClause;
     }
 
-    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
+    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
     {
         var tableType = ResolveTableName(entityType, whereClause);
 
@@ -169,7 +169,8 @@ public class MergeBehaviorApply : MergeBehaviorBase
             _connection, 
             tableType, 
             selectColumns, 
-            whereClause, 
+            whereClause,
+            joins,
             useNotIndexedInFromClause, 
             cancellationToken);
     }

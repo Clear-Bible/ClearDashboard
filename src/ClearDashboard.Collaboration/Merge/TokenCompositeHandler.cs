@@ -144,6 +144,7 @@ DELETE FROM TokenComponent WHERE Id IN
                     { "ParallelCorpusId", parallelCorpusId },
                     { DISCRIMINATOR_COLUMN_NAME, DISCRIMINATOR_COLUMN_VALUE }
                 },
+                Enumerable.Empty<(Type, string, string)>(),
                 true,
                 CancellationToken.None))
                     .Select(e => Guid.Parse((string)e["Id"]!))
@@ -194,6 +195,7 @@ DELETE FROM TokenComponent WHERE Id IN
                         { "Deleted", null },
                         { TokenHandler.DISCRIMINATOR_COLUMN_NAME, TokenHandler.DISCRIMINATOR_COLUMN_VALUE }
                     },
+                    Enumerable.Empty<(Type, string, string)>(),
                     true,
                     CancellationToken.None))
                         .Select(e => (

@@ -106,12 +106,13 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
                     dbConnection,
                     TABLE_ENTITY_TYPE,
                     new List<string> { "Id", "EngineTokenId" },
-                    new Dictionary<string, object?> {
+                    whereClause: new Dictionary<string, object?> {
                                 { "OriginTokenLocation", (string)originTokenLocation },
                                 { "TokenizedCorpusId", tokenizedCorpusId },
                                 { "Deleted", deleted },
                                 { DISCRIMINATOR_COLUMN_NAME, DISCRIMINATOR_COLUMN_VALUE }
                     },
+                    Enumerable.Empty<(Type, string, string)>(),
                     true,
                     CancellationToken.None))
                         .Select(e => (
@@ -145,6 +146,7 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
                                 { "Deleted", deleted },
                                 { DISCRIMINATOR_COLUMN_NAME, DISCRIMINATOR_COLUMN_VALUE }
                     },
+                    Enumerable.Empty<(Type, string, string)>(),
                     true,
                     CancellationToken.None))
                         .Select(e => (
@@ -191,15 +193,12 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
                 tokenId = await ResolveTokenId(itemToDelete, dbConnection, cache, logger);
                 tokenCompositeIds.AddRange(await FindTokenCompositeIds(dbConnection, new Guid[] { tokenId }, cancellationToken));
 
-                if (itemToDelete.PropertyValues.TryGetValue(nameof(Models.Token.TrainingText), out var trainingText))
-                {
-                    var alignmentSetDenormalizationTasks = await BuildDenormalizationTasksForTokenAlignments(
-                        dbConnection, 
-                        new Dictionary<Guid, string> { { tokenId, (string)trainingText! } }, 
-                        cancellationToken);
+                var alignmentSetDenormalizationTasks = await BuildDenormalizationTasksForTokenAlignments(
+                    dbConnection, 
+                    new Guid[] { tokenId }, 
+                    cancellationToken);
 
-                    await InsertDenormalizationTasks(alignmentSetDenormalizationTasks, cancellationToken);
-                }
+                await InsertDenormalizationTasks(alignmentSetDenormalizationTasks, cancellationToken);
             },
             cancellationToken
         );
@@ -318,16 +317,20 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
     $"Delete composites for token",
             async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
             {
+                alignmentSetDenormalizationTasks.AddRange(await BuildDenormalizationTasksForTokenAlignments(
+                    dbConnection, 
+                    tokenCompositeIds, 
+                    cancellationToken));
+
                 await DataUtil.DeleteEntityValuesAsync(
                     dbConnection,
                     TokenCompositeHandler.TABLE_ENTITY_TYPE,
-                    new Dictionary<string, object?> {
-                        { "Id", tokenCompositeIds },
+                    new() {
+                        { nameof(Models.TokenComponent.Id), tokenCompositeIds },
                         { TokenCompositeHandler.DISCRIMINATOR_COLUMN_NAME, TokenCompositeHandler.DISCRIMINATOR_COLUMN_VALUE }
                     },
                     cancellationToken);
 
-                // DANG:  don't know the trainingText for the composites being deleted
                 // Probably anytime we delete using DbConnection we should Detach the same
                 // entities in DbContext
             },
@@ -416,35 +419,46 @@ $"Delete any TokenComposites associated with the token being deleted",
         }
     }
 
-    private static async Task<List<GeneralModel<Models.AlignmentSetDenormalizationTask>>> BuildDenormalizationTasksForTokenAlignments(DbConnection dbConnection, Dictionary<Guid, string> trainingTextsByTokenComponentId, CancellationToken cancellationToken)
+    private static async Task<List<GeneralModel<Models.AlignmentSetDenormalizationTask>>> BuildDenormalizationTasksForTokenAlignments(DbConnection dbConnection, IEnumerable<Guid> tokenComponentIds, CancellationToken cancellationToken)
     {
         List<GeneralModel<Models.AlignmentSetDenormalizationTask>> alignmentSetDenormalizationTasks = new();
 
         var alignmentSetTokens = (await DataUtil.SelectEntityValuesAsync(
             dbConnection,
             typeof(Models.Alignment),
-            new List<string> { "AlignmentSetId", "SourceTokenComponentId" },
-            new Dictionary<string, object?> {
-                { "SourceTokenComponentId", trainingTextsByTokenComponentId.Keys },
-                { "Deleted", null }
+            selectColumns: new List<string> { 
+                nameof(Models.Alignment.AlignmentSetId), 
+                nameof(Models.Alignment.SourceTokenComponentId),
+                nameof(Models.TokenComponent.TrainingText)
             },
+            new Dictionary<string, object?> {
+                { nameof(Models.Alignment.SourceTokenComponentId), tokenComponentIds },
+                { $"{nameof(Models.Alignment)}.{nameof(Models.Alignment.Deleted)}", null }
+            },
+            new List<(Type, string, string)> { (
+                TABLE_ENTITY_TYPE,
+                nameof(Models.TokenComponent.Id),
+                nameof(Models.Alignment.SourceTokenComponentId)
+            )},
             true,
             cancellationToken))
                 .Select(e => (
-                    AlignmentSetId: Guid.Parse((string)e["AlignmentSetId"]!),
-                    SourceTokenComponentId: Guid.Parse((string)e["SourceTokenComponentId"]!)))
+                    AlignmentSetId: Guid.Parse((string)e[nameof(Models.Alignment.AlignmentSetId)]!),
+                    SourceTokenComponentId: Guid.Parse((string)e[nameof(Models.Alignment.SourceTokenComponentId)]!),
+                    TrainingText: (string)e[nameof(Models.TokenComponent.TrainingText)]!))
+                .Where(e => !string.IsNullOrEmpty(e.TrainingText))
                 .GroupBy(e => e.AlignmentSetId)
                 .ToDictionary(
                     g => g.Key, 
-                    g => g.Select(e => e.SourceTokenComponentId).Distinct());
+                    g => g.Select(e => e).DistinctBy(e => e.SourceTokenComponentId));
 
         foreach (var kvp in alignmentSetTokens)
         {
-            foreach (var tokenComponentId in kvp.Value)
+            foreach (var tokenComponentInfo in kvp.Value)
             {
                 var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
                 t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), kvp.Key);
-                t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), trainingTextsByTokenComponentId[tokenComponentId]);
+                t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), tokenComponentInfo.TrainingText);
                 alignmentSetDenormalizationTasks.Add(t);
             }
         }
@@ -457,14 +471,17 @@ $"Delete any TokenComposites associated with the token being deleted",
         return (await DataUtil.SelectEntityValuesAsync(
             dbConnection,
             typeof(Models.TokenCompositeTokenAssociation),
-            new List<string> { "Id", "TokenCompositeId" },
+            new List<string> { 
+                nameof(Models.TokenCompositeTokenAssociation.TokenCompositeId), 
+                nameof(Models.TokenComponent.TrainingText) },
             new Dictionary<string, object?> {
-                { "TokenId", tokenIds },
-                { "Deleted", null }
+                { nameof(Models.TokenCompositeTokenAssociation.TokenId), tokenIds },
+                { nameof(Models.TokenCompositeTokenAssociation.Deleted), null }
             },
+            Enumerable.Empty<(Type, string, string)>(),
             true,
             cancellationToken))
-                .Select(e => Guid.Parse((string)e["TokenCompositeId"]!))
+                .Select(e => Guid.Parse((string)e[nameof(Models.TokenCompositeTokenAssociation.TokenCompositeId)]!))
                 .Distinct()
                 .ToList();
     }

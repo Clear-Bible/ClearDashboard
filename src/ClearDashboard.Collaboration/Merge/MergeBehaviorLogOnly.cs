@@ -71,7 +71,7 @@ public class MergeBehaviorLogOnly : MergeBehaviorBase
         return where;
     }
 
-    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
+    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
     {
         await Task.CompletedTask;
 

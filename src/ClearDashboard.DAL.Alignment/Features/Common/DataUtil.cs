@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Text;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
@@ -76,7 +77,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             IsNot
         }
 
-        public static void ApplyColumnsToSelectCommand(DbCommand command, Type type, string[] selectColumns, (string name, WhereEquality whereEquality)[] whereColumns, (string name, int count)[] whereInColumns, bool notIndexed)
+        public static void ApplyColumnsToSelectCommand(DbCommand command, Type type, string[] selectColumns, (string name, WhereEquality whereEquality)[] whereColumns, (string name, int count)[] whereInColumns, (Type JoinType, string JoinColumn, string FromColumn)[] joins, bool notIndexed)
         {
             var whereStrings = new List<string>();
 
@@ -108,10 +109,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
 
             var notIndexedString = notIndexed ? " NOT INDEXED " : string.Empty;
+
+            var joinStringBuilder = new StringBuilder();
+            foreach (var join in joins)
+            {
+                joinStringBuilder.AppendLine($"JOIN {join.JoinType.Name} ON {join.JoinType.Name}.{join.JoinColumn} = {type.Name}.{join.FromColumn}");
+            }
+
             command.CommandText =
             $@"
                 SELECT {string.Join(", ", selectColumns)}
                 FROM {type.Name} {notIndexedString}
+                {joinStringBuilder}
                 WHERE {string.Join(" AND ", whereStrings)}
             ";
             
@@ -184,7 +193,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             return results;
         }
 
-        public static async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(DbConnection? connection, Type tableType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
+        public static async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(DbConnection? connection, Type tableType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
         {
             if (connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
 
@@ -210,6 +219,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                     .Where(e => e.Value != null && e.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
                     .Select(e => (name: e.Key, count: (e.Value as IEnumerable)!.Cast<object>().Count()))
                     .ToArray(),
+                joins.ToArray(),
                 useNotIndexedInFromClause);
 
             try

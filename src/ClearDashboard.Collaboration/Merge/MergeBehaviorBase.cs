@@ -87,7 +87,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     public abstract void CompleteInsertModelCommand(Type entityType);
 
     public abstract Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken);
-    public abstract Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, bool useNotIndexedInFromClause, CancellationToken cancellationToken);
+    public abstract Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken);
     public abstract Task<int> DeleteEntityValuesAsync(Type entityType, Dictionary<string, object?> whereClause, CancellationToken cancellationToken);
 
     public abstract Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default);
