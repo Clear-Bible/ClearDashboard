@@ -181,12 +181,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #region Static Dependency Properties
 
         /// <summary>
-        /// Identifies the NoteProperty dependency property.
-        /// </summary>
-        public static readonly DependencyProperty NotePropertyChanged = DependencyProperty.Register(nameof(NoteProperty), typeof(bool), typeof(NoteDisplay),
-            new PropertyMetadata(false, OnNotePropertyChanged));
-
-        /// <summary>
         /// Identifies the AddMode dependency property.
         /// </summary>
         public static readonly DependencyProperty AddModeProperty = DependencyProperty.Register(nameof(AddMode), typeof(bool), typeof(NoteDisplay),
@@ -250,7 +244,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Identifies the Note dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register(nameof(Note), typeof(NoteViewModel), typeof(NoteDisplay));
+        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register(nameof(Note), typeof(NoteViewModel), typeof(NoteDisplay), 
+            new PropertyMetadata(null, OnNotePropertyChanged));
 
         /// <summary>
         /// Identifies the NoteAssociationFontFamily dependency property.
