@@ -230,6 +230,8 @@ public class CollaborationManager
 
     public bool IsCurrentProjectInRepository()
     {
+        _repositoryPath = Path.Combine(_repositoryBasePath, "P_" + _projectProvider.CurrentProject!.Id);
+
         if (IsRepositoryInitialized() && _projectProvider.HasCurrentProject)
         {
             var currentProjectId = _projectProvider.CurrentProject!.Id;
