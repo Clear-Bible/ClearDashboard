@@ -181,6 +181,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #region Static Dependency Properties
 
         /// <summary>
+        /// Identifies the NoteProperty dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NotePropertyChanged = DependencyProperty.Register(nameof(NoteProperty), typeof(bool), typeof(NoteDisplay),
+            new PropertyMetadata(false, OnNotePropertyChanged));
+
+        /// <summary>
         /// Identifies the AddMode dependency property.
         /// </summary>
         public static readonly DependencyProperty AddModeProperty = DependencyProperty.Register(nameof(AddMode), typeof(bool), typeof(NoteDisplay),
@@ -415,6 +421,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         #endregion
         #region Private Event Handlers
+
+        private static void OnNotePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NoteDisplay)d;
+            control.OnPropertyChanged(nameof(ParatextSendVisibility));
+        }
 
         private static void OnAddModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
