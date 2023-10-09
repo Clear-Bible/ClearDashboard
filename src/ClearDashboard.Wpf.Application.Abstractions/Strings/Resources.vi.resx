@@ -119,10 +119,13 @@
     <value>Thêm vào</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Chọn cách để mã hóa xác chết</value>
+    <value>Chọn cách để mã hóa Quả văn</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Liên kết</value>
+  </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Chọn (các) cuốn sách bạn đang làm việc cùng, bạn luôn có thể thêm nhiều sách sau này.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Kiểm tra USFM</value>
@@ -512,7 +515,7 @@
     <value>Người dùng cộng tác có sẵn:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Quản lý các dự án hợp tác</value>
+    <value>Quản lý các dự án cộng tác</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Người dùng dự án hiện tại:</value>
@@ -659,10 +662,10 @@
     <value>Tách mã thông báo</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Áp dụng chia tách cho tất cả các trường hợp của mã thông báo:</value>
+    <value>Áp dụng chia tách cho các phiên bản mã thông báo khác</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Chọn nơi để chia mã thông báo:</value>
+    <value>Chọn WHERE để chia mã thông báo:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>Chia ba chiều</value>
@@ -812,7 +815,7 @@
     <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Thêm một hình thức từ vựng vào bổ đề này</value>
+    <value>Thêm một dạng từ vựng vào bổ đề này</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>Thêm từ vựng</value>
@@ -875,7 +878,7 @@
     <value>Từ vựng</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Một từ vựng đã tồn tại cho bổ đề</value>
+    <value>Một từ vựng đã tồn tại cho Bổ đề</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Ý nghĩa:</value>
@@ -956,7 +959,7 @@
     <value>Thêm mục tiêu làm dịch cho ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Tìm các từ bỏ có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
+    <value>Tìm từ vựng có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Nhập khẩu đã kiểm tra</value>
@@ -1051,6 +1054,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Sở thích</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Nhanh chóng mới</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Thay đổi cộng tác có sẵn</value>
   </data>
@@ -1136,7 +1142,7 @@
     <value>Glosses:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Các phần của bài phát biểu</value>
+    <value>Các phần của lời nói</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
     <value>Bổ số liên quan</value>
@@ -1198,7 +1204,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Đặt lại ánh xạ câu thơ về sự đa dạng hóa mặc định</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1343,7 +1349,7 @@
     <value>Bạn có muốn tháo rời nhãn:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>Từ nhóm nhãn:</value>
+    <value>từ nhóm nhãn:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Thêm nhóm nhãn</value>
@@ -1374,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Văn bản gắn vào nhãn</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Xóa nhãn</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Disassociate Label</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Tạo</value>
@@ -1466,7 +1478,7 @@
     <value>Siêu dữ liệu JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Song song với những câu thơ</value>
+    <value>Song song hóa câu thơ</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>Thuật toán căn chỉnh từ máy</value>
@@ -1475,7 +1487,7 @@
     <value>Thuật toán căn chỉnh từ máy</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Mô hình đối xứng xe lửa?</value>
+    <value>Mô hình Symmetrized Train?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Xe lửa</value>
@@ -1520,7 +1532,7 @@
     <value>Thêm văn bản vào chế độ xem mới</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm chế độ xem câu để xem</value>
+    <value>Thêm để xem</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Phụ trợ</value>
@@ -1532,7 +1544,7 @@
     <value>Tính toán mô hình dịch mới</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức thu phóng của nội dung</value>
+    <value>Thay đổi mức độ zoom của nội dung</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Chuyên gia tư vấn</value>
@@ -1729,6 +1741,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Tạo một dự án mới</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Bắt đầu nhanh chóng dự án mới</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Tạo dự án:</value>
   </data>
@@ -1756,14 +1771,17 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Dự án máy chủ nhập khẩu</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Bao gồm các văn bản Kinh Thánh?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Kiểm tra hộp này để bao gồm các văn bản Kinh thánh Hy Lạp và tiếng Do Thái khi tạo dự án của bạn.</value>
   </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Bao gồm các văn bản Kinh Thánh Hy Lạp NT?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Bao gồm các văn bản Kinh thánh tiếng Do Thái OT?</value>
+  </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Quản lý các dự án hợp tác</value>
+    <value>Quản lý các dự án cộng tác</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Không có trận đấu.</value>
@@ -1886,7 +1904,7 @@
     <value>2 Tê -sa -lô -ni -ca</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Ti -mô -thê</value>
+    <value>2 Timothy</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 John</value>
@@ -1898,7 +1916,7 @@
     <value>Amos</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>COLOSSIANS</value>
+    <value>Cô -lô -se</value>
   </data>
   <data name="ProperCase_Daniel" xml:space="preserve">
     <value>Daniel</value>
@@ -2021,7 +2039,7 @@
     <value>Sự mặc khải</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Người La Mã</value>
+    <value>Rô -ma</value>
   </data>
   <data name="ProperCase_Ruth" xml:space="preserve">
     <value>Ruth</value>
@@ -2113,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Bật chỉnh sửa căn chỉnh</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Cho phép phân tách mã thông báo</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Thực nghiệm</value>
   </data>
@@ -2162,7 +2183,7 @@
     <value>Hiển thị chế độ xem mở rộng trên một màn hình khác với bảng điều khiển</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với các hệ thống có ba hoặc nhiều màn hình, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>
@@ -2226,6 +2247,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Không có mạng</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Đặt lại biểu mẫu</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Gửi</value>

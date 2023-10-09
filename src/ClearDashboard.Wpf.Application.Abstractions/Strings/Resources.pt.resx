@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alinhamento</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Selecione Livros (s) com os quais você está trabalhando, sempre pode adicionar mais livros posteriormente.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Verificando USFM</value>
   </data>
@@ -659,7 +662,7 @@
     <value>Token dividido</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplique dividido em todas as instâncias de token:</value>
+    <value>Aplique dividido em outras instâncias de token</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Selecione onde dividir o token:</value>
@@ -668,7 +671,7 @@
     <value>Divisão de três vias</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token de compósito un -joain</value>
+    <value>Token composto de unidade</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -905,7 +908,7 @@
     <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>Completamente</value>
@@ -950,7 +953,7 @@
     <value>Adicione como forma para ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Encontre correspondências ou formulários completos ou parciais para a fonte</value>
+    <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Adicione o alvo como tradução para ...</value>
@@ -1050,6 +1053,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferências</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Rápido novo</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Alterações de colaboração disponíveis</value>
@@ -1151,7 +1157,7 @@
     <value>Pesquisar por brilho inglês</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Pesquise por hebraico/grego</value>
+    <value>Pesquisar por hebraico/grego</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Senso</value>
@@ -1198,8 +1204,8 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
+  <data name="Migrate_Header" xml:space="preserve">
+    <value>Redefinir mapeamentos de versos para versificação padrão</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1331,7 +1337,7 @@
     <value>Adicione um rótulo</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Você quer criar o rótulo:</value>
+    <value>Você quer criar rótulo:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
@@ -1375,6 +1381,12 @@
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Texto anexado ao rótulo</value>
   </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Excluir rótulo</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Rótulo desassociado</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Criada</value>
   </data>
@@ -1403,7 +1415,7 @@
     <value>Grupos de etiquetas</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Etiquetas</value>
+    <value>Rótulos</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
     <value>Respostas</value>
@@ -1520,7 +1532,7 @@
     <value>Adicione texto à nova visualização</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Adicione a visão do verso para visualizar</value>
+    <value>Adicione à visualização</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliar</value>
@@ -1589,7 +1601,7 @@
     <value>Propriedades</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para versificação padrão</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Recurso</value>
@@ -1655,7 +1667,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>
@@ -1667,7 +1679,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme Type</value>
+    <value>Lexeme tipo</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1729,6 +1741,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Crie um novo projeto</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Iniciar rápido novo projeto</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Criar projeto:</value>
   </data>
@@ -1756,11 +1771,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Projeto de servidor de importação</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Incluir textos bíblicos gregos do NT?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Incluir textos bíblicos hebraicos?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gerenciar projetos de colaboração</value>
@@ -1802,7 +1820,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
+    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -1820,7 +1838,7 @@
     <value>Pesquise recente</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Clique aqui para começar a Paratext</value>
+    <value>Clique aqui para começar o Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
     <value>Versão:</value>
@@ -2113,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Ativar edição de alinhamento</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Ativar divisão de token</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
@@ -2141,13 +2162,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurar o usuário de colaboração</value>
+    <value>Restaure o usuário da colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salve o usuário do GitLab no servidor</value>
+    <value>Salvar o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>
@@ -2226,6 +2247,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Sem internet</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Redefinir formulário</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Enviar</value>

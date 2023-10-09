@@ -33,6 +33,8 @@ namespace ClearDashboard.Wpf.Application.Services
         private IUserProvider UserProvider { get; }
         private ILocalizationService LocalizationService { get; }
 
+        public ExternalNoteManager ExternalNoteManager { get; }
+
         private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
         public void ClearNotesCache()
         {
@@ -61,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <summary>
         /// Gets the LabelGroup which contains all label suggestions.
         /// </summary>
-        public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel { Name = "<None>" };
+        public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel() ;
 
         /// <summary>
         /// Gets the default <see cref="LabelGroupViewModel"/> for the current user, if any.
@@ -283,7 +285,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
                 if (doGetParatextSendNoteInformation)
-                    await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, UserProvider, Logger);
+                    noteViewModel.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteViewModel.NoteId!, UserProvider, Logger);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
@@ -472,7 +474,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public async Task SendToParatextAsync(NoteViewModel note)
         {
-            await ParatextNoteManager.SendToParatextAsync(Mediator, note, Logger);
+            await ExternalNoteManager.SendToExternalAsync(Mediator, note, Logger);
         }
 
         /// <summary>
@@ -912,6 +914,9 @@ namespace ClearDashboard.Wpf.Application.Services
             Logger = logger;
             Mediator = mediator;
             UserProvider = userProvider;
+            ExternalNoteManager = new ExternalNoteManager();
+
+            NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
 
             EventAggregator.SubscribeOnUIThread(this);
         }

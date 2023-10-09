@@ -963,7 +963,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public void LaunchGettingStartedGuide()
         {
             var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
-            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
+            var path = Path.Combine(programFiles, "ClearDashboard", "Dashboard_Instructions.pdf");
             if (File.Exists(path))
             {
                 var p = new Process();
@@ -1387,8 +1387,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // New
+                        new() { Header = _localizationService!.Get("MainView_QuickNew"), Id = MenuIds.FileQuickNew, ViewModel = this, IsEnabled = true },
                         new() { Header =_localizationService!.Get("MainView_FileNew"), Id = MenuIds.FileNew, ViewModel = this, IsEnabled = true },
                         new() { Header = _localizationService!.Get("MainView_FileOpen"), Id = MenuIds.FileOpen, ViewModel = this, IsEnabled = true }
+                        
                     }
                 },
                 new()
@@ -2189,6 +2191,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             break;
                         }
 
+                    case MenuIds.FileQuickNew:
+                    {
+                        await ShowStartupDialog(menuItem);
+                        break;
+                    }
                     case MenuIds.FileNew:
                         {
                             await ShowStartupDialog(menuItem);
@@ -2222,9 +2229,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task ShowStartupDialog(MenuItemViewModel menuItem)
         {
+            StartupDialogViewModel.ProjectAlreadyOpened = true;
+
             if (menuItem.Id == MenuIds.FileNew)
             {
                 StartupDialogViewModel.GoToSetup = true;
+            }
+
+            if (menuItem.Id == MenuIds.FileQuickNew)
+            {
+                StartupDialogViewModel.GoToTemplate = true;
             }
 
             var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
@@ -2242,6 +2256,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 await OnActivateAsync(CancellationToken.None);
                 await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
             }
+
+            StartupDialogViewModel.ProjectAlreadyOpened = false;
         }
 
         #endregion // Methods

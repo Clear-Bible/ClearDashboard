@@ -524,6 +524,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenJoinLanguagePair", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TokenSplit routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenSplitEvent = EventManager.RegisterRoutedEvent
+            (nameof(TokenSplit), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the TokenUnjoinEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
@@ -642,6 +648,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly RoutedEvent FilterPinsEvent = EventManager.RegisterRoutedEvent
             ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the FilterPinsTargetEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent FilterPinsTargetEvent = EventManager.RegisterRoutedEvent
+            ("FilterPinsTarget", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the FilterPinsByBiblicalTermsEvent routed event.
@@ -864,6 +876,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the user requests to split a token.
+        /// </summary>
+        public event RoutedEventHandler TokenSplit
+        {
+            add => AddHandler(TokenSplitEvent, value);
+            remove => RemoveHandler(TokenSplitEvent, value);
+        }        
+        
+        /// <summary>
         /// Occurs when the user requests to unjoin a composite token.
         /// </summary>
         public event RoutedEventHandler TokenUnjoin
@@ -1042,6 +1063,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             add => AddHandler(FilterPinsEvent, value);
             remove => RemoveHandler(FilterPinsEvent, value);
         }
+
+        /// <summary>
+        /// Occurs when the user requests to filter pins.
+        /// </summary>
+        public event RoutedEventHandler FilterPinsTarget
+        {
+            add => AddHandler(FilterPinsTargetEvent, value);
+            remove => RemoveHandler(FilterPinsTargetEvent, value);
+        }
+
         /// <summary>
         /// Occurs when the user requests to filter pins by biblical terms.
         /// </summary>
@@ -1126,12 +1157,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (AllSelectedTokens != null)
             {
                 var selectedTokenCount = AllSelectedTokens.Count(t => t.IsTokenSelected);
-                var selectedAssignedTranslationCount = AllSelectedTokens
-                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId != null);
-                var selectedUnassignedTranslationCount = AllSelectedTokens
-                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId == null);
 
-                if (selectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || selectedAssignedTranslationCount > 0))
+                if (AllSelectedTokens.SelectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || AllSelectedTokens.SelectedAssignedTranslationCount > 0))
                 {
                     CreateNoteMenuItem.Visibility = Visibility.Visible;
                 }
@@ -1140,12 +1167,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     CreateNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
-                if (selectedTokenCount > 0 && selectedAssignedTranslationCount == 0 && selectedUnassignedTranslationCount == 0)
+                if (selectedTokenCount > 0 && AllSelectedTokens.SelectedAssignedTranslationCount == 0 && AllSelectedTokens.SelectedUnassignedTranslationCount == 0)
                 {
                     CopyMenuItem.Visibility = Visibility.Visible;
                     JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
                     JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
                     UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
+                    SplitTokenMenuItem.Visibility = Properties.Settings.Default.IsTokenSplittingEnabled && AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                     FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                     CreateAlignmentMenuItem.Visibility = tokenDisplay.VerseDisplay is AlignmentDisplayViewModel && AllSelectedTokens.CanCreateAlignment ? Visibility.Visible : Visibility.Collapsed;
                     DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned && AllSelectedTokens.SelectedTokenCount == 1 ? Visibility.Visible : Visibility.Collapsed;
@@ -1156,6 +1184,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     JoinTokensMenuItem.Visibility = Visibility.Collapsed;
                     JoinTokensLanguagePairMenuItem.Visibility = Visibility.Collapsed;
                     UnjoinTokenMenuItem.Visibility = Visibility.Collapsed;
+                    SplitTokenMenuItem.Visibility = Visibility.Collapsed;
                     FilterPinsMenuItem.Visibility = Visibility.Collapsed;
                     CreateAlignmentMenuItem.Visibility = Visibility.Collapsed;
                     DeleteAlignmentMenuItem.Visibility = Visibility.Collapsed;
@@ -1169,12 +1198,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (AllSelectedTokens != null)
             {
                 var selectedTokenCount = AllSelectedTokens.Count(t => t.IsTokenSelected);
-                var selectedAssignedTranslationCount = AllSelectedTokens
-                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId != null);
-                var selectedUnassignedTranslationCount = AllSelectedTokens
-                    .Count(t => t.IsTranslationSelected && t.Translation?.TranslationId == null);
-
-                if (selectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || selectedAssignedTranslationCount > 0))
+               
+                if (AllSelectedTokens.SelectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || AllSelectedTokens.SelectedAssignedTranslationCount > 0))
                 {
                     CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
                 }
@@ -1183,7 +1208,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
-                if (selectedTokenCount == 0 && selectedAssignedTranslationCount + selectedUnassignedTranslationCount == 1)
+                if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
                 {
                     SetTranslationMenuItem.Visibility = Visibility.Visible;
                 }
@@ -1406,6 +1431,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
+            //2
             var control = e.Source as FrameworkElement;
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new NoteEventArgs
@@ -1470,6 +1496,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenJoinLanguagePairEvent, e);
         }
 
+        private void OnTokenSplit(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenSplitEvent, e);
+        }        
+        
         private void OnTokenUnjoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenUnjoinEvent, e);
@@ -1477,7 +1508,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnFilterPins(object sender, RoutedEventArgs e)
         {
+            //1
             RaiseNoteEvent(FilterPinsEvent, e);
+        }
+
+        private void OnFilterPinsTarget(object sender, RoutedEventArgs e)
+        {
+            //1
+            RaiseNoteEvent(FilterPinsTargetEvent, e);
         }
 
         private void OnFilterPinsByBiblicalTerms(object sender, RoutedEventArgs e)

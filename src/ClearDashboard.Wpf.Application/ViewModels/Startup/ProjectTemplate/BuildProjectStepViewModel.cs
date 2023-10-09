@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,6 +36,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 {
     public class BuildProjectStepViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>, IHandle<BackgroundTaskChangedMessage>
     {
+        #region Calls to keep screen on and not allow sleep mode
+
+        [FlagsAttribute]
+        public enum EXECUTION_STATE : uint
+        {
+            ES_AWAYMODE_REQUIRED = 0x00000040,
+            ES_CONTINUOUS = 0x80000000,
+            ES_DISPLAY_REQUIRED = 0x00000002,
+            ES_SYSTEM_REQUIRED = 0x00000001
+            // Legacy flag, should not be used.
+            // ES_USER_PRESENT = 0x00000004
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
+
+
+        #endregion
+
+
+
         #region Member Variables   
 
         private readonly ProjectTemplateProcessRunner _processRunner;
@@ -190,6 +212,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
         #region Methods
 
+        private void Prevent_ScreenSaver(bool enabled)
+        {
+            if (enabled)
+            {
+                SetThreadExecutionState(EXECUTION_STATE.ES_DISPLAY_REQUIRED | EXECUTION_STATE.ES_CONTINUOUS);
+            }
+            else
+            {
+                SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
+            }
+        }
+
         private async Task ActivateProjectDesignSurface(CancellationToken cancellationToken)
         {
             await Initialize(cancellationToken);
@@ -263,6 +297,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 _runningTask = Task.Run((Func<Task?>)(async () => { await CreateNewProject(cancellationToken ?? CancellationToken.None); }));
 
+                // turn off ability for computer to go into screen saver mode
+                Prevent_ScreenSaver(true);
+
                 await _runningTask;
 
                 cancellationToken?.ThrowIfCancellationRequested();
@@ -319,6 +356,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
 
                 stopwatch.Stop();
+
+                // turn back on the ability to go into screen saver mode
+                Prevent_ScreenSaver(false);
             }
         }
 
@@ -442,7 +482,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             var paratextTaskName = _processRunner.RegisterParatextProjectCorpusTask(
                 ParentViewModel!.SelectedParatextProject!, Tokenizers.LatinWordTokenizer, ParentViewModel!.SelectedBookIds!);
 
-            if (ParentViewModel!.IncludeBiblicalTexts)
+            if (ParentViewModel!.IncludeOtBiblicalTexts)
             {
                 if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks)
                 {
@@ -455,7 +495,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                         false,
                         SmtModelType.FastAlign.ToString());
                 }
+            }
 
+            if (ParentViewModel!.IncludeNtBiblicalTexts)
+            {
                 if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks)
                 {
                     var manuscriptGreekTaskName =
@@ -564,21 +607,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 BuildParatextProjectToBackTranslationConnector(paratextNode, paratextBackTranslationNode);
             }
 
-            // If selected, build Macula Greek and Macula Hebrew nodes and associated connectors
-            if (ParentViewModel!.IncludeBiblicalTexts)
+            if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks && ParentViewModel!.IncludeOtBiblicalTexts)
             {
+                var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode(GetNextPoint(ref index));
+                BuildParatextProjectToMaculaHebrewConnector(paratextNode, manuscriptHebrewNode);
+            }
 
-                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledOldTestamentBooks)
-                {
-                    var manuscriptHebrewNode = BuildMaculaHebrewCorpusNode(GetNextPoint(ref index));
-                    BuildParatextProjectToMaculaHebrewConnector(paratextNode, manuscriptHebrewNode);
-                }
-
-                if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks)
-                {
-                    var manuscriptGreekNode = BuildMaculaGreekCorpusNode(GetNextPoint(ref index));
-                    BuildParatextProjectToMaculaGreekConnector(paratextNode, manuscriptGreekNode);
-                }
+            if (ParentViewModel.SelectedBookManager.HasSelectedAndEnabledNewTestamentBooks && ParentViewModel!.IncludeNtBiblicalTexts)
+            {
+                var manuscriptGreekNode = BuildMaculaGreekCorpusNode(GetNextPoint(ref index));
+                BuildParatextProjectToMaculaGreekConnector(paratextNode, manuscriptGreekNode);
             }
             await Task.CompletedTask;
         }

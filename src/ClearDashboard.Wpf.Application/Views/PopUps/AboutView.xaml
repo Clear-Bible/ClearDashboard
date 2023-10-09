@@ -11,6 +11,7 @@
     Width="500"
     Height="450"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -47,7 +48,7 @@
             <TextBlock
                 Cursor="Hand"
                 FontSize="24"
-                Foreground="DodgerBlue"
+                Foreground="{StaticResource HyperlinkHueBrush}"
                 Text="Clear Bible"
                 TextDecorations="Underline" />
         </Button>
@@ -58,6 +59,6 @@
             Height="40"
             Margin="3,0,3,5"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource AlternativeStyle}" />
     </Grid>
 </Window>

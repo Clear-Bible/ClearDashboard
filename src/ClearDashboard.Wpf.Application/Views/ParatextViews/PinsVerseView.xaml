@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:cm="http://caliburnmicro.com"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -87,7 +88,6 @@
             <CheckBox
                 Name="ShowBackTranslationCheckBox"
                 Margin="50,0,0,0"
-                Background="{StaticResource PrimaryHueDarkBrush}"
                 Content="{helpers:Localization Pins_ShowBackTranslation}"
                 IsChecked="{Binding ShowBackTranslation}"
                 IsEnabled="{Binding BackTranslationFound}" />

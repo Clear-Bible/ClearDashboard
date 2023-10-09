@@ -1,19 +1,20 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.Application.Views.Project.ReadonlyProjectDesignSurfaceView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:cm="http://caliburnmicro.com"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
-    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
-    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="500"
+    FontFamily="{StaticResource ClearDashboardFont}"
     d:DataContext="{d:DesignInstance Type=project:ReadonlyProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -265,10 +266,12 @@
 
                     <!--<controls:AdornedControl.AdornerContent>
 
-                        --><!--
-                            This is the adorner that pops up when the user hovers the mouse over the node.
-                            It displays a button that the user can click to delete the node.
-                        --><!--
+                    -->
+                    <!--
+                        This is the adorner that pops up when the user hovers the mouse over the node.
+                        It displays a button that the user can click to delete the node.
+                    -->
+                    <!--
                         <Canvas
                             x:Name="nodeAdornerCanvas"
                             Width="30"
@@ -348,19 +351,23 @@
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
-              --><!--IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"--><!--  
+        -->
+        <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"  -->
+        <!--
             <Grid MinWidth="400">
 
-                --><!--<Grid.RowDefinitions>
+        -->
+        <!--<Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="50" />
                     <RowDefinition />
                 </Grid.RowDefinitions>-->
 
-                <!--<Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>--><!--
+                </Grid.ColumnDefinitions>-->
+        <!--
                 <StackPanel Orientation="Horizontal">
                 <Label HorizontalAlignment="Left"
                        VerticalAlignment="Top"
@@ -386,11 +393,10 @@
             Margin="0,0,50,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
             Value="0">
             <ProgressBar.Style>
-                <Style BasedOn="{StaticResource MaterialDesignCircularProgressBar}" TargetType="ProgressBar">
+                <Style BasedOn="{StaticResource ClearDashboardCircularProgressBar}" TargetType="ProgressBar">
                     <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsBusy}" Value="False">
@@ -419,9 +425,11 @@
                     <materialDesign:PackIcon Kind="FitToScreenOutline" />
                 </Button>
 
-                --><!--
-                    The fill button.  Causes the content to be scaled so that it fits in the viewport.
-                --><!--
+            -->
+            <!--
+                The fill button.  Causes the content to be scaled so that it fits in the viewport.
+            -->
+            <!--
                 <Button
                     Width="40"
                     Margin="3"
@@ -432,9 +440,11 @@
                     <materialDesign:PackIcon Kind="FitToPageOutline" />
                 </Button>
 
-                --><!--
-                    The 100% button.  Causes the content to be scaled to 100 percent.
-                --><!--
+            -->
+            <!--
+                The 100% button.  Causes the content to be scaled to 100 percent.
+            -->
+            <!--
                 <Button
                     Width="40"
                     Margin="3"
@@ -445,10 +455,12 @@
                     100%
                 </Button>
 
-                --><!--
-                    This is the label that shows what the current zoom level
-                    is while zooming in and out.
-                --><!--
+            -->
+            <!--
+                This is the label that shows what the current zoom level
+                is while zooming in and out.
+            -->
+            <!--
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         x:Name="tb3"
@@ -467,7 +479,9 @@
                 </StackPanel>
 
 
-                --><!--  Button to zoom out.  --><!--
+            -->
+            <!--  Button to zoom out.  -->
+            <!--
                 <StackPanel Orientation="Horizontal">
                     <Button
                         Width="35"
@@ -480,7 +494,9 @@
                         -
                     </Button>
 
-                    --><!--  Slider to change the current zoom level.  --><!--
+            -->
+            <!--  Slider to change the current zoom level.  -->
+            <!--
                     <Slider
                         Width="120"
                         Height="40"
@@ -495,9 +511,11 @@
                         ToolTip="{helpers:Localization Pds_ChangeZoom}"
                         Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
 
-                    --><!--
-                        Button to zoom in.
-                    --><!--
+            -->
+            <!--
+                Button to zoom in.
+            -->
+            <!--
                     <Button
                         Width="35"
                         Margin="3"
@@ -511,8 +529,10 @@
                 </StackPanel>
 
 
-                --><!--  Stick a resize grip in the bottom right corner of the window.  -->
-                <!--<ResizeGrip Grid.Column="16" />--><!--
+            -->
+            <!--  Stick a resize grip in the bottom right corner of the window.  -->
+            <!--<ResizeGrip Grid.Column="16" />-->
+            <!--
 
             </WrapPanel>-->
 

@@ -24,7 +24,7 @@
     AllowsTransparency="True"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     Foreground="{DynamicResource MaterialDesignPaper}"
     ShowCloseButton="True"
     ShowInTaskbar="False"
@@ -82,7 +82,7 @@
                         <materialDesign:PackIcon
                             Width="36"
                             Height="36"
-                            Foreground="{StaticResource BlueMidBrush}"
+                            Foreground="{StaticResource PrimaryHueLightBrush}"
                             Kind="TooltipOutline" />
                         <ProgressBar
                             Width="15"

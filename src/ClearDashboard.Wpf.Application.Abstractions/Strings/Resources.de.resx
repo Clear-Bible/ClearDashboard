@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Ausrichtung</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Wählen Sie Buch (en), mit denen Sie zusammenarbeiten, Sie können später immer mehr Bücher hinzufügen.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>USFM überprüfen</value>
   </data>
@@ -434,7 +437,7 @@
     <value>Maschine</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Markieren Sie als "ungültig" ausgewählt</value>
+    <value>Markieren Sie als "ungültig" ausgewählt.</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
     <value>Markieren Sie als "Bedarfsüberprüfung" ausgewählt.</value>
@@ -659,7 +662,7 @@
     <value>Geteiltes Token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Wenden Sie sich auf alle Fälle von Token an:</value>
+    <value>Wenden Sie sich auf andere Token -Fälle an</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Wählen Sie aus, wo Token geteilt werden soll:</value>
@@ -1051,6 +1054,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Vorlieben</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Schnell neu</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Zusammenarbeit mit Zusammenarbeit verfügbar</value>
   </data>
@@ -1198,7 +1204,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Versetzen Sie Verse -Mappings auf Standardversifikation zurück</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1271,7 +1277,7 @@
     <value>Nutzername:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Der Benutzer ist bereits im System!</value>
+    <value>Der Benutzer ist bereits auf dem System!</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Validieren Sie den E -Mail -Code</value>
@@ -1304,7 +1310,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Verbände</value>
+    <value>Durch Assoziationen</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1340,7 +1346,7 @@
     <value>Möchten Sie das Etikett löschen:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Möchten Sie das Etikett disassoziieren:</value>
+    <value>Möchten Sie das Etikett zerlegen:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>aus der Labelgruppe:</value>
@@ -1352,7 +1358,7 @@
     <value>Fügen Sie eine Etikettengruppe hinzu</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Eine Etikettengruppe existiert bereits mit Namen</value>
+    <value>Eine Labelgruppe existiert bereits mit Namen</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>Labelgruppe initialisieren</value>
@@ -1374,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Text an Etikett angehängt</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Etikett löschen</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Label disassoziieren</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Erstellt</value>
@@ -1469,10 +1481,10 @@
     <value>Korpora -Verse parallelisieren</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithmus für maschinelles Wortausrichtungen</value>
+    <value>Algorithmus für maschinelle Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithmus für maschinelles Wortausrichtungen</value>
+    <value>Algorithmus für maschinelle Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Zuges symmetisiertes Modell?</value>
@@ -1520,7 +1532,7 @@
     <value>Fügen Sie der neuen Ansicht Text hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Vers anzeigen, um anzeigen</value>
+    <value>Zur Anzeige hinzufügen</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Hilfs</value>
@@ -1729,6 +1741,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Erstellen Sie ein neues Projekt</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Schnellstart neues Projekt</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Projekt erstellen:</value>
   </data>
@@ -1745,7 +1760,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Buchauswahl aktivieren</value>
+    <value>Aktivieren Sie die Buchauswahl</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1756,11 +1771,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Serverprojekt importieren</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Biblische Texte einschließen?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>NT Griechische biblische Texte einschließen?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>OT hebräische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Kooperationsprojekte verwalten</value>
@@ -1949,7 +1967,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremia</value>
+    <value>Jeremiah</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>
@@ -2113,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktivieren Sie die Bearbeitung der Ausrichtung</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Aktivieren der Token -Spaltung</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
@@ -2177,7 +2198,7 @@
     <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktivieren Sie die Anzeige von Versen durch Versuchssammlungen</value>
+    <value>Aktivieren Sie die Anzeige von Verse-by-Vers-Textsammlungen</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Aufgabe abbrechen</value>
@@ -2226,6 +2247,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Kein Internet</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Formular leeren</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Schicken</value>

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     xmlns:lexiconViewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
@@ -22,7 +23,7 @@
             <RowDefinition Height="25" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="60" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="70" />
         </Grid.RowDefinitions>
 
         <Label
@@ -30,7 +31,7 @@
             Margin="0,10,0,0"
             HorizontalContentAlignment="Center"
             Content="{helpers:Localization Lexicon_SetTranslation}"
-            FontFamily="{DynamicResource MaterialDesignFont}"
+            FontFamily="{StaticResource ClearDashboardFont}"
             FontSize="16" />
 
         <Label
@@ -46,7 +47,7 @@
             Grid.Row="2"
             Margin="20,0,20,20"
             CurrentLexeme="{Binding CurrentLexeme}"
-            FontFamily="{DynamicResource MaterialDesignFont}"
+            FontFamily="{StaticResource ClearDashboardFont}"
             LemmaFontFamily="{Binding SourceFontFamily}"
             LemmaFontSize="16"
             LemmaFontWeight="Bold"
@@ -60,7 +61,7 @@
             MeaningTextFontSize="14"
             SemanticDomainBackground="AliceBlue"
             SemanticDomainCornerRadius="4"
-            SemanticDomainFontFamily="{DynamicResource MaterialDesignFont}"
+            SemanticDomainFontFamily="{StaticResource ClearDashboardFont}"
             SemanticDomainFontSize="12"
             SemanticDomainFontStyle="Normal"
             SemanticDomainMargin="4"
@@ -120,7 +121,7 @@
             Grid.Row="3"
             Margin="20,10,0,0"
             VerticalAlignment="Center"
-            FontFamily="{DynamicResource MaterialDesignFont}"
+            FontFamily="{StaticResource ClearDashboardFont}"
             FontSize="16"
             FontWeight="SemiBold"
             Text="{helpers:Localization Lexicon_Concordance}" />
@@ -169,7 +170,7 @@
                 x:Name="ApplyTranslation"
                 Margin="10"
                 Content="{helpers:Localization Lexicon_ApplyTranslation}"
-                FontFamily="{DynamicResource MaterialDesignFont}"
+                FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 IsEnabled="{Binding ApplyEnabled}"
                 Style="{StaticResource TransparentStyle}" />
@@ -177,10 +178,10 @@
                 x:Name="CancelTranslation"
                 Margin="10"
                 Content="{helpers:Localization Lexicon_CancelTranslation}"
-                FontFamily="{DynamicResource MaterialDesignFont}"
+                FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 IsEnabled="{Binding CancelEnabled}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
         </StackPanel>
         <ProgressBar
             Grid.Row="2"

@@ -21,7 +21,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -109,13 +109,13 @@
                         <CheckBox
                             cm:Message.Attach="AquaEnabledCheckBox($datacontext)"
                             Content="{helpers:Localization Settings_AquaEnabled}"
-                            Foreground="{StaticResource OrangeDarkBrush}"
+                            Foreground="{StaticResource AccentHueBrush}"
                             IsChecked="{Binding IsAquaEnabled}" />
                     </GroupBox>
                     <TextBlock
                         Margin="16"
                         FontWeight="Medium"
-                        Foreground="Red"
+                        Foreground="{StaticResource ErrorHueBrush}"
                         Text="Please restart ClearDashboard for AQUA to be be enabled/disabled."
                         Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </StackPanel>
@@ -423,16 +423,28 @@
                         Stretch="Fill"
                         StretchDirection="UpOnly" />
                     <GroupBox Margin="16" Header="{helpers:Localization Settings_Experimental}">
-                        <CheckBox
-                            cm:Message.Attach="EnableAlignmentEditing($datacontext)"
-                            Content="{helpers:Localization Settings_EnableAlignmentEditing}"
-                            Foreground="{StaticResource OrangeDarkBrush}"
-                            IsChecked="{Binding IsAlignmentEditingEnabled}" />
+                        <StackPanel Orientation="Vertical">
+                            <CheckBox
+                                cm:Message.Attach="EnableAlignmentEditing($datacontext)"
+                                Content="{helpers:Localization Settings_EnableAlignmentEditing}"
+                                Foreground="{StaticResource AccentHueBrush}"
+                                IsChecked="{Binding IsAlignmentEditingEnabled}" />
+                            <CheckBox
+                                cm:Message.Attach="EnableTokenSplitting($datacontext)"
+                                Content="{helpers:Localization Settings_EnableTokenSplitting}"
+                                Foreground="{StaticResource AccentHueBrush}"
+                                IsChecked="{Binding IsTokenSplittingEnabled}" />
+                        </StackPanel>
                     </GroupBox>
                     <TextBlock
                         Margin="16"
                         FontWeight="Medium"
-                        Foreground="Red"
+                        Text="Please restart ClearDashboard for Alignment Editing to be enabled/disabled"
+                        Visibility="{Binding IsAlignmentEditingSettingChanged, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <TextBlock
+                        Margin="16"
+                        FontWeight="Medium"
+                        Foreground="{StaticResource ErrorHueBrush}"
                         Text="Please restart ClearDashboard for AQUA to be be enabled/disabled."
                         Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </StackPanel>
@@ -446,7 +458,7 @@
             Margin="10"
             HorizontalAlignment="Right"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource AlternativeStyle}" />
 
     </Grid>
 </Window>

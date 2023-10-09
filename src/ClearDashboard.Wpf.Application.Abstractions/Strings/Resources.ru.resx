@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Выравнивание</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Выберите книги, с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Проверка USFM</value>
   </data>
@@ -419,7 +422,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобряют</value>
+    <value>Не одобрять</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -656,10 +659,10 @@
     <value>Показать элементы управления представлением</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Разделенный токен</value>
+    <value>Расколотый токен</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Применить разделение ко всем случаям токена:</value>
+    <value>Применить разделение на другие экземпляры токена</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Выберите, где разделить токен:</value>
@@ -956,7 +959,7 @@
     <value>Добавьте цель в качестве перевода для ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите Lexemes, которые имеют один или несколько переводов, которые соответствуют цели</value>
+    <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
@@ -1051,8 +1054,11 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Предпочтения</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Быстрый новый</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Коллабные изменения доступны</value>
+    <value>Изменения в сотрудничестве доступны</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -1163,7 +1169,7 @@
     <value>Сильные коды</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Подпагнические домены:</value>
+    <value>Субсины:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Стих</value>
@@ -1198,7 +1204,7 @@
   <data name="MIC" xml:space="preserve">
     <value>Мих.</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1340,7 +1346,7 @@
     <value>Вы хотите удалить этикетку:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Вы хотите отменить этикетку:</value>
+    <value>Вы хотите понизить этикетку:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>Из группы лейбла:</value>
@@ -1374,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Текст, прикрепленный к этикетке</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Удалить этикетку</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Распочеивая этикетка</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1469,10 +1481,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1520,7 +1532,7 @@
     <value>Добавить текст в новый вид</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Добавить вид стиха, чтобы просмотреть</value>
+    <value>Добавить в просмотр</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Вспомогательный</value>
@@ -1625,7 +1637,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIntEncoder</value>
+    <value>Транслитерация WithIteChoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1634,7 +1646,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить содержание</value>
+    <value>Увеличить контент</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1691,7 +1703,7 @@
     <value>Префикс</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Покажите Backtranslation</value>
+    <value>Показать переходное время</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Корень</value>
@@ -1729,6 +1741,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Создать новый проект</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Quick Start New Project</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Создать проект:</value>
   </data>
@@ -1756,11 +1771,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Импортный сервер проект</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Включите библейские тексты?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Включите NT Греко -библейские тексты?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Включите ивритские библейские тексты?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Управление совместными проектами</value>
@@ -2105,13 +2123,16 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка отправки</value>
+    <value>По электронной почте ошибка</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Включить редактирование выравнивания</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Включить расщепление токенов</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Экспериментальный</value>
@@ -2141,7 +2162,7 @@
     <value>Зарезервировано для будущего расширения</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Восстановить пользователь сотрудничества</value>
+    <value>Восстановите пользователя сотрудничества</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Сохраняется на удаленном сервере</value>
@@ -2159,10 +2180,10 @@
     <value>Настройки ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Показать расширенные представления на другом мониторе, чем панель инструментов</value>
+    <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>
@@ -2226,6 +2247,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Без интернета</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Сброс форма</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Отправлять</value>
@@ -2291,7 +2315,7 @@
     <value>Обновить и добавить новый</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создайте использование дефолтов</value>
+    <value>Создать использование дефолтов</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

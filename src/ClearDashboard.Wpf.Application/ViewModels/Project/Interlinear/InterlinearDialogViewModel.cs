@@ -236,6 +236,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
                 return;
             }
 
+            AlignmentsAvailable = false;
+
             SpinnerVisibility = Visibility.Visible;
             await Task.Delay(200);
             await AddTranslationSet(TranslationSetDisplayName);

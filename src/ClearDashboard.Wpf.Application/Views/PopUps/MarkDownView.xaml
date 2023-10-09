@@ -19,7 +19,7 @@
                                      IsDesignTimeCreatable=True}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -89,10 +89,10 @@
             x:Name="Close"
             Grid.Row="1"
             Width="Auto"
-            Margin="10,0,10,10"
+            Margin="10,5,10,10"
             HorizontalAlignment="Right"
             cm:Message.Attach="Close"
             Content="{helpers:Localization Close}"
-            Style="{StaticResource TransparentStyle}" />
+            Style="{StaticResource AlternativeStyle}" />
     </Grid>
 </Window>

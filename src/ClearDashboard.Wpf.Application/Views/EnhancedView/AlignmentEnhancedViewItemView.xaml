@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
              xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
              xmlns:cm="http://caliburnmicro.com"
+             FontFamily="{StaticResource ClearDashboardFont}"
              xmlns:input="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -136,6 +137,9 @@
                                 <b:EventTrigger EventName="TokenUnjoin">
                                     <b:CallMethodAction MethodName="TokenUnjoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                                 </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenSplit">
+                                    <b:CallMethodAction MethodName="TokenSplit" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
                             </b:Interaction.Triggers>
                         </userControls:VerseDisplay>
                     </DataTemplate>
@@ -150,9 +154,8 @@
             Height="75"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
     </Grid>

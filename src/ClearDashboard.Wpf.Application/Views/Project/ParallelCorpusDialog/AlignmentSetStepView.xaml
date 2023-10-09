@@ -17,7 +17,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
     <UserControl.Resources>
 
@@ -68,7 +68,7 @@
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -101,7 +101,7 @@
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -136,7 +136,7 @@
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -169,7 +169,7 @@
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -202,7 +202,7 @@
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>

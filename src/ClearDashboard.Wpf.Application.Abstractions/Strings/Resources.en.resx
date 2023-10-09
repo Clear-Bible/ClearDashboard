@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alignment</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Select book(s) you are working with, you can always add more books later.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Checking USFM</value>
   </data>
@@ -659,7 +662,7 @@
     <value>Split Token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Apply split to all instances of token:</value>
+    <value>Apply split to other instances of token</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Select where to split token:</value>
@@ -1051,6 +1054,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferences</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Quick New</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Collab Changes Available</value>
   </data>
@@ -1198,7 +1204,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Reset verse mappings to default versification</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1375,6 +1381,12 @@
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Text attached to label</value>
   </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Delete label</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Disassociate label</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>
   </data>
@@ -1520,7 +1532,7 @@
     <value>Add Text to New View</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Add Verse View to View</value>
+    <value>Add to View</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliary</value>
@@ -1571,10 +1583,10 @@
     <value>Show information about this project</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Greek (NT) Macula</value>
+    <value>Greek (NT) MACULA</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>Hebrew (OT) Macula</value>
+    <value>Hebrew (OT) MACULA</value>
   </data>
   <data name="Pds_MARBLE Resource" xml:space="preserve">
     <value>MARBLE Resource</value>
@@ -1729,6 +1741,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Create a new project</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Quick Start New Project</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Create Project: </value>
   </data>
@@ -1756,11 +1771,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Import Server Project</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Include Biblical Texts?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Check this box to include the Greek and Hebrew biblical texts when creating your project.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Include NT Greek Biblical Texts?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Include OT Hebrew Biblical Texts?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Manage Collaboration Projects</value>
@@ -2113,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Enable Alignment Editing</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Enable Token Splitting</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
@@ -2226,6 +2247,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>No Internet</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Reset Form</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Send</value>

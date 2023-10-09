@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Penyelarasan</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Pilih buku yang Anda kerjakan, Anda selalu dapat menambahkan lebih banyak buku nanti.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Memeriksa USFM</value>
   </data>
@@ -248,7 +251,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>batu permata</value>
+    <value>Batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -605,7 +608,7 @@
     <value>Hapus Penyelarasan?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Hapus penyelarasan</value>
+    <value>Hapus Penyelarasan</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Hapus Alignment untuk '{0}'?</value>
@@ -659,7 +662,7 @@
     <value>Split token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Terapkan perpecahan untuk semua contoh token:</value>
+    <value>Terapkan perpecahan untuk contoh token lainnya</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Pilih Tempat Membagi Token:</value>
@@ -950,7 +953,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
+    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1050,6 +1053,9 @@
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferensi</value>
+  </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Cepat baru</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>COBOL COBULSI TERSEDIA</value>
@@ -1198,7 +1204,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Setel ulang pemetaan ayat ke versifikasi default</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1349,7 +1355,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan grup label</value>
+    <value>Tambahkan Grup Label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1374,6 +1380,12 @@
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Teks terlampir pada label</value>
+  </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Hapus label</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Label Disassociate</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Dibuat</value>
@@ -1493,7 +1505,7 @@
     <value>Pilih algoritma SMT untuk berlatih</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Tambahkan persetujuan massal untuk dilihat</value>
+    <value>Tambahkan persetujuan curah untuk dilihat</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Tambahkan ke tampilan</value>
@@ -1520,7 +1532,7 @@
     <value>Tambahkan teks ke tampilan baru</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Tambahkan tampilan ayat untuk dilihat</value>
+    <value>Tambahkan ke tampilan</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Bantu</value>
@@ -1547,7 +1559,7 @@
     <value>Anak perempuan</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Hapus penyelarasan</value>
+    <value>Hapus Penyelarasan</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Hapus Interlinear</value>
@@ -1729,6 +1741,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Buat proyek baru</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Mulai Cepat Proyek Baru</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Buat Proyek:</value>
   </data>
@@ -1756,11 +1771,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Proyek Server Impor</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Sertakan teks Alkitab?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Centang kotak ini untuk memasukkan teks -teks Alkitab Yunani dan Ibrani saat membuat proyek Anda.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>Sertakan teks Alkitab Yunani?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>Sertakan teks -teks Alkitab Ibrani?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Kelola proyek kolaborasi</value>
@@ -2054,7 +2072,7 @@
     <value>Kunci yang disediakan salah. Ketika didekripsi, elemen -elemen JSON tertentu tidak dapat ditemukan.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Isi kunci lisensi yang didekripsi tidak sesuai dengan informasi yang Anda berikan.</value>
+    <value>Isi kunci lisensi yang didekripsi tidak cocok dengan informasi yang Anda berikan.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>Kunci lisensi Anda hilang atau rusak.</value>
@@ -2112,6 +2130,9 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktifkan pengeditan penyelarasan</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Aktifkan pemisahan token</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Eksperimental</value>
@@ -2226,6 +2247,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Tidak ada internet</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Formulir Reset</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Mengirim</value>

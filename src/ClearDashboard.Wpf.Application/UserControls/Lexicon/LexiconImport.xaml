@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -75,7 +76,7 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    
+
     <TabControl Margin="5" HorizontalContentAlignment="Left">
         <TabItem Header="Import">
             <Grid>

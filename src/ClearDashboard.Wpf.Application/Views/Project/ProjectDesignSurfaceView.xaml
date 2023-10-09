@@ -10,6 +10,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -136,7 +137,7 @@
                                                 <TextBlock
                                                     Margin="5,5,0,0"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{StaticResource PrimaryHueMidBrush}"
+                                                    Foreground="{StaticResource MenuTextHueBrush}"
                                                     Text="{Binding Header}" />
                                             </StackPanel>
                                         </HierarchicalDataTemplate>
@@ -444,7 +445,7 @@
             Grid.Row="0"
             Margin="0"
             Padding="5"
-            Background="{DynamicResource PrimaryHueLightBrush}"
+            Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
             <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"  -->
             <Grid MinWidth="400">
@@ -505,6 +506,15 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Width="{Binding ActualWidth, ElementName=MainGrid, Converter={converters:WidthSubtraction}, ConverterParameter='10'}">
+                    <!--  Paratext Corpus  -->
+                    <Button
+                        x:Name="AddParatextCorpus"
+                        Margin="10,0,10,10"
+                        cm:Message.Attach="AddParatextCorpus()"
+                        Content="{helpers:Localization ProjectPicker_Paratext}"
+                        Style="{StaticResource BigParatextButton}"
+                        Tag=" ScriptTextOutline" />
+
                     <!--  Hebrew Manuscript  -->
                     <Button
                         x:Name="AddManuscriptHebrewCorpus"
@@ -532,14 +542,6 @@
                         Tag="ScriptTextOutline"
                         Visibility="Collapsed" />
 
-                    <!--  Paratext Corpus  -->
-                    <Button
-                        x:Name="AddParatextCorpus"
-                        Margin="10,0,10,10"
-                        cm:Message.Attach="AddParatextCorpus()"
-                        Content="{helpers:Localization ProjectPicker_Paratext}"
-                        Style="{StaticResource BigParatextButton}"
-                        Tag=" ScriptTextOutline" />
                     <!--  Tag=" ScriptTextOutline"  -->
                     <!--    -->
                     <!--<Button
@@ -557,7 +559,7 @@
             Grid.Row="0"
             Width="50"
             Height="50"
-            Margin="0,0,50,0"
+            Margin="0,0,40,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             IsIndeterminate="True"
@@ -663,6 +665,7 @@
                         Maximum="200"
                         Minimum="1"
                         SmallChange="10"
+                        Style="{StaticResource DashboardSliderStyle}"
                         TickFrequency="10"
                         TickPlacement="TopLeft"
                         ToolTip="{helpers:Localization Pds_ChangeZoom}"

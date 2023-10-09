@@ -8,7 +8,7 @@
     Height="450"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -21,6 +21,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Slider
+            Style="{StaticResource DashboardSliderStyle}"
             Name="ZoomSlider"
             Grid.Column="0"
             AutoToolTipPlacement="BottomRight"

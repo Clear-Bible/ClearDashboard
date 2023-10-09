@@ -17,7 +17,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="AutoCompleteBoxStyle" TargetType="{x:Type controls:AutoCompleteComboBox}">
@@ -80,7 +80,7 @@
                                         MaxHeight="40"
                                         Margin="10"
                                         FontSize="16"
-                                        Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                        Foreground="{DynamicResource ErrorHueBrush}"
                                         Text="{Binding [0].ErrorContent}"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
@@ -133,7 +133,7 @@
                         <materialDesign:PackIcon
                             Width="36"
                             Height="36"
-                            Foreground="{StaticResource BlueMidBrush}"
+                            Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Kind="CloseBox" />
                     </Button>
                 </StackPanel>
@@ -182,7 +182,7 @@
                         <materialDesign:PackIcon
                             Width="36"
                             Height="36"
-                            Foreground="{StaticResource BlueMidBrush}"
+                            Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Kind="CloseBox" />
                     </Button>
                 </StackPanel>
@@ -231,7 +231,7 @@
                         <materialDesign:PackIcon
                             Width="36"
                             Height="36"
-                            Foreground="{StaticResource BlueMidBrush}"
+                            Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Kind="CloseBox" />
                     </Button>
                 </StackPanel>
@@ -244,9 +244,21 @@
                 <CheckBox
                     x:Name="ShowBiblicalTextsCheckBox"
                     Margin="10,20,0,20"
-                    Content="{helpers:Localization ProjectPicker_IncludeBiblicalTexts}"
+                    Content="{helpers:Localization ProjectPicker_IncludeOtBiblicalTexts}"
                     FontSize="13"
-                    IsChecked="{Binding ShowBiblicalTexts, Mode=TwoWay}">
+                    IsChecked="{Binding ShowOtBiblicalTexts, Mode=TwoWay}">
+
+                    <CheckBox.ToolTip>
+                        <Label Content="{helpers:Localization ProjectPicker_IncludeBiblicalTextsTooltip}" />
+                    </CheckBox.ToolTip>
+                </CheckBox>
+
+                <CheckBox
+                    x:Name="ShowBiblicalNTTextsCheckBox"
+                    Margin="10,5,0,20"
+                    Content="{helpers:Localization ProjectPicker_IncludeNtBiblicalTexts}"
+                    FontSize="13"
+                    IsChecked="{Binding ShowNtBiblicalTexts, Mode=TwoWay}">
 
                     <CheckBox.ToolTip>
                         <Label Content="{helpers:Localization ProjectPicker_IncludeBiblicalTextsTooltip}" />
@@ -269,7 +281,7 @@
                 cal:Message.Attach="MoveBackwards"
                 Content="{helpers:Localization Back}"
                 IsEnabled="{Binding CanMoveBackwards}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
             <Button
                 x:Name="MoveForwards"
                 Margin="0,0,15,15"

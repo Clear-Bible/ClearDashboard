@@ -124,6 +124,9 @@
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alineación</value>
   </data>
+  <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
+    <value>Seleccione Libros con los que esté trabajando, siempre puede agregar más libros más tarde.</value>
+  </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Verificar USFM</value>
   </data>
@@ -539,7 +542,7 @@
     <value>Proyectos</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Proyecto seleccionado</value>
+    <value>Seleccionar proyecto</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -653,13 +656,13 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de vista</value>
+    <value>Mostrar los controles de la vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplicar división a todas las instancias de token:</value>
+    <value>Aplicar la división a otros casos de token</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
     <value>Seleccione dónde dividir el token:</value>
@@ -668,7 +671,7 @@
     <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unión a la token compuesta</value>
+    <value>Un si unir un token compuesto</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -836,7 +839,7 @@
     <value>Cancelar traducción</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias no establecidos</value>
+    <value>Cambiar todos los ocurrencias inseguros</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -1051,6 +1054,9 @@
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferencias</value>
   </data>
+  <data name="MainView_QuickNew" xml:space="preserve">
+    <value>Rápido</value>
+  </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Cambios de colaboración disponibles</value>
   </data>
@@ -1198,7 +1204,7 @@
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
-  <data name="Migrate_Header2" xml:space="preserve">
+  <data name="Migrate_Header" xml:space="preserve">
     <value>Restablecer las asignaciones de versos a la versificación predeterminada</value>
   </data>
   <data name="MRK" xml:space="preserve">
@@ -1375,6 +1381,12 @@
   <data name="Notes_LabelTextAttached" xml:space="preserve">
     <value>Texto adjunto a la etiqueta</value>
   </data>
+  <data name="Notes_LabelTooltipDelete" xml:space="preserve">
+    <value>Etiqueta de eliminación</value>
+  </data>
+  <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
+    <value>Etiqueta disociada</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
   </data>
@@ -1424,7 +1436,7 @@
     <value>¿Enviar esta nota a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envía esta nota a Paratext</value>
+    <value>Envíe esta nota a Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1520,7 +1532,7 @@
     <value>Agregar texto a una nueva vista</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Agregar vista de verso a la vista</value>
+    <value>Agregar a la vista</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliar</value>
@@ -1610,7 +1622,7 @@
     <value>Estándar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Estudio de estudio</value>
+    <value>Estudiobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBIBLeadDitions</value>
@@ -1729,6 +1741,9 @@
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Crea un nuevo proyecto</value>
   </data>
+  <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
+    <value>Inicio rápido nuevo proyecto</value>
+  </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Crear proyecto:</value>
   </data>
@@ -1756,11 +1771,14 @@
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Proyecto de servidor de importación</value>
   </data>
-  <data name="ProjectPicker_IncludeBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos?</value>
-  </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Marque esta casilla para incluir los textos bíblicos griegos y hebreos al crear su proyecto.</value>
+  </data>
+  <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
+    <value>¿Incluir textos bíblicos griegos de NT?</value>
+  </data>
+  <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
+    <value>¿Incluir textos bíblicos hebreos?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gestionar proyectos de colaboración</value>
@@ -1925,7 +1943,7 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Gálate</value>
+    <value>Gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
@@ -2113,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Habilitar la edición de alineación</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Habilitar división de token</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
@@ -2147,7 +2168,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab al servidor</value>
+    <value>Guardar el usuario de GitLab en el servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>
@@ -2201,7 +2222,7 @@
     <value>Mostrar preleboseos</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Actualizar a la nueva versión de ClearDashboard</value>
+    <value>Actualización de la nueva versión de ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
     <value>Usuario</value>
@@ -2226,6 +2247,9 @@
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
     <value>Sin internet</value>
+  </data>
+  <data name="SlackMessageView_ResetForm" xml:space="preserve">
+    <value>Restablecer formulario</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Enviar</value>

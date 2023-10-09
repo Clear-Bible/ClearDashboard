@@ -50,12 +50,12 @@
                                         </Setter>
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="#EEEBEB" />
                                         <Setter Property="Cursor" Value="Hand" />
-                                        <Setter Property="Background" Value="#7DA1C4" />
+                                        <Setter Property="Background" Value="#3292DE" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Opacity" Value="1" />
+                                        <Setter Property="Background" Value="LightGray" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -93,15 +93,30 @@
                     <Border>
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="Gray" />
+                                <Setter Property="CornerRadius" Value="5" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Button.Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect
+                                                    BlurRadius="5"
+                                                    Direction="320"
+                                                    Opacity="0.5"
+                                                    ShadowDepth="1"
+                                                    Color="Black" />
+                                            </Setter.Value>
+                                        </Setter>
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="{StaticResource AlternativeButtonHueBrush}" />
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="Background" Value="#ffffff" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Opacity" Value="1" />
+                                        <Setter Property="Background" Value="LightGray" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -140,12 +155,15 @@
                     <Border>
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="Gray" />
+                                <Setter Property="CornerRadius" Value="5" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="LightGray" />
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="#EEEBEB" />
+                                        <Setter Property="Background" Value="#3292DE" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -192,12 +210,71 @@
                                         </Setter>
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="#EEEBEB" />
                                         <Setter Property="Cursor" Value="Hand" />
-                                        <Setter Property="Background" Value="#7DA1C4" />
+                                        <Setter Property="Background" Value="#3292DE" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Opacity" Value="1" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="Transparent">
+                            <ContentPresenter x:Name="ButtonContent" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="Foreground" Value="Gray" />
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SmallAlternativeStyle" TargetType="{x:Type Button}">
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Height" Value="50" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border>
+                        <Border.Style>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="Gray" />
+                                <Setter Property="CornerRadius" Value="5" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Button.Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect
+                                                    BlurRadius="5"
+                                                    Direction="320"
+                                                    Opacity="0.5"
+                                                    ShadowDepth="1"
+                                                    Color="Black" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="Background" Value="#ffffff" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" Value="1" />
+                                        <Setter Property="Background" Value="LightGray" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>

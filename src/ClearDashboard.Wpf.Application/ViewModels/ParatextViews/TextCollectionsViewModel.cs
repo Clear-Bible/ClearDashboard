@@ -436,7 +436,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 }
             }
 
-            BcvUserControlVisibility = makeVisible ? Visibility.Visible : Visibility.Hidden;
+            BcvUserControlVisibility = makeVisible ? Visibility.Visible : Visibility.Collapsed;
 
             return Task.CompletedTask;
         }

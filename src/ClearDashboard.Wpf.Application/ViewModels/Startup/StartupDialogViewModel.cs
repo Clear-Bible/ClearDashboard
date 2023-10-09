@@ -27,6 +27,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public bool MimicParatextConnection { get; set; }
         public static bool InitialStartup = true;
         public static bool GoToSetup = false;
+        public static bool GoToTemplate = false;
+        public static bool ProjectAlreadyOpened = false;
+
         public string Version { get; set; }
 
         #endregion //Member Variables
@@ -73,11 +76,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _selectedParatextLwcProject, value);
         }
 
-        private bool _includeBiblicalTexts = true;
-        public bool IncludeBiblicalTexts
+        private bool _includeOtBiblicalTexts = true;
+        public bool IncludeOtBiblicalTexts
         {
-            get => _includeBiblicalTexts;
-            set => Set(ref _includeBiblicalTexts, value);
+            get => _includeOtBiblicalTexts;
+            set => Set(ref _includeOtBiblicalTexts, value);
+        }
+
+        private bool _includeNtBiblicalTexts = true;
+        public bool IncludeNtBiblicalTexts
+        {
+            get => _includeNtBiblicalTexts;
+            set => Set(ref _includeNtBiblicalTexts, value);
         }
 
         private IEnumerable<string>? _selectedBookIds = null;
@@ -158,6 +168,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CurrentStep = Steps![2];
                 GoToSetup = false;
             }
+            else if (GoToTemplate)
+            {
+                CurrentStep = Steps![3];
+                GoToTemplate = false;
+            }
             else
             {
                 CurrentStep = Steps![1];
@@ -199,7 +214,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             SelectedParatextProject = null;
             SelectedParatextBtProject = null;
             SelectedParatextLwcProject = null;
-            IncludeBiblicalTexts = true;
+            IncludeOtBiblicalTexts = true;
             SelectedBookIds = null;
             SelectedBookManager.UnselectAllBooks();
         }

@@ -207,10 +207,12 @@
         </Grid>
         <ControlTemplate.Triggers>
             <EventTrigger RoutedEvent="Mouse.MouseEnter">
-                --><!--
-                    Make the 'delete connection button' larger when the mouse
-                    cursor is hovered over it.
-                --><!--
+    -->
+    <!--
+        Make the 'delete connection button' larger when the mouse
+        cursor is hovered over it.
+    -->
+    <!--
                 <BeginStoryboard>
                     <Storyboard>
                         <DoubleAnimation
@@ -228,10 +230,12 @@
             </EventTrigger>
 
             <EventTrigger RoutedEvent="Mouse.MouseLeave">
-                --><!--
-                    Return the 'delete connection button' to normal size when the mouse
-                    cursor is moved away.
-                --><!--
+    -->
+    <!--
+        Return the 'delete connection button' to normal size when the mouse
+        cursor is moved away.
+    -->
+    <!--
                 <BeginStoryboard>
                     <Storyboard>
                         <DoubleAnimation
@@ -346,10 +350,12 @@
 
             <!--<controls:AdornedControl.AdornerContent>
 
-                --><!--
-                    This is the adorner that pops up when the user hovers the mouse over the connection.
-                    It displays a button that the user can click to delete the connection.
-                --><!--
+            -->
+            <!--
+                This is the adorner that pops up when the user hovers the mouse over the connection.
+                It displays a button that the user can click to delete the connection.
+            -->
+            <!--
                 <Canvas
                     x:Name="connectionAdornerCanvas"
                     Width="30"

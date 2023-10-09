@@ -15,7 +15,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d"
     Loaded="ProjectSetupView_OnLoaded">
     <UserControl.Resources>
@@ -93,7 +93,7 @@
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
@@ -117,7 +117,7 @@
                 cal:Message.Attach="MoveBackwards"
                 Content="{helpers:Localization Back}"
                 IsEnabled="{Binding EnableControls}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
             <Button
                 x:Name="Create"
                 Content="{helpers:Localization Create}"

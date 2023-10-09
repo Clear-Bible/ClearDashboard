@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
@@ -55,14 +56,12 @@
 
     <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignPaper}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <!--<RowDefinition Height="*" />-->
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
@@ -102,33 +101,34 @@
                 Kind="ArrowExpandAll" />
         </Button>
 
-        <userControls:BcvUserControl
+        <StackPanel
+            Grid.Row="0"
             Grid.Column="1"
-            Margin="50,0,0,0"
-            BcvDictionary="{Binding Path=BcvDictionary}"
-            CurrentBcv="{Binding Path=CurrentBcv}"
-            IsControlEnabled="False"
-            IsControlMinimal="True"
-            ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            ShowHeader="False"
-            ShowOffsetControl="False"
-            VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Visibility="{Binding Path=BcvUserControlVisibility}" />
+            Margin="0,5,0,0"
+            Orientation="Horizontal">
+            <userControls:BcvUserControl
+                Margin="50,0,0,0"
+                BcvDictionary="{Binding Path=BcvDictionary}"
+                CurrentBcv="{Binding Path=CurrentBcv}"
+                IsControlEnabled="False"
+                IsControlMinimal="True"
+                ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                ShowHeader="False"
+                ShowOffsetControl="False"
+                VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{Binding Path=BcvUserControlVisibility}" />
 
-        <Button
-            Grid.Column="2"
-            Width="30"
-            Height="25"
-            Margin="10,0,0,0"
-            Command="{Binding Path=DataContext.RefreshCommand, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
-            CommandParameter="{Binding}"
-            Style="{StaticResource SmallTransparentStyle}"
-            ToolTip="{helpers:Localization Refresh}">
-            <iconPacks:PackIconOcticons Kind="Sync" />
-        </Button>
-
-        <StackPanel Grid.Column="3" Orientation="Horizontal">
+            <Button
+                Width="30"
+                Height="25"
+                Margin="10,0,0,0"
+                Command="{Binding Path=DataContext.RefreshCommand, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
+                CommandParameter="{Binding}"
+                Style="{StaticResource SmallTransparentStyle}"
+                ToolTip="{helpers:Localization Refresh}">
+                <iconPacks:PackIconOcticons Kind="Sync" />
+            </Button>
             <TextBox
                 Name="SearchBox"
                 Width="150"

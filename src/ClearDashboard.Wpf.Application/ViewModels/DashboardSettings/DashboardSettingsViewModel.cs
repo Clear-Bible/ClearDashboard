@@ -80,6 +80,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _isTokenSplittingEnabled;
+        public bool IsTokenSplittingEnabled
+        {
+            get => _isTokenSplittingEnabled;
+            set
+            {
+                _isTokenSplittingEnabled = value;
+                NotifyOfPropertyChange(() => IsTokenSplittingEnabled);
+            }
+        }
 
         private bool _isAlignmentEditingEnabled;
         public bool IsAlignmentEditingEnabled
@@ -89,9 +99,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             {
                 _isAlignmentEditingEnabled = value;
                 NotifyOfPropertyChange(() => IsAlignmentEditingEnabled);
+
+                IsAlignmentEditingSettingChanged =_isAlignmentEditingEnabledInitial != _isAlignmentEditingEnabled;
             }
         }
 
+        private bool _isAlignmentEditingEnabledInitial;
+
+        private bool _isAlignmentEditingSettingChanged;
+        public bool IsAlignmentEditingSettingChanged
+        {
+            get => _isAlignmentEditingSettingChanged;
+            set
+            {
+                _isAlignmentEditingSettingChanged = value;
+                NotifyOfPropertyChange(() => IsAlignmentEditingSettingChanged);
+            }
+        }
 
         private bool _runAquaInstall;
         public bool RunAquaInstall
@@ -377,7 +401,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             ThirdMonitor = Settings.Default.ThirdMonitor;
 
             IsAlignmentEditingEnabled = AbstractionsSettingsHelper.GetEnabledAlignmentEditing();
+            _isAlignmentEditingEnabledInitial = IsAlignmentEditingEnabled;
+            IsAlignmentEditingSettingChanged =  _isAlignmentEditingEnabledInitial != IsAlignmentEditingEnabled;
 
+            IsTokenSplittingEnabled = Settings.Default.IsTokenSplittingEnabled;
 
             base.OnViewReady(view);
         }
@@ -511,6 +538,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         {
             AbstractionsSettingsHelper.SaveEnabledAlignmentEditing(IsAlignmentEditingEnabled);
             _eventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus());
+        }
+
+        public void EnableTokenSplitting(bool value)
+        {
+            Settings.Default.IsTokenSplittingEnabled = IsTokenSplittingEnabled;
         }
 
         // ReSharper disable once UnusedParameter.Global

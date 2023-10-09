@@ -21,7 +21,7 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -80,7 +80,10 @@
             Grid.Row="2"
             Grid.Column="0"
             Margin="40,20">
-            <Hyperlink extension:HyperlinkExtensions.IsExternal="true" NavigateUri="https://cleardashboard.org">
+            <Hyperlink
+                extension:HyperlinkExtensions.IsExternal="true"
+                Foreground="{StaticResource HyperlinkHueBrush}"
+                NavigateUri="https://cleardashboard.org">
                 <Hyperlink.Inlines>
                     <Run Text="{helpers:Localization ProjectPicker_ProjectBuilderHelpfulVideos}" />
                 </Hyperlink.Inlines>
@@ -100,7 +103,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 FontSize="16"
-                Foreground="{StaticResource OrangeMidBrush}"
+                Foreground="{StaticResource AccentHueBrush}"
                 Text="{helpers:Localization ProjectPicker_Cancelling}"
                 Visibility="{Binding CancelTextVisibility}">
                 <!--<TextBlock.Triggers>
@@ -131,7 +134,7 @@
                 Content="{Binding BackOrCancelAction}"
                 FontSize="12"
                 IsEnabled="{Binding CanMoveBackwards}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
             <Button
                 x:Name="CreateOrClose"
                 Width="90"
@@ -150,9 +153,8 @@
             Height="75"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Foreground="{DynamicResource SecondaryHueMidBrush}"
             IsIndeterminate="True"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressIndicatorVisibility}"
             Value="0" />
     </Grid>

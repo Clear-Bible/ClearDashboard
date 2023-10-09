@@ -20,6 +20,7 @@ public static class MenuIds
 
 
     public const string File = "FileID";
+    public const string FileQuickNew = "QuickNewID";
     public const string FileNew = "NewID";
     public const string FileOpen = "OpenID";
     public const string GatherLogs = "GatherLogsID";

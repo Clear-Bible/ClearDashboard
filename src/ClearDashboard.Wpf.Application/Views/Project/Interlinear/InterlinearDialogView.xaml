@@ -18,7 +18,7 @@
     helpers1:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="{DynamicResource MaterialDesignPaper}"
     FlowDirection="{Binding WindowFlowDirection}"
-    FontFamily="{DynamicResource MaterialDesignFont}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -139,7 +139,7 @@
                             MaxWidth="400"
                             Margin="10"
                             FontSize="16"
-                            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                            Foreground="{DynamicResource ErrorHueBrush}"
                             Text="{Binding [0].ErrorContent}"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -160,29 +160,28 @@
                 Height="40"
                 Margin="10,0"
                 HorizontalAlignment="Left"
-                Foreground="{StaticResource PrimaryHueMidBrush}"
                 IsIndeterminate="True"
                 Style="{StaticResource ClearDashboardCircularProgressBar}"
                 Visibility="{Binding SpinnerVisibility}"
                 Value="75" />
             <Button
-                x:Name="Create"
+                x:Name="Close"
                 Grid.Column="1"
+                Height="40"
+                MaxWidth="175"
+                Margin="5,0,5,0"
+                Style="{StaticResource AlternativeStyle}">
+                Cancel
+            </Button>
+            <Button
+                x:Name="Create"
+                Grid.Column="2"
                 Height="40"
                 MaxWidth="175"
                 Margin="5,0,5,0"
                 IsEnabled="{Binding AlignmentsAvailable}"
                 Style="{StaticResource TransparentStyle}">
                 Create Interlinear
-            </Button>
-            <Button
-                x:Name="Close"
-                Grid.Column="2"
-                Height="40"
-                MaxWidth="175"
-                Margin="5,0,5,0"
-                Style="{StaticResource TransparentStyle}">
-                Cancel
             </Button>
         </Grid>
 

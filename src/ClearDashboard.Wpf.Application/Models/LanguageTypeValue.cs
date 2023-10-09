@@ -44,7 +44,7 @@ namespace ClearDashboard.Wpf.Application.Models
         [Description("ro"), DefaultValue("Română")]//multiple
         ro,
         [RTL(false)]
-        [Description("ru"), DefaultValue("русский")]//multiple
+        [Description("ru"), DefaultValue("Русский")]//multiple
         ru,
         [RTL(false)]
         [Description("vi"), DefaultValue("Ngôn ngữ tiếng Việt")]

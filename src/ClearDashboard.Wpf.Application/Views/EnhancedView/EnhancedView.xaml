@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -13,9 +14,9 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -89,14 +90,14 @@
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="40" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!--  ROW 6  -->
                     <Button
                         Grid.Row="6"
+                        Grid.RowSpan="2"
                         Grid.Column="0"
-                        Width="66"
-                        Height="20"
                         Margin="10"
                         Padding="0"
                         HorizontalAlignment="Left"
@@ -105,7 +106,7 @@
                         CommandParameter="{x:Static Dock.Top}"
                         Content="{helpers:Localization Close}"
                         FontSize="10"
-                        Style="{StaticResource SmallTransparentStyle}" />
+                        Style="{StaticResource AlternativeStyle}" />
 
                     <!--  ROW 0  -->
                     <Label
@@ -126,6 +127,7 @@
                             IsSnapToTickEnabled="True"
                             Maximum="48"
                             Minimum="8"
+                            Style="{StaticResource DashboardSliderStyle}"
                             TickFrequency="1"
                             Value="{Binding TitleFontSizeValue}" />
                         <Label
@@ -153,6 +155,7 @@
                             IsSnapToTickEnabled="True"
                             Maximum="48"
                             Minimum="8"
+                            Style="{StaticResource DashboardSliderStyle}"
                             TickFrequency="1"
                             Value="{Binding SourceFontSizeValue}" />
                         <Label
@@ -172,6 +175,7 @@
                             IsSnapToTickEnabled="True"
                             Maximum="40"
                             Minimum="0"
+                            Style="{StaticResource DashboardSliderStyle}"
                             TickFrequency="1"
                             Value="{Binding SourceVerticalValue}" />
                         <Label
@@ -191,6 +195,7 @@
                             IsSnapToTickEnabled="True"
                             Maximum="40"
                             Minimum="1"
+                            Style="{StaticResource DashboardSliderStyle}"
                             TickFrequency="1"
                             Value="{Binding SourceHorizontalValue}" />
                         <Label
@@ -218,6 +223,7 @@
                             IsSnapToTickEnabled="True"
                             Maximum="48"
                             Minimum="8"
+                            Style="{StaticResource DashboardSliderStyle}"
                             TickFrequency="1"
                             Value="{Binding TargetFontSizeValue}" />
                         <Label
@@ -287,6 +293,7 @@
                             IsSnapToTickEnabled="True"
                             Maximum="48"
                             Minimum="8"
+                            Style="{StaticResource DashboardSliderStyle}"
                             TickFrequency="1"
                             Value="{Binding TranslationsFontSizeValue}" />
                         <Label
@@ -307,6 +314,7 @@
                             IsSnapToTickEnabled="True"
                             Maximum="40"
                             Minimum="0"
+                            Style="{StaticResource DashboardSliderStyle}"
                             TickFrequency="1"
                             Value="10" />
                         <Label
@@ -346,6 +354,7 @@
                             IsSnapToTickEnabled="True"
                             Maximum="10"
                             Minimum="1"
+                            Style="{StaticResource DashboardSliderStyle}"
                             TickFrequency="1"
                             Value="{Binding NoteIndicatorsSizeValue}" />
                         <Label
@@ -548,7 +557,7 @@
                                     <materialDesign:PackIcon
                                         Width="24"
                                         Height="24"
-                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                        Foreground="{DynamicResource PrimaryHueLightBrush}"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
 
@@ -563,7 +572,7 @@
                                     <materialDesign:PackIcon
                                         Width="24"
                                         Height="24"
-                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                        Foreground="{DynamicResource PrimaryHueLightBrush}"
                                         Kind="ArrowDownDropCircle" />
                                 </Button>
                             </StackPanel>
@@ -590,7 +599,7 @@
                                                 <materialDesign:PackIcon
                                                     Width="20"
                                                     Height="20"
-                                                    Foreground="{StaticResource RedVeryDarkBrush}"
+                                                    Foreground="{StaticResource ErrorHueBrush}"
                                                     Kind="Close"
                                                     ToolTip="{helpers:Localization EnhancedView_RemoveCorpus}" />
                                             </Button>
@@ -674,6 +683,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <notes:NoteCollectionDisplay
                         x:Name="NotesControl"
+                        Margin="0,-20"
                         CurrentUserId="{Binding NoteManager.CurrentUserId}"
                         DefaultLabelGroup="{Binding NoteManager.DefaultLabelGroup}"
                         EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
@@ -683,12 +693,11 @@
                         LabelGroups="{Binding NoteManager.LabelGroups}"
                         LabelPadding="10,6,10,5"
                         LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
-                        Margin="0,-20"
                         NoteMargin="0,0,0,0"
                         NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         Notes="{Binding NoteManager.CurrentNotes}"
-                        UserFontStyle="Italic"
                         TimestampMargin="0,0,00,0"
+                        UserFontStyle="Italic"
                         Visibility="{Binding NoteControlVisibility}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="NoteIndicatorMouseEnter">

@@ -1,6 +1,7 @@
 ﻿<controls:DialogWindow x:Class="ClearDashboard.Wpf.Application.Views.Interlinear.InterlinearDialogView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interlinear="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear"
@@ -12,7 +13,7 @@
         helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
         AllowsTransparency="True"
         FlowDirection="{Binding WindowFlowDirection}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
+        FontFamily="{StaticResource ClearDashboardFont}"
         Background="{DynamicResource MaterialDesignPaper}"
         Foreground="{DynamicResource MaterialDesignBody}"
         ShowInTaskbar="False"
@@ -60,7 +61,7 @@
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Foreground="{DynamicResource ErrorHueBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
