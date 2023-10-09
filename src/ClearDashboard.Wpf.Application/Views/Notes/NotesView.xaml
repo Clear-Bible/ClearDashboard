@@ -11,7 +11,6 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Notes"
     xmlns:notes1="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -21,6 +20,7 @@
     d:DataContext="{d:DesignInstance Type=notes:NotesViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
@@ -161,7 +161,7 @@
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Any}"
-                                    Style="{StaticResource DashboardRadioButtonStyle}"/>
+                                    Style="{StaticResource DashboardRadioButtonStyle}" />
 
 
                                 <materialDesign:PackIcon
@@ -179,7 +179,7 @@
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Open}"
-                                    Style="{StaticResource DashboardRadioButtonStyle}"/>
+                                    Style="{StaticResource DashboardRadioButtonStyle}" />
 
                                 <materialDesign:PackIcon
                                     Grid.Row="2"
@@ -312,9 +312,9 @@
             VerticalGridLinesBrush="{StaticResource GridBrush}">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 
@@ -490,12 +490,12 @@
                         Orientation="Horizontal">
 
                         <RadioButton
-                            Style="{StaticResource DashboardRadioButtonStyle}"
                             Checked="RadioButton_Open_Checked"
                             Content="{helpers:Localization Notes_Note_NoteStatus_Open}"
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="{Binding NoteId}"
-                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"/>
+                            IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
+                            Style="{StaticResource DashboardRadioButtonStyle}" />
                         <RadioButton
                             Margin="10,0,0,0"
                             Checked="RadioButton_Resolved_Checked"
@@ -503,7 +503,7 @@
                             Foreground="{DynamicResource PrimaryHueDarkBrush}"
                             GroupName="{Binding NoteId}"
                             IsChecked="{Binding Path=SelectedNoteViewModel.NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
-                            Style="{StaticResource DashboardRadioButtonStyle}"/>
+                            Style="{StaticResource DashboardRadioButtonStyle}" />
                     </StackPanel>
                 </Border>
                 <GroupBox

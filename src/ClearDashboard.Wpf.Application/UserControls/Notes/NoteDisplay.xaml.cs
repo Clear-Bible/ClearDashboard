@@ -624,6 +624,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 EntityIds = EntityIds,
                 Note = Note
             });
+            OnPropertyChanged(nameof(ParatextSendVisibility));
         }
 
         private void ConfirmNoteDeletion(object sender, RoutedEventArgs e)
@@ -793,7 +794,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 OnPropertyChanged(nameof(NoteSaveCancelButtonVisibility));
             } 
         }
-
+        
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
         public Visibility NoteSaveCancelButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
