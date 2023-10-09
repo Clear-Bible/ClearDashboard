@@ -47,19 +47,19 @@ namespace ClearDashboard.Wpf.Application.Helpers
             var monitors = Monitor.AllMonitors.ToList();
 
 
-            var logger = IoC.Get<Logger>();
-            logger.Information($"differentMonitor: {differentMonitor}");
-            logger.Information($"thirdMonitor: {thirdMonitor}");
-            logger.Information($"monitors.Count: {monitors.Count}");
-            int i = 0;
-            foreach (var monitor in monitors)
-            {
-                logger.Information($"Monitor {i}: monitor.Bounds.Left: {monitor.Bounds.Left}");
-                logger.Information($"monitor.Bounds.Top: {monitor.Bounds.Top}");
-                logger.Information($"monitor.Bounds.Width: {monitor.Bounds.Width}");
-                logger.Information($"monitor.Bounds.Height: {monitor.Bounds.Height}");
-                i++;
-            }
+            //var logger = IoC.Get<Logger>();
+            //logger.Information($"differentMonitor: {differentMonitor}");
+            //logger.Information($"thirdMonitor: {thirdMonitor}");
+            //logger.Information($"monitors.Count: {monitors.Count}");
+            //int i = 0;
+            //foreach (var monitor in monitors)
+            //{
+            //    logger.Information($"Monitor {i}: monitor.Bounds.Left: {monitor.Bounds.Left}");
+            //    logger.Information($"monitor.Bounds.Top: {monitor.Bounds.Top}");
+            //    logger.Information($"monitor.Bounds.Width: {monitor.Bounds.Width}");
+            //    logger.Information($"monitor.Bounds.Height: {monitor.Bounds.Height}");
+            //    i++;
+            //}
 
             // figure out which monitor the app is on
             var thisApp = App.Current.MainWindow;
@@ -72,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 if (Math.Abs(monitor.Bounds.Left - thisApp.Left) < Math.Abs(thisMonitor.Bounds.Left - thisApp.Left))
                 {
                     thisMonitor = monitor;
-                    logger.Information($"thisMonitor.Bounds.Left: {thisMonitor.Bounds.Left}");
+                    //logger.Information($"thisMonitor.Bounds.Left: {thisMonitor.Bounds.Left}");
                 }
             }
 
@@ -82,7 +82,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 mirror.Left = thisMonitor.Bounds.Left;
                 mirror.Top = thisMonitor.Bounds.Top;
 
-                logger.Information($"PRIMARY MONITOR mirror.Left: {mirror.Left}");
+                //logger.Information($"PRIMARY MONITOR mirror.Left: {mirror.Left}");
             }
             else if (monitors.Count > 2 && thirdMonitor && differentMonitor)
             {
@@ -90,7 +90,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 mirror.Left = monitors[2].Bounds.Left;
                 mirror.Top = monitors[2].Bounds.Top;
 
-                logger.Information($"THIRD MONITOR mirror.Left: {mirror.Left}");
+                //logger.Information($"THIRD MONITOR mirror.Left: {mirror.Left}");
             }
             else
             {
@@ -104,14 +104,14 @@ namespace ClearDashboard.Wpf.Application.Helpers
                     mirror.Left = monitors[0].Bounds.Left;
                     mirror.Top = monitors[0].Bounds.Top;
 
-                    logger.Information($"FIRST MONITOR mirror.Left: {mirror.Left}");
+                    //logger.Information($"FIRST MONITOR mirror.Left: {mirror.Left}");
                 }
                 else
                 {
                     mirror.Left = thisMonitor.Bounds.Left;
                     mirror.Top = thisMonitor.Bounds.Top;
 
-                    logger.Information($"SECOND MONITOR mirror.Left: {mirror.Left}");
+                    //logger.Information($"SECOND MONITOR mirror.Left: {mirror.Left}");
                 }
             }
 
