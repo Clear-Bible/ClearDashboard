@@ -1125,10 +1125,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            if (CheckIfConnectedToParatext() == false)
-            {
-                return;
-            }
+            //if (CheckIfConnectedToParatext() == false)
+            //{
+            //    return;
+            //}
 
             var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
             if (currentlyOpenProjectsList.Contains(project.ProjectName))
