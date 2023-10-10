@@ -244,7 +244,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Identifies the Note dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register(nameof(Note), typeof(NoteViewModel), typeof(NoteDisplay));
+        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register(nameof(Note), typeof(NoteViewModel), typeof(NoteDisplay), 
+            new PropertyMetadata(null, OnNotePropertyChanged));
 
         /// <summary>
         /// Identifies the NoteAssociationFontFamily dependency property.
@@ -415,6 +416,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         #endregion
         #region Private Event Handlers
+
+        private static void OnNotePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NoteDisplay)d;
+            control.OnPropertyChanged(nameof(ParatextSendVisibility));
+        }
 
         private static void OnAddModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -793,7 +800,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 OnPropertyChanged(nameof(NoteSaveCancelButtonVisibility));
             } 
         }
-
+        
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
         public Visibility NoteSaveCancelButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
