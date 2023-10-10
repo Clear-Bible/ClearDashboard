@@ -17,6 +17,8 @@ using SIL.Extensions;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Collections;
 using System.Threading;
+using System.Data;
+using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -136,18 +138,18 @@ DELETE FROM TokenComponent WHERE Id IN
             var tokenCompositeId = (await DataUtil.SelectEntityValuesAsync(
                 dbConnection,
                 TABLE_ENTITY_TYPE,
-                new List<string> { "Id" },
+                new List<string> { nameof(Models.TokenComposite.Id) },
                 new Dictionary<string, object?>             {
-                    { "EngineTokenId", (string)engineTokenId! },
-                    { "TokenizedCorpusId", tokenizedCorpusId },
-                    { "Deleted", deleted },
-                    { "ParallelCorpusId", parallelCorpusId },
+                    { nameof(Models.TokenComposite.EngineTokenId), (string)engineTokenId! },
+                    { nameof(Models.TokenComposite.TokenizedCorpusId), tokenizedCorpusId },
+                    { nameof(Models.TokenComposite.Deleted), deleted },
+                    { nameof(Models.TokenComposite.ParallelCorpusId), parallelCorpusId },
                     { DISCRIMINATOR_COLUMN_NAME, DISCRIMINATOR_COLUMN_VALUE }
                 },
                 Enumerable.Empty<(Type, string, string)>(),
                 true,
                 CancellationToken.None))
-                    .Select(e => Guid.Parse((string)e["Id"]!))
+                    .Select(e => Guid.Parse((string)e[nameof(Models.TokenComposite.Id)]!))
                     .FirstOrDefault();
 
             if (tokenCompositeId == default)
@@ -182,26 +184,50 @@ DELETE FROM TokenComponent WHERE Id IN
         var tokenIds = new List<(Guid TokenId, string EngineTokenId)>();
 
         await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
-            $"Resolve token id",
+            $"Find token id from token locations",
             async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
             {
-                tokenIds.AddRange((await DataUtil.SelectEntityValuesAsync(
-                    dbConnection,
-                    TokenHandler.TABLE_ENTITY_TYPE,
-                    new List<string> { "Id", "EngineTokenId" },
-                    new Dictionary<string, object?> {
-                        { "EngineTokenId", tokenLocations },
-                        { "TokenizedCorpusId", tokenizedCorpusId },
-                        { "Deleted", null },
-                        { TokenHandler.DISCRIMINATOR_COLUMN_NAME, TokenHandler.DISCRIMINATOR_COLUMN_VALUE }
-                    },
-                    Enumerable.Empty<(Type, string, string)>(),
-                    true,
-                    CancellationToken.None))
-                        .Select(e => (
-                            TokenId: Guid.Parse((string)e["Id"]!),
-                            EngineTokenId: (string)e["EngineTokenId"]!))
-                        .ToList());
+                await using var command = dbConnection.CreateCommand();
+                command.CommandType = CommandType.Text;
+
+                var whereClause = new Dictionary<string, object?>
+                {
+                    { nameof(Models.Token.TokenizedCorpusId), tokenizedCorpusId },
+                    { nameof(Models.Token.EngineTokenId), tokenLocations }
+                };
+
+                var whereEngineTokenIds = DataUtil.BuildWhereInParameterString(
+                    nameof(Models.Token.EngineTokenId),
+                    tokenLocations.Count());
+
+                command.CommandText =
+                    $@"
+                        SELECT ta2.TokenId, ta2.TokenCompositeId, t2.EngineTokenId
+                        FROM TokenComponent t1
+                        JOIN TokenCompositeTokenAssociation ta1 ON t1.Id = ta1.TokenId
+                        JOIN TokenCompositeTokenAssociation ta2 ON ta2.TokenCompositeId = ta1.TokenCompositeId
+                        JOIN TokenComponent tc ON ta2.TokenCompositeId = tc.Id
+                        JOIN TokenComponent t2 ON ta2.TokenId = t2.Id
+                        WHERE t1.EngineTokenId IN ({whereEngineTokenIds})
+                        AND t1.TokenizedCorpusId = @TokenizedCorpusId
+                        AND t1.Deleted IS NULL
+                        AND tc.Deleted IS NULL
+                        AND t2.Deleted IS NULL
+                    ";
+
+                DataUtil.AddWhereClauseParameters(
+                    command, 
+                    new (string name, WhereEquality whereEquality)[] { (nameof(Models.Token.TokenizedCorpusId), WhereEquality.Equals) },
+                    new (string name, int count)[] { (nameof(Models.Token.EngineTokenId), tokenLocations.Count()) });
+
+                command.Prepare();
+
+                DataUtil.AddWhereClauseParameterValues(command, whereClause);
+
+                await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+                var results = DataUtil.ReadSelectDbDataReader(reader)
+                    .Select(e => Guid.Parse((string)e[nameof(Models.TokenComposite.Id)]!))
+                    .FirstOrDefault();
             },
             cancellationToken
         );
@@ -217,9 +243,9 @@ DELETE FROM TokenComponent WHERE Id IN
         // but we also need to find all TokenLocation tokens and set their
         // TokenCompositeId.
 
-        var tokenizedCorpusId = (Guid)itemToCreate.PropertyValues["TokenizedCorpusId"]!;
-        var parallelCorpusId = (Guid?)itemToCreate.PropertyValues["ParallelCorpusId"];
-        var tokenLocations = (IEnumerable<string>)itemToCreate.PropertyValues["TokenLocations"]!;
+        var tokenizedCorpusId = (Guid)itemToCreate.PropertyValues[nameof(Models.TokenComposite.TokenizedCorpusId)]!;
+        var parallelCorpusId = (Guid?)itemToCreate.PropertyValues[nameof(Models.TokenComposite.ParallelCorpusId)];
+        var tokenLocations = (IEnumerable<string>)itemToCreate.PropertyValues[TokenCompositeBuilder.TOKEN_LOCATIONS]!;
 
         var tokenIds = await FindTokenIds(tokenLocations, tokenizedCorpusId, cancellationToken);
 
@@ -268,7 +294,7 @@ DELETE FROM TokenComponent WHERE Id IN
         var modified = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
 
         var tokenLocationDifference = modelDifference.PropertyDifferences
-            .Where(pd => pd.PropertyName == "TokenLocations")
+            .Where(pd => pd.PropertyName == TokenCompositeBuilder.TOKEN_LOCATIONS)
             .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ListDifference<string>)))
             .FirstOrDefault();
         if (tokenLocationDifference is null)
@@ -295,8 +321,8 @@ DELETE FROM TokenComponent WHERE Id IN
         var tokenLocationsOnlyIn1 = valueListDifference.ListMembershipDifference.OnlyIn1;
         var tokenLocationsOnlyIn2 = valueListDifference.ListMembershipDifference.OnlyIn2;
         var tokenLocationsBoth = tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2);
-        var tokenizedCorpusId = (Guid)itemToModify.PropertyValues["TokenizedCorpusId"]!;
-        var parallelCorpusId = (Guid?)itemToModify.PropertyValues["ParallelCorpusId"];
+        var tokenizedCorpusId = (Guid)itemToModify.PropertyValues[nameof(Models.TokenComposite.TokenizedCorpusId)]!;
+        var parallelCorpusId = (Guid?)itemToModify.PropertyValues[nameof(Models.TokenComposite.ParallelCorpusId)];
 
         var tokenIds = await FindTokenIds(tokenLocationsBoth, tokenizedCorpusId, cancellationToken);
 

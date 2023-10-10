@@ -1,14 +1,4 @@
-﻿using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -104,8 +94,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             {
                 // E.g.:  " AND EngineTokenId IN (@EngineTokenId0, @EngineTokenId1)"
                 whereStrings.Add(string.Join(" AND ", whereInColumns
-                    .Select(column => column.name + " IN (" + string.Join(", ", Enumerable.Range(0, column.count)
-                        .Select(e => $"@{column.name}{e}")) + ")")));
+                    .Select(column => column.name + " IN (" + BuildWhereInParameterString(column.name, column.count) + ")")));
             }
 
             var notIndexedString = notIndexed ? " NOT INDEXED " : string.Empty;
@@ -123,7 +112,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                 {joinStringBuilder}
                 WHERE {string.Join(" AND ", whereStrings)}
             ";
-            
+
+            AddWhereClauseParameters(command, whereColumns, whereInColumns);
+        }
+
+        public static string BuildWhereInParameterString(string columnName, int count)
+        {
+            return string.Join(", ", Enumerable.Range(0, count).Select(e => $"@{columnName}{e}"));
+        }
+
+        public static void AddWhereClauseParameters(DbCommand command, (string name, WhereEquality whereEquality)[] whereColumns, (string name, int count)[] whereInColumns)
+        {
             foreach (var column in whereColumns)
             {
                 var parameter = command.CreateParameter();
@@ -142,7 +141,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
         }
 
-        private static void AddWhereClauseParameters(DbCommand command, Dictionary<string, object?> whereClause)
+        public static void AddWhereClauseParameterValues(DbCommand command, Dictionary<string, object?> whereClause)
         {
             foreach (var kvp in whereClause)
             {
@@ -165,7 +164,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
         }
 
-        private static IEnumerable<Dictionary<string, object?>> ReadSelectDbDataReader(DbDataReader reader)
+        public static IEnumerable<Dictionary<string, object?>> ReadSelectDbDataReader(DbDataReader reader)
         {
             var results = new List<Dictionary<string, object?>>();
 
@@ -231,7 +230,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                 throw new Exception($"Preparing command to get data from table type '{tableType}' failed with the following error: {ex.Message}", ex);
             }
 
-            AddWhereClauseParameters(command, whereClause);
+            AddWhereClauseParameterValues(command, whereClause);
 
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             var results = ReadSelectDbDataReader(reader);
@@ -260,7 +259,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                 throw new Exception($"Preparing command to get data from table type '{tableType}' failed with the following error: {ex.Message}", ex);
             }
 
-            AddWhereClauseParameters(command, whereClause);
+            AddWhereClauseParameterValues(command, whereClause);
 
             return await command.ExecuteNonQueryAsync(cancellationToken);
         }

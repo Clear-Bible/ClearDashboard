@@ -143,7 +143,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
         var id = string.Join(", ", where);
 
         var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToModify);
-        var command = await CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
+        using var command = await CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
 
         _logger.LogDebug($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having id '{id}'");
 
