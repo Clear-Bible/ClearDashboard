@@ -477,6 +477,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             BcvDictionary = bcvDictionary;
 
+
+            if (ProjectManager!.CurrentParatextProject is null)
+            {
+                ProjectManager.CurrentParatextProject = new ParatextProject();
+                ProjectManager.CurrentParatextProject.Language = new ScrLanguageWrapper();
+            }
+
             ProjectManager!.CurrentParatextProject.BcvDictionary = bcvDictionary;
         }
 
@@ -580,14 +587,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         protected override async void OnViewAttached(object view, object context)
         {
-            if (ProjectManager?.CurrentParatextProject is not null)
+            if (ProjectManager?.CurrentParatextProject is null)
             {
                 await GenerateBcvFromDatabase();
             }
 
 
-
-                // grab the dictionary of all the verse lookups
+            // grab the dictionary of all the verse lookups
             if (ProjectManager?.CurrentParatextProject is not null)
             {
                 BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
