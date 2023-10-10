@@ -33,6 +33,8 @@ namespace ClearDashboard.Wpf.Application.Services
         private IUserProvider UserProvider { get; }
         private ILocalizationService LocalizationService { get; }
 
+        public ExternalNoteManager ExternalNoteManager { get; }
+
         private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
         public void ClearNotesCache()
         {
@@ -61,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <summary>
         /// Gets the LabelGroup which contains all label suggestions.
         /// </summary>
-        public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel { Name = "<None>" };
+        public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel() ;
 
         /// <summary>
         /// Gets the default <see cref="LabelGroupViewModel"/> for the current user, if any.
@@ -912,6 +914,9 @@ namespace ClearDashboard.Wpf.Application.Services
             Logger = logger;
             Mediator = mediator;
             UserProvider = userProvider;
+            ExternalNoteManager = new ExternalNoteManager();
+
+            NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
 
             EventAggregator.SubscribeOnUIThread(this);
         }

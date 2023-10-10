@@ -20,6 +20,8 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using Token = ClearBible.Engine.Corpora.Token;
 using TokenId = ClearBible.Engine.Corpora.TokenId;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using SIL.Scripture;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -37,7 +39,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseEnterMessage>,
         IHandle<NoteMouseLeaveMessage>,
         IHandle<TokensJoinedMessage>,
-        IHandle<TokenUnjoinedMessage>
+        IHandle<TokenUnjoinedMessage>,
+        IHandle<TokenSplitMessage>
     {
         protected NoteManager NoteManager { get; }
         protected IMediator Mediator { get; }
@@ -66,6 +69,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(IsTargetRtl));
             }
         }
+
+        public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
+        public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
 
         /// <summary>
         /// Gets the <see cref="ParallelCorpusId"/> for the verse.
@@ -107,6 +113,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return null;
         }
 
+        public virtual void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
+            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
+        {
+        }
+        protected void SetExternalNotesOnTokenDisplayViewModels(TokenDisplayViewModelCollection tokenDisplayViewModels, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> noteInfos)
+        {
+            foreach( var tokenDisplayViewModel in tokenDisplayViewModels)
+            {
+                var externalNotes = noteInfos
+                    .Where(noteInfo => noteInfo.tokenIds?.Contains(tokenDisplayViewModel.Token.TokenId) ?? false)
+                    .Select(noteInfo => noteInfo.externalNote)
+                    .ToList();
+                if (externalNotes != null && externalNotes.Count() > 0)
+                {
+                    tokenDisplayViewModel.ExternalNotes = externalNotes;
+                }
+                else
+                {
+                    tokenDisplayViewModel.ExternalNotes = null;
+                }
+            }
+        }
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)
         {
             var sourceTokens = GetSourceTokens(isSource, tokenId);
@@ -335,6 +363,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
+        public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
+        {
+            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
+            SourceTokenMap?.AddCompositeToken(message.CompositeToken);
+            TargetTokenMap?.AddCompositeToken(message.CompositeToken);
+            await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
+        }        
+        
+        public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var kvp in message.SplitCompositeTokensByIncomingTokenId)
+            {
+                var compositeToken = kvp.Value.FirstOrDefault();    // For now, the user can only split one token at a time.
+                if (compositeToken != null)
+                {
+                    SourceTokenMap?.ReplaceToken(kvp.Key, compositeToken);
+                    TargetTokenMap?.ReplaceToken(kvp.Key, compositeToken);
+                }
+            }
+            await BuildTokenDisplayViewModelsAsync();
+            await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage(), cancellationToken);
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
+        {
+            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = null);
+            SourceTokenMap?.RemoveCompositeToken(message.CompositeToken, message.Tokens);
+            TargetTokenMap?.RemoveCompositeToken(message.CompositeToken, message.Tokens);
+            await RefreshTranslationsAsync(message.Tokens);
+        }
+
+        protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
+        {
+            await Task.CompletedTask;
+        }
         protected virtual async Task InitializeAsync()
         {
             await BuildTokenDisplayViewModelsAsync();
@@ -349,25 +414,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Logger = logger;
 
             EventAggregator.SubscribeOnUIThread(this);
-        }
-
-        public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
-        {
-            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
-            SourceTokenMap!.AddCompositeToken(message.CompositeToken);
-            await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
-        }
-
-        public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
-        {
-            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = null);
-            SourceTokenMap!.RemoveCompositeToken(message.CompositeToken, message.Tokens);
-            await RefreshTranslationsAsync(message.Tokens);
-        }
-
-        protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
-        {
-            await Task.CompletedTask;
         }
     }
 }

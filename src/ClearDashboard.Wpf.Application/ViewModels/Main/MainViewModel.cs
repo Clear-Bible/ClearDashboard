@@ -2229,6 +2229,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task ShowStartupDialog(MenuItemViewModel menuItem)
         {
+            StartupDialogViewModel.ProjectAlreadyOpened = true;
+
             if (menuItem.Id == MenuIds.FileNew)
             {
                 StartupDialogViewModel.GoToSetup = true;
@@ -2254,6 +2256,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 await OnActivateAsync(CancellationToken.None);
                 await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
             }
+
+            StartupDialogViewModel.ProjectAlreadyOpened = false;
         }
 
         #endregion // Methods

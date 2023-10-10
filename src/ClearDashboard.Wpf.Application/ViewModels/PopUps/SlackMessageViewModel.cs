@@ -552,13 +552,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 SendErrorVisibility = Visibility.Collapsed;
                 JiraButtonEnabled = false;
-                WorkingMessage = "Message Sent Successfully";
+               
 
                 // clear the fields
                 JiraTitle = string.Empty;
                 JiraDescription = string.Empty;
                 JiraSeverity = string.Empty;
                 ShowEmailIcon = true;
+
+                WorkingMessage = "Message Sent Successfully";
             }
             else
             {

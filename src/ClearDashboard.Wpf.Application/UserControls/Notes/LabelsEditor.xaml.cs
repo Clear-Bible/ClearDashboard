@@ -369,6 +369,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             NewLabelGroupTextBox.Focusable = true;
             NewLabelGroupTextBox.Focus();
 
+            CurrentSourceLabelGroup = LabelGroups.FirstOrDefault();
+
             Keyboard.Focus(NewLabelGroupTextBox);
         }
 
@@ -453,6 +455,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private string? _currentLabelName;
         private string? _currentLabelGroupName;
+        private LabelGroupViewModel? _currentSourceLabelGroup;
         private NotesLabel _currentLabel;
 
         /// <summary>
@@ -494,6 +497,20 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 _currentLabelGroupName = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(PopupLabelGroupVisibility));
+            }
+        }        
+        
+        /// <summary>
+        /// Gets or sets the source label group for the Add Label Group confirmation.
+        /// </summary>
+        public LabelGroupViewModel? CurrentSourceLabelGroup
+        {
+            get => _currentSourceLabelGroup;
+            set
+            {
+                if (value == _currentSourceLabelGroup) return;
+                _currentSourceLabelGroup = value;
+                OnPropertyChanged();
             }
         }
 

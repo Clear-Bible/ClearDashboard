@@ -93,9 +93,13 @@
                         Click="OnTokenUnjoin"
                         Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
                     <MenuItem
-                        x:Name="CopyMenuItem"
-                        Click="OnCopy"
-                        Header="{helpers:Localization Copy}"
+                        x:Name="SplitTokenMenuItem"
+                        Click="OnTokenSplit"
+                        Header="{helpers:Localization EnhancedView_SplitToken}" />
+                    <MenuItem 
+                        x:Name="CopyMenuItem" 
+                        Click="OnCopy" 
+                        Header="{helpers:Localization Copy}" 
                         Visibility="Collapsed" />
                     <MenuItem
                         x:Name="FilterPinsMenuItem"

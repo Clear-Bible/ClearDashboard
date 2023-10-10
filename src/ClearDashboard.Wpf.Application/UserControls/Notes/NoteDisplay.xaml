@@ -137,12 +137,12 @@
                 Margin="0,0"
                 VerticalAlignment="Top"
                 Visibility="{Binding ElementName=NotesDisplayControl, Path=TimestampRowVisibility}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="3*" />
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
                 <Label
-                    Grid.Column="0"
+                    Grid.Row="0"
                     Margin="{Binding ElementName=NotesDisplayControl, Path=UserMargin}"
                     VerticalContentAlignment="Top"
                     Content="{Binding ElementName=NotesDisplayControl, Path=Note.ModifiedBy}"
@@ -151,7 +151,7 @@
                     FontStyle="{Binding ElementName=NotesDisplayControl, Path=UserFontStyle}"
                     FontWeight="{Binding ElementName=NotesDisplayControl, Path=UserFontWeight}" />
                 <Label
-                    Grid.Column="1"
+                    Grid.Row="1"
                     Margin="{Binding ElementName=NotesDisplayControl, Path=TimestampMargin}"
                     HorizontalAlignment="Right"
                     HorizontalContentAlignment="Right"

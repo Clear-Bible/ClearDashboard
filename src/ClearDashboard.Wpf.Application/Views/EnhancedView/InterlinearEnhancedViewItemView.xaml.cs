@@ -50,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 
         public async Task TranslationSetAsync(TranslationEventArgs args)
         {
-            if (args.SelectedTokens.Count(t => t.IsTranslationSelected) == 1 &&
+            if (args.SelectedTokens.CanTranslateToken &&
                 !args.SelectedTokens.Any(t => t.IsTokenSelected))
             {
                 async Task ShowTranslationSelectionDialog()

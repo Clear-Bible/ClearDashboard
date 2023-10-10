@@ -18,10 +18,21 @@ namespace ClearDashboard.Wpf.Application.Collections.Notes
 
         public void AddDistinct(Label label)
         {
-            if (!Contains(label))
+            var existing = Items.FirstOrDefault(i => i.Text != null && i.Text.Equals(label.Text));
+            if (existing == null)
             {
                 Add(label);
             }
+        }
+
+        public Label? GetMatchingLabel(string? text)
+        {
+            return ! string.IsNullOrWhiteSpace(text) ? Items.FirstOrDefault(i => i.Text != null && i.Text == text) : null;
+        }
+
+        public bool ContainsMatchingLabel(string? text)
+        {
+            return GetMatchingLabel(text) != null;
         }
 
         public void Insert(Label label)

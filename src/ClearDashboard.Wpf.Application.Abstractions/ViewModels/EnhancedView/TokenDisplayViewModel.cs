@@ -6,10 +6,13 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Collections.Notes;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -36,6 +39,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool IsTargetRtl => VerseDisplay.IsTargetRtl;
 
+        public bool IsCorpusView => VerseDisplay is CorpusDisplayViewModel;
+
         /// <summary>
         /// Gets or sets whether this is a source token.
         /// </summary>
@@ -51,6 +56,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(IsTarget));
             }
         }
+
+        public TokenizedTextCorpus? Corpus => IsSource ? VerseDisplay.SourceCorpus : VerseDisplay.TargetCorpus;
 
         /// <summary>
         /// Placeholder for when we will need to support RTL for the selected application language.
@@ -179,6 +186,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private List<ExternalNote>? _externalNote;
+
+        /// <summary>
+        /// The <see cref="Translation"/> associated with the token.
+        /// </summary>
+        public List<ExternalNote>? ExternalNotes
+        {
+            get => _externalNote;
+            set
+            {
+                if (Set(ref _externalNote, value))
+                {
+                    NotifyOfPropertyChange(nameof(ExternalNotes));
+                }
+            }
+        }
         /// <summary>
         /// The surface text of the token to be displayed.  
         /// </summary>

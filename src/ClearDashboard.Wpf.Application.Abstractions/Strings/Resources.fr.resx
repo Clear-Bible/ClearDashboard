@@ -2131,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Activer l'édition d'alignement</value>
   </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Activer le fractionnement des jetons</value>
+  </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Expérimental</value>
   </data>
