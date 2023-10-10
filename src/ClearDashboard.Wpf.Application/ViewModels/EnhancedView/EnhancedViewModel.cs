@@ -417,26 +417,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                // TODO:  This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
-                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
-
-                // get the first project id
-                var firstProjectId = topLevelProjectIds.CorpusIds.FirstOrDefault(t => t.CorpusType == "Standard");
-
-                var results =
-                    await ExecuteRequest(new GetProjectBBBCCCVVVQuery(ProjectManager.CurrentDashboardProject.FullFilePath, firstProjectId.Id), CancellationToken.None);
-
-                var bcvDictionary = new Dictionary<string, string>();
-                if (results.Success)
+                if (!BcvDictionary.Any())
                 {
-                    var data = results.Data;
-                    foreach (var verse in data)
-                    {
-                        bcvDictionary.Add(verse, verse);
-                    }
+                    await GenerateBcvFromDatabase();
                 }
-
-                BcvDictionary = bcvDictionary;
             }
             
             ParatextSync = enhancedViewLayout.ParatextSync;
@@ -466,6 +450,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.SubscribeOnPublishedThread(this);
 
             await Task.CompletedTask;
+        }
+
+        private async Task GenerateBcvFromDatabase()
+        {
+            // TODO:  This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
+
+            // get the first project id
+            var firstProjectId = topLevelProjectIds.CorpusIds.FirstOrDefault(t => t.CorpusType == "Standard");
+
+            var results =
+                await ExecuteRequest(
+                    new GetProjectBBBCCCVVVQuery(ProjectManager.CurrentDashboardProject.FullFilePath, firstProjectId.Id),
+                    CancellationToken.None);
+
+            var bcvDictionary = new Dictionary<string, string>();
+            if (results.Success)
+            {
+                var data = results.Data;
+                foreach (var verse in data)
+                {
+                    bcvDictionary.Add(verse, verse);
+                }
+            }
+
+            BcvDictionary = bcvDictionary;
+
+            ProjectManager!.CurrentParatextProject.BcvDictionary = bcvDictionary;
         }
 
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
@@ -566,9 +578,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
    
 
 
-        protected override void OnViewAttached(object view, object context)
+        protected override async void OnViewAttached(object view, object context)
         {
-            // grab the dictionary of all the verse lookups
+            if (ProjectManager?.CurrentParatextProject is not null)
+            {
+                await GenerateBcvFromDatabase();
+            }
+
+
+
+                // grab the dictionary of all the verse lookups
             if (ProjectManager?.CurrentParatextProject is not null)
             {
                 BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
@@ -582,11 +601,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     CurrentBcv.BibleBookList?.Add(bookName);
                 }
             }
-            else
-            {
-                BcvDictionary = new Dictionary<string, string>();
-            }
-
             CurrentBcv.SetVerseFromId(ProjectManager!.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = ProjectManager.CurrentVerse;
@@ -703,7 +717,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                BcvDictionary = new Dictionary<string, string>();
+                await GenerateBcvFromDatabase();
             }
 
             await Task.CompletedTask;
