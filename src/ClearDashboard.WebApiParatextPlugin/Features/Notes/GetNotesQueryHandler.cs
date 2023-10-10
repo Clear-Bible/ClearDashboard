@@ -3,7 +3,6 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
-using SIL.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +34,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                     .Where(p => p.ID.Equals(request.Data.ExternalProjectId))
                     .First();
             }
-            catch (Exception)
+            catch (InvalidOperationException) //empty, which means the external project doesn't exist
             {
-                throw new Exception($"externalprojectid {request.Data.ExternalProjectId} not found");
+                return Task.FromResult(new RequestResult<IReadOnlyList<ExternalNote>>(new List<ExternalNote>()));
             }
             var paratextChapterNotes = project.GetNotes(request.Data.BookNumber, request.Data.ChapterNumber, request.Data.IncludeResolved);
 

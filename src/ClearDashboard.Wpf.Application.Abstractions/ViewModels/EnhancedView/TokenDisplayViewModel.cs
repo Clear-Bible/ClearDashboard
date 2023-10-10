@@ -11,6 +11,8 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Collections.Notes;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -184,6 +186,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private List<ExternalNote>? _externalNote;
+
+        /// <summary>
+        /// The <see cref="Translation"/> associated with the token.
+        /// </summary>
+        public List<ExternalNote>? ExternalNotes
+        {
+            get => _externalNote;
+            set
+            {
+                if (Set(ref _externalNote, value))
+                {
+                    NotifyOfPropertyChange(nameof(ExternalNotes));
+                }
+            }
+        }
         /// <summary>
         /// The surface text of the token to be displayed.  
         /// </summary>
