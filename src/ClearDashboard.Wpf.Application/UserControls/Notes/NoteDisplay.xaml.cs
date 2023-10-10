@@ -631,7 +631,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 EntityIds = EntityIds,
                 Note = Note
             });
-            OnPropertyChanged(nameof(ParatextSendVisibility));
         }
 
         private void ConfirmNoteDeletion(object sender, RoutedEventArgs e)
