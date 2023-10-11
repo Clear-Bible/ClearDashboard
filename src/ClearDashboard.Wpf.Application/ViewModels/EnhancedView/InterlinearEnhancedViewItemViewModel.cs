@@ -13,8 +13,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class InterlinearEnhancedViewItemViewModel : VerseAwareEnhancedViewItemViewModel
     {
-        public InterlinearEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,  INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : 
-            base(projectManager,enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService)
+        public InterlinearEnhancedViewItemViewModel(
+            DashboardProjectManager? projectManager, 
+            IEnhancedViewManager enhancedViewManager,  
+            INavigationService? navigationService, 
+            ILogger<VerseAwareEnhancedViewItemViewModel>? logger, 
+            IEventAggregator? eventAggregator, 
+            IMediator? mediator, ILifetimeScope? 
+            lifetimeScope, 
+            IWindowManager windowManager, 
+            ILocalizationService localizationService,
+            NoteManager noteManager) : 
+            base(
+                projectManager,
+                enhancedViewManager, 
+                navigationService, 
+                logger, 
+                eventAggregator, 
+                mediator, 
+                lifetimeScope, 
+                windowManager, 
+                localizationService, 
+                noteManager)
         {
         }
 

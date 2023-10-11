@@ -8,6 +8,8 @@ using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using SIL.Scripture;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -47,6 +49,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
             SourceTokenMap = new TokenMap(tokens, corpus);
+        }
+        public override void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
+            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
+        {
+            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, sourceTokenizedCorpusNotes);
         }
     }
 }

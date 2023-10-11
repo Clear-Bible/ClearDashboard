@@ -33,6 +33,8 @@ namespace ClearDashboard.Wpf.Application.Services
         private IUserProvider UserProvider { get; }
         private ILocalizationService LocalizationService { get; }
 
+        public ExternalNoteManager ExternalNoteManager { get; }
+
         private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
         public void ClearNotesCache()
         {
@@ -916,6 +918,7 @@ namespace ClearDashboard.Wpf.Application.Services
             Logger = logger;
             Mediator = mediator;
             UserProvider = userProvider;
+            ExternalNoteManager = new ExternalNoteManager();
 
             NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
 

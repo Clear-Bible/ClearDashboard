@@ -20,6 +20,8 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using Token = ClearBible.Engine.Corpora.Token;
 using TokenId = ClearBible.Engine.Corpora.TokenId;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using SIL.Scripture;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -111,6 +113,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return null;
         }
 
+        public virtual void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
+            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
+        {
+        }
+        protected void SetExternalNotesOnTokenDisplayViewModels(TokenDisplayViewModelCollection tokenDisplayViewModels, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> noteInfos)
+        {
+            foreach( var tokenDisplayViewModel in tokenDisplayViewModels)
+            {
+                var externalNotes = noteInfos
+                    .Where(noteInfo => noteInfo.tokenIds?.Contains(tokenDisplayViewModel.Token.TokenId) ?? false)
+                    .Select(noteInfo => noteInfo.externalNote)
+                    .ToList();
+                if (externalNotes != null && externalNotes.Count() > 0)
+                {
+                    tokenDisplayViewModel.ExternalNotes = externalNotes;
+                }
+                else
+                {
+                    tokenDisplayViewModel.ExternalNotes = null;
+                }
+            }
+        }
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)
         {
             var sourceTokens = GetSourceTokens(isSource, tokenId);
