@@ -78,8 +78,8 @@
                 SelectionMode="Single"
                 SelectionUnit="FullRow"
                 VirtualizingPanel.IsVirtualizing="True"
-                VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                VirtualizingPanel.VirtualizationMode="Recycling">
+                VirtualizingPanel.IsVirtualizingWhenGrouping="False"
+                VirtualizingPanel.VirtualizationMode="Standard">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.HeaderTemplate>
