@@ -2299,6 +2299,9 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>កំណត់ស្នាមរលោង</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>ធេវីអាេយយរមយរ</value>
   </data>
