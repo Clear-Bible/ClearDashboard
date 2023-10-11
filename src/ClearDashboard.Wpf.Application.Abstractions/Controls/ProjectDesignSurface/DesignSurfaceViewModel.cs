@@ -1150,32 +1150,43 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
-            var sourceParatextProjectId = parallelCorpusConnectorDraggedOut.ParentNode!.CorpusId;
-            var targetParatextProjectId = parallelCorpusConnectorDraggedOver.ParentNode.CorpusId;
-
-            List<ParallelCorpusId> parallelCorpusIds = new();
-            foreach (var parallel in topLevelProjectIds.ParallelCorpusIds)
+            if (parallelCorpusConnectorDraggedOut.ParentNode != null && 
+                parallelCorpusConnectorDraggedOver.ParentNode !=null)
             {
-                if (parallel.TargetTokenizedCorpusId.CorpusId.Id == targetParatextProjectId &&
-                    parallel.SourceTokenizedCorpusId.CorpusId.Id == sourceParatextProjectId)
+                var sourceParatextProjectId = parallelCorpusConnectorDraggedOut.ParentNode.CorpusId;
+                var targetParatextProjectId = parallelCorpusConnectorDraggedOver.ParentNode.CorpusId;
+
+                List<ParallelCorpusId> parallelCorpusIds = new();
+                foreach (var parallel in topLevelProjectIds.ParallelCorpusIds)
                 {
-                    parallelCorpusIds.Add(parallel);
+                    if (parallel.TargetTokenizedCorpusId != null &&
+                        parallel.TargetTokenizedCorpusId.CorpusId != null &&
+                        parallel.TargetTokenizedCorpusId.CorpusId.Id == targetParatextProjectId &&
+
+                        parallel.SourceTokenizedCorpusId != null &&
+                        parallel.SourceTokenizedCorpusId.CorpusId != null &&
+                        parallel.SourceTokenizedCorpusId.CorpusId.Id == sourceParatextProjectId)
+                    {
+                        parallelCorpusIds.Add(parallel);
+                    }
                 }
+
+                List<string> smts = new();
+                foreach (var parallelCorpusId in parallelCorpusIds)
+                {
+                    var alignments =
+                        topLevelProjectIds.AlignmentSetIds.Where(x =>
+                            x.ParallelCorpusId!.Id == parallelCorpusId.Id);
+                    foreach (var alignment in alignments)
+                    {
+                        smts.Add(alignment.SmtModel!);
+                    }
+                }
+
+                return smts.Count >= 1;
             }
 
-            List<string> smts = new();
-            foreach (var parallelCorpusId in parallelCorpusIds)
-            {
-                var alignments =
-                    topLevelProjectIds.AlignmentSetIds.Where(x =>
-                        x.ParallelCorpusId!.Id == parallelCorpusId.Id);
-                foreach (var alignment in alignments)
-                {
-                    smts.Add(alignment.SmtModel!);
-                }
-            }
-
-            return smts.Count >= 1;
+            return false;
         }
 
         /// <summary>
