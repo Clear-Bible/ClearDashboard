@@ -29,7 +29,12 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock
+
+            <!--
+                REMOVED TEMPORALLY FOR THE CONFERENCE
+            -->
+
+            <!--<TextBlock
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource ClearDashboardFont}"
@@ -82,7 +87,7 @@
                     ToolTip="{helpers:Localization Notes_LabelGroupAddTooltip}">
                     <Image Height="18" Source="/Resources/add24.png" />
                 </Button>
-            </StackPanel>
+            </StackPanel>-->
 
             <Popup
                 Name="AddLabelGroupPopup"
