@@ -257,6 +257,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 if (!collabUpdate && NotesCache.TryGetValue(noteId.Id, out var noteDetails))
                 {
+                    if (doGetParatextSendNoteInformation && noteDetails.ParatextSendNoteInformation == null)
+                    {
+                        noteDetails.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteDetails.NoteId!, UserProvider, Logger);
+                    }
                     Logger?.LogInformation($"Returning cached details for note \"{noteDetails.Text}\" ({noteId.Id})");
                     return noteDetails;
                 }
