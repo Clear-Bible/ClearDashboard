@@ -298,7 +298,7 @@ public class CollaborationManager
 
     public bool AreUnmergedChanges()
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return false;
         }
@@ -412,7 +412,7 @@ public class CollaborationManager
 
     public void FetchMergeRemote()
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return;
         }
@@ -457,7 +457,7 @@ public class CollaborationManager
 
     public void PullRemoteCommits()
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return;
         }
@@ -488,7 +488,7 @@ public class CollaborationManager
     public async Task<string?> MergeProjectLatestChangesAsync(MergeMode mergeMode, bool createBackupSnapshot,
         CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return string.Empty;
         }
@@ -594,7 +594,7 @@ public class CollaborationManager
     // isn't there or doesn't match the current repository configuration
     public async Task StageProjectChangesAsync(CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return;
         }
@@ -634,7 +634,7 @@ public class CollaborationManager
 
     public void HardResetChanges()
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return;
         }
@@ -656,7 +656,7 @@ public class CollaborationManager
 
     public IEnumerable<string> RetrieveFileStatuses(Guid? projectIdFilter = default)
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return Enumerable.Empty<string>();
         }
@@ -700,7 +700,7 @@ public class CollaborationManager
 
     public string? CommitChanges(string commitMessage, IProgress<ProgressStatus> progress)
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return string.Empty;
         }
@@ -736,7 +736,7 @@ public class CollaborationManager
 
     public void PushChangesToRemote()
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return;
         }
@@ -830,7 +830,7 @@ public class CollaborationManager
 
     public void DumpDifferencesBetweenLastMergedCommitAndHead()
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return;
         }
@@ -879,7 +879,7 @@ public class CollaborationManager
 
     public async Task DumpDifferencesBetweenHeadAndCurrentDatabaseAsync()
     {
-        if (_repositoryPath == "LocalOnly" || File.Exists(_repositoryPath) != false)
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return;
         }
