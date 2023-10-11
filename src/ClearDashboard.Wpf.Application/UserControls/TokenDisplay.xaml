@@ -184,7 +184,7 @@
                     <MenuItem
                         x:Name="SetTranslationMenuItem"
                         Click="OnSetTranslation"
-                        Header="Set Gloss"
+                        Header="{helpers:Localization TokenDisplay_SetTranslation}"
                         Visibility="Collapsed" />
                     <MenuItem
                         x:Name="CreateTranslationNoteMenuItem"

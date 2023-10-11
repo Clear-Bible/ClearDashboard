@@ -653,7 +653,7 @@
     <value>Nu există date de versuri în acest interval de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Îndepărtați corpusul</value>
+    <value>Eliminați corpusul</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Afișați controalele de vizualizare</value>
@@ -668,7 +668,7 @@
     <value>Selectați unde să împărțiți token:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
-    <value>Split cu trei căi</value>
+    <value>Despărțire cu trei căi</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>Unjoin compus jeton</value>
@@ -1178,7 +1178,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Simțul versetului</value>
+    <value>Sense verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1475,7 +1475,7 @@
     <value>Creați interlinear</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>Metadate JSON</value>
+    <value>JSON Metadate</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
     <value>Paralelizează versetele corporale</value>
@@ -1487,7 +1487,7 @@
     <value>Algoritm de aliniere a cuvântului mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Modelul simetrizat de antrenament?</value>
+    <value>Antrenează modelul simetrizat?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
@@ -1529,7 +1529,7 @@
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la New View</value>
+    <value>Adăugați text la vizualizare nouă</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la vizualizare</value>
@@ -1703,7 +1703,7 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Arată backtranslație</value>
+    <value>Afișați backtranslația</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Tulpină</value>
@@ -1820,13 +1820,13 @@
     <value>Suntem aproape acolo!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Faceți clic aici pentru a vizualiza videoclipurile „tabloul de bord”</value>
+    <value>Faceți clic aici pentru a vizualiza videoclipurile „bordul de bord”</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Vrăjitor de șablon de proiect</value>
+    <value>Expert de șablon de proiect</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
     <value>Proiect de șablon vrăjitor: {0}</value>
@@ -2219,7 +2219,7 @@
     <value>Note de lansare</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Afișați pre-lansarea</value>
+    <value>Afișați pre-versiuni</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Actualizați la noua versiune a ClearDashboard</value>
@@ -2261,7 +2261,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Suportă formatul Markdown</value>
+    <value>Acceptă formatul de marcare</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>
@@ -2298,6 +2298,9 @@
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Setați luciu</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Actualizați</value>
