@@ -52,7 +52,7 @@
                 FlowDirection="{Binding ElementName=VerseDisplayControl, Path=SourceFlowDirection}"
                 ItemTemplate="{StaticResource SourceTokenDisplay}"
                 ItemsPanel="{StaticResource SourceWrapPanelTemplate}"
-                ItemsSource="{Binding ElementName=VerseDisplayControl,  Path=SourceTokens}" />
+                ItemsSource="{Binding ElementName=VerseDisplayControl, Path=SourceTokens}" />
         </Border>
         <Border
             Margin="{Binding ElementName=VerseDisplayControl, Path=VerseMargin}"
@@ -65,7 +65,7 @@
                 FlowDirection="{Binding ElementName=VerseDisplayControl, Path=TargetFlowDirection}"
                 ItemTemplate="{StaticResource TargetTokenDisplay}"
                 ItemsPanel="{StaticResource TargetWrapPanelTemplate}"
-                ItemsSource="{Binding ElementName=VerseDisplayControl,  Path=TargetTokens}"/>
+                ItemsSource="{Binding ElementName=VerseDisplayControl, Path=TargetTokens}"/>
         </Border>
     </StackPanel>
 </userControls:VerseDisplayBase>
