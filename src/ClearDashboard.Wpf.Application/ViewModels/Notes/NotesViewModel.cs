@@ -485,7 +485,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                         FilterLabelsChoices.Clear();
                         noteVms
                             .SelectMany(nvm => nvm.Labels)
-                            .Distinct()
+                            .GroupBy(l=>l.Text)
+                            .Select(l=>l.First())
                             .OrderBy(l => l.Text)
                             .Select(l =>
                             {
