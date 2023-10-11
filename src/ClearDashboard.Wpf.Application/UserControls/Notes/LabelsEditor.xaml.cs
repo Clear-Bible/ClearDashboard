@@ -430,11 +430,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnLabelGroupRemoveConfirmed(object sender, RoutedEventArgs e)
         {
-            if (LabelGroupComboBox.SelectedItem is LabelGroupViewModel labelGroup)
-            {
-                RaiseLabelGroupEvent(LabelGroupRemovedEvent, labelGroup);
-                CurrentLabelGroup = LabelGroups.First();
-            }
+            //if (LabelGroupComboBox.SelectedItem is LabelGroupViewModel labelGroup)
+            //{
+            //    RaiseLabelGroupEvent(LabelGroupRemovedEvent, labelGroup);
+            //    CurrentLabelGroup = LabelGroups.First();
+            //}
 
             ConfirmDeleteLabelGroupPopup.IsOpen = false;
         }
