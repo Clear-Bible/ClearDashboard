@@ -523,9 +523,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         public async Task HandleAsync(LexemeAddedMessage message, CancellationToken cancellationToken)
         {
             Lexemes.Add(message.Lexeme);
-            CurrentLexeme = message.Lexeme;
 
-            if (CurrentLexeme.Lemma != TokenDisplay.SurfaceText && CurrentLexeme.Forms.All(f => f.Text != TokenDisplay.SurfaceText))
+            // Execute this assignment on the UI thread to ensure that data binding doesn't get broken.
+            Execute.OnUIThread(() => CurrentLexeme = message.Lexeme);
+
+            if (CurrentLexeme != null && CurrentLexeme.Lemma != TokenDisplay.SurfaceText && CurrentLexeme.Forms.All(f => f.Text != TokenDisplay.SurfaceText))
             {
                 var form = new Form{Text = TokenDisplay.SurfaceText};
                 CurrentLexeme.Forms.Add(form);
