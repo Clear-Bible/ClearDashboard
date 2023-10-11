@@ -123,6 +123,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
 
         private string _errorTitle;
+        private readonly ILocalizationService _localizationService;
+
         public string ErrorTitle
         {
             get => _errorTitle;
@@ -158,8 +160,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         {
             CanOk = true;
 
+            _localizationService = localizationService;
             // TODO
-            DisplayName = LocalizationStrings.Get("ParatextCorpusDialog_ParatextCorpus", Logger!);
+            DisplayName = _localizationService.Get("ParatextCorpusDialog_ParatextCorpus");
 
             DialogMode = dialogMode;
 
