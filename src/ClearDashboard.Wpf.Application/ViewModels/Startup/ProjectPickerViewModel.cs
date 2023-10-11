@@ -573,7 +573,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.NoResize;
+            settings.ResizeMode = ResizeMode.CanResize;
             settings.MinWidth = 500;
             settings.MinHeight = 500;
             //settings.Title = $"{localizedString}";
