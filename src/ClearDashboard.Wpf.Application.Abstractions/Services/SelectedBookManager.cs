@@ -62,6 +62,7 @@ public class SelectedBookManager : PropertyChangedBase
                 {
                     commonBooks[book.Abbreviation].IsEnabled = commonBooks[book.Abbreviation].IsEnabled || book.IsEnabled;
                 }
+                commonBooks[book.Abbreviation].IsEnabled = (commonBooks[book.Abbreviation].IsEnabled && !book.HasUsfmError);
                 commonBooks[book.Abbreviation].IsSelected = false; // set this to false by default
             }
         }
