@@ -220,8 +220,8 @@
                 LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
                 LabelRemoved="OnLabelRemoved"
                 LabelUpdated="OnLabelUpdated"
-                Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}"
-                Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" />
+                Labels="{Binding ElementName=LabelsEditorControl, Path=Labels}"
+                Note="{Binding ElementName=LabelsEditorControl, Path=Note}" />
             <notesControls:LabelSelector
                 x:Name="LabelSelector"
                 HorizontalAlignment="Right"
