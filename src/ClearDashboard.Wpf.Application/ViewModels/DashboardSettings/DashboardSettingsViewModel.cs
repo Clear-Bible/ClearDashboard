@@ -91,6 +91,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _isLexiconImportEnabled;
+        public bool IsLexiconImportEnabled
+        {
+            get => _isLexiconImportEnabled;
+            set
+            {
+                _isLexiconImportEnabled = value;
+                NotifyOfPropertyChange(() => IsLexiconImportEnabled);
+            }
+        }
+        
+
         private bool _isAlignmentEditingEnabled;
         public bool IsAlignmentEditingEnabled
         {
@@ -405,6 +417,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             IsAlignmentEditingSettingChanged =  _isAlignmentEditingEnabledInitial != IsAlignmentEditingEnabled;
 
             IsTokenSplittingEnabled = Settings.Default.IsTokenSplittingEnabled;
+            IsLexiconImportEnabled = AbstractionsSettingsHelper.GetEnabledLexiconImport();
 
             base.OnViewReady(view);
         }
@@ -534,24 +547,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         }
 
 
-        public void EnableAlignmentEditing(bool value)
+        public async void EnableAlignmentEditing(bool value)
         {
             AbstractionsSettingsHelper.SaveEnabledAlignmentEditing(IsAlignmentEditingEnabled);
-            _eventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus());
+            await _eventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus());
         }
 
         public void EnableTokenSplitting(bool value)
         {
             Settings.Default.IsTokenSplittingEnabled = IsTokenSplittingEnabled;
+            Settings.Default.Save();
         }
 
+        public async void EnableLexifonImport(bool value)
+        {
+            AbstractionsSettingsHelper.SaveEnabledLexiconImport(IsLexiconImportEnabled);
+            await _eventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus());
+        }
+
+
         // ReSharper disable once UnusedParameter.Global
-        public void VerseByVerseTextCollectionsEnabledCheckBox(bool value)
+        public async void VerseByVerseTextCollectionsEnabledCheckBox(bool value)
         {
             Settings.Default.VerseByVerseTextCollectionsEnabled = IsVerseByVerseTextCollectionsEnabled;
             Settings.Default.Save();
 
-            _eventAggregator.PublishOnUIThreadAsync(new RefreshTextCollectionsMessage());
+            await _eventAggregator.PublishOnUIThreadAsync(new RefreshTextCollectionsMessage());
         }
 
         public async void SendValidationEmail()
