@@ -18,11 +18,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
+public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
 {
-    public static readonly Type TABLE_ENTITY_TYPE = typeof(Models.TokenComponent);
-    public static readonly string DISCRIMINATOR_COLUMN_VALUE = "Token";
-    public static readonly string DISCRIMINATOR_COLUMN_NAME = "Discriminator";
+    public static readonly string DISCRIMINATOR_COLUMN_VALUE = nameof(Models.Token);
     public TokenHandler(MergeContext mergeContext): base(mergeContext)
     {
         mergeContext.MergeBehavior.AddEntityTypeDiscriminatorMapping(
@@ -336,87 +334,6 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
         await DetachTokenComponents(Enumerable.Empty<Guid>(), deletedTokenCompositeIds, cancellationToken);
     }
 
-    private async Task DeleteComposites(DbConnection dbConnection, IEnumerable<Guid> tokenCompositeIds, CancellationToken cancellationToken)
-    {
-        var alignmentSetDenormalizationTasks = await BuildDenormalizationTasksForTokenAlignments(
-            dbConnection, 
-            tokenCompositeIds, 
-            cancellationToken);
-
-        await InsertDenormalizationTasks(alignmentSetDenormalizationTasks, cancellationToken);
-
-        await DataUtil.DeleteEntityValuesAsync(
-            dbConnection,
-            TokenCompositeHandler.TABLE_ENTITY_TYPE,
-            new() {
-                { nameof(Models.TokenComponent.Id), tokenCompositeIds },
-                { TokenCompositeHandler.DISCRIMINATOR_COLUMN_NAME, TokenCompositeHandler.DISCRIMINATOR_COLUMN_VALUE }
-            },
-            cancellationToken);
-    }
-
-    private async Task InsertDenormalizationTasks(IEnumerable<GeneralModel<Models.AlignmentSetDenormalizationTask>> alignmentSetDenormalizationTasks, CancellationToken cancellationToken)
-    {
-        if (alignmentSetDenormalizationTasks.Any())
-        {
-            _mergeContext.MergeBehavior.StartInsertModelCommand(alignmentSetDenormalizationTasks.First());
-            foreach (var child in alignmentSetDenormalizationTasks)
-            {
-                _ = await _mergeContext.MergeBehavior.RunInsertModelCommand(child, cancellationToken);
-            }
-            _mergeContext.MergeBehavior.CompleteInsertModelCommand(typeof(Models.AlignmentSetDenormalizationTask));
-
-            _mergeContext.FireAlignmentDenormalizationEvent = true;
-        }
-    }
-
-    private static async Task<List<GeneralModel<Models.AlignmentSetDenormalizationTask>>> BuildDenormalizationTasksForTokenAlignments(DbConnection dbConnection, IEnumerable<Guid> tokenComponentIds, CancellationToken cancellationToken)
-    {
-        List<GeneralModel<Models.AlignmentSetDenormalizationTask>> alignmentSetDenormalizationTasks = new();
-
-        var alignmentSetTokens = (await DataUtil.SelectEntityValuesAsync(
-            dbConnection,
-            typeof(Models.Alignment),
-            selectColumns: new List<string> { 
-                nameof(Models.Alignment.AlignmentSetId), 
-                nameof(Models.Alignment.SourceTokenComponentId),
-                nameof(Models.TokenComponent.TrainingText)
-            },
-            new Dictionary<string, object?> {
-                { nameof(Models.Alignment.SourceTokenComponentId), tokenComponentIds },
-                { $"{nameof(Models.Alignment)}.{nameof(Models.Alignment.Deleted)}", null }
-            },
-            new List<(Type, string, string)> { (
-                TABLE_ENTITY_TYPE,
-                nameof(Models.TokenComponent.Id),
-                nameof(Models.Alignment.SourceTokenComponentId)
-            )},
-            true,
-            cancellationToken))
-                .Select(e => (
-                    AlignmentSetId: Guid.Parse((string)e[nameof(Models.Alignment.AlignmentSetId)]!),
-                    SourceTokenComponentId: Guid.Parse((string)e[nameof(Models.Alignment.SourceTokenComponentId)]!),
-                    TrainingText: (string)e[nameof(Models.TokenComponent.TrainingText)]!))
-                .Where(e => !string.IsNullOrEmpty(e.TrainingText))
-                .GroupBy(e => e.AlignmentSetId)
-                .ToDictionary(
-                    g => g.Key, 
-                    g => g.Select(e => e).DistinctBy(e => e.SourceTokenComponentId));
-
-        foreach (var kvp in alignmentSetTokens)
-        {
-            foreach (var tokenComponentInfo in kvp.Value)
-            {
-                var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
-                t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), kvp.Key);
-                t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), tokenComponentInfo.TrainingText);
-                alignmentSetDenormalizationTasks.Add(t);
-            }
-        }
-
-        return alignmentSetDenormalizationTasks;
-    }
-
     private static async Task<IEnumerable<Guid>> FindTokenCompositeIds(DbConnection dbConnection, IEnumerable<Guid> tokenIds, CancellationToken cancellationToken)
     {
         return (await DataUtil.SelectEntityValuesAsync(
@@ -464,45 +381,5 @@ public class TokenHandler : DefaultMergeHandler<IModelSnapshot<Models.Token>>
             .ToDictionary(
                 g => g.Key,
                 g => g.OrderBy(e => e.Index).Select(e => (e.RefValue, e.Snapshot)));
-    }
-
-    private async Task DetachTokenComponents(IEnumerable<Guid> tokenIds, IEnumerable<Guid> tokenCompositeIds, CancellationToken cancellationToken)
-    {
-        if (!tokenIds.Any() && !tokenCompositeIds.Any())
-        {
-            return;
-        }
-
-        await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
-$"Detach TokenComposites/Tokens/TokenComponentTokenAssocations",
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
-
-                foreach (var entry in projectDbContext.ChangeTracker
-                    .Entries<Models.TokenCompositeTokenAssociation>()
-                    .Where(e =>
-                        tokenCompositeIds.Contains(e.Property(e => e.TokenCompositeId).OriginalValue) ||
-                        tokenIds.Contains(e.Property(e => e.TokenId).OriginalValue)))
-                {
-                    entry.State = EntityState.Detached;
-                }
-
-                foreach (var entry in projectDbContext.ChangeTracker
-                    .Entries<Models.TokenComposite>()
-                    .Where(e => tokenCompositeIds.Contains(e.Property(e => e.Id).OriginalValue)))
-                {
-                    entry.State = EntityState.Detached;
-                }
-
-                foreach (var entry in projectDbContext.ChangeTracker
-                    .Entries<Models.Token>()
-                    .Where(e => tokenIds.Contains(e.Property(e => e.Id).OriginalValue)))
-                {
-                    entry.State = EntityState.Detached;
-                }
-
-                await Task.CompletedTask;
-            },
-            cancellationToken
-        );
     }
 }

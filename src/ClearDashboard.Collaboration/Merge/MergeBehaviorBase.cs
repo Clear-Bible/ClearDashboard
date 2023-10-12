@@ -374,10 +374,8 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
     }
 
-    protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, IModelSnapshot modelSnapshot, Dictionary<string, object> resolvedWhereClause)
+    protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, Type entityType, Dictionary<string, object> resolvedWhereClause)
     {
-        var entityType = modelSnapshot.EntityType;
-
         var command = connection.CreateCommand();
 
         var whereColumns = resolvedWhereClause.Keys;

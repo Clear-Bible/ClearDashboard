@@ -14,7 +14,7 @@ public class TokenCompositeBuilder : GeneralModelBuilder<Models.TokenComposite>
 {
     public const string VERSE_ROW_LOCATION = "VerseRowLocation";
     public const string TOKEN_LOCATIONS = "TokenLocations";
-    public override string IdentityKey => BuildPropertyRefName();
+//    public override string IdentityKey => BuildPropertyRefName();
 
     public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
         new Dictionary<string, Type>()
@@ -51,19 +51,35 @@ public class TokenCompositeBuilder : GeneralModelBuilder<Models.TokenComposite>
 
     public static GeneralModel<Models.TokenComposite> BuildModelSnapshot(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> childTokens, BuilderContext builderContext)
     {
+        var modelSnapshot = ExtractUsingModelIds(
+            tokenComposite,
+            new List<string>() { "VerseRowId" });
+
+        modelSnapshot.Add(VERSE_ROW_LOCATION, tokenComposite.VerseRow?.BookChapterVerse, typeof(string));
+        modelSnapshot.Add(TOKEN_LOCATIONS, childTokens.Select(t => TokenBuilder.BuildTokenLocation(t)).ToGeneralListModel<string>());
+
+        return modelSnapshot;
+
+        // ===============================================================================
+        // Prototype code - thinking we might want to send both an "Id" and "Ref" and
+        // implement a fallback-comparison (if "Id"s don't match, try "Ref"s).  More
+        // commented/supporting code on line 17 above
+        // ===============================================================================
         var modelProperties = ExtractUsingModelRefs(
             tokenComposite,
             builderContext,
-            new List<string>() { "Id", "VerseRowId" });
+            new List<string>() { "VerseRowId" });
 
+
+        var tokenLocations = childTokens.Select(t => TokenBuilder.BuildTokenLocation(t)).OrderBy(e => e).ToList();
 
         modelProperties.Add(VERSE_ROW_LOCATION, (typeof(string), tokenComposite.VerseRow?.BookChapterVerse));
-        modelProperties.Add(TOKEN_LOCATIONS, (typeof(IEnumerable<string>), childTokens.Select(t => TokenBuilder.BuildTokenLocation(t)).ToGeneralListModel<string>()));
+        modelProperties.Add(TOKEN_LOCATIONS, (typeof(IEnumerable<string>), tokenLocations.ToGeneralListModel<string>()));
 
         var refValue = CalculateRef(
             tokenComposite.TokenizedCorpusId,
             tokenComposite.ParallelCorpusId,
-            tokenComposite.EngineTokenId!
+            string.Join("|", tokenLocations)
         );
 
         var tokenCompositeModelSnapshot = new GeneralModel<Models.TokenComposite>(BuildPropertyRefName(), refValue);
@@ -85,6 +101,15 @@ public class TokenCompositeBuilder : GeneralModelBuilder<Models.TokenComposite>
 
         var identityPropertyValue = sb.ToString().ToMD5String();
         return $"TokenComposite_{identityPropertyValue}";
+    }
+
+    public static GeneralModel<Models.TokenCompositeTokenAssociation> BuildModelSnapshot(Models.TokenCompositeTokenAssociation tokenCompositeTokenAssociation)
+    {
+        var modelSnapshot = ExtractUsingModelIds<Models.TokenCompositeTokenAssociation>(
+            tokenCompositeTokenAssociation,
+            new List<string>() { });
+
+        return modelSnapshot;
     }
 
     public override GeneralModel<TokenComposite> BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes)

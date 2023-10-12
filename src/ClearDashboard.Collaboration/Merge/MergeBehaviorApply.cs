@@ -82,7 +82,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
         var id = string.Join(", ", where);
 
         var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToDelete);
-        var command = CreateModelSnapshotDeleteCommand(_connection, itemToDelete, resolvedWhereClause);
+        var command = CreateModelSnapshotDeleteCommand(_connection, itemToDelete.EntityType, resolvedWhereClause);
 
         _logger.LogInformation($"Executing delete query for model type '{itemToDelete.EntityType.ShortDisplayName()}' having id '{id}'");
 
