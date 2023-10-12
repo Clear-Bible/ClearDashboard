@@ -62,7 +62,7 @@
         <ItemsControl
             ItemTemplate="{StaticResource LabelBoxTemplate}"
             ItemsPanel="{StaticResource LabelsPanelTemplate}"
-            ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Labels}" />
+            ItemsSource="{Binding ElementName=LabelsDisplayControl, Path=Labels}" />
         <Popup
             Name="EditLabelTextPopup"
             Grid.Row="0"
