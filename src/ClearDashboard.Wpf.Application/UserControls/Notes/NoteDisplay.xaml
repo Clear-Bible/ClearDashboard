@@ -220,7 +220,7 @@
                         LabelRemoved="OnLabelRemoved"
                         LabelSelected="OnLabelSelected"
                         LabelUpdated="OnLabelUpdated"
-                        Labels="{Binding ElementName=NotesDisplayControl, Path=Note.Labels}"
+                        Labels="{Binding ElementName=NotesDisplayControl, Path=Labels}"
                         Note="{Binding ElementName=NotesDisplayControl, Path=Note}" />
                 </userControls:TogglePanel>
 
