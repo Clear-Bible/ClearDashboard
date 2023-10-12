@@ -770,7 +770,7 @@
     <value>លេខសម្ងាត់:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>url:</value>
+    <value>URL:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
     <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
@@ -2130,6 +2130,9 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>បើកដំណើរការការនាំចូល lexicon</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>បើកការបំបែកថូខឹន</value>

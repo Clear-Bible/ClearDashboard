@@ -5,7 +5,6 @@ using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
-using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -50,7 +49,6 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -61,7 +59,9 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>
+    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel,
+        IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>,
+        IHandle<RedrawCorpusNodeMenus>
     {
         #region Member Variables
 
@@ -1847,5 +1847,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion // Methods
 
 
+        public async Task HandleAsync(RedrawCorpusNodeMenus message, CancellationToken cancellationToken)
+        {
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
+            
+            foreach (var node in DesignSurfaceViewModel.CorpusNodes)
+            {
+                var tokenizedCorpora =
+                    topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == node.CorpusId);
+                await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
+            }
+        }
     }
 }

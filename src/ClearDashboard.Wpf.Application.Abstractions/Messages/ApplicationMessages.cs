@@ -11,6 +11,7 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record BackgroundDeletionTaskRunning(bool Result, ParallelCorpusConnectorViewModel ConnectorDraggedOut, ParallelCorpusConnectorViewModel ConnectorDraggedOver, ParallelCorpusConnectionViewModel NewConnection);
 
     public record RedrawParallelCorpusMenus();
+    public record RedrawCorpusNodeMenus();
     public record SetIsCheckedAlignment(AlignmentSetId AlignmentSetId, bool IsChecked);
 
     public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);

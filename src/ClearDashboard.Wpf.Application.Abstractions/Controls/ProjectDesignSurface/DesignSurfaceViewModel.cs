@@ -989,9 +989,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         });
                     }
 
+
                     // do not allow MACULA or Resource types to have lexicon
-                    if (corpusNodeViewModel.CorpusType == CorpusType.Standard ||
-                         corpusNodeViewModel.CorpusType == CorpusType.BackTranslation)
+                    if ((corpusNodeViewModel.CorpusType == CorpusType.Standard || corpusNodeViewModel.CorpusType == CorpusType.BackTranslation) 
+                        && Settings.Default.IsLexiconImportEnabled)
                     {
                         corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
                         {
@@ -1688,5 +1689,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
         #endregion
+
     }
 }
