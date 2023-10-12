@@ -70,5 +70,17 @@ namespace ClearDashboard.Wpf.Application {
                 this["IsAlignmentEditingEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsLexiconImportEnabled {
+            get {
+                return ((bool)(this["IsLexiconImportEnabled"]));
+            }
+            set {
+                this["IsLexiconImportEnabled"] = value;
+            }
+        }
     }
 }

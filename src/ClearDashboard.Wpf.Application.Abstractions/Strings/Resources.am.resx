@@ -2131,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>የምደባ አርት editing ትን አንቃ</value>
   </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Lexicon ማስመጣትን አንቃ</value>
+  </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>የመረበሽ መከፋፈል ያንቁ</value>
   </data>
