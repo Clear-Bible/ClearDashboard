@@ -265,6 +265,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             if (CurrentLabel != null)
             {
                 Labels.AddDistinct(CurrentLabel);
+                Labels.Refresh();
                 OnPropertyChanged(nameof(Labels));
                 Labels.Refresh();
             }
@@ -275,6 +276,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             if (CurrentLabel != null)
             {
                 Labels.RemoveIfExists(CurrentLabel);
+                Labels.Refresh();
                 OnPropertyChanged(nameof(Labels));
                 Labels.Refresh();
             }
@@ -289,7 +291,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnLabelAddConfirmed(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelAddedEvent);
-            Execute.OnUIThread(AddCurrentLabel);
+            //Execute.OnUIThread(AddCurrentLabel);
             ConfirmAddLabelPopup.IsOpen = false;
         }
 
@@ -302,7 +304,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             CacheCurrentLabel(e);
             RaiseLabelEvent(LabelSelectedEvent);
-            Execute.OnUIThread(AddCurrentLabel);
+            //Execute.OnUIThread(AddCurrentLabel);
         }
 
         private void OnLabelDeleted(object sender, RoutedEventArgs e)
@@ -322,7 +324,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnLabelDeleteConfirmed(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelDeletedEvent);
-            Execute.OnUIThread(RemoveCurrentLabel);
+            //Execute.OnUIThread(RemoveCurrentLabel);
             ConfirmDeleteLabelPopup.IsOpen = false;
             LabelSelector.CloseSuggestionPopup();
             LabelSelector.CloseTextBox();
@@ -459,11 +461,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             void ReplaceLabel()
             {
-                Labels.Replace(message.Label);
+                Labels.Replace(message.Label, true);
+                Labels.Refresh();
                 OnPropertyChanged(nameof(Labels));
             }
-            Execute.OnUIThread(ReplaceLabel);
 
+            if (Note.NoteId != null && Note.NoteId.IdEquals(message.NoteId))
+            {
+                Execute.OnUIThread(ReplaceLabel);
+            }
             return Task.CompletedTask;
         }
 
@@ -472,10 +478,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             void RemoveLabel()
             {
                 Labels.RemoveIfExists(message.Label);
+                Labels.Refresh();
                 OnPropertyChanged(nameof(Labels));
             }
-            Execute.OnUIThread(RemoveLabel);
 
+            if (Note.NoteId != null && Note.NoteId.IdEquals(message.NoteId))
+            {
+                Execute.OnUIThread(RemoveLabel);
+            }
             return Task.CompletedTask;
         }
 
