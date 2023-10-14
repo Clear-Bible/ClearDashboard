@@ -752,7 +752,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 mediator: Mediator!,
                 IsRtl: false,
                 Name: metadata.Name!,
-                Language: metadata.LanguageName!,
+                Language: metadata.LanguageId!,
                 CorpusType: metadata.CorpusType.ToString(),
                 ParatextId: metadata.Id!,
                 token: cancellationToken);
@@ -812,7 +812,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     IsRtl: metadata.IsRtl,
                     FontFamily: metadata.FontFamily,
                     Name: metadata.Name!,
-                    Language: metadata.LanguageName!,
+                    Language: metadata.LanguageId!,
                     CorpusType: metadata.CorpusTypeDisplay,
                     ParatextId: metadata.Id!,
                     token: cancellationToken);
