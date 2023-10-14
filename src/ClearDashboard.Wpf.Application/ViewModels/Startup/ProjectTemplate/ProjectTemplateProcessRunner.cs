@@ -33,6 +33,7 @@ using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using BookInfo = ClearDashboard.DataAccessLayer.Models.BookInfo;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using ParatextProjectMetadata = ClearDashboard.DataAccessLayer.Models.ParatextProjectMetadata;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 {
@@ -697,8 +698,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Name = MaculaCorporaNames.HebrewCorpusName,
                     CorpusType = corpusType,
                     FontFamily = DataAccessLayer.FontNames.HebrewFontFamily,
-                    LanguageId = "he",
-                    LanguageName = "Hebrew"
+                    LanguageId = ManuscriptIds.HebrewManuscriptLanguageId
                 };
                 languageCode = LanguageCodeEnum.H;
             }
@@ -710,8 +710,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Name = MaculaCorporaNames.GreekCorpusName,
                     CorpusType = corpusType,
                     FontFamily = DataAccessLayer.FontNames.GreekFontFamily,
-                    LanguageId = "el",
-                    LanguageName = "Greek"
+                    LanguageId = ManuscriptIds.GreekManuscriptLanguageId
                 };
                 languageCode = LanguageCodeEnum.G;
             }
