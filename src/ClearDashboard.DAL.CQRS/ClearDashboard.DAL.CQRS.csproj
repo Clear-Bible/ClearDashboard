@@ -5,9 +5,9 @@
     <Copyright>Copyright Clear Bible</Copyright>
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearDashboard</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Clear-Bible/ClearDashboard</RepositoryUrl>
-    <FileVersion>1.2.0.10</FileVersion>
-    <Version>1.2.0.10</Version>
-    <AssemblyVersion>1.2.0.10</AssemblyVersion>
+    <FileVersion>1.2.0.11</FileVersion>
+    <Version>1.2.0.11</Version>
+    <AssemblyVersion>1.2.0.11</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>latest</LangVersion>
