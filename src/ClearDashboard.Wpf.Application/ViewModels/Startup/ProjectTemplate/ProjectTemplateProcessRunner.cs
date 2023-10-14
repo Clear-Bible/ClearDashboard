@@ -697,7 +697,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Name = MaculaCorporaNames.HebrewCorpusName,
                     CorpusType = corpusType,
                     FontFamily = DataAccessLayer.FontNames.HebrewFontFamily,
-                    LanguageName = "Hebrew" // FIXME:  shouldn't this be bcp-47 code?
+                    LanguageId = "he",
+                    LanguageName = "Hebrew"
                 };
                 languageCode = LanguageCodeEnum.H;
             }
@@ -709,7 +710,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Name = MaculaCorporaNames.GreekCorpusName,
                     CorpusType = corpusType,
                     FontFamily = DataAccessLayer.FontNames.GreekFontFamily,
-                    LanguageName = "Greek" // FIXME:  shouldn't this be bcp-47 code?
+                    LanguageId = "el",
+                    LanguageName = "Greek"
                 };
                 languageCode = LanguageCodeEnum.G;
             }
