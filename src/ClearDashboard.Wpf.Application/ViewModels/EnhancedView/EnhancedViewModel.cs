@@ -392,6 +392,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             LabelsEditor.EventAggregator = eventAggregator;
+            LabelsDisplay.EventAggregator = eventAggregator;
 
             LabelSelector.LocalizationService = localizationService;
 

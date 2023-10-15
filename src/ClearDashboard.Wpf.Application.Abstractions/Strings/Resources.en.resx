@@ -2131,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Enable Alignment Editing</value>
   </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Enable Lexicon Import</value>
+  </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>Enable Token Splitting</value>
   </data>

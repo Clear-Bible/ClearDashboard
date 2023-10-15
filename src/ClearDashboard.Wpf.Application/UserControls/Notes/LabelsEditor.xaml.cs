@@ -23,7 +23,10 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
     /// <summary>
     /// A control that displays and edits the collection of labels associated with a note, optionally grouped by label groups.
     /// </summary>
-    public partial class LabelsEditor : INotifyPropertyChanged, IHandle<LabelGroupAddedMessage>, IHandle<NoteLabelDetachedMessage>
+    public partial class LabelsEditor : INotifyPropertyChanged, 
+        IHandle<LabelGroupAddedMessage>,
+        IHandle<NoteLabelAttachedMessage>,
+        IHandle<NoteLabelDetachedMessage>
     {
         #region Static Routed Events
 
@@ -205,7 +208,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseEvent(new LabelEventArgs
             {
                 RoutedEvent = routedEvent,
-                Label = CurrentLabel,
+                Label = CurrentLabel!,
                 LabelGroup = CurrentLabelGroup,
                 Note = Note
             });
@@ -230,16 +233,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
-        private void RaiseLabelGroupLabelEvent(RoutedEvent routedEvent, LabelGroupViewModel labelGroup, NotesLabel label)
-        {
-            RaiseEvent(new LabelGroupLabelEventArgs
-            {
-                RoutedEvent = routedEvent,
-                LabelGroup = labelGroup,
-                Label = label,
-            });
-        }
-
         #endregion
         #region Public Event Handlers
         
@@ -259,24 +252,34 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 CurrentLabel = labelEventArgs.Label;
                 CurrentLabelName = CurrentLabel?.Text;
 
-                if (CurrentLabelGroup?.LabelGroupId == null)
+                if (CurrentLabelGroup.LabelGroupId == null)
                 {
                     CurrentLabelName += " ?";
                 }
             }
-            CurrentLabelGroupName = CurrentLabelGroup?.LabelGroupId != null ? CurrentLabelGroup.Name : string.Empty;
+            CurrentLabelGroupName = CurrentLabelGroup.LabelGroupId != null ? CurrentLabelGroup.Name : string.Empty;
         }
 
         private void AddCurrentLabel()
         {
-            Labels.AddDistinct(CurrentLabel);
-            OnPropertyChanged(nameof(Labels));
+            if (CurrentLabel != null)
+            {
+                Labels.AddDistinct(CurrentLabel);
+                Labels.Refresh();
+                OnPropertyChanged(nameof(Labels));
+                Labels.Refresh();
+            }
         }
 
         private void RemoveCurrentLabel()
         {
-            Labels.RemoveIfExists(CurrentLabel);
-            OnPropertyChanged(nameof(Labels));
+            if (CurrentLabel != null)
+            {
+                Labels.RemoveIfExists(CurrentLabel);
+                Labels.Refresh();
+                OnPropertyChanged(nameof(Labels));
+                Labels.Refresh();
+            }
         }
 
         private void OnLabelAdded(object sender, RoutedEventArgs e)
@@ -288,7 +291,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnLabelAddConfirmed(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelAddedEvent);
-            AddCurrentLabel();
+            //Execute.OnUIThread(AddCurrentLabel);
             ConfirmAddLabelPopup.IsOpen = false;
         }
 
@@ -301,14 +304,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             CacheCurrentLabel(e);
             RaiseLabelEvent(LabelSelectedEvent);
-            AddCurrentLabel();
+            //Execute.OnUIThread(AddCurrentLabel);
         }
 
         private void OnLabelDeleted(object sender, RoutedEventArgs e)
         {
             CacheCurrentLabel(e);
 
-            if (CurrentLabelGroup?.LabelGroupId != null)
+            if (CurrentLabelGroup.LabelGroupId != null)
             {
                 ConfirmDisassociateLabelPopup.IsOpen = true;
             }
@@ -320,9 +323,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnLabelDeleteConfirmed(object sender, RoutedEventArgs e)
         {
-            RemoveCurrentLabel();
             RaiseLabelEvent(LabelDeletedEvent);
+            //Execute.OnUIThread(RemoveCurrentLabel);
             ConfirmDeleteLabelPopup.IsOpen = false;
+            LabelSelector.CloseSuggestionPopup();
+            LabelSelector.CloseTextBox();
         }
 
         private void OnLabelDeleteCancelled(object sender, RoutedEventArgs e)
@@ -334,6 +339,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             RaiseLabelEvent(LabelDisassociatedEvent);
             ConfirmDisassociateLabelPopup.IsOpen = false;
+            LabelSelector.CloseSuggestionPopup();
+            LabelSelector.CloseTextBox();
         }
 
         private void OnLabelDisassociateCancelled(object sender, RoutedEventArgs e)
@@ -346,8 +353,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             if (e is LabelEventArgs args)
             {
                 CurrentLabel = args.Label;
-                RemoveCurrentLabel();
                 RaiseLabelEvent(LabelRemovedEvent);
+                Execute.OnUIThread(RemoveCurrentLabel);
             }
         }
 
@@ -444,6 +451,44 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             ConfirmDeleteLabelGroupPopup.IsOpen = false;
         }
 
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            Unloaded -= OnUnloaded;
+            EventAggregator?.Unsubscribe(this);
+        }
+
+        public Task HandleAsync(NoteLabelAttachedMessage message, CancellationToken cancellationToken)
+        {
+            void ReplaceLabel()
+            {
+                Labels.Replace(message.Label, true);
+                Labels.Refresh();
+                OnPropertyChanged(nameof(Labels));
+            }
+
+            if (Note.NoteId != null && Note.NoteId.IdEquals(message.NoteId))
+            {
+                Execute.OnUIThread(ReplaceLabel);
+            }
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(NoteLabelDetachedMessage message, CancellationToken cancellationToken)
+        {
+            void RemoveLabel()
+            {
+                Labels.RemoveIfExists(message.Label);
+                Labels.Refresh();
+                OnPropertyChanged(nameof(Labels));
+            }
+
+            if (Note.NoteId != null && Note.NoteId.IdEquals(message.NoteId))
+            {
+                Execute.OnUIThread(RemoveLabel);
+            }
+            return Task.CompletedTask;
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -456,12 +501,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private string? _currentLabelName;
         private string? _currentLabelGroupName;
         private LabelGroupViewModel? _currentSourceLabelGroup;
-        private NotesLabel _currentLabel;
+        private NotesLabel? _currentLabel;
 
         /// <summary>
         /// Gets or sets the label pending addition or removal.
         /// </summary>
-        public NotesLabel CurrentLabel
+        public NotesLabel? CurrentLabel
         {
             get => _currentLabel;
             set
@@ -835,18 +880,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             InitializeComponent();
 
+            Unloaded += OnUnloaded;
             EventAggregator?.SubscribeOnUIThread(this);
-        }
-
-        public Task HandleAsync(NoteLabelDetachedMessage message, CancellationToken cancellationToken)
-        {
-            Labels.RemoveIfExists(message.Label);
-            return Task.CompletedTask;
-        }
-
-        ~LabelsEditor()
-        {
-            EventAggregator?.Unsubscribe(this);
         }
     }
 }

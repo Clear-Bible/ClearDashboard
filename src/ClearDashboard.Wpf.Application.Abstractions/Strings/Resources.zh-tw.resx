@@ -416,7 +416,7 @@
     <value>數數</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按地面文本計數</value>
+    <value>按表面文本計數</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通過培訓文本計數</value>
@@ -452,7 +452,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞密性的單詞</value>
+    <value>樞紐的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -614,7 +614,7 @@
     <value>刪除“ {0}”的對齊？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>刪除所有對齊方式？</value>
+    <value>刪除所有路線？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多個對齊定義。單擊'{1}'將刪除所有對齊。</value>
@@ -659,7 +659,7 @@
     <value>顯示視圖控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>拆分令牌</value>
+    <value>分開令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>將拆分應用於其他令牌</value>
@@ -842,7 +842,7 @@
     <value>更改所有不設置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果檢查了，這將改變此詞的所有不設置的情況</value>
+    <value>如果檢查了，這將改變此詞的所有不設置</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -962,7 +962,7 @@
     <value>查找具有與目標匹配的一個或多個翻譯的詞彙</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>導入檢查</value>
+    <value>進口檢查</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme或形式匹配</value>
@@ -1439,7 +1439,7 @@
     <value>將此註釋發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象徵化的語料庫</value>
+    <value>令牌化語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1547,7 +1547,7 @@
     <value>更改內容的縮放級別</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顧問Notes</value>
+    <value>顧問說明</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
@@ -1727,7 +1727,7 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>PARATEXT BETA未運行</value>
+    <value>paratext beta不運行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
     <value>取消...</value>
@@ -1772,7 +1772,7 @@
     <value>導入服務器項目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>選中此框，以在創建項目時包括希臘語和希伯來語聖經文本。</value>
+    <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希臘聖經文本？</value>
@@ -2131,6 +2131,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>啟用對齊編輯</value>
   </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>啟用詞典進口</value>
+  </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>啟用令牌分裂</value>
   </data>
@@ -2219,7 +2222,7 @@
     <value>發行說明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>顯示預發行</value>
+    <value>顯示預釋放</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>

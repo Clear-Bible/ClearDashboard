@@ -528,10 +528,11 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             // configure Serilog
+            // set to 150 MB limit on file size
             var log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Debug()
-                .WriteTo.File(fullPath, rollingInterval: RollingInterval.Day)
+                .WriteTo.File(fullPath, rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 104857600, rollOnFileSizeLimit: true, retainedFileCountLimit: 15)
                 .CreateLogger();
             // set instance to global logger
             Log.Logger = log;
