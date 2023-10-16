@@ -903,7 +903,10 @@ namespace ClearDashboard.Wpf.Application.Services
             LabelSuggestions = await GetLabelSuggestionsAsync();
             NoneLabelGroup.Labels = LabelSuggestions;
             LabelGroups = await GetLabelGroupsAsync();
-            DefaultLabelGroup = await GetUserDefaultLabelGroupAsync();
+
+            // For the hotfix only; do not merge to DEV.
+            //DefaultLabelGroup = await GetUserDefaultLabelGroupAsync();
+            DefaultLabelGroup = NoneLabelGroup;
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
