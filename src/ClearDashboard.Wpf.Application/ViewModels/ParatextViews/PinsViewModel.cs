@@ -1349,8 +1349,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     try
                     {
                         // look for full word and case sensitive
-                        var pattern = new Regex(@"\b" + puncLessWord + @"\b");
-                        var matchResults = pattern.Match(verseText);
+                        var pattern = new Regex(@"\b" + puncLessWord.ToUpper() + @"\b");
+                        var matchResults = pattern.Match(verseText.ToUpper());
                         while (matchResults.Success)
                         {
                             // matched text: matchResults.Value
