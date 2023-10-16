@@ -108,7 +108,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Identifies the CurrentLabelGroup dependency property.
         /// </summary>
-        public static readonly DependencyProperty CurrentLabelGroupProperty = DependencyProperty.Register(nameof(CurrentLabelGroup), typeof(LabelGroupViewModel), typeof(LabelsEditor));
+        public static readonly DependencyProperty CurrentLabelGroupProperty = DependencyProperty.Register(nameof(CurrentLabelGroup), typeof(LabelGroupViewModel), typeof(LabelsEditor),
+            new PropertyMetadata(null, OnCurrentLabelGroupChanged));
+
+        private static void OnCurrentLabelGroupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as LabelsEditor;
+            if (control != null)
+            {
+                control.LabelSuggestions = control.CurrentLabelGroup.Labels;
+            }
+        }
 
         /// <summary>
         /// Identifies the CurrentUserId dependency property.
