@@ -220,28 +220,21 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             EventAggregator?.Unsubscribe(this);
         }
 
+        private void RefreshLabels()
+        {
+            OnPropertyChanged(nameof(Labels));
+            Labels.Refresh();
+        }
+
         public async Task HandleAsync(NoteLabelDetachedMessage message, CancellationToken cancellationToken)
         {
-            void RemoveLabel()
-            {
-                Labels.RemoveIfExists(message.Label);
-                OnPropertyChanged(nameof(Labels));
-                Labels.Refresh();
-            }
-            Execute.OnUIThread(RemoveLabel);
-
+            Execute.OnUIThread(RefreshLabels);
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(NoteLabelAttachedMessage message, CancellationToken cancellationToken)
         {
-            void AddLabel()
-            {
-                Labels.AddDistinct(message.Label);
-                OnPropertyChanged(nameof(Labels));
-                Labels.Refresh();
-            }
-            Execute.OnUIThread(AddLabel);
+            Execute.OnUIThread(RefreshLabels);
 
             await Task.CompletedTask;
         }

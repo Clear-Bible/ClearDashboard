@@ -40,25 +40,25 @@ namespace ClearDashboard.Wpf.Application.Collections.Notes
             throw new NotImplementedException();
         }
 
-        public void Replace(string labelText, Label newLabel)
+        public void Replace(string labelText, Label newLabel, bool addIfNotExists = false)
         {
             var existing = GetMatchingLabel(labelText);
-            if (existing != null)
+            if (existing != null && existing.LabelId != newLabel.LabelId)
             {
                 Items.Insert(Items.IndexOf(existing), newLabel);
                 Items.Remove(existing);
             }
-            else
+            else if (addIfNotExists)
             {
                 Items.Add(newLabel);
             }
         }
 
-        public void Replace(Label label)
+        public void Replace(Label label, bool addIfNotExists = false)
         {
             if (!string.IsNullOrWhiteSpace(label.Text))
             {
-                Replace(label.Text, label);
+                Replace(label.Text, label, addIfNotExists);
             }
         }
 
