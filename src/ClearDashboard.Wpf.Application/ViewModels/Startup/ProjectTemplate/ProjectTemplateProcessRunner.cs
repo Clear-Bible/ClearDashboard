@@ -33,6 +33,7 @@ using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using BookInfo = ClearDashboard.DataAccessLayer.Models.BookInfo;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using ParatextProjectMetadata = ClearDashboard.DataAccessLayer.Models.ParatextProjectMetadata;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 {
@@ -697,7 +698,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Name = MaculaCorporaNames.HebrewCorpusName,
                     CorpusType = corpusType,
                     FontFamily = DataAccessLayer.FontNames.HebrewFontFamily,
-                    LanguageName = "Hebrew" // FIXME:  shouldn't this be bcp-47 code?
+                    LanguageId = ManuscriptIds.HebrewManuscriptLanguageId
                 };
                 languageCode = LanguageCodeEnum.H;
             }
@@ -709,7 +710,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Name = MaculaCorporaNames.GreekCorpusName,
                     CorpusType = corpusType,
                     FontFamily = DataAccessLayer.FontNames.GreekFontFamily,
-                    LanguageName = "Greek" // FIXME:  shouldn't this be bcp-47 code?
+                    LanguageId = ManuscriptIds.GreekManuscriptLanguageId
                 };
                 languageCode = LanguageCodeEnum.G;
             }
@@ -752,7 +753,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 mediator: Mediator!,
                 IsRtl: false,
                 Name: metadata.Name!,
-                Language: metadata.LanguageName!,
+                Language: metadata.LanguageId!,
                 CorpusType: metadata.CorpusType.ToString(),
                 ParatextId: metadata.Id!,
                 token: cancellationToken);
@@ -812,7 +813,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     IsRtl: metadata.IsRtl,
                     FontFamily: metadata.FontFamily,
                     Name: metadata.Name!,
-                    Language: metadata.LanguageName!,
+                    Language: metadata.LanguageId!,
                     CorpusType: metadata.CorpusTypeDisplay,
                     ParatextId: metadata.Id!,
                     token: cancellationToken);

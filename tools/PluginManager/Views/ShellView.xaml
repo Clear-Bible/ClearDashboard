@@ -12,7 +12,6 @@
     d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
     Background="{DynamicResource MaterialDesignPaper}"
-    FontFamily="{StaticResource ClearDashboardFont}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
