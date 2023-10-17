@@ -221,6 +221,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             try
             {
                 DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
+
+                // throw out any DesignSurfaceViewModels that are not the one connected to the ProjectDesignSurfaceViewModel
+                // this is to prevent the double hits that were coming through after a user uses the Project Template Wizard
+                // which spawns off a new DesignSurfaceViewModel so we have double versions of it floating around
                 DesignSurfaceViewModel.CorrectGuid = DesignSurfaceViewModel.Guid;
             }
             catch (Exception ex)
@@ -423,7 +427,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
-                    DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
+                    //DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
 
 
                     foreach (var parallelCorpusId in topLevelProjectIds.ParallelCorpusIds)

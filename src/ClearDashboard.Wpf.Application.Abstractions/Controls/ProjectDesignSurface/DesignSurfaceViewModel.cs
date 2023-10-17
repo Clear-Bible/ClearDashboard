@@ -1511,12 +1511,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
+            // throw out any DesignSurfaceViewModels that are not the one connected to the ProjectDesignSurfaceViewModel
+            // this is to prevent the double hits that were coming through after a user uses the Project Template Wizard
+            // which spawns off a new DesignSurfaceViewModel so we have double versions of it floating around
             if (this.Guid != CorrectGuid)
             {
                 return;
             }
-
-
 
             Debug.WriteLine($"DesignSurfaceViewModel GUID: {Guid.ToString()}");
 
