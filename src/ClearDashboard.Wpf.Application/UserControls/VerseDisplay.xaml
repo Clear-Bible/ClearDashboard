@@ -5,6 +5,7 @@
     FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -14,7 +15,7 @@
 
     <UserControl.Resources>
         <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
-
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <DataTemplate x:Key="SourceTokenDisplay">
             <userControls:TokenDisplay
                 HorizontalAlignment="Left"
@@ -224,6 +225,35 @@
     </UserControl.Resources>
 
     <StackPanel Orientation="Vertical">
+        <Button Content="i" 
+                Width="20px"
+                Height="20px"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
+            <Button.ToolTip>
+                <ToolTip
+                    Background="LightYellow"
+                    HasDropShadow="false"
+                    HorizontalOffset="10"
+                    Placement="Left"
+                    PlacementRectangle="50,0,0,0"
+                    VerticalOffset="20">
+                    <StackPanel Orientation="Vertical">
+                        <ListView ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.ExternalNotes)}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="{Binding VersePlainText}" />
+                                        <controls:ExtendedPropertiesTreeView
+                                            x:Name="ExternalNoteBodyTreeViewName"
+                                            ExtendedPropertiesXml="{Binding Body}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
         <TextBlock
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
             Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitlePadding}"

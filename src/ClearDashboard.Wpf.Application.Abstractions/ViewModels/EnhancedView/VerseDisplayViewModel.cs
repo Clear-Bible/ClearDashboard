@@ -70,6 +70,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private BindableCollection<ExternalNote> _externalNotes = new();
+        public BindableCollection<ExternalNote> ExternalNotes
+        {
+            get => _externalNotes;
+            set
+            {
+                Set(ref _externalNotes, value);
+                NotifyOfPropertyChange(nameof(ExternalNotes));
+            }
+        }
+
+        public bool HasExternalNotes => ExternalNotes.Count() > 0;
+
+        public void NotifyExternalNotesItemsChanged()
+        {
+            NotifyOfPropertyChange(nameof(ExternalNotes));
+            NotifyOfPropertyChange(nameof(HasExternalNotes));
+        }
         public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
         public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
 
@@ -116,6 +134,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public virtual void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
             List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
         {
+            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, sourceTokenizedCorpusNotes);
+            if (targetTokenizedCorpusNotes != null)
+                SetExternalNotesOnTokenDisplayViewModels(TargetTokenDisplayViewModels, targetTokenizedCorpusNotes);
         }
         protected void SetExternalNotesOnTokenDisplayViewModels(TokenDisplayViewModelCollection tokenDisplayViewModels, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> noteInfos)
         {
@@ -127,12 +148,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     .ToList();
                 if (externalNotes != null && externalNotes.Count() > 0)
                 {
-                    tokenDisplayViewModel.ExternalNotes = externalNotes;
+                    tokenDisplayViewModel.ExternalNotes.Clear();
+                    tokenDisplayViewModel.ExternalNotes.AddRange(externalNotes);
+                    tokenDisplayViewModel.NotifyExternalNotesItemsChanged();
                 }
                 else
                 {
-                    tokenDisplayViewModel.ExternalNotes = null;
+                    if (tokenDisplayViewModel.ExternalNotes.Count() > 0)
+                    {
+                        tokenDisplayViewModel.ExternalNotes.Clear();
+                        tokenDisplayViewModel.NotifyExternalNotesItemsChanged();
+                    }
                 }
+                
             }
         }
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)

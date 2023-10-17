@@ -50,10 +50,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             SourceTokenMap = new TokenMap(tokens, corpus);
         }
-        public override void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
-            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
-        {
-            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, sourceTokenizedCorpusNotes);
-        }
     }
 }

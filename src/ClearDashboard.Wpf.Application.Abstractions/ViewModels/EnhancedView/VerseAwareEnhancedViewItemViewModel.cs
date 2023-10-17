@@ -253,12 +253,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                         Execute.OnUIThread(() =>
                         {
-                            //update the UI with verse-level external notes.
-
-
-
-
-                            // update the tokenDisplayViewModels with notes associated with them.
                             foreach (var verseDisplayViewModel in Verses)
                             {
                                 verseDisplayViewModel.SetExternalNotes(tokenizedCorpusNotes.First(), tokenizedCorpusNotes.Skip(1).FirstOrDefault());

@@ -271,7 +271,7 @@ namespace ClearDashboard.Wpf.Application.Services
                                 else
                                 {
                                     var task = GetNotesForChapterFromExternalAsync(mediator, ttcid, vr.BookNum, vr.ChapterNum, logger, cancellationToken);
-                                    task.Wait();
+                                    task.Wait(cancellationToken);
                                     externalNotes = task.Result;
                                     chapterToExternalNotesMap.Add(chapter, externalNotes);
                                     return externalNotes
