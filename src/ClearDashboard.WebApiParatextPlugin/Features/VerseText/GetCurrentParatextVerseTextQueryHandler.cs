@@ -57,7 +57,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
             if (string.IsNullOrEmpty(verseText))
             {
                 result.Data.Name = "Verse Get";
-                result.Message = "No Verse Data";
+                result.Message = $"No Verse Data in B:{request.BookNum} C:{request.ChapterNum} V:{request.VerseNum} for project {_mainWindow.Project.ShortName}";
                 result.Success = false;
             }
 
