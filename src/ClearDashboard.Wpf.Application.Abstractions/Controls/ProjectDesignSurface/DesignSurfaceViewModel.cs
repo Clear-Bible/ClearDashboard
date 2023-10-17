@@ -46,6 +46,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     public partial class DesignSurfaceViewModel : Screen, IHandle<BackgroundDeletionTaskRunning>
     {
 
+        public Guid Guid = Guid.NewGuid();
+
         #region Internal Data Members
 
         /// <summary>
@@ -222,6 +224,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 return _connections;
             }
         }
+
+        public Guid CorrectGuid { get; set; }
 
 
         #region ctor
@@ -1507,6 +1511,16 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
+            if (this.Guid != CorrectGuid)
+            {
+                return;
+            }
+
+
+
+            Debug.WriteLine($"DesignSurfaceViewModel GUID: {Guid.ToString()}");
+
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (parallelCorpusConnectorDraggedOver == null)
             {

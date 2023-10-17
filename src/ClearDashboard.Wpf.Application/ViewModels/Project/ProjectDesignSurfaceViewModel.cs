@@ -221,6 +221,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             try
             {
                 DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
+                DesignSurfaceViewModel.CorrectGuid = DesignSurfaceViewModel.Guid;
             }
             catch (Exception ex)
             {
@@ -422,7 +423,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
-                    //DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
+                    DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
 
 
                     foreach (var parallelCorpusId in topLevelProjectIds.ParallelCorpusIds)

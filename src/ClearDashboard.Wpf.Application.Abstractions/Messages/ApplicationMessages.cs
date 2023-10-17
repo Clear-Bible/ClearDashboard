@@ -35,6 +35,8 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record UserMessage(User User);
     public record DashboardProjectNameMessage(string ProjectName);
 
+    public record LoadProjectTemplateWizardProject(string? projectPath);
+
     public record DashboardProjectPermissionLevelMessage(PermissionLevel PermissionLevel);
 
     public record FilterPinsMessage(string Message, XmlSource XmlSource = XmlSource.All);

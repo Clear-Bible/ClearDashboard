@@ -14,12 +14,12 @@
     xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="500"
-    FontFamily="{StaticResource ClearDashboardFont}"
     d:DataContext="{d:DesignInstance Type=project:ReadonlyProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="500"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
 
     <UserControl.Resources>

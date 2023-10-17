@@ -357,8 +357,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 ProjectManager!.PauseDenormalization = false;
 
 
-                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
+                //await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
 
+                var projectName = ProjectManager!.CurrentDashboardProject.ProjectName;
+                var projectPath = ProjectManager!.CurrentDashboardProject.FullFilePath;
+                ProjectManager.CurrentDashboardProject = new();
+                //await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(projectName));
+
+                await EventAggregator.PublishOnCurrentThreadAsync(new LoadProjectTemplateWizardProject(projectPath));
                 stopwatch.Stop();
 
                 // turn back on the ability to go into screen saver mode
