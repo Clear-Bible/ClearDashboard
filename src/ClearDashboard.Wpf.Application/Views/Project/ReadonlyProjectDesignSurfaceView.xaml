@@ -599,13 +599,7 @@
                             <controls:ProjectDesignSurface
                                 x:Name="ProjectDesignSurface"
                                 cm:Action.TargetWithoutContext="{Binding ElementName=ProjectDesignSurface, Path=DataContext.DesignSurfaceViewModel}"
-                                cm:Message.Attach="[Event NodeDragCompleted] = [Action OnCorpusNodeDragCompleted($this,$eventArgs)];                                                    [Event ConnectionDragCompleted] = [Action OnParallelCorpusConnectionDragCompleted($this, $eventArgs)];                                                    [Event ConnectionDragStarted] = [Action OnParallelCorpusConnectionDragStarted($this, $eventArgs)];                                                    [Event QueryConnectionFeedback] = [Action OnProjectDesignSurfaceQueryConnectionFeedback($this, $eventArgs)];"
-                                ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
                                 ConnectionsSource="{Binding Path=DesignSurfaceViewModel.ParallelCorpusConnections}"
-                                MouseDown="OnDesignSurfaceMouseDown"
-                                MouseMove="OnDesignSurfaceMouseMove"
-                                MouseUp="OnDesignSurfaceMouseUp"
-                                MouseWheel="OnMouseWheel"
                                 NodesSource="{Binding DesignSurfaceViewModel.CorpusNodes}" />
 
 

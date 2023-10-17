@@ -204,6 +204,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             await BackgroundTasksViewModel.DeactivateAsync(true);
+
+            await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
+
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -353,12 +356,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 ProjectManager!.PauseDenormalization = false;
 
+
                 await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
 
                 stopwatch.Stop();
 
                 // turn back on the ability to go into screen saver mode
                 Prevent_ScreenSaver(false);
+
+                //ParentViewModel.Ok();
             }
         }
 
