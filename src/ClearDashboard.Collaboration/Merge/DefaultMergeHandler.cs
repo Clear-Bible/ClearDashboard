@@ -150,11 +150,11 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
         }
     }
 
-    protected virtual async Task<Dictionary<string, object>> HandleDeleteAsync(T itemToDelete, CancellationToken cancellationToken)
+    protected virtual async Task<Dictionary<string, object?>> HandleDeleteAsync(T itemToDelete, CancellationToken cancellationToken)
     {
         var modelSnapshot = (IModelSnapshot)itemToDelete;
 
-        var where = new Dictionary<string, object>() { { modelSnapshot.IdentityKey, modelSnapshot.GetId() } };
+        var where = new Dictionary<string, object?>() { { modelSnapshot.IdentityKey, modelSnapshot.GetId() } };
         return await _mergeContext.MergeBehavior.DeleteModelAsync(modelSnapshot, where, cancellationToken);
 
         //// If deleting a parent, need to first delete all its children
@@ -220,7 +220,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 //    throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality for retrieving where clause values");
                 //}
 
-                var where = new Dictionary<string, object>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
+                var where = new Dictionary<string, object?>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
                 await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
 
                 return true;

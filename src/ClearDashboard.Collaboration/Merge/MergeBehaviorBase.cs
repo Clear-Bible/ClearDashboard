@@ -80,15 +80,12 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     public virtual async Task MergeEndAsync(CancellationToken cancellationToken) { await Task.CompletedTask; }
     public virtual async Task MergeErrorAsync(CancellationToken cancellationToken) { await Task.CompletedTask; }
 
-    public abstract Task<Dictionary<string, object>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object> where, CancellationToken cancellationToken);
+    public abstract Task<Dictionary<string, object?>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object?> where, CancellationToken cancellationToken);
+    public abstract Task<Dictionary<string, object?>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object?> where, CancellationToken cancellationToken);
 
     public abstract void StartInsertModelCommand(IModelSnapshot itemToCreate);
     public abstract Task<Guid> RunInsertModelCommand(IModelSnapshot itemToCreate, CancellationToken cancellationToken);
     public abstract void CompleteInsertModelCommand(Type entityType);
-
-    public abstract Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken);
-    public abstract Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken);
-    public abstract Task<int> DeleteEntityValuesAsync(Type entityType, Dictionary<string, object?> whereClause, CancellationToken cancellationToken);
 
     public abstract Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default);
     public abstract Task RunDbConnectionQueryAsync(string description, DbConnectionMergeQueryAsync query, CancellationToken cancellationToken = default);
@@ -196,10 +193,10 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         return identityPropertyValue;
     }
 
-    protected async Task<Dictionary<string, object>> ResolveWhereClauseAsync(Dictionary<string, object> where, IModelSnapshot modelSnapshot)
+    protected async Task<Dictionary<string, object?>> ResolveWhereClauseAsync(Dictionary<string, object?> where, IModelSnapshot modelSnapshot)
     {
         var entityType = modelSnapshot.EntityType;
-        var resolvedValues = new Dictionary<string, object>();
+        var resolvedValues = new Dictionary<string, object?>();
 
         var whereColumns = where.Keys
             .SelectMany(key =>
@@ -218,7 +215,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             else if (_entityValueResolvers.TryGetValue((entityType, key), out var resolver))
             {
                 var resolvedValue = await RunEntityValueResolverAsync(modelSnapshot, key, resolver);
-                resolvedValues[key] = resolvedValue ?? DBNull.Value;
+                resolvedValues[key] = resolvedValue;
             }
             else
             {
@@ -230,19 +227,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         return resolvedValues;
     }
 
-    public Type ResolveTableName(Type entityType, Dictionary<string, object?> whereClause)
-    {
-        var tableType = entityType;
-        if (_discriminatorMappings.TryGetValue(entityType, out var mapping))
-        {
-            tableType = mapping.TableEntityType;
-            whereClause.Add(mapping.DiscriminatorColumnName, mapping.DiscriminatorColumnValue);
-        }
-
-        return tableType;
-    }
-
-    protected async Task<DbCommand> CreateModelSnapshotUpdateCommand(DbConnection connection, IModelDifference modelDifference, IModelSnapshot modelSnapshot, Dictionary<string, object> resolvedWhereClause)
+    protected async Task<DbCommand> CreateModelSnapshotUpdateCommand(DbConnection connection, IModelDifference modelDifference, IModelSnapshot modelSnapshot, Dictionary<string, object?> resolvedWhereClause)
     {
         var entityType = modelSnapshot.EntityType;
 
@@ -259,11 +244,17 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
         var command = connection.CreateCommand();
 
-        var tableType = _discriminatorMappings.TryGetValue(entityType, out var mapping)
-            ? mapping.TableEntityType
-            : entityType;
+        var tableType = entityType;
+        if (_discriminatorMappings.TryGetValue(entityType, out var mapping))
+        {
+            tableType = mapping.TableEntityType;
+            resolvedWhereClause[mapping.DiscriminatorColumnName] = mapping.DiscriminatorColumnValue;
+        }
 
-        DataUtil.ApplyColumnsToUpdateCommand(command, tableType, columns, resolvedWhereClause.Keys.ToArray());
+        var whereColumns = DataUtil.ExtractWhereColumns(resolvedWhereClause);
+        var whereInColumns = DataUtil.ExtractWhereInColumns(resolvedWhereClause);
+
+        DataUtil.ApplyColumnsToUpdateCommand(command, tableType, columns, whereColumns, whereInColumns);
 
         try
         {
@@ -274,7 +265,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             throw new PropertyResolutionException($"Entity type '{entityType}' had following error when trying to prepare DbCommand: {ex.Message}");
         }
 
-        resolvedWhereClause.ToList().ForEach(kvp => command.Parameters[$"@{kvp.Key}"].Value = kvp.Value);
+        DataUtil.AddWhereClauseParameterValues(command, resolvedWhereClause);
 
         await ApplyPropertyModelDifferencesToCommand(command, modelDifference, modelSnapshot);
         await ApplyPropertyValueDifferencesToCommand(command, modelDifference, modelSnapshot);
@@ -374,21 +365,32 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
     }
 
-    protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, Type entityType, Dictionary<string, object> resolvedWhereClause)
+    protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, Type entityType, Dictionary<string, object?> resolvedWhereClause)
     {
         var command = connection.CreateCommand();
 
-        var whereColumns = resolvedWhereClause.Keys;
-        var tableType = _discriminatorMappings.TryGetValue(entityType, out var mapping)
-            ? mapping.TableEntityType
-            : entityType;
+        var tableType = entityType;
+        if (_discriminatorMappings.TryGetValue(entityType, out var mapping))
+        {
+            tableType = mapping.TableEntityType;
+            resolvedWhereClause[mapping.DiscriminatorColumnName] = mapping.DiscriminatorColumnValue;
+        }
 
-        DataUtil.ApplyColumnsToDeleteCommand(command, tableType, whereColumns.ToArray());
+        var whereColumns = DataUtil.ExtractWhereColumns(resolvedWhereClause);
+        var whereInColumns = DataUtil.ExtractWhereInColumns(resolvedWhereClause);
 
-        command.Prepare();
-        resolvedWhereClause
-            .ToList()
-            .ForEach(kvp => command.Parameters[$"@{kvp.Key}"].Value = kvp.Value);
+        DataUtil.ApplyColumnsToDeleteCommand(command, tableType, whereColumns, whereInColumns);
+
+        try
+        {
+            command.Prepare();
+        }
+        catch (Exception ex)
+        {
+            throw new PropertyResolutionException($"Entity type '{entityType}' had following error when trying to prepare DbCommand: {ex.Message}");
+        }
+
+        DataUtil.AddWhereClauseParameterValues(command, resolvedWhereClause);
 
         return command;
     }

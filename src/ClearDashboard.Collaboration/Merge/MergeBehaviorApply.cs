@@ -76,17 +76,39 @@ public class MergeBehaviorApply : MergeBehaviorBase
         }
     }
 
-    public override async Task<Dictionary<string, object>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object> where, CancellationToken cancellationToken)
+    public override async Task<Dictionary<string, object?>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object?> where, CancellationToken cancellationToken)
     {
         if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
-        var id = string.Join(", ", where);
 
         var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToDelete);
-        var command = CreateModelSnapshotDeleteCommand(_connection, itemToDelete.EntityType, resolvedWhereClause);
+        await using var command = CreateModelSnapshotDeleteCommand(_connection, itemToDelete.EntityType, resolvedWhereClause);
 
-        _logger.LogInformation($"Executing delete query for model type '{itemToDelete.EntityType.ShortDisplayName()}' having id '{id}'");
+        _logger.LogDebug($"Executing delete query for model type '{itemToDelete.EntityType.ShortDisplayName()}' having parameter values:");
+        foreach (DbParameter p in command.Parameters)
+        {
+            _logger.LogDebug($"Parameter name {p.ParameterName}, value {p.Value}");
+        }
 
-        await Task.CompletedTask;
+        _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+        return resolvedWhereClause;
+    }
+
+    public override async Task<Dictionary<string, object?>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object?> where, CancellationToken cancellationToken)
+    {
+        if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
+
+        var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToModify);
+        using var command = await CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
+
+        _logger.LogDebug($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having parameter values:");
+        foreach (DbParameter p in command.Parameters)
+        {
+            _logger.LogDebug($"Parameter name {p.ParameterName}, value {p.Value}");
+        }
+
+        // FIXME:  what type of exception is thrown if the where clause doesn't match any
+        // record in the database?  Propbably log the details but continue?
         _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
         return resolvedWhereClause;
@@ -135,55 +157,6 @@ public class MergeBehaviorApply : MergeBehaviorBase
 
         _insertCommandsByType[modelType].Dispose();
         _insertCommandsByType.Remove(modelType);
-    }
-
-    public override async Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken)
-    {
-        if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
-        var id = string.Join(", ", where);
-
-        var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToModify);
-        using var command = await CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
-
-        _logger.LogDebug($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having id '{id}'");
-
-        foreach (DbParameter p in command.Parameters)
-        {
-            _logger.LogDebug($"Parameter name {p.ParameterName}, value {p.Value}");
-        }
-
-        await Task.CompletedTask;
-
-        // FIXME:  what type of exception is thrown if the where clause doesn't match any
-        // record in the database?  Propbably log the details but continue?
-        _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-
-        return resolvedWhereClause;
-    }
-
-    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
-    {
-        var tableType = ResolveTableName(entityType, whereClause);
-
-        return await DataUtil.SelectEntityValuesAsync(
-            _connection, 
-            tableType, 
-            selectColumns, 
-            whereClause,
-            joins,
-            useNotIndexedInFromClause, 
-            cancellationToken);
-    }
-
-    public override async Task<int> DeleteEntityValuesAsync(Type entityType, Dictionary<string, object?> whereClause, CancellationToken cancellationToken)
-    {
-        var tableType = ResolveTableName(entityType, whereClause);
-
-        return await DataUtil.DeleteEntityValuesAsync(
-            _connection,
-            tableType,
-            whereClause,
-            cancellationToken);
     }
 
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)

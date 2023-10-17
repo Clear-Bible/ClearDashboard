@@ -9,6 +9,8 @@ using ClearDashboard.DAL.Alignment.Features.Common;
 using System.Data.Common;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge
 {
@@ -30,13 +32,10 @@ namespace ClearDashboard.Collaboration.Merge
 
             await InsertDenormalizationTasks(alignmentSetDenormalizationTasks, cancellationToken);
 
-            await DataUtil.DeleteEntityValuesAsync(
+            await DataUtil.DeleteIdentifiableEntityAsync(
                 dbConnection,
                 TokenCompositeHandler.TABLE_ENTITY_TYPE,
-                new() {
-                    { nameof(Models.TokenComponent.Id), tokenCompositeIds },
-                    { TokenCompositeHandler.DISCRIMINATOR_COLUMN_NAME, TokenCompositeHandler.DISCRIMINATOR_COLUMN_VALUE }
-                },
+                tokenCompositeIds,
                 cancellationToken);
         }
 

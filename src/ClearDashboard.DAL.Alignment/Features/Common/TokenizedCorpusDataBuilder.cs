@@ -136,9 +136,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         {
             var command = connection.CreateCommand();
             var columns = new string[] { "OriginalText", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "Modified" };
-            var whereColumns = new string[] { "Id" };
+            var whereColumns = new (string, DataUtil.WhereEquality)[] { ("Id", DataUtil.WhereEquality.Equals) };
 
-            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.VerseRow), columns, whereColumns);
+            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.VerseRow), columns, whereColumns, Array.Empty<(string, int)>());
 
             command.Prepare();
 
@@ -317,9 +317,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         {
             var command = connection.CreateCommand();
             var columns = new string[] { "TokenCompositeId" };
-            var whereColumns = new string[] { "Id" };
+            var whereColumns = new (string, DataUtil.WhereEquality)[] { ("Id", DataUtil.WhereEquality.Equals) };
 
-            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.TokenComponent), columns, whereColumns);
+            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.TokenComponent), columns, whereColumns, Array.Empty<(string, int)>());
 
             command.Prepare();
 

@@ -34,12 +34,22 @@ public class MergeBehaviorLogOnly : MergeBehaviorBase
         _logger.LogInformation("Rolling back transaction");
     }
 
-    public override async Task<Dictionary<string, object>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object> where, CancellationToken cancellationToken)
+    public override async Task<Dictionary<string, object?>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object?> where, CancellationToken cancellationToken)
     {
         await Task.CompletedTask;
 
         var id = string.Join(", ", where);
         _logger.LogInformation($"HARD DELETING:  '{itemToDelete.EntityType.ShortDisplayName()}' item having id '{id}'");
+
+        return where;
+    }
+
+    public override async Task<Dictionary<string, object?>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object?> where, CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+
+        var id = string.Join(", ", where);
+        _logger.LogInformation($"MODIFYING:  '{itemToModify.EntityType.ShortDisplayName()}' item having id '{id}'");
 
         return where;
     }
@@ -59,36 +69,6 @@ public class MergeBehaviorLogOnly : MergeBehaviorBase
     public override void CompleteInsertModelCommand(Type modelType)
     {
         _logger.LogInformation($"Completing INSERT:  '{modelType.ShortDisplayName()}'");
-    }
-
-    public override async Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken)
-    {
-        await Task.CompletedTask;
-
-        var id = string.Join(", ", where);
-        _logger.LogInformation($"MODIFYING:  '{itemToModify.EntityType.ShortDisplayName()}' item having id '{id}'");
-
-        return where;
-    }
-
-    public override async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(Type entityType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
-    {
-        await Task.CompletedTask;
-
-        var whereItems = string.Join(", ", whereClause);
-        _logger.LogInformation($"Getting Ids for :  '{entityType.ShortDisplayName()}' where: '{whereItems}'");
-
-        return Enumerable.Empty<Dictionary<string, object?>>();
-    }
-
-    public override async Task<int> DeleteEntityValuesAsync(Type entityType, Dictionary<string, object?> whereClause, CancellationToken cancellationToken)
-    {
-        await Task.CompletedTask;
-
-        var whereItems = string.Join(", ", whereClause);
-        _logger.LogInformation($"Deleting Ids for :  '{entityType.ShortDisplayName()}' where: '{whereItems}'");
-
-        return 0;
     }
 
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)

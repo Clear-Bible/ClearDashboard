@@ -98,7 +98,7 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
         }
     }
 
-    protected override async Task<Dictionary<string, object>> HandleDeleteAsync(IModelSnapshot<Models.VerseRow> itemToDelete, CancellationToken cancellationToken)
+    protected override async Task<Dictionary<string, object?>> HandleDeleteAsync(IModelSnapshot<Models.VerseRow> itemToDelete, CancellationToken cancellationToken)
     {
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"Deleting any TokenComposites related by Token to VerseRow BookChapterVerse: '{itemToDelete.GetId()}'",
@@ -141,7 +141,7 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
 
         if (modelMergeResult == ModelMergeResult.ShouldMerge)
         {
-            var where = new Dictionary<string, object>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
+            var where = new Dictionary<string, object?>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
             var resolvedWhereClause = await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
 
             if (modelDifference.PropertyDifferences.Where(pd => pd.PropertyName == nameof(Models.VerseRow.OriginalText)).Any())

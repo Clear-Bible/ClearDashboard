@@ -173,7 +173,7 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
         }
     }
 
-    protected override async Task<Dictionary<string, object>> HandleDeleteAsync(IModelSnapshot<Models.Token> itemToDelete, CancellationToken cancellationToken)
+    protected override async Task<Dictionary<string, object?>> HandleDeleteAsync(IModelSnapshot<Models.Token> itemToDelete, CancellationToken cancellationToken)
     {
         // If deleting a Token that is associated with a composite...
         // my best guess is we should delete the composite since it
