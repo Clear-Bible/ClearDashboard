@@ -242,10 +242,11 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
-                                        <Label Content="{Binding VersePlainText}" />
+                                        <Label Content="{Binding Message}" />
                                         <controls:ExtendedPropertiesTreeView
-                                            x:Name="ExternalNoteBodyTreeViewName"
-                                            ExtendedPropertiesXml="{Binding Body}" />
+                                            x:Name="ExternalNoteBodyVerseTreeViewName"
+                                            ExtendedPropertiesXml="{Binding Body}"
+                                            IsExpanded="False"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

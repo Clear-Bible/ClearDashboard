@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -13,6 +14,7 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
@@ -23,6 +25,7 @@ namespace ClearDashboard.Wpf.Application.Services
 {
     public class ExternalNoteManager
     {
+        private readonly IEventAggregator _eventAggregator;
 
         /// <summary>
         /// Gets relevant External drafting tool project information for the entities associated with a note.
@@ -212,6 +215,12 @@ namespace ClearDashboard.Wpf.Application.Services
 
         private Dictionary<string, Dictionary<Chapter, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>>>  ExternalProjectIdToChapterToExternalNotesMap { get; set; } = new();
 
+        public ExternalNoteManager(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -295,7 +304,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public bool InvalidateExternalNotesCache(TokenizedTextCorpusId? tokenizedTextCorpusId)
+        public async Task<bool> InvalidateExternalNotesCache(CorpusId? corpusId, CancellationToken cancellationToken = default)
         {
             bool obtainedLock = false;
             try
@@ -306,14 +315,14 @@ namespace ClearDashboard.Wpf.Application.Services
                     throw new EngineException("Couldn't obtain lock on cache within 60 seconds");
                 }
 
-                if (tokenizedTextCorpusId == null)
+                if (corpusId == null)
                 {
                     ExternalProjectIdToChapterToExternalNotesMap.Clear();
                     return true;
                 }
                 else
                 {
-                    return ExternalProjectIdToChapterToExternalNotesMap.Remove(tokenizedTextCorpusId?.CorpusId?.ParatextGuid
+                    return ExternalProjectIdToChapterToExternalNotesMap.Remove(corpusId?.ParatextGuid
                         ?? throw new InvalidStateEngineException(name: "tokenizedTextCorpus.CorpusId or ParatextGuid", value: "null"));
                 }
             }
@@ -323,6 +332,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     Monitor.Exit(ExternalProjectIdToChapterToExternalNotesMap);
                 }
+                await _eventAggregator.PublishOnUIThreadAsync(new ExternalNotesUpdatedMessage(corpusId), cancellationToken);
             }
         }
     }

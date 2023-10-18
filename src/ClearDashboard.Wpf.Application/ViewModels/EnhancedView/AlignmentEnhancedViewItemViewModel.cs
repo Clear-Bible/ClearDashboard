@@ -25,6 +25,9 @@ using ClearDashboard.DAL.ViewModels;
 using Alignment = ClearDashboard.DAL.Alignment.Translation.Alignment;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Token = ClearBible.Engine.Corpora.Token;
+using ClearBible.Engine.Exceptions;
+using SIL.Scripture;
+using SIL.Machine.Corpora;
 
 
 // ReSharper disable UnusedMember.Global
@@ -642,6 +645,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 { AlignmentTypes.Assigned_Invalid, LocalizationService.Get("BulkAlignmentReview_Invalid") },
                 { AlignmentTypes.Assigned_Unverified, LocalizationService.Get("BulkAlignmentReview_NeedsReview") },
             };
+        }
+
+        protected override IEnumerable<IRow> Rows
+        {
+            get
+            {
+                var verses = (EnhancedViewItemMetadatum as AlignmentEnhancedViewItemMetadatum)
+                    ?.ParallelCorpus
+                    ?.GetByVerseRange(
+                        new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()),
+                        (ushort)ParentViewModel.VerseOffsetRange,
+                        (ushort)ParentViewModel.VerseOffsetRange)
+                    ?? throw new InvalidDataEngineException(name: "metadata or parallelcorpus", value: "null");
+                return verses.parallelTextRows;
+            }
+        }
+        protected override List<TokenizedTextCorpusId> TokenizedTextCorpusIds
+        {
+            get
+            {
+                var metadatum = EnhancedViewItemMetadatum as AlignmentEnhancedViewItemMetadatum;
+                return new List<TokenizedTextCorpusId>()
+                {
+                    metadatum?.ParallelCorpus?.ParallelCorpusId?.SourceTokenizedCorpusId
+                        ?? throw new InvalidStateEngineException(name: "metadatum, metadatum.ParallelCorpus, or ParallelCorpusId", value: "null"),
+                    metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId
+                        ?? throw new InvalidStateEngineException(name: "metadatum, metadatum.ParallelCorpus, or ParallelCorpusId", value: "null")
+                };
+            }
         }
     }
 }

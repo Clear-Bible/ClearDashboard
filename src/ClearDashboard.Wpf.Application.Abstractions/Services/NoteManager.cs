@@ -918,7 +918,7 @@ namespace ClearDashboard.Wpf.Application.Services
             Logger = logger;
             Mediator = mediator;
             UserProvider = userProvider;
-            ExternalNoteManager = new ExternalNoteManager();
+            ExternalNoteManager = new ExternalNoteManager(EventAggregator);
 
             NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
 

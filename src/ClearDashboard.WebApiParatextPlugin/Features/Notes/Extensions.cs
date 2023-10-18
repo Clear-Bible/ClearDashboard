@@ -41,7 +41,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 SelectedPlainText = projectNote.Anchor.SelectedText,
                 IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
                 VerseRefString = verseRef.ToString(),
-                Body = SerializeNoteBodyXml(projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum)))
+                Body = SerializeNoteBodyXml(projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum))),
+                Message = projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum))
+                    .Comments
+                    .Aggregate("", (str, next) => $"{str}\n {next.Paragraphs.Aggregate("", (str, next) => $"{str},{next}")}, {next.Author}")
             };
         }
 
@@ -82,10 +85,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 
         private static string SerializeNoteBodyXml(Body body)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Body));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Body>));
             using (StringWriter textWriter = new StringWriter())
             {
-                xmlSerializer.Serialize(textWriter, body);
+                xmlSerializer.Serialize(textWriter, new List<Body> { body });
                 return textWriter.ToString();
             }
         }
