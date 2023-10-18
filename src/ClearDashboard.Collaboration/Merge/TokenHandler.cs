@@ -265,10 +265,11 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
         {
             if (otlSetsInCurrentDatabase.TryGetValue(otlDelete.Key, out var otlSetCurrentDatabase))
             {
-                var leftoverRefsInCurrentDatabase = otlSetCurrentDatabase.Except(otlDelete.Value);
+                var leftoverRefsInCurrentDatabase = otlSetCurrentDatabase
+                    .ExceptBy(otlDelete.Value.Select(e => e.RefValue), e => e.RefValue);
                 foreach (var leftoverRef in leftoverRefsInCurrentDatabase)
                 {
-                    var itemInCurrentSnapshot = currentChildren.FindById(leftoverRef);
+                    var itemInCurrentSnapshot = currentChildren.FindById(leftoverRef.Snapshot.GetId());
                     if (itemInCurrentSnapshot is not null)
                     {
                         await HandleDeleteAsync(itemInCurrentSnapshot, cancellationToken);
@@ -288,10 +289,11 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
                 otlSetTargetSnapshot.All(e => otlInsert.Value.Contains(e)) &&
                 otlSetsInCurrentDatabase.TryGetValue(otlInsert.Key, out var otlSetCurrentDatabase))
             {
-                var leftoverRefsInCurrentDatabase = otlSetCurrentDatabase.Except(otlSetTargetSnapshot);
+                var leftoverRefsInCurrentDatabase = otlSetCurrentDatabase
+                    .ExceptBy(otlSetTargetSnapshot.Select(e => e.RefValue), e => e.RefValue);
                 foreach (var leftoverRef in leftoverRefsInCurrentDatabase)
                 {
-                    var itemInCurrentSnapshot = currentChildren.FindById(leftoverRef);
+                    var itemInCurrentSnapshot = currentChildren.FindById(leftoverRef.Snapshot.GetId());
                     if (itemInCurrentSnapshot is not null)
                     {
                         await HandleDeleteAsync(itemInCurrentSnapshot, cancellationToken);
@@ -323,9 +325,11 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
                         }
 
                         var tokenCompositeIds = await FindTokenCompositeIds(dbConnection, tokenIds, cancellationToken);
-                        await DeleteComposites(dbConnection, tokenCompositeIds, cancellationToken);
-
-                        deletedTokenCompositeIds.AddRange(tokenCompositeIds);
+                        if (tokenCompositeIds.Any())
+                        {
+                            await DeleteComposites(dbConnection, tokenCompositeIds, cancellationToken);
+                            deletedTokenCompositeIds.AddRange(tokenCompositeIds);
+                        }
                     },
                     cancellationToken);
             }

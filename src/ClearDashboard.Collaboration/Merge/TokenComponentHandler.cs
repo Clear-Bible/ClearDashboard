@@ -25,6 +25,11 @@ namespace ClearDashboard.Collaboration.Merge
 
         protected async Task DeleteComposites(DbConnection dbConnection, IEnumerable<Guid> tokenCompositeIds, CancellationToken cancellationToken)
         {
+            if (!tokenCompositeIds.Any())
+            {
+                return;
+            }
+
             var alignmentSetDenormalizationTasks = await BuildDenormalizationTasksForTokenAlignments(
                 dbConnection,
                 tokenCompositeIds,

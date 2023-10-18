@@ -17,7 +17,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             command.CommandText =
             $@"
                 INSERT INTO {type.Name} ({string.Join(", ", columns)})
-                VALUES ({string.Join(", ", columns.Select(c => "@" + c))})
+                VALUES ({string.Join(", ", columns.Select(c => "@" + c.ToDbCommandParameterName()))})
             ";
 
             AddWhereClauseParameters(command, columns, Array.Empty<(string, int)>());
@@ -35,11 +35,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             command.CommandText =
             $@"
                 UPDATE {type.Name}
-                SET {string.Join(", ", columns.Select(c => c + " = @" + c))}
+                SET {string.Join(", ", columns.Select(c => c + " = @" + c.ToDbCommandParameterName()))}
                 WHERE {string.Join(" AND ", whereStrings)}
             ";
 
-            AddWhereClauseParameters(command, whereColumns.Select(e => e.name).ToArray(), whereInColumns);
+            AddWhereClauseParameters(
+                command, 
+                columns.Union(whereColumns.Select(e => e.name)).ToArray(), 
+                whereInColumns);
         }
 
         public static void ApplyColumnsToDeleteCommand(DbCommand command, Type type, (string name, WhereEquality whereEquality)[] whereColumns, (string name, int count)[] whereInColumns)
@@ -91,7 +94,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         public static (string name, WhereEquality whereEquality)[] ExtractWhereColumns(Dictionary<string, object?> whereClause)
         {
             return whereClause
-                .Where(e => e.Value == null || !e.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
+                .Where(e => 
+                    e.Value == null || 
+                    e.Value!.GetType() == typeof(string) || 
+                    e.Value!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) == null)
                 .Select(e =>
                 {
                     if (e.Value == null)
@@ -106,7 +112,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         public static (string name, int count)[] ExtractWhereInColumns(Dictionary<string, object?> whereClause)
         {
             return whereClause
-                .Where(e => e.Value != null && e.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
+                .Where(e => e.Value != null)
+                .Where(e => e.Value!.GetType() != typeof(string))
+                .Where(e => e.Value!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) != null)
                 .Select(e => (name: e.Key, count: (e.Value as IEnumerable)!.Cast<object>().Count()))
                 .ToArray();
         }
@@ -122,17 +130,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             if (whereEquals.Any())
             {
                 // E.g.:  " AND TokenizedCorpusId = @TokenizedCorpusId"
-                whereStrings.Add($"{string.Join(" AND ", whereEquals.Select(c => c.name + " = @" + c.name))}");
+                whereStrings.Add($"{string.Join(" AND ", whereEquals.Select(c => c.name + " = @" + c.name.ToDbCommandParameterName()))}");
             }
             if (whereIs.Any())
             {
                 // E.g.:  " AND Deleted IS @Deleted"
-                whereStrings.Add($"{string.Join(" AND ", whereIs.Select(c => c.name + " IS @" + c.name))}");
+                whereStrings.Add($"{string.Join(" AND ", whereIs.Select(c => c.name + " IS @" + c.name.ToDbCommandParameterName()))}");
             }
             if (whereIsNot.Any())
             {
                 // E.g.:  " AND Deleted IS @Deleted"
-                whereStrings.Add($"{string.Join(" AND ", whereIsNot.Select(c => c.name + " IS NOT @" + c.name))}");
+                whereStrings.Add($"{string.Join(" AND ", whereIsNot.Select(c => c.name + " IS NOT @" + c.name.ToDbCommandParameterName()))}");
             }
             if (whereInColumns.Any())
             {
@@ -146,7 +154,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
         public static string BuildWhereInParameterString(string columnName, int count)
         {
-            return string.Join(", ", Enumerable.Range(0, count).Select(e => $"@{columnName}{e}"));
+            return string.Join(", ", Enumerable.Range(0, count).Select(e => $"@{columnName.ToDbCommandParameterName()}{e}"));
         }
 
         public static void AddWhereClauseParameters(DbCommand command, string[] whereColumnNames, (string name, int count)[] whereInColumns)
@@ -154,7 +162,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             foreach (var columnName in whereColumnNames)
             {
                 var parameter = command.CreateParameter();
-                parameter.ParameterName = $"@{columnName}";
+                parameter.ParameterName = $"@{columnName.ToDbCommandParameterName()}";
                 command.Parameters.Add(parameter);
             }
 
@@ -163,7 +171,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                 foreach (var nameIndex in Enumerable.Range(0, columnCount))
                 {
                     var parameter = command.CreateParameter();
-                    parameter.ParameterName = $"@{columnName}{nameIndex}";
+                    parameter.ParameterName = $"@{columnName.ToDbCommandParameterName()}{nameIndex}";
                     command.Parameters.Add(parameter);
                 }
             }
@@ -173,21 +181,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         {
             foreach (var kvp in whereClause)
             {
-                if (kvp.Value is not null && kvp.Value.GetType().IsAssignableTo(typeof(IEnumerable<object>)))
+                if (kvp.Value is not null && 
+                    kvp.Value!.GetType() != typeof(string) && 
+                    kvp.Value!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) != null)
                 {
                     var valueEnumerable = (kvp.Value as IEnumerable)!.Cast<object>();
                     foreach (var column in valueEnumerable.Select((value, nameIndex) => new { value, nameIndex }))
                     {
-                        command.Parameters[$"@{kvp.Key}{column.nameIndex}"].Value = column.value;
+                        command.Parameters[$"@{kvp.Key.ToDbCommandParameterName()}{column.nameIndex}"].Value = column.value;
                     }
                 }
                 else if (kvp.Value is null || (kvp.Value as string) == NOT_NULL)
                 {
-                    command.Parameters[$"@{kvp.Key}"].Value = DBNull.Value;
+                    command.Parameters[$"@{kvp.Key.ToDbCommandParameterName()}"].Value = DBNull.Value;
                 }
                 else
                 {
-                    command.Parameters[$"@{kvp.Key}"].Value = kvp.Value;
+                    command.Parameters[$"@{kvp.Key.ToDbCommandParameterName()}"].Value = kvp.Value;
                 }
             }
         }
@@ -323,5 +333,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        private static string ToDbCommandParameterName(this string parameterName)
+        {
+            return parameterName.Replace('.', '_');
+        }
     }
 }

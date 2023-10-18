@@ -586,7 +586,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
             Assert.Equal(4, _fixture.ProjectDbContext.TokenComposites.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
-            Assert.Equal(35, _fixture.ProjectDbContext.Tokens.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
+            Assert.Equal(33, _fixture.ProjectDbContext.Tokens.Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id).Count());
 
             var splitCompositeDb = _fixture.ProjectDbContext.TokenComposites
                 .Include(e => e.Tokens.OrderBy(t => t.EngineTokenId))
@@ -607,6 +607,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Assert.Equal("other1_other2_other6", extraCompositeDb.SurfaceText);
 
             var tokensWord1Db = _fixture.ProjectDbContext.Tokens
+                .Where(e => e.TokenizedCorpusId == testTokenizedCorpus.Id)
+                .Where(e => e.Deleted == null)
                 .Where(e => e.BookNumber == 1)
                 .Where(e => e.ChapterNumber == 1)
                 .Where(e => e.VerseNumber == 20)
