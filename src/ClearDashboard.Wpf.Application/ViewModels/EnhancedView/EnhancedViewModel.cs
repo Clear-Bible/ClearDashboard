@@ -1010,6 +1010,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Execute.OnUIThreadAsync(async () =>
             {
+                //TODO This is a TEMPORAY FIX just for the hotfix, this needs to be resolved by ANDY in the longterm
+                e.Note.Labels.Clear();
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
                 NotifyOfPropertyChange(() => Items);
             });

@@ -577,7 +577,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         mediator: Mediator!,
                         IsRtl: true,
                         Name: MaculaCorporaNames.HebrewCorpusName,
-                        Language: "Hebrew",
+                        Language: ManuscriptIds.HebrewManuscriptLanguageId,
                         CorpusType: CorpusType.ManuscriptHebrew.ToString(),
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
                         token: cancellationToken);
@@ -723,7 +723,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         mediator: Mediator!,
                         IsRtl: false,
                         Name: MaculaCorporaNames.GreekCorpusName,
-                        Language: "Greek",
+                        Language: ManuscriptIds.GreekManuscriptLanguageId,
                         CorpusType: CorpusType.ManuscriptGreek.ToString(),
                         ParatextId: ManuscriptIds.GreekManuscriptId,
                         token: cancellationToken);
@@ -879,7 +879,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     IsRtl: selectedProject.IsRtl,
                                     FontFamily: selectedProject.FontFamily,
                                     Name: selectedProject.Name,
-                                    Language: selectedProject.LanguageName,
+                                    Language: selectedProject.LanguageId,
                                     CorpusType: selectedProject.CorpusTypeDisplay,
                                     ParatextId: selectedProject.Id,
                                     token: cancellationToken);

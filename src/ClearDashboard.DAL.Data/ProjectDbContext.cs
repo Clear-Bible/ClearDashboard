@@ -281,6 +281,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.TrainingText);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.SurfaceText);
 
+            modelBuilder.Entity<Token>().HasIndex(e => e.OriginTokenLocation);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.VerseNumber);

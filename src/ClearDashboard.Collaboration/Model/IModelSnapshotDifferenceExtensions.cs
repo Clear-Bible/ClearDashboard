@@ -237,6 +237,12 @@ namespace ClearDashboard.Collaboration.Model
                 childList1 = (IEnumerable<IModelDistinguishable>)toEmptyModelSnapshotTypeMethod.Invoke(null, null)!;
             }
 
+            if (!childList2.Any() && iModelSnapshotType is not null)
+            {
+                var toEmptyModelSnapshotTypeMethod = typeof(Enumerable).GetMethod("Empty")!.MakeGenericMethod(iModelSnapshotType);
+                childList2 = (IEnumerable<IModelDistinguishable>)toEmptyModelSnapshotTypeMethod.Invoke(null, null)!;
+            }
+
             // FIXME:  this fixes lame casting problem between GeneralListModel<GeneralModel<X>>
             // and the GeneralListModelExtensions.GetListDifference (GeneralModel<X> isn't assignableTo
             // IModelDistinguishable<GeneralModel<X>> type, but with IModelSnapshot<X> its fine)

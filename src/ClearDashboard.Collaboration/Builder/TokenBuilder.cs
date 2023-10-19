@@ -2,60 +2,118 @@ using Microsoft.EntityFrameworkCore;
 using ClearDashboard.Collaboration.Model;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Data;
-using System.Text.Json;
-using ClearDashboard.Collaboration.Serializer;
-using ClearDashboard.DAL.Alignment.Corpora;
+using SIL.Extensions;
+using System.Linq;
 
 namespace ClearDashboard.Collaboration.Builder;
 
-public class TokenBuilder : GeneralModelBuilder<Models.TokenComposite>
+public class TokenBuilder : GeneralModelBuilder<Models.Token>
 {
     public const string VERSE_ROW_LOCATION = "VerseRowLocation";
-    public const string TOKEN_LOCATIONS = "TokenLocations";
+
+    public override string IdentityKey => BuildPropertyRefName();
 
     public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
         new Dictionary<string, Type>()
         {
-            { VERSE_ROW_LOCATION, typeof(string) },
-            { TOKEN_LOCATIONS, typeof(GeneralListModel<string>) }
+            { VERSE_ROW_LOCATION, typeof(string) }
         };
 
-    public Func<ProjectDbContext, Guid, IEnumerable<(Models.TokenComposite TokenComposite, IEnumerable<Models.Token> Tokens)>> GetTokenizedCorpusCompositeTokens = 
+    public static IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)> OrganizeTokensByOriginTokenLocation(IEnumerable<Models.Token> tokens)
+    {
+        // Tokens manually changed (e.g. Token Splitting/subword renumbering):
+        var originTokenLocationGroups = tokens
+            .Where(e => e.OriginTokenLocation != null)
+            .ToList()
+            .GroupBy(e => e.OriginTokenLocation);
+
+        var tokenIndexes = originTokenLocationGroups
+            .Where(g => g.Count() > 1)
+            .SelectMany(g => g
+                .OrderBy(e => e.OriginTokenLocation)
+                .OrderBy(e => e.EngineTokenId)
+                .Select((e, index) => (Token: e, Index: index as int?)))
+            .ToList();
+
+        tokenIndexes.AddRange(originTokenLocationGroups
+            .Where(g => g.Count() == 1)
+            .Select(g => (Token: g.First(), Index: null as int?))
+            .ToList());
+
+        var manuallyChangedOriginTokenLocations = tokenIndexes
+            .Select(e => e.Token.OriginTokenLocation!)
+            .Distinct();
+
+        // Tokens that were 'replaced' by manually created tokens:
+        // (Tokens with an EngineTokenId that matches any of the 
+        // OriginTokenLocation values from above)
+        tokenIndexes.AddRange(tokens
+            .Where(e => e.OriginTokenLocation == null)
+            .Where(e => manuallyChangedOriginTokenLocations.Contains(e.EngineTokenId))
+            .ToList()
+            .Select(e => (Token: e, Index: null as int?))
+        );
+
+        // Tokens not yet included in tokenIndexes that were soft deleted:
+        tokenIndexes.AddRange(tokens
+            .Where(e => e.Deleted != null)
+            .Where(e => !tokenIndexes.Select(e => e.Token.Id).Contains(e.Id))
+            .ToList()
+            .Select(e => (Token: e, Index: null as int?))
+        );
+
+        return tokenIndexes
+            .OrderBy(e => e.Token.OriginTokenLocation)
+            .OrderBy(e => e.Index)
+            .OrderBy(e => e.Token.EngineTokenId);
+    }
+
+    public Func<ProjectDbContext, Guid, IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)>> GetTokenizedCorpusTokens = 
         (projectDbContext, tokenizedCorpusId) =>
             {
-                return projectDbContext.TokenComposites
-                    .Include(tc => tc.TokenCompositeTokenAssociations)
-                        .ThenInclude(ta => ta.Token)
-                    .Include(tc => tc.VerseRow)
-                    .Where(tc => tc.ParallelCorpusId == null)
-                    .Where(tc => tc.TokenizedCorpusId == tokenizedCorpusId)
-                    .ToList()
-                    .Select(tc => (TokenComposite: tc, Tokens: tc.Tokens.ToList().AsEnumerable()))
-                    .AsEnumerable();
+                return OrganizeTokensByOriginTokenLocation(projectDbContext.Tokens
+                    .AsNoTrackingWithIdentityResolution()
+                    .Include(e => e.VerseRow)
+                    .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
+                );
             };
 
-    public Func<ProjectDbContext, Guid, IEnumerable<(Models.TokenComposite TokenComposite, IEnumerable<Models.Token> Tokens)>> GetParallelCorpusCompositeTokens =
-        (projectDbContext, parallelCorpusId) =>
-            {
-                return projectDbContext.TokenComposites
-                    .Include(tc => tc.TokenCompositeTokenAssociations)
-                    .ThenInclude(ta => ta.Token)
-                    .Where(tc => tc.ParallelCorpusId == parallelCorpusId)
-                    .ToList()
-                    .Select(tc => (TokenComposite: tc, Tokens: tc.Tokens.ToList().AsEnumerable()))
-                    .AsEnumerable();
-            };
-
-    public static GeneralModel<Models.TokenComposite> BuildModelSnapshot(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> childTokens, BuilderContext builderContext)
+    public static GeneralModel<Models.Token> BuildModelSnapshot((Models.Token Token, int? Index) tokenOriginTokenLocationIndex, BuilderContext builderContext)
     {
-        var modelSnapshot = ExtractUsingModelIds(
-            tokenComposite,
-            new List<string>() { "VerseRowId" });
+        var modelProperties = ExtractUsingModelRefs(
+            tokenOriginTokenLocationIndex.Token, 
+            builderContext, 
+            new List<string>() { "Id", "VerseRowId" });
 
-        modelSnapshot.Add(VERSE_ROW_LOCATION, tokenComposite.VerseRow?.BookChapterVerse, typeof(string));
-        modelSnapshot.Add(TOKEN_LOCATIONS, childTokens.Select(t => BuildTokenLocation(t)).ToGeneralListModel<string>());
+        modelProperties.Add(VERSE_ROW_LOCATION, (typeof(string), tokenOriginTokenLocationIndex.Token.VerseRow?.BookChapterVerse));
 
-        return modelSnapshot;
+        var refValue = CalculateRef(
+            tokenOriginTokenLocationIndex.Token.TokenizedCorpusId,
+            tokenOriginTokenLocationIndex.Token.EngineTokenId!,
+            tokenOriginTokenLocationIndex.Token.OriginTokenLocation,
+            tokenOriginTokenLocationIndex.Index
+        );
+
+        var tokenModelSnapshot = new GeneralModel<Models.Token>(BuildPropertyRefName(), refValue);
+        GeneralModelBuilder<Models.Alignment>.AddPropertyValuesToGeneralModel(tokenModelSnapshot, modelProperties);
+
+        return tokenModelSnapshot;
+    }
+
+    public static string CalculateRef(Guid tokenizedCorpusId, string engineTokenId, string? originTokenLocation, int? index)
+    {
+        // If a split token, use {OriginTokenLocation}_{Index} (index, when ordered by Subword,
+        // within the set of tokens having this OriginTokenLocation).
+        // Else use OriginTokenLocation (if there is one - which would mean the EngineTokenId
+        // was changed by subword renumbering), otherwise EngineTokenId
+        var identityPropertyValue = $"{tokenizedCorpusId}{ originTokenLocation ?? engineTokenId}".ToMD5String();
+
+        if (index != null)
+        {
+            identityPropertyValue += $"_{index}";
+        }
+
+        return $"Token_{identityPropertyValue}";
     }
 
     public static TokenRef BuildTokenRef(
@@ -67,6 +125,7 @@ public class TokenBuilder : GeneralModelBuilder<Models.TokenComposite>
             IsComposite = (tokenComponent is Models.TokenComposite),
             TokenizedCorpusId = tokenComponent.TokenizedCorpusId,
             TokenLocation = tokenComponent.EngineTokenId!,
+            TokenSurfaceText = tokenComponent.SurfaceText!
         };
     }
 
