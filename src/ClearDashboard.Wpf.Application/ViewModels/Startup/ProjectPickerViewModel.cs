@@ -43,7 +43,8 @@ using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
+    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>,
+        IHandle<ParatextConnectedMessage>, IHandle<UserMessage>, IHandle<LoadProjectTemplateWizardProject>
     {
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
@@ -1416,6 +1417,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             ParatextUserName = message.User.ParatextUserName;
             await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(LoadProjectTemplateWizardProject message, CancellationToken cancellationToken)
+        {
+            await RefreshProjectList();
+
+            var project = DashboardProjects.FirstOrDefault(x => x.FullFilePath == message.projectPath);
+
+            if (project is not null)
+            {
+                NavigateToMainViewModel(project, new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left));
+            }
         }
     }
 }

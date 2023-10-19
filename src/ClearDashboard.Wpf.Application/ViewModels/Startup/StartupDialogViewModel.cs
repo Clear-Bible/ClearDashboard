@@ -228,6 +228,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            foreach (var step in Steps.Cast<ApplicationScreen>())
+            {
+                await step.DeactivateAsync(close);
+            }
+
+            await base.OnDeactivateAsync(close, cancellationToken);
+        }
+
         public async void Cancel()
         {
             await TryCloseAsync(false);
