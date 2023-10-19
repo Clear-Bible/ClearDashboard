@@ -142,7 +142,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public static async Task<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromExternalAsync(
+        private static async Task<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromExternalAsync(
             IMediator mediator, 
             TokenizedTextCorpusId tokenizedTextCorpusId, 
             int bookNumber, 
@@ -222,7 +222,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
 
         /// <summary>
-        /// 
+        /// This method blocks.
         /// </summary>
         /// <param name="mediator"></param>
         /// <param name="tokenizedTextCorpusIds"></param>
@@ -280,8 +280,18 @@ namespace ClearDashboard.Wpf.Application.Services
                                 else
                                 {
                                     var task = GetNotesForChapterFromExternalAsync(mediator, ttcid, vr.BookNum, vr.ChapterNum, logger, cancellationToken);
-                                    task.Wait(cancellationToken);
-                                    externalNotes = task.Result;
+                                    task.Wait(cancellationToken); //blocking rather than async, because async can cause deadlock. Consider:
+                                                                  //  two OnUIThreadAsync() calling this method.
+                                                                  // 1. the first awaits after a Monitor.TryEnter(),
+                                                                  // 2. awaiting switches to second, which blocks on Monitor.TryEnter().
+                                                                  // 3. meanwhile, the first completes, but the continuation is blocked because the
+                                                                  //    second is bocking the UI thread.
+                                                                  // Naturally, TryEnter can be given a timeout, but this could slow down the UI considerably.
+                                                                  // This problem is hidden to the user of this method. Instead, felt it was better to just make
+                                                                  // it blocking and let the user deal with its blocking nature, e.g. put it in a Task.Run().
+
+
+                                    externalNotes = task.Result;  
                                     chapterToExternalNotesMap.Add(chapter, externalNotes);
                                     return externalNotes
                                         .Where(en => en.verseRef.BookNum == vr.BookNum &&
@@ -304,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task<bool> InvalidateExternalNotesCache(CorpusId? corpusId, CancellationToken cancellationToken = default)
+        public async Task<bool> InvalidateExternalNotesCache(string? externalProjectId, CancellationToken cancellationToken = default)
         {
             bool obtainedLock = false;
             try
@@ -315,15 +325,14 @@ namespace ClearDashboard.Wpf.Application.Services
                     throw new EngineException("Couldn't obtain lock on cache within 60 seconds");
                 }
 
-                if (corpusId == null)
+                if (externalProjectId == null)
                 {
                     ExternalProjectIdToChapterToExternalNotesMap.Clear();
                     return true;
                 }
                 else
                 {
-                    return ExternalProjectIdToChapterToExternalNotesMap.Remove(corpusId?.ParatextGuid
-                        ?? throw new InvalidStateEngineException(name: "tokenizedTextCorpus.CorpusId or ParatextGuid", value: "null"));
+                    return ExternalProjectIdToChapterToExternalNotesMap.Remove(externalProjectId);
                 }
             }
             finally
@@ -331,8 +340,12 @@ namespace ClearDashboard.Wpf.Application.Services
                 if (obtainedLock)
                 {
                     Monitor.Exit(ExternalProjectIdToChapterToExternalNotesMap);
+
+                    await _eventAggregator.PublishOnUIThreadAsync(new ExternalNotesUpdatedMessage(externalProjectId), cancellationToken);
+
+                    //eventAggregator.PublishOnBackgroundThreadAsync or PublishOnCurrentThreadAsync don't appear to work, handlers still called on UI thread. Caliburn code
+                    //too cryptic to figure out, so ensure handler can be called on UI thread.
                 }
-                await _eventAggregator.PublishOnUIThreadAsync(new ExternalNotesUpdatedMessage(corpusId), cancellationToken);
             }
         }
     }

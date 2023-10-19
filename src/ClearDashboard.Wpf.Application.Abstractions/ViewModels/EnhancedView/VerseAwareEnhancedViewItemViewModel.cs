@@ -44,8 +44,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             IHandle<TokenSplitMessage>,
             IHandle<TokenUnjoinedMessage>,
             IHandle<AlignmentAddedMessage>,
-            IHandle<AlignmentDeletedMessage>,
-            IHandle<ExternalNotesUpdatedMessage>
+            IHandle<AlignmentDeletedMessage>
     {
         public IWindowManager WindowManager { get; }
         public NoteManager? NoteManager { get; }
@@ -219,64 +218,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await GetData(reloadType, cancellationToken);
         }
 
-        /// <summary>
-        /// Runs async in a separate thread so caller can continue loading. 
-        /// 
-        /// </summary>
-        /// <param name="tokenizedTextCorpusIds"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        private Task SetExternalNotes(
+        private async Task SetExternalNotesAsync(
             IEnumerable<TokenizedTextCorpusId> tokenizedTextCorpusIds,
             CancellationToken cancellationToken)
         {
             if (NoteManager != null && Rows != null && Verses.Count() > 0 && tokenizedTextCorpusIds.Count() > 0)
             {
-               return Task.Run(() =>
-               {
-                   try
-                   {
-                       var tokenizedCorpusNotes = NoteManager!.ExternalNoteManager.GetExternalNotes(
-                           Mediator!,
-                           tokenizedTextCorpusIds,
-                           Rows.Select(ptr => (VerseRef)ptr.Ref),
-                           Logger,
-                           cancellationToken);
+                await Task.Run(() => //put this in a task.run so that it can be called in a UI main thread as well.
+                {
+                    try
+                    {
+                        // this method blocks.
+                        var tokenizedCorpusNotes = NoteManager!.ExternalNoteManager.GetExternalNotes(
+                            Mediator!,
+                            tokenizedTextCorpusIds,
+                            Rows.Select(ptr => (VerseRef)ptr.Ref),
+                            Logger,
+                            cancellationToken);
 
                         Execute.OnUIThread(() =>
                         {
                             foreach (var verseDisplayViewModel in Verses)
                             {
-                                verseDisplayViewModel.SetExternalNotes(tokenizedCorpusNotes);
+                                //FIXME: EXTERNALNOTES - uncomment following line
+                                //verseDisplayViewModel.SetExternalNotes(tokenizedCorpusNotes);
                             }
                         });
-                   }
-                   catch (EngineException ex)
-                   {
-                       Logger?.LogError($"ExternalNoteManager.GetExternalNotes threw exception{ex}");
-                       Execute.OnUIThread(() =>
-                       {
-                           //update the UI here with error info.
-                       });
-                   }
-               });
-            }
-            else
-            {
-                return Task.CompletedTask;
+                    }
+                    catch (EngineException ex)
+                    {
+                        Logger?.LogError($"ExternalNoteManager.GetExternalNotes threw exception{ex}");
+                        Execute.OnUIThread(() =>
+                        {
+                            //update the UI here with error info.
+                        });
+                    }
+                });
             }
         }
-
         protected virtual List<TokenizedTextCorpusId> TokenizedTextCorpusIds => new();
         protected virtual IEnumerable<IRow>? Rows => null;
-        public Task HandleAsync(ExternalNotesUpdatedMessage message, CancellationToken cancellationToken)
-        {
-            _ = SetExternalNotes(
-                TokenizedTextCorpusIds
-                    .Where(ttid => ttid.CorpusId?.ParatextGuid?.Equals(message.corpusId?.ParatextGuid) ?? false), 
-                cancellationToken);
-            return Task.CompletedTask;
-        }
         private async Task GetData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
         {
             try
@@ -416,7 +397,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 if (bookFound)
                 {
-                    BindableCollection<VerseDisplayViewModel> verses = new();
+                    Verses.Clear();
                     if (IsParagraphMode)
                     {
                         // For "paragraph mode" concatenate the tokens in the rows into a single verse display.
@@ -425,25 +406,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             tokens.AddRange(row.Tokens);
                         }
-                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus));
+                        Verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus));
                     }
                     else
                     {
                         // Otherwise, create a separate verse display for each row.
                         foreach (var textRow in tokensTextRowsRange)
                         {
-                            verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus));
+                            Verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus));
                         }
                     }
-                    OnUIThread(() =>
-                    {
-                        Verses = verses;
-
-                        //run this after Verses has been set so they are there to set once complete, but don't await so loading can continue.
-                        _ = SetExternalNotes(
-                                TokenizedTextCorpusIds,
-                                cancellationToken);
-                    });
+                    //run this after Verses has been set so they are there to set once complete, but don't await so loading can continue.
+                    _ = SetExternalNotesAsync(
+                            TokenizedTextCorpusIds,
+                            cancellationToken);
                 }
 
                 CreateTitle(metadatum, tokensTextRowsRange, currentBcv, bookFound);
@@ -573,7 +549,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
 
                 //run this after Verses has been set so they are there to set once complete, but don't await so loading can continue.
-                _ = SetExternalNotes(
+                _ = SetExternalNotesAsync(
                         TokenizedTextCorpusIds,
                         cancellationToken);
                 Title = CreateParallelCorpusItemTitle(metadatum, "EnhancedView_Interlinear", rows.Count);
@@ -620,7 +596,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
 
                 //run this after Verses has been set so they are there to set once complete, but don't await so loading can continue.
-                _ = SetExternalNotes(
+                _ = SetExternalNotesAsync(
                         TokenizedTextCorpusIds,
                         cancellationToken);
                 Title = CreateParallelCorpusItemTitle(metadatum, "EnhancedView_Alignment", rows.Count);

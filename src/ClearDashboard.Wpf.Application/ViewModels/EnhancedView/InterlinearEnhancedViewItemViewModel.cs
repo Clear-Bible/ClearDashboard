@@ -97,6 +97,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 };
             }
         }
-
     }
 }

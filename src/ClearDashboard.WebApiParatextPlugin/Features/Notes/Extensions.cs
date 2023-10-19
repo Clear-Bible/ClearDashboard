@@ -35,19 +35,24 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                     (projectNote.Anchor.Offset - tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVerseRawUsfm);
             }
 
+            var body = projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum));
             return new ExternalNote()
             {
                 VersePlainText = versePlainText,
                 SelectedPlainText = projectNote.Anchor.SelectedText,
                 IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
                 VerseRefString = verseRef.ToString(),
-                Body = SerializeNoteBodyXml(projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum))),
-                Message = projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum))
-                    .Comments
-                    .Aggregate("", (str, next) => $"{str}\n {next.Paragraphs.Aggregate("", (str, next) => $"{str},{next}")}, {next.Author}")
+                Body = SerializeNoteBodyXml(body),
+                Message = GetMessage(body)
             };
         }
 
+        private static string GetMessage(Body body)
+        {
+            return body
+                .Comments
+                    .Aggregate("", (str, next) => $"{str}Author {next.Author} {next.Created}:\n{next.Paragraphs.Aggregate("", (innerstring, next) => $"{innerstring}{next}\n")}\n\n");
+        }
         [DataContract]
         public class BodyComment
         {
