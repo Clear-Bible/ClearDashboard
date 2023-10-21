@@ -121,6 +121,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public async Task Update(CancellationToken token = default)
         {
+            await Task.CompletedTask;
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
             throw new NotImplementedException();
         }

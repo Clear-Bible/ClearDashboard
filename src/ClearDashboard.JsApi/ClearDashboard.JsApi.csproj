@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+    <WasmMainJSPath>main.mjs</WasmMainJSPath>
+    <OutputType>Exe</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>anycpu</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+	<PackageReference Include="ClearBible.Engine" Version="2.0.16" />
+	<PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="11.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <WasmFilesToIncludeInFileSystem Include="Resources\JsApiExperiment.sqlite">
+      <TargetPath>\home\web_user\ClearDashboard_Projects\JsApiExperiment\JsApiExperiment.sqlite</TargetPath>
+    </WasmFilesToIncludeInFileSystem>
+    <WasmFilesToIncludeInFileSystem Include="Resources\books.csv">
+      <TargetPath>books.csv</TargetPath>
+    </WasmFilesToIncludeInFileSystem>
+</ItemGroup>
+</Project>

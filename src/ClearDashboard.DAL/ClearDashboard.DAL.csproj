@@ -16,6 +16,10 @@
     <Compile Remove="Models\**" />
     <EmbeddedResource Remove="Models\**" />
     <None Remove="Models\**" />
+	<Compile Remove="Features\MarbleDataRequests\GetVerseDataFromSemanticDatabaseSlice.cs" />
+	<Compile Remove="Features\MarbleDataRequests\GetWordMeaningsSlice.cs" />
+	<Compile Remove="Features\MarbleDataRequests\LoadSemanticDictionaryGlossesSlice.cs" />
+	<Compile Remove="Features\MarbleDataRequests\LoadSemanticDictionaryLookupSlice.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Features\DashboardProjects\DashboardProjectSlice.cs" />
@@ -537,7 +541,6 @@
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
-    <ProjectReference Include="..\ClearDashboard.DAL.ViewModels\ClearDashboard.DAL.ViewModels.csproj" />
     <ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
   </ItemGroup>
   <ItemGroup>

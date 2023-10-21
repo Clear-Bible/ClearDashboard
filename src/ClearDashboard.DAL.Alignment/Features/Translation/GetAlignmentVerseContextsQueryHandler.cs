@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Windows.Documents;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
