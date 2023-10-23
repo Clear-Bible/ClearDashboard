@@ -16,9 +16,7 @@ using System.Dynamic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
 using static ClearDashboard.Wpf.Application.Helpers.SlackMessage;
 using Markdown = Markdig.Markdown;
 
@@ -40,6 +38,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private JiraUser? _jiraUser;
 
+        
+
         #endregion //Member Variables
 
 
@@ -51,10 +51,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public CollaborationConfiguration GitLabUser { get; set; }
         public List<string> Files { get; set; }
 
+
         #endregion //Public Properties
 
 
         #region Observable Properties
+
+        private List<FileItem> _attachedFiles = new();
+        public List<FileItem> AttachedFiles
+        {
+            get => _attachedFiles;
+            set
+            {
+                _attachedFiles = value;
+                NotifyOfPropertyChange(() => AttachedFiles);
+            }
+        }
+
+
 
         private bool _bugReport = true;
         public bool BugReport
@@ -319,24 +333,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _ = await computerInfo.GetComputerInfo(destinationComputerInfoPath);
             Files.Add(destinationComputerInfoPath);
 
-            var guid = Guid.NewGuid().ToString();
-            ZipPathAttachment = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
-            // zip up everything
-            if (Files.Count > 0)
-            {
-                if (File.Exists(ZipPathAttachment))
-                {
-                    File.Delete(ZipPathAttachment);
-                }
-
-                ZipFiles zipFiles = new(Files, ZipPathAttachment);
-                var succcess = zipFiles.Zip();
-
-                if (succcess == false)
-                {
-                    _logger.LogError("Error zipping files");
-                }
-            }
+            ZipFiles();
 
             ShowOkButton = Visibility.Visible;
 
@@ -360,6 +357,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         #region Methods
+
+        private void ZipFiles()
+        {
+            var guid = Guid.NewGuid().ToString();
+            ZipPathAttachment = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
+            // zip up everything
+            if (Files.Count > 0)
+            {
+                if (File.Exists(ZipPathAttachment))
+                {
+                    File.Delete(ZipPathAttachment);
+                }
+
+                ZipFiles zipFiles = new(Files, ZipPathAttachment);
+                var succcess = zipFiles.Zip();
+
+                if (succcess == false)
+                {
+                    _logger.LogError("Error zipping files");
+                }
+            }
+        }
 
         public void ResetSlackMessage()
         {
@@ -400,12 +419,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 return;
             }
 
-            ShowSlackSendButton = false;
 
+            ShowSlackSendButton = false;
             WorkingMessage = "Sending Message...";
             await Task.Delay(200);
 
 
+            // add in attached files
+            if (AttachedFiles.Count > 0)
+            {
+                foreach (var file in AttachedFiles)
+                {
+                    Files.Add(file.FilePath);
+                }
+
+                ZipFiles();
+            }
+
+            
             var thisVersion = Assembly.GetEntryAssembly()!.GetName().Version;
             var versionNumber = $"{thisVersion!.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
@@ -441,6 +472,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             //_timer.Elapsed += OnTimedEvent;
             //_timer.AutoReset = false;
             //_timer.Enabled = true;
+        }
+
+        private void AddAttachedFilesToZip()
+        {
+            
         }
 
         //private void OnTimedEvent(object? sender, ElapsedEventArgs e)
@@ -596,5 +632,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         #endregion // Methods
+
+
+    }
+
+
+
+    public class FileItem
+    {
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
     }
 }
