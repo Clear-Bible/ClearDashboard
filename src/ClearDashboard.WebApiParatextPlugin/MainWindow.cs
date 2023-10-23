@@ -505,7 +505,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                     AppendText(Color.Black, $"");
                 }
             }
-            key.Close();
+
+            if (key is not null)
+            {
+                key.Close();
+            }
+            
         }
 
         /// <summary>
