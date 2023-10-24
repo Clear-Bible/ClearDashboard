@@ -1,7 +1,6 @@
 ﻿<Window
     x:Class="ClearDashboard.Wpf.Application.Views.PopUps.SlackMessageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,13 +16,9 @@
     Width="800"
     Height="650"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
+    Loaded="Window_Loaded"
     mc:Ignorable="d">
-
-    <Window.DataContext>
-        <popUps:SlackMessageViewModel />
-    </Window.DataContext>
-
-
 
     <Grid>
         <Grid.RowDefinitions>
@@ -60,9 +55,9 @@
                 </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
-
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
                     <TextBox
                         Margin="10,0,10,10"
@@ -74,7 +69,7 @@
                         Text="{Binding UserMessage, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap" />
 
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" Margin="10,0,10,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -85,6 +80,14 @@
                             x:Name="ResetSlackMessage"
                             Margin="5"
                             Content="{helpers:Localization SlackMessageView_ResetForm}"
+                            Style="{StaticResource TransparentStyle}" />
+
+
+                        <Button
+                            Grid.Column="1"
+                            Margin="5"
+                            Click="LoadFile_Click"
+                            Content="Add in File to Send"
                             Style="{StaticResource TransparentStyle}" />
 
                         <Button
@@ -114,6 +117,50 @@
                             </Button.Style>
                         </Button>
                     </Grid>
+
+                    <Border
+                        Grid.Row="2"
+                        Margin="10,0,10,0"
+                        BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                        BorderThickness="2"
+                        CornerRadius="5">
+                        <ListBox
+                            x:Name="AttachedFilesListBox"
+                            MinWidth="700"
+                            MinHeight="80"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <!--<materialDesign:Chip
+                                        cm:Message.Attach="[Event Click] = [Action DeleteAttachedFile]"
+                                        Content="{Binding Path=FileName}"
+                                        IsDeletable="True" />-->
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:Chip Content="{Binding Path=FileName}" />
+                                        <Button
+                                            Width="20"
+                                            Height="20"
+                                            Margin="-12,-15,0,0"
+                                            Click="RemoveAttachedFile_Click"
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+
+                                            <iconPacks:PackIconMaterialDesign
+                                                Width="8"
+                                                Height="8"
+                                                Kind="Close" />
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
                 </Grid>
             </TabItem>
 
