@@ -642,14 +642,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var licenseUser = LicenseManager.GetUserFromLicense();
 
             var dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
-            if (string.IsNullOrEmpty(dashboardUser.ParatextUserName))
-            {
-                dashboardUser.ParatextUserName = ParatextUserName;
-                await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
-            }
 
-
-            CollaborationUser collaborationUser;
+            CollaborationUser collaborationUser = null;
             bool dashboardUserChanged = false;
             bool collaborationUserSet = false;
             if (_collaborationManager.HasRemoteConfigured())
@@ -658,6 +652,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CollaborationConfig = _collaborationManager.GetConfig();
 
                 collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(CollaborationConfig.UserId);
+
+                // make a new collab user if one doesn't exist
                 if (collaborationUser.UserId < 1)
                 {
                     var user = new GitLabUser
@@ -671,10 +667,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     };
 
                     await _collaborationHttpClientServices.CreateNewCollabUser(user, user.Password);
-
                 }
 
-                if (dashboardUser.Id == Guid.Empty) //make a DashboardUser
+                //make a DashboardUser
+                if (dashboardUser.Id == Guid.Empty) 
                 {
                     var newDashboardUser = new DashboardUser(
                         licenseUser,
@@ -688,23 +684,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     dashboardUserChanged = await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
                 }
-                else //update a DashboardUser
+                else 
                 {
-                    dashboardUser.ParatextUserName = ParatextUserName;
+                    //update a DashboardUser
+                    if (string.IsNullOrEmpty(dashboardUser.ParatextUserName) && ParatextUserName is not null)
+                    {
+                        dashboardUser.ParatextUserName = ParatextUserName;
+                    }
                     dashboardUser.Organization = collaborationUser.GroupName;
                     dashboardUser.GitLabUserId = collaborationUser.UserId;
                     dashboardUser.AppVersionNumber = Assembly.GetEntryAssembly()?.GetName().Version.ToString();
                     dashboardUser.AppLastDate = DateTime.Today.Date;
 
-                    dashboardUserChanged = await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+                    _ = await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
                 }
             }
 
+            // if a new user has been created, get the new user
             if (dashboardUserChanged)
             {
                 dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
             }
-            collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(dashboardUser.GitLabUserId);//Change to use CollabConfig instead of dashboardUser.GitLabId?
+
+            if (collaborationUser is null)
+            {
+                collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(dashboardUser.GitLabUserId);
+            }
+            
 
             if (collaborationUser.UserId < 1)
             {
