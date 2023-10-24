@@ -43,7 +43,8 @@ using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
+    public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>,
+        IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
     {
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
@@ -1417,5 +1418,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ParatextUserName = message.User.ParatextUserName;
             await Task.CompletedTask;
         }
+
     }
 }

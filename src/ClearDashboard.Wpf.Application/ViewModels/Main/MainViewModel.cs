@@ -536,7 +536,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async Task SaveProjectEnhancedViewTabs()
         {
             var enhancedViewLayouts = new List<EnhancedViewLayout>();
-            Logger!.LogInformation("Saving ProjectDesignSurface layout.");
+            Logger!.LogInformation("Saving Enhanced View Tabs layout.");
             foreach (var item in Items)
             {
                 if (item is EnhancedViewModel enhancedViewModel)
@@ -569,6 +569,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
 
                     enhancedViewLayouts.Add(enhancedViewModel.EnhancedViewLayout);
+                    Logger.LogInformation($"Saving Enhanced View Tab '{title}'");
                 }
             }
 
@@ -576,6 +577,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ProjectManager.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(enhancedViewLayouts, options);
             await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
 
+            Logger!.LogInformation("Saving ProjectDesignSurface layout complete");
         }
 
         private JsonSerializerOptions CreateDiscriminatedJsonSerializerOptions()
