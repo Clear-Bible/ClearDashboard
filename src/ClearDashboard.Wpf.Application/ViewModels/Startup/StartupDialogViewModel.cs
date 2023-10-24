@@ -25,7 +25,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private DashboardProjectManager ProjectManager { get; }
         public bool MimicParatextConnection { get; set; }
-        public static bool InitialStartup = true;
         public static bool GoToSetup = false;
         public static bool GoToTemplate = false;
         public static bool ProjectAlreadyOpened = false;
@@ -247,7 +246,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async void Ok()
         {
-            InitialStartup = false;
             await TryCloseAsync(true);
         }
 
