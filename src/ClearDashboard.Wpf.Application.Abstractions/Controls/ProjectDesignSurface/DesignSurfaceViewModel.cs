@@ -46,6 +46,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     public partial class DesignSurfaceViewModel : Screen, IHandle<BackgroundDeletionTaskRunning>
     {
 
+        public Guid Guid = Guid.NewGuid();
+
         #region Internal Data Members
 
         /// <summary>
@@ -222,6 +224,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 return _connections;
             }
         }
+
+        public Guid CorrectGuid { get; set; }
 
 
         #region ctor
@@ -1416,6 +1420,19 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             var newConnection = (ParallelCorpusConnectionViewModel)e.Connection;
 
 
+            Debug.WriteLine($"connectorDraggedOut: {connectorDraggedOut}");
+            Debug.WriteLine($"connectorDraggedOver: {connectorDraggedOver}");
+
+
+            if (newConnection.DestinationConnector is null)
+            {
+                Console.WriteLine();
+            }
+            else
+            {
+                Debug.WriteLine($"newConnection: {newConnection.SourceConnector!.CorpusType}  {newConnection.DestinationConnector!.CorpusType}");
+            }
+
             EventAggregator.PublishOnUIThreadAsync(new IsBackgroundDeletionTaskRunning("Alignment Deletion", connectorDraggedOut, connectorDraggedOver, newConnection));
 
             //ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
@@ -1505,6 +1522,17 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
+            // throw out any DesignSurfaceViewModels that are not the one connected to the ProjectDesignSurfaceViewModel
+            // this is to prevent the double hits that were coming through after a user uses the Project Template Wizard
+            // which spawns off a new DesignSurfaceViewModel so we have double versions of it floating around
+            if (this.Guid != CorrectGuid)
+            {
+                return;
+            }
+
+            Debug.WriteLine($"DesignSurfaceViewModel GUID: {Guid.ToString()}");
+
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (parallelCorpusConnectorDraggedOver == null)
             {
@@ -1560,46 +1588,67 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             // Finalize the connection by attaching it to the connector
             // that the user dragged the mouse over.
             //
-            bool added;
+            bool added = false;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (newParallelCorpusConnection.DestinationConnector is null)
             {
-                newParallelCorpusConnection.DestinationConnector = parallelCorpusConnectorDraggedOver;
+                if (newParallelCorpusConnection.SourceConnector == parallelCorpusConnectorDraggedOver)
+                {
+                    newParallelCorpusConnection.DestinationConnector = parallelCorpusConnectorDraggedOut;
+                }
+                else
+                {
+                    newParallelCorpusConnection.DestinationConnector = parallelCorpusConnectorDraggedOver;
+                }
+
                 added = true;
-            }
-            else
+            } else
             {
-                newParallelCorpusConnection.SourceConnector = parallelCorpusConnectorDraggedOver;
+                if (newParallelCorpusConnection.DestinationConnector == parallelCorpusConnectorDraggedOver)
+                {
+                    newParallelCorpusConnection.SourceConnector = parallelCorpusConnectorDraggedOut;
+                }
+                else
+                {
+                    newParallelCorpusConnection.SourceConnector = parallelCorpusConnectorDraggedOver;
+                }
+
                 added = true;
             }
 
             if (added)
             {
-                // check to see if we somehow didn't get a source/target id properly.  If so remove the line
-                var sourceParatextProjectId = newParallelCorpusConnection.SourceConnector!.ParentNode!.ParatextProjectId;
-                if (string.IsNullOrEmpty(sourceParatextProjectId))
+
+                if (newParallelCorpusConnection.SourceConnector != null)
                 {
-                    ParallelCorpusConnections.Remove(newParallelCorpusConnection);
-                    return;
+                    // check to see if we somehow didn't get a source/target id properly.  If so remove the line
+                    var sourceParatextProjectId = newParallelCorpusConnection.SourceConnector!.ParentNode!.ParatextProjectId;
+                    if (string.IsNullOrEmpty(sourceParatextProjectId))
+                    {
+                        ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                        return;
+                    }
+
+                    var destinationParatextProjectId = newParallelCorpusConnection.DestinationConnector.ParentNode!.ParatextProjectId;
+                    if (string.IsNullOrEmpty(destinationParatextProjectId))
+                    {
+                        ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                        return;
+                    }
+
+                    await EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
+                        SourceParatextId: newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId,
+                        TargetParatextId: newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId,
+                        ConnectorGuid: newParallelCorpusConnection.Id));
+
+                    if (newParallelCorpusConnection.SourceConnector != null)
+                    {
+                        newParallelCorpusConnection.SourceFontFamily = await GetFontFamily(newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId);
+                        newParallelCorpusConnection.TargetFontFamily = await GetFontFamily(newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId);
+
+                        await ProjectDesignSurfaceViewModel.AddParallelCorpus(newParallelCorpusConnection, Enums.ParallelProjectType.WholeProcess);
+                    }
                 }
-
-                var destinationParatextProjectId = newParallelCorpusConnection.DestinationConnector.ParentNode!.ParatextProjectId;
-                if (string.IsNullOrEmpty(destinationParatextProjectId))
-                {
-                    ParallelCorpusConnections.Remove(newParallelCorpusConnection);
-                    return;
-                }
-
-                await EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
-                    SourceParatextId: newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId,
-                    TargetParatextId: newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId,
-                    ConnectorGuid: newParallelCorpusConnection.Id));
-
-
-                newParallelCorpusConnection.SourceFontFamily = await GetFontFamily(newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId);
-                newParallelCorpusConnection.TargetFontFamily = await GetFontFamily(newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId);
-
-                await ProjectDesignSurfaceViewModel.AddParallelCorpus(newParallelCorpusConnection, Enums.ParallelProjectType.WholeProcess);
             }
 
             await ProjectDesignSurfaceViewModel.SaveDesignSurfaceData();
