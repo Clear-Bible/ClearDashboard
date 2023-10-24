@@ -45,14 +45,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return TranslationManager?.GetTranslationForToken(token, compositeToken);
         }
 
-        public override void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
-            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
-        {
-            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, sourceTokenizedCorpusNotes);
-            if (targetTokenizedCorpusNotes != null)
-                SetExternalNotesOnTokenDisplayViewModels(TargetTokenDisplayViewModels, targetTokenizedCorpusNotes);
-        }
-
         /// <summary>
         /// Refreshes the translations for the specified tokens when a composite token is joined or unjoined.
         /// </summary>
