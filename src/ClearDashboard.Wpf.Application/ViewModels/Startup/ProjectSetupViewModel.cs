@@ -60,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             //return base.OnInitializeAsync(cancellationToken);
         }
         
-        public void Create()
+        public async void Create()
         {
             if (CheckIfConnectedToParatext() == false)
             {
@@ -73,7 +73,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectName));
+            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectName));
 
             OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
 

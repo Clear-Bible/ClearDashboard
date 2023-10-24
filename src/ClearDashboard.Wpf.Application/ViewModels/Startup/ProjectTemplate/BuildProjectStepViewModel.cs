@@ -348,7 +348,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 _cancellationToken = null;
 
-                //ProgressIndicatorVisibility = Visibility.Hidden;
                 CanMoveForwards = false;
                 CanMoveBackwards = false;
 
@@ -356,21 +355,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 ProjectManager!.PauseDenormalization = false;
 
-
-                //await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
-
                 var projectName = ProjectManager!.CurrentDashboardProject.ProjectName;
                 var projectPath = ProjectManager!.CurrentDashboardProject.FullFilePath;
                 ProjectManager.CurrentDashboardProject = new();
-                //await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(projectName));
 
-                await EventAggregator.PublishOnCurrentThreadAsync(new LoadProjectTemplateWizardProject(projectPath));
+                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(projectName));
                 stopwatch.Stop();
 
                 // turn back on the ability to go into screen saver mode
                 Prevent_ScreenSaver(false);
-
-                //ParentViewModel.Ok();
             }
         }
 
