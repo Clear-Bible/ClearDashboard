@@ -54,12 +54,6 @@ namespace ClearDashboard.Wpf.Application.Helpers
                     puncLessWord = puncLessWord.Replace(punc, sBlank);
                 }
 
-
-                if (puncLessVerse.Length != verseText.Length)
-                {
-                    Console.WriteLine();
-                }
-
                 try
                 {
                     // look for full word and case sensitive
