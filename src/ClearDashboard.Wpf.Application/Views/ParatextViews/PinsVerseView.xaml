@@ -4,11 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:cm="http://caliburnmicro.com"
-    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
@@ -20,6 +20,7 @@
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -168,26 +169,15 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
-                                    <helpers:BindableTextBlock
-                                        Name="VerseTextBlock"
+                                    <RichTextBox
+                                        Name="RichVerseTextBlock"
                                         Width="Auto"
                                         Margin="0,0,10,0"
+                                        helpers1:RichTextBoxHelper.DocumentRtf="{Binding Path=RichVerseText}"
                                         FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
                                         FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
-                                        TextWrapping="Wrap">
-                                        <TextBlock.Style>
-                                            <Style TargetType="helpers:BindableTextBlock">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Path=Tag, ElementName=MainGrid}" Value="False">
-                                                        <Setter Property="InlineList" Value="{Binding Path=Inlines}" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Path=Tag, ElementName=MainGrid}" Value="True">
-                                                        <Setter Property="Text" Value="{Binding Path=VerseText}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </helpers:BindableTextBlock>
+                                        BorderThickness="0"
+                                        IsReadOnly="True" />
                                     <TextBlock
                                         Name="BackTranslation"
                                         Margin="10,10,0,0"

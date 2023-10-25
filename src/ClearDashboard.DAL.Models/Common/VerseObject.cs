@@ -22,6 +22,8 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? VerseText { get; set; }
 
+        public string? RichVerseText { get; set; }
+
         public Guid? Id { get; set; }
 
         public Guid? CorpusId { get; set; }
