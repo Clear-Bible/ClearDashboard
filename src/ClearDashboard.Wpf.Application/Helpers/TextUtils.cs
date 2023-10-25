@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 try
                 {
                     // look for full word and case sensitive
-                    Regex pattern = new Regex("(?<= |^)" + puncLessWord.ToUpper() + "(?= |)");
+                    Regex pattern = new Regex("(?i)(?<=\\s|^|\\W)" + puncLessWord.ToUpper() + "(?=\\s|$|\\W)");
                     Match matchResults = pattern.Match(puncLessVerse.ToUpper());
                     while (matchResults.Success)
                     {

@@ -1309,11 +1309,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private void CreateInlines(PinsDataTable dataRow)
         {
+            var puncs = Punctuation.LoadPunctuation();
+
             // create inlines of the selected word
             foreach (var verse in _selectedItemVerses)
             {
-                var puncs = Punctuation.LoadPunctuation();
-
                 var renderings = dataRow.Source.Split("; ").Distinct().ToList();
 
                 var output = TextUtils.HighLightWordsRtf(renderings, verse.VerseText, null, puncs, FontFamily, FontSize);
