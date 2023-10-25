@@ -166,18 +166,6 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
         mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.Alignment), AlignmentBuilder.BOOK_CHAPTER_LOCATION),
             Enumerable.Empty<string>());
-
-        // By mapping SourceTokenSurfaceText to an empty property name string, we effectively
-        // leave it out of the inserting/updating part of Merge:
-        mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Alignment), AlignmentBuilder.SOURCE_TOKEN_SURFACE_TEXT),
-            Enumerable.Empty<string>());
-
-        // By mapping TargetTokenSurfaceText to an empty property name string, we effectively
-        // leave it out of the inserting/updating part of Merge:
-        mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Alignment), AlignmentBuilder.TARGET_TOKEN_SURFACE_TEXT),
-            Enumerable.Empty<string>());
     }
 }
 
