@@ -48,15 +48,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
         }
-
-        public override void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
-            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
-        {
-            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, sourceTokenizedCorpusNotes);
-            if (targetTokenizedCorpusNotes != null)
-                SetExternalNotesOnTokenDisplayViewModels(TargetTokenDisplayViewModels, targetTokenizedCorpusNotes);
-        }
-
         protected override IEnumerable<Token>? GetSourceTokens(bool isSource, TokenId tokenId)
         {
 

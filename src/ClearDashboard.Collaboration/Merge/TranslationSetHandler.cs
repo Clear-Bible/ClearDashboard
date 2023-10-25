@@ -17,6 +17,9 @@ public class TranslationSetHandler : DefaultMergeHandler<IModelSnapshot<Models.T
     {
     }
 
+    public static (Type EntityType, string EntityId, string ItemName) TranslationSetCacheKey(Guid translationSetId) =>
+        (typeof(Models.TranslationSet), translationSetId.ToString()!, nameof(Models.TranslationSet));
+
     protected override async Task HandleCreateChildrenAsync(IModelSnapshot<Models.TranslationSet> parentSnapshot, CancellationToken cancellationToken)
     {
         var translationSetId = (Guid)parentSnapshot.GetId();

@@ -991,6 +991,17 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             CorpusNodeViewModel = corpusNodeViewModel,
                             Tokenizer = tokenizer.ToString(),
                         });
+
+                        //FIXME: EXTERNALNOTES uncomment following to add
+                        //corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        //{
+                        //    Header = LocalizationService.Get("Pds_GetLatestExternalNotes"),
+                        //    Id = DesignSurfaceMenuIds.GetLatestExternalNotes,
+                        //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                        //    IconKind = PackIconPicolIconsKind.Edit.ToString(),
+                        //    CorpusNodeViewModel = corpusNodeViewModel,
+                        //    Tokenizer = tokenizer.ToString(),
+                        //});
                     }
 
 

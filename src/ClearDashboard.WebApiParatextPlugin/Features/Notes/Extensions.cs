@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
-
+using System.Xml.Serialization;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {
@@ -35,16 +35,24 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                     (projectNote.Anchor.Offset - tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVerseRawUsfm);
             }
 
+            var body = projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum));
             return new ExternalNote()
             {
                 VersePlainText = versePlainText,
                 SelectedPlainText = projectNote.Anchor.SelectedText,
                 IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
                 VerseRefString = verseRef.ToString(),
-                Body = SerializeNoteBody(projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum)))
+                Body = SerializeNoteBodyXml(body),
+                Message = GetMessage(body)
             };
         }
 
+        private static string GetMessage(Body body)
+        {
+            return body
+                .Comments
+                    .Aggregate("", (str, next) => $"{str}Author {next.Author} {next.Created}:\n{next.Paragraphs.Aggregate("", (innerstring, next) => $"{innerstring}{next}\n")}\n\n");
+        }
         [DataContract]
         public class BodyComment
         {
@@ -79,7 +87,17 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             [DataMember]
             public string VerseUsfmText { get; set; }
         }
-        private static string SerializeNoteBody(Body body)
+
+        private static string SerializeNoteBodyXml(Body body)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Body>));
+            using (StringWriter textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, new List<Body> { body });
+                return textWriter.ToString();
+            }
+        }
+        private static string SerializeNoteBodyJson(Body body)
         {
             //from https://learn.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-serialize-and-deserialize-json-data?redirectedfrom=MSDN for
             //.net 4.x

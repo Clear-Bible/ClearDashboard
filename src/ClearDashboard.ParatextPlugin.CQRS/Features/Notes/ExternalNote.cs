@@ -9,6 +9,7 @@ public class ExternalNote
     /// </summary>
     public int? IndexOfSelectedPlainTextInVersePainText { get; set; }
     public string VerseRefString { get; set; }
+    public string Message { get; set; }
     public string Body { get; set; }
 }
 

@@ -14,12 +14,14 @@ public class TokenRef : ModelRef<TokenRef>
     public bool IsComposite { get; set; } = false;
     public Guid TokenizedCorpusId { get; set; } = Guid.Empty;
     public string TokenLocation { get; set; } = string.Empty;
+    public string TokenSurfaceText { get; set; } = string.Empty;
 
     [JsonIgnore]
     public override IReadOnlyDictionary<string, object?> PropertyValues => new Dictionary<string, object?>() {
         { nameof(TokenRef.IsComposite), IsComposite },
         { nameof(TokenRef.TokenizedCorpusId), TokenizedCorpusId },
-        { nameof(TokenRef.TokenLocation), TokenLocation }
+        { nameof(TokenRef.TokenLocation), TokenLocation },
+        { nameof(TokenRef.TokenSurfaceText), TokenSurfaceText }
     }.AsReadOnly();
 
     public override IModelDifference<TokenRef> GetModelDifference(TokenRef other)

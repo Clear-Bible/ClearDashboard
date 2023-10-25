@@ -22,6 +22,7 @@ using TokenId = ClearBible.Engine.Corpora.TokenId;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using SIL.Scripture;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -70,6 +71,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private BindableCollection<ExternalNote> _externalNotes = new();
+        public BindableCollection<ExternalNote> ExternalNotes
+        {
+            get => _externalNotes;
+            set
+            {
+                Set(ref _externalNotes, value);
+                NotifyOfPropertyChange(nameof(ExternalNotes));
+                NotifyOfPropertyChange(nameof(HasExternalNotes));
+            }
+        }
+
+        public bool HasExternalNotes => ExternalNotes.Count() > 0;
+
+        public void NotifyExternalNotesItemsChanged()
+        {
+            NotifyOfPropertyChange(nameof(ExternalNotes));
+            NotifyOfPropertyChange(nameof(HasExternalNotes));
+        }
         public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
         public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
 
@@ -113,9 +133,78 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return null;
         }
 
-        public virtual void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
-            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
+        private class VerseRefVerseNoVersificationEqualityComparer : IEqualityComparer<VerseRef>
         {
+            public bool Equals(VerseRef x, VerseRef y)
+            {
+                return x.BookNum == y.BookNum
+                    && x.ChapterNum == y.ChapterNum
+                    && x.VerseNum == y.VerseNum;
+            }
+            public int GetHashCode([DisallowNull] VerseRef obj) => obj.BookNum ^ obj.ChapterNum ^ obj.VerseNum;
+        }
+        private class TokenIdVerseEqualityComparer : IEqualityComparer<TokenId>
+        {
+            public bool Equals(TokenId? x, TokenId? y)
+            {
+                if (ReferenceEquals(x, y))
+                    return true;
+
+                if (y is null || x is null)
+                    return false;
+
+                return x.BookNumber == y.BookNumber
+                    && x.ChapterNumber == y.ChapterNumber
+                    && x.VerseNumber == y.VerseNumber;
+            }
+
+            public int GetHashCode([DisallowNull] TokenId obj) => obj.BookNumber ^ obj.ChapterNumber ^ obj.VerseNumber;
+        }
+        public virtual void SetExternalNotes(List<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> tokenizedCorpusNotes)
+        {
+            //update tokens explicitly associated with external notes
+            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, tokenizedCorpusNotes.First());
+            if (tokenizedCorpusNotes.Count() > 1)
+                SetExternalNotesOnTokenDisplayViewModels(TargetTokenDisplayViewModels, tokenizedCorpusNotes.Skip(1).First());
+
+            // update verse with external notes associated with verse but not explicitly with tokens in verse.
+            TokenIdVerseEqualityComparer tokenIdVerseEqualityComparer = new();
+            var uniqueVersesRepresentedByTokens = SourceTokenDisplayViewModels
+                .Select(tdvm => tdvm.Token.TokenId)
+                .Distinct(tokenIdVerseEqualityComparer)
+                .Select(tid => new VerseRef(tid.BookNumber, tid.ChapterNumber, tid.VerseNumber))
+                .ToList();
+
+            uniqueVersesRepresentedByTokens.AddRange(TargetTokenDisplayViewModels
+                .Select(tdvm => tdvm.Token.TokenId)
+                .Distinct(tokenIdVerseEqualityComparer)
+                .Select(tid => new VerseRef(tid.BookNumber, tid.ChapterNumber, tid.VerseNumber)));
+
+
+            VerseRefVerseNoVersificationEqualityComparer verseRefNoVersificationComparer = new();
+            var externalNotes = tokenizedCorpusNotes
+                .SelectMany(tcn => tcn)
+                .Where(noteInfos => uniqueVersesRepresentedByTokens.Contains(noteInfos.verseRef))
+                .Where(noteInfos => noteInfos.tokenIds == null || noteInfos.tokenIds.Count() == 0)
+                .Select(noteInfo => noteInfo.externalNote)
+                .ToList();
+
+            bool notifyVerseDisplayViewModelExternalNotesItemsChanged = false;
+            if (ExternalNotes.Count() > 0)
+            {
+                ExternalNotes.Clear();
+                notifyVerseDisplayViewModelExternalNotesItemsChanged = true;
+            }
+
+            if (externalNotes != null && externalNotes.Count() > 0)
+            {
+                ExternalNotes.AddRange(externalNotes);
+                notifyVerseDisplayViewModelExternalNotesItemsChanged = true;
+            }
+
+            if (notifyVerseDisplayViewModelExternalNotesItemsChanged)
+                NotifyExternalNotesItemsChanged();
+
         }
         protected void SetExternalNotesOnTokenDisplayViewModels(TokenDisplayViewModelCollection tokenDisplayViewModels, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> noteInfos)
         {
@@ -125,14 +214,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     .Where(noteInfo => noteInfo.tokenIds?.Contains(tokenDisplayViewModel.Token.TokenId) ?? false)
                     .Select(noteInfo => noteInfo.externalNote)
                     .ToList();
+
+                bool notifyTokenViewModelExternalNotesItemsChanged = false;
+                if (tokenDisplayViewModel.ExternalNotes.Count() > 0)
+                {
+                    tokenDisplayViewModel.ExternalNotes.Clear();
+                    notifyTokenViewModelExternalNotesItemsChanged = true;
+                }
+
                 if (externalNotes != null && externalNotes.Count() > 0)
                 {
-                    tokenDisplayViewModel.ExternalNotes = externalNotes;
+                    tokenDisplayViewModel.ExternalNotes.AddRange(externalNotes);
+                    notifyTokenViewModelExternalNotesItemsChanged = true;
                 }
-                else
-                {
-                    tokenDisplayViewModel.ExternalNotes = null;
-                }
+
+                if (notifyTokenViewModelExternalNotesItemsChanged)
+                    tokenDisplayViewModel.NotifyExternalNotesItemsChanged();
             }
         }
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)

@@ -72,6 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public readonly BackgroundTasksViewModel BackgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
+        private readonly NoteManager _noteManager;
         private readonly SystemPowerModes _systemPowerModes;
 
         private const string TaskName = "Alignment Deletion";
@@ -166,10 +167,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ILifetimeScope lifetimeScope,
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
-            IEnhancedViewManager enhancedViewManager)
+            IEnhancedViewManager enhancedViewManager,
+            NoteManager noteManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
+            _noteManager = noteManager;
             _systemPowerModes = systemPowerModes;
             _windowManager = windowManager;
             BackgroundTasksViewModel = backgroundTasksViewModel;
@@ -1149,6 +1152,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await SaveDesignSurfaceData();
             }
         }
+        public void GetLatestExternalNotes(string externalProjectId)
+        {
+            try
+            {
+                Logger!.LogInformation("GetLatestExternalNotes called.");
+
+                var taskName = $"GetLatestExternalNotesFor{externalProjectId}";
+                var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
+                var cancellationToken = task.CancellationTokenSource!.Token;
+
+                _ = Task.Run(async () =>
+                {
+                    _busyState.Add(taskName, true);
+
+
+                    try
+                    {
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                            description: $"Retrieving external notes for externalProjectId '{externalProjectId}'...", cancellationToken: cancellationToken);
+
+                        await _noteManager.ExternalNoteManager.InvalidateExternalNotesCache(externalProjectId);
+
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                            description: $"Retrieving external notes for externalProjectId '{externalProjectId}'...Completed", cancellationToken: cancellationToken);
+
+                        _longRunningTaskManager.TaskComplete(taskName);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Logger!.LogInformation("GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
+                    }
+                    catch (MediatorErrorEngineException ex)
+                    {
+                        if (ex.Message.Contains("The operation was canceled"))
+                        {
+                            Logger!.LogInformation($"GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
+                        }
+                        else
+                        {
+                            Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger!.LogError(ex, $"An unexpected error occurred while retrieving external notes for '{externalProjectId}' ");
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed, exception: ex, cancellationToken: cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        _longRunningTaskManager.TaskComplete(taskName);
+                        _busyState.Remove(taskName);
+                    }
+                }, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Logger!.LogInformation($"GetLatestExternalNotes() - Exception was thrown {e}");
+            }
+        }
 
         public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer)
         {
@@ -1604,6 +1670,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
                     await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
+                    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.GetLatestExternalNotes:
+                    GetLatestExternalNotes(corpusNodeViewModel.ParatextProjectId);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowLexiconDialog:
                     await ShowLexiconDialog(corpusNodeViewModel.CorpusId);

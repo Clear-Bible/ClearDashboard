@@ -33,7 +33,6 @@
     <None Remove="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Builder\" />
     <Folder Include="DifferenceModel\" />
     <Folder Include="Factory\" />
     <Folder Include="Serializer\" />
