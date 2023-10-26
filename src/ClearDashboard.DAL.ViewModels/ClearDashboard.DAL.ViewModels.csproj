@@ -3,9 +3,9 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <FileVersion>1.2.0.15</FileVersion>
-    <Version>1.2.0.15</Version>
-    <AssemblyVersion>1.2.0.15</AssemblyVersion>
+    <FileVersion>1.2.0.16</FileVersion>
+    <Version>1.2.0.16</Version>
+    <AssemblyVersion>1.2.0.16</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
