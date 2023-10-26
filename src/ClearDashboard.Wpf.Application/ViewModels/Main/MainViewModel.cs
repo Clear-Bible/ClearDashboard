@@ -2406,6 +2406,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await OnInitializeAsync(CancellationToken.None);
             await OnActivateAsync(CancellationToken.None);
             //await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+
+            await EventAggregator.PublishOnUIThreadAsync(new ReloadNotesListMessage(), cancellationToken);
         }
 
 

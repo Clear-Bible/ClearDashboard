@@ -13,8 +13,6 @@ using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Drawing;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -23,7 +21,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
-using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
