@@ -171,6 +171,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         
         private void OnNewTranslationChanged(object sender, RoutedEventArgs e)
         {
+            NewTranslationCheckBox.IsChecked = true;
             RaiseTranslationEntryEvent(NewTranslationChangedEvent, new LexiconTranslationViewModel { Text = NewTranslationTextBox.Text });
         }
 
