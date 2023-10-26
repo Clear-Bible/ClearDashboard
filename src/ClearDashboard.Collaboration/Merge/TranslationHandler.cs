@@ -104,12 +104,6 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
         mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.Translation), "SourceTokenLocation"),
             new[] { nameof(Models.Translation.SourceTokenComponentId) });
-
-        // By mapping SourceTokenSurfaceText to an empty property name string, we effectively
-        // leave it out of the inserting/updating part of Merge:
-        mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Translation), TranslationBuilder.SOURCE_TOKEN_SURFACE_TEXT),
-            Enumerable.Empty<string>());
     }
 }
 
