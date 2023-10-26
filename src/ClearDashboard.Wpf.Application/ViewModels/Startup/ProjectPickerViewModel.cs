@@ -395,6 +395,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private Visibility _projectLoadingProgressBarVisibility = Visibility.Collapsed;
+        public Visibility ProjectLoadingProgressBarVisibility
+        {
+            get => _projectLoadingProgressBarVisibility;
+            set
+            {
+                _projectLoadingProgressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProjectLoadingProgressBarVisibility);
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -1137,6 +1148,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
+            if (ProjectLoadingProgressBarVisibility == Visibility.Visible)
+            {
+                return;
+            }
+            
             var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
             if (currentlyOpenProjectsList.Contains(project.ProjectName))
             {
@@ -1145,35 +1161,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             AlreadyOpenMessageVisibility = Visibility.Collapsed;
 
-
-            ProjectManager!.CurrentDashboardProject = project;
-            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
-            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(project.PermissionLevel));
-
-            OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
-
-            ParentViewModel!.ExtraData = project;
-
-
-            var projectGuid =
-                await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(project.FullFilePath), CancellationToken.None);
-
-
-            // get the user's projects
-            var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
-
-            foreach (var gitLabProject in projectList)
+            try
             {
-                var guid = gitLabProject.Name.Substring(2).ToUpper();
-                if (guid == projectGuid.Data)
+                ProjectLoadingProgressBarVisibility = Visibility.Visible;
+
+                ProjectManager!.CurrentDashboardProject = project;
+                await EventAggregator.PublishOnUIThreadAsync(
+                    new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
+                await EventAggregator.PublishOnUIThreadAsync(
+                    new DashboardProjectPermissionLevelMessage(project.PermissionLevel));
+
+               
+                //Turn on ProgressBar
+
+                ParentViewModel!.ExtraData = project;
+
+
+                var projectGuid =
+                    await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(project.FullFilePath),
+                        CancellationToken.None);
+
+
+                // get the user's projects
+                var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+
+                foreach (var gitLabProject in projectList)
                 {
-                    _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
-                    break;
+                    var guid = gitLabProject.Name.Substring(2).ToUpper();
+                    if (guid == projectGuid.Data)
+                    {
+                        _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
+                        break;
+                    }
                 }
+
+
+                ParentViewModel.Ok();
             }
-
-
-            ParentViewModel.Ok();
+            finally
+            {
+                OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
+                ProjectLoadingProgressBarVisibility = Visibility.Collapsed;
+            }
         }
 
         public async Task ImportServerProject(DashboardCollabProject project, MouseButtonEventArgs args)
