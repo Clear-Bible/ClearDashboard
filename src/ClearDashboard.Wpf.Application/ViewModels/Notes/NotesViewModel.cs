@@ -8,6 +8,7 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -22,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,9 +40,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         IHandle<NoteUpdatedMessage>,
         IHandle<NoteLabelAttachedMessage>,
         IHandle<NoteLabelDetachedMessage>,
-        IHandle<TokenizedCorpusUpdatedMessage>
+        IHandle<TokenizedCorpusUpdatedMessage>, IHandle<ReloadNotesListMessage>
     {
         #region Member Variables   
+
+        private Guid Guid = Guid.NewGuid();
+
         private const string TaskName = "Notes";
         private const int ToleranceContainsFuzzyAssociationsDescriptions = 1;
         private const int ToleranceContainsFuzzyNoteText = 1;
@@ -438,6 +443,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             try
             {
+                //Debug.WriteLine($"GetNotesAndSetNoteViewModelsAsync GUID: {Guid}");
 
                 var selectedNoteId = SelectedNoteViewModel?.NoteId ?? null;
 
@@ -685,7 +691,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await GetAllNotesAndSetNoteViewModelsAsync();
         }
 
+
+        //public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
+        //{
+        //    await GetAllNotesAndSetNoteViewModelsAsync(true);
+        //}
+
+        public async Task HandleAsync(ReloadNotesListMessage message, CancellationToken cancellationToken)
+        {
+            await GetAllNotesAndSetNoteViewModelsAsync(true);
+        }
+
+
         #endregion // Methods
+
 
 
     }
