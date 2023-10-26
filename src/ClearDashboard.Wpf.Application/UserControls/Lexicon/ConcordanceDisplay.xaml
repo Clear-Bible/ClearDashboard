@@ -79,7 +79,6 @@
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
                 FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
-                IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewTranslationTextBoxIsEnabled}"
                 KeyUp="OnNewTranslationTextBoxKeyUp"
                 TextChanged="OnNewTranslationChanged" />
             <TextBlock
