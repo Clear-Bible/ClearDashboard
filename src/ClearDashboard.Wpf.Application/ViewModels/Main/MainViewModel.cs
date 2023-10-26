@@ -2282,6 +2282,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // rebuild the menu system with the new language
             await RebuildMainMenu();
+
+            // redraw the corpus and parallel corpus menus 
+            await EventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus(), cancellationToken);
+            await EventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus(), cancellationToken);
         }
 
         public async Task HandleAsync(RebuildMainMenuMessage message, CancellationToken cancellationToken)
