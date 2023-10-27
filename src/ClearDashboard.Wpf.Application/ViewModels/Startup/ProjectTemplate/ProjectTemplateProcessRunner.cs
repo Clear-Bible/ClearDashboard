@@ -34,6 +34,7 @@ using BookInfo = ClearDashboard.DataAccessLayer.Models.BookInfo;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using ParatextProjectMetadata = ClearDashboard.DataAccessLayer.Models.ParatextProjectMetadata;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 
 namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 {
@@ -41,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
     {
 
         #region Member Variables   
-
+        
         private abstract record BackgroundTask
         {
             public BackgroundTask(Type taskReturnType, string? taskName = null) { TaskReturnType = taskReturnType; TaskName = taskName ?? Guid.NewGuid().ToString(); }
@@ -172,6 +173,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
         private readonly object lockObject = new();
 
         private readonly ObservableDictionary<string, bool> _busyState = new();
+        private readonly BackgroundTasksViewModel _backgroundTasksViewModel;
 
         #endregion //Member Variables
 
@@ -198,6 +200,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             IEventAggregator eventAggregator,
             TranslationCommands translationCommands,
             LongRunningTaskManager longRunningTaskManager,
+            BackgroundTasksViewModel backgroundTasksViewModel,
             SystemPowerModes systemPowerModes)
         {
             Logger = logger;
@@ -206,6 +209,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             TranslationCommands = translationCommands;
             LongRunningTaskManager = longRunningTaskManager;
             SystemPowerModes = systemPowerModes;
+            _backgroundTasksViewModel = backgroundTasksViewModel;
         }
 
         #endregion //Constructor
@@ -478,6 +482,11 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             Task<TokenizedTextCorpus> sourceTokenizedTextCorpusTask, 
             Task<TokenizedTextCorpus> targetTokenizedTextCorpusTask)
         {
+            if (Properties.Settings.Default.EnablePowerModes && SystemPowerModes.IsLaptop)
+            {
+                await SystemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             if (!sourceTokenizedTextCorpusTask.IsCompleted || !targetTokenizedTextCorpusTask.IsCompleted)
             {
                 await AwaitCancelAllIfErrorAsync(sw, sourceTokenizedTextCorpusTask, targetTokenizedTextCorpusTask);
@@ -500,6 +509,13 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             Logger.LogInformation($"{nameof(AwaitRunAddParallelCorpusTask)} '{displayName}' after run  Elapsed={sw.Elapsed}");
 
+            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+            if (numTasks == 0 && SystemPowerModes.IsHighPerformanceEnabled)
+            {
+                // shut down high performance mode
+                await SystemPowerModes.TurnOffHighPerformanceMode();
+            }
+
             return parallelCorpus;
         }
 
@@ -511,6 +527,12 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             string? smtModelName,
             bool generateAlignedTokenPairs)
         {
+
+            if (Properties.Settings.Default.EnablePowerModes && SystemPowerModes.IsLaptop)
+            {
+                await SystemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             if (!parallelCorpusTask.IsCompleted)
             {
                 await AwaitCancelAllIfErrorAsync(sw, parallelCorpusTask);
@@ -527,6 +549,13 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             Logger.LogInformation($"{nameof(AwaitRunTrainSmtModelTask)} '{parallelCorpusTask.Result.ParallelCorpusId.DisplayName}' after run  Elapsed={sw.Elapsed}");
 
+            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+            if (numTasks == 0 && SystemPowerModes.IsHighPerformanceEnabled)
+            {
+                // shut down high performance mode
+                await SystemPowerModes.TurnOffHighPerformanceMode();
+            }
+
             return trainingResult;
         }
 
@@ -536,6 +565,11 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             Task<TrainSmtModelSet> trainSmtModelTask,
             Task<ParallelCorpus> parallelCorpusTask)
         {
+            if (Properties.Settings.Default.EnablePowerModes && SystemPowerModes.IsLaptop)
+            {
+                await SystemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             if (!trainSmtModelTask.IsCompleted || !parallelCorpusTask.IsCompleted)
             {
                 await AwaitCancelAllIfErrorAsync(sw, trainSmtModelTask, parallelCorpusTask);
@@ -557,6 +591,13 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             Logger.LogInformation($"{nameof(AwaitRunAddAlignmentSetTask)} '{parallelCorpusTask.Result.ParallelCorpusId.DisplayName}' after run  Elapsed={sw.Elapsed}");
 
+            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+            if (numTasks == 0 && SystemPowerModes.IsHighPerformanceEnabled)
+            {
+                // shut down high performance mode
+                await SystemPowerModes.TurnOffHighPerformanceMode();
+            }
+
             return alignmentSet;
         }
 
@@ -566,6 +607,11 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             Task<TrainSmtModelSet> trainSmtModelTask,
             Task<AlignmentSet> alignmentSetTask)
         {
+            if (Properties.Settings.Default.EnablePowerModes && SystemPowerModes.IsLaptop)
+            {
+                await SystemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             if (!trainSmtModelTask.IsCompleted || !alignmentSetTask.IsCompleted)
             {
                 await AwaitCancelAllIfErrorAsync(sw, trainSmtModelTask, alignmentSetTask);
@@ -584,6 +630,13 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 taskName);
 
             Logger.LogInformation($"{nameof(AwaitRunAddTranslationSetTask)} '{alignmentSetTask.Result.ParallelCorpusId.DisplayName}' after run  Elapsed={sw.Elapsed}");
+
+            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+            if (numTasks == 0 && SystemPowerModes.IsHighPerformanceEnabled)
+            {
+                // shut down high performance mode
+                await SystemPowerModes.TurnOffHighPerformanceMode();
+            }
 
             return translationSet;
         }
@@ -687,6 +740,11 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         public async Task<TokenizedTextCorpus> RunBackgroundAddManuscriptCorpusAsync(string taskName, CorpusType corpusType)
         {
+            if (Properties.Settings.Default.EnablePowerModes && SystemPowerModes.IsLaptop)
+            {
+                await SystemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             ParatextProjectMetadata metadata;
             LanguageCodeEnum languageCode;
 
@@ -721,9 +779,18 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 throw new ArgumentException(nameof(AddManuscriptCorpusAsync) + " only supports ManuscriptHebrew and ManuscriptGreek CorpusTypes", nameof(corpusType));
             }
 
-            return await RunBackgroundLongRunningTaskAsync(
+            var corpus = await RunBackgroundLongRunningTaskAsync(
                 (string taskName, CancellationToken cancellationToken) => AddManuscriptCorpusAsync(taskName, metadata, languageCode, cancellationToken),
                 taskName);
+
+            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+            if (numTasks == 0 && SystemPowerModes.IsHighPerformanceEnabled)
+            {
+                // shut down high performance mode
+                await SystemPowerModes.TurnOffHighPerformanceMode();
+            }
+
+            return corpus;
         }
 
         public async Task<TokenizedTextCorpus> AddManuscriptCorpusAsync(string taskName, ParatextProjectMetadata metadata, LanguageCodeEnum languageCode, CancellationToken cancellationToken)
@@ -785,14 +852,28 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         public async Task<TokenizedTextCorpus> RunBackgroundAddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds)
         {
+            if (Properties.Settings.Default.EnablePowerModes && SystemPowerModes.IsLaptop)
+            {
+                await SystemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             if (!bookIds.Any())
             {
                 throw new ArgumentException("BookIds is empty", nameof(bookIds));
             }
 
-            return await RunBackgroundLongRunningTaskAsync(
+            var corpus = await RunBackgroundLongRunningTaskAsync(
                 (string taskName, CancellationToken cancellationToken) => AddParatextProjectCorpusAsync(taskName, metadata, tokenizer, bookIds, cancellationToken),
                 taskName);
+
+            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+            if (numTasks == 0 && SystemPowerModes.IsHighPerformanceEnabled)
+            {
+                // shut down high performance mode
+                await SystemPowerModes.TurnOffHighPerformanceMode();
+            }
+
+            return corpus;
         }
 
         public async Task<TokenizedTextCorpus> AddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds, CancellationToken cancellationToken)
