@@ -7,6 +7,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 //USE TO ACCESS Models
@@ -200,6 +201,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             // 2.  Try Lexicon
+            //  Here we first look for token training text values in Lexicon_Lexeme,
+            //  and then for cases where there no matches, try Lexicon_Form:
             if (tokenGuidsNotFound.Any() && ProjectDbContext.Lexicon_Lexemes.Any())
             {
 #if DEBUG
@@ -210,6 +213,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 cancellationToken.ThrowIfCancellationRequested();
 
+                // Query the database for 'not found' token ids:
                 var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
                     .Include(tc => ((TokenComposite)tc).Tokens)
                     .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
@@ -221,23 +225,98 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                combined.AddRange(ProjectDbContext.Lexicon_Lexemes
+                // Query the database for Lexemes that match language AND lemma (to any of the TokenComponents' TrainingText):
+                var trainingTextLexemeTranslations = ProjectDbContext.Lexicon_Lexemes
                     .Include(li => li.Meanings
-                        .Where(d => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(d.Language) || d.Language == targetLanguage))
+                        .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage))
+                        .ThenInclude(m => m.Translations)
+                    .Where(li => li.Lemma != null)
                     .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
-                    .Where(li => sourceTokenTrainingTexts.Keys.Contains(li.Lemma))
+                    .Where(li => li.Meanings.Any(m => m.Translations.Any()))
+                    .Where(li => sourceTokenTrainingTexts.Keys.Contains(li.Lemma!))
                     .ToList()
-                    .SelectMany(li => sourceTokenTrainingTexts[li.Lemma!]
-                        .Select(t => new Alignment.Translation.Translation(
-                            ModelHelper.BuildToken(t),
-                            string.Join("/", li.Meanings.Select(lid => lid.Text)),
-                            OriginatedFromValues.FromLexicon)
-                        )
-                    ));
-
-                tokenGuidsNotFound = tokenGuidsNotFound
-                    .Where(tid => !combined.Select(t => t.SourceToken.TokenId.Id).Contains(tid))
+                    .Select(li => (TrainingTextMatch: li.Lemma!, LexemeType: li.Type, FirstTranslation: li.Meanings
+                        .SelectMany(lm => lm.Translations
+                            .Select(lt => lt.Text!))
+                        .First()))
                     .ToList();
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var tokenGuidsFound = new List<Guid>();
+
+                // Add matches to combined:
+                foreach (var (TrainingTextMatch, LexemeType, FirstTranslation) in trainingTextLexemeTranslations
+                    .OrderBy(e => e.TrainingTextMatch)
+                    .OrderByDescending(e => e.LexemeType))
+                {
+                    foreach (var tokenMatch in sourceTokenTrainingTexts[TrainingTextMatch])
+                    {
+                        if (!tokenGuidsFound.Contains(tokenMatch.Id) && 
+                            (LexemeType is null || tokenMatch.Type is null || LexemeType == tokenMatch.Type))
+                        {
+                            combined.Add(new Alignment.Translation.Translation(
+                                ModelHelper.BuildToken(tokenMatch),
+                                FirstTranslation,
+                                OriginatedFromValues.FromLexicon
+                            ));
+
+                            tokenGuidsFound.Add(tokenMatch.Id);
+                        }
+                    }
+                }
+
+                // Remove token ids that were added to combined:
+                foreach (var trainingText in sourceTokenTrainingTexts.Keys)
+                {
+                    sourceTokenTrainingTexts[trainingText] = sourceTokenTrainingTexts[trainingText].ExceptBy(tokenGuidsFound, e => e.Id);
+                }
+
+                // Remove keys having empty value sets:
+                sourceTokenTrainingTexts = sourceTokenTrainingTexts
+                    .Where(e => e.Value.Any())
+                    .ToDictionary(x => x.Key, x => x.Value);
+
+                // Query the database for Forms that match Lexeme language AND form Text (to any of the TokenComponents' TrainingText):
+                var trainingTextFormTranslations = ProjectDbContext.Lexicon_Forms
+                    .Include(lf => lf.Lexeme)
+                        .ThenInclude(li => li!.Meanings
+                            .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage))
+                            .ThenInclude(m => m.Translations)
+                    .Where(lf => lf.Text != null)
+                    .Where(lf => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(lf.Lexeme!.Language) || lf.Lexeme!.Language == sourceLanguage)
+                    .Where(lf => lf.Lexeme!.Meanings.Any(m => m.Translations.Any()))
+                    .Where(lf => sourceTokenTrainingTexts.Keys.Contains(lf.Text!))
+                    .ToList()
+                    .Select(lf => (TrainingTextMatch: lf.Text!, LexemeType: lf.Lexeme!.Type, FirstTranslation: lf.Lexeme!.Meanings
+                        .SelectMany(lm => lm.Translations
+                            .Select(lt => lt.Text!))
+                        .First()));
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                // Add matches to combined:
+                foreach (var (TrainingTextMatch, LexemeType, FirstTranslation) in trainingTextFormTranslations
+                    .OrderBy(e => e.TrainingTextMatch)
+                    .OrderByDescending(e => e.LexemeType))
+                {
+                    foreach (var tokenMatch in sourceTokenTrainingTexts[TrainingTextMatch])
+                    {
+                        if (!tokenGuidsFound.Contains(tokenMatch.Id) &&
+                            (LexemeType is null || tokenMatch.Type is null || LexemeType == tokenMatch.Type))
+                        {
+                            combined.Add(new Alignment.Translation.Translation(
+                                ModelHelper.BuildToken(tokenMatch),
+                                FirstTranslation,
+                                OriginatedFromValues.FromLexicon
+                            ));
+
+                            tokenGuidsFound.Add(tokenMatch.Id);
+                        }
+                    }
+                }
+
+                tokenGuidsNotFound = tokenGuidsNotFound.Except(tokenGuidsFound).ToList();
 
 #if DEBUG
                 sw.Stop();
