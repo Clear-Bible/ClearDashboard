@@ -1430,7 +1430,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
             else
             {
-                Debug.WriteLine($"newConnection: {newConnection.SourceConnector!.CorpusType}  {newConnection.DestinationConnector!.CorpusType}");
+
+                var sourceString = newConnection.SourceConnector == null
+                    ? "No corpus selected"
+                    : newConnection.SourceConnector.CorpusType;
+
+                Debug.WriteLine($"newConnection: {sourceString}  {newConnection.DestinationConnector!.CorpusType}");
             }
 
             EventAggregator.PublishOnUIThreadAsync(new IsBackgroundDeletionTaskRunning("Alignment Deletion", connectorDraggedOut, connectorDraggedOver, newConnection));
