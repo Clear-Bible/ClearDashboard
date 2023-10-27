@@ -697,6 +697,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Id = DataAccessLayer.ManuscriptIds.HebrewManuscriptId,
                     Name = MaculaCorporaNames.HebrewCorpusName,
                     CorpusType = corpusType,
+                    IsRtl = true,
                     FontFamily = DataAccessLayer.FontNames.HebrewFontFamily,
                     LanguageId = ManuscriptIds.HebrewManuscriptLanguageId
                 };
@@ -709,6 +710,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Id = DataAccessLayer.ManuscriptIds.GreekManuscriptId,
                     Name = MaculaCorporaNames.GreekCorpusName,
                     CorpusType = corpusType,
+                    IsRtl = false,
                     FontFamily = DataAccessLayer.FontNames.GreekFontFamily,
                     LanguageId = ManuscriptIds.GreekManuscriptLanguageId
                 };
@@ -751,7 +753,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             var corpus = await Corpus.Create(
                 mediator: Mediator!,
-                IsRtl: false,
+                IsRtl: metadata.IsRtl,
                 Name: metadata.Name!,
                 Language: metadata.LanguageId!,
                 CorpusType: metadata.CorpusType.ToString(),
