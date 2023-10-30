@@ -86,9 +86,21 @@
                     <!--<Ellipse Fill="{StaticResource ConnectorBackgroundBrush}" Stroke="{StaticResource NodeBorderBrush}" />-->
                     <Rectangle
                         Fill="{StaticResource ConnectorBackgroundBrush}"
+                        IsHitTestVisible="True"
                         RadiusX="3"
-                        RadiusY="3"
-                        Stroke="{StaticResource NodeBorderBrush}" />
+                        RadiusY="3">
+                        <Rectangle.Style>
+                            <Style TargetType="{x:Type Rectangle}">
+                                <Setter Property="Stroke" Value="{StaticResource NodeBorderBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                        <Setter Property="StrokeThickness" Value="2" />
+                                        <Setter Property="Stroke" Value="{StaticResource IndigoMidBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Rectangle.Style>
+                    </Rectangle>
                     <!--<Grid>
                         <iconPacks:PackIconIonicons
                             Width="25"

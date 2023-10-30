@@ -164,6 +164,8 @@
 
                 <!--  Show a black dot at the start of the arrow when connected.  -->
                 <Ellipse
+                    Width="12"
+                    Height="12"
                     Margin="3"
                     Fill="{StaticResource ConnectionBrush}"
                     IsHitTestVisible="False"
