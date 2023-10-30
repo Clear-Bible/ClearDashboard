@@ -797,6 +797,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task AddUsfmCorpus()
         {
+            foreach (var nodes in DesignSurfaceViewModel.CorpusNodes)
+            {
+                Debug.WriteLine($"CorpusNode: {nodes.Name}");
+                Debug.WriteLine($"CorpusNode: {nodes.CorpusType}");
+
+                Debug.WriteLine($"CorpusNode: {nodes.OutputConnectors[0].Name}");
+                Debug.WriteLine($"CorpusNode: {nodes.OutputConnectors[0].ParatextId}");
+
+                Debug.WriteLine($"CorpusNode: {nodes.InputConnectors[0].Name}");
+                Debug.WriteLine($"CorpusNode: {nodes.InputConnectors[0].ParatextId}");
+
+            }
+
             // TODO:  need to complete implementation
             await Task.CompletedTask;
         }
