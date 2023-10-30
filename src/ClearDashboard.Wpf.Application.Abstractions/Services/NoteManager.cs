@@ -513,26 +513,32 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                Label? newLabel = null;
-                // For thread safety, because Note.CreateAssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
-                async void CreateAssociateLabel()
+                var matchingLabel = note.Labels.GetMatchingLabel(labelText);
+                if (matchingLabel == null)
                 {
-                    newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText, null);
-                    LabelSuggestions.Add(newLabel);
-                    LabelSuggestions = new LabelCollection(LabelSuggestions.OrderBy(l => l.Text));
-                    await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
-                }
-                await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
 #if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
 #endif
-                return newLabel;
+                    Label? newLabel = null;
+
+                    // For thread safety, because Note.CreateAssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
+                    async void CreateAssociateLabel()
+                    {
+                        newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText, null);
+                        LabelSuggestions.Add(newLabel);
+                        LabelSuggestions.Sort();
+                    }
+
+                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
+#if DEBUG
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
+                    return newLabel;
+                }
+                return matchingLabel;
             }
             catch (Exception e)
             {
@@ -542,7 +548,7 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         /// <summary>
-        /// Associates a <see cref="Label"/> with a <see cref="Note"/>.
+        /// Associates a <see cref="Label"/> with a <see cref="Note"/>, if it isn't already.
         /// </summary>
         /// <param name="note">The <see cref="NoteViewModel"/> to which to associate the label.</param>
         /// <param name="label">The <see cref="Label"/> to associate.</param>
@@ -551,22 +557,24 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                // For thread safety, because Note.AssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
-                async void AssociateLabel()
+                if (! note.Labels.ContainsMatchingLabel(label.Text))
                 {
-                    await note.Entity.AssociateLabel(Mediator, label);
-                }
-                await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
 #if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-
-                await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
 #endif
+                    // For thread safety, because Note.AssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
+                    async void AssociateLabel()
+                    {
+                        await note.Entity.AssociateLabel(Mediator, label);
+                    }
+                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
+#if DEBUG
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
+                }
             }
             catch (Exception e)
             {
