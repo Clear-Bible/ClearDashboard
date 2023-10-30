@@ -83,7 +83,26 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:ConnectorItem}">
                     <!--  The visual for the connector.  -->
-                    <Ellipse Fill="{StaticResource ConnectorBackgroundBrush}" Stroke="{StaticResource NodeBorderBrush}" />
+                    <!--<Ellipse Fill="{StaticResource ConnectorBackgroundBrush}" Stroke="{StaticResource NodeBorderBrush}" />-->
+                    <Rectangle
+                        Fill="{StaticResource ConnectorBackgroundBrush}"
+                        RadiusX="3"
+                        RadiusY="3"
+                        Stroke="{StaticResource NodeBorderBrush}" />
+                    <!--<Grid>
+                        <iconPacks:PackIconIonicons
+                            Width="25"
+                            Height="25"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource NodeBorderBrush}"
+                            Kind="OutletiOS" />
+                        <iconPacks:PackIconIonicons
+                            Width="22"
+                            Height="22"
+                            HorizontalAlignment="Center"
+                            Foreground="{StaticResource ConnectorBackgroundBrush}"
+                            Kind="OutletiOS" />
+                    </Grid>-->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
