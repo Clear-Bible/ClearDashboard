@@ -40,6 +40,16 @@ namespace ClearDashboard.Wpf.Application.Collections.Notes
             throw new NotImplementedException();
         }
 
+        public void Sort()
+        {
+            var labels = new List<Label>(this.OrderBy(l => l.Text).ToList());
+            Clear();
+            foreach (var label in labels)
+            {
+                Add(label);
+            }
+        }
+
         public void Replace(string labelText, Label newLabel, bool addIfNotExists = false)
         {
             var existing = GetMatchingLabel(labelText);
