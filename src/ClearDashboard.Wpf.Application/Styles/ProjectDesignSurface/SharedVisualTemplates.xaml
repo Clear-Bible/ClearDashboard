@@ -93,8 +93,8 @@
             <!--  The 'ConnectorItem' or anchor point for the connector.  -->
             <controls:ConnectorItem
                 Grid.Column="0"
-                Width="15"
-                Height="15"
+                Width="25"
+                Height="25"
                 Cursor="Hand" />
 
             <!--  The name of the connector.  -->
@@ -155,8 +155,8 @@
 
             <Grid
                 Grid.Column="1"
-                Width="15"
-                Height="15"
+                Width="25"
+                Height="25"
                 Cursor="Hand">
 
                 <!--  The 'ConnectorItem' or anchor point for the connector.  -->
