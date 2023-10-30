@@ -1431,8 +1431,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             else
             {
                 Debug.WriteLine($"newConnection: {newConnection.SourceConnector!.CorpusType}  {newConnection.DestinationConnector!.CorpusType}");
-
-                return;
             }
 
             EventAggregator.PublishOnUIThreadAsync(new IsBackgroundDeletionTaskRunning("Alignment Deletion", connectorDraggedOut, connectorDraggedOver, newConnection));
