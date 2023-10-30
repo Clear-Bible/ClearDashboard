@@ -95,7 +95,7 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
                                         <Setter Property="StrokeThickness" Value="2" />
-                                        <Setter Property="Stroke" Value="{StaticResource IndigoMidBrush}" />
+                                        <Setter Property="Stroke" Value="{StaticResource IndigoLightBrush}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
