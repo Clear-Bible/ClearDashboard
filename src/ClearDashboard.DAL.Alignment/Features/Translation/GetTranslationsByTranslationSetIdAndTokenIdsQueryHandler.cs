@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -34,7 +35,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<IEnumerable<Alignment.Translation.Translation>>> GetDataAsync(GetTranslationsByTranslationSetIdAndTokenIdsQuery request, CancellationToken cancellationToken)
         {
 #if DEBUG
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
             sw.Start();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
 #endif
@@ -68,9 +69,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             //var bookNumbers = request.TokenIds.GroupBy(t => t.BookNumber).Select(grp => grp.Key);
             var tokenIdGuids = request.TokenIds.Select(t => t.Id).ToList();
 
-            var translations = ModelHelper.AddIdIncludesTranslationsQuery(ProjectDbContext!)
+            var translations = await ModelHelper.AddIdIncludesTranslationsQuery(ProjectDbContext!)
                 .Include(tr => tr.LexiconTranslation)
-                    .ThenInclude(lt => lt.User)
+                    .ThenInclude(lt => lt != null ? lt.User : null)
                 .Where(tr => tr.Deleted == null)
                 .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
                 .Where(tr => tokenIdGuids.Contains(tr.SourceTokenComponentId))
@@ -80,7 +81,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     t.TargetText ?? string.Empty,
                     t.TranslationState.ToString(),
                     t.LexiconTranslation != null ? ModelHelper.BuildTranslationId(t.LexiconTranslation) : null))
-                .ToList();
+                .ToListAsync(cancellationToken);
 
             var tokenGuidsNotFound = tokenIdGuids.Except(translations.Select(t => t.SourceToken.TokenId.Id));
 
@@ -92,7 +93,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // For any token ids not found in Translations:
             if (tokenGuidsNotFound.Any())
             {
-                var combined = CombineModelTranslations(
+                var combined = await CombineModelTranslations(
                     translations, 
                     tokenGuidsNotFound, 
                     translationSet, 
@@ -120,14 +121,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 if (tokensIdsNotFound.Any())
                 {
-                    combined.AddRange(ProjectDbContext.TokenComponents
+                    combined.AddRange(await ProjectDbContext.TokenComponents
                         .Include(tc => ((TokenComposite)tc).Tokens)
                         .Where(tc => tokensIdsNotFound.Contains(tc.Id))
                         .Select(tc => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(tc),
                             string.Empty,
                             OriginatedFromValues.FromAlignmentModel,
-                            null)).ToList());
+                            null)).ToListAsync(cancellationToken));
                     //                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
 
 #if DEBUG
@@ -151,7 +152,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
         }
 
-        private List<Alignment.Translation.Translation> CombineModelTranslations(
+        private async Task<List<Alignment.Translation.Translation>> CombineModelTranslations(
             IEnumerable<Alignment.Translation.Translation> translations, 
             IEnumerable<Guid> tokenGuidsNotFound, 
             Models.TranslationSet translationSet,
@@ -164,15 +165,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             // 1. Try TranslationModel if it exists:
             if (ProjectDbContext!.TranslationModelEntries
-                .Where(tme => tme.TranslationSetId == translationSet.Id).Count() > 0)
+                .Where(tme => tme.TranslationSetId == translationSet.Id)
+                .Any())
             {
 #if DEBUG
-                Stopwatch sw = new Stopwatch();
+                Stopwatch sw = new();
                 sw.Start();
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Add model translations (start)");
 #endif
 
-                var translationModelEntries = ProjectDbContext!.TranslationModelEntries
+                var translationModelEntries = await ProjectDbContext!.TranslationModelEntries
                     .Include(tm => tm.TargetTextScores)
                     .Join(
                         ProjectDbContext!.TokenComponents
@@ -186,7 +188,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         ModelHelper.BuildToken(tmtc.tc),
                         tmtc.tm.TargetTextScores.OrderByDescending(tts => tts.Score).First().Text ?? string.Empty,
                         OriginatedFromValues.FromTranslationModel,
-                        null));
+                        null))
+                    .ToListAsync(cancellationToken);
 
                 combined.AddRange(translationModelEntries);
 
@@ -206,117 +209,66 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             if (tokenGuidsNotFound.Any() && ProjectDbContext.Lexicon_Lexemes.Any())
             {
 #if DEBUG
-                Stopwatch sw = new Stopwatch();
+                Stopwatch sw = new();
                 sw.Start();
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Add lexicon translations (start)");
 #endif
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 // Query the database for 'not found' token ids:
-                var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
-                    .Include(tc => ((TokenComposite)tc).Tokens)
-                    .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
-                    .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
-                    .Where(tc => tc.TrainingText != null)
-                    .ToList()
-                    .GroupBy(tc => tc.TrainingText!)
-                    .ToDictionary(g => g.Key, g => g.Select(i => i));
+                var sourceTokenComponentsByTrainingText = await GetSourceTokenComponentsByTrainingText(
+                    tokenGuidsNotFound, 
+                    translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId, 
+                    cancellationToken);
 
-                cancellationToken.ThrowIfCancellationRequested();
+                var translationsFromLexicon = new List<Alignment.Translation.Translation>();
 
-                // Query the database for Lexemes that match language AND lemma (to any of the TokenComponents' TrainingText):
-                var trainingTextLexemeTranslations = ProjectDbContext.Lexicon_Lexemes
-                    .Include(li => li.Meanings
-                        .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage))
-                        .ThenInclude(m => m.Translations)
-                    .Where(li => li.Lemma != null)
-                    .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
-                    .Where(li => li.Meanings.Any(m => m.Translations.Any()))
-                    .Where(li => sourceTokenTrainingTexts.Keys.Contains(li.Lemma!))
-                    .ToList()
-                    .Select(li => (TrainingTextMatch: li.Lemma!, LexemeType: li.Type, FirstTranslation: li.Meanings
-                        .SelectMany(lm => lm.Translations
-                            .Select(lt => lt.Text!))
-                        .First()))
-                    .ToList();
-
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var tokenGuidsFound = new List<Guid>();
-
-                // Add matches to combined:
-                foreach (var (TrainingTextMatch, LexemeType, FirstTranslation) in trainingTextLexemeTranslations
-                    .OrderBy(e => e.TrainingTextMatch)
-                    .OrderByDescending(e => e.LexemeType))
+                if (sourceTokenComponentsByTrainingText.Any())
                 {
-                    foreach (var tokenMatch in sourceTokenTrainingTexts[TrainingTextMatch])
-                    {
-                        if (!tokenGuidsFound.Contains(tokenMatch.Id) && 
-                            (LexemeType is null || tokenMatch.Type is null || LexemeType == tokenMatch.Type))
-                        {
-                            combined.Add(new Alignment.Translation.Translation(
-                                ModelHelper.BuildToken(tokenMatch),
-                                FirstTranslation,
-                                OriginatedFromValues.FromLexicon
-                            ));
-
-                            tokenGuidsFound.Add(tokenMatch.Id);
-                        }
-                    }
-                }
-
-                // Remove token ids that were added to combined:
-                foreach (var trainingText in sourceTokenTrainingTexts.Keys)
-                {
-                    sourceTokenTrainingTexts[trainingText] = sourceTokenTrainingTexts[trainingText].ExceptBy(tokenGuidsFound, e => e.Id);
-                }
-
-                // Remove keys having empty value sets:
-                sourceTokenTrainingTexts = sourceTokenTrainingTexts
-                    .Where(e => e.Value.Any())
-                    .ToDictionary(x => x.Key, x => x.Value);
-
-                // Query the database for Forms that match Lexeme language AND form Text (to any of the TokenComponents' TrainingText):
-                var trainingTextFormTranslations = ProjectDbContext.Lexicon_Forms
-                    .Include(lf => lf.Lexeme)
-                        .ThenInclude(li => li!.Meanings
+                    // Query the database for Lexemes that match language AND lemma (to any of the TokenComponents' TrainingText):
+                    var lexemeMatches = (await ProjectDbContext.Lexicon_Lexemes
+                        .Include(li => li.Meanings
                             .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage))
                             .ThenInclude(m => m.Translations)
-                    .Where(lf => lf.Text != null)
-                    .Where(lf => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(lf.Lexeme!.Language) || lf.Lexeme!.Language == sourceLanguage)
-                    .Where(lf => lf.Lexeme!.Meanings.Any(m => m.Translations.Any()))
-                    .Where(lf => sourceTokenTrainingTexts.Keys.Contains(lf.Text!))
-                    .ToList()
-                    .Select(lf => (TrainingTextMatch: lf.Text!, LexemeType: lf.Lexeme!.Type, FirstTranslation: lf.Lexeme!.Meanings
-                        .SelectMany(lm => lm.Translations
-                            .Select(lt => lt.Text!))
-                        .First()));
+                        .Where(li => li.Lemma != null)
+                        .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
+                        .Where(li => li.Meanings.Any(m => m.Translations.Any()))
+                        .Where(li => sourceTokenComponentsByTrainingText.Keys.Contains(li.Lemma!))
+                        .ToListAsync(cancellationToken))
+                        .Select(li => (TrainingTextMatch: li.Lemma!, LexemeType: li.Type, FirstTranslation: li.Meanings
+                            .SelectMany(lm => lm.Translations
+                                .Select(lt => lt.Text!))
+                            .First()))
+                        .ToList();
 
-                cancellationToken.ThrowIfCancellationRequested();
-
-                // Add matches to combined:
-                foreach (var (TrainingTextMatch, LexemeType, FirstTranslation) in trainingTextFormTranslations
-                    .OrderBy(e => e.TrainingTextMatch)
-                    .OrderByDescending(e => e.LexemeType))
-                {
-                    foreach (var tokenMatch in sourceTokenTrainingTexts[TrainingTextMatch])
-                    {
-                        if (!tokenGuidsFound.Contains(tokenMatch.Id) &&
-                            (LexemeType is null || tokenMatch.Type is null || LexemeType == tokenMatch.Type))
-                        {
-                            combined.Add(new Alignment.Translation.Translation(
-                                ModelHelper.BuildToken(tokenMatch),
-                                FirstTranslation,
-                                OriginatedFromValues.FromLexicon
-                            ));
-
-                            tokenGuidsFound.Add(tokenMatch.Id);
-                        }
-                    }
+                    translationsFromLexicon.AddRange(CreateTranslationsFromLexicon(lexemeMatches, sourceTokenComponentsByTrainingText));
                 }
 
-                tokenGuidsNotFound = tokenGuidsNotFound.Except(tokenGuidsFound).ToList();
+                // Any Lexeme matches from above result in values being removed from sourceTokenTrainingTexts.
+                // If any are leftover, try forms:
+                if (sourceTokenComponentsByTrainingText.Any())
+                {
+                    // Query the database for Forms that match Lexeme language AND form Text (to any of the TokenComponents' TrainingText):
+                    var formMatches = (await ProjectDbContext.Lexicon_Forms
+                        .Include(lf => lf.Lexeme)
+                            .ThenInclude(li => li!.Meanings
+                                .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage))
+                                .ThenInclude(m => m.Translations)
+                        .Where(lf => lf.Text != null)
+                        .Where(lf => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(lf.Lexeme!.Language) || lf.Lexeme!.Language == sourceLanguage)
+                        .Where(lf => lf.Lexeme!.Meanings.Any(m => m.Translations.Any()))
+                        .Where(lf => sourceTokenComponentsByTrainingText.Keys.Contains(lf.Text!))
+                        .ToListAsync(cancellationToken))
+                        .Select(lf => (TrainingTextMatch: lf.Text!, LexemeType: lf.Lexeme!.Type, FirstTranslation: lf.Lexeme!.Meanings
+                            .SelectMany(lm => lm.Translations
+                                .Select(lt => lt.Text!))
+                            .First()))
+                        .ToList();
+
+                    translationsFromLexicon.AddRange(CreateTranslationsFromLexicon(formMatches, sourceTokenComponentsByTrainingText));
+                }
+
+                combined.AddRange(translationsFromLexicon);
+                tokenGuidsNotFound = tokenGuidsNotFound.Except(translationsFromLexicon.Select(e => e.SourceToken.TokenId.Id)).ToList();
 
 #if DEBUG
                 sw.Stop();
@@ -328,33 +280,25 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             if (tokenGuidsNotFound.Any())
             {
 #if DEBUG
-                Stopwatch sw = new Stopwatch();
+                Stopwatch sw = new();
                 sw.Restart();
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Add alignment translations (start)");
 #endif
 
                 if (ProjectDbContext!.AlignmentSetDenormalizationTasks.Any(a => a.AlignmentSetId == translationSet.AlignmentSetId))
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    var sourceTokenComponentsByTrainingText = await GetSourceTokenComponentsByTrainingText(
+                        tokenGuidsNotFound,
+                        translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId,
+                        cancellationToken);
 
-                    var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
-                        .Include(tc => ((TokenComposite)tc).Tokens)
-                        .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
-                        .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
-                        .Where(tc => tc.TrainingText != null)
-                        .ToList()
-                        .GroupBy(tc => tc.TrainingText!)
-                        .ToDictionary(g => g.Key, g => g.Select(i => i));
-
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    var sourceTextToTopTargetTrainingText = ProjectDbContext!.Alignments
+                    var sourceTextToTopTargetTrainingText = (await ProjectDbContext!.Alignments
                         .Include(a => a.SourceTokenComponent)
                         .Include(a => a.TargetTokenComponent)
                         .Where(a => a.Deleted == null)
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
-                        .Where(a => sourceTokenTrainingTexts.Keys.Contains(a.SourceTokenComponent!.TrainingText))
-                        .ToList()
+                        .Where(a => sourceTokenComponentsByTrainingText.Keys.Contains(a.SourceTokenComponent!.TrainingText!))
+                        .ToListAsync(cancellationToken))
                         .WhereAlignmentTypesFilter(alignmentTypesToInclude)
                         .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
                         .ToDictionary(g => g.Key, g => g
@@ -362,10 +306,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                             .OrderByDescending(g => g.Count())
                             .First().Key);
 
-                    cancellationToken.ThrowIfCancellationRequested();
-
                     combined.AddRange(sourceTextToTopTargetTrainingText
-                        .SelectMany(kvp => sourceTokenTrainingTexts[kvp.Key]
+                        .SelectMany(kvp => sourceTokenComponentsByTrainingText[kvp.Key]
                             .Select(s =>
                                 new Alignment.Translation.Translation(
                                         ModelHelper.BuildToken(s),
@@ -380,7 +322,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 }
                 else
                 {
-                    var translationsFromAlignmentModel = ProjectDbContext.AlignmentTopTargetTrainingTexts
+                    var translationsFromAlignmentModel = await ProjectDbContext.AlignmentTopTargetTrainingTexts
                         .Include(a => a.SourceTokenComponent!)
                             .ThenInclude(tc => ((TokenComposite)tc).Tokens)
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
@@ -390,7 +332,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                             a.TopTargetTrainingText,
                             OriginatedFromValues.FromAlignmentModel,
                             null))
-                        .ToList();
+                        .ToListAsync(cancellationToken);
 
                     combined.AddRange(translationsFromAlignmentModel);
 #if DEBUG
@@ -401,6 +343,68 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             return combined;
+        }
+
+        private async Task<IDictionary<string, IEnumerable<Models.TokenComponent>>> GetSourceTokenComponentsByTrainingText(
+            IEnumerable<Guid> sourceTokenComponentIds,
+            Guid sourceTokenizedCorpusId,
+            CancellationToken cancellationToken)
+        {
+            var sourceTokenComponents = await ProjectDbContext!.TokenComponents
+                .Include(tc => ((TokenComposite)tc).Tokens)
+                .Where(tc => tc.TokenizedCorpusId == sourceTokenizedCorpusId)
+                .Where(tc => sourceTokenComponentIds.Contains(tc.Id))
+                .Where(tc => tc.TrainingText != null)
+                .ToListAsync(cancellationToken);
+
+            return sourceTokenComponents
+                .GroupBy(tc => tc.TrainingText!)
+                .ToDictionary(g => g.Key, g => g.Select(i => i));
+        }
+
+        private static IEnumerable<Alignment.Translation.Translation> CreateTranslationsFromLexicon(
+            IEnumerable<(string TrainingTextMatch, string? LexemeType, string FirstTranslation)> lexemeOrFormMatches, 
+            IDictionary<string, IEnumerable<Models.TokenComponent>> sourceTokensByTrainingText)
+        {
+            var translationsFromLexicon = new List<Alignment.Translation.Translation>();
+            var translationSourceTokenIds = new List<Guid>();
+
+            foreach (var (TrainingTextMatch, LexemeType, FirstTranslation) in lexemeOrFormMatches
+                .OrderBy(e => e.TrainingTextMatch)
+                .OrderByDescending(e => e.LexemeType))
+            {
+                foreach (var sourceToken in sourceTokensByTrainingText[TrainingTextMatch])
+                {
+                    if (!translationSourceTokenIds.Contains(sourceToken.Id) &&
+                        (LexemeType is null || sourceToken.Type is null || LexemeType == sourceToken.Type))
+                    {
+                        translationsFromLexicon.Add(new Alignment.Translation.Translation(
+                            ModelHelper.BuildToken(sourceToken),
+                            FirstTranslation,
+                            OriginatedFromValues.FromLexicon
+                        ));
+
+                        translationSourceTokenIds.Add(sourceToken.Id);
+                    }
+                }
+            }
+
+            // Remove token ids that were added to translations:
+            foreach (var trainingText in sourceTokensByTrainingText.Keys)
+            {
+                sourceTokensByTrainingText[trainingText] = sourceTokensByTrainingText[trainingText]
+                    .ExceptBy(translationSourceTokenIds, e => e.Id);
+            }
+
+            // Remove keys having empty values:
+            foreach (var emptyItem in sourceTokensByTrainingText
+                .Where(kvp => !kvp.Value.Any())
+                .ToList())
+            {
+                sourceTokensByTrainingText.Remove(emptyItem.Key);
+            }
+
+            return translationsFromLexicon;
         }
     }
 }

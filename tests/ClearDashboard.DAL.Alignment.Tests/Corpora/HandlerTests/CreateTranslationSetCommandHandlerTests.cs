@@ -1220,7 +1220,8 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             await Assert.ThrowsAsync<MediatorErrorEngineException>(() => new Lexeme
             {
                 Lemma = l1Db1!.Lemma,
-                Language = l1Db1!.Language
+                Language = l1Db1!.Language,
+                Type = l1Db1!.Type
             }.Create(Mediator!));
 
             var l3Db1 = (await Lexeme.GetByLemmaOrForm(
@@ -1241,19 +1242,12 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.Equal(3, translations.Count());
 
             var translationsFromLexicon = translations.Where(t => t.OriginatedFrom == OriginatedFromValues.FromLexicon);
-            Assert.Equal(2, translationsFromLexicon.Count());
+            Assert.Equal(2, translations.Where(t => t.OriginatedFrom == OriginatedFromValues.FromAlignmentModel).Count());
 
-            var translation1 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexeme1.Lemma).FirstOrDefault();
-            Assert.NotNull(translation1);
-            Assert.Null(translation1.TranslationId);
-            Assert.Equal(tokensToQuery[0].Id, translation1.SourceToken.TokenId.Id);
-            Assert.Equal("l1_meaning1/l1_meaning2", translation1.TargetTranslationText);
-
-            var translation2 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexeme2.Lemma).FirstOrDefault();
-            Assert.NotNull(translation2);
-            Assert.Null(translation2.TranslationId);
-            Assert.Equal(tokensToQuery[1].Id, translation2.SourceToken.TokenId.Id);
-            Assert.Equal("l2_meaning1/l2_meaning3", translation2.TargetTranslationText);
+            Assert.Single(translationsFromLexicon);
+            Assert.Null(translationsFromLexicon.First().TranslationId);
+            Assert.Equal(tokensToQuery[0].Id, translationsFromLexicon.First().SourceToken.TokenId.Id);
+            Assert.Contains(translationsFromLexicon.First().TargetTranslationText, new string[]{ "l1_meaning2_t1", "l1_meaning2_t2" });
 
             ProjectDbContext!.ChangeTracker.Clear();
 
