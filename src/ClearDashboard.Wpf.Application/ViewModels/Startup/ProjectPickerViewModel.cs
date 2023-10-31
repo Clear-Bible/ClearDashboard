@@ -58,6 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private bool _initializationComplete = false;
+        private readonly string _importTaskName = "Import Collab Project";
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
@@ -1224,6 +1225,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
+            if (_longRunningTaskManager.HasTask(_importTaskName))
+            {
+                return;
+            }
+
+            _longRunningTaskManager.Create(_importTaskName, LongRunningTaskStatus.Running);
+
             // get the user's projects
             var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
 
@@ -1251,6 +1259,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     await GetCollabProjects();
                 }
             }
+
+            _longRunningTaskManager.TaskComplete(_importTaskName);
         }
 
         private async Task SendUiLanguageChangeMessage(string language)
