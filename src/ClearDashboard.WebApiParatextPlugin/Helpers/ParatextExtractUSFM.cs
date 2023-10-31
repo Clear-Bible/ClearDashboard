@@ -192,10 +192,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                         {
                                             bool foundMatch = false;
                                             string key = $"{project.AvailableBooks[bookNum].Number}{lastChapter.PadLeft(3, '0')}{marker.Data.Trim().PadLeft(3, '0')}";
-
                                             // look for numbers, space, and a dash as being valid
                                             // also match thins like \v 43a
-                                            foundMatch = Regex.IsMatch(verseMarker, "^[0-9* -abc]+$");
+                                            //foundMatch = Regex.IsMatch(verseMarker, "^[0-9* -abc]+$");  // original regex
+                                            foundMatch = Regex.IsMatch(verseMarker, @"[0-9]+[\p{L}\p{Mn}]*(\u200F?[\-,][0-9]+[\p{L}\p{Mn}]*)*");  // new regex from Kent Spielman that handles RTL characters
+
                                             if (foundMatch)
                                             {
                                                 // check to see if the verse ends in '-'
