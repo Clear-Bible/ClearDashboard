@@ -340,6 +340,9 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Lexicon_Lexeme>()
                 .HasIndex(e => new { e.Lemma, e.Type, e.Language })
                 .IsUnique();
+
+            modelBuilder.Entity<Lexicon_Form>()
+                .HasIndex(e => e.Text);
             // =============
         }
 
