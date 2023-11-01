@@ -1006,7 +1006,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
 
                     // do not allow MACULA or Resource types to have lexicon
-                    if ((corpusNodeViewModel.CorpusType == CorpusType.Standard || corpusNodeViewModel.CorpusType == CorpusType.BackTranslation) 
+                    if ((corpusNodeViewModel.CorpusType == CorpusType.Standard || corpusNodeViewModel.CorpusType == CorpusType.BackTranslation)
                         && Settings.Default.IsLexiconImportEnabled)
                     {
                         corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
@@ -1166,8 +1166,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
-            if (parallelCorpusConnectorDraggedOut.ParentNode != null && 
-                parallelCorpusConnectorDraggedOver.ParentNode !=null)
+            if (parallelCorpusConnectorDraggedOut.ParentNode != null &&
+                parallelCorpusConnectorDraggedOver.ParentNode != null)
             {
                 var sourceParatextProjectId = parallelCorpusConnectorDraggedOut.ParentNode.CorpusId;
                 var targetParatextProjectId = parallelCorpusConnectorDraggedOver.ParentNode.CorpusId;
@@ -1539,7 +1539,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             {
                 Debug.WriteLine($"====Drag Started (Target) is NULL");
             }
-            
+
         }
 
         /// <summary>
@@ -1617,8 +1617,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             {
                 Debug.WriteLine("====ConnectionDragCompleted (parallelCorpusConnectorDraggedOver.Id):" + parallelCorpusConnectorDraggedOver.ParatextId);
             }
-            
-
 
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
@@ -1700,7 +1698,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 }
 
                 added = true;
-            } else
+            }
+            else
             {
                 if (newParallelCorpusConnection.DestinationConnector == parallelCorpusConnectorDraggedOver)
                 {
