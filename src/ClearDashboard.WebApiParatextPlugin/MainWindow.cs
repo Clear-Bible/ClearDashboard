@@ -1798,7 +1798,32 @@ namespace ClearDashboard.WebApiParatextPlugin
                                 Verse = verse,
                                 Text = verseText
                             };
-                            verses.Add(usfm);
+
+                            //if verse is a partialVerse and the last item in verses is a partialVerse
+                            var isCurrentPartialVerse = Regex.IsMatch(verse, @"(\A[0-9]+[a-z]\Z)");
+                            var previousVerse = (verses.LastOrDefault()??new UsfmVerse()).Verse;
+                            var isPreviousPartialVerse = Regex.IsMatch(previousVerse, @"(\A[0-9]+[a-z]\Z)");
+
+                            //and the verse number is the same and the verse subparts are subsequent
+                            var currentVerseNumber = Regex.Replace(verse, "[A-Za-z]", "");
+                            var previousVerseNumber = Regex.Replace(previousVerse, "[A-Za-z]", "");
+
+                            var currentVersePart = Regex.Replace(verse, @"[\d]", "");
+                            var previousVersePart = Regex.Replace(previousVerse, @"[\d]", "");
+                            
+
+                            if (isCurrentPartialVerse && isPreviousPartialVerse &&
+                                currentVerseNumber == previousVerseNumber &&
+                                String.CompareOrdinal(currentVersePart, previousVersePart) == 1)
+                            {
+                                //then append verseText onto versetext of last element in verses
+                                verses.LastOrDefault().Text += verseText;
+                            }
+                            else
+                            {
+                                verses.Add(usfm);
+                            }
+
                             verseText = "";
                         }
 
