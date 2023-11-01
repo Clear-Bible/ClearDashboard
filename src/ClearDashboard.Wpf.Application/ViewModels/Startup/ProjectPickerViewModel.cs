@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using CefSharp.DevTools.Network;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Collaboration.Util;
@@ -639,10 +640,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async Task FinishAccountSetup()
         {
+            Logger!.LogDebug("Entering FinishAccountSetup");
+
             var licenseUser = LicenseManager.GetUserFromLicense();
 
             var dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
 
+            if (dashboardUser is null)
+            {
+                Logger!.LogDebug("FinishAccountSetup: dashboard user is null");
+            }
+            else
+            {
+                Logger!.LogDebug($"FinishAccountSetup: dashboard user is: {dashboardUser.FullName} {dashboardUser.Id}");
+                Logger!.LogDebug($"FinishAccountSetup: dashboard GitLabUserId: {dashboardUser.GitLabUserId} ParatextUserName: {dashboardUser.ParatextUserName}");
+            }
+
+            
             CollaborationUser collaborationUser = null;
             bool dashboardUserChanged = false;
             bool collaborationUserSet = false;
@@ -650,12 +664,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
 
                 CollaborationConfig = _collaborationManager.GetConfig();
-
                 collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(CollaborationConfig.UserId);
 
                 // make a new collab user if one doesn't exist
                 if (collaborationUser.UserId < 1)
                 {
+                    Logger!.LogDebug("FinishAccountSetup:  create new GitLabUser");
                     var user = new GitLabUser
                     {
                         Id = CollaborationConfig.UserId,
@@ -666,12 +680,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         NamespaceId = CollaborationConfig.NamespaceId
                     };
 
-                    await _collaborationHttpClientServices.CreateNewCollabUser(user, user.Password);
+                    var result = await _collaborationHttpClientServices.CreateNewCollabUser(user, user.Password);
+                    Logger!.LogDebug($"FinishAccountSetup: create new GitLabUser result: {result}");
                 }
 
                 //make a DashboardUser
                 if (dashboardUser.Id == Guid.Empty) 
                 {
+                    Logger!.LogDebug("FinishAccountSetup:  create new dashboard user");
+
                     var newDashboardUser = new DashboardUser(
                         licenseUser,
                         collaborationUser.RemoteEmail,
@@ -683,10 +700,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         ProjectManager.CurrentUser.ParatextUserName);
 
                     dashboardUserChanged = await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
+                    Logger!.LogDebug($"FinishAccountSetup: create new dashboard user result: {dashboardUserChanged}");
                 }
                 else 
                 {
-                    //update a DashboardUser
+                    //update a DashboardUser with new paratext username
                     if (string.IsNullOrEmpty(dashboardUser.ParatextUserName) && ParatextUserName is not null)
                     {
                         dashboardUser.ParatextUserName = ParatextUserName;
@@ -696,24 +714,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     dashboardUser.AppVersionNumber = Assembly.GetEntryAssembly()?.GetName().Version.ToString();
                     dashboardUser.AppLastDate = DateTime.Today.Date;
 
-                    _ = await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+                    var response = await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+                    Logger!.LogDebug($"FinishAccountSetup: UpdateDashboardUser: {response}");
                 }
             }
 
             // if a new user has been created, get the new user
             if (dashboardUserChanged)
             {
+                Logger!.LogDebug("FinishAccountSetup: dashboardUserChanged");
                 dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(licenseUser.Id);
+                Logger!.LogDebug($"FinishAccountSetup: dashboardUserChanged result: {dashboardUser.Id} {dashboardUser.FullName}");
             }
 
             if (collaborationUser is null)
             {
+                Logger!.LogDebug("FinishAccountSetup: collaborationUser is null");
                 collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(dashboardUser.GitLabUserId);
+                Logger!.LogDebug($"FinishAccountSetup:  collaborationUser is null result: {collaborationUser.UserId} {collaborationUser.RemoteUserName}");                
             }
             
 
             if (collaborationUser.UserId < 1)
             {
+                Logger!.LogDebug($"FinishAccountSetup: collaborationUser.UserId < 1 [{collaborationUser.UserId}]");
                 await System.Windows.Application.Current.Dispatcher.Invoke(async delegate
                 {
                     await InitializeCollaborationUser();
@@ -722,6 +746,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             else
             {
+                Logger!.LogDebug($"FinishAccountSetup: saving collaborationUser [{collaborationUser.UserId}]");
                 var gitLabUser = new CollaborationConfiguration
                 {
                     UserId =collaborationUser.UserId,
