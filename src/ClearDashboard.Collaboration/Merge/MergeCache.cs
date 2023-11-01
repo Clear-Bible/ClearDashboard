@@ -1,14 +1,13 @@
 ﻿using System;
-using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.Collaboration.Merge;
 
 public class MergeCache
 {
-    private readonly Dictionary<(Type EntityType, string key), Dictionary<string, object?>> _cache = new();
+    private readonly Dictionary<(Type EntityType, string EntityId, string ItemName), Dictionary<string, object?>> _cache = new();
     //private readonly Dictionary<(Type EntityType, (string key1, string key2)), Dictionary<string, object?>> _cache = new();
 
-    public void AddCacheEntry((Type EntityType, string key) key, string name, object? value)
+    public void AddCacheEntry((Type EntityType, string EntityId, string ItemName) key, string name, object? value)
     {
         if (_cache.ContainsKey(key))
         {
@@ -27,7 +26,7 @@ public class MergeCache
         }
     }
 
-    public void AddCacheEntrySet((Type EntityType, string key) key, Dictionary<string, object?> value)
+    public void AddCacheEntrySet((Type EntityType, string EntityId, string ItemName) key, Dictionary<string, object?> value)
     {
         if (_cache.ContainsKey(key))
         {
@@ -39,7 +38,7 @@ public class MergeCache
         }
     }
 
-    public bool TryLookupCacheEntry((Type EntityType, string key) key, string name, out object? value)
+    public bool TryLookupCacheEntry((Type EntityType, string EntityId, string ItemName) key, string name, out object? value)
     {
         value = null;
         if (_cache.TryGetValue(key, out var nvp))
@@ -50,7 +49,7 @@ public class MergeCache
         return false;
     }
 
-    public bool ContainsCacheKey((Type EntityType, string key) key)
+    public bool ContainsCacheKey((Type EntityType, string EntityId, string ItemName) key)
     {
         return _cache.ContainsKey(key);
     }

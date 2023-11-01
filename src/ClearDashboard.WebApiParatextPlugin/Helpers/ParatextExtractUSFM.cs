@@ -1,10 +1,12 @@
 ﻿using ClearDashboard.DataAccessLayer.Models.Common;
+using Icu;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -184,6 +186,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                         sb.AppendLine();
                                     }
                                     // this includes single verses (\v 1) and multiline (\v 1-3)
+                                    // \v 2,3 and \v 2b-4d are OK so is \v 2ബി-4ഡി (Malayalam)
                                     if (marker.Data != null)
                                     {
                                         string verseMarker = marker.Data.Trim();

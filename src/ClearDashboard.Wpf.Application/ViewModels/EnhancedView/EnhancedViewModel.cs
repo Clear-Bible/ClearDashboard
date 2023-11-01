@@ -46,7 +46,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<HighlightTokensMessage>,
         IHandle<UnhighlightTokensMessage>,
         IHandle<ParallelCorpusDeletedMessage>,
-        IHandle<CorpusDeletedMessage>
+        IHandle<CorpusDeletedMessage>,
+        IHandle<ExternalNotesUpdatedMessage>
     {
         #region Commands
 
@@ -734,6 +735,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
             {
                 await enhancedViewItemViewModel.UnhighlightTokensAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(ExternalNotesUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.GetData(cancellationToken);
             }
         }
 

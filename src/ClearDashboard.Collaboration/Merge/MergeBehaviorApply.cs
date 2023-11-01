@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using ClearDashboard.Collaboration.DifferenceModel;
+using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Interfaces;
@@ -9,6 +12,8 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
@@ -71,17 +76,39 @@ public class MergeBehaviorApply : MergeBehaviorBase
         }
     }
 
-    public override async Task<Dictionary<string, object>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object> where, CancellationToken cancellationToken)
+    public override async Task<Dictionary<string, object?>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object?> where, CancellationToken cancellationToken)
     {
         if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
-        var id = string.Join(", ", where);
 
-        var resolvedWhereClause = ResolveWhereClause(where, itemToDelete);
-        var command = CreateModelSnapshotDeleteCommand(_connection, itemToDelete, resolvedWhereClause);
+        var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToDelete);
+        await using var command = CreateModelSnapshotDeleteCommand(_connection, itemToDelete.EntityType, resolvedWhereClause);
 
-        _logger.LogInformation($"Executing delete query for model type '{itemToDelete.EntityType.ShortDisplayName()}' having id '{id}'");
+        _logger.LogDebug($"Executing delete query for model type '{itemToDelete.EntityType.ShortDisplayName()}' having parameter values:");
+        foreach (DbParameter p in command.Parameters)
+        {
+            _logger.LogDebug($"Parameter name {p.ParameterName}, value {p.Value}");
+        }
 
-        await Task.CompletedTask;
+        _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+        return resolvedWhereClause;
+    }
+
+    public override async Task<Dictionary<string, object?>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object?> where, CancellationToken cancellationToken)
+    {
+        if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
+
+        var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToModify);
+        using var command = await CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
+
+        _logger.LogDebug($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having parameter values:");
+        foreach (DbParameter p in command.Parameters)
+        {
+            _logger.LogDebug($"Parameter name {p.ParameterName}, value {p.Value}");
+        }
+
+        // FIXME:  what type of exception is thrown if the where clause doesn't match any
+        // record in the database?  Propbably log the details but continue?
         _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
         return resolvedWhereClause;
@@ -111,7 +138,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
         _logger.LogDebug($"Running insert command for model type:  '{itemToCreate.EntityType.ShortDisplayName()}' having id '{itemToCreate.GetId()}'");
 
         var command = _insertCommandsByType[itemToCreate.EntityType];
-        var id = AddModelSnapshotParametersToInsertCommand(command, itemToCreate);
+        var id = await AddModelSnapshotParametersToInsertCommand(command, itemToCreate);
 
         await Task.CompletedTask;
         _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
@@ -132,39 +159,30 @@ public class MergeBehaviorApply : MergeBehaviorBase
         _insertCommandsByType.Remove(modelType);
     }
 
-    public override async Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken)
-    {
-        if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
-        var id = string.Join(", ", where);
-
-        var resolvedWhereClause = ResolveWhereClause(where, itemToModify);
-        var command = CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
-
-        _logger.LogDebug($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having id '{id}'");
-
-        foreach (DbParameter p in command.Parameters)
-        {
-            _logger.LogDebug($"Parameter name {p.ParameterName}, value {p.Value}");
-        }
-
-        await Task.CompletedTask;
-
-        // FIXME:  what type of exception is thrown if the where clause doesn't match any
-        // record in the database?  Propbably log the details but continue?
-        _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-
-        return resolvedWhereClause;
-    }
-
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
         _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");
         await query.Invoke(_projectDbContext, MergeCache, _logger, Progress, cancellationToken);
     }
 
-    public override object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver propertyValueConverter)
+    public override async Task RunDbConnectionQueryAsync(string description, DbConnectionMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
-        return propertyValueConverter.Invoke(modelSnapshot, _projectDbContext, MergeCache, _logger);
+        if (_connection is null || !_connectionOpen)
+        {
+            throw new PropertyResolutionException($"Unable to run '{description}' because DbConnection is closed");
+        }
+
+        _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");
+        await query.Invoke(_connection, MergeCache, _logger, Progress, cancellationToken);
+    }
+
+    public override async Task<object?> RunEntityValueResolverAsync(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolverAsync propertyValueConverter)
+    {
+        if (_connection is null || !_connectionOpen)
+        {
+            throw new PropertyResolutionException($"Unable to resolve '{propertyName}' because DbConnection is closed");
+        }
+        return await propertyValueConverter.Invoke(modelSnapshot, _projectDbContext, _connection, MergeCache, _logger);
     }
 
     protected override void Dispose(bool disposing)

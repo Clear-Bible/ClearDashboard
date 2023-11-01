@@ -5,6 +5,7 @@
     xmlns:bulkAlignment="clr-namespace:ClearDashboard.Wpf.Application.UserControls.BulkAlignment"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
+    xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -18,6 +19,12 @@
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
 
     <StackPanel
         Width="Auto"
@@ -150,6 +157,39 @@
             MouseRightButtonUp="OnNoteRightButtonUp"
             MouseWheel="OnNoteMouseWheel"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
+        <Rectangle
+            Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
+            Visibility="{Binding HasExternalNotes, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Rectangle.ToolTip>
+                <ToolTip
+                    Background="LightYellow"
+                    HasDropShadow="false"
+                    HorizontalOffset="10"
+                    Placement="Left"
+                    PlacementRectangle="50,0,0,0"
+                    VerticalOffset="20">
+                    <StackPanel Orientation="Vertical">
+                        <ListView ItemsSource="{Binding ExternalNotes}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="{Binding Message}" />
+                                        <controls:ExtendedPropertiesTreeView
+                                            x:Name="ExternalNoteBodyTokenTreeViewName"
+                                            ExtendedPropertiesXml="{Binding Body}"
+                                            IsExpanded="False" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </ToolTip>
+            </Rectangle.ToolTip>
+        </Rectangle>
         <Button
             x:Name="TranslationButton"
             Height="Auto"

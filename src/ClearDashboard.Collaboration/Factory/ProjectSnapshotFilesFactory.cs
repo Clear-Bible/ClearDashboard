@@ -59,6 +59,7 @@ public class ProjectSnapshotFilesFactory
             (string parentPath,
             GeneralModel<Models.TokenizedCorpus> modelSnapshot) =>
             {
+                SaveGeneralModelChild<Models.TokenizedCorpus, Models.Token>(parentPath, modelSnapshot, null, cancellationToken);
                 SaveGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(parentPath, modelSnapshot, null, cancellationToken);
                 SaveGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(parentPath, modelSnapshot, null, cancellationToken);
             },

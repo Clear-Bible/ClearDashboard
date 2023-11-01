@@ -58,6 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private bool _initializationComplete = false;
+        private readonly string _importTaskName = "Import Collab Project";
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
@@ -392,6 +393,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 _isParatextBetaInstalled = value;
                 NotifyOfPropertyChange(() => IsParatextBetaInstalled);
+            }
+        }
+
+        private Visibility _projectLoadingProgressBarVisibility = Visibility.Collapsed;
+        public Visibility ProjectLoadingProgressBarVisibility
+        {
+            get => _projectLoadingProgressBarVisibility;
+            set
+            {
+                _projectLoadingProgressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProjectLoadingProgressBarVisibility);
             }
         }
 
@@ -1137,6 +1149,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
+            if (ProjectLoadingProgressBarVisibility == Visibility.Visible)
+            {
+                return;
+            }
+            
             var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
             if (currentlyOpenProjectsList.Contains(project.ProjectName))
             {
@@ -1145,35 +1162,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             AlreadyOpenMessageVisibility = Visibility.Collapsed;
 
-
-            ProjectManager!.CurrentDashboardProject = project;
-            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
-            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(project.PermissionLevel));
-
-            OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
-
-            ParentViewModel!.ExtraData = project;
-
-
-            var projectGuid =
-                await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(project.FullFilePath), CancellationToken.None);
-
-
-            // get the user's projects
-            var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
-
-            foreach (var gitLabProject in projectList)
+            try
             {
-                var guid = gitLabProject.Name.Substring(2).ToUpper();
-                if (guid == projectGuid.Data)
+                ProjectLoadingProgressBarVisibility = Visibility.Visible;
+
+                ProjectManager!.CurrentDashboardProject = project;
+                await EventAggregator.PublishOnUIThreadAsync(
+                    new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
+                await EventAggregator.PublishOnUIThreadAsync(
+                    new DashboardProjectPermissionLevelMessage(project.PermissionLevel));
+
+               
+                //Turn on ProgressBar
+
+                ParentViewModel!.ExtraData = project;
+
+
+                var projectGuid =
+                    await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(project.FullFilePath),
+                        CancellationToken.None);
+
+
+                // get the user's projects
+                var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+
+                foreach (var gitLabProject in projectList)
                 {
-                    _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
-                    break;
+                    var guid = gitLabProject.Name.Substring(2).ToUpper();
+                    if (guid == projectGuid.Data)
+                    {
+                        _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
+                        break;
+                    }
                 }
+
+
+                ParentViewModel.Ok();
             }
-
-
-            ParentViewModel.Ok();
+            finally
+            {
+                OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
+                ProjectLoadingProgressBarVisibility = Visibility.Collapsed;
+            }
         }
 
         public async Task ImportServerProject(DashboardCollabProject project, MouseButtonEventArgs args)
@@ -1194,6 +1224,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
+
+            if (_longRunningTaskManager.HasTask(_importTaskName))
+            {
+                return;
+            }
+
+            _longRunningTaskManager.Create(_importTaskName, LongRunningTaskStatus.Running);
 
             // get the user's projects
             var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
@@ -1222,6 +1259,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     await GetCollabProjects();
                 }
             }
+
+            _longRunningTaskManager.TaskComplete(_importTaskName);
         }
 
         private async Task SendUiLanguageChangeMessage(string language)

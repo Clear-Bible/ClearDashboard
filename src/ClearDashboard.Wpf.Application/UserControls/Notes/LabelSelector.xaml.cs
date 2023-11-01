@@ -86,7 +86,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
-        private void CloseTextBox()
+        public void CloseTextBox()
         {
             LabelTextBox.Text = string.Empty;
             LabelSuggestionListBox.SelectedIndex = -1;
@@ -236,7 +236,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             LabelSuggestionListBox.Visibility = Visibility.Visible;
         }
 
-        private void CloseSuggestionPopup()
+        public void CloseSuggestionPopup()
         {
             LabelPopup.Visibility = Visibility.Collapsed;
             LabelPopup.IsOpen = false;
