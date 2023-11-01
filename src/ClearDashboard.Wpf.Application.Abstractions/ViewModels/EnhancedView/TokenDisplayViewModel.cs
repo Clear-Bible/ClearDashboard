@@ -203,10 +203,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NotifyOfPropertyChange(nameof(ExternalNotes));
             NotifyOfPropertyChange(nameof(HasExternalNotes));
         }
+
         /// <summary>
         /// The surface text of the token to be displayed.  
         /// </summary>
         public string SurfaceText => Token.SurfaceText;
+
+        /// <summary>
+        /// The training text of the token to be displayed.  
+        /// </summary>
+        public string TrainingText => Token.TrainingText;
 
         /// <summary>
         /// The surface text of the token to be displayed for translations.
