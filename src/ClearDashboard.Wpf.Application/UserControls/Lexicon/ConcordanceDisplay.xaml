@@ -91,7 +91,7 @@
                 FontStyle="Italic"
                 Foreground="DarkGray"
                 IsHitTestVisible="False"
-                Text="Enter a new translation">
+                Text="{helpers:Localization Lexicon_EnterNewTranslation}">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed" />

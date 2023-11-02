@@ -461,7 +461,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Reflexión de origen</value>
+    <value>Fuente Ref.</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -614,7 +614,7 @@
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>¿Eliminar todas las alineaciones?</value>
+    <value>Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -671,7 +671,7 @@
     <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unión a la token compuesta</value>
+    <value>Un si unir un token compuesto</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -833,13 +833,13 @@
     <value>Agregar un dominio semántico</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Aplicar traducción</value>
+    <value>Aplicar brillo</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Cancelar traducción</value>
+    <value>Cancelar brillo</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias no establecidos</value>
+    <value>Cambiar todos los ocurrencias inseguros</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -863,7 +863,7 @@
     <value>Ingrese una nueva traducción para</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Ingrese una nueva traducción</value>
+    <value>Ingrese un nuevo brillo</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -884,7 +884,7 @@
     <value>Significados:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Nueva traducción</value>
+    <value>Nuevo brillo</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Eliminar este dominio semántico de este significado</value>
@@ -893,7 +893,7 @@
     <value>Eliminar esta forma léxica de este lema</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Establecer una traducción para</value>
+    <value>Establecer un brillo para</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Y</value>
@@ -965,7 +965,7 @@
     <value>Importación comprobada</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme o coincidencias de formulario</value>
+    <value>Lexeme o coincidencias de forma</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>No hay más registros para importar.</value>
@@ -1346,7 +1346,7 @@
     <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>¿Quieres disociar la etiqueta?</value>
+    <value>¿Quieres disociar la etiqueta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>del grupo de etiquetas:</value>
@@ -1436,7 +1436,7 @@
     <value>¿Enviar esta nota a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envía esta nota a Paratext</value>
+    <value>Envíe esta nota a Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1541,7 +1541,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcule el nuevo modelo de traducción</value>
+    <value>Calcular el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -2201,7 +2201,7 @@
     <value>Validar el código de correo electrónico</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Habilitar visualización de colecciones de texto verso a versiones</value>
+    <value>Habilitar visualización de colecciones de texto verso por verso</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Cancelar tarea</value>
@@ -2225,7 +2225,7 @@
     <value>Mostrar preleboseos</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Actualizar a la nueva versión de ClearDashboard</value>
+    <value>Actualización de la nueva versión de ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
     <value>Usuario</value>

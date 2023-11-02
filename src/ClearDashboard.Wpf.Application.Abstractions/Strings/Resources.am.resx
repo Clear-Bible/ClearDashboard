@@ -833,10 +833,10 @@
     <value>የ &lt;SELMACE&gt; ጎራ ያክሉ</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>ትርጉም ይተግብሩ</value>
+    <value>አንጥረኛ አተገባበር</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>ትርጉም ሰርዝ</value>
+    <value>መጮህ መሰረዝ</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>ሁሉንም ያልተለመዱ ክስተቶች ይለውጡ</value>
@@ -863,7 +863,7 @@
     <value>አዲስ ትርጉም ያስገቡ ለ</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>አዲስ ትርጉም ያስገቡ</value>
+    <value>አዲስ አንጸባራቂውን ያስገቡ</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>ሎሚ</value>
@@ -884,7 +884,7 @@
     <value>ትርጉሞች</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>አዲስ ትርጉም</value>
+    <value>አዲስ አንጸባራቂ</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>ከዚህ ትርጉም ይህንን የትርጉም ጎራ ያስወግዱ</value>
@@ -893,7 +893,7 @@
     <value>ከዚህ ሎማ ውስጥ ይህን ሌክሳይክ ቅፅ ያስወግዱ</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>ትርጉም ያዘጋጁ</value>
+    <value>አንድ አፍቃሪ ያዘጋጁ</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>እና</value>
