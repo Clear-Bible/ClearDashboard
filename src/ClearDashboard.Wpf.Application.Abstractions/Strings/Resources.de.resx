@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Erstellt von</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Aktuell</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -833,10 +836,10 @@
     <value>Fügen Sie eine semantische Domäne hinzu</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Übersetzung anwenden</value>
+    <value>Glanz auftragen</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Übersetzung abbrechen</value>
+    <value>Gloss abbrechen</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Ändern Sie alle unbegründeten Ereignisse</value>
@@ -863,7 +866,7 @@
     <value>Geben Sie eine neue Übersetzung für ein</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Geben Sie eine neue Übersetzung ein</value>
+    <value>Geben Sie einen neuen Glanz ein</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -884,7 +887,7 @@
     <value>Bedeutungen:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Neue Übersetzung</value>
+    <value>Neuer Glanz</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Entfernen Sie diese semantische Domäne aus dieser Bedeutung</value>
@@ -893,7 +896,7 @@
     <value>Entfernen Sie diese lexikalische Form aus diesem Lemma</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Setzen Sie eine Übersetzung für</value>
+    <value>Setzen Sie einen Glanz für</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Und</value>
@@ -1190,7 +1193,7 @@
     <value>Datenbank erstellen ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Führen Sie vollständig zusammen ... neu lädt die Schnittstelle neu</value>
+    <value>Vervollständigen Sie vollständig ... Nachladen der Schnittstelle neu</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
     <value>Operation storniert</value>
@@ -1505,7 +1508,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1523,13 +1526,13 @@
     <value>Erstellen Sie eine neue Corpus -Tokenisierung</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Fügen Sie neue Interlineare hinzu</value>
+    <value>Neue Interlineare hinzufügen</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
+    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1610,7 +1613,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>
@@ -1772,10 +1775,10 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT -griechische biblische Texte einschließen?</value>
+    <value>NT Griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -1832,7 +1835,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierungsprojekte Liste aktualisieren</value>
+    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>
@@ -2201,7 +2204,7 @@
     <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktivieren Sie die Anzeige von Versen durch Versuchssammlungen</value>
+    <value>Aktivieren Sie die Anzeige von Verse-by-Vers-Textsammlungen</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Aufgabe abbrechen</value>

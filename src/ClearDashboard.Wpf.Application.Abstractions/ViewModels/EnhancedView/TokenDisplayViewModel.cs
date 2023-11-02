@@ -203,16 +203,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NotifyOfPropertyChange(nameof(ExternalNotes));
             NotifyOfPropertyChange(nameof(HasExternalNotes));
         }
+
         /// <summary>
         /// The surface text of the token to be displayed.  
         /// </summary>
         public string SurfaceText => Token.SurfaceText;
 
         /// <summary>
+        /// The training text of the token to be displayed.  
+        /// </summary>
+        public string TrainingText => Token.TrainingText;
+
+        /// <summary>
         /// The surface text of the token to be displayed for translations.
         /// </summary>
         public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.SurfaceText))
                                                                        : Token.SurfaceText;
+
+        /// <summary>
+        /// The training text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationTrainingText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.TrainingText))
+                                                                       : Token.TrainingText;
+
+        /// <summary>
+        /// The surface and training text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationSurfaceAndTrainingText => $"{TranslationSurfaceText} ({TranslationTrainingText})";
 
         /// <summary>
         /// The extended properties of the token to be displayed.

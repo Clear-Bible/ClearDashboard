@@ -81,7 +81,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             set => _interlinearDisplayViewModel = value;
         }
 
-        public string DialogTitle => $"Translation/Lexeme: {TokenDisplay.TranslationSurfaceText}";
+        public string DialogTitle => $"{LocalizationService["BiblicalTermsForm_Gloss"]}: {TokenDisplay.TranslationSurfaceAndTrainingText}";
 
         private LexemeViewModel? _currentLexeme;
         public LexemeViewModel? CurrentLexeme
@@ -174,6 +174,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void CancelTranslation()
         {
+            await InterlinearDisplay.UpdateTokens(true);
             await TryCloseAsync(false);
         }
 
