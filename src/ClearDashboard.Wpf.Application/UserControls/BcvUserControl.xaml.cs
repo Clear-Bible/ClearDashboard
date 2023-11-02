@@ -273,7 +273,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             if (IsRtl)
             {
-                PreviousBookArrow.LayoutTransform = rotate;
+                NextBookArrow.LayoutTransform = rotate;
                 NextChapterArrow.LayoutTransform = rotate;
                 NextVerseArrow.LayoutTransform = rotate;
                 PreviousBookArrow.LayoutTransform = rotate;
