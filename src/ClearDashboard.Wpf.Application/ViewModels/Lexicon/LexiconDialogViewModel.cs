@@ -174,6 +174,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void CancelTranslation()
         {
+            await InterlinearDisplay.UpdateTokens(true);
             await TryCloseAsync(false);
         }
 
