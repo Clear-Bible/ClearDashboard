@@ -339,6 +339,12 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<Lexicon_Lexeme>()
                 .HasIndex(e => new { e.Lemma, e.Type, e.Language })
+                .HasFilter("Type IS NOT NULL")
+                .IsUnique();
+
+            modelBuilder.Entity<Lexicon_Lexeme>()
+                .HasIndex(e => new { e.Lemma, e.Language })
+                .HasFilter("Type IS NULL")
                 .IsUnique();
 
             modelBuilder.Entity<Lexicon_Form>()
