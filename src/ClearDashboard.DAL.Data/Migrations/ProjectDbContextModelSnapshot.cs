@@ -413,10 +413,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("Lemma", "Language")
                         .IsUnique()
+                        .HasDatabaseName("IX_Lexicon_Lexeme_Lemma_TypeNull_Language")
                         .HasFilter("Type IS NULL");
 
                     b.HasIndex("Lemma", "Type", "Language")
                         .IsUnique()
+                        .HasDatabaseName("IX_Lexicon_Lexeme_Lemma_TypeNotNull_Language")
                         .HasFilter("Type IS NOT NULL");
 
                     b.ToTable("Lexicon_Lexeme");

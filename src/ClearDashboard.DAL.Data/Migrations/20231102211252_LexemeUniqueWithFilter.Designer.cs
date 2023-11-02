@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20231102171451_LexemeUniqueWithFilter")]
+    [Migration("20231102211252_LexemeUniqueWithFilter")]
     partial class LexemeUniqueWithFilter
     {
         /// <inheritdoc />
@@ -416,10 +416,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("Lemma", "Language")
                         .IsUnique()
+                        .HasDatabaseName("IX_Lexicon_Lexeme_Lemma_TypeNull_Language")
                         .HasFilter("Type IS NULL");
 
                     b.HasIndex("Lemma", "Type", "Language")
                         .IsUnique()
+                        .HasDatabaseName("IX_Lexicon_Lexeme_Lemma_TypeNotNull_Language")
                         .HasFilter("Type IS NOT NULL");
 
                     b.ToTable("Lexicon_Lexeme");
