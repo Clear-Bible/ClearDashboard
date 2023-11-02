@@ -1817,7 +1817,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                 String.CompareOrdinal(currentVersePart, previousVersePart) == 1)
                             {
                                 //then append verseText onto versetext of last element in verses
-                                verses.LastOrDefault().Text += verseText;
+                                verses.LastOrDefault().Text = verses.LastOrDefault().Text.TrimEnd() + " " + verseText;
                             }
                             else
                             {
