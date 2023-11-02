@@ -964,8 +964,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public void LaunchGettingStartedGuide()
         {
-            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
-            var path = Path.Combine(programFiles, "ClearDashboard", "Dashboard_Instructions.pdf");
+            // get the application startup directory
+            var startupPath = AppDomain.CurrentDomain.BaseDirectory;
+            var path = Path.Combine(startupPath, "Dashboard_Instructions.pdf");
+
+            //var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            //var path = Path.Combine(programFiles, "ClearDashboard", "Dashboard_Instructions.pdf");
             if (File.Exists(path))
             {
                 var p = new Process();
