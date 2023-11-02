@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>由...製作</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>當前的</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>

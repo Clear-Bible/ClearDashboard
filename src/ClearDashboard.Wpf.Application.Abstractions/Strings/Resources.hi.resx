@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>के द्वारा बनाई गई</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>मौजूदा</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>

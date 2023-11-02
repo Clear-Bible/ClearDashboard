@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Creat de</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Actual</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>

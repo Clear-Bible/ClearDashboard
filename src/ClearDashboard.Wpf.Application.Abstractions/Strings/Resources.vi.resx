@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Được tạo bởi</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Hiện hành</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>

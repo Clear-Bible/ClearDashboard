@@ -309,9 +309,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             VerseManager = verseManager;
             PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.None, localizationService["None"]));
-            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapterVerse, $"{localizationService["BiblicalTermsBcv_Book"]}+{localizationService["BiblicalTermsBcv_Chapter"]}+{localizationService["BiblicalTermsBcv_Verse"]}"));
-            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["BiblicalTermsBcv_Book"]}+{localizationService["BiblicalTermsBcv_Chapter"]}"));
-            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["BiblicalTermsBcv_Book"]}"));
+            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapterVerse, $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Verse"]}"));
+            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Chapter"]}"));
+            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Book"]}"));
             PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["BiblicalTermsBcv_All"]}"));
         }
     }
