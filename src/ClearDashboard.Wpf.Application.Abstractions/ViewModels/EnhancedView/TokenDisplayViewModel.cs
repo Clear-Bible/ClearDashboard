@@ -221,6 +221,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                                                        : Token.SurfaceText;
 
         /// <summary>
+        /// The training text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationTrainingText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.TrainingText))
+                                                                       : Token.TrainingText;
+
+        /// <summary>
+        /// The surface and training text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationSurfaceAndTrainingText => $"{TranslationSurfaceText} ({TranslationTrainingText})";
+
+        /// <summary>
         /// The extended properties of the token to be displayed.
         /// </summary>
         public string? ExtendedProperties => Token.ExtendedProperties;

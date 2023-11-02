@@ -37,7 +37,7 @@
         <Label
             Grid.Row="1"
             HorizontalContentAlignment="Center"
-            Content="{Binding TokenDisplay.TranslationSurfaceText}"
+            Content="{Binding TokenDisplay.TranslationSurfaceAndTrainingText}"
             FontFamily="{Binding SourceFontFamily}"
             FontSize="22"
             FontWeight="Bold" />
