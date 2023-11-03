@@ -242,7 +242,7 @@
                 Orientation="Vertical">
                 <CheckBox
                     x:Name="ShowBiblicalTextsCheckBox"
-                    Margin="10,20,0,20"
+                    Margin="10,5,0,20"
                     Content="{helpers:Localization ProjectPicker_IncludeOtBiblicalTexts}"
                     FontSize="13"
                     IsChecked="{Binding ShowOtBiblicalTexts, Mode=TwoWay}">
@@ -254,7 +254,7 @@
 
                 <CheckBox
                     x:Name="ShowBiblicalNTTextsCheckBox"
-                    Margin="10,20,0,20"
+                    Margin="10,5,0,20"
                     Content="{helpers:Localization ProjectPicker_IncludeNtBiblicalTexts}"
                     FontSize="13"
                     IsChecked="{Binding ShowNtBiblicalTexts, Mode=TwoWay}">
