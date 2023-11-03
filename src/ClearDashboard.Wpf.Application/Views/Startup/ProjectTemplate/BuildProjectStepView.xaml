@@ -13,6 +13,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.Views.Shell"
     Width="1010"
+    MaxHeight="700"
     d:DataContext="{d:DesignInstance Type=projectTemplate:BuildProjectStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
