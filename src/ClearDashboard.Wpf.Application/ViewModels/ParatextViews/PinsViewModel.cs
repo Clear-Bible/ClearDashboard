@@ -41,7 +41,7 @@ using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
-    public class PinsViewModel : ToolViewModel, IHandle<FilterPinsMessage>, IHandle<ProjectLoadedMessage>
+    public class PinsViewModel : ToolViewModel, IHandle<FilterPinsMessage>
     {
 
         #region Member Variables
@@ -1379,7 +1379,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         #region IHandle
 
-        public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
         {
             FilterString = message.Message;
             switch (message.XmlSource)
@@ -1400,6 +1400,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     IsLx = true;
                     break;
             }
+
+            return Task.CompletedTask;
         }
 
         #endregion // IHandle
