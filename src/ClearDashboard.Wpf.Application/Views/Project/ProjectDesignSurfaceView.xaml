@@ -513,6 +513,7 @@
                         cm:Message.Attach="AddParatextCorpus()"
                         Content="{helpers:Localization ProjectPicker_Paratext}"
                         Style="{StaticResource BigParatextButton}"
+                        IsEnabled="{Binding AddParatextButtonEnabled}"
                         Tag=" ScriptTextOutline" />
 
                     <!--  Hebrew Manuscript  -->

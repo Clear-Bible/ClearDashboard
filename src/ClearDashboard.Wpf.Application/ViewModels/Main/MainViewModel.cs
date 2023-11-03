@@ -844,7 +844,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     await PinsViewModel.Initialize(cancellationToken);
                 });
             }, cancellationToken);
-            //PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+            //PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);                
             
             await ActivateItemAsync<TextCollectionsViewModel>(cancellationToken);
             //await ActivateItemAsync<WordMeaningsViewModel>();
@@ -2438,6 +2438,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await LoadEnhancedViewTabs(cancellationToken);
             
             await OnActivateAsync(CancellationToken.None);
+
+
+            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadedMessage(), cancellationToken);
         }
 
         #endregion

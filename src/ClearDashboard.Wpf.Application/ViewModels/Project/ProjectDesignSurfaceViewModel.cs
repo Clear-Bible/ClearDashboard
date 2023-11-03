@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel,
         IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>,
-        IHandle<RedrawCorpusNodeMenus>
+        IHandle<RedrawCorpusNodeMenus>, IHandle<ProjectLoadedMessage>
     {
         #region Member Variables
 
@@ -74,12 +74,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly ILocalizationService _localizationService;
         private readonly NoteManager _noteManager;
         private readonly SystemPowerModes _systemPowerModes;
+        private readonly ObservableDictionary<string, bool> _busyState = new();
 
         private const string TaskName = "Alignment Deletion";
 
         #endregion //Member Variables
 
         #region Observable Properties
+
+        public new bool IsBusy => _busyState.Count > 0;
 
         public IEnhancedViewManager EnhancedViewManager { get; }
 
@@ -142,6 +145,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             get => _projectName;
             set => Set(ref _projectName, value);
+        }
+
+        public bool _addParatextButtonEnabled = false;
+        public bool AddParatextButtonEnabled
+        {
+            get => _addParatextButtonEnabled;
+            set => Set(ref _addParatextButtonEnabled, value);
         }
 
         #endregion //Observable Properties
@@ -509,11 +519,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             return JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
         }
-
-
-        private readonly ObservableDictionary<string, bool> _busyState = new();
-
-        public new bool IsBusy => _busyState.Count > 0;
 
 
         // ReSharper disable once UnusedMember.Global
@@ -1894,6 +1899,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }));
         }
 
+        #endregion // Methods
+
         #region IHandle
 
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
@@ -1930,11 +1937,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        #endregion
-
-        #endregion // Methods
-
-
         public async Task HandleAsync(RedrawCorpusNodeMenus message, CancellationToken cancellationToken)
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
@@ -1946,5 +1948,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
             }
         }
+
+        public Task HandleAsync(ProjectLoadedMessage message, CancellationToken cancellationToken)
+        {
+            AddParatextButtonEnabled = true;
+
+            return Task.CompletedTask;
+        }
+
+        #endregion
+
+
     }
 }

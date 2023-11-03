@@ -41,7 +41,7 @@ using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
-    public class PinsViewModel : ToolViewModel, IHandle<FilterPinsMessage>
+    public class PinsViewModel : ToolViewModel, IHandle<FilterPinsMessage>, IHandle<ProjectLoadedMessage>
     {
 
         #region Member Variables
@@ -369,6 +369,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public async Task Initialize(CancellationToken cancellationToken)
         {
+            if (ProjectManager.IsParatextConnected == false)
+            {
+                ProgressBarVisibility = Visibility.Collapsed;
+                return;
+            }
+
             _watch.Start();
 #pragma warning disable CS4014
             // Do not await this....let it run in the background otherwise
@@ -1369,6 +1375,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
+        #endregion // Methods
+
+        #region IHandle
+
         public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
         {
             FilterString = message.Message;
@@ -1392,7 +1402,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        #endregion // Methods
+        #endregion // IHandle
     }
 
 }
