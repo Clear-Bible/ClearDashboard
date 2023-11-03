@@ -18,6 +18,11 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? TrainingText { get; set; }
         public string? SurfaceText { get; set; }
 
+        /// <summary>
+        /// Optional type analogous to Lexicon_Lexeme.Type (lemma, suffix, etc.)
+        /// </summary>
+        public string? Type { get; set; }
+
         public string? ExtendedProperties { get; set; }
 
         [ForeignKey(nameof(VerseRowId))]

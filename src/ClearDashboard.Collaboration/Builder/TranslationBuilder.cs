@@ -12,7 +12,6 @@ namespace ClearDashboard.Collaboration.Builder;
 public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
 {
     public const string SOURCE_TOKEN_LOCATION = "SourceTokenLocation";
-    public const string SOURCE_TOKEN_SURFACE_TEXT = "SourceTokenSurfaceText";
     public const string BOOK_CHAPTER_LOCATION = "Location";
 
     public override string IdentityKey => BuildPropertyRefName();
@@ -21,7 +20,6 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
         {
             { BuildPropertyRefName(), typeof(string) },
             { SOURCE_TOKEN_LOCATION, typeof(string) },
-            { SOURCE_TOKEN_SURFACE_TEXT, typeof(string) },
             { BOOK_CHAPTER_LOCATION, typeof(string) }
         };
 
@@ -76,8 +74,7 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
 
         modelProperties.Add(SOURCE_TOKEN_LOCATION,
             (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenLocation));
-        modelProperties.Add(SOURCE_TOKEN_SURFACE_TEXT,
-            (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenSurfaceText));
+
         modelProperties.Add(BOOK_CHAPTER_LOCATION,
             (typeof(string), $"{translation.leadingToken.BookNumber:000}{translation.leadingToken.ChapterNumber:000}"));
 

@@ -1006,7 +1006,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
 
                     // do not allow MACULA or Resource types to have lexicon
-                    if ((corpusNodeViewModel.CorpusType == CorpusType.Standard || corpusNodeViewModel.CorpusType == CorpusType.BackTranslation) 
+                    if ((corpusNodeViewModel.CorpusType == CorpusType.Standard || corpusNodeViewModel.CorpusType == CorpusType.BackTranslation)
                         && Settings.Default.IsLexiconImportEnabled)
                     {
                         corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
@@ -1166,8 +1166,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         private bool IsAlreadyAligned(TopLevelProjectIds topLevelProjectIds, ParallelCorpusConnectionViewModel parallelCorpusConnection,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
-            if (parallelCorpusConnectorDraggedOut.ParentNode != null && 
-                parallelCorpusConnectorDraggedOver.ParentNode !=null)
+            if (parallelCorpusConnectorDraggedOut.ParentNode != null &&
+                parallelCorpusConnectorDraggedOver.ParentNode != null)
             {
                 var sourceParatextProjectId = parallelCorpusConnectorDraggedOut.ParentNode.CorpusId;
                 var targetParatextProjectId = parallelCorpusConnectorDraggedOver.ParentNode.CorpusId;
@@ -1203,6 +1203,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
 
             return false;
+        }
+
+        public async void OnCorpusNodeDragCompleted(object? sender, NodeDragCompletedEventArgs? e)
+        {
+            Logger!.LogInformation("NodeDragCompleted");
+            await ProjectDesignSurfaceViewModel.SaveDesignSurfaceData();
+
         }
 
         /// <summary>
@@ -1263,6 +1270,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         {
             if (!isCurrentlyParallelizing)
             {
+                if (parallelCorpusConnection.DestinationConnector is null || parallelCorpusConnection.SourceConnector is null)
+                {
+                    return;
+                }
+
                 EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusDeletedMessage(
                      SourceParatextId: parallelCorpusConnection.SourceConnector!.ParentNode!.ParatextProjectId,
                      TargetParatextId: parallelCorpusConnection.DestinationConnector!.ParentNode!.ParatextProjectId,
@@ -1303,56 +1315,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
         /// <summary>
-        /// Event raised while the user is dragging a connection.
-        /// NB:  This method cannot be moved to the view model as Mouse.GetPosition always returns a Point - (0,0)
-        ///      The event is handled in the code behind for ProjectDesignSurfaceView
-        /// </summary>
-        public void OnProjectDesignSurfaceConnectionDragging(object sender, ConnectionDraggingEventArgs e)
-        {
-            //OnUIThread(() =>
-            //{
-            //    var curDragPoint = Mouse.GetPosition((Wpf.Controls.ProjectDesignSurface)sender);
-            //    var connection = (ParallelCorpusConnectionViewModel)e.Connection;
-            //    ConnectionDragging(curDragPoint, connection);
-            //});
-        }
-
-        /// <summary>
-        /// Called when the user has started to drag out a connector, thus creating a new connection.
-        /// </summary>
-        public ParallelCorpusConnectionViewModel ConnectionDragStarted(ParallelCorpusConnectorViewModel draggedOutParallelCorpusConnector, Point curDragPoint)
-        {
-            //
-            // Create a new connection to add to the view-model.
-            //
-            var connection = new ParallelCorpusConnectionViewModel();
-
-            if (draggedOutParallelCorpusConnector.ConnectorType == ConnectorType.Output)
-            {
-                //
-                // The user is dragging out a source connector (an output) and will connect it to a destination connector (an input).
-                //
-                connection.SourceConnector = draggedOutParallelCorpusConnector;
-                connection.DestConnectorHotspot = curDragPoint;
-            }
-            else
-            {
-                //
-                // The user is dragging out a destination connector (an input) and will connect it to a source connector (an output).
-                //
-                connection.DestinationConnector = draggedOutParallelCorpusConnector;
-                connection.SourceConnectorHotspot = curDragPoint;
-            }
-
-            //
-            // Add the new connection to the view-model.
-            //
-            ParallelCorpusConnections.Add(connection);
-
-            return connection;
-        }
-
-        /// <summary>
         /// Event raised, to query for feedback, while the user is dragging a connection.
         /// </summary>
         public void OnProjectDesignSurfaceQueryConnectionFeedback(object sender, QueryConnectionFeedbackEventArgs e)
@@ -1376,35 +1338,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
         /// <summary>
-        /// Event raised when the user has started to drag out a connection.
-        /// </summary>
-        public void OnParallelCorpusConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
-        {
-            if (ProjectDesignSurfaceViewModel.IsBusy)
-            {
-                return;
-            }
-
-            var draggedOutConnector = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
-            var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
-
-            //
-            // Delegate the real work to the view model.
-            //
-            var connection = ConnectionDragStarted(draggedOutConnector, curDragPoint);
-
-            //
-            // Must return the view-model object that represents the connection via the event args.
-            // This is so that ProjectDesignSurfaceView can keep track of the object while it is being dragged.
-            //
-            e.Connection = connection;
-        }
-
-        /// <summary>
         /// Event raised while the user is dragging a connection.
         /// </summary>
         public void OnParallelCorpusConnectionDragging(object sender, ConnectionDraggingEventArgs e)
         {
+            Debug.WriteLine("==== In OnParallelCorpusConnectionDragging");
+
             var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
             var connection = (ParallelCorpusConnectionViewModel)e.Connection;
             ConnectionDragging(curDragPoint, connection);
@@ -1415,13 +1354,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         public void OnParallelCorpusConnectionDragCompleted(object? sender, ConnectionDragCompletedEventArgs e)
         {
+            Debug.WriteLine("==== In OnParallelCorpusConnectionDragCompleted");
+
             var connectorDraggedOut = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
             var connectorDraggedOver = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOver;
             var newConnection = (ParallelCorpusConnectionViewModel)e.Connection;
-
-
-            Debug.WriteLine($"connectorDraggedOut: {connectorDraggedOut}");
-            Debug.WriteLine($"connectorDraggedOver: {connectorDraggedOver}");
 
 
             if (newConnection.DestinationConnector is null)
@@ -1430,7 +1367,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
             else
             {
-                Debug.WriteLine($"newConnection: {newConnection.SourceConnector!.CorpusType}  {newConnection.DestinationConnector!.CorpusType}");
+
+                var sourceString = newConnection.SourceConnector == null
+                    ? "No corpus selected"
+                    : newConnection.SourceConnector.CorpusType;
+
+                Debug.WriteLine($"newConnection: {sourceString}  {newConnection.DestinationConnector!.CorpusType}");
             }
 
             EventAggregator.PublishOnUIThreadAsync(new IsBackgroundDeletionTaskRunning("Alignment Deletion", connectorDraggedOut, connectorDraggedOver, newConnection));
@@ -1438,19 +1380,23 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             //ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
         }
 
-        public async void OnCorpusNodeDragCompleted(object? sender, NodeDragCompletedEventArgs? e)
-        {
-            Logger!.LogInformation("NodeDragCompleted");
-            await ProjectDesignSurfaceViewModel.SaveDesignSurfaceData();
-
-        }
-
         /// <summary>
         /// Called to query the application for feedback while the user is dragging the connection.
         /// </summary>
         public void QueryConnectionFeedback(ParallelCorpusConnectorViewModel draggedOutParallelCorpusConnector, ParallelCorpusConnectorViewModel draggedOverParallelCorpusConnector, out object feedbackIndicator, out bool connectionOk)
         {
-            if (draggedOutParallelCorpusConnector == draggedOverParallelCorpusConnector)
+            if (draggedOutParallelCorpusConnector == null || draggedOverParallelCorpusConnector == null)
+            {
+                //
+                // The user is dragging the connection out of the source connector but hasn't dragged it over a destination connector yet.
+                // Or the user is dragging the connection over a destination connector but hasn't dragged it out of the source connector yet.
+                // Provide feedback to indicate that this connection is not valid!
+                //
+                feedbackIndicator = new ConnectionBadIndicator();
+                connectionOk = false;
+                return;
+            }
+            else if (draggedOutParallelCorpusConnector == draggedOverParallelCorpusConnector)
             {
                 //
                 // Can't connect to self!
@@ -1493,13 +1439,116 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
+        #region ParallelLineConnection
+
+        /// <summary>
+        /// Called when the user has started to drag out a connector, thus creating a new connection.
+        /// </summary>
+        public ParallelCorpusConnectionViewModel ConnectionDragStarted(ParallelCorpusConnectorViewModel draggedOutParallelCorpusConnector, Point curDragPoint)
+        {
+            Debug.WriteLine("==== In ConnectionDragStarted");
+
+
+            //
+            // Create a new connection to add to the view-model.
+            //
+            var connection = new ParallelCorpusConnectionViewModel();
+
+            if (draggedOutParallelCorpusConnector.ConnectorType == ConnectorType.Output)
+            {
+                //
+                // The user is dragging out a source connector (an output) and will connect it to a destination connector (an input).
+                //
+                connection.SourceConnector = draggedOutParallelCorpusConnector;
+                connection.DestConnectorHotspot = curDragPoint;
+            }
+            else
+            {
+                //
+                // The user is dragging out a destination connector (an input) and will connect it to a source connector (an output).
+                //
+                connection.DestinationConnector = draggedOutParallelCorpusConnector;
+                connection.SourceConnectorHotspot = curDragPoint;
+            }
+
+            //
+            // Add the new connection to the view-model.
+            //
+            ParallelCorpusConnections.Add(connection);
+
+
+            Debug.WriteLine($"====Drag Started (Connection): {connection.Id}");
+            if (connection.SourceConnector != null)
+            {
+                Debug.WriteLine($"====Drag Started (Source): {connection.SourceConnector.Name}");
+                Debug.WriteLine($"====Drag Started (Source): {connection.SourceConnector.ParatextId}");
+            }
+            if (connection.DestinationConnector != null)
+            {
+                Debug.WriteLine($"====Drag Started (Target): {connection.DestinationConnector.Name}");
+                Debug.WriteLine($"====Drag Started (Target): {connection.DestinationConnector.ParatextId}");
+            }
+
+            return connection;
+        }
+
+        /// <summary>
+        /// Event raised when the user has started to drag out a connection.
+        /// </summary>
+        public void OnParallelCorpusConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
+        {
+            Debug.WriteLine("==== In OnParallelCorpusConnectionDragStarted");
+
+            if (ProjectDesignSurfaceViewModel.IsBusy)
+            {
+                return;
+            }
+
+            var draggedOutConnector = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
+            var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
+
+            //
+            // Delegate the real work to the view model.
+            //
+            var connection = ConnectionDragStarted(draggedOutConnector, curDragPoint);
+
+            //
+            // Must return the view-model object that represents the connection via the event args.
+            // This is so that ProjectDesignSurfaceView can keep track of the object while it is being dragged.
+            //
+            e.Connection = connection;
+
+
+            Debug.WriteLine($"====Drag Started (Connection): {connection.Id}");
+            if (connection.SourceConnector != null)
+            {
+                Debug.WriteLine($"====Drag Started (Source): {connection.SourceConnector.Name}");
+                Debug.WriteLine($"====Drag Started (Source): {connection.SourceConnector.ParatextId}");
+            }
+            else
+            {
+                Debug.WriteLine($"====Drag Started (Source) is NULL");
+            }
+
+            if (connection.DestinationConnector != null)
+            {
+                Debug.WriteLine($"====Drag Started (Target): {connection.DestinationConnector.Name}");
+                Debug.WriteLine($"====Drag Started (Target): {connection.DestinationConnector.ParatextId}");
+            }
+            else
+            {
+                Debug.WriteLine($"====Drag Started (Target) is NULL");
+            }
+
+        }
+
         /// <summary>
         /// Called as the user continues to drag the connection.
         /// </summary>
         public void ConnectionDragging(Point curDragPoint, ParallelCorpusConnectionViewModel parallelCorpusConnection)
         {
+            //Logger!.LogDebug($"Current drag point: {curDragPoint.X}, {curDragPoint.Y}");
 
-            Logger!.LogDebug($"Current drag point: {curDragPoint.X}, {curDragPoint.Y}");
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (parallelCorpusConnection is not null)
             {
@@ -1516,12 +1565,30 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
         /// <summary>
+        /// Event raised while the user is dragging a connection.
+        /// NB:  This method cannot be moved to the view model as Mouse.GetPosition always returns a Point - (0,0)
+        ///      The event is handled in the code behind for ProjectDesignSurfaceView
+        /// </summary>
+        public void OnProjectDesignSurfaceConnectionDragging(object sender, ConnectionDraggingEventArgs e)
+        {
+            //OnUIThread(() =>
+            //{
+            //    var curDragPoint = Mouse.GetPosition((Wpf.Controls.ProjectDesignSurface)sender);
+            //    var connection = (ParallelCorpusConnectionViewModel)e.Connection;
+            //    ConnectionDragging(curDragPoint, connection);
+            //});
+        }
+
+        /// <summary>
         /// Called when the user has finished dragging out the new connection.
         /// </summary>
         public async void ConnectionDragCompleted(ParallelCorpusConnectionViewModel newParallelCorpusConnection,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
         {
+            Debug.WriteLine("==== In ConnectionDragCompleted");
+
+
             // throw out any DesignSurfaceViewModels that are not the one connected to the ProjectDesignSurfaceViewModel
             // this is to prevent the double hits that were coming through after a user uses the Project Template Wizard
             // which spawns off a new DesignSurfaceViewModel so we have double versions of it floating around
@@ -1530,7 +1597,26 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 return;
             }
 
-            Debug.WriteLine($"DesignSurfaceViewModel GUID: {Guid.ToString()}");
+            Debug.WriteLine($"====DesignSurfaceViewModel GUID: {Guid.ToString()}");
+            Debug.WriteLine("====ConnectionDragCompleted (newParallelCorpusConnection.Id):" + newParallelCorpusConnection.Id);
+
+            if (parallelCorpusConnectorDraggedOut is null)
+            {
+                Debug.WriteLine("====ConnectionDragCompleted (parallelCorpusConnectorDraggedOut.Id): NULL");
+            }
+            else
+            {
+                Debug.WriteLine("====ConnectionDragCompleted (parallelCorpusConnectorDraggedOut.Id):" + parallelCorpusConnectorDraggedOut.ParatextId);
+            }
+
+            if (parallelCorpusConnectorDraggedOver is null)
+            {
+                Debug.WriteLine("====ConnectionDragCompleted (parallelCorpusConnectorDraggedOver.Id): NULL");
+            }
+            else
+            {
+                Debug.WriteLine("====ConnectionDragCompleted (parallelCorpusConnectorDraggedOver.Id):" + parallelCorpusConnectorDraggedOver.ParatextId);
+            }
 
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
@@ -1545,6 +1631,16 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
 
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            // get this into the right order where source is always parallelCorpusConnectorDraggedOut
+            if (parallelCorpusConnectorDraggedOut.Name == "Target")
+            {
+                var tmp = parallelCorpusConnectorDraggedOut;
+                parallelCorpusConnectorDraggedOut = parallelCorpusConnectorDraggedOver;
+                parallelCorpusConnectorDraggedOver = tmp;
+            }
+
+
             if (IsAlreadyAligned(topLevelProjectIds, newParallelCorpusConnection, parallelCorpusConnectorDraggedOut, parallelCorpusConnectorDraggedOver))
             {
                 ParallelCorpusConnections.Remove(newParallelCorpusConnection);
@@ -1602,7 +1698,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 }
 
                 added = true;
-            } else
+            }
+            else
             {
                 if (newParallelCorpusConnection.DestinationConnector == parallelCorpusConnectorDraggedOver)
                 {
@@ -1653,6 +1750,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             await ProjectDesignSurfaceViewModel.SaveDesignSurfaceData();
         }
+
+        #endregion
 
 
         /// <summary>

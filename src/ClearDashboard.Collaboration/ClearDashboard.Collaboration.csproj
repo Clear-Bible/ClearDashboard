@@ -4,9 +4,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>ClearDashboard.Collaboration</AssemblyName>
-    <FileVersion>1.2.0.14</FileVersion>
-    <Version>1.2.0.14</Version>
-    <AssemblyVersion>1.2.0.14</AssemblyVersion>
+    <FileVersion>1.2.0.17</FileVersion>
+    <Version>1.2.0.17</Version>
+    <AssemblyVersion>1.2.0.17</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ClearBible.Engine" Version="2.0.16" />

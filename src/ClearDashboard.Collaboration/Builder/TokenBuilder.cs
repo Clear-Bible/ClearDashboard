@@ -124,8 +124,7 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
         {
             IsComposite = (tokenComponent is Models.TokenComposite),
             TokenizedCorpusId = tokenComponent.TokenizedCorpusId,
-            TokenLocation = tokenComponent.EngineTokenId!,
-            TokenSurfaceText = tokenComponent.SurfaceText!
+            TokenLocation = tokenComponent.EngineTokenId!
         };
     }
 
