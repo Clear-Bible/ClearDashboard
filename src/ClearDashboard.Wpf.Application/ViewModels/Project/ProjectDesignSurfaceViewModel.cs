@@ -424,7 +424,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
 
-                    if (projectCorporaPresent  && !currentParatextProjectPresent)
+                    if (projectCorporaPresent  && !currentParatextProjectPresent && ProjectManager!.IsParatextConnected)
                     {
                         var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
 
