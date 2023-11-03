@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>បង្កើត​ឡើង​ដោយ</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>នា​ពេល​បច្ចុប្បន្ន</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -833,10 +836,10 @@
     <value>បន្ថែមដែន semantic</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>អនុវត្តការបកប្រែ</value>
+    <value>លាបរលោង</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>បោះបង់ការបកប្រែ</value>
+    <value>បោះបង់ STARST</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>ផ្លាស់ប្តូររាល់ការកើតឡើងដែលមិនបានសំរេច</value>
@@ -863,7 +866,7 @@
     <value>បញ្ចូលការបកប្រែថ្មីសម្រាប់</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>បញ្ចូលការបកប្រែថ្មី</value>
+    <value>បញ្ចូលរលោងថ្មី</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>រេក្យងល្ផើម</value>
@@ -884,7 +887,7 @@
     <value>អត្ថន័យ:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>ការបកប្រែថ្មី</value>
+    <value>រលោងថ្មី</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>យកដែន semory នេះចេញពីអត្ថន័យនេះ</value>
@@ -893,7 +896,7 @@
     <value>យកទម្រង់ lexical នេះចេញពីក្រែមល្ហែមនេះ</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>កំណត់ការបកប្រែសម្រាប់</value>
+    <value>កំណត់រលោងសម្រាប់</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>និង</value>
@@ -2130,6 +2133,9 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>បើកដំណើរការការនាំចូល lexicon</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>បើកការបំបែកថូខឹន</value>

@@ -1,7 +1,6 @@
 ﻿using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
@@ -32,10 +31,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using Microsoft.Extensions.Logging;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
-using System.Media;
-using System.Threading;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -129,7 +125,12 @@ namespace ClearDashboard.WebApiParatextPlugin
             _project = parent.CurrentState.Project;
             _parent = parent;
 
+            // get the version of SIL Convertors if present
+            GetSilConvertorsVersion();
+
+
             UpdateProjectList();
+
         }
 
         public override void DoLoad(IProgressInfo progressInfo)
@@ -226,8 +227,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="newProject"></param>
         private async void ProjectChanged(IPluginChildWindow sender, IProject newProject)
         {
-            ProjectListBox.Visible = false;
-            
             SetProject(newProject, reloadWebHost: false);
 
             WebHostStartup.ChangeProject(newProject);
@@ -474,6 +473,46 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         #region Methods
 
+        private void GetSilConvertorsVersion()
+        {
+            // get the path to the SIL Converters uninstaller
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\SIL\SilEncConverters40\Installer");
+
+            //if it does exist, retrieve the stored values  
+            if (key != null)
+            {
+                // remove the trailing file name from the path
+                var path = Path.GetDirectoryName(key.GetValue("InstallerPath").ToString());
+                var filePath = Path.Combine(path, "Microsoft.Extensions.DependencyInjection.Abstractions.dll");
+                if (File.Exists(filePath))
+                {
+                    // get the file version
+                    var versionInfo = FileVersionInfo.GetVersionInfo(filePath);
+
+                    AppendText(Color.SaddleBrown, "Microsoft.Extensions.DependencyInjection.Abstractions.dll");
+
+                    AppendText(Color.SaddleBrown, $"Version {versionInfo.FileMajorPart}.{versionInfo.FileMinorPart}.{versionInfo.FileBuildPart}.{versionInfo.FilePrivatePart}");
+
+                    if (versionInfo.FileMajorPart < 7)
+                    {
+                        AppendText(Color.Red, $"Incompatible version of SIL Converters Detected - Please update to at least version 5.2 from https://software.sil.org/silconverters/");
+                    }
+                    else
+                    {
+                        AppendText(Color.SeaGreen, $"SIL Converters 5.2 or higher Detected");
+                    }
+
+                    AppendText(Color.Black, $"");
+                }
+            }
+
+            if (key is not null)
+            {
+                key.Close();
+            }
+            
+        }
+
         /// <summary>
         /// Standard Paratext verse reference has been changed
         /// </summary>
@@ -547,7 +586,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             var allProjectsList = _host.GetAllProjects();
 
             _projectList.Clear();
-            ProjectListBox.Items.Clear();   
+
 
             var windows = _host.AllOpenWindows;
             foreach (var window in windows)
@@ -577,21 +616,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                     }
                 }
 
-            }
-
-            foreach (var proj in _projectList)
-            {
-                if (proj is not null)
-                {
-                    ProjectListBox.Items.Add(proj.ShortName);
-                }
-            }
-
-
-            if (ProjectListBox.Items.Count > 0)
-            {
-                ProjectListBox.SelectedIndex = 0;
-                ProjectListBox_SelectedIndexChanged(null, null);
             }
         }
 
@@ -1774,7 +1798,32 @@ namespace ClearDashboard.WebApiParatextPlugin
                                 Verse = verse,
                                 Text = verseText
                             };
-                            verses.Add(usfm);
+
+                            //if verse is a partialVerse and the last item in verses is a partialVerse
+                            var isCurrentPartialVerse = Regex.IsMatch(verse, @"(\A[0-9]+[a-z]\Z)");
+                            var previousVerse = (verses.LastOrDefault()??new UsfmVerse()).Verse;
+                            var isPreviousPartialVerse = Regex.IsMatch(previousVerse, @"(\A[0-9]+[a-z]\Z)");
+
+                            //and the verse number is the same and the verse subparts are subsequent
+                            var currentVerseNumber = Regex.Replace(verse, "[A-Za-z]", "");
+                            var previousVerseNumber = Regex.Replace(previousVerse, "[A-Za-z]", "");
+
+                            var currentVersePart = Regex.Replace(verse, @"[\d]", "");
+                            var previousVersePart = Regex.Replace(previousVerse, @"[\d]", "");
+                            
+
+                            if (isCurrentPartialVerse && isPreviousPartialVerse &&
+                                currentVerseNumber == previousVerseNumber &&
+                                String.CompareOrdinal(currentVersePart, previousVersePart) == 1)
+                            {
+                                //then append verseText onto versetext of last element in verses
+                                verses.LastOrDefault().Text = verses.LastOrDefault().Text.TrimEnd() + " " + verseText;
+                            }
+                            else
+                            {
+                                verses.Add(usfm);
+                            }
+
                             verseText = "";
                         }
 
@@ -1958,26 +2007,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             switchProjectWindow.Show();
         }
 
-        private void ProjectListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string name = ProjectListBox.SelectedItem.ToString();
-            bool found = false;
-            //foreach (var proj in m_ProjectList)
-            //{
-            //    if (name == proj.ShortName)
-            //    {
-            //        m_Project = proj;
-            //        ShowScripture();
-            //        found = true;
-            //        break;
-            //    }
-            //}
-            //if (!found)
-            //{
-            //    textBox.Text = $"Cannot find project named {name}";
-            //}
 
-        }
 
 
 

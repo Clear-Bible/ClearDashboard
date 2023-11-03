@@ -125,7 +125,7 @@
     <value>Выравнивание</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>Выберите книги, с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
+    <value>Выберите книги (ы), с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Проверка USFM</value>
@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Сделано</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Текущий</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>Дан.</value>
   </data>
@@ -620,10 +623,10 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск фильтра</value>
+    <value>Поиск по фильтру</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск членов фильтра</value>
+    <value>Поиск члена фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Межлинейно</value>
@@ -833,10 +836,10 @@
     <value>Добавить семантический домен</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Применить перевод</value>
+    <value>Нанесите глянец</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Отменить перевод</value>
+    <value>Отменить блеск</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Изменить все незаметные события</value>
@@ -863,7 +866,7 @@
     <value>Введите новый перевод для</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Введите новый перевод</value>
+    <value>Введите новый глянец</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Лемма</value>
@@ -872,7 +875,7 @@
     <value>Лемма/формы:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Лемма для новой лексеме:</value>
+    <value>Лемма для новой лексем:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>Лекса</value>
@@ -884,7 +887,7 @@
     <value>Значения:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Новый перевод</value>
+    <value>Новый глянец</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Удалить этот семантический домен из этого значения</value>
@@ -893,7 +896,7 @@
     <value>Удалить эту лексическую форму из этой леммы</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Установить перевод для</value>
+    <value>Установить глянец для</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>И</value>
@@ -959,7 +962,7 @@
     <value>Добавьте цель в качестве перевода для ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите Lexemes, которые имеют один или несколько переводов, которые соответствуют цели</value>
+    <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
@@ -1205,7 +1208,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1223,7 +1226,7 @@
     <value>Токен доступа:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Проверьте доступность пользователя</value>
@@ -1346,7 +1349,7 @@
     <value>Вы хотите удалить этикетку:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Вы хотите отменить этикетку:</value>
+    <value>Вы хотите понизить этикетку:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>Из группы лейбла:</value>
@@ -1355,7 +1358,7 @@
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу этикетки</value>
+    <value>Добавить группу ярлыков</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -1367,7 +1370,7 @@
     <value>с ярлыками от:</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Название группы на этикетке</value>
+    <value>Название группы лейбла</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
     <value>Удалить эту группу этикетки?</value>
@@ -1523,7 +1526,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интернетальный</value>
+    <value>Добавить новый интерлинеар</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1574,7 +1577,7 @@
     <value>Установите всю область контента в просмотр</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Установите все узлы в Viewport</value>
+    <value>Подключить все узлы к видовому доку</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Получите последние из Paratext</value>
@@ -1601,7 +1604,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1646,7 +1649,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить содержание</value>
+    <value>Увеличить контент</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1682,7 +1685,7 @@
     <value>Тип лекса</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Загружать ссылки</value>
+    <value>Загрузить ссылки</value>
   </data>
   <data name="Pins_Match" xml:space="preserve">
     <value>Соответствовать</value>
@@ -1703,7 +1706,7 @@
     <value>Префикс</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Покажите Backtranslation</value>
+    <value>Показать переходное время</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Корень</value>
@@ -1775,10 +1778,10 @@
     <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Включите NT Греко -библейские тексты?</value>
+    <value>Включите NT Грико -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Включите OT ивритские библейские тексты?</value>
+    <value>Включите ивритские библейские тексты?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Управление совместными проектами</value>
@@ -2108,7 +2111,7 @@
     <value>Включить экспериментальный плагин Aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Настройки сотрудничества</value>
@@ -2123,13 +2126,16 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка отправки</value>
+    <value>По электронной почте ошибка</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Включить редактирование выравнивания</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Включить импорт лексикона</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>Включить расщепление токенов</value>
@@ -2174,16 +2180,16 @@
     <value>Сохранить настройки</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Отправить валидацию по электронной почте</value>
+    <value>Отправить валидацию электронной почты</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
     <value>Настройки ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Показать расширенные представления на другом мониторе, чем панель инструментов</value>
+    <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>
@@ -2318,7 +2324,7 @@
     <value>Обновить и добавить новый</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создайте использование дефолтов</value>
+    <value>Создать использование дефолтов</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

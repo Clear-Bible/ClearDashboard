@@ -82,7 +82,20 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
-     
+        public string? RichVerseText
+        {
+            get => Entity?.RichVerseText;
+            set
+            {
+                if (Entity != null)
+                {
+                    Entity.RichVerseText = value;
+                }
+                NotifyOfPropertyChange(nameof(RichVerseText));
+            }
+        }
+
+
 
         public Guid? CorpusId
         {

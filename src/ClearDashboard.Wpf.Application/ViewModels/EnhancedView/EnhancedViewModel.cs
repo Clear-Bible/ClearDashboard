@@ -49,7 +49,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<HighlightTokensMessage>,
         IHandle<UnhighlightTokensMessage>,
         IHandle<ParallelCorpusDeletedMessage>,
-        IHandle<CorpusDeletedMessage>
+        IHandle<CorpusDeletedMessage>,
+        IHandle<ExternalNotesUpdatedMessage>
     {
         #region Commands
 
@@ -395,6 +396,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             LabelsEditor.EventAggregator = eventAggregator;
+            LabelsDisplay.EventAggregator = eventAggregator;
 
             LabelSelector.LocalizationService = localizationService;
 
@@ -787,6 +789,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public async Task HandleAsync(ExternalNotesUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.GetData(cancellationToken);
+            }
+        }
+
         public Task HandleAsync(ParallelCorpusDeletedMessage message, CancellationToken cancellationToken)
         {
             bool deleteHappened = false;
@@ -1051,6 +1061,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Execute.OnUIThreadAsync(async () =>
             {
+                //TODO This is a TEMPORAY FIX just for the hotfix, this needs to be resolved by ANDY in the longterm
+                e.Note.Labels.Clear();
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
                 NotifyOfPropertyChange(() => Items);
             });

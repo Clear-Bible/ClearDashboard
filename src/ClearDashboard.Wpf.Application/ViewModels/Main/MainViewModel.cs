@@ -552,7 +552,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async Task SaveProjectEnhancedViewTabs()
         {
             var enhancedViewLayouts = new List<EnhancedViewLayout>();
-            Logger!.LogInformation("Saving ProjectDesignSurface layout.");
+            Logger!.LogInformation("Saving Enhanced View Tabs layout.");
             foreach (var item in Items)
             {
                 if (item is EnhancedViewModel enhancedViewModel)
@@ -585,6 +585,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
 
                     enhancedViewLayouts.Add(enhancedViewModel.EnhancedViewLayout);
+                    Logger.LogInformation($"Saving Enhanced View Tab '{title}'");
                 }
             }
 
@@ -592,6 +593,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ProjectManager.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(enhancedViewLayouts, options);
             await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
 
+            Logger!.LogInformation("Saving ProjectDesignSurface layout complete");
         }
 
         private JsonSerializerOptions CreateDiscriminatedJsonSerializerOptions()
@@ -960,8 +962,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public void LaunchGettingStartedGuide()
         {
-            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
-            var path = Path.Combine(programFiles, "ClearDashboard", "Dashboard_Instructions.pdf");
+            // get the application startup directory
+            var startupPath = AppDomain.CurrentDomain.BaseDirectory;
+            var path = Path.Combine(startupPath, "Dashboard_Instructions.pdf");
+
+            //var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            //var path = Path.Combine(programFiles, "ClearDashboard", "Dashboard_Instructions.pdf");
             if (File.Exists(path))
             {
                 var p = new Process();
@@ -2278,6 +2284,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // rebuild the menu system with the new language
             await RebuildMainMenu();
+
+            // redraw the corpus and parallel corpus menus 
+            await EventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus(), cancellationToken);
+            await EventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus(), cancellationToken);
         }
 
         public async Task HandleAsync(RebuildMainMenuMessage message, CancellationToken cancellationToken)
@@ -2402,6 +2412,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await OnInitializeAsync(CancellationToken.None);
             await OnActivateAsync(CancellationToken.None);
             //await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+
+            await EventAggregator.PublishOnUIThreadAsync(new ReloadNotesListMessage(), cancellationToken);
         }
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)

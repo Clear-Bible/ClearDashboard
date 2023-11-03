@@ -51,196 +51,196 @@ public partial class ReadonlyProjectDesignSurfaceView
     /// <summary>
     /// Event raised on mouse down in the ProjectDesignSurfaceView.
     /// </summary> 
-    private void OnDesignSurfaceMouseDown(object sender, MouseButtonEventArgs e)
-    {
-        ProjectDesignSurface.Focus();
-        Keyboard.Focus(ProjectDesignSurface);
+    //private void OnDesignSurfaceMouseDown(object sender, MouseButtonEventArgs e)
+    //{
+    //    ProjectDesignSurface.Focus();
+    //    Keyboard.Focus(ProjectDesignSurface);
 
-        _mouseButtonDown = e.ChangedButton;
-        _origZoomAndPanControlMouseDownPoint = e.GetPosition(zoomAndPanControl);
-        _origContentMouseDownPoint = e.GetPosition(ProjectDesignSurface);
+    //    _mouseButtonDown = e.ChangedButton;
+    //    _origZoomAndPanControlMouseDownPoint = e.GetPosition(zoomAndPanControl);
+    //    _origContentMouseDownPoint = e.GetPosition(ProjectDesignSurface);
 
-        if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0 &&
-            (e.ChangedButton == MouseButton.Left ||
-             e.ChangedButton == MouseButton.Right))
-        {
-            // Shift + left- or right-down initiates zooming mode.
-            _mouseHandlingMode = MouseHandlingMode.Zooming;
-        }
-        else if (_mouseButtonDown == MouseButton.Left &&
-                 (Keyboard.Modifiers & ModifierKeys.Control) == 0)
-        {
-            //
-            // Initiate panning, when control is not held down.
-            // When control is held down left dragging is used for drag selection.
-            // After panning has been initiated the user must drag further than the threshold value to actually start drag panning.
-            //
-            _mouseHandlingMode = MouseHandlingMode.Panning;
-        }
+    //    if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0 &&
+    //        (e.ChangedButton == MouseButton.Left ||
+    //         e.ChangedButton == MouseButton.Right))
+    //    {
+    //        // Shift + left- or right-down initiates zooming mode.
+    //        _mouseHandlingMode = MouseHandlingMode.Zooming;
+    //    }
+    //    else if (_mouseButtonDown == MouseButton.Left &&
+    //             (Keyboard.Modifiers & ModifierKeys.Control) == 0)
+    //    {
+    //        //
+    //        // Initiate panning, when control is not held down.
+    //        // When control is held down left dragging is used for drag selection.
+    //        // After panning has been initiated the user must drag further than the threshold value to actually start drag panning.
+    //        //
+    //        _mouseHandlingMode = MouseHandlingMode.Panning;
+    //    }
 
-        if (_mouseHandlingMode != MouseHandlingMode.None)
-        {
-            // Capture the mouse so that we eventually receive the mouse up event.
-            ProjectDesignSurface.CaptureMouse();
-            e.Handled = true;
-        }
-    }
+    //    if (_mouseHandlingMode != MouseHandlingMode.None)
+    //    {
+    //        // Capture the mouse so that we eventually receive the mouse up event.
+    //        ProjectDesignSurface.CaptureMouse();
+    //        e.Handled = true;
+    //    }
+    //}
 
     /// <summary>
     /// Event raised on mouse up in the ProjectDesignSurfaceView.
     /// </summary>
-    private void OnDesignSurfaceMouseUp(object sender, MouseButtonEventArgs e)
-    {
-        if (_mouseHandlingMode != MouseHandlingMode.None)
-        {
-            if (_mouseHandlingMode == MouseHandlingMode.Panning)
-            {
-                //
-                // Panning was initiated but dragging was abandoned before the mouse
-                // cursor was dragged further than the threshold distance.
-                // This means that this basically just a regular left mouse click.
-                // Because it was a mouse click in empty space we need to clear the current selection.
-                //
-            }
-            else if (_mouseHandlingMode == MouseHandlingMode.Zooming)
-            {
-                if (_mouseButtonDown == MouseButton.Left)
-                {
-                    // Shift + left-click zooms in on the content.
-                    ZoomIn(_origContentMouseDownPoint);
-                }
-                else if (_mouseButtonDown == MouseButton.Right)
-                {
-                    // Shift + left-click zooms out from the content.
-                    ZoomOut(_origContentMouseDownPoint);
-                }
-            }
-            else if (_mouseHandlingMode == MouseHandlingMode.DragZooming)
-            {
-                // When drag-zooming has finished we zoom in on the rectangle that was highlighted by the user.
-                ApplyDragZoomRect();
-            }
+    //private void OnDesignSurfaceMouseUp(object sender, MouseButtonEventArgs e)
+    //{
+    //    if (_mouseHandlingMode != MouseHandlingMode.None)
+    //    {
+    //        if (_mouseHandlingMode == MouseHandlingMode.Panning)
+    //        {
+    //            //
+    //            // Panning was initiated but dragging was abandoned before the mouse
+    //            // cursor was dragged further than the threshold distance.
+    //            // This means that this basically just a regular left mouse click.
+    //            // Because it was a mouse click in empty space we need to clear the current selection.
+    //            //
+    //        }
+    //        else if (_mouseHandlingMode == MouseHandlingMode.Zooming)
+    //        {
+    //            if (_mouseButtonDown == MouseButton.Left)
+    //            {
+    //                // Shift + left-click zooms in on the content.
+    //                ZoomIn(_origContentMouseDownPoint);
+    //            }
+    //            else if (_mouseButtonDown == MouseButton.Right)
+    //            {
+    //                // Shift + left-click zooms out from the content.
+    //                ZoomOut(_origContentMouseDownPoint);
+    //            }
+    //        }
+    //        else if (_mouseHandlingMode == MouseHandlingMode.DragZooming)
+    //        {
+    //            // When drag-zooming has finished we zoom in on the rectangle that was highlighted by the user.
+    //            ApplyDragZoomRect();
+    //        }
 
-            //
-            // Reenable clearing of selection when empty space is clicked.
-            // This is disabled when drag panning is in progress.
-            //
-            ProjectDesignSurface.IsClearSelectionOnEmptySpaceClickEnabled = true;
+    //        //
+    //        // Reenable clearing of selection when empty space is clicked.
+    //        // This is disabled when drag panning is in progress.
+    //        //
+    //        ProjectDesignSurface.IsClearSelectionOnEmptySpaceClickEnabled = true;
 
-            //
-            // Reset the override cursor.
-            // This is set to a special cursor while drag panning is in progress.
-            //
-            Mouse.OverrideCursor = null;
+    //        //
+    //        // Reset the override cursor.
+    //        // This is set to a special cursor while drag panning is in progress.
+    //        //
+    //        Mouse.OverrideCursor = null;
 
-            ProjectDesignSurface.ReleaseMouseCapture();
-            _mouseHandlingMode = MouseHandlingMode.None;
-            e.Handled = true;
-        }
-    }
+    //        ProjectDesignSurface.ReleaseMouseCapture();
+    //        _mouseHandlingMode = MouseHandlingMode.None;
+    //        e.Handled = true;
+    //    }
+    //}
 
     /// <summary>
     /// Event raised on mouse move in the ProjectDesignSurfaceView.
     /// </summary>
-    private void OnDesignSurfaceMouseMove(object sender, MouseEventArgs e)
-    {
-        if (_mouseHandlingMode == MouseHandlingMode.Panning)
-        {
-            var currentPoint = e.GetPosition(zoomAndPanControl);
-            var dragOffset = currentPoint - _origZoomAndPanControlMouseDownPoint;
-            var dragThreshold = 10;
-            if (Math.Abs(dragOffset.X) > dragThreshold ||
-                Math.Abs(dragOffset.Y) > dragThreshold)
-            {
-                //
-                // The user has dragged the cursor further than the threshold distance, initiate
-                // drag panning.
-                //
-                _mouseHandlingMode = MouseHandlingMode.DragPanning;
-                ProjectDesignSurface.IsClearSelectionOnEmptySpaceClickEnabled = false;
-                Mouse.OverrideCursor = Cursors.ScrollAll;
-            }
+    //private void OnDesignSurfaceMouseMove(object sender, MouseEventArgs e)
+    //{
+    //    if (_mouseHandlingMode == MouseHandlingMode.Panning)
+    //    {
+    //        var currentPoint = e.GetPosition(zoomAndPanControl);
+    //        var dragOffset = currentPoint - _origZoomAndPanControlMouseDownPoint;
+    //        var dragThreshold = 10;
+    //        if (Math.Abs(dragOffset.X) > dragThreshold ||
+    //            Math.Abs(dragOffset.Y) > dragThreshold)
+    //        {
+    //            //
+    //            // The user has dragged the cursor further than the threshold distance, initiate
+    //            // drag panning.
+    //            //
+    //            _mouseHandlingMode = MouseHandlingMode.DragPanning;
+    //            ProjectDesignSurface.IsClearSelectionOnEmptySpaceClickEnabled = false;
+    //            Mouse.OverrideCursor = Cursors.ScrollAll;
+    //        }
 
-            e.Handled = true;
-        }
-        else if (_mouseHandlingMode == MouseHandlingMode.DragPanning)
-        {
-            //
-            // The user is left-dragging the mouse.
-            // Pan the viewport by the appropriate amount.
-            //
-            var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
-            var dragOffset = curContentMousePoint - _origContentMouseDownPoint;
+    //        e.Handled = true;
+    //    }
+    //    else if (_mouseHandlingMode == MouseHandlingMode.DragPanning)
+    //    {
+    //        //
+    //        // The user is left-dragging the mouse.
+    //        // Pan the viewport by the appropriate amount.
+    //        //
+    //        var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
+    //        var dragOffset = curContentMousePoint - _origContentMouseDownPoint;
 
-            zoomAndPanControl.ContentOffsetX -= dragOffset.X;
-            zoomAndPanControl.ContentOffsetY -= dragOffset.Y;
+    //        zoomAndPanControl.ContentOffsetX -= dragOffset.X;
+    //        zoomAndPanControl.ContentOffsetY -= dragOffset.Y;
 
-            e.Handled = true;
-        }
-        else if (_mouseHandlingMode == MouseHandlingMode.Zooming)
-        {
-            var curZoomAndPanControlMousePoint = e.GetPosition(zoomAndPanControl);
-            var dragOffset = curZoomAndPanControlMousePoint - _origZoomAndPanControlMouseDownPoint;
-            double dragThreshold = 10;
-            if (_mouseButtonDown == MouseButton.Left &&
-                (Math.Abs(dragOffset.X) > dragThreshold ||
-                 Math.Abs(dragOffset.Y) > dragThreshold))
-            {
-                //
-                // When Shift + left-down zooming mode and the user drags beyond the drag threshold,
-                // initiate drag zooming mode where the user can drag out a rectangle to select the area
-                // to zoom in on.
-                //
-                _mouseHandlingMode = MouseHandlingMode.DragZooming;
-                var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
-                InitDragZoomRect(_origContentMouseDownPoint, curContentMousePoint);
-            }
+    //        e.Handled = true;
+    //    }
+    //    else if (_mouseHandlingMode == MouseHandlingMode.Zooming)
+    //    {
+    //        var curZoomAndPanControlMousePoint = e.GetPosition(zoomAndPanControl);
+    //        var dragOffset = curZoomAndPanControlMousePoint - _origZoomAndPanControlMouseDownPoint;
+    //        double dragThreshold = 10;
+    //        if (_mouseButtonDown == MouseButton.Left &&
+    //            (Math.Abs(dragOffset.X) > dragThreshold ||
+    //             Math.Abs(dragOffset.Y) > dragThreshold))
+    //        {
+    //            //
+    //            // When Shift + left-down zooming mode and the user drags beyond the drag threshold,
+    //            // initiate drag zooming mode where the user can drag out a rectangle to select the area
+    //            // to zoom in on.
+    //            //
+    //            _mouseHandlingMode = MouseHandlingMode.DragZooming;
+    //            var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
+    //            InitDragZoomRect(_origContentMouseDownPoint, curContentMousePoint);
+    //        }
 
-            e.Handled = true;
-        }
-        else if (_mouseHandlingMode == MouseHandlingMode.DragZooming)
-        {
-            //
-            // When in drag zooming mode continuously update the position of the rectangle
-            // that the user is dragging out.
-            //
-            var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
-            SetDragZoomRect(_origContentMouseDownPoint, curContentMousePoint);
+    //        e.Handled = true;
+    //    }
+    //    else if (_mouseHandlingMode == MouseHandlingMode.DragZooming)
+    //    {
+    //        //
+    //        // When in drag zooming mode continuously update the position of the rectangle
+    //        // that the user is dragging out.
+    //        //
+    //        var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
+    //        SetDragZoomRect(_origContentMouseDownPoint, curContentMousePoint);
 
-            e.Handled = true;
-        }
-    }
+    //        e.Handled = true;
+    //    }
+    //}
 
     /// <summary>
     /// Event raised by rotating the mouse wheel.
     /// </summary>
-    private void OnMouseWheel(object sender, MouseWheelEventArgs e)
-    {
-        e.Handled = true;
+    //private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+    //{
+    //    e.Handled = true;
 
-        if (e.Delta > 0)
-        {
-            var currentPoint = e.GetPosition(ProjectDesignSurface);
-            ZoomIn(currentPoint);
-        }
-        else if (e.Delta < 0)
-        {
-            var currentPoint = e.GetPosition(ProjectDesignSurface);
-            ZoomOut(currentPoint);
-        }
-    }
+    //    if (e.Delta > 0)
+    //    {
+    //        var currentPoint = e.GetPosition(ProjectDesignSurface);
+    //        ZoomIn(currentPoint);
+    //    }
+    //    else if (e.Delta < 0)
+    //    {
+    //        var currentPoint = e.GetPosition(ProjectDesignSurface);
+    //        ZoomOut(currentPoint);
+    //    }
+    //}
 
     /// <summary>
     /// Event raised when the user has double clicked in the zoom and pan control.
     /// </summary>
-    private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-    {
-        if ((Keyboard.Modifiers & ModifierKeys.Shift) == 0)
-        {
-            var doubleClickPoint = e.GetPosition(ProjectDesignSurface);
-            zoomAndPanControl.AnimatedSnapTo(doubleClickPoint);
-        }
-    }
+    //private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    //{
+    //    if ((Keyboard.Modifiers & ModifierKeys.Shift) == 0)
+    //    {
+    //        var doubleClickPoint = e.GetPosition(ProjectDesignSurface);
+    //        zoomAndPanControl.AnimatedSnapTo(doubleClickPoint);
+    //    }
+    //}
 
     /// <summary>
     /// The 'ZoomIn' command (bound to the plus key) was executed.
@@ -279,26 +279,26 @@ public partial class ReadonlyProjectDesignSurfaceView
     /// <summary>
     /// The 'Fill' command was executed.
     /// </summary>
-    private void FitContent_Executed(object sender, ExecutedRoutedEventArgs e)
-    {
-        var nodes = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CorpusNodes;
-        if (nodes.Count == 0)
-        {
-            return;
-        }
+    //private void FitContent_Executed(object sender, ExecutedRoutedEventArgs e)
+    //{
+    //    var nodes = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CorpusNodes;
+    //    if (nodes.Count == 0)
+    //    {
+    //        return;
+    //    }
 
-        SavePrevZoomRect();
+    //    SavePrevZoomRect();
 
-        var actualContentRect = DetermineAreaOfNodes(nodes);
+    //    var actualContentRect = DetermineAreaOfNodes(nodes);
 
-        //
-        // Inflate the content rect by a fraction of the actual size of the total content area.
-        // This puts a nice border around the content we are fitting to the viewport.
-        //
-        actualContentRect.Inflate(ProjectDesignSurface.ActualWidth / 40, ProjectDesignSurface.ActualHeight / 40);
+    //    //
+    //    // Inflate the content rect by a fraction of the actual size of the total content area.
+    //    // This puts a nice border around the content we are fitting to the viewport.
+    //    //
+    //    actualContentRect.Inflate(ProjectDesignSurface.ActualWidth / 40, ProjectDesignSurface.ActualHeight / 40);
 
-        zoomAndPanControl.AnimatedZoomTo(actualContentRect);
-    }
+    //    zoomAndPanControl.AnimatedZoomTo(actualContentRect);
+    //}
 
     /// <summary>
     /// Determine the area covered by the specified list of nodes.

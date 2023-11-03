@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Created By</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Current</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -833,10 +836,10 @@
     <value>Add a semantic domain</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Apply Translation</value>
+    <value>Apply Gloss</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Cancel Translation</value>
+    <value>Cancel Gloss</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Change all unset occurrences</value>
@@ -863,7 +866,7 @@
     <value>Enter a new translation for</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Enter a new translation</value>
+    <value>Enter a new gloss</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -884,7 +887,7 @@
     <value>Meanings:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>New Translation</value>
+    <value>New Gloss</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Remove this semantic domain from this meaning</value>
@@ -893,7 +896,7 @@
     <value>Remove this lexical form from this lemma</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Set a translation for</value>
+    <value>Set a gloss for</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>And</value>
@@ -2130,6 +2133,9 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Enable Alignment Editing</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Enable Lexicon Import</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>Enable Token Splitting</value>

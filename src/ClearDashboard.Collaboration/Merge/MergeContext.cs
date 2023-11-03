@@ -34,6 +34,7 @@ public sealed class MergeContext
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenizedCorpus>), new TokenizedCorpusHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.VerseRow>), new VerseRowHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenComposite>), new TokenCompositeHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Token>), new TokenHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.AlignmentSet>), new AlignmentSetHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Alignment>), new AlignmentHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TranslationSet>), new TranslationSetHandler(this));

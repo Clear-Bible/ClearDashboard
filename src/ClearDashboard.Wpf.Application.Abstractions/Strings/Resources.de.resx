@@ -437,7 +437,7 @@
     <value>Maschine</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Markieren Sie als "ungültig" ausgewählt</value>
+    <value>Markieren Sie als "ungültig" ausgewählt.</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
     <value>Markieren Sie als "Bedarfsüberprüfung" ausgewählt.</value>
@@ -555,6 +555,9 @@
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Erstellt von</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Aktuell</value>
   </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
@@ -833,10 +836,10 @@
     <value>Fügen Sie eine semantische Domäne hinzu</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Übersetzung anwenden</value>
+    <value>Glanz auftragen</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Übersetzung abbrechen</value>
+    <value>Gloss abbrechen</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Ändern Sie alle unbegründeten Ereignisse</value>
@@ -863,7 +866,7 @@
     <value>Geben Sie eine neue Übersetzung für ein</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Geben Sie eine neue Übersetzung ein</value>
+    <value>Geben Sie einen neuen Glanz ein</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -884,7 +887,7 @@
     <value>Bedeutungen:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Neue Übersetzung</value>
+    <value>Neuer Glanz</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Entfernen Sie diese semantische Domäne aus dieser Bedeutung</value>
@@ -893,7 +896,7 @@
     <value>Entfernen Sie diese lexikalische Form aus diesem Lemma</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Setzen Sie eine Übersetzung für</value>
+    <value>Setzen Sie einen Glanz für</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Und</value>
@@ -953,10 +956,10 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
+    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Fügen Sie Ziel als Übersetzung für ...</value>
+    <value>Ziel als Übersetzung für ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
@@ -1229,7 +1232,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
+    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1346,7 +1349,7 @@
     <value>Möchten Sie das Etikett löschen:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Möchten Sie das Etikett disassoziieren:</value>
+    <value>Möchten Sie das Etikett zerlegen:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>aus der Labelgruppe:</value>
@@ -1481,10 +1484,10 @@
     <value>Korpora -Verse parallelisieren</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithmus für maschinelles Wortausrichtungen</value>
+    <value>Algorithmus für maschinelle Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithmus für maschinelles Wortausrichtungen</value>
+    <value>Algorithmus für maschinelle Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Zuges symmetisiertes Modell?</value>
@@ -1505,7 +1508,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1523,13 +1526,13 @@
     <value>Erstellen Sie eine neue Corpus -Tokenisierung</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Fügen Sie neue Interlineare hinzu</value>
+    <value>Neue Interlineare hinzufügen</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
+    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1760,7 +1763,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Buchauswahl aktivieren</value>
+    <value>Aktivieren Sie die Buchauswahl</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1775,7 +1778,7 @@
     <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT -griechische biblische Texte einschließen?</value>
+    <value>NT Griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -1880,7 +1883,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotheus</value>
+    <value>1 Timothy</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2131,6 +2134,9 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktivieren Sie die Bearbeitung der Ausrichtung</value>
   </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Aktivieren Sie Lexikonimport</value>
+  </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>Aktivieren der Token -Spaltung</value>
   </data>
@@ -2309,7 +2315,7 @@
     <value>Neue hinzufügen</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Neue Bücher aktualisieren und hinzufügen</value>
+    <value>Aktualisieren Sie und fügen Sie neue Bücher hinzu</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
     <value>Bücher auswählen</value>

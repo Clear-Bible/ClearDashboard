@@ -420,6 +420,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private static void OnNotePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (NoteDisplay)d;
+            control.OnPropertyChanged(nameof(Labels));
             control.OnPropertyChanged(nameof(ParatextSendVisibility));
         }
 
@@ -801,6 +802,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             } 
         }
         
+        public LabelCollection Labels => Note?.Labels ?? new LabelCollection();
+
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
         public Visibility NoteSaveCancelButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;

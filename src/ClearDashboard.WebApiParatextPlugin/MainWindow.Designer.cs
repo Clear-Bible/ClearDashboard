@@ -36,7 +36,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnExportUSFM = new System.Windows.Forms.Button();
             this.btnVersificationTest = new System.Windows.Forms.Button();
             this.btnSwitchProject = new System.Windows.Forms.Button();
-            this.ProjectListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // rtb
@@ -117,24 +116,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             this.btnSwitchProject.UseVisualStyleBackColor = true;
             this.btnSwitchProject.Click += new System.EventHandler(this.btnSwitchProject_Click);
             // 
-            // ProjectListBox
-            // 
-            this.ProjectListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.ProjectListBox.FormattingEnabled = true;
-            this.ProjectListBox.Location = new System.Drawing.Point(6, 36);
-            this.ProjectListBox.Margin = new System.Windows.Forms.Padding(2);
-            this.ProjectListBox.Name = "ProjectListBox";
-            this.ProjectListBox.Size = new System.Drawing.Size(119, 329);
-            this.ProjectListBox.TabIndex = 28;
-            this.ProjectListBox.Visible = false;
-            this.ProjectListBox.SelectedIndexChanged += new System.EventHandler(this.ProjectListBox_SelectedIndexChanged);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.ProjectListBox);
             this.Controls.Add(this.btnSwitchProject);
             this.Controls.Add(this.btnVersificationTest);
             this.Controls.Add(this.btnExportUSFM);
@@ -157,6 +142,5 @@ namespace ClearDashboard.WebApiParatextPlugin
         private System.Windows.Forms.Button btnExportUSFM;
         private System.Windows.Forms.Button btnVersificationTest;
         private System.Windows.Forms.Button btnSwitchProject;
-        private System.Windows.Forms.ListBox ProjectListBox;
     }
 }
