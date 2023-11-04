@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -136,7 +137,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         {
             await RetrieveParatextProjectMetadata(cancellationToken);
 
-            await CheckUsfm(this);
+            ShowSpinner = Visibility.Visible;
+            var result = await UsfmChecker.CheckUsfm(SelectedProject, ProjectManager, LocalizationService);
+            UsfmErrors = result.FirstOrDefault().UsfmErrors;
+            ShowSpinner = Visibility.Collapsed;
 
             var parameters = new List<Autofac.Core.Parameter>
             {
@@ -164,50 +168,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             await ActivateItemAsync(Steps[0], cancellationToken);
 
             await base.OnInitializeAsync(cancellationToken);
-        }
-
-        private async Task CheckUsfm(IParatextCorpusDialogViewModel? paratextCorpusDialogViewModel)
-        {
-            if (SelectedProject is null)
-            {
-                return;
-            }
-
-            ShowSpinner = Visibility.Visible;
-
-            var result = await ProjectManager!.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
-            if (result.Success)
-            {
-                var errors = result.Data;
-
-                if (errors.NumberOfErrors == 0)
-                {
-                    UsfmErrors = new();
-
-                    ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_NoErrors");
-                }
-                else
-                {
-                    UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
-                    ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_ErrorCount");
-                }
-
-                //UsfmErrorsByProject = new List<UsfmErrorsWrapper>()
-                //{
-                //    new()
-                //    {
-                //        ProjectName = SelectedProject!.LongName!,
-                //        ProjectId = SelectedProject!.Id,
-                //        UsfmErrors = UsfmErrors,
-                //        ErrorTitle = ErrorTitle
-                //    }
-                //};
-
-                paratextCorpusDialogViewModel.UsfmErrors = UsfmErrors;
-
-            }
-
-            ShowSpinner = Visibility.Collapsed;
         }
 
         private async Task RetrieveParatextProjectMetadata(CancellationToken cancellationToken)
