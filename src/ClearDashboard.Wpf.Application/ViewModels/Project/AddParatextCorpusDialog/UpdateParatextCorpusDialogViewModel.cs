@@ -138,7 +138,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
             ShowSpinner = Visibility.Visible;
             var result = await UsfmChecker.CheckUsfm(SelectedProject, ProjectManager, LocalizationService);
-            UsfmErrors = result.FirstOrDefault().UsfmErrors;
+            var firstProject = result.FirstOrDefault();
+            if (firstProject != null)
+            {
+                UsfmErrors = firstProject.UsfmErrors;
+            }
+            
             ShowSpinner = Visibility.Collapsed;
 
             var parameters = new List<Autofac.Core.Parameter>

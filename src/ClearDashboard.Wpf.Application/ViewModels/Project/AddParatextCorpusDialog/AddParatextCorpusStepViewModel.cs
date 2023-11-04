@@ -300,9 +300,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             ShowSpinner = Visibility.Visible;
             UsfmErrorsByProject = await UsfmChecker.CheckUsfm(SelectedProject, ProjectManager, LocalizationService);
             var firstProject = UsfmErrorsByProject.FirstOrDefault();
-            ErrorTitle = firstProject.ErrorTitle;
-            UsfmErrors = firstProject.UsfmErrors;
-            ParentViewModel.UsfmErrors = firstProject.UsfmErrors;
+            if (firstProject != null)
+            {
+                ErrorTitle = firstProject.ErrorTitle;
+                UsfmErrors = firstProject.UsfmErrors;
+                ParentViewModel.UsfmErrors = firstProject.UsfmErrors;
+            }
             ShowSpinner = Visibility.Collapsed;
 
             ValidationResult = Validator?.Validate(this);
