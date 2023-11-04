@@ -19,7 +19,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
