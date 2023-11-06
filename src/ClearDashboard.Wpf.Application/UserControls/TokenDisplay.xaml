@@ -61,7 +61,6 @@
             IsDefault="False"
             MouseDoubleClick="OnTokenDoubleClicked"
             MouseEnter="OnTokenMouseEnter"
-            DragEnter="OnTokenDragEnter"
             MouseLeave="OnTokenMouseLeave"
             MouseLeftButtonUp="OnTokenLeftButtonUp"
             MouseRightButtonDown="OnTokenRightButtonDown"

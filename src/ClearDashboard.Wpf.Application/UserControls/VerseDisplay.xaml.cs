@@ -121,12 +121,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             (nameof(TokenMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the TokenDragEnterEvent routed event.
-        /// </summary>
-        public static readonly RoutedEvent TokenDragEnterEvent = EventManager.RegisterRoutedEvent
-            (nameof(TokenDragEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
-
-        /// <summary>
         /// Identifies the TokenMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
@@ -833,42 +827,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenMouseEnterEvent, e);
         }
 
-        private async void OnTokenDragEnter(object sender, RoutedEventArgs e)
-        {
-            var args = (TokenEventArgs)e;
-            var tokenDisplayViewModel = args.TokenDisplay;
-
-            if (DataContext is VerseDisplayViewModel verseDisplayViewModel)
-            {
-                //if (args.IsShiftPressed)
-                //{
-                //    if (verseDisplayViewModel.AlignmentManager is { Alignments: { } })
-                //    {
-                //        await verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.AlignmentToken.TokenId);
-                //        await Task.Delay(50);
-                //        var element = (UIElement)sender;
-                //        EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
-                //    }
-                //}
-
-                //if (args.IsAltPressed)
-                //{
-                //    await verseDisplayViewModel.UnhighlightTokens();
-
-                //    await Task.Delay(50);
-                //    var element = (UIElement)sender;
-                //    EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
-                //}
-
-                if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
-                {
-                    UpdateVerseSelection(args.TokenDisplay, true);
-                }
-            }
-
-            RaiseTokenEvent(TokenDragEnterEvent, e);
-        }
-
         private void OnTokenMouseLeave(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenMouseLeaveEvent, e);
@@ -1213,15 +1171,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenMouseEnterEvent, value);
             remove => RemoveHandler(TokenMouseEnterEvent, value);
-        }
-
-        /// <summary>
-        /// Occurs when the mouse pointer enters the bounds of a token.
-        /// </summary>
-        public event RoutedEventHandler TokenDragEnter
-        {
-            add => AddHandler(TokenDragEnterEvent, value);
-            remove => RemoveHandler(TokenDragEnterEvent, value);
         }
 
         /// <summary>
