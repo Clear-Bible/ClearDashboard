@@ -1257,6 +1257,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
         }
 
