@@ -754,7 +754,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            //e.Handled = true;
             if (e is not TokenEventArgs args || args is { TokenDisplay: null })
             {
                 return;
@@ -767,7 +766,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
 
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
-            //e.Handled = true;
         }
 
         private void OnTokenLeftButtonUp(object sender, RoutedEventArgs e)
