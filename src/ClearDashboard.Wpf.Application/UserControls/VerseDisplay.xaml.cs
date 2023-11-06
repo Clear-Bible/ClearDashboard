@@ -121,6 +121,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             (nameof(TokenMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenDragEnterEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenDragEnterEvent = EventManager.RegisterRoutedEvent
+            (nameof(TokenDragEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TokenMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
@@ -598,11 +604,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 return;
             }
 
-            // If shift is pressed, then leave any selected tokens selected.
-            //if (!args.IsShiftPressed)
-            //{
-            //    UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
-            //}
+            //If shift is pressed, then leave any selected tokens selected.
+            if (!args.IsShiftPressed)
+            {
+                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
+            }
 
 
             RaiseTokenEvent(TokenClickedEvent, args);
@@ -754,18 +760,20 @@ namespace ClearDashboard.Wpf.Application.UserControls
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            if (e is not TokenEventArgs args || args is { TokenDisplay: null })
-            {
-                return;
-            }
+            //e.Handled = true;
+            //if (e is not TokenEventArgs args || args is { TokenDisplay: null })
+            //{
+            //    return;
+            //}
 
-            // If shift is pressed, then leave any selected tokens selected.
-            if (!args.IsShiftPressed)
-            {
-                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
-            }
+            //// If shift is pressed, then leave any selected tokens selected.
+            //if (!args.IsShiftPressed)
+            //{
+            //    UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
+            //}
 
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
+            //e.Handled = true;
         }
 
         private void OnTokenLeftButtonUp(object sender, RoutedEventArgs e)
@@ -816,13 +824,49 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
 
+                //if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
+                //{
+                //    UpdateVerseSelection(args.TokenDisplay, true);
+                //}
+            }
+
+            RaiseTokenEvent(TokenMouseEnterEvent, e);
+        }
+
+        private async void OnTokenDragEnter(object sender, RoutedEventArgs e)
+        {
+            var args = (TokenEventArgs)e;
+            var tokenDisplayViewModel = args.TokenDisplay;
+
+            if (DataContext is VerseDisplayViewModel verseDisplayViewModel)
+            {
+                //if (args.IsShiftPressed)
+                //{
+                //    if (verseDisplayViewModel.AlignmentManager is { Alignments: { } })
+                //    {
+                //        await verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.AlignmentToken.TokenId);
+                //        await Task.Delay(50);
+                //        var element = (UIElement)sender;
+                //        EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
+                //    }
+                //}
+
+                //if (args.IsAltPressed)
+                //{
+                //    await verseDisplayViewModel.UnhighlightTokens();
+
+                //    await Task.Delay(50);
+                //    var element = (UIElement)sender;
+                //    EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
+                //}
+
                 if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
                 {
                     UpdateVerseSelection(args.TokenDisplay, true);
                 }
             }
 
-            RaiseTokenEvent(TokenMouseEnterEvent, e);
+            RaiseTokenEvent(TokenDragEnterEvent, e);
         }
 
         private void OnTokenMouseLeave(object sender, RoutedEventArgs e)
@@ -1169,6 +1213,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenMouseEnterEvent, value);
             remove => RemoveHandler(TokenMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of a token.
+        /// </summary>
+        public event RoutedEventHandler TokenDragEnter
+        {
+            add => AddHandler(TokenDragEnterEvent, value);
+            remove => RemoveHandler(TokenDragEnterEvent, value);
         }
 
         /// <summary>

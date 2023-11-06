@@ -72,6 +72,7 @@
                 TokenLeftButtonDown="OnTokenLeftButtonDown"
                 TokenLeftButtonUp="OnTokenLeftButtonUp"
                 TokenMouseEnter="OnTokenMouseEnter"
+                TokenDragEnter="OnTokenDragEnter"
                 TokenMouseLeave="OnTokenMouseLeave"
                 TokenMouseWheel="OnTokenMouseWheel"
                 TokenRightButtonDown="OnTokenRightButtonDown"

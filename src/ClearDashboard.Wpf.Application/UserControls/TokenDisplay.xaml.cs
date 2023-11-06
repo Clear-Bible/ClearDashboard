@@ -500,6 +500,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TokenDragEnterEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenDragEnterEvent = EventManager.RegisterRoutedEvent
+            ("TokenDragEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the TokenMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenMouseLeaveEvent = EventManager.RegisterRoutedEvent
@@ -837,6 +843,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenMouseEnterEvent, value);
             remove => RemoveHandler(TokenMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of a token.
+        /// </summary>
+        public event RoutedEventHandler TokenDragEnter
+        {
+            add => AddHandler(TokenDragEnterEvent, value);
+            remove => RemoveHandler(TokenDragEnterEvent, value);
         }
 
         /// <summary>
@@ -1257,8 +1272,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
+            //e.Handled = true;
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
+            e.Handled = true;
         }
 
         private void OnTokenLeftButtonUp(object sender, RoutedEventArgs e)
@@ -1287,6 +1303,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 return;
             }
             RaiseTokenEvent(TokenMouseEnterEvent, e);
+        }
+
+        private void OnTokenDragEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenDragEnterEvent, e);
         }
 
         private void OnTokenMouseLeave(object sender, RoutedEventArgs e)
