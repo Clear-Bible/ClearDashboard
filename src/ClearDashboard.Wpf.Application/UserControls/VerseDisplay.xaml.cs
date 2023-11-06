@@ -604,11 +604,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 return;
             }
 
-            //If shift is pressed, then leave any selected tokens selected.
-            if (!args.IsShiftPressed)
-            {
-                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
-            }
+            ////If shift is pressed, then leave any selected tokens selected.
+            //if (!args.IsShiftPressed)
+            //{
+            //    UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
+            //}
 
 
             RaiseTokenEvent(TokenClickedEvent, args);
@@ -761,16 +761,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             //e.Handled = true;
-            //if (e is not TokenEventArgs args || args is { TokenDisplay: null })
-            //{
-            //    return;
-            //}
+            if (e is not TokenEventArgs args || args is { TokenDisplay: null })
+            {
+                return;
+            }
 
-            //// If shift is pressed, then leave any selected tokens selected.
-            //if (!args.IsShiftPressed)
-            //{
-            //    UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
-            //}
+            // If shift is pressed, then leave any selected tokens selected.
+            if (!args.IsShiftPressed)
+            {
+                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
+            }
 
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
             //e.Handled = true;
@@ -824,10 +824,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
 
-                //if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
-                //{
-                //    UpdateVerseSelection(args.TokenDisplay, true);
-                //}
+                if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
+                {
+                    UpdateVerseSelection(args.TokenDisplay, true);
+                }
             }
 
             RaiseTokenEvent(TokenMouseEnterEvent, e);
