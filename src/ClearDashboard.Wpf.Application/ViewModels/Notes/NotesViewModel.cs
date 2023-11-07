@@ -361,16 +361,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             if (obj is NoteViewModel noteViewModel)
             {
-                var associationDescriptions = noteViewModel.Associations
-                    .Select(a => a.Description)
-                    .Aggregate((all, next) => $"{all} {next}");
+                var associationDescriptions = noteViewModel.AssociationVerse;
 
                 if (
                     (FilterStatus.Equals(FilterNoteStatusEnum.Any) || FilterStatus.ToString().Equals(noteViewModel.NoteStatus.ToString())) &&
                     (FilterUsers.Count() == 0 || FilterUsers.Contains(noteViewModel.ModifiedBy)) &&
                     (FilterLabels.Count() == 0 || FilterLabels.Intersect(noteViewModel.Labels).Any()) &&
-                    associationDescriptions.ContainsFuzzy(FilterAssociationsDescriptionText, ToleranceContainsFuzzyAssociationsDescriptions) &&
-                    noteViewModel.Text.ContainsFuzzy(FilterNoteText, ToleranceContainsFuzzyNoteText)
+                    associationDescriptions.ToUpper().Contains(FilterAssociationsDescriptionText.ToUpper()) &&
+                    noteViewModel.Text.ContainsFuzzy(FilterNoteText.ToUpper(), ToleranceContainsFuzzyNoteText)
                 )
                 {
                     return true;
