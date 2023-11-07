@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Collaboration.Exceptions;
+using System.Data.Common;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -94,7 +95,7 @@ public class NoteModelRefHandler : DefaultMergeHandler<NoteModelRef>
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.NoteDomainEntityAssociation), nameof(Models.NoteDomainEntityAssociation.DomainEntityIdGuid)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot is not NoteModelRef)
                 {
@@ -113,12 +114,13 @@ public class NoteModelRefHandler : DefaultMergeHandler<NoteModelRef>
 
                 };
 
+                await Task.CompletedTask;
                 return resolvedValue;
             });
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.NoteDomainEntityAssociation), nameof(Models.NoteDomainEntityAssociation.DomainEntityIdName)),
-            entityValueResolver: (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger) => {
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 if (modelSnapshot is not NoteModelRef)
                 {
@@ -136,6 +138,7 @@ public class NoteModelRefHandler : DefaultMergeHandler<NoteModelRef>
                         $"Not expected type value: {((NoteModelRef)modelSnapshot).ModelRef.GetType().ShortDisplayName()}")
                 };
 
+                await Task.CompletedTask;
                 return resolvedValue;
             });
 

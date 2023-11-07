@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -13,6 +14,7 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
@@ -23,6 +25,7 @@ namespace ClearDashboard.Wpf.Application.Services
 {
     public class ExternalNoteManager
     {
+        private readonly IEventAggregator _eventAggregator;
 
         /// <summary>
         /// Gets relevant External drafting tool project information for the entities associated with a note.
@@ -139,7 +142,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public static async Task<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromExternalAsync(
+        private static async Task<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> GetNotesForChapterFromExternalAsync(
             IMediator mediator, 
             TokenizedTextCorpusId tokenizedTextCorpusId, 
             int bookNumber, 
@@ -212,8 +215,14 @@ namespace ClearDashboard.Wpf.Application.Services
 
         private Dictionary<string, Dictionary<Chapter, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>>>  ExternalProjectIdToChapterToExternalNotesMap { get; set; } = new();
 
+        public ExternalNoteManager(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
+
+
         /// <summary>
-        /// 
+        /// This method blocks.
         /// </summary>
         /// <param name="mediator"></param>
         /// <param name="tokenizedTextCorpusIds"></param>
@@ -271,8 +280,18 @@ namespace ClearDashboard.Wpf.Application.Services
                                 else
                                 {
                                     var task = GetNotesForChapterFromExternalAsync(mediator, ttcid, vr.BookNum, vr.ChapterNum, logger, cancellationToken);
-                                    task.Wait();
-                                    externalNotes = task.Result;
+                                    task.Wait(cancellationToken); //blocking rather than async, because async can cause deadlock. Consider:
+                                                                  //  two OnUIThreadAsync() calling this method.
+                                                                  // 1. the first awaits after a Monitor.TryEnter(),
+                                                                  // 2. awaiting switches to second, which blocks on Monitor.TryEnter().
+                                                                  // 3. meanwhile, the first completes, but the continuation is blocked because the
+                                                                  //    second is bocking the UI thread.
+                                                                  // Naturally, TryEnter can be given a timeout, but this could slow down the UI considerably.
+                                                                  // This problem is hidden to the user of this method. Instead, felt it was better to just make
+                                                                  // it blocking and let the user deal with its blocking nature, e.g. put it in a Task.Run().
+
+
+                                    externalNotes = task.Result;  
                                     chapterToExternalNotesMap.Add(chapter, externalNotes);
                                     return externalNotes
                                         .Where(en => en.verseRef.BookNum == vr.BookNum &&
@@ -295,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public bool InvalidateExternalNotesCache(TokenizedTextCorpusId? tokenizedTextCorpusId)
+        public async Task<bool> InvalidateExternalNotesCache(string? externalProjectId, CancellationToken cancellationToken = default)
         {
             bool obtainedLock = false;
             try
@@ -306,15 +325,14 @@ namespace ClearDashboard.Wpf.Application.Services
                     throw new EngineException("Couldn't obtain lock on cache within 60 seconds");
                 }
 
-                if (tokenizedTextCorpusId == null)
+                if (externalProjectId == null)
                 {
                     ExternalProjectIdToChapterToExternalNotesMap.Clear();
                     return true;
                 }
                 else
                 {
-                    return ExternalProjectIdToChapterToExternalNotesMap.Remove(tokenizedTextCorpusId?.CorpusId?.ParatextGuid
-                        ?? throw new InvalidStateEngineException(name: "tokenizedTextCorpus.CorpusId or ParatextGuid", value: "null"));
+                    return ExternalProjectIdToChapterToExternalNotesMap.Remove(externalProjectId);
                 }
             }
             finally
@@ -322,7 +340,84 @@ namespace ClearDashboard.Wpf.Application.Services
                 if (obtainedLock)
                 {
                     Monitor.Exit(ExternalProjectIdToChapterToExternalNotesMap);
+
+                    await _eventAggregator.PublishOnUIThreadAsync(new ExternalNotesUpdatedMessage(externalProjectId), cancellationToken);
+
+                    //eventAggregator.PublishOnBackgroundThreadAsync or PublishOnCurrentThreadAsync don't appear to work, handlers still called on UI thread. Caliburn code
+                    //too cryptic to figure out, so ensure handler can be called on UI thread.
                 }
+            }
+        }
+
+        public static async Task AddNewCommentToExternalNote(
+            IMediator mediator, 
+            string externalNoteId, 
+            string comment, 
+            string assignToUserName, 
+            ILogger? logger = null, 
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await mediator.Send(new AddNewCommentToExternalNoteCommand(new AddNewCommentToExternalNoteCommandParam()
+                {
+                    ExternalNoteId = externalNoteId,
+                    Comment = comment,
+                    AssignToUserName = assignToUserName
+                }), cancellationToken);
+
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    logger?.LogInformation($"Sent new comment for external note id {externalNoteId} to external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
+                }
+                else
+                {
+                    logger?.LogCritical($"Error sending new comment for external note id {{externalNoteId}} to external drafting tool: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public static async Task ResolveExternalNote(
+            IMediator mediator,
+            string externalNoteId,
+            ILogger? logger = null,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await mediator.Send(new ResolveExternalNoteCommand(new ResolveExternalNoteCommandParam()
+                {
+                    ExternalNoteId = externalNoteId
+                }), cancellationToken);
+
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    logger?.LogInformation($"Marked external note id {externalNoteId} resolved in external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
+                }
+                else
+                {
+                    logger?.LogCritical($"Error marking external note id {externalNoteId} resolved in external drafting tool: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
             }
         }
     }

@@ -5,6 +5,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -302,19 +303,17 @@
             Width="15"
             Height="18"
             MinWidth="20"
-            Margin="0,0,0,2"
-            Padding="-1,-2,0,0"
             HorizontalAlignment="Right"
-            VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="BookUpArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
             ToolTip="{helpers:Localization Bcv_PreviousBook}">
-            <TextBlock
+            <iconPacks:PackIconForkAwesome
                 Name="PreviousBookArrow"
-                FontWeight="ExtraBold"
-                Text="⏵" />
+                Width="10"
+                Height="10"
+                Kind="CaretLeft" />
 
         </Button>
         <!--  BOOK RIGHT ARROW  -->
@@ -325,20 +324,18 @@
             Width="15"
             Height="18"
             MinWidth="20"
-            Margin="0,0,0,2"
-            Padding="-1,-2,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="BookDownArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
             ToolTip="{helpers:Localization Bcv_NextBook}">
 
-            <TextBlock
+            <iconPacks:PackIconForkAwesome
                 Name="NextBookArrow"
-                FontWeight="ExtraBold"
-                Text="⏵" />
+                Width="10"
+                Height="10"
+                Kind="CaretRight" />
 
         </Button>
 
@@ -350,19 +347,17 @@
             Width="15"
             Height="18"
             MinWidth="20"
-            Margin="0,0,0,2"
-            Padding="-1,-2,0,0"
             HorizontalAlignment="Right"
-            VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="ChapterUpArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
             ToolTip="{helpers:Localization Bcv_PreviousChapter}">
-            <TextBlock
+            <iconPacks:PackIconForkAwesome
                 Name="PreviousChapterArrow"
-                FontWeight="ExtraBold"
-                Text="⏵" />
+                Width="10"
+                Height="10"
+                Kind="CaretLeft" />
 
         </Button>
         <!--  CHAPTER RIGHT ARROW  -->
@@ -373,20 +368,17 @@
             Width="15"
             Height="18"
             MinWidth="20"
-            Margin="0,0,0,2"
-            Padding="-1,-2,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="ChapterDownArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
             ToolTip="{helpers:Localization Bcv_NextChapter}">
-
-            <TextBlock
+            <iconPacks:PackIconForkAwesome
                 Name="NextChapterArrow"
-                FontWeight="ExtraBold"
-                Text="⏵" />
+                Width="10"
+                Height="10"
+                Kind="CaretRight" />
 
         </Button>
 
@@ -399,20 +391,18 @@
             Width="15"
             Height="18"
             MinWidth="20"
-            Margin="0,0,0,2"
-            Padding="-1,-2,0,0"
             HorizontalAlignment="Right"
-            VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="VerseUpArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
             ToolTip="{helpers:Localization Bcv_PreviousVerse}">
 
-            <TextBlock
+            <iconPacks:PackIconForkAwesome
                 Name="PreviousVerseArrow"
-                FontWeight="ExtraBold"
-                Text="⏵" />
+                Width="10"
+                Height="10"
+                Kind="CaretLeft" />
 
         </Button>
         <!--  VERSE RIGHT ARROW  -->
@@ -423,20 +413,18 @@
             Width="15"
             Height="18"
             MinWidth="20"
-            Margin="0,0,0,2"
-            Padding="-1,-2,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Center"
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="VerseDownArrow_Click"
             IsEnabled="False"
             Style="{StaticResource SmallTransparentStyle}"
             ToolTip="{helpers:Localization Bcv_NextVerse}">
 
-            <TextBlock
+            <iconPacks:PackIconForkAwesome
                 Name="NextVerseArrow"
-                FontWeight="ExtraBold"
-                Text="⏵" />
+                Width="10"
+                Height="10"
+                Kind="CaretRight" />
         </Button>
 
         <mah:NumericUpDown

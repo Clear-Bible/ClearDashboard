@@ -59,6 +59,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private bool _initializationComplete = false;
+        private readonly string _importTaskName = "Import Collab Project";
 
         private string _projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects");
         #endregion
@@ -396,6 +397,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private Visibility _projectLoadingProgressBarVisibility = Visibility.Collapsed;
+        public Visibility ProjectLoadingProgressBarVisibility
+        {
+            get => _projectLoadingProgressBarVisibility;
+            set
+            {
+                _projectLoadingProgressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProjectLoadingProgressBarVisibility);
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -656,7 +668,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger!.LogDebug($"FinishAccountSetup: dashboard GitLabUserId: {dashboardUser.GitLabUserId} ParatextUserName: {dashboardUser.ParatextUserName}");
             }
 
-            
             CollaborationUser collaborationUser = null;
             bool dashboardUserChanged = false;
             bool collaborationUserSet = false;
@@ -685,7 +696,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 }
 
                 //make a DashboardUser
-                if (dashboardUser.Id == Guid.Empty) 
+                if (dashboardUser.Id == Guid.Empty)
                 {
                     Logger!.LogDebug("FinishAccountSetup:  create new dashboard user");
 
@@ -702,7 +713,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     dashboardUserChanged = await _collaborationHttpClientServices.CreateNewDashboardUser(newDashboardUser);
                     Logger!.LogDebug($"FinishAccountSetup: create new dashboard user result: {dashboardUserChanged}");
                 }
-                else 
+                else
                 {
                     //update a DashboardUser with new paratext username
                     if (string.IsNullOrEmpty(dashboardUser.ParatextUserName) && ParatextUserName is not null)
@@ -733,7 +744,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(dashboardUser.GitLabUserId);
                 Logger!.LogDebug($"FinishAccountSetup:  collaborationUser is null result: {collaborationUser.UserId} {collaborationUser.RemoteUserName}");                
             }
-            
+
 
             if (collaborationUser.UserId < 1)
             {
@@ -749,13 +760,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger!.LogDebug($"FinishAccountSetup: saving collaborationUser [{collaborationUser.UserId}]");
                 var gitLabUser = new CollaborationConfiguration
                 {
-                    UserId =collaborationUser.UserId,
-                    RemoteUserName =collaborationUser.RemoteUserName,
-                    RemoteEmail =collaborationUser.RemoteEmail,
-                    RemotePersonalAccessToken =Encryption.Decrypt(collaborationUser.RemotePersonalAccessToken),
+                    UserId = collaborationUser.UserId,
+                    RemoteUserName = collaborationUser.RemoteUserName,
+                    RemoteEmail = collaborationUser.RemoteEmail,
+                    RemotePersonalAccessToken = Encryption.Decrypt(collaborationUser.RemotePersonalAccessToken),
                     RemotePersonalPassword = Encryption.Decrypt(collaborationUser.RemotePersonalPassword),
-                    Group =collaborationUser.GroupName,
-                    NamespaceId=collaborationUser.NamespaceId
+                    Group = collaborationUser.GroupName,
+                    NamespaceId = collaborationUser.NamespaceId
                 };
                 _collaborationManager.SaveCollaborationLicense(gitLabUser);
             }
@@ -1162,6 +1173,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
+            if (ProjectLoadingProgressBarVisibility == Visibility.Visible)
+            {
+                return;
+            }
+            
             var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
             if (currentlyOpenProjectsList.Contains(project.ProjectName))
             {
@@ -1170,35 +1186,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             AlreadyOpenMessageVisibility = Visibility.Collapsed;
 
-
-            ProjectManager!.CurrentDashboardProject = project;
-            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
-            await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(project.PermissionLevel));
-
-            OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
-
-            ParentViewModel!.ExtraData = project;
-
-
-            var projectGuid =
-                await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(project.FullFilePath), CancellationToken.None);
-
-
-            // get the user's projects
-            var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
-
-            foreach (var gitLabProject in projectList)
+            try
             {
-                var guid = gitLabProject.Name.Substring(2).ToUpper();
-                if (guid == projectGuid.Data)
+                ProjectLoadingProgressBarVisibility = Visibility.Visible;
+
+                ProjectManager!.CurrentDashboardProject = project;
+                await EventAggregator.PublishOnUIThreadAsync(
+                    new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
+                await EventAggregator.PublishOnUIThreadAsync(
+                    new DashboardProjectPermissionLevelMessage(project.PermissionLevel));
+
+               
+                //Turn on ProgressBar
+
+                ParentViewModel!.ExtraData = project;
+
+
+                var projectGuid =
+                    await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(project.FullFilePath),
+                        CancellationToken.None);
+
+
+                // get the user's projects
+                var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+
+                foreach (var gitLabProject in projectList)
                 {
-                    _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
-                    break;
+                    var guid = gitLabProject.Name.Substring(2).ToUpper();
+                    if (guid == projectGuid.Data)
+                    {
+                        _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
+                        break;
+                    }
                 }
+
+
+                ParentViewModel.Ok();
             }
-
-
-            ParentViewModel.Ok();
+            finally
+            {
+                OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
+                ProjectLoadingProgressBarVisibility = Visibility.Collapsed;
+            }
         }
 
         public async Task ImportServerProject(DashboardCollabProject project, MouseButtonEventArgs args)
@@ -1219,6 +1248,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 return;
             }
+
+            if (_longRunningTaskManager.HasTask(_importTaskName))
+            {
+                return;
+            }
+
+            _longRunningTaskManager.Create(_importTaskName, LongRunningTaskStatus.Running);
 
             // get the user's projects
             var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
@@ -1247,6 +1283,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     await GetCollabProjects();
                 }
             }
+
+            _longRunningTaskManager.TaskComplete(_importTaskName);
         }
 
         private async Task SendUiLanguageChangeMessage(string language)

@@ -458,7 +458,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian Sumber</value>
+    <value>Bagian sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -494,7 +494,7 @@
     <value>Waktu lokal</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Beri nama itemnya</value>
+    <value>Beri nama item</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup baru</value>
@@ -515,7 +515,7 @@
     <value>Pengguna kolaborasi yang tersedia:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Pengguna proyek saat ini:</value>
@@ -555,6 +555,9 @@
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Dibuat oleh</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Saat ini</value>
   </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
@@ -833,10 +836,10 @@
     <value>Tambahkan domain semantik</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Terapkan terjemahan</value>
+    <value>Terapkan gloss</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Batalkan terjemahan</value>
+    <value>Batalkan Gloss</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Ubah semua kejadian yang tidak disetel</value>
@@ -863,7 +866,7 @@
     <value>Masukkan terjemahan baru untuk</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Masukkan terjemahan baru</value>
+    <value>Masukkan Gloss Baru</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Kata pengantar singkat</value>
@@ -884,7 +887,7 @@
     <value>Makna:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Terjemahan baru</value>
+    <value>Gloss Baru</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Hapus domain semantik ini dari makna ini</value>
@@ -893,7 +896,7 @@
     <value>Hapus bentuk leksikal ini dari lemma ini</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Tetapkan terjemahan untuk</value>
+    <value>Atur gloss untuk</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Dan</value>
@@ -1187,7 +1190,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Membuat database ...</value>
+    <value>Membuat basis data ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>Gabungkan ... Antarmuka Muat Ulang</value>
@@ -1493,7 +1496,7 @@
     <value>Kereta</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Pelatih mesin pelurus mesin</value>
+    <value>Pelatihan mesin pelurus mesin</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Atur pemetaan ayat antara korpora yang disejajarkan</value>
@@ -1781,7 +1784,7 @@
     <value>Sertakan teks -teks Alkitab Ibrani?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Tidak ada yang cocok.</value>
@@ -1835,7 +1838,7 @@
     <value>Daftar Proyek Kolaborasi Refresh</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari Terbaru</value>
+    <value>Cari Terkini</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>
@@ -1856,7 +1859,7 @@
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Nama proyek yang diberikan terlalu lama.</value>
+    <value>Nama proyek yang diberikan terlalu panjang.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>

@@ -1619,8 +1619,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
 
 
-
-
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (parallelCorpusConnectorDraggedOver == null)
             {

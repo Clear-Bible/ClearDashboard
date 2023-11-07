@@ -90,18 +90,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 }
 
                 var noteAdded = project.AddNote(writeLock, anchor, commentParagraphs, assignedUser: new UserInfo(request.Data.UserName));
-                return Task.FromResult(new RequestResult<ExternalNote>(noteAdded.GetExternalNote(project)));
+                return Task.FromResult(new RequestResult<ExternalNote>(noteAdded.GetExternalNote(project, _logger)));
             }
-        }
-
-        private class UserInfo : IUserInfo
-        {
-            public UserInfo(string name)
-            {
-                Name = name;
-            }
-
-            public string Name { get;}
         }
         private void WriteLockReleaseRequested(IWriteLock obj)
         {

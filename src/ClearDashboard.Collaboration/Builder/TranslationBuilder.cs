@@ -74,6 +74,7 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
 
         modelProperties.Add(SOURCE_TOKEN_LOCATION,
             (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenLocation));
+
         modelProperties.Add(BOOK_CHAPTER_LOCATION,
             (typeof(string), $"{translation.leadingToken.BookNumber:000}{translation.leadingToken.ChapterNumber:000}"));
 

@@ -150,12 +150,12 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
         }
     }
 
-    protected virtual async Task HandleDeleteAsync(T itemToDelete, CancellationToken cancellationToken)
+    protected virtual async Task<Dictionary<string, object?>> HandleDeleteAsync(T itemToDelete, CancellationToken cancellationToken)
     {
         var modelSnapshot = (IModelSnapshot)itemToDelete;
 
-        var where = new Dictionary<string, object>() { { modelSnapshot.IdentityKey, modelSnapshot.GetId() } };
-        await _mergeContext.MergeBehavior.DeleteModelAsync(modelSnapshot, where, cancellationToken);
+        var where = new Dictionary<string, object?>() { { modelSnapshot.IdentityKey, modelSnapshot.GetId() } };
+        return await _mergeContext.MergeBehavior.DeleteModelAsync(modelSnapshot, where, cancellationToken);
 
         //// If deleting a parent, need to first delete all its children
         //if (itemToDelete is IModelSnapshot)
@@ -220,7 +220,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 //    throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality for retrieving where clause values");
                 //}
 
-                var where = new Dictionary<string, object>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
+                var where = new Dictionary<string, object?>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
                 await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
 
                 return true;
@@ -533,14 +533,20 @@ public class DefaultMergeHandler
         return string.IsNullOrEmpty((string?)displayName) ? "Unknown" : (string)displayName;
     }
 
+    public static (Type EntityType, string EntityId, string ItemName) TokenizedCorpusEngineTokenIdCacheKey(Guid tokenizedCorpusId) =>
+        (typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString(), nameof(Models.TokenComponent.EngineTokenId));
+    public static (Type EntityType, string EntityId, string ItemName) TokenizedCorpusTokenRefCacheKey(Guid tokenizedCorpusId) =>
+        (typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString(), "Ref");
+
     public static Guid LookupTokenComponent(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, string engineTokenId, MergeCache cache)
     {
-        if (!cache.TryLookupCacheEntry((typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString()),
+        if (!cache.TryLookupCacheEntry(TokenizedCorpusEngineTokenIdCacheKey(tokenizedCorpusId),
             engineTokenId, out var id))
         {
             var tokenComponentId = projectDbContext.TokenComponents
                 .Where(e => e.EngineTokenId == engineTokenId!)
                 .Where(e => e.TokenizedCorpusId == tokenizedCorpusId!)
+                .Where(e => e.Deleted == null)
                 .Select(e => e.Id)
                 .FirstOrDefault();
 
@@ -553,18 +559,46 @@ public class DefaultMergeHandler
 
     public static void LoadTokenizedCorpusLocationsIntoCache(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, MergeCache cache)
     {
-        if (!cache.ContainsCacheKey((typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString())))
+        if (!cache.ContainsCacheKey(TokenizedCorpusEngineTokenIdCacheKey(tokenizedCorpusId)))
         {
             var tokenComponentsByLocationId = projectDbContext.TokenComponents
                 .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
                 .Where(e => e.EngineTokenId != null)
+                .Where(e => e.Deleted == null)
                 .ToDictionary(e => e.EngineTokenId!, e => e);
 
             var tokenLocationIds = tokenComponentsByLocationId.ToDictionary(e => e.Key, e => (object?)e.Value.Id);
             var tokenLocationTrainingTexts = tokenComponentsByLocationId.ToDictionary(e => e.Key, e => (object?)e.Value.TrainingText);
 
-            cache.AddCacheEntrySet((typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString()), tokenLocationIds);
-            cache.AddCacheEntrySet((typeof(Models.AlignmentSetDenormalizationTask), tokenizedCorpusId.ToString()), tokenLocationTrainingTexts);
+            cache.AddCacheEntrySet(TokenizedCorpusEngineTokenIdCacheKey(tokenizedCorpusId), tokenLocationIds);
+            cache.AddCacheEntrySet(AlignmentSetHandler.DenormalizationTrainingTextCacheKey(tokenizedCorpusId), tokenLocationTrainingTexts);
+        }
+    }
+
+    public static void LoadManualTokenRefsIntoCache(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, MergeCache cache)
+    {
+        if (!cache.ContainsCacheKey(TokenizedCorpusTokenRefCacheKey(tokenizedCorpusId)))
+        {
+            var manualTokenIndexes = Builder.TokenBuilder.OrganizeTokensByOriginTokenLocation(
+                projectDbContext.Tokens.Where(e => e.TokenizedCorpusId == tokenizedCorpusId));
+
+            var refs = manualTokenIndexes
+                .Select(e => (
+                    Ref: Builder.TokenBuilder.CalculateRef(
+                        e.Token.TokenizedCorpusId,
+                        e.Token.EngineTokenId!,
+                        e.Token.OriginTokenLocation,
+                        e.OriginTokenLocationIndex),
+                    e.Token))
+                .ToList();
+
+           var manualTokenIdsByRef = refs
+                .ToDictionary(
+                e => e.Ref, 
+                e => (object?)e.Token.Id
+                );
+
+            cache.AddCacheEntrySet(TokenizedCorpusTokenRefCacheKey(tokenizedCorpusId), manualTokenIdsByRef);
         }
     }
 }

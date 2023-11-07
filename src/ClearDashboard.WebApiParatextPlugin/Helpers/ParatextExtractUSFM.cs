@@ -1,10 +1,12 @@
 ﻿using ClearDashboard.DataAccessLayer.Models.Common;
+using Icu;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -184,6 +186,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                         sb.AppendLine();
                                     }
                                     // this includes single verses (\v 1) and multiline (\v 1-3)
+                                    // \v 2,3 and \v 2b-4d are OK so is \v 2ബി-4ഡി (Malayalam)
                                     if (marker.Data != null)
                                     {
                                         string verseMarker = marker.Data.Trim();
@@ -216,18 +219,15 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                                     // check if this has already been entered and is a duplicate
                                                     if (verseKey.ContainsKey(key))
                                                     {
-                                                        if (lastVerseRef != marker.VerseRef.ToString())
-                                                        {
-                                                            mainWindow.AppendText(Color.Red,
+                                                        mainWindow.AppendText(Color.Red,
                                                                 $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}");
-                                                            usfmError.Add(new UsfmError
-                                                            {
-                                                                Reference = UsfmReferenceHelper
-                                                                    .ConvertBbbcccvvvToReadable(key),
-                                                                Error =
-                                                                    $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
-                                                            });
-                                                        }
+                                                        usfmError.Add(new UsfmError
+                                                        {
+                                                            Reference = UsfmReferenceHelper
+                                                                .ConvertBbbcccvvvToReadable(key),
+                                                            Error =
+                                                                $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
+                                                        });
                                                     }
                                                     else
                                                     {

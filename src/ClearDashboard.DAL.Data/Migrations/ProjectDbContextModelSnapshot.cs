@@ -379,6 +379,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("LexemeId");
 
+                    b.HasIndex("Text");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Lexicon_Form");
@@ -803,6 +805,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TrainingText")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("VerseRowId")
@@ -1289,6 +1294,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("ChapterNumber")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("OriginTokenLocation")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
 
@@ -1301,6 +1309,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("BookNumber");
 
                     b.HasIndex("ChapterNumber");
+
+                    b.HasIndex("OriginTokenLocation");
 
                     b.HasIndex("VerseNumber");
 

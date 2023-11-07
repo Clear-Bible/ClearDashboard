@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Criado por</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Atual</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -833,10 +836,10 @@
     <value>Adicione um domínio semântico</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Aplique tradução</value>
+    <value>Aplique o brilho</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Cancelar tradução</value>
+    <value>Cancelar o brilho</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Mudar todas as ocorrências não definidas</value>
@@ -863,7 +866,7 @@
     <value>Insira uma nova tradução para</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Digite uma nova tradução</value>
+    <value>Digite um novo brilho</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -884,7 +887,7 @@
     <value>Significados:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Nova tradução</value>
+    <value>Novo brilho</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Remova este domínio semântico deste significado</value>
@@ -893,7 +896,7 @@
     <value>Remova esta forma lexical deste lema</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Defina uma tradução para</value>
+    <value>Defina um brilho para</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>E</value>
@@ -1178,7 +1181,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sentido do verso</value>
+    <value>Verso senso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1223,7 +1226,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1514,7 +1517,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corpora</value>
+    <value>Adicione corporal</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1679,7 +1682,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme tipo</value>
+    <value>Lexeme Type</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1775,7 +1778,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos gregos do NT?</value>
+    <value>Incluir textos bíblicos gregos no NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -2108,7 +2111,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>
@@ -2165,13 +2168,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaure o usuário da colaboração</value>
+    <value>Restaurar o usuário de colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salve o usuário do GitLab no servidor</value>
+    <value>Salvar o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>

@@ -967,7 +967,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // get the application startup directory
             var startupPath = AppDomain.CurrentDomain.BaseDirectory;
             var path = Path.Combine(startupPath, "Dashboard_Instructions.pdf");
-                       
+
             //var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
             //var path = Path.Combine(programFiles, "ClearDashboard", "Dashboard_Instructions.pdf");
             if (File.Exists(path))
@@ -2286,6 +2286,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // rebuild the menu system with the new language
             await RebuildMainMenu();
+
+            // redraw the corpus and parallel corpus menus 
+            await EventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus(), cancellationToken);
+            await EventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus(), cancellationToken);
         }
 
         public async Task HandleAsync(RebuildMainMenuMessage message, CancellationToken cancellationToken)

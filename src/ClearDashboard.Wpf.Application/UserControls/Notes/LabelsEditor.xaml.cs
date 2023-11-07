@@ -277,6 +277,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 Labels.AddDistinct(CurrentLabel);
                 Labels.Refresh();
                 OnPropertyChanged(nameof(Labels));
+                Labels.Refresh();
             }
         }
 
@@ -287,6 +288,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 Labels.RemoveIfExists(CurrentLabel);
                 Labels.Refresh();
                 OnPropertyChanged(nameof(Labels));
+                Labels.Refresh();
             }
         }
 
@@ -334,6 +336,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseLabelEvent(LabelDeletedEvent);
             //Execute.OnUIThread(RemoveCurrentLabel);
             ConfirmDeleteLabelPopup.IsOpen = false;
+            LabelSelector.CloseSuggestionPopup();
+            LabelSelector.CloseTextBox();
         }
 
         private void OnLabelDeleteCancelled(object sender, RoutedEventArgs e)
@@ -345,6 +349,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             RaiseLabelEvent(LabelDisassociatedEvent);
             ConfirmDisassociateLabelPopup.IsOpen = false;
+            LabelSelector.CloseSuggestionPopup();
+            LabelSelector.CloseTextBox();
         }
 
         private void OnLabelDisassociateCancelled(object sender, RoutedEventArgs e)
@@ -441,11 +447,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnLabelGroupRemoveConfirmed(object sender, RoutedEventArgs e)
         {
-            //if (LabelGroupComboBox.SelectedItem is LabelGroupViewModel labelGroup)
-            //{
-            //    RaiseLabelGroupEvent(LabelGroupRemovedEvent, labelGroup);
-            //    CurrentLabelGroup = LabelGroups.First();
-            //}
+            if (LabelGroupComboBox.SelectedItem is LabelGroupViewModel labelGroup)
+            {
+                RaiseLabelGroupEvent(LabelGroupRemovedEvent, labelGroup);
+                CurrentLabelGroup = LabelGroups.First();
+            }
 
             ConfirmDeleteLabelGroupPopup.IsOpen = false;
         }

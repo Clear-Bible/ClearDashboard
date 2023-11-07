@@ -11,7 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="1010"
-    Height="700"
+    MaxHeight="700"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -236,14 +236,14 @@
                     </Button>
                 </StackPanel>
             </StackPanel>
-            <StackPanel
+            <WrapPanel
                 Grid.Row="5"
                 Margin="24,10"
                 HorizontalAlignment="Left"
                 Orientation="Vertical">
                 <CheckBox
                     x:Name="ShowBiblicalTextsCheckBox"
-                    Margin="10,20,0,20"
+                    Margin="10,0,0,20"
                     Content="{helpers:Localization ProjectPicker_IncludeOtBiblicalTexts}"
                     FontSize="13"
                     IsChecked="{Binding ShowOtBiblicalTexts, Mode=TwoWay}">
@@ -255,7 +255,7 @@
 
                 <CheckBox
                     x:Name="ShowBiblicalNTTextsCheckBox"
-                    Margin="10,5,0,20"
+                    Margin="10,0,0,20"
                     Content="{helpers:Localization ProjectPicker_IncludeNtBiblicalTexts}"
                     FontSize="13"
                     IsChecked="{Binding ShowNtBiblicalTexts, Mode=TwoWay}">
@@ -264,7 +264,7 @@
                         <Label Content="{helpers:Localization ProjectPicker_IncludeBiblicalTextsTooltip}" />
                     </CheckBox.ToolTip>
                 </CheckBox>
-            </StackPanel>
+            </WrapPanel>
 
 
         </Grid>

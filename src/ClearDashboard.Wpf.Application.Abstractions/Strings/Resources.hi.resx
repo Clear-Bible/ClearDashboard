@@ -556,6 +556,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>के द्वारा बनाई गई</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>मौजूदा</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -632,13 +635,13 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
+    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -665,7 +668,7 @@
     <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -833,10 +836,10 @@
     <value>एक शब्दार्थ डोमेन जोड़ें</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>अनुवाद लागू करें</value>
+    <value>ग्लोस लागू करें</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>अनुवाद रद्द करें</value>
+    <value>ग्लोस रद्द करें</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>सभी अनसेट घटनाओं को बदलें</value>
@@ -863,7 +866,7 @@
     <value>के लिए एक नया अनुवाद दर्ज करें</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>एक नया अनुवाद दर्ज करें</value>
+    <value>एक नया चमक दर्ज करें</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>लेम्मा</value>
@@ -884,7 +887,7 @@
     <value>अर्थ:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>नया अनुवाद</value>
+    <value>नई चमक</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>इस अर्थ डोमेन को इस अर्थ से निकालें</value>
@@ -893,7 +896,7 @@
     <value>इस लेक्सिकल फॉर्म को इस लेम्मा से हटा दें</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>के लिए एक अनुवाद निर्धारित करें</value>
+    <value>के लिए एक चमक सेट करना</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>और</value>
@@ -1058,7 +1061,7 @@
     <value>त्वरित नया</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध हैं</value>
+    <value>Collab परिवर्तन उपलब्ध है</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1472,7 +1475,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Internear बनाएँ</value>
+    <value>Interlinear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1736,10 +1739,10 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
+    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नया प्रोजेक्ट बनाएं</value>
+    <value>एक नई परियोजना बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -1868,7 +1871,7 @@
     <value>1 जॉन</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 राजा</value>
+    <value>1 किंग्स</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 पीटर</value>
@@ -2024,7 +2027,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दामाद</value>
+    <value>दाई</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>
@@ -2354,7 +2357,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
+    <value>उपडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>
