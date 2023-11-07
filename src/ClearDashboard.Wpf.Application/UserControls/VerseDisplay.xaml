@@ -239,6 +239,13 @@
                     PlacementRectangle="50,0,0,0"
                     VerticalOffset="20">
                     <StackPanel Orientation="Vertical">
+
+                        <TextBlock
+                            FontWeight="Bold"
+                            Foreground="Black"
+                            Text="External Notes" />
+                        <TextBlock Foreground="Blue" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.NotesCount)}" />
+
                         <ListView ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.ExternalNotes)}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>

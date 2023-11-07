@@ -143,6 +143,7 @@
                 </ToolTip>
             </Button.ToolTip>
         </Button>
+        <!--  Dashboard Notes  -->
         <Rectangle
             Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
@@ -157,39 +158,93 @@
             MouseRightButtonUp="OnNoteRightButtonUp"
             MouseWheel="OnNoteMouseWheel"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
-        <Rectangle
-            Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
-            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
-            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
-            Visibility="{Binding HasExternalNotes, Converter={StaticResource BoolToVisibilityConverter}}">
-            <Rectangle.ToolTip>
-                <ToolTip
-                    Background="LightYellow"
-                    HasDropShadow="false"
-                    HorizontalOffset="10"
-                    Placement="Left"
-                    PlacementRectangle="50,0,0,0"
-                    VerticalOffset="20">
-                    <StackPanel Orientation="Vertical">
-                        <ListView ItemsSource="{Binding ExternalNotes}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Vertical">
-                                        <Label Content="{Binding Message}" />
-                                        <controls:ExtendedPropertiesTreeView
-                                            x:Name="ExternalNoteBodyTokenTreeViewName"
-                                            ExtendedPropertiesXml="{Binding Body}"
-                                            IsExpanded="False" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
-                </ToolTip>
-            </Rectangle.ToolTip>
-        </Rectangle>
+
+        <!--  External Notes  -->
+        <Grid>
+
+            <Rectangle
+                Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+                Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
+                HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
+                IsHitTestVisible="True">
+                <Rectangle.Style>
+                    <Style TargetType="{x:Type Rectangle}">
+                        <Setter Property="Opacity" Value="0.25" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasExternalNotes}" Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Rectangle.Style>
+                <Rectangle.ToolTip>
+                    <ToolTip
+                        Background="LightYellow"
+                        HasDropShadow="false"
+                        HorizontalOffset="10"
+                        Placement="Left"
+                        PlacementRectangle="50,0,0,0"
+                        VerticalOffset="20">
+                        <StackPanel Orientation="Vertical">
+                            <ListView ItemsSource="{Binding ExternalNotes}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <Label Content="{Binding Message}" />
+                                            <controls:ExtendedPropertiesTreeView
+                                                x:Name="ExternalNoteBodyTokenTreeViewName"
+                                                ExtendedPropertiesXml="{Binding Body}"
+                                                IsExpanded="False" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </ToolTip>
+                </Rectangle.ToolTip>
+            </Rectangle>
+
+            <Line
+                x:Name="ExternalNoteLine"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
+                IsHitTestVisible="False"
+                Stroke="Plum"
+                StrokeDashArray="1 1"
+                StrokeThickness="3"
+                Visibility="{Binding HasExternalNotes, Converter={StaticResource BoolToVisibilityConverter}}"
+                X1="0"
+                X2="{Binding Path=ActualWidth, ElementName=TokenButton}"
+                Y1="0"
+                Y2="0">
+                <!--<Line.ToolTip>
+                    <ToolTip
+                        Background="LightYellow"
+                        HasDropShadow="false"
+                        HorizontalOffset="10"
+                        Placement="Left"
+                        PlacementRectangle="50,0,0,0"
+                        VerticalOffset="20">
+                        <StackPanel Orientation="Vertical">
+                            <ListView ItemsSource="{Binding ExternalNotes}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <Label Content="{Binding Message}" />
+                                            <controls:ExtendedPropertiesTreeView
+                                                x:Name="ExternalNoteBodyTokenTreeViewName"
+                                                ExtendedPropertiesXml="{Binding Body}"
+                                                IsExpanded="False" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </ToolTip>
+                </Line.ToolTip>-->
+            </Line>
+        </Grid>
         <Button
             x:Name="TranslationButton"
             Height="Auto"
