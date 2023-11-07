@@ -1,7 +1,12 @@
-﻿namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+﻿using System.Collections.Generic;
+
+namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 
 public class ExternalNote
 {
+    public string ExternalNoteId { get; set; }
+    public string ExternalProjectId { get; set; }
+    public IEnumerable<int> LabelIds { get; set; }
     public string VersePlainText { get; set; }
     public string SelectedPlainText { get; set; }
     /// <summary>

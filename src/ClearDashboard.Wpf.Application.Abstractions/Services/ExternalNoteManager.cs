@@ -348,5 +348,77 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
             }
         }
+
+        public static async Task AddNewCommentToExternalNote(
+            IMediator mediator, 
+            string externalNoteId, 
+            string comment, 
+            string assignToUserName, 
+            ILogger? logger = null, 
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await mediator.Send(new AddNewCommentToExternalNoteCommand(new AddNewCommentToExternalNoteCommandParam()
+                {
+                    ExternalNoteId = externalNoteId,
+                    Comment = comment,
+                    AssignToUserName = assignToUserName
+                }), cancellationToken);
+
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    logger?.LogInformation($"Sent new comment for external note id {externalNoteId} to external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
+                }
+                else
+                {
+                    logger?.LogCritical($"Error sending new comment for external note id {{externalNoteId}} to external drafting tool: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public static async Task ResolveExternalNote(
+            IMediator mediator,
+            string externalNoteId,
+            ILogger? logger = null,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await mediator.Send(new ResolveExternalNoteCommand(new ResolveExternalNoteCommandParam()
+                {
+                    ExternalNoteId = externalNoteId
+                }), cancellationToken);
+
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    logger?.LogInformation($"Marked external note id {externalNoteId} resolved in external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
+                }
+                else
+                {
+                    logger?.LogCritical($"Error marking external note id {externalNoteId} resolved in external drafting tool: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
     }
 }
