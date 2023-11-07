@@ -368,7 +368,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                     (FilterUsers.Count() == 0 || FilterUsers.Contains(noteViewModel.ModifiedBy)) &&
                     (FilterLabels.Count() == 0 || FilterLabels.Intersect(noteViewModel.Labels).Any()) &&
                     associationDescriptions.ToUpper().ContainsFuzzy(FilterAssociationsDescriptionText.ToUpper(), ToleranceContainsFuzzyAssociationsDescriptions, 7) &&
-                    noteViewModel.Text.ContainsFuzzy(FilterNoteText.ToUpper(), ToleranceContainsFuzzyNoteText, 3)
+                    noteViewModel.Text.ContainsFuzzy(FilterNoteText, ToleranceContainsFuzzyNoteText, 3)
                 )
                 {
                     return true;
