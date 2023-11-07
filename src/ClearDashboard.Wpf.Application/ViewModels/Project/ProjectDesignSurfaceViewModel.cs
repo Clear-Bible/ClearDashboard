@@ -915,15 +915,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
+
                                 Tokenizers.WhitespaceTokenizer =>
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
-                                Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+
+                                Tokenizers.ZwspWordTokenizer => 
+                                    (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .Tokenize<ZwspWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
+
+                                Tokenizers.ChineseBibleWordTokenizer => 
+                                    (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                    .Tokenize<ChineseBibleWordTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>(),
+
                                 _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
