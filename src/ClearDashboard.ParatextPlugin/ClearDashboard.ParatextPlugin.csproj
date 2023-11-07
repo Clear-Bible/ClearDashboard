@@ -3,9 +3,9 @@
     <TargetFramework>net472</TargetFramework>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <PlatformTarget>x64</PlatformTarget>
-    <FileVersion>1.2.0.17</FileVersion>
-    <Version>1.2.0.17</Version>
-    <AssemblyVersion>1.2.0.17</AssemblyVersion>
+    <FileVersion>1.2.0.18</FileVersion>
+    <Version>1.2.0.18</Version>
+    <AssemblyVersion>1.2.0.18</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Plugin.bmp" />
