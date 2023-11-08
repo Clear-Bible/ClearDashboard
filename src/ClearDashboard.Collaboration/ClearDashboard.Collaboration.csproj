@@ -9,7 +9,7 @@
     <AssemblyVersion>1.2.0.18</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ClearBible.Engine" Version="2.0.16" />
+    <PackageReference Include="ClearBible.Engine" Version="2.0.18-alpha" />
     <PackageReference Include="LibGit2Sharp" Version="0.27.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
