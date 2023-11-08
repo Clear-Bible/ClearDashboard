@@ -376,7 +376,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             _timer.AutoReset = true;
         }
 
-        private void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        private async void OnTimedEvent(object? sender, ElapsedEventArgs e)
         {
             if (ProjectManager!.CurrentProject is null)
             {
@@ -387,6 +387,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             ProjectManager.CurrentDashboardProject.GitLabUpdateNeeded = changeNeeded;
             GitLabUpdateNeeded = changeNeeded;
+            if (changeNeeded)
+            {
+                await EventAggregator.PublishOnBackgroundThreadAsync(new RebuildMainMenuMessage());
+            }
         }
 
         private double _popupHorizontalOffset;
