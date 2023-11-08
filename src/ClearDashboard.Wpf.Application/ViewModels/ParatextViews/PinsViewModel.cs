@@ -369,6 +369,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public async Task Initialize(CancellationToken cancellationToken)
         {
+            if (ProjectManager.IsParatextConnected == false)
+            {
+                ProgressBarVisibility = Visibility.Collapsed;
+                return;
+            }
+
             _watch.Start();
 #pragma warning disable CS4014
             // Do not await this....let it run in the background otherwise
@@ -828,6 +834,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> GenerateLexiconDataCalculations(CancellationToken cancellationToken)
         {
+            if (ProjectManager.CurrentParatextProject is null)
+            {
+                return false;
+            }
+
 
             var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
             ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
@@ -1364,7 +1375,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
+        #endregion // Methods
+
+        #region IHandle
+
+        public Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
         {
             FilterString = message.Message;
             switch (message.XmlSource)
@@ -1385,9 +1400,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     IsLx = true;
                     break;
             }
+
+            return Task.CompletedTask;
         }
 
-        #endregion // Methods
+        #endregion // IHandle
     }
 
 }
