@@ -219,18 +219,15 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                                     // check if this has already been entered and is a duplicate
                                                     if (verseKey.ContainsKey(key))
                                                     {
-                                                        if (lastVerseRef != marker.VerseRef.ToString())
-                                                        {
-                                                            mainWindow.AppendText(Color.Red,
+                                                        mainWindow.AppendText(Color.Red,
                                                                 $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}");
-                                                            usfmError.Add(new UsfmError
-                                                            {
-                                                                Reference = UsfmReferenceHelper
-                                                                    .ConvertBbbcccvvvToReadable(key),
-                                                                Error =
-                                                                    $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
-                                                            });
-                                                        }
+                                                        usfmError.Add(new UsfmError
+                                                        {
+                                                            Reference = UsfmReferenceHelper
+                                                                .ConvertBbbcccvvvToReadable(key),
+                                                            Error =
+                                                                $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
+                                                        });
                                                     }
                                                     else
                                                     {

@@ -18,6 +18,7 @@ using ClearBible.Engine.Exceptions;
 using SIL.Scripture;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
+using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
@@ -75,6 +76,95 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 {
                     throw new MediatorErrorEngineException(result.Message);
                 }
+            }
+            finally
+            {
+                await DeleteDatabaseContext();
+            }
+        }
+
+        [Fact]
+        [Trait("Requires", "Paratext ZZ_SUR on test machine, paratextprojectid 2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f")]
+        public async void ResolveExternalNote()
+        {
+            try
+            {
+                CancellationTokenSource cancellationSource = new CancellationTokenSource();
+                CancellationToken cancellationToken = cancellationSource.Token;
+
+                var getNotesCommandParam = new GetNotesQueryParam()
+                {
+                    ExternalProjectId = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                    BookNumber = 1,
+                    ChapterNumber = 1,
+                    IncludeResolved = true
+                };
+
+                var resultGetNotes = await Mediator!.Send(new GetNotesQuery(getNotesCommandParam), cancellationToken);
+                if (!resultGetNotes.Success)
+                {
+                    Assert.Fail("get external notes failed.");
+                }
+
+                if ((resultGetNotes.Data?.Count() ?? 0) < 1 )
+                {
+                    Assert.Fail("null or zero external notes returned.");
+                }
+
+                var resultResolveExternalNoteCommand = await Mediator!.Send(new ResolveExternalNoteCommand(new ResolveExternalNoteCommandParam()
+                {
+                    ExternalProjectId = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                    ExternalNoteId = resultGetNotes.Data![1].ExternalNoteId,
+                    VerseRefString = resultGetNotes.Data![1].VerseRefString
+                }), cancellationToken);
+
+                Assert.True(resultResolveExternalNoteCommand.Success);
+            }
+            finally
+            {
+                await DeleteDatabaseContext();
+            }
+        }
+
+        [Fact]
+        [Trait("Requires", "Paratext ZZ_SUR on test machine, paratextprojectid 2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f")]
+        public async void AddNewCommentToExternalNote()
+        {
+            try
+            {
+                CancellationTokenSource cancellationSource = new CancellationTokenSource();
+                CancellationToken cancellationToken = cancellationSource.Token;
+
+                var getNotesCommandParam = new GetNotesQueryParam()
+                {
+                    ExternalProjectId = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                    BookNumber = 1,
+                    ChapterNumber = 1,
+                    IncludeResolved = true
+                };
+
+                var resultGetNotes = await Mediator!.Send(new GetNotesQuery(getNotesCommandParam), cancellationToken);
+                if (!resultGetNotes.Success)
+                {
+                    Assert.Fail("get external notes failed.");
+                }
+
+                if ((resultGetNotes.Data?.Count() ?? 0) < 1)
+                {
+                    Assert.Fail("null or zero external notes returned.");
+                }
+
+                var result = await Mediator!.Send(new AddNewCommentToExternalNoteCommand(new AddNewCommentToExternalNoteCommandParam()
+                {
+                    ExternalProjectId = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                    ExternalNoteId = resultGetNotes.Data![1].ExternalNoteId,
+                    VerseRefString = resultGetNotes.Data![1].VerseRefString,
+                    Comment = $"Another comment at {DateTime.Now}",
+                    AssignToUserName = "josie"
+                }), cancellationToken);
+
+
+                Assert.True(result.Success);
             }
             finally
             {

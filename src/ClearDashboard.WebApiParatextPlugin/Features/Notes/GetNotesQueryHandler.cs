@@ -41,7 +41,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             var paratextChapterNotes = project.GetNotes(request.Data.BookNumber, request.Data.ChapterNumber, request.Data.IncludeResolved);
 
             return Task.FromResult(new RequestResult<IReadOnlyList<ExternalNote>>(paratextChapterNotes
-                .Select(ptn => ptn.GetExternalNote(project))
+                .Select(ptn => ptn.GetExternalNote(project, _logger))
                 .ToList()));
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using CefSharp.DevTools.Network;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Collaboration.Util;
@@ -667,7 +668,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger!.LogDebug($"FinishAccountSetup: dashboard GitLabUserId: {dashboardUser.GitLabUserId} ParatextUserName: {dashboardUser.ParatextUserName}");
             }
 
-
             CollaborationUser collaborationUser = null;
             bool dashboardUserChanged = false;
             bool collaborationUserSet = false;
@@ -742,7 +742,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 Logger!.LogDebug("FinishAccountSetup: collaborationUser is null");
                 collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(dashboardUser.GitLabUserId);
-                Logger!.LogDebug($"FinishAccountSetup:  collaborationUser is null result: {collaborationUser.UserId} {collaborationUser.RemoteUserName}");
+                Logger!.LogDebug($"FinishAccountSetup:  collaborationUser is null result: {collaborationUser.UserId} {collaborationUser.RemoteUserName}");                
             }
 
 
