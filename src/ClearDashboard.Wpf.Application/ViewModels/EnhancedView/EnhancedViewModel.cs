@@ -419,9 +419,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
+                // check to see if it has not already been computed
                 if (!BcvDictionary.Any())
                 {
-                    await GenerateBcvFromDatabase();
+                    BcvDictionary = await GenerateBcvFromDatabase();
                 }
             }
             
@@ -454,9 +455,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-        private async Task GenerateBcvFromDatabase()
+        private async Task<Dictionary<string, string>> GenerateBcvFromDatabase()
         {
-            // TODO:  This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
+            // This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
 
             // get the first project id
@@ -477,9 +478,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             }
 
-            BcvDictionary = bcvDictionary;
-
-
             if (ProjectManager!.CurrentParatextProject is null)
             {
                 ProjectManager.CurrentParatextProject = new ParatextProject();
@@ -487,6 +485,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
             ProjectManager!.CurrentParatextProject.BcvDictionary = bcvDictionary;
+
+            return bcvDictionary;
         }
 
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
@@ -591,24 +591,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (ProjectManager?.CurrentParatextProject is null)
             {
-                await GenerateBcvFromDatabase();
-            }
-
-
-            // grab the dictionary of all the verse lookups
-            if (ProjectManager?.CurrentParatextProject is not null)
+                BcvDictionary = await GenerateBcvFromDatabase();
+            } 
+            else
             {
+                // grab the dictionary of all the verse lookups
                 BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-
-                var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
-                    .Select(g => g.First())
-                    .ToList();
-
-                foreach (var bookName in books.Select(book => book.Substring(0, 3)).Select(BookChapterVerseViewModel.GetShortBookNameFromBookNum))
-                {
-                    CurrentBcv.BibleBookList?.Add(bookName);
-                }
             }
+
+            var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var bookName in books.Select(book => book.Substring(0, 3)).Select(BookChapterVerseViewModel.GetShortBookNameFromBookNum))
+            {
+                CurrentBcv.BibleBookList?.Add(bookName);
+            }
+
             CurrentBcv.SetVerseFromId(ProjectManager!.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = ProjectManager.CurrentVerse;
@@ -725,7 +724,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                await GenerateBcvFromDatabase();
+                BcvDictionary = await GenerateBcvFromDatabase();
             }
 
             await Task.CompletedTask;
