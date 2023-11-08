@@ -397,35 +397,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
         }
 
-        private double _popupHorizontalOffset;
-        public double PopupHorizontalOffset
-        {
-            get => _popupHorizontalOffset;
-            set => Set(ref _popupHorizontalOffset, value);
-        }
 
-        private void DeterminePopupHorizontalOffset(Visual view)
-        {
-            var source = PresentationSource.FromVisual(view);
-
-            PopupHorizontalOffset = 5;
-
-            //var scalingFactor = GetWindowsScreenScalingFactor(false);
-            //PopupHorizontalOffset = scalingFactor * 5;
-
-            //var verticalFactor = source.CompositionTarget.TransformToDevice.M11;
-            //var horizontalFactor = source.CompositionTarget.TransformToDevice.M22;
-            //PopupHorizontalOffset = horizontalFactor switch
-            //{
-            //    < 1.25 => 5,
-            //    >= 1.25 => 270,
-            //    _ => 5
-            //};
-
-            //Logger!.LogInformation($"VerticalFactor is {verticalFactor}");
-            //Logger!.LogInformation($"HorizontalFactor is {horizontalFactor}");
-            Logger!.LogInformation($"Setting PopupHorizontalOffset to {PopupHorizontalOffset}");
-        }
 
         //private static double GetWindowsScreenScalingFactor(bool percentage = true)
         //{
@@ -538,26 +510,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
         }
 
-        private void StartTimer()
-        {
-            _timer = new System.Timers.Timer(15000);
-            _timer.Elapsed += OnTimedEvent;
-            _timer.Enabled = true;
-            _timer.AutoReset = true;
-        }
-
-        private void OnTimedEvent(object? sender, ElapsedEventArgs e)
-        {
-            if (ProjectManager!.CurrentProject is null)
-            {
-                return;
-            }
-
-            var changeNeeded =  _collaborationManager.AreUnmergedChanges();
-
-            ProjectManager.CurrentDashboardProject.GitLabUpdateNeeded = changeNeeded;
-            GitLabUpdateNeeded = changeNeeded;
-        }
 
         /// <summary>
         /// Button click for the background tasks on the status bar
