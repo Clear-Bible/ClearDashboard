@@ -525,6 +525,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 
             await GetRemoteUser();
 
+            await LicenseManager.DeleteOldLicense();
+
             base.OnViewLoaded(view);
 
             _initializationComplete = true;
