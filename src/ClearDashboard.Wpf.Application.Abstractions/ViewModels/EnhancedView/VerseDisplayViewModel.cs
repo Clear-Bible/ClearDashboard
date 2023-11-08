@@ -113,8 +113,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private ObservableCollection<ExternalNote> _externalNotes = new();
-        public ObservableCollection<ExternalNote> ExternalNotes
+        private BindableCollection<ExternalNote> _externalNotes = new();
+        public BindableCollection<ExternalNote> ExternalNotes
         {
             get => _externalNotes;
             set
@@ -134,6 +134,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         protected VerseDisplayViewModel(NoteManager noteManager, IMediator mediator, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger logger)
         {
+            NotifyExternalNotesItemsChanged();
+
             NoteManager = noteManager;
             Mediator = mediator;
             EventAggregator = eventAggregator;
@@ -320,6 +322,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 return;
             }
+
             _ =  TargetTokenDisplayViewModels
                 .Select(tdm =>
                 {
