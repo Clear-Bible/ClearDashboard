@@ -507,39 +507,47 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<LexiconImportViewModel>> GetLexiconImportViewModels(string? projectId, CancellationToken cancellationToken)
         {
-            LexiconImportViewModels = new List<LexiconImportViewModel>();
-            var externalLexicon = await GetLexiconForProject(projectId);
-            if (externalLexicon != null)
+            try
             {
-                ManagedLexicon = await GetExternalLexiconMergedIntoInternal(externalLexicon, cancellationToken);
-                ManagedLexemes = new ObservableCollection<Lexeme>(ManagedLexicon.Lexemes);
-
-                foreach (var lexeme in ManagedLexemes)
+                LexiconImportViewModels = new List<LexiconImportViewModel>();
+                var externalLexicon = await GetLexiconForProject(projectId);
+                if (externalLexicon != null)
                 {
-                    foreach (var meaning in lexeme.Meanings)
-                    {
-                        foreach (var translation in meaning.Translations.Where(e => !e.IsInDatabase))
-                        {
-                            var translationMatch = ManagedLexicon.TranslationMatchTranslationIds.Contains(translation.TranslationId.Id);
-                            var lemmaOrFormMatch = ManagedLexicon.LemmaOrFormMatchTranslationIds.Contains(translation.TranslationId.Id);
+                    ManagedLexicon = await GetExternalLexiconMergedIntoInternal(externalLexicon, cancellationToken);
+                    ManagedLexemes = new ObservableCollection<Lexeme>(ManagedLexicon.Lexemes);
 
-                            var vm = new LexiconImportViewModel
+                    foreach (var lexeme in ManagedLexemes)
+                    {
+                        foreach (var meaning in lexeme.Meanings)
+                        {
+                            foreach (var translation in meaning.Translations.Where(e => !e.IsInDatabase))
                             {
-                                LexemeId = lexeme.LexemeId.Id,
-                                SourceLanguage = lexeme.Language,
-                                SourceWord = lexeme.Lemma,
-                                SourceType = lexeme.Type,
-                                TargetLanguage = meaning.Language,
-                                TargetWord = translation.Text,
-                                IsSelected = !translationMatch && !lemmaOrFormMatch,
-                                ShowAddAsFormButton = translationMatch,
-                                ShowAddTargetAsTranslationButton = lemmaOrFormMatch
-                            };
-                            LexiconImportViewModels.Add(vm);
+                                var translationMatch = ManagedLexicon.TranslationMatchTranslationIds.Contains(translation.TranslationId.Id);
+                                var lemmaOrFormMatch = ManagedLexicon.LemmaOrFormMatchTranslationIds.Contains(translation.TranslationId.Id);
+
+                                var vm = new LexiconImportViewModel
+                                {
+                                    LexemeId = lexeme.LexemeId.Id,
+                                    SourceLanguage = lexeme.Language,
+                                    SourceWord = lexeme.Lemma,
+                                    SourceType = lexeme.Type,
+                                    TargetLanguage = meaning.Language,
+                                    TargetWord = translation.Text,
+                                    IsSelected = !translationMatch && !lemmaOrFormMatch,
+                                    ShowAddAsFormButton = translationMatch,
+                                    ShowAddTargetAsTranslationButton = lemmaOrFormMatch
+                                };
+                                LexiconImportViewModels.Add(vm);
+                            }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "An unexpected error occurred while getting LexiconImportViewModels.");
+            }
+            
 
             // AnyPartialMatch example:
             //var matchStrings = new string[] { "lemma1", "form1", "form2" };
