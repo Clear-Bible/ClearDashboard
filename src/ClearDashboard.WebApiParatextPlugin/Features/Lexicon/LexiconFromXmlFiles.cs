@@ -201,7 +201,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 
                     var translationModel = meaningModel.Translations
                         .Where(e => e.Text == sense.Gloss.Text)
-                        .Where(e => e.OriginatedFrom == translationOriginatedFrom)
+                        //.Where(e => e.OriginatedFrom == translationOriginatedFrom)
                         .FirstOrDefault();
 
                     if (translationModel is null)
@@ -239,7 +239,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                     _logger.LogInformation($"Unable to load Biblical Term into Lexicon model due to SuggestLanguages returning null for language: '{term.Language}'");
                     continue;
                 }
-
+				
                 var lexemeModel = lexiconModel.Lexemes
                     .Where(e => e.Language == termLanguageInfo.LanguageTag)
                     .Where(e => e.Type == null)
@@ -291,7 +291,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 
                     var translationModel = meaningModel.Translations
                         .Where(t => t.Text == e)
-                        .Where(t => t.OriginatedFrom == translationOriginatedFrom)
+                        //.Where(t => t.OriginatedFrom == translationOriginatedFrom)
                         .FirstOrDefault();
 
                     if (translationModel is null)
@@ -335,7 +335,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                     _logger.LogInformation($"Unable to load Term Rendering into Lexicon model due to SuggestLanguages returning null for language: '{biblicalTerm.Language}'");
                     continue;
                 }
-
+				
                 var lexemeModel = lexiconModel.Lexemes
                     .Where(e => e.Language == termLanguageInfo.LanguageTag)
                     .Where(e => e.Type == null)
@@ -387,7 +387,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 
                     var translationModel = meaningModel.Translations
                         .Where(t => t.Text == e)
-                        .Where(t => t.OriginatedFrom == translationOriginatedFrom)
+                        //.Where(t => t.OriginatedFrom == translationOriginatedFrom)
                         .FirstOrDefault();
 
                     if (translationModel is null)
