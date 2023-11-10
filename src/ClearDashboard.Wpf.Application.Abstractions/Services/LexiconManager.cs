@@ -519,8 +519,9 @@ namespace ClearDashboard.Wpf.Application.Services
                    
                     foreach (var meaning in lexeme.Meanings)
                     {
-                       var lemmaOrFormMatch = ManagedLexicon.LemmaOrFormMatchesOnly.Contains(lexeme.LexemeId.Id);
-                       var translationMatch = ManagedLexicon.TranslationMatchesOnly.Contains(lexeme.LexemeId.Id);
+                        //TODO:  fix me!
+                        var lemmaOrFormMatch = true; //ManagedLexicon.LemmaOrFormMatchesOnly.Contains(lexeme.LexemeId.Id);
+                        var translationMatch = true; // ManagedLexicon.TranslationMatchesOnly.Contains(lexeme.LexemeId.Id);
 
                         foreach (var translation in meaning.Translations)
                         {

@@ -22,6 +22,22 @@ namespace ClearDashboard.Wpf.Application.Helpers
     {
         private readonly Dictionary<string, ResourceManager> resourceManagerDictionary = new Dictionary<string, ResourceManager>();
 
+
+        private Dictionary<string, string> TempStrings = new()
+        {
+            {"LexiconEdit_And", "And"},
+            {"LexiconEdit_FindAll", "Find All"},
+            {"LexiconEdit_Forms", "Forms"},
+            {"LexiconEdit_Fully", "Fully"},
+            {"LexiconEdit_FullyMatching", "Fully Matching"},
+            {"LexiconEdit_Lexeme", "Lexeme"},
+            {"LexiconEdit_Matching", "Matching"},
+            {"LexiconEdit_Or", "Or"},
+            {"LexiconEdit_Partially", "Partially"},
+            {"LexiconEdit_Translation", "Translation"},
+
+        };
+
         public string this[string key]
         {
             get
@@ -34,7 +50,16 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 var tuple = SplitName(key);
                 string translation = null;
                 if (resourceManagerDictionary.ContainsKey(tuple.Item1))
-                    translation = resourceManagerDictionary[tuple.Item1].GetString(tuple.Item2, Thread.CurrentThread.CurrentUICulture);
+                {
+                    translation = resourceManagerDictionary[tuple.Item1]
+                        .GetString(tuple.Item2, Thread.CurrentThread.CurrentUICulture) ;
+                }
+
+                if (translation == null && TempStrings.ContainsKey(tuple.Item1))
+                {
+                    translation = TempStrings[tuple.Item1];
+                }
+
                 return translation ?? key;
             }
         }

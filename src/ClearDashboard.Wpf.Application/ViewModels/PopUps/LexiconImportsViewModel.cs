@@ -118,7 +118,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             Task.Run(async () =>
             {
                 // TODO:  change to true when feature is ready.
-                ShowDialog = false;
+                ShowDialog = true;
                 ProgressBarVisibility = Visibility.Visible;
                 var stopWatch = Stopwatch.StartNew();
                 try

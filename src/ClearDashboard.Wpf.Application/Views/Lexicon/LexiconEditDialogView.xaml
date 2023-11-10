@@ -8,12 +8,13 @@
     xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:cm="http://caliburnmicro.com"
     d:DataContext="{d:DesignInstance Type=lexicon:LexiconEditDialogViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
-    <Grid MinWidth="500">
+    <Grid MinWidth="800">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="40" />
@@ -27,7 +28,7 @@
         <Grid Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
-                <RowDefinition Height="35" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="35" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -67,8 +68,65 @@
                 IsEnabled="{Binding EnableTargetLanguageComboBox}"
                 ItemsSource="{Binding TargetLanguages}"
                 SelectedItem="{Binding SelectedTargetLanguage}" />
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Orientation="Horizontal">
+                <TextBlock Text="{helpers:Localization LexiconEdit_FindAll}"></TextBlock>
+                <CheckBox x:Name="FindAllLexemeCheckBox" cm:Message.Attach="[Event Checked] = [Action OnLexemeChecked($source)]" Content="{helpers:Localization LexiconEdit_Lexeme}" IsChecked="{Binding State.LexemeChecked}"  />
+                <ListBox x:Name="FindAllLexemeOptions"
+                         Height="28"
+                         Margin="4"
+                         cm:Message.Attach="[Event SelectionChanged] = [Action OnLexemeOptionChanged($eventArgs)]"
+                         IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
+                         SelectedIndex="0"
+                         SelectionMode="Single"
+                         Style="{StaticResource MaterialDesignToolToggleListBox}"
+                         Visibility="{Binding State.LexemeChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
+                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
+                </ListBox>
+                <TextBlock Text="{helpers:Localization LexiconEdit_Or}" Visibility="{Binding State.LexemeAndFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                <CheckBox x:Name="FormsCheckBox" cm:Message.Attach="[Event Checked] = [Action OnFormsChecked($source)]" Content="{helpers:Localization LexiconEdit_Forms}" IsChecked="{Binding State.FormsChecked}"  />
+                <ListBox x:Name="FormsOptions"
+                         Height="28"
+                         Margin="4"
+                         cm:Message.Attach="[Event SelectionChanged] = [Action OnFormsOptionChanged($eventArgs)]"
+                         IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
+                         SelectedIndex="0"
+                         SelectionMode="Single"
+                         Style="{StaticResource MaterialDesignToolToggleListBox}"
+                         Visibility="{Binding State.FormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
+                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
+                </ListBox>
+                <TextBlock Text="{helpers:Localization LexiconEdit_Matching}" Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                <TextBox x:Name="FormsMatch"  
+                         cm:Message.Attach="[Event TextChanged] = [Action OnFormsMatchChanged($source, $eventArgs)]" 
+                         Style="{StaticResource MaterialDesignTextBox}" 
+                         Width="100" 
+                         Height="30"
+                         Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+                <ListBox x:Name="PredicateOptions"
+                         Height="28"
+                         Margin="4"
+                         cm:Message.Attach="[Event SelectionChanged] = [Action OnFormsOptionChanged($eventArgs)]"
+                         IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
+                         SelectedIndex="0"
+                         SelectionMode="Single"
+                         Style="{StaticResource MaterialDesignToolToggleListBox}"
+                         Visibility="{Binding State.TransitionAndLexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ListBoxItem Content="{helpers:Localization LexiconEdit_And}" Tag="{x:Static lexicon:LexiconEditTags.And}" />
+                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Or}" Tag="{x:Static lexicon:LexiconEditTags.Or}" />
+                </ListBox>
+                <CheckBox x:Name="TranslationCheckBox"  cm:Message.Attach="[Event Checked] = [Action OnTranslationChecked($source)]" Content="{helpers:Localization LexiconEdit_Translation}" IsChecked="{Binding State.TranslationChecked}"  />
+                <TextBlock Text="{helpers:Localization LexiconEdit_FullyMatching}" 
+                           Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                <TextBox x:Name="TranslationMatch"  cm:Message.Attach="[Event TextChanged] = [Action OnTranslationMatchChanged($source, $eventArgs)]" 
+                         Style="{StaticResource MaterialDesignTextBox}" 
+                         Width="100" 
+                         Height="30"
+                         Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
 
-            <CheckBox Grid.Row="2" Grid.Column="0" />
+            </StackPanel>
+           
         </Grid>
 
 

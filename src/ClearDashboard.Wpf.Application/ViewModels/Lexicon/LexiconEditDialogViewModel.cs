@@ -13,6 +13,8 @@ using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
@@ -23,9 +25,120 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         MatchOnTranslation,
         Edit
     }
+
+    public static class LexiconEditTags
+    {
+        public const string And = "And";
+        public const string Fully = "Fully";
+        public const string Or = "Or";
+        public const string Partially = "Partially";
+       
+    }
+
+    public enum PredicateOption
+    {
+        And,
+        Or
+    }
+
+    public enum MatchOption
+    {
+        Partially,
+        Fully,
+    }
+
+    public class LexiconEditDialogState : PropertyChangedBase
+    {
+        private bool _lexemeChecked;
+        private bool _formsChecked;
+        private bool _translationChecked;
+        private MatchOption _lexemeOption;
+        private MatchOption _formsOption;
+        private PredicateOption _predicateOption;
+        private string? _formsMatch;
+        private string? _translationMatch;
+
+        public bool LexemeChecked
+        {
+            get => _lexemeChecked;
+            set
+            {
+                Set(ref _lexemeChecked, value);
+                NotifyBooleansChanged();
+            }
+        }
+
+        public bool FormsChecked
+        {
+            get => _formsChecked;
+            set
+            {
+                Set(ref _formsChecked, value);
+                NotifyBooleansChanged();
+            }
+        }
+
+        public bool LexemeAndFormsChecked => LexemeChecked & FormsChecked;
+
+        public bool LexemeOrFormsChecked => LexemeChecked | FormsChecked;
+
+        public bool TransitionAndLexemeOrFormsChecked => TranslationChecked & LexemeAndFormsChecked;
+
+        private void NotifyBooleansChanged()
+        {
+            NotifyOfPropertyChange(()=> LexemeAndFormsChecked);
+            NotifyOfPropertyChange(() => LexemeOrFormsChecked);
+            NotifyOfPropertyChange(() => TransitionAndLexemeOrFormsChecked);
+        }
+
+        public bool TranslationChecked
+        {
+            get => _translationChecked;
+            set
+            {
+                Set(ref _translationChecked, value);
+                NotifyBooleansChanged();
+            }
+        }
+
+        public MatchOption LexemeOption
+        {
+            get => _lexemeOption;
+            set => Set(ref _lexemeOption, value);
+        }
+
+        public MatchOption FormsOption
+        {
+            get => _formsOption;
+            set => Set(ref _formsOption, value);
+        }
+
+        public PredicateOption PredicateOption
+        {
+            get => _predicateOption;
+            set => Set(ref _predicateOption, value);
+        }
+
+        public string FormsMatch
+        {
+            get => _formsMatch;
+            set => Set(ref _formsMatch, value);
+        }
+
+        public string TranslationMatch
+        {
+            get => _translationMatch;
+            set => Set(ref _translationMatch, value);
+        }
+
+      
+    }
     public class LexiconEditDialogViewModel : DashboardApplicationScreen
     {
         private readonly LexiconManager? _lexiconManager;
+
+        private readonly DebounceDispatcher _debounceTimer = new();
+
         private LexiconManager LexiconManager
         {
             get
@@ -34,6 +147,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 return _lexiconManager!;
             }
             init => Set(ref _lexiconManager, value);
+        }
+
+        public LexiconEditDialogState State
+        {
+            get => _state;
+            set => Set(ref _state, value);
         }
 
         public LexiconEditMode EditMode
@@ -112,6 +231,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         private string? _other;
         private BindableCollection<string> _sourceLanguages;
         private BindableCollection<string> _targetLanguages;
+        private LexiconEditDialogState _state;
 
         public BindableCollection<string> SourceLanguages
         {
@@ -183,8 +303,75 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 SelectedTargetLanguage = TargetLanguage;
                 TargetLanguages.Add(TargetLanguage);
             }
+
+            State = new LexiconEditDialogState();
             
             return base.OnActivateAsync(cancellationToken);
+        }
+
+       
+
+        public void OnLexemeOptionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+
+                State.LexemeOption =
+                    (MatchOption)Enum.Parse(typeof(MatchOption), (item.Tag as string));
+                ////_debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
+
+            }
+        }
+
+        public void OnFormsOptionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+
+                State.FormsOption =
+                    (MatchOption)Enum.Parse(typeof(MatchOption), (item.Tag as string));
+                ////_debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
+
+            }
+        }
+
+        public void OnPredicateOptionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+
+                State.PredicateOption =
+                    (PredicateOption)Enum.Parse(typeof(PredicateOption), (item.Tag as string));
+                ////_debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
+
+            }
+        }
+
+        public void OnFormsMatchChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            State.FormsMatch = textBox.Text;
+        }
+
+        public void OnTranslationMatchChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            State.TranslationMatch = textBox.Text;
+        }
+
+        public void OnTranslationChecked(CheckBox? checkBox)
+        {
+            //State.TranslationChecked = checkBox?.IsChecked;
+        }
+
+        public void OnFormsChecked(CheckBox? checkBox)
+        {
+            //State.FormsChecked = checkBox?.IsChecked;
+        }
+
+        public void OnLexemeChecked(CheckBox? checkBox)
+        {
+            //State.LexemeChecked = checkBox?.IsChecked;
         }
     }
 }
