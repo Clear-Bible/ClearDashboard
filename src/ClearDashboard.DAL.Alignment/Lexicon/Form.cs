@@ -39,6 +39,11 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         public bool IsDirty { get; internal set; } = false;
         public bool IsInDatabase { get => FormId.Created is not null; }
 
+        /// <summary>
+        /// When set to true, only affects a single Save operation
+        /// </summary>
+        public bool ExcludeFromSave { get; set; } = false;
+
         public Form()
         {
             FormId = FormId.Create(Guid.NewGuid());
@@ -51,8 +56,14 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         internal void PostSave(FormId? formId)
         {
-            FormId = formId ?? FormId;
-            IsDirty = false;
+            if (!ExcludeFromSave)
+            {
+                FormId = formId ?? FormId;
+                IsDirty = false;
+            }
+
+            // When set to true, it only affects a single Save
+            ExcludeFromSave = false;
         }
 
         internal void PostSaveAll(IDictionary<Guid, IId> createdIIdsByGuid)
