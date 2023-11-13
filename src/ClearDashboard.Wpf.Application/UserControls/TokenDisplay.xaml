@@ -15,6 +15,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:usercontrols="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    x:Name="TokenDisplayBase"
     d:DataContext="{d:DesignInstance Type=enhancedView:TokenDisplayViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -47,9 +48,11 @@
         <Grid>
             <!--  External Notes Indicator  -->
             <iconPacks:PackIconModern
+                x:Name="ExternalNotesIcon"
                 Margin="0,0,12,0"
                 Foreground="Red"
                 Kind="Flag"
+                MouseDown="PackIconModern_MouseDown"
                 Visibility="{Binding HasExternalNotes, Converter={StaticResource BoolToVisibilityConverter}}">
                 <iconPacks:PackIconModern.ToolTip>
                     <ToolTip
