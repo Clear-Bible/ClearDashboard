@@ -361,16 +361,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             if (obj is NoteViewModel noteViewModel)
             {
-                var associationDescriptions = noteViewModel.Associations
-                    .Select(a => a.Description)
-                    .Aggregate((all, next) => $"{all} {next}");
+                var associationDescriptions = noteViewModel.AssociationVerse;
 
                 if (
                     (FilterStatus.Equals(FilterNoteStatusEnum.Any) || FilterStatus.ToString().Equals(noteViewModel.NoteStatus.ToString())) &&
                     (FilterUsers.Count() == 0 || FilterUsers.Contains(noteViewModel.ModifiedBy)) &&
                     (FilterLabels.Count() == 0 || FilterLabels.Intersect(noteViewModel.Labels).Any()) &&
-                    associationDescriptions.ContainsFuzzy(FilterAssociationsDescriptionText, ToleranceContainsFuzzyAssociationsDescriptions) &&
-                    noteViewModel.Text.ContainsFuzzy(FilterNoteText, ToleranceContainsFuzzyNoteText)
+                    associationDescriptions.ToUpper().ContainsFuzzy(FilterAssociationsDescriptionText.ToUpper(), ToleranceContainsFuzzyAssociationsDescriptions, 7) &&
+                    noteViewModel.Text.ContainsFuzzy(FilterNoteText, ToleranceContainsFuzzyNoteText, 3)
                 )
                 {
                     return true;
@@ -711,14 +709,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
     public static class Extensions
     {
-        public static bool ContainsFuzzy(this string? str, string input, int tolerance)
+        public static bool ContainsFuzzy(this string? str, string input, int tolerance, int minCharsNeededForFuzzy)
         {
             if (str == null)
                 throw new InvalidParameterEngineException(name: "str", value: "null");
 
             if (input.Length == 0)
                 return true;
-            if (input.Length > 3)
+            if (input.Length > minCharsNeededForFuzzy)
             {
                 //see https://github.com/kdjones/fuzzystring
                 return str.LongestCommonSubsequence(input).Length
