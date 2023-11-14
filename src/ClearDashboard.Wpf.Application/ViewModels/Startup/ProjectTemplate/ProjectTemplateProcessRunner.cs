@@ -72,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         private record ParatextProjectCorpusBackgroundTask : CorpusBackgroundTask
         {
-            public ParatextProjectCorpusBackgroundTask(string taskName, ParatextProjectMetadata projectMetadata, Tokenizers tokenizer, IEnumerable<string> bookIds)
+            public ParatextProjectCorpusBackgroundTask(string taskName, ParatextProjectMetadata projectMetadata, Tokenizers tokenizer, IEnumerable<string> bookIds, bool alreadyTokenized = false)
                 : base(typeof(TokenizedTextCorpus), taskName)
             {
                 if (!bookIds.Any())
@@ -247,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             return taskName;
         }
 
-        public string RegisterParatextProjectCorpusTask(ParatextProjectMetadata projectMetadata, Tokenizers tokenizer, IEnumerable<string> bookIds, string? taskName = null)
+        public string RegisterParatextProjectCorpusTask(ParatextProjectMetadata projectMetadata, Tokenizers tokenizer, IEnumerable<string> bookIds, string? taskName = null, bool alreadyTokenized = false)
         {
             if (string.IsNullOrEmpty(projectMetadata.Name))
                 throw new ArgumentNullException(nameof(projectMetadata.Name));
@@ -261,7 +261,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 taskName,
                 projectMetadata,
                 tokenizer,
-                bookIds));
+                bookIds,
+                alreadyTokenized));
 
             return taskName;
         }

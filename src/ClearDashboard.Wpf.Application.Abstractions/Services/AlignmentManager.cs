@@ -23,7 +23,7 @@ namespace ClearDashboard.Wpf.Application.Services
     {
         private List<EngineParallelTextRow> ParallelTextRows { get; }
         private AlignmentSetId AlignmentSetId { get; }
-        private AlignmentSet? AlignmentSet { get; set; }
+        public AlignmentSet? AlignmentSet { get; set; }
 
         private IEventAggregator EventAggregator { get; }
         private ILogger<AlignmentManager> Logger { get; }
@@ -183,13 +183,18 @@ namespace ClearDashboard.Wpf.Application.Services
             return alignmentPopupViewModel;
         }
 
-        public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay)
+        public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay, bool autoConfirm = false)
         {
             var alignmentPopupViewModel = GetAlignmentPopupViewModel(SimpleMessagePopupMode.Delete);
             alignmentPopupViewModel.TargetTokenDisplay = tokenDisplay;
 
-            var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
-            if (result == true)
+            var result = false;
+            if (!autoConfirm)
+            {
+                result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
+            }
+            
+            if (result == true || autoConfirm)
             {
                 var alignmentIds = FindAlignmentIds(tokenDisplay);
          

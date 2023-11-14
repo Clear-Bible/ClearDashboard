@@ -49,10 +49,19 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
+using CefSharp.DevTools.DOM;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
+using ClearDashboard.DataAccessLayer.Features.Corpa;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using SIL.Extensions;
+using ClearDashboard.DAL.Interfaces;
 
 
 // ReSharper disable once CheckNamespace
@@ -73,6 +82,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
         private readonly NoteManager _noteManager;
+        private readonly ProjectTemplateProcessRunner _projectTemplateProcessRunner;
         private readonly SystemPowerModes _systemPowerModes;
         private readonly ObservableDictionary<string, bool> _busyState = new();
 
@@ -81,6 +91,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion //Member Variables
 
         #region Observable Properties
+        public AlignmentManager? OldAlignmentManager { get; set; } = null;
+
+        public AlignmentManager? NewAlignmentManager { get; set; } = null;
 
         public new bool IsBusy => _busyState.Count > 0;
 
@@ -178,11 +191,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
             IEnhancedViewManager enhancedViewManager,
-            NoteManager noteManager)
+            NoteManager noteManager,
+            ProjectTemplateProcessRunner projectTemplateProcessRunner)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
             _noteManager = noteManager;
+            _projectTemplateProcessRunner = projectTemplateProcessRunner;
             _systemPowerModes = systemPowerModes;
             _windowManager = windowManager;
             BackgroundTasksViewModel = backgroundTasksViewModel;
@@ -1147,6 +1162,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // get TranslationSet , etc from the dialogViewModel
                     //var translationSet = dialogViewModel!.TranslationSet;
 
+                    //var verses = metadatum.ParallelCorpus.GetByVerseRange(new VerseRef(bbbcccvvv), offset, offset);
+                    //var rows = verses.parallelTextRows.Select(v => (EngineParallelTextRow)v).ToList();
+
+
+
+                    //.ParallelTokenizedCorpus.GetByVerseRange()..
+
+                    //var alignmentId = dialogViewModel?.AlignmentSet?.AlignmentSetId;
+                    //var parallelTextRows = dialogViewModel.ParallelTokenizedCorpus.Select(v => (EngineParallelTextRow)v).ToList();
+                    //NewAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, parallelTextRows, alignmentId);
 
                     if (parallelProjectType == ParallelProjectType.WholeProcess)
                     {
@@ -1242,9 +1267,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer)
+        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer, CorpusNodeViewModel corpusNodeViewModel, CorpusNodeMenuItemViewModel connectionMenuItem)
         {
             Logger!.LogInformation("UpdateParatextCorpus called.");
+
+            var bookIds = new List<string>();
 
             var parameters = new List<Autofac.Core.Parameter>
             {
@@ -1264,11 +1291,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null,
                     DialogSettings.AddParatextCorpusDialogSettings);
-
                 if (result)
                 {
                     var selectedProject = dialogViewModel!.SelectedProject;
-                    var bookIds = dialogViewModel.BookIds;
+                    bookIds = dialogViewModel.BookIds;
 
                     var taskName = $"{selectedProject!.Name}";
                     _busyState.Add(taskName, true);
@@ -1315,6 +1341,168 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                                 description: $"Updating verses in tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
+
+                            /////////////////////////////////////////////////
+
+                            if (bookIds.Count == 0)
+                            {
+                                return;
+                            }
+
+                            //Get all connections for a text
+                            var connections = corpusNodeViewModel.AttachedConnections.ToList();
+
+                            //foreach connection
+                            foreach (var connection in connections)
+                            {
+                                var topLevelProjectIds2 = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+                                //Are common books present?
+                                var commonBookPresent = false;
+                                var updatedNodeIsSource = connection.SourceConnector.ParentNode.Id == corpusNodeViewModel.Id;
+                                if (updatedNodeIsSource)
+                                {
+                                    //why are we using the paratextProjectId to get a tokenized corpus?  What if there are multiple instances of a corpus tokenized
+                                    var tokenizedBookRequest = await Mediator.Send(new GetBooksFromTokenizedCorpusQuery(connection.DestinationConnector.ParentNode.ParatextProjectId), CancellationToken.None);
+
+                                    foreach (var bookId in bookIds)
+                                    {
+                                        if (tokenizedBookRequest.Data.Contains(BookChapterVerseViewModel.GetBookNumFromBookName(bookId)))
+                                        {
+                                            commonBookPresent = true;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    //why are we using the paratextProjectId to get a tokenized corpus?  What if there are multiple instances of a corpus tokenized
+                                    var tokenizedBookRequest = await Mediator.Send(new GetBooksFromTokenizedCorpusQuery(connection.SourceConnector.ParentNode.ParatextProjectId), CancellationToken.None);
+
+                                    foreach (var bookId in bookIds)
+                                    {
+                                        if (tokenizedBookRequest.Data.Contains(BookChapterVerseViewModel.GetBookNumFromBookName(bookId)))
+                                        {
+                                            commonBookPresent = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (!commonBookPresent)
+                                {
+                                    break;
+                                }
+
+                                //Get Old Alignments
+                                var oldParallelCorpus = await ParallelCorpus.Get(Mediator!, connection.ParallelCorpusId);
+                                var oldParallelTextRows = oldParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();
+                                var oldAlignmentIds = topLevelProjectIds2.AlignmentSetIds.Where(x => x.ParallelCorpusId == oldParallelCorpus.ParallelCorpusId);
+                                if (oldAlignmentIds == null)
+                                {
+                                    break;
+                                }
+
+                                //Create New Alignments
+                                var allBookIds = BookChapterVerseViewModel.GetBookIdDictionary().Keys.ToList();
+
+                                var targetProjectMetadata = new ParatextProjectMetadata()
+                                {
+                                    Name = connection.SourceConnector.Name,
+                                    Id=connection.SourceConnector.ParatextId
+                                };
+
+                                var sourceTaskName = _projectTemplateProcessRunner.RegisterParatextProjectCorpusTask(
+                                    targetProjectMetadata, Tokenizers.LatinWordTokenizer,
+                                    allBookIds);
+
+                                var sourceProjectMetadata = new ParatextProjectMetadata()
+                                {
+                                    Name = connection.DestinationConnector.Name,
+                                    Id=connection.DestinationConnector.ParatextId
+                                };
+
+                                var targetTaskName = _projectTemplateProcessRunner.RegisterParatextProjectCorpusTask(
+                                    sourceProjectMetadata, Tokenizers.LatinWordTokenizer,
+                                    allBookIds);
+
+                                //Should we make one new alignment or as many new alignments as old alignments?
+                                _ = _projectTemplateProcessRunner.RegisterParallelizationTasks(
+                                    sourceTaskName,
+                                    targetTaskName,
+                                    false,//remember this from the old alignment
+                                    SmtModelType.FastAlign.ToString());//
+
+                                var runningTask = _projectTemplateProcessRunner.RunRegisteredTasks(new Stopwatch());
+                                await runningTask;
+
+                                // get all the existing alignment sets for this parallelCorpusId
+                                var alignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
+                                        Mediator!,
+                                        connection.ParallelCorpusId,
+                                new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!)))
+                                    .ToList();
+
+                                var newestAlignmentSet = alignmentSets.OrderBy(x => x.Created).LastOrDefault();
+
+                                var newParallelCorpus = await ParallelCorpus.Get(Mediator, newestAlignmentSet.ParallelCorpusId);
+
+                                var alignmentId = newestAlignmentSet;
+                                var parallelTextRows = newParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();
+                                NewAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, parallelTextRows, alignmentId);
+
+                                //foreach old alignment, if Auto aligned, then replace with new alignment
+                                foreach (var oldAlignmentId in oldAlignmentIds)
+                                {
+                                    OldAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, oldParallelTextRows, oldAlignmentId);
+                                    
+                                    if (OldAlignmentManager.Alignments != null)
+                                        foreach (var oldAlignment in OldAlignmentManager.Alignments)
+                                        {
+                                            if (oldAlignment.OriginatedFrom == "FromAlignmentModel")
+                                            {
+                                                if (NewAlignmentManager != null)
+                                                {
+                                                    var newAlignment = NewAlignmentManager.Alignments?.FindAlignmentByTokenId(oldAlignment.AlignedTokenPair.SourceToken.TokenId.Id);
+                                                    
+                                                    await OldAlignmentManager.DeleteAlignment(new TokenDisplayViewModel(oldAlignment.AlignedTokenPair.SourceToken), true);
+                                                    //await OldAlignmentManager.AlignmentSet.DeleteAlignment(oldAlignment.AlignmentId);
+
+                                                    if (newAlignment != null)
+                                                        await OldAlignmentManager.AlignmentSet?.PutAlignment(newAlignment)!;
+                                                }
+                                            }
+                                        }
+                                }
+                                //await AddParallelCorpus(connection);
+                            }
+                            //NewAlignmentManager.Alignments;
+                            //topLevelProjectIds2.AlignmentSetIds.FirstOrDefault(x => x.ParallelCorpusId == connection.ParallelCorpusId);
+                            //dialogViewModel?.AlignmentSet?.AlignmentSetId;
+                            //parallelCorpus.AlignmentCorpus.AlignmentCollections.GetEnumerator().Current.Id;
+                            //var alignmentId = dialogViewModel.AlignmentSet.AlignmentSetId;
+
+                            //if (parallelProjectType == ParallelProjectType.WholeProcess)
+                            //{
+                            //    newParallelCorpusConnection.ParallelCorpusId =
+                            //        dialogViewModel!.ParallelTokenizedCorpus.ParallelCorpusId;
+                            //    newParallelCorpusConnection.ParallelCorpusDisplayName =
+                            //        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
+                            //}
+
+                            //topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                            //DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(newParallelCorpusConnection,
+                            //    topLevelProjectIds);
+
+                            await SaveDesignSurfaceData();
+
+                            //foreach connection (based on source token)
+                            //foreach token/alignment
+                            //if auto aligned
+                            //replace with new auto alignment
+
+                            //recalculate interlinear
                         }
                         catch (OperationCanceledException)
                         {
@@ -1360,7 +1548,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await SaveDesignSurfaceData();
             }
-
         }
 
         private static ITokenizer<string, int, string> InstantiateTokenizer(Tokenizers tokenizerEnum)
@@ -1695,7 +1882,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //#pragma warning restore CS8601
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
-                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
+                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer, corpusNodeViewModel, corpusNodeMenuItem);
+                    
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.GetLatestExternalNotes:
                     GetLatestExternalNotes(corpusNodeViewModel.ParatextProjectId);
@@ -1906,7 +2094,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }));
         }
 
-        #endregion // Methods
+#endregion // Methods
 
         #region IHandle
 
