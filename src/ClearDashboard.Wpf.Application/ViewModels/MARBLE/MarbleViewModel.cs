@@ -197,8 +197,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         #region Observable Properties
 
-        #endregion //Observable Properties
-
         private List<CoupleOfStrings> _searchResults = new();
         public List<CoupleOfStrings> SearchResults
         {
@@ -434,6 +432,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 NotifyOfPropertyChange(() => SourceText);
             }
         }
+
+        #endregion //Observable Properties
 
 
         #region Constructor
@@ -1058,6 +1058,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             _ = GetWord();
         }
 
+        #endregion // Methods
+
+        #region IHandle
 
         public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
@@ -1122,16 +1125,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             return Task.CompletedTask;
         }
 
-        #endregion // Methods
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public Task HandleAsync(ParatextSyncMessage message, CancellationToken cancellationToken)
         {
             var makeVisible = false;
@@ -1151,6 +1144,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             BcvUserControlVisibility = makeVisible ? Visibility.Visible : Visibility.Hidden;
 
             return Task.CompletedTask;
+        }
+
+        #endregion // IHandle
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1168,10 +1168,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            if (CheckIfConnectedToParatext() == false)
-            {
-                return;
-            }
+            //if (CheckIfConnectedToParatext() == false)
+            //{
+            //    return;
+            //}
 
             if (ProjectLoadingProgressBarVisibility == Visibility.Visible)
             {
@@ -1478,6 +1478,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             Connected = message.Connected;
+
+            Connected = true;
 
             await Task.CompletedTask;
         }
