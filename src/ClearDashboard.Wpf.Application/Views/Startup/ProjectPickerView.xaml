@@ -316,7 +316,7 @@
                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
                     Background="DarkGray"
                     BorderThickness="0"
-                    IsEnabled="{Binding Connected}"
+                    IsEnabled="{Binding IsParatextRunning}"
                     Style="{StaticResource TransparentStyle}">
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                         <Image
@@ -352,7 +352,7 @@
                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
                     Background="DarkGray"
                     BorderThickness="0"
-                    IsEnabled="{Binding Connected}"
+                    IsEnabled="{Binding IsParatextRunning}"
                     Style="{StaticResource TransparentStyle}">
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                         <iconPacks:PackIconJamIcons
