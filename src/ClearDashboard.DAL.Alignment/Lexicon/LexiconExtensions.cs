@@ -154,7 +154,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                         .Where(e => e.IsInDatabase)
                         .Select(e => e.LemmaOrFormText);
 
-                    if (incoming.AnyPartialMatch(established))
+                    if (incoming.AnyPartialMatches(established))
                     {
                         incomingTranslationIds.AddRange(g
                             .Where(e => !e.IsInDatabase)
@@ -165,9 +165,175 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             return incomingTranslationIds.Distinct();
         }
 
-        public static bool AnyPartialMatch(this IEnumerable<string> incoming, IEnumerable<string> established)
+        public static bool AnyFullMatches(this IEnumerable<string> incoming, IEnumerable<string> established)
+        {
+            return incoming.Any(i => established.Contains(i));
+        }
+
+        public static bool AnyFullMatches(this string incoming, IEnumerable<string> established)
+        {
+            return established.Contains(incoming);
+        }
+
+        public static bool AnyPartialMatches(this IEnumerable<string> incoming, IEnumerable<string> established)
         {
             return incoming.Any(i => established.Any(e => e.Contains(i)));
+        }
+
+        public static bool AnyPartialMatches(this string incoming, IEnumerable<string> established)
+        {
+            return established.Any(e => e.Contains(incoming));
+        }
+
+        public static Func<Lexeme, bool> LexemeMatchPredicate(string lemmaOrFormText, bool allowPartialMatch, string? lexemeLanguage, string? lexemeType, Func<Meaning, bool>? anyMeaningMatchesPredicate)
+        {
+            return lexeme =>
+                (allowPartialMatch 
+                    ? lemmaOrFormText.AnyPartialMatches(lexeme.LemmaPlusFormTexts) 
+                    : lemmaOrFormText.AnyFullMatches(lexeme.LemmaPlusFormTexts)) &&
+                (lexemeLanguage is null || lexeme.Language == lexemeLanguage) &&
+                (lexemeType is null || lexeme.Type == lexemeType) &&
+                (anyMeaningMatchesPredicate is null || lexeme.Meanings.Any(anyMeaningMatchesPredicate));
+        }
+
+        public static Func<Lexeme, bool> LexemeMatchPredicate(IEnumerable<string> lemmaOrFormTexts, bool allowPartialMatch, string? lexemeLanguage, string? lexemeType, Func<Meaning, bool>? anyMeaningMatchesPredicate)
+        {
+            return lexeme =>
+                (allowPartialMatch
+                    ? lemmaOrFormTexts.AnyPartialMatches(lexeme.LemmaPlusFormTexts)
+                    : lemmaOrFormTexts.AnyFullMatches(lexeme.LemmaPlusFormTexts)) &&
+                (lexemeLanguage is null || lexeme.Language == lexemeLanguage) &&
+                (lexemeType is null || lexeme.Type == lexemeType) &&
+                (anyMeaningMatchesPredicate is null || lexeme.Meanings.Any(anyMeaningMatchesPredicate));
+        }
+
+        public static Func<Lexeme, bool> LexemeMatchPredicate(string? lexemeLanguage, string? lexemeType, Func<Meaning, bool>? anyMeaningMatchesPredicate)
+        {
+            return lexeme =>
+                (lexemeLanguage is null || lexeme.Language == lexemeLanguage) &&
+                (lexemeType is null || lexeme.Type == lexemeType) &&
+                (anyMeaningMatchesPredicate is null || lexeme.Meanings.Any(anyMeaningMatchesPredicate));
+        }
+
+        public static Func<Meaning, bool> MeaningMatchPredicate(string? meaningText, string? meaningLanguage, Func<Translation, bool>? anyTranslationMatchesPredicate)
+        {
+            return meaning =>
+                (meaningText is null || meaning.Text == meaningText) &&
+                (meaningLanguage is null || meaning.Language == meaningLanguage) &&
+                (anyTranslationMatchesPredicate is null || meaning.Translations.Any(anyTranslationMatchesPredicate));
+        }
+
+        public static Func<Translation, bool> TranslationMatchPredicate(string translationText, bool allowPartialMatch)
+        {
+            if (allowPartialMatch)
+            {
+                return translation => translation.Text is not null && translation.Text.Contains(translationText);
+            }
+            else
+            {
+                return translation => translation.Text == translationText;
+            }
+        }
+
+        public static IEnumerable<Lexeme> FilterByLexemeAndTranslationText(
+            this IEnumerable<Lexeme> lexemes,
+            string lemmaOrFormText,
+            bool allowPartialMatch,
+            string? lexemeLanguage,
+            string? lexemeType,
+            string? meaningLanguage,
+            string translationText
+            )
+        {
+            return lexemes.Where(
+                LexemeMatchPredicate(
+                    lemmaOrFormText, 
+                    allowPartialMatch, 
+                    lexemeLanguage, 
+                    lexemeType,
+                    MeaningMatchPredicate(null, meaningLanguage, TranslationMatchPredicate(translationText, false))
+                ));
+        }
+
+        public static IEnumerable<Lexeme> FilterByLexemeText(
+            this IEnumerable<Lexeme> lexemes,
+            string lemmaOrFormText,
+            bool allowPartialMatch,
+            string? lexemeLanguage,
+            string? lexemeType
+            )
+        {
+            return lexemes.Where(
+                LexemeMatchPredicate(
+                    lemmaOrFormText,
+                    allowPartialMatch,
+                    lexemeLanguage,
+                    lexemeType,
+                    null
+//                    MeaningMatchPredicate(null, meaningLanguage, null /* translation => true */) 
+                ));
+        }
+
+        public static IEnumerable<Lexeme> FilterByLexemeText(
+            this IEnumerable<Lexeme> lexemes,
+            IEnumerable<string> lemmaOrFormTexts,
+            bool allowPartialMatch,
+            string? lexemeLanguage,
+            string? lexemeType
+            )
+        {
+            return lexemes.Where(
+                LexemeMatchPredicate(
+                    lemmaOrFormTexts,
+                    allowPartialMatch,
+                    lexemeLanguage,
+                    lexemeType,
+                    null
+//                    MeaningMatchPredicate(null, meaningLanguage, null /* translation => true */) 
+                ));
+        }
+
+        public static IEnumerable<Lexeme> FilterByTranslationText(
+            this IEnumerable<Lexeme> lexemes,
+            string? lexemeLanguage,
+            string? meaningLanguage,
+            string translationText
+            )
+        {
+            return lexemes.Where(
+                LexemeMatchPredicate(
+                    lexemeLanguage,
+                    null,
+                    MeaningMatchPredicate(null, meaningLanguage, TranslationMatchPredicate(translationText, false))
+                ));
+        }
+
+        public static IEnumerable<Meaning> FilterByMeaningTextLanguageHavingAnyTranslations(
+            this IEnumerable<Meaning> meanings,
+            string? meaningText,
+            string meaningLanguage
+            )
+        {
+            return meanings.Where(
+                MeaningMatchPredicate(
+                    meaningText,
+                    meaningLanguage,
+                    translation => true
+                ));
+        }
+
+        public static IEnumerable<Meaning> FilterByMeaningLanguageAndTranslationText(
+            this IEnumerable<Meaning> meanings,
+            string? meaningLanguage,
+            string translationText
+            )
+        {
+            return meanings.Where(
+                MeaningMatchPredicate(
+                    null,
+                    meaningLanguage,
+                    TranslationMatchPredicate(translationText, false)
+                ));
         }
 
         public static IEnumerable<(Guid IncomingTranslationId, Guid CandidateLexemeId)> GetAddAsFormMappings(
