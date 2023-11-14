@@ -183,24 +183,22 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
-             Width="100"
-             Binding="{Binding Type}"
-             Header="{helpers:Localization BulkAlignmentReview_Type}" />
+                     Width="100"
+                     Binding="{Binding Text}"
+                     Header="{helpers:Localization LexiconEdit_Lexeme}" />
                 <DataGridTextColumn
-             Width="125"
-             Binding="{Binding SourceRef}"
-             Header="{helpers:Localization BulkAlignmentReview_SourceRef}" />
+                     Width="125"
+                     Binding="{Binding Type}"
+                     Header="{helpers:Localization  LexiconEdit_Type}" />
+                <DataGridTextColumn
+                    Width="125"
+                    Binding="{Binding Forms}"
+                    Header="{helpers:Localization  LexiconEdit_Forms}" />
+                <DataGridTextColumn
+                    Width="125"
+                    Binding="{Binding Meanings}"
+                    Header="{helpers:Localization  LexiconEdit_Meanings}" />
 
-                <DataGridTemplateColumn Width="75" Header="{helpers:Localization Bcv_Sync}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button
-                         cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]"
-                         Content="{iconPacks:PicolIcons Kind=Synchronize}"
-                         Style="{StaticResource SmallTransparentStyle}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -1,12 +1,16 @@
 {
   "LexiconEdit_And": "And",
+  "LexiconEdit_Edit": "Edit",
   "LexiconEdit_FindAll": "Find All",
   "LexiconEdit_Forms": "Forms",
   "LexiconEdit_Fully": "Fully",
   "LexiconEdit_FullyMatching": "Fully Matching",
   "LexiconEdit_Lexeme": "Lexeme",
   "LexiconEdit_Matching": "Matching",
+  "LexiconEdit_Meanings": "Meanings",
   "LexiconEdit_Or": "Or",
   "LexiconEdit_Partially": "Partially",
-  "LexiconEdit_Translation": "Translation"
+  "LexiconEdit_Translation": "Translation",
+  "LexiconEdit_Translations": "Translations",
+  "LexiconEdit_Type": "Type"
 }
