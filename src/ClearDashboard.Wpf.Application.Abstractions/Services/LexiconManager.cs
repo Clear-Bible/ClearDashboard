@@ -539,6 +539,27 @@ namespace ClearDashboard.Wpf.Application.Services
                         }
                     }
                 }
+
+                // Some Lexeme "filter" examples:
+                var eg1 = ManagedLexemes.FilterByLexemeAndTranslationText(
+                    "wur",
+                    true,
+                    "sur",
+                    "Word",
+                    "en",
+                    "him").ToList();
+                var eg2 = ManagedLexemes.FilterByLexemeText("ɗi", false, null, null).ToList();
+                var eg3 = ManagedLexemes.FilterByLexemeText(new string[] { "kɨ̀", "ɗiihai", "mishkagham" }, false, null, null).ToList();
+                var eg4 = ManagedLexemes.FilterByLexemeText(new string[] { "kɨ̀", "ɗii", "wuri" }, true, null, "Word").ToList();
+                var eg5 = ManagedLexemes.FilterByTranslationText("sur", "en", "another").ToList();
+
+                // 
+                var eg6 = ManagedLexemes
+                    .Where(LexiconExtensions.LexemeMatchPredicate("sur", "Word", null))
+                    .SelectMany(l => l.Meanings
+                        .Where(LexiconExtensions.MeaningMatchPredicate(null, "en", null))
+                        .SelectMany(m => m.Translations.Where(LexiconExtensions.TranslationMatchPredicate("him", true))))
+                    .ToList();
             }
 
             // AnyPartialMatch example:
