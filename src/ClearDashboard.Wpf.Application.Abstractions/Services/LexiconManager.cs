@@ -522,9 +522,13 @@ namespace ClearDashboard.Wpf.Application.Services
                         {
                             foreach (var translation in meaning.Translations.Where(e => !e.IsInDatabase))
                             {
-                                var translationMatch = ManagedLexicon.TranslationMatchTranslationIds.Contains(translation.TranslationId.Id);
-                                var lemmaOrFormMatch = ManagedLexicon.LemmaOrFormMatchTranslationIds.Contains(translation.TranslationId.Id);
+                                // LEXICON-EDIT:  remove 'true' and unremark the following lines when the Lexicon is ready
+                                var translationMatch =  ManagedLexicon.TranslationMatchTranslationIds.Contains(translation.TranslationId.Id);
+                                var lemmaOrFormMatch =  ManagedLexicon.LemmaOrFormMatchTranslationIds.Contains(translation.TranslationId.Id);
 
+                               // Lexeme v    Type v  Forms Meanings[translations]
+
+                               
                                 var vm = new LexiconImportViewModel
                                 {
                                     LexemeId = lexeme.LexemeId.Id,
@@ -542,6 +546,17 @@ namespace ClearDashboard.Wpf.Application.Services
                         }
                     }
                 }
+                //LexiconImportViewModels.Add(new LexiconImportViewModel
+                //{
+                //    LexemeId = Guid.NewGuid(), 
+                //    SourceLanguage = "en",
+                //    SourceType = "Lexeme",
+                //    SourceWord = "tree",
+                //    TargetLanguage = "he",
+                //    TargetWord = "אֱלֹהִ",
+                //    ShowAddAsFormButton = true,
+                //    ShowAddTargetAsTranslationButton = true
+                //} );
             }
             catch (Exception ex)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Windows.Controls;
+using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
@@ -119,16 +121,61 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             set => Set(ref _predicateOption, value);
         }
 
-        public string FormsMatch
+        public string? FormsMatch
         {
             get => _formsMatch;
             set => Set(ref _formsMatch, value);
         }
 
-        public string TranslationMatch
+        public string? TranslationMatch
         {
             get => _translationMatch;
             set => Set(ref _translationMatch, value);
+        }
+
+        public void Configure(LexiconEditMode editMode, string? toMatch)
+        {
+            /*
+             
+              -when [PartialMatchOnLexemeOrForm] parameter: (C) checked, (D) set to
+              partially, (F) checked, (G) partial, (I) filled in with [toMatch] parameter,
+              (K) unchecked; (M) is "Edit adding [other] as translation to first meaning" and
+              when pressed (M) changes line into in-place editing, adds [] to first default meaning 
+              if no meaning, then adds [other] to first meaning's comma delimited [] list and selects 
+              other in this list so user can see what has been added.
+               
+            
+             -when [MatchOnTranslation] parameter: (C) and (F) unchecked, (K) checked; (L) set to 
+               [toMatch].; (M) is "Edit adding [other] as form" and when pressed (M) changes line 
+               into in-place editing, adds [other] to the comma delimited list of forms, and highlights 
+               added form so user can see what was added..
+
+            */
+
+            switch (editMode)
+            {
+                case LexiconEditMode.MatchOnTranslation:
+                    LexemeChecked = false;
+                    FormsChecked = false;
+                    TranslationChecked = true;
+                    LexemeOption = MatchOption.Partially;
+                    FormsOption = MatchOption.Partially;
+                    PredicateOption = PredicateOption.And;
+                    FormsMatch = string.Empty;
+                    TranslationMatch = toMatch;
+                    break;
+                case LexiconEditMode.PartialMatchOnLexemeOrForm:
+                    LexemeChecked = true;
+                    FormsChecked = true;
+                    TranslationChecked = false;
+                    LexemeOption = MatchOption.Partially;
+                    FormsOption = MatchOption.Partially;
+                    PredicateOption = PredicateOption.And;
+                    FormsMatch = toMatch;
+                    TranslationMatch = string.Empty;
+                    break;
+
+            }
         }
 
       
@@ -288,6 +335,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
             TargetLanguages = new BindableCollection<string>();
             SourceLanguages = new BindableCollection<string>();
+
+            State = new LexiconEditDialogState();
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -304,12 +353,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 TargetLanguages.Add(TargetLanguage);
             }
 
-            State = new LexiconEditDialogState();
-            
+           
+            State.Configure(EditMode, ToMatch);
+
+            FilteredLexemes = FilterLexemes();
             return base.OnActivateAsync(cancellationToken);
         }
 
-       
+        private ObservableCollection<Lexeme>? _filteredLexemes;
+
+        public ObservableCollection<Lexeme>? FilteredLexemes
+        {
+            get => _filteredLexemes;
+            set => Set(ref _filteredLexemes, value);
+        }
+
+        private ObservableCollection<Lexeme>? FilterLexemes()
+        {
+            var filteredLexemes = new List<Lexeme>();
+
+            switch (EditMode)
+            {
+                case LexiconEditMode.MatchOnTranslation:
+                    filteredLexemes =  LexiconManager.ManagedLexemes
+                        .Where(lexeme => lexeme.Language == SelectedSourceLanguage && lexeme.Meanings
+                            .Any(meaning => meaning.Language == SelectedSourceLanguage && meaning.Translations
+                                .Any(trans => trans.Text == State.TranslationMatch)))
+                        .ToList();
+
+                    return new ObservableCollection<Lexeme>(filteredLexemes);
+
+                case LexiconEditMode.PartialMatchOnLexemeOrForm:
+                    //filteredLexemes = LexiconManager.ManagedLexemes
+                    //    .Where(lexeme => lexeme.Language == SelectedSourceLanguage && lexeme.Meanings
+                    //        .Any(meaning => meaning.Language == SelectedSourceLanguage && meaning.Text == State.FormsMatch) || 
+                    //            lexeme.Forms.Any(form=>form.Text == State.FormsMatch))
+                    //    .ToList();
+
+                    filteredLexemes = LexiconManager.ManagedLexemes
+                        .Where(lexeme => lexeme.Language == SelectedSourceLanguage && lexeme.Meanings
+                            .Any(meaning => meaning.Language == SelectedSourceLanguage && meaning.Translations
+                                .Any(trans => trans.Text == State.FormsMatch)))
+                        .ToList();
+
+                    return new ObservableCollection<Lexeme>(filteredLexemes);
+
+                default:
+                    return null;
+
+            }
+          
+        }
 
         public void OnLexemeOptionChanged(SelectionChangedEventArgs e)
         {

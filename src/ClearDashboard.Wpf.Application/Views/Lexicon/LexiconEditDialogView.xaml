@@ -9,68 +9,83 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:cm="http://caliburnmicro.com"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     d:DataContext="{d:DesignInstance Type=lexicon:LexiconEditDialogViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="Label" TargetType="{ x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="5 0 10 0"></Setter>
+        </Style>
+        <Style x:Key="HintTextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="{x:Type TextBox}">
+            <Setter Property="materialDesign:TextFieldAssist.TextBoxViewMargin" Value="1 -6 1 0"/>
+            <Setter Property="Margin" Value="5 0 10 0"></Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid MinWidth="800">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
         <Grid Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="35" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
-                HorizontalAlignment="Center"
-                Text="{helpers:Localization LexiconEdit_SourceLanguage}" />
+                Text="{helpers:Localization LexiconEdit_SourceLanguage}" 
+                Style="{StaticResource Label}"/>
             <ComboBox
                 x:Name="SourceLanguage"
                 Grid.Row="0"
                 Grid.Column="1"
-                Grid.ColumnSpan="2"
                 Margin="5"
                 IsEnabled="{Binding EnableSourceLanguageComboBox}"
                 ItemsSource="{Binding SourceLanguages}"
                 SelectedItem="{Binding SelectedSourceLanguage}" />
-
             <TextBlock
-                Grid.Row="1"
-                Grid.Column="0"
-                HorizontalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="2"
+                Style="{StaticResource Label}"
                 Text="{helpers:Localization LexiconEdit_TargetLanguage}" />
             <ComboBox
                 x:Name="TargetLanguage"
-                Grid.Row="1"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
+                Grid.Row="0"
+                Grid.Column="3"
                 Margin="5"
                 IsEnabled="{Binding EnableTargetLanguageComboBox}"
                 ItemsSource="{Binding TargetLanguages}"
                 SelectedItem="{Binding SelectedTargetLanguage}" />
-            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Orientation="Horizontal">
-                <TextBlock Text="{helpers:Localization LexiconEdit_FindAll}"></TextBlock>
-                <CheckBox x:Name="FindAllLexemeCheckBox" cm:Message.Attach="[Event Checked] = [Action OnLexemeChecked($source)]" Content="{helpers:Localization LexiconEdit_Lexeme}" IsChecked="{Binding State.LexemeChecked}"  />
+            <TextBlock Grid.Row="1" 
+                       Grid.Column="0" Style="{StaticResource Label}"
+                       Text="{helpers:Localization LexiconEdit_FindAll}"></TextBlock>
+            <WrapPanel Grid.Row="2" 
+                       Grid.Column="0" 
+                       Grid.ColumnSpan="5" 
+                       Orientation="Horizontal">
+
+                <CheckBox x:Name="FindAllLexemeCheckBox" 
+                          cm:Message.Attach="[Event Checked] = [Action OnLexemeChecked($source)]" 
+                          Content="{helpers:Localization LexiconEdit_Lexeme}" 
+                          IsChecked="{Binding State.LexemeChecked}"  />
                 <ListBox x:Name="FindAllLexemeOptions"
                          Height="28"
                          Margin="4"
@@ -83,7 +98,9 @@
                     <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
                     <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
                 </ListBox>
-                <TextBlock Text="{helpers:Localization LexiconEdit_Or}" Visibility="{Binding State.LexemeAndFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                <TextBlock Text="{helpers:Localization LexiconEdit_Or}" 
+                           Style="{StaticResource Label}"
+                           Visibility="{Binding State.LexemeAndFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
                 <CheckBox x:Name="FormsCheckBox" cm:Message.Attach="[Event Checked] = [Action OnFormsChecked($source)]" Content="{helpers:Localization LexiconEdit_Forms}" IsChecked="{Binding State.FormsChecked}"  />
                 <ListBox x:Name="FormsOptions"
                          Height="28"
@@ -97,13 +114,18 @@
                     <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
                     <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
                 </ListBox>
-                <TextBlock Text="{helpers:Localization LexiconEdit_Matching}" Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                <!--<TextBlock Text="{helpers:Localization LexiconEdit_Matching}" 
+                           Style="{StaticResource Label}"
+                           Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>-->
                 <TextBox x:Name="FormsMatch"  
                          cm:Message.Attach="[Event TextChanged] = [Action OnFormsMatchChanged($source, $eventArgs)]" 
-                         Style="{StaticResource MaterialDesignTextBox}" 
+                         materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_Matching}"
+                         Style="{StaticResource HintTextBox}"
+                         Text="{Binding State.FormsMatch}"
                          Width="100" 
                          Height="30"
                          Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+
                 <ListBox x:Name="PredicateOptions"
                          Height="28"
                          Margin="4"
@@ -117,22 +139,74 @@
                     <ListBoxItem Content="{helpers:Localization LexiconEdit_Or}" Tag="{x:Static lexicon:LexiconEditTags.Or}" />
                 </ListBox>
                 <CheckBox x:Name="TranslationCheckBox"  cm:Message.Attach="[Event Checked] = [Action OnTranslationChecked($source)]" Content="{helpers:Localization LexiconEdit_Translation}" IsChecked="{Binding State.TranslationChecked}"  />
-                <TextBlock Text="{helpers:Localization LexiconEdit_FullyMatching}" 
-                           Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                <!--<TextBlock Text="{helpers:Localization LexiconEdit_FullyMatching}" 
+                           Style="{StaticResource Label}"
+                           Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>-->
                 <TextBox x:Name="TranslationMatch"  cm:Message.Attach="[Event TextChanged] = [Action OnTranslationMatchChanged($source, $eventArgs)]" 
-                         Style="{StaticResource MaterialDesignTextBox}" 
+                         materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_FullyMatching}"
+                        Text ="{Binding State.TranslationMatch}"
+                         Style="{StaticResource HintTextBox}"
                          Width="100" 
                          Height="30"
                          Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
 
-            </StackPanel>
-           
-        </Grid>
+            </WrapPanel>
 
+        </Grid>
+        <DataGrid
+             x:Name="LexiconEdit"
+             Grid.Row="1"
+             Grid.Column="0"
+             Margin="4"
+             HorizontalAlignment="Stretch"
+             AutoGenerateColumns="False"
+             IsReadOnly="True"
+             ItemsSource="{Binding FilteredLexemes}"
+             ScrollViewer.CanContentScroll="True"
+             ScrollViewer.VerticalScrollBarVisibility="Visible"
+             SelectionMode="Single"
+             SelectionUnit="FullRow"
+             VirtualizingPanel.IsVirtualizing="True"
+             VirtualizingPanel.IsVirtualizingWhenGrouping="False"
+             VirtualizingPanel.VirtualizationMode="Standard">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                          
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="EditRow" Content="{helpers:Localization LexiconEdit_Edit}"></Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn
+             Width="100"
+             Binding="{Binding Type}"
+             Header="{helpers:Localization BulkAlignmentReview_Type}" />
+                <DataGridTextColumn
+             Width="125"
+             Binding="{Binding SourceRef}"
+             Header="{helpers:Localization BulkAlignmentReview_SourceRef}" />
+
+                <DataGridTemplateColumn Width="75" Header="{helpers:Localization Bcv_Sync}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                         cm:Message.Attach="[Event Click] = [Action OnSyncButtonClicked($dataContext)]"
+                         Content="{iconPacks:PicolIcons Kind=Synchronize}"
+                         Style="{StaticResource SmallTransparentStyle}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 
 
         <StackPanel
-            Grid.Row="6"
+            Grid.Row="2"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Button
@@ -153,7 +227,7 @@
                 Style="{StaticResource TransparentStyle}" />
         </StackPanel>
         <ProgressBar
-            Grid.Row="2"
+            Grid.Row="1"
             Grid.RowSpan="3"
             Width="76"
             Height="75"
