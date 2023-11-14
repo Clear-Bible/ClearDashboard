@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Lexeme = ClearDashboard.DAL.Alignment.Lexicon.Lexeme;
@@ -516,57 +517,69 @@ namespace ClearDashboard.Wpf.Application.Services
                     ManagedLexicon = await GetExternalLexiconMergedIntoInternal(externalLexicon, cancellationToken);
                     ManagedLexemes = new ObservableCollection<Lexeme>(ManagedLexicon.Lexemes);
 
-                foreach (var lexeme in ManagedLexemes)
-                {
-                    foreach (var meaning in lexeme.Meanings)
+                    foreach (var lexeme in ManagedLexemes)
                     {
-                        foreach (var translation in meaning.Translations.Where(e => !e.IsInDatabase))
+                        foreach (var meaning in lexeme.Meanings)
                         {
-                            var translationMatch = ManagedLexicon.TranslationMatchTranslationIds.Contains(translation.TranslationId.Id);
-                            var lemmaOrFormMatch = ManagedLexicon.LemmaOrFormMatchTranslationIds.Contains(translation.TranslationId.Id);
-
-                            var vm = new LexiconImportViewModel
+                            foreach (var translation in meaning.Translations.Where(e => !e.IsInDatabase))
                             {
-                                LexemeId = lexeme.LexemeId.Id,
-                                SourceLanguage = lexeme.Language,
-                                SourceWord = lexeme.Lemma,
-                                SourceType = lexeme.Type,
-                                TargetLanguage = meaning.Language,
-                                TargetWord = translation.Text,
-                                IsSelected = !translationMatch && !lemmaOrFormMatch,
-                                ShowAddAsFormButton = translationMatch,
-                                ShowAddTargetAsTranslationButton = lemmaOrFormMatch
-                            };
-                            LexiconImportViewModels.Add(vm);
+                                var translationMatch =
+                                    ManagedLexicon.TranslationMatchTranslationIds.Contains(translation.TranslationId
+                                        .Id);
+                                var lemmaOrFormMatch =
+                                    ManagedLexicon.LemmaOrFormMatchTranslationIds.Contains(translation.TranslationId
+                                        .Id);
+
+                                var vm = new LexiconImportViewModel
+                                {
+                                    LexemeId = lexeme.LexemeId.Id,
+                                    SourceLanguage = lexeme.Language,
+                                    SourceWord = lexeme.Lemma,
+                                    SourceType = lexeme.Type,
+                                    TargetLanguage = meaning.Language,
+                                    TargetWord = translation.Text,
+                                    IsSelected = !translationMatch && !lemmaOrFormMatch,
+                                    ShowAddAsFormButton = translationMatch,
+                                    ShowAddTargetAsTranslationButton = lemmaOrFormMatch
+                                };
+                                LexiconImportViewModels.Add(vm);
+                            }
                         }
                     }
+
+                    // Some Lexeme "filter" examples:
+                    var eg1 = ManagedLexemes.FilterByLexemeAndTranslationText(
+                        "wur",
+                        true,
+                        "sur",
+                        "Word",
+                        "en",
+                        "him").ToList();
+                    var eg2 = ManagedLexemes.FilterByLexemeText("ɗi", false, null, null).ToList();
+                    var eg3 = ManagedLexemes
+                        .FilterByLexemeText(new string[] { "kɨ̀", "ɗiihai", "mishkagham" }, false, null, null).ToList();
+                    var eg4 = ManagedLexemes
+                        .FilterByLexemeText(new string[] { "kɨ̀", "ɗii", "wuri" }, true, null, "Word").ToList();
+                    var eg5 = ManagedLexemes.FilterByTranslationText("sur", "en", "another").ToList();
+
+                    // 
+                    var eg6 = ManagedLexemes
+                        .Where(LexiconExtensions.LexemeMatchPredicate("sur", "Word", null))
+                        .SelectMany(l => l.Meanings
+                            .Where(LexiconExtensions.MeaningMatchPredicate(null, "en", null))
+                            .SelectMany(m =>
+                                m.Translations.Where(LexiconExtensions.TranslationMatchPredicate("him", true))))
+                        .ToList();
                 }
 
-                // Some Lexeme "filter" examples:
-                var eg1 = ManagedLexemes.FilterByLexemeAndTranslationText(
-                    "wur",
-                    true,
-                    "sur",
-                    "Word",
-                    "en",
-                    "him").ToList();
-                var eg2 = ManagedLexemes.FilterByLexemeText("ɗi", false, null, null).ToList();
-                var eg3 = ManagedLexemes.FilterByLexemeText(new string[] { "kɨ̀", "ɗiihai", "mishkagham" }, false, null, null).ToList();
-                var eg4 = ManagedLexemes.FilterByLexemeText(new string[] { "kɨ̀", "ɗii", "wuri" }, true, null, "Word").ToList();
-                var eg5 = ManagedLexemes.FilterByTranslationText("sur", "en", "another").ToList();
-
-                // 
-                var eg6 = ManagedLexemes
-                    .Where(LexiconExtensions.LexemeMatchPredicate("sur", "Word", null))
-                    .SelectMany(l => l.Meanings
-                        .Where(LexiconExtensions.MeaningMatchPredicate(null, "en", null))
-                        .SelectMany(m => m.Translations.Where(LexiconExtensions.TranslationMatchPredicate("him", true))))
-                    .ToList();
+                // AnyPartialMatch example:
+                //var matchStrings = new string[] { "lemma1", "form1", "form2" };
+                //lexemes.Where(e => matchStrings.AnyPartialMatch(e.LemmaPlusFormTexts)).Select(e => ...);
             }
-
-            // AnyPartialMatch example:
-            //var matchStrings = new string[] { "lemma1", "form1", "form2" };
-            //lexemes.Where(e => matchStrings.AnyPartialMatch(e.LemmaPlusFormTexts)).Select(e => ...);
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.ToString());
+            }
 
             return LexiconImportViewModels;
         }
