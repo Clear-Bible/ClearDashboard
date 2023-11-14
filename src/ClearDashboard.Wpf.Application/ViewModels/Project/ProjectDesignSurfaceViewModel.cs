@@ -250,6 +250,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await DrawDesignSurface();
 
             _busyState.CollectionChanged += BusyStateOnCollectionChanged;
+
+
+            if(ProjectManager.IsParatextConnected)
+            {
+                AddParatextButtonEnabled = true;
+            }
+
         }
 
         private void BusyStateOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
