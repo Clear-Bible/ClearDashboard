@@ -856,6 +856,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenClicked(object sender, TokenEventArgs e)
         {
+
+        }
+
+        public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
+        {
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
                 if (SelectionManager.AnySourceTokens && SelectionManager.AnyTargetTokens)
@@ -869,7 +874,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     Logger!.LogInformation("There are no source tokens, so skipping the call to add an alignment.");
                 }
-                
+
             }
             else
             {
