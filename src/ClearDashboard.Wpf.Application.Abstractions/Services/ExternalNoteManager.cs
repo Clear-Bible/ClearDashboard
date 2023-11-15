@@ -350,9 +350,11 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public static async Task AddNewCommentToExternalNote(
+        public static async Task<bool> AddNewCommentToExternalNote(
             IMediator mediator, 
+            string externalProjectId,
             string externalNoteId, 
+            string verseRefString,
             string comment, 
             string assignToUserName, 
             ILogger? logger = null, 
@@ -365,7 +367,9 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var result = await mediator.Send(new AddNewCommentToExternalNoteCommand(new AddNewCommentToExternalNoteCommandParam()
                 {
+                    ExternalProjectId = externalProjectId,
                     ExternalNoteId = externalNoteId,
+                    VerseRefString = verseRefString,
                     Comment = comment,
                     AssignToUserName = assignToUserName
                 }), cancellationToken);
@@ -374,6 +378,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 if (result.Success)
                 {
                     logger?.LogInformation($"Sent new comment for external note id {externalNoteId} to external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
+                    return true;
                 }
                 else
                 {

@@ -47,25 +47,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set => Set(ref _externalNotes, value);
         }
 
-
-        private string _comment;
-
-        public string Comment
-        {
-            get => _comment;
-            set => _comment = value;
-        }
-
+        // ReSharper disable once MemberCanBePrivate.Global
+        public string ReplyText { get; set; } = string.Empty;
 
         #endregion //Observable Properties
 
 
         #region Constructor
 
+        // ReSharper disable once UnusedMember.Global
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public ExternalNoteViewModel()
         {
             //no-op
         }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 
         public ExternalNoteViewModel(INavigationService navigationService, 
             ILogger<AboutViewModel> logger,
@@ -73,8 +70,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             IEventAggregator eventAggregator, 
             IMediator mediator, 
             ILifetimeScope? lifetimeScope, 
-            ILocalizationService localizationService,
-            NoteManager? noteManager = null)
+            ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _logger = logger;
@@ -127,7 +123,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             var inlines = new ObservableCollection<Inline>();
 
-            var firstPart = externalNote.VersePlainText.Substring(0, (int)externalNote.IndexOfSelectedPlainTextInVersePainText);
+            var firstPart = externalNote.VersePlainText.Substring(0, (int)externalNote.IndexOfSelectedPlainTextInVersePainText!);
             var secondPart = externalNote.VersePlainText.Substring((int)externalNote.IndexOfSelectedPlainTextInVersePainText + externalNote.SelectedPlainText.Length);
 
 
@@ -149,13 +145,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var str = XElement.Parse(xmlString);
 
             // get the value of the AssignedUserName element
-            var assignedUser = str.Element("Body").Element("AssignedUserName").Value;
+            var assignedUser = str.Element("Body")!.Element("AssignedUserName")!.Value;
             if (string.IsNullOrEmpty(assignedUser))
             {
                 assignedUser = "Unassigned";
             }
 
-            var isResolved = str.Element("Body").Element("IsResolved").Value;
+            var isResolved = str.Element("Body")!.Element("IsResolved")!.Value;
+            // ReSharper disable once ReplaceWithSingleAssignment.False
             bool isResolvedBool = false;
             if (isResolved == "true")
             {
@@ -163,7 +160,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             // get all the body comments
-            var comments = str.Element("Body").Element("Comments").Elements("BodyComment").ToList();
+            var comments = str.Element("Body")!.Element("Comments")!.Elements("BodyComment").ToList();
 
             List<BodyComment> bodyComments = new List<BodyComment>();
             foreach (var element in comments)
@@ -183,10 +180,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// </summary>
         public async void Ok()
         {
-            if (string.IsNullOrEmpty(Comment) == false)
+            if (string.IsNullOrEmpty(ReplyText) == false)
             {
-                await ExternalNoteManager.AddNewCommentToExternalNote(_mediator,
-                    ExternalNotes.Select(x => x.ExternalNoteId).FirstOrDefault(), Comment, "assignToUserName", _logger);
+                var result = await ExternalNoteManager.AddNewCommentToExternalNote(_mediator, _externalProjectId,
+                    _externalNoteId, _verseRef, ReplyText, "assignToUserName", _logger);
+
+                if (result)
+                {
+                    await EventAggregator.PublishOnUIThreadAsync(new RefreshExternalNotesMessage(_externalProjectId));
+
+                    await this.TryCloseAsync();
+                }
             }
         }
 
@@ -215,27 +219,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-
         #endregion // Methods
-
     }
 
 
     public class ExternalNoteExtended : ExternalNote, INotifyPropertyChanged
     {
-        private ObservableCollection<Inline> _inlines;
+        private ObservableCollection<Inline> _inlines = new();
         public ObservableCollection<Inline> Inlines
         {
             get => _inlines;
             set
             {
                 _inlines = value;
-                OnPropertyChanged(nameof(Inlines));
+                OnPropertyChanged();
             }
         }
 
-        public string AssignedUser { get; set; }
-        public List<BodyComment> BodyComments { get; set; }
+        public string AssignedUser { get; set; } = string.Empty;
+        public List<BodyComment> BodyComments { get; set; } = new();
         public bool IsResolved { get; set; }
 
 
@@ -247,24 +249,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
     }
 
 
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    [Serializable()]
+    [DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRoot(Namespace = "", IsNullable = false)]
     public partial class BodyComment
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public BodyComment(XElement element)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            Created = element.Element("Created").Value;
-            Language = element.Element("Language").Value;
-            Author = element.Element("Author").Value;
+            Created = element.Element("Created")!.Value;
+            Language = element.Element("Language")!.Value;
+            Author = element.Element("Author")!.Value;
 
-            var bodyStrings = element.Element("Paragraphs").Elements("string").ToList();
+            var bodyStrings = element.Element("Paragraphs")!.Elements("string").ToList();
 
             string body = "";
             foreach (var bodyString in bodyStrings)
             {
-                if (bodyString.Value != null)
+                if (bodyString.Value is not null)
                 {
                     body += bodyString.Value + Environment.NewLine;
                 }
@@ -284,11 +288,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private BodyCommentParagraphs paragraphsField;
 
-        private string createdField;
+        private string _createdField = string.Empty;
 
-        private string languageField;
+        private string _languageField = string.Empty;
 
-        private string authorField;
+        private string _authorField = string.Empty;
 
         /// <remarks/>
         public BodyCommentParagraphs Paragraphs
@@ -300,63 +304,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// <remarks/>
         public string Created
         {
-            get
-            {
-                return this.createdField;
-            }
-            set
-            {
-                this.createdField = value;
-            }
+            get => this._createdField;
+            set => this._createdField = value;
         }
 
         /// <remarks/>
         public string Language
         {
-            get
-            {
-                return this.languageField;
-            }
-            set
-            {
-                this.languageField = value;
-            }
+            get => this._languageField;
+            set => this._languageField = value;
         }
 
         /// <remarks/>
         public string Author
         {
-            get
-            {
-                return this.authorField;
-            }
-            set
-            {
-                this.authorField = value;
-            }
+            get => this._authorField;
+            set => this._authorField = value;
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [SerializableAttribute()]
+    [DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public partial class BodyCommentParagraphs
     {
-
-        private string stringField;
+        private string _stringField = string.Empty;
 
         /// <remarks/>
         public string @string
         {
-            get
-            {
-                return this.stringField;
-            }
-            set
-            {
-                this.stringField = value;
-            }
+            get => this._stringField;
+            set => this._stringField = value;
         }
     }
 

@@ -131,10 +131,15 @@
 
         <!--  ROW 3 REPLY  -->
         <TextBox
+            x:Name="ReplyText"
             Grid.Row="3"
+            MinHeight="50"
             Width="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='20'}"
-            Height="50"
-            Background="Bisque" />
+            Height="Auto"
+            Margin="5 10 5 5"
+            TextWrapping="Wrap"   
+            AcceptsReturn="True"
+            Background="LightGray" />
 
         <!--  ROW 4 RESOLVE  -->
         <Grid Grid.Row="4">
