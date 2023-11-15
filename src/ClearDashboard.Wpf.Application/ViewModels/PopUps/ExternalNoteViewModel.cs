@@ -1,18 +1,19 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
-using MahApps.Metro.Controls;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Documents;
-using System.Xml;
+using System.Windows.Media;
 using System.Xml.Linq;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
@@ -45,14 +46,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public ExternalNoteViewModel()
         {
-              //no-op
+            //no-op
         }
 
         public ExternalNoteViewModel(INavigationService navigationService, ILogger<AboutViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
-                
+
         }
 
         public void Initialize(BindableCollection<ExternalNote> externalNotes)
@@ -60,6 +61,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             foreach (var externalNote in externalNotes)
             {
                 var items = ExtractBody(externalNote.Body);
+
+                var inlines = GenerateVerseInlines(externalNote);
+
 
                 ExternalNotes.Add(new ExternalNoteExtended
                 {
@@ -74,11 +78,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     AssignedUser = items.Item1,
                     BodyComments = items.Item2,
                     IsResolved = items.Item3,
-                    Inlines = new List<Inline>()
+                    Inlines = inlines
                 });
             }
 
             NotifyOfPropertyChange(nameof(ExternalNotes));
+        }
+
+        private ObservableCollection<Inline> GenerateVerseInlines(ExternalNote externalNote)
+        {
+            var inlines = new ObservableCollection<Inline>();
+
+            var firstPart = externalNote.VersePlainText.Substring(0, (int)externalNote.IndexOfSelectedPlainTextInVersePainText);
+            var secondPart = externalNote.VersePlainText.Substring((int)externalNote.IndexOfSelectedPlainTextInVersePainText + externalNote.SelectedPlainText.Length);
+
+
+            inlines.Add(new Run(firstPart) { FontWeight = FontWeights.Normal, Foreground = Brushes.Gray });
+            inlines.Add(new Run(externalNote.SelectedPlainText) { FontWeight = FontWeights.Bold, Foreground = Brushes.Black });
+            inlines.Add(new Run(secondPart) { FontWeight = FontWeights.Normal, Foreground = Brushes.Gray });
+
+            return inlines;
         }
 
         #endregion //Constructor
@@ -92,6 +111,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             // get the value of the AssignedUserName element
             var assignedUser = str.Element("Body").Element("AssignedUserName").Value;
+            if (string.IsNullOrEmpty(assignedUser))
+            {
+                assignedUser = "Unassigned";
+            }
 
             var isResolved = str.Element("Body").Element("IsResolved").Value;
             bool isResolvedBool = false;
@@ -125,13 +148,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
     }
 
 
-    public class ExternalNoteExtended: ExternalNote
+    public class ExternalNoteExtended : ExternalNote, INotifyPropertyChanged
     {
-        public List<Inline> Inlines { get; set; }
+        private ObservableCollection<Inline> _inlines;
+        public ObservableCollection<Inline> Inlines
+        {
+            get => _inlines;
+            set
+            {
+                _inlines = value;
+                OnPropertyChanged(nameof(Inlines));
+            }
+        }
+
         public string AssignedUser { get; set; }
         public List<BodyComment> BodyComments { get; set; }
         public bool IsResolved { get; set; }
 
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
 

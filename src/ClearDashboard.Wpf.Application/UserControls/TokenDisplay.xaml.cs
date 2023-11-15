@@ -2166,10 +2166,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
 
             dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.NoResize;
             settings.MinWidth = 500;
             settings.MinHeight = 500;
+            settings.Height = 500;
+            settings.MaxWidth = 700;
+            settings.MaxHeight = 700;
             settings.Top = Mouse.GetPosition(this).Y + screenPoint.Y;
             settings.Left = Mouse.GetPosition(this).X + screenPoint.X;
 

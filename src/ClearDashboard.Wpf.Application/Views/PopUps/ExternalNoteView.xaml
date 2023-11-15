@@ -1,15 +1,17 @@
-﻿<UserControl
+﻿<Window
     x:Class="ClearDashboard.Wpf.Application.Views.PopUps.ExternalNoteView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
-    MaxWidth="600"
+    x:Name="UserControl"
     d:DataContext="{d:DesignInstance Type=popUps:ExternalNoteViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -30,90 +32,100 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
 
-        <!--  ROW 0  -->
-        <StackPanel
-            Grid.Row="0"
-            Margin="0,0,0,10"
-            Orientation="Horizontal">
+        <!--  ROW 0 FLAG/VERSE REF/ASSIGNED USER  -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
             <iconPacks:PackIconModern
                 Margin="5,0,0,0"
                 Foreground="Red"
                 Kind="Flag" />
             <TextBlock
+                Grid.Column="1"
                 Margin="15,0,0,0"
                 VerticalAlignment="Center"
                 Foreground="Blue"
                 Text="{Binding ExternalNotes[0].VerseRefString}" />
 
             <TextBlock
-                Margin="15,0,0,0"
+                Grid.Column="2"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Foreground="Gray">
                 <Run Text="&gt;(" />
                 <Run Text="{Binding ExternalNotes[0].AssignedUser}" />
                 <Run Text="}" />
             </TextBlock>
-        </StackPanel>
+        </Grid>
 
-        <!--  ROW 1  -->
-        <TextBlock Grid.Row="1" Text="{Binding ExternalNotes[0].Inlines}" />
+        <!--  ROW 1 VERSE  -->
+        <Border
+            Grid.Row="1"
+            MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='30'}"
+            Padding="5"
+            BorderBrush="Gray"
+            BorderThickness="1"
+            CornerRadius="3">
+
+            <helpers:BindableTextBlock
+                MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='20'}"
+                FontSize="18"
+                InlineList="{Binding ExternalNotes[0].Inlines}"
+                TextWrapping="Wrap" />
+        </Border>
+        <!--  ROW 1 COMMENTS  -->
 
 
-        <ListView
-            x:Name="InnerLV"
-            Grid.Row="2"
-            ItemsSource="{Binding ExternalNotes}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <!--  INNER LISTVIEW FOR MESSAGES  -->
-                    <ListView ItemsSource="{Binding BodyComments}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Vertical">
-                                    <StackPanel Orientation="Horizontal">
+        <ScrollViewer Grid.Row="2" MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='30'}">
+            <ListView
+                x:Name="InnerLV"
+                MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='30'}"
+                ItemsSource="{Binding ExternalNotes}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <!--  INNER LISTVIEW FOR MESSAGES  -->
+                        <ListView ItemsSource="{Binding BodyComments}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                Margin="0,0,15,0"
+                                                Foreground="SlateGray"
+                                                Text="{Binding Author}"
+                                                TextWrapping="Wrap" />
+                                            <TextBlock Foreground="SlateGray" Text="{Binding CreatedDateTime, StringFormat={}{0:yyyy-MM-dd  HH:mm}}" />
+                                        </StackPanel>
                                         <TextBlock
-                                            Margin="0,0,15,0"
-                                            Foreground="SlateGray"
-                                            Text="{Binding Author}" />
-                                        <TextBlock Foreground="SlateGray" Text="{Binding CreatedDateTime, StringFormat={}{0:yyyy-MM-dd  HH:mm}}" />
+                                            Width="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='70'}"
+                                            Margin="0,8,0,0"
+                                            FontSize="18"
+                                            FontWeight="DemiBold"
+                                            Text="{Binding Paragraphs.string}"
+                                            TextWrapping="Wrap" />
+                                        <Line
+                                            Margin="2"
+                                            Stroke="SlateGray"
+                                            StrokeThickness="1"
+                                            X1="0"
+                                            X2="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='50'}"
+                                            Y1="0"
+                                            Y2="0" />
+
                                     </StackPanel>
-                                    <TextBlock
-                                        Margin="0,8,0,10"
-                                        FontSize="18"
-                                        FontWeight="DemiBold"
-                                        Text="{Binding Paragraphs.string}" />
-                                    <Line
-                                        Margin="2"
-                                        Stroke="SlateGray"
-                                        StrokeThickness="1"
-                                        X1="0"
-                                        X2="{Binding ElementName=InnerLV, Path=ActualWidth}"
-                                        Y1="0"
-                                        Y2="0" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-
-        <!--<Label Content="{Binding VersePlainText}" />
-                        <Label Content="{Binding SelectedPlainText}" />
-                        <Label Content="{Binding IndexOfSelectedPlainTextInVersePainText}" />
-                        <Label Content="{Binding VerseRefString}" />
-                        <Label Content="{Binding Body}" />-->
-
-        <!--<controls:ExtendedPropertiesTreeView
-                            x:Name="ExternalNoteBodyTokenTreeViewName"
-                            ExtendedPropertiesXml="{Binding Body}"
-                            IsExpanded="False" />-->
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
     </Grid>
-</UserControl>
+</Window>

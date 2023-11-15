@@ -294,6 +294,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 if (notifyTokenViewModelExternalNotesItemsChanged)
                     tokenDisplayViewModel.NotifyExternalNotesItemsChanged();
+
+                // separate out the first tokenId of the note series
+                foreach (var note in noteInfos)
+                {
+                    var firstTokenId = note.tokenIds?.FirstOrDefault();
+
+                    if (firstTokenId != null && firstTokenId.IdEquals(tokenDisplayViewModel.Token.TokenId))
+                    {
+                        tokenDisplayViewModel.IsFirstExternalNoteToken = true;
+                    }
+                }
+                
+
             }
         }
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)

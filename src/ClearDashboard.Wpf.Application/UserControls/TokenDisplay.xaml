@@ -27,6 +27,7 @@
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <converters1:ValuesAdditionConverter x:Key="ValuesAddition" />
+            <converters1:MarginLeftConverter x:Key="MarginLeftConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -53,7 +54,7 @@
                 Foreground="Red"
                 Kind="Flag"
                 MouseDown="PackIconModern_MouseDown"
-                Visibility="{Binding HasExternalNotes, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding IsFirstExternalNoteToken, Converter={StaticResource BoolToVisibilityConverter}}">
                 <iconPacks:PackIconModern.ToolTip>
                     <ToolTip
                         Background="LightYellow"
@@ -68,10 +69,10 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
                                             <Label Content="{Binding Message}" />
-                                            <controls:ExtendedPropertiesTreeView
+                                            <!--<controls:ExtendedPropertiesTreeView
                                                 x:Name="ExternalNoteBodyTokenTreeViewName"
                                                 ExtendedPropertiesXml="{Binding Body}"
-                                                IsExpanded="False" />
+                                                IsExpanded="False" />-->
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -211,18 +212,21 @@
         <Grid>
             <!--  Rectangle for hit test on mouse over  -->
             <Rectangle
+                Grid.Row="0"
                 Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
-                Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
+                Height="5"
+                Margin="{Binding ElementName=TokenButton, Path=Margin.Left, Converter={StaticResource MarginLeftConverter}}"
                 HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
                 Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
-                IsHitTestVisible="True">
+                IsHitTestVisible="True"
+                MouseDown="PackIconModern_MouseDown">
+
                 <Rectangle.Style>
                     <Style TargetType="{x:Type Rectangle}">
                         <Setter Property="Opacity" Value="0.0" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasExternalNotes}" Value="True">
-                                <Setter Property="Opacity" Value="0" />
+                                <Setter Property="Opacity" Value="0.1" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -241,10 +245,10 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
                                             <Label Content="{Binding Message}" />
-                                            <controls:ExtendedPropertiesTreeView
+                                            <!--<controls:ExtendedPropertiesTreeView
                                                 x:Name="ExternalNoteBodyTokenTreeViewName"
                                                 ExtendedPropertiesXml="{Binding Body}"
-                                                IsExpanded="False" />
+                                                IsExpanded="False" />-->
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -257,15 +261,25 @@
             <!--  Dashed Line for Paratext note indicator  -->
             <Line
                 x:Name="ExternalNoteLine"
+                Grid.Row="0"
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
                 IsHitTestVisible="False"
                 Stroke="Red"
                 StrokeDashArray="0.75 0.75"
                 StrokeThickness="2"
-                Visibility="{Binding HasExternalNotes, Converter={StaticResource BoolToVisibilityConverter}}"
                 X1="{Binding ElementName=TokenButton, Path=Margin.Left}"
                 Y1="0"
                 Y2="0">
+                <Line.Style>
+                    <Style TargetType="{x:Type Line}">
+                        <Setter Property="Opacity" Value="0.0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasExternalNotes}" Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Line.Style>
                 <Line.X2>
                     <MultiBinding Converter="{StaticResource ValuesAddition}">
                         <Binding ElementName="TokenButton" Path="Margin.Left" />

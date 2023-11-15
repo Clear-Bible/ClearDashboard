@@ -357,6 +357,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public bool HasExternalNotes => ExternalNotes.Count() > 0;
 
 
+        private bool _isFirstExternalNoteToken;
+        public bool IsFirstExternalNoteToken
+        {
+            get => _isFirstExternalNoteToken;
+            set 
+            { 
+                _isFirstExternalNoteToken = value;
+                NotifyOfPropertyChange(nameof(IsFirstExternalNoteToken));
+            }
+        }
+
+
+
+
+
         public void OnToolTipOpening(ToolTipEventArgs e)
         {
             if (!IsHighlighted && string.IsNullOrWhiteSpace(ExtendedProperties))
