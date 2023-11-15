@@ -81,12 +81,14 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 ProjectMetadata = projectMetadata;
                 Tokenizer = tokenizer;
                 BookIds = bookIds;
+                AlreadyTokenized = alreadyTokenized;
             }
 
             public ParatextProjectMetadata ProjectMetadata { get; init; }
             public Tokenizers Tokenizer { get; init; }
             public IEnumerable<string> BookIds { get; init; }
             public override string CorpusName => ProjectMetadata.Name!;
+            public bool AlreadyTokenized { get; init; }
         }
 
         private record ParallelCorpusBackgroundTask : BackgroundTask
@@ -404,7 +406,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                         endOfSequenceTasks.Add(task.TaskName, corpusTasksByName[task.TaskName]);
                         break;
                     case ParatextProjectCorpusBackgroundTask task:
-                        corpusTasksByName.Add(task.TaskName, RunBackgroundAddParatextProjectCorpusAsync(task.TaskName, task.ProjectMetadata, task.Tokenizer, task.BookIds));
+                        //if(!task.AlreadyTokenized)
+                        corpusTasksByName.Add(task.TaskName, RunBackgroundAddParatextProjectCorpusAsync(task.TaskName, task.ProjectMetadata, task.Tokenizer, task.BookIds, task.AlreadyTokenized));
                         endOfSequenceTasks.Add(task.TaskName, corpusTasksByName[task.TaskName]);
                         break;
                     case ParallelCorpusBackgroundTask task:
@@ -784,7 +787,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             return tokenizedTextCorpus;
         }
 
-        public async Task<TokenizedTextCorpus> RunBackgroundAddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds)
+        public async Task<TokenizedTextCorpus> RunBackgroundAddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds, bool alreadyTokenized)
         {
             if (!bookIds.Any())
             {
@@ -792,11 +795,11 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             }
 
             return await RunBackgroundLongRunningTaskAsync(
-                (string taskName, CancellationToken cancellationToken) => AddParatextProjectCorpusAsync(taskName, metadata, tokenizer, bookIds, cancellationToken),
+                (string taskName, CancellationToken cancellationToken) => AddParatextProjectCorpusAsync(taskName, metadata, tokenizer, bookIds, cancellationToken, alreadyTokenized),
                 taskName);
         }
 
-        public async Task<TokenizedTextCorpus> AddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds, CancellationToken cancellationToken)
+        public async Task<TokenizedTextCorpus> AddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds, CancellationToken cancellationToken, bool alreadyTokenized = false)
         {
             Logger!.LogInformation($"{nameof(AddParatextProjectCorpusAsync)} '{metadata.Name}' called.");
 
@@ -804,69 +807,77 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.ParatextGuid == metadata.Id);
             var corpus = corpusId != null ? await Corpus.Get(Mediator, corpusId) : null;
 
-            // first time for this corpus
-            if (corpus is null)
+            if (alreadyTokenized)
             {
+                var tokenizedTextCorpusId = topLevelProjectIds.TokenizedTextCorpusIds.FirstOrDefault(c => c.CorpusId == corpusId);
+                return await TokenizedTextCorpus.Get(Mediator, tokenizedTextCorpusId);
+            }
+            else
+            {
+                // first time for this corpus
+                if (corpus is null)
+                {
+                    await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                        description: $"Creating corpus '{metadata.Name}'.", cancellationToken: cancellationToken,
+                        backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
+
+                    corpus = await Corpus.Create(
+                        mediator: Mediator,
+                        IsRtl: metadata.IsRtl,
+                        FontFamily: metadata.FontFamily,
+                        Name: metadata.Name!,
+                        Language: metadata.LanguageId!,
+                        CorpusType: metadata.CorpusTypeDisplay,
+                        ParatextId: metadata.Id!,
+                        token: cancellationToken);
+
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    corpus.CorpusId.FontFamily = metadata.FontFamily;
+                }
+
                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                    description: $"Creating corpus '{metadata.Name}'.", cancellationToken: cancellationToken,
+                    description: $"Tokenizing and transforming '{metadata.Name}' corpus.", cancellationToken: cancellationToken,
                     backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
-                corpus = await Corpus.Create(
-                    mediator: Mediator,
-                    IsRtl: metadata.IsRtl,
-                    FontFamily: metadata.FontFamily,
-                    Name: metadata.Name!,
-                    Language: metadata.LanguageId!,
-                    CorpusType: metadata.CorpusTypeDisplay,
-                    ParatextId: metadata.Id!,
-                    token: cancellationToken);
+                var textCorpus = tokenizer switch
+                {
+                    Tokenizers.LatinWordTokenizer =>
+                        (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
+                        .Tokenize<LatinWordTokenizer>()
+                        .Transform<IntoTokensTextRowProcessor>()
+                        .Transform<SetTrainingBySurfaceLowercase>(),
+                    Tokenizers.WhitespaceTokenizer =>
+                        (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
+                        .Tokenize<WhitespaceTokenizer>()
+                        .Transform<IntoTokensTextRowProcessor>()
+                        .Transform<SetTrainingBySurfaceLowercase>(),
+                    Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
+                        .Tokenize<ZwspWordTokenizer>()
+                        .Transform<IntoTokensTextRowProcessor>()
+                        .Transform<SetTrainingBySurfaceLowercase>(),
+                    _ => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, null, cancellationToken))
+                        .Tokenize<WhitespaceTokenizer>()
+                        .Transform<IntoTokensTextRowProcessor>()
+                        .Transform<SetTrainingBySurfaceLowercase>()
+                };
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                corpus.CorpusId.FontFamily = metadata.FontFamily;
+                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                    description: $"Creating tokenized text corpus for '{metadata.Name}' corpus.",
+                    cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
+
+                // ReSharper disable once UnusedVariable
+                var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
+                    metadata.Name!, tokenizer.ToString(), metadata.ScrVers, cancellationToken);
+
+                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                    description: $"Completed creation of tokenized text corpus for '{metadata.Name}' corpus.",
+                    cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
+
+                return tokenizedTextCorpus;
             }
-
-            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Tokenizing and transforming '{metadata.Name}' corpus.", cancellationToken: cancellationToken,
-                backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
-
-            var textCorpus = tokenizer switch
-            {
-                Tokenizers.LatinWordTokenizer =>
-                    (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
-                    .Tokenize<LatinWordTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>(),
-                Tokenizers.WhitespaceTokenizer =>
-                    (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
-                    .Tokenize<WhitespaceTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>(),
-                Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
-                    .Tokenize<ZwspWordTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>(),
-                _ => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, null, cancellationToken))
-                    .Tokenize<WhitespaceTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>()
-            };
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Creating tokenized text corpus for '{metadata.Name}' corpus.",
-                cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
-
-            // ReSharper disable once UnusedVariable
-            var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                metadata.Name!, tokenizer.ToString(), metadata.ScrVers, cancellationToken);
-
-            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                description: $"Completed creation of tokenized text corpus for '{metadata.Name}' corpus.",
-                cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
-
-            return tokenizedTextCorpus;
         }
 
         public async Task<ParallelCorpus> AddParallelCorpusAsync(string taskName, string parallelCorpusDisplayName, TokenizedTextCorpusId sourceTokenizedTextCorpusId, TokenizedTextCorpusId targetTokenizedTextCorpusId, CancellationToken cancellationToken)

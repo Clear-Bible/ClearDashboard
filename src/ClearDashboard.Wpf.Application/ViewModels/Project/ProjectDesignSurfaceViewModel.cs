@@ -62,6 +62,7 @@ using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using SIL.Extensions;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.Wpf.Application.Collections;
 
 
 // ReSharper disable once CheckNamespace
@@ -1409,23 +1410,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                                 var targetProjectMetadata = new ParatextProjectMetadata()
                                 {
-                                    Name = connection.SourceConnector.Name,
+                                    Name = connection.SourceConnector.ParentNode.Name,
                                     Id=connection.SourceConnector.ParatextId
                                 };
 
                                 var sourceTaskName = _projectTemplateProcessRunner.RegisterParatextProjectCorpusTask(
                                     targetProjectMetadata, Tokenizers.LatinWordTokenizer,
-                                    allBookIds);
+                                    allBookIds,
+                                    null, true);
 
                                 var sourceProjectMetadata = new ParatextProjectMetadata()
                                 {
-                                    Name = connection.DestinationConnector.Name,
+                                    Name = connection.DestinationConnector.ParentNode.Name,
                                     Id=connection.DestinationConnector.ParatextId
                                 };
 
                                 var targetTaskName = _projectTemplateProcessRunner.RegisterParatextProjectCorpusTask(
                                     sourceProjectMetadata, Tokenizers.LatinWordTokenizer,
-                                    allBookIds);
+                                    allBookIds,
+                                    null, true);
 
                                 //Should we make one new alignment or as many new alignments as old alignments?
                                 _ = _projectTemplateProcessRunner.RegisterParallelizationTasks(
@@ -1440,7 +1443,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 // get all the existing alignment sets for this parallelCorpusId
                                 var alignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
                                         Mediator!,
-                                        connection.ParallelCorpusId,
+                                        null,
+                                        //connection.ParallelCorpusId,
                                 new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!)))
                                     .ToList();
 
@@ -1456,26 +1460,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 foreach (var oldAlignmentId in oldAlignmentIds)
                                 {
                                     OldAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, oldParallelTextRows, oldAlignmentId);
-                                    
+
+                                    var cloneForLoop = CloneAlignmentCollection(OldAlignmentManager.Alignments);
+
                                     if (OldAlignmentManager.Alignments != null)
-                                        foreach (var oldAlignment in OldAlignmentManager.Alignments)
+                                        foreach (var oldAlignment in cloneForLoop)
                                         {
                                             if (oldAlignment.OriginatedFrom == "FromAlignmentModel")
                                             {
-                                                if (NewAlignmentManager != null)
-                                                {
-                                                    var newAlignment = NewAlignmentManager.Alignments?.FindAlignmentByTokenId(oldAlignment.AlignedTokenPair.SourceToken.TokenId.Id);
+                                                var newAlignment = NewAlignmentManager.Alignments?.FindAlignmentByTokenId(oldAlignment.AlignedTokenPair.SourceToken.TokenId.Id);
                                                     
-                                                    await OldAlignmentManager.DeleteAlignment(new TokenDisplayViewModel(oldAlignment.AlignedTokenPair.SourceToken), true);
-                                                    //await OldAlignmentManager.AlignmentSet.DeleteAlignment(oldAlignment.AlignmentId);
+                                                await OldAlignmentManager.DeleteAlignment(new TokenDisplayViewModel(oldAlignment.AlignedTokenPair.SourceToken), true);
+                                                //await OldAlignmentManager.AlignmentSet.DeleteAlignment(oldAlignment.AlignmentId);
 
-                                                    if (newAlignment != null)
-                                                        await OldAlignmentManager.AlignmentSet?.PutAlignment(newAlignment)!;
-                                                }
+                                                if (newAlignment != null)
+                                                    await OldAlignmentManager.AlignmentSet?.PutAlignment(newAlignment)!;
                                             }
                                         }
                                 }
-                                //await AddParallelCorpus(connection);
                             }
                             //NewAlignmentManager.Alignments;
                             //topLevelProjectIds2.AlignmentSetIds.FirstOrDefault(x => x.ParallelCorpusId == connection.ParallelCorpusId);
@@ -1548,6 +1550,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await SaveDesignSurfaceData();
             }
+        }
+
+        public AlignmentCollection CloneAlignmentCollection(AlignmentCollection original)
+        {
+            AlignmentCollection copy = new();
+
+            foreach (var item in original)
+            {
+                copy.Add(item);
+            }
+
+            return copy;
         }
 
         private static ITokenizer<string, int, string> InstantiateTokenizer(Tokenizers tokenizerEnum)
