@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using CefSharp.DevTools.Network;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Collaboration.Util;
@@ -524,6 +525,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 
             await GetRemoteUser();
 
+            await LicenseManager.DeleteOldLicense();
+
             base.OnViewLoaded(view);
 
             _initializationComplete = true;
@@ -667,7 +670,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger!.LogDebug($"FinishAccountSetup: dashboard GitLabUserId: {dashboardUser.GitLabUserId} ParatextUserName: {dashboardUser.ParatextUserName}");
             }
 
-
             CollaborationUser collaborationUser = null;
             bool dashboardUserChanged = false;
             bool collaborationUserSet = false;
@@ -742,7 +744,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 Logger!.LogDebug("FinishAccountSetup: collaborationUser is null");
                 collaborationUser = await _collaborationHttpClientServices.GetCollabUserExistsById(dashboardUser.GitLabUserId);
-                Logger!.LogDebug($"FinishAccountSetup:  collaborationUser is null result: {collaborationUser.UserId} {collaborationUser.RemoteUserName}");
+                Logger!.LogDebug($"FinishAccountSetup:  collaborationUser is null result: {collaborationUser.UserId} {collaborationUser.RemoteUserName}");                
             }
 
 
@@ -1168,10 +1170,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            if (CheckIfConnectedToParatext() == false)
-            {
-                return;
-            }
+            //if (CheckIfConnectedToParatext() == false)
+            //{
+            //    return;
+            //}
 
             if (ProjectLoadingProgressBarVisibility == Visibility.Visible)
             {
@@ -1478,6 +1480,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             Connected = message.Connected;
+
+            Connected = true;
 
             await Task.CompletedTask;
         }

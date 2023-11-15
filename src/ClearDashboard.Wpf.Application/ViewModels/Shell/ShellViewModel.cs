@@ -218,8 +218,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             set => Set(ref _gitLabUpdateNeeded, value);
         }
 
+        private bool _loadingApplication;
 
 
+        public bool LoadingApplication
+        {
+            get => _loadingApplication;
+            set
+            {
+                Set(ref _loadingApplication, value);
+                //SetLanguage();
+            }
+        }
+
+        private double _popupHorizontalOffset;
+        public double PopupHorizontalOffset
+        {
+            get => _popupHorizontalOffset;
+            set => Set(ref _popupHorizontalOffset, value);
+        }
 
         #endregion
 
@@ -325,30 +342,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
 
+        //protected override void OnUIThread(Action action)
+        //{
+        //    SetLanguage();
+        //}
 
-        private bool _loadingApplication;
 
 
-        public bool LoadingApplication
-        {
-            get => _loadingApplication;
-            set
-            {
-                Set(ref _loadingApplication, value);
-                //SetLanguage();
-            }
-        }
 
-        private void NavigationServiceOnNavigated(object sender, NavigationEventArgs e)
-        {
-            //SetLanguage();
-            var uri = e.Uri;
+        #endregion
 
-            if (uri.OriginalString.Contains("MainView.xaml"))
-            {
-                LoadingApplication = false;
-            }
-        }
+        #region Caliburn.Micro overrides
 
         protected override void OnViewReady(object view)
         {
@@ -376,7 +380,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             _timer.AutoReset = true;
         }
 
-        private void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        private async void OnTimedEvent(object? sender, ElapsedEventArgs e)
         {
             if (ProjectManager!.CurrentProject is null)
             {
@@ -387,37 +391,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             ProjectManager.CurrentDashboardProject.GitLabUpdateNeeded = changeNeeded;
             GitLabUpdateNeeded = changeNeeded;
+            if (changeNeeded)
+            {
+                await EventAggregator.PublishOnBackgroundThreadAsync(new RebuildMainMenuMessage());
+            }
         }
 
-        private double _popupHorizontalOffset;
-        public double PopupHorizontalOffset
-        {
-            get => _popupHorizontalOffset;
-            set => Set(ref _popupHorizontalOffset, value);
-        }
 
-        private void DeterminePopupHorizontalOffset(Visual view)
-        {
-            var source = PresentationSource.FromVisual(view);
-
-            PopupHorizontalOffset = 5;
-
-            //var scalingFactor = GetWindowsScreenScalingFactor(false);
-            //PopupHorizontalOffset = scalingFactor * 5;
-
-            //var verticalFactor = source.CompositionTarget.TransformToDevice.M11;
-            //var horizontalFactor = source.CompositionTarget.TransformToDevice.M22;
-            //PopupHorizontalOffset = horizontalFactor switch
-            //{
-            //    < 1.25 => 5,
-            //    >= 1.25 => 270,
-            //    _ => 5
-            //};
-
-            //Logger!.LogInformation($"VerticalFactor is {verticalFactor}");
-            //Logger!.LogInformation($"HorizontalFactor is {horizontalFactor}");
-            Logger!.LogInformation($"Setting PopupHorizontalOffset to {PopupHorizontalOffset}");
-        }
 
         //private static double GetWindowsScreenScalingFactor(bool percentage = true)
         //{
@@ -456,7 +436,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             await base.OnActivateAsync(cancellationToken);
         }
 
-        
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            NavigationService!.Navigated -= NavigationServiceOnNavigated;
+            Logger!.LogInformation($"{nameof(ShellViewModel)} is deactivating.");
+
+            // HACK:  Force the MainViewModel singleton to properly deactivate
+            var mainViewModel = IoC.Get<MainViewModel>();
+            await mainViewModel!.DeactivateAsync(true);
+
+            // deactivate the BackgroundTaskViewModel
+            await BackgroundTasksViewModel.DeactivateAsync(true);
+
+            await base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        #endregion
+
+        #region Methods
+
         private void InitializeProjectManager()
         {
             // delay long enough for the application to be rendered before 
@@ -478,36 +476,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             dispatcherTimer.Start();
         }
 
-        //protected override void OnUIThread(Action action)
-        //{
-        //    SetLanguage();
-        //}
-
-
-
-
-        #endregion
-
-        #region Caliburn.Micro overrides
-
-        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        private void DeterminePopupHorizontalOffset(Visual view)
         {
-            NavigationService!.Navigated -= NavigationServiceOnNavigated;
-            Logger!.LogInformation($"{nameof(ShellViewModel)} is deactivating.");
+            var source = PresentationSource.FromVisual(view);
 
-            // HACK:  Force the MainViewModel singleton to properly deactivate
-            var mainViewModel = IoC.Get<MainViewModel>();
-            await mainViewModel!.DeactivateAsync(true);
+            PopupHorizontalOffset = 5;
 
-            // deactivate the BackgroundTaskViewModel
-            await BackgroundTasksViewModel.DeactivateAsync(true);
+            //var scalingFactor = GetWindowsScreenScalingFactor(false);
+            //PopupHorizontalOffset = scalingFactor * 5;
 
-            await base.OnDeactivateAsync(close, cancellationToken);
+            //var verticalFactor = source.CompositionTarget.TransformToDevice.M11;
+            //var horizontalFactor = source.CompositionTarget.TransformToDevice.M22;
+            //PopupHorizontalOffset = horizontalFactor switch
+            //{
+            //    < 1.25 => 5,
+            //    >= 1.25 => 270,
+            //    _ => 5
+            //};
+
+            //Logger!.LogInformation($"VerticalFactor is {verticalFactor}");
+            //Logger!.LogInformation($"HorizontalFactor is {horizontalFactor}");
+            Logger!.LogInformation($"Setting PopupHorizontalOffset to {PopupHorizontalOffset}");
         }
 
-        #endregion
+        private void NavigationServiceOnNavigated(object sender, NavigationEventArgs e)
+        {
+            //SetLanguage();
+            var uri = e.Uri;
 
-        #region Methods
+            if (uri.OriginalString.Contains("MainView.xaml"))
+            {
+                LoadingApplication = false;
+            }
+        }
+
 
         /// <summary>
         /// Button click for the background tasks on the status bar
@@ -656,8 +658,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             return Task.CompletedTask;
         }
 
-        #endregion
-
         public Task HandleAsync(DashboardProjectPermissionLevelMessage message, CancellationToken cancellationToken)
         {
             ProjectManager.CurrentDashboardProject.PermissionLevel = message.PermissionLevel;
@@ -665,5 +665,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             PermissionLevel = message.PermissionLevel;
             return Task.CompletedTask;
         }
+
+        #endregion
     }
 }
