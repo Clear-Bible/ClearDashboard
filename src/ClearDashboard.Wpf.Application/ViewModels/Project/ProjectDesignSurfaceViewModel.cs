@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel,
         IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>,
-        IHandle<RedrawCorpusNodeMenus>, IHandle<ProjectLoadedMessage>
+        IHandle<RedrawCorpusNodeMenus>, IHandle<ProjectLoadedMessage>, IHandle<RefreshExternalNotesMessage>
     {
         #region Member Variables
 
@@ -1178,6 +1178,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await SaveDesignSurfaceData();
             }
         }
+
+
         public void GetLatestExternalNotes(string externalProjectId)
         {
             try
@@ -1966,5 +1968,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion
 
 
+        public Task HandleAsync(RefreshExternalNotesMessage message, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(message.ParatextProjectId) == false)
+            {
+                GetLatestExternalNotes(message.ParatextProjectId);
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }

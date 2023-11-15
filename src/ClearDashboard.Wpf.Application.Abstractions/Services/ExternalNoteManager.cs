@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
@@ -387,9 +388,11 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public static async Task ResolveExternalNote(
+        public static async Task<bool> ResolveExternalNote(
             IMediator mediator,
+            string externalProjectId,
             string externalNoteId,
+            string verseRefString,
             ILogger? logger = null,
             CancellationToken cancellationToken = default)
         {
@@ -400,13 +403,17 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var result = await mediator.Send(new ResolveExternalNoteCommand(new ResolveExternalNoteCommandParam()
                 {
-                    ExternalNoteId = externalNoteId
+                    ExternalProjectId = externalProjectId,
+                    ExternalNoteId = externalNoteId,
+                    VerseRefString = verseRefString
                 }), cancellationToken);
 
                 stopwatch.Stop();
                 if (result.Success)
                 {
                     logger?.LogInformation($"Marked external note id {externalNoteId} resolved in external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
+
+                    return true;
                 }
                 else
                 {

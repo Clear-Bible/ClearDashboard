@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class ExternalNoteViewModel : DashboardApplicationScreen
     {
+        private readonly ILogger<AboutViewModel> _logger;
+        private readonly IMediator _mediator;
+
         #region Member Variables   
+
+        private string _externalProjectId;
+        private string _externalNoteId;
+        private string _verseRef;
 
         #endregion //Member Variables
 
@@ -39,6 +47,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set => Set(ref _externalNotes, value);
         }
 
+
+        private string _comment;
+
+        public string Comment
+        {
+            get => _comment;
+            set => _comment = value;
+        }
+
+
         #endregion //Observable Properties
 
 
@@ -49,11 +67,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             //no-op
         }
 
-        public ExternalNoteViewModel(INavigationService navigationService, ILogger<AboutViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+        public ExternalNoteViewModel(INavigationService navigationService, 
+            ILogger<AboutViewModel> logger,
+            DashboardProjectManager? projectManager, 
+            IEventAggregator eventAggregator, 
+            IMediator mediator, 
+            ILifetimeScope? lifetimeScope, 
+            ILocalizationService localizationService,
+            NoteManager? noteManager = null)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
-
+            _logger = logger;
+            _mediator = mediator;
         }
 
         public void Initialize(BindableCollection<ExternalNote> externalNotes)
@@ -64,6 +89,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 var inlines = GenerateVerseInlines(externalNote);
 
+                _externalNoteId = externalNote.ExternalNoteId;
+                _externalProjectId = externalNote.ExternalProjectId;
+                _verseRef = externalNote.VerseRefString;
 
                 ExternalNotes.Add(new ExternalNoteExtended
                 {
@@ -85,6 +113,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             NotifyOfPropertyChange(nameof(ExternalNotes));
         }
 
+        #endregion //Constructor
+
+
+        #region Methods
+
+        /// <summary>
+        /// do the verse context highlighting
+        /// </summary>
+        /// <param name="externalNote"></param>
+        /// <returns></returns>
         private ObservableCollection<Inline> GenerateVerseInlines(ExternalNote externalNote)
         {
             var inlines = new ObservableCollection<Inline>();
@@ -100,11 +138,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             return inlines;
         }
 
-        #endregion //Constructor
 
-
-        #region Methods
-
+        /// <summary>
+        /// Extracts components from the xml string
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
         private Tuple<string, List<BodyComment>, bool> ExtractBody(string xmlString)
         {
             var str = XElement.Parse(xmlString);
@@ -139,11 +178,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
 
+        /// <summary>
+        /// Saves the external note
+        /// </summary>
+        public async void Ok()
+        {
+            if (string.IsNullOrEmpty(Comment) == false)
+            {
+                await ExternalNoteManager.AddNewCommentToExternalNote(_mediator,
+                    ExternalNotes.Select(x => x.ExternalNoteId).FirstOrDefault(), Comment, "assignToUserName", _logger);
+            }
+        }
+
+
+        /// <summary>
+        /// Closes the dialog
+        /// </summary>
+        public async void Close()
+        {
+            await this.TryCloseAsync();
+        }
+
+
+        /// <summary>
+        /// Resolves the external note
+        /// </summary>
+        public async void Resolve()
+        {
+            var result = await ExternalNoteManager.ResolveExternalNote(_mediator, _externalProjectId, _externalNoteId, _verseRef, _logger);
+
+            if (result)
+            {
+                await EventAggregator.PublishOnUIThreadAsync(new RefreshExternalNotesMessage(_externalProjectId));
+
+                await this.TryCloseAsync();
+            }
+        }
+
+
         #endregion // Methods
-
-        #region IHandle
-
-        #endregion // IHandle
 
     }
 
