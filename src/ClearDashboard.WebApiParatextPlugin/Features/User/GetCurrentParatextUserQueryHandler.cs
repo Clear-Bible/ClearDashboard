@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 using ClearDashboard.WebApiParatextPlugin.Features.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.User
 {
