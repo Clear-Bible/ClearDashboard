@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Users;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
@@ -10,8 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -40,6 +44,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Observable Properties
 
+        private ObservableCollection<string> _assignableUsers = new();
+        public ObservableCollection<string> AssignableUsers
+        {
+            get => _assignableUsers;
+            set
+            {
+                _assignableUsers = value;
+                NotifyOfPropertyChange(() => AssignableUsers);
+            }
+        }
+
+
+        private string _selectedAssignableUser = string.Empty;
+        public string? SelectedAssignableUser
+        {
+            get => _selectedAssignableUser;
+            set
+            {
+                _selectedAssignableUser = value;
+                NotifyOfPropertyChange(() => SelectedAssignableUser);
+            }
+        }
+
+
         private BindableCollection<ExternalNoteExtended> _externalNotes = new();
         public BindableCollection<ExternalNoteExtended> ExternalNotes
         {
@@ -64,12 +92,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 
-        public ExternalNoteViewModel(INavigationService navigationService, 
+        public ExternalNoteViewModel(INavigationService navigationService,
             ILogger<AboutViewModel> logger,
-            DashboardProjectManager? projectManager, 
-            IEventAggregator eventAggregator, 
-            IMediator mediator, 
-            ILifetimeScope? lifetimeScope, 
+            DashboardProjectManager? projectManager,
+            IEventAggregator eventAggregator,
+            IMediator mediator,
+            ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
@@ -77,7 +105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _mediator = mediator;
         }
 
-        public void Initialize(BindableCollection<ExternalNote> externalNotes)
+        public async Task Initialize(BindableCollection<ExternalNote> externalNotes)
         {
             foreach (var externalNote in externalNotes)
             {
@@ -107,6 +135,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             NotifyOfPropertyChange(nameof(ExternalNotes));
+
+            var result = await ExecuteRequest(new GetAllEditableProjectUsersQuery(_externalProjectId), CancellationToken.None);
+            if (result.Success && result.HasData)
+            {
+                if (result.Data != null) 
+                    AssignableUsers = new ObservableCollection<string>(result.Data);
+            }
+
+            NotifyOfPropertyChange(nameof(AssignableUsers));
+            SelectedAssignableUser = null;
         }
 
         #endregion //Constructor
@@ -176,14 +214,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
         /// <summary>
-        /// Saves the external note
+        /// Saves the external note and or selected assigned user
         /// </summary>
         public async void Ok()
         {
-            if (string.IsNullOrEmpty(ReplyText) == false)
+            if (string.IsNullOrEmpty(ReplyText) == false || SelectedAssignableUser != "")
             {
+                var comment = string.Empty;
+                if (string.IsNullOrEmpty(ReplyText))
+                {
+                    comment = $"- Assigned to user {SelectedAssignableUser} -";
+                }
+                else
+                {
+                    comment = ReplyText;
+                }
+
                 var result = await ExternalNoteManager.AddNewCommentToExternalNote(_mediator, _externalProjectId,
-                    _externalNoteId, _verseRef, ReplyText, "assignToUserName", _logger);
+                    _externalNoteId, _verseRef, comment, SelectedAssignableUser, _logger);
 
                 if (result)
                 {

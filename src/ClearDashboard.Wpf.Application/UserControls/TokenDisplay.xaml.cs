@@ -2152,7 +2152,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             InitializeComponent();
         }
 
-        private void PackIconModern_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void PackIconModern_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton != MouseButtonState.Pressed)
             {
@@ -2177,7 +2177,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
 
             var viewModel = IoC.Get<ExternalNoteViewModel>();
-            viewModel.Initialize(TokenDisplayViewModel.ExternalNotes);
+            await viewModel.Initialize(TokenDisplayViewModel.ExternalNotes);
 
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(viewModel, null, settings);

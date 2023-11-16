@@ -7,5 +7,8 @@ using System.Text;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.Users
 {
-    public record GetAllEditableProjectUsersQuery() : IRequest<RequestResult<List<string>>>;
+    public record GetAllEditableProjectUsersQuery(string ParatextProjectId) : IRequest<RequestResult<List<string>>>
+    {
+        public string ParatextProjectId { get; } = ParatextProjectId;
+    }
 }
