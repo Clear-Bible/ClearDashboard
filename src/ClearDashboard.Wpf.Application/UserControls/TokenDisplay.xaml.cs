@@ -1258,6 +1258,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
+
+            var tokenDisplay = (TokenDisplayViewModel)DataContext;
+
+            if (tokenDisplay.VerseDisplay is AlignmentDisplayViewModel)
+            {
+                //if (e.NewValue != null && (bool)e.NewValue)
+                //{
+                    var keyBoardModifiers = Keyboard.Modifiers;
+
+                    if (keyBoardModifiers == ModifierKeys.None || (Keyboard.IsKeyDown(Key.Tab) && keyBoardModifiers == ModifierKeys.Shift))
+                    {
+                        EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
+                    }
+
+                //}
+            }
+
             e.Handled = true;
         }
 
