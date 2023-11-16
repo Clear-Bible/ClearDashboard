@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Text.Json;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -16,7 +17,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
     {
         public static IEnumerable<TokensTextRow> ExtractValidateBook(ITextCorpus textCorpus, string bookId, string? corpusName)
         {
-            var tokensTextRows = textCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
+            List<TokensTextRow> tokensTextRows = new();
+            try
+            {
+                tokensTextRows = textCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
 
             var dups = tokensTextRows
                 .SelectMany(ttr => ttr.Tokens)
